@@ -31,7 +31,7 @@ let g:yankring_window_width        = 30
 let g:yankring_window_use_bottom   = 0
 let g:yankring_window_use_right    = 0
 let g:yankring_window_increment    = 5
-let g:yankring_history_dir         = '~/yankring'
+let g:yankring_history_dir         = '~/.yankring'
 let g:yankring_history_file        = 'yankring_text' . $USER
 let g:yankring_ignore_operator     = 'g~ gu gU ! = g? < > zf zo zc g@ @'
 let g:yankring_n_keys              = ''
@@ -44,18 +44,7 @@ let g:yankring_paste_n_akey        = ''
 let g:yankring_paste_v_key         = ''
 let g:yankring_replace_n_pkey      = ''
 let g:yankring_replace_n_nkey      = ''
-
-
-
-
-
-"0": Turns the menu off.
-"1": Turns the 'Yankring' menu on with no menu shortcut.
-"2": Turns the 'Yankring 'menu on with <alt>-y as the shortcut.
-"3": Turns the 'Plugin -> YankRing' menu on with <alt>-y as
 let  g:yankring_default_menu_mode = 0
-" let  g:yankring_menu_root = 'MyPlugin.&YankRing'
-" let  g:yankring_menu_priority = 30
 "}}}
 
 "------------------------------------

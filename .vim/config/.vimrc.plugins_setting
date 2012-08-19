@@ -1,6 +1,7 @@
 "------------------------------------
 " プラグインごとの設定 Plugins
 "------------------------------------
+" jk同時押しで<ESC>
 call arpeggio#map('i', '', 0, 'jk', '<Esc>')
 
 "------------------------------------
@@ -923,6 +924,7 @@ autocmd User Rails call SetUpRailsSetting()
 "------------------------------------
 " vim-rsense
 "------------------------------------
+"{{{
 " Rsense
 let g:rsenseUseOmniFunc = 1
 let g:rsenseHome = expand('~/.vim/ref/rsense-0.3')
@@ -933,6 +935,7 @@ function! SetUpRubySetting()
   nmap <buffer>td :RSenseTypeHelp<CR>
 endfunction
 autocmd FileType ruby,eruby,ruby.rspec call SetUpRubySetting()
+"}}}
 
 "------------------------------------
 " gist.vim
@@ -950,15 +953,19 @@ nnoremap <C-H>ge :Gist -e<CR>
 nnoremap <C-H>gd :Gist -d<CR>
 nnoremap <C-H>gl :Gist -l<CR>
 "}}}
+
 "------------------------------------
 " twitvim
 "------------------------------------
-nnoremap <silent><Space>n  :Unite tweetvim<CR>
+"{{{
+nnoremap <silent><C-J><C-T>  :Unite tweetvim<CR>
+nnoremap <silent><C-J><C-N>  :TweetVimSay<CR>
 
 " you can display tweet's source.
 let g:tweetvim_display_source = 1
 let g:tweetvim_display_time = 0
 let g:tweetvim_open_buffer_cmd = 'tabnew'
+"}}}
 
 "------------------------------------
 " alter
