@@ -1,0 +1,10 @@
+kind=defined
+names=new
+visibility=public
+
+--- new -> SM:SimpleMarkup
+
+take a block of text and use various heuristics to determine
+it's structure (paragraphs, lists, and so on). Invoke an
+event handler as we identify significant chunks.
+

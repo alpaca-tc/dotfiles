@@ -1,0 +1,214 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>ファイルパスに関する情報を返す</title>
+
+ </head>
+ <body><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="function.parse-ini-string.html">parse_ini_string</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="function.pclose.html">pclose</a></div>
+ <div class="up"><a href="ref.filesystem.html">ファイルシステム 関数</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div><hr /><div id="function.pathinfo" class="refentry">
+ <div class="refnamediv">
+  <h1 class="refname">pathinfo</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.3, PHP 5)</p><p class="refpurpose"><span class="refname">pathinfo</span> &mdash; <span class="dc-title">ファイルパスに関する情報を返す</span></p>
+
+ </div>
+ 
+ <div class="refsect1 description" id="refsect1-function.pathinfo-description">
+  <h3 class="title">説明</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="type"><a href="language.pseudo-types.html#language.types.mixed" class="type mixed">mixed</a></span> <span class="methodname"><strong>pathinfo</strong></span>
+    ( <span class="methodparam"><span class="type">string</span> <code class="parameter">$path</code></span>
+   [, <span class="methodparam"><span class="type">int</span> <code class="parameter">$options</code><span class="initializer"> = PATHINFO_DIRNAME | PATHINFO_BASENAME | PATHINFO_EXTENSION | PATHINFO_FILENAME</span></span>
+  ] )</div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>pathinfo()</strong></span> は、<em><code class="parameter">path</code></em>
+   に関する情報を返します。<em><code class="parameter">options</code></em>
+   によって連想配列あるいは文字列のどちらかとなります。
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.pathinfo-parameters">
+  <h3 class="title">パラメータ</h3>
+  <p class="para">
+   <dl>
+
+    <dt>
+
+     <span class="term"><em><code class="parameter">path</code></em></span>
+     <dd>
+
+      <p class="para">
+       調べたいパス。
+      </p>
+     </dd>
+
+    </dt>
+
+    <dt>
+
+     <span class="term"><em><code class="parameter">options</code></em></span>
+     <dd>
+
+      <p class="para">
+       指定する場合は、どの要素を返すのかを
+       <strong><code>PATHINFO_DIRNAME</code></strong>、
+       <strong><code>PATHINFO_BASENAME</code></strong>、
+       <strong><code>PATHINFO_EXTENSION</code></strong> あるいは
+       <strong><code>PATHINFO_FILENAME</code></strong>
+       のいずれかで指定します。
+      </p>
+      <p class="para">
+       <em><code class="parameter">options</code></em> を省略した場合はすべての要素を返します。
+      </p>
+     </dd>
+
+    </dt>
+
+   </dl>
+
+  </p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.pathinfo-returnvalues">
+  <h3 class="title">返り値</h3>
+  <p class="para">
+   <em><code class="parameter">options</code></em> パラメータを渡さなかった場合は、次の要素を含む連想配列を返します。
+   <em>dirname</em>、<em>basename</em>、
+   <em>extension</em> (存在すれば)、そして <em>filename</em>。
+  </p>
+  <blockquote class="note"><p><strong class="note">注意</strong>: 
+   <p class="para">
+    <em><code class="parameter">path</code></em> に拡張子がない場合は、
+    <em>extension</em> 要素は返されません
+    (以下の二番目の例を参照ください)。
+   </p>
+  </p></blockquote>
+  <p class="para">
+   <em><code class="parameter">options</code></em> を指定すると、
+   要求した要素を文字列で返します。
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.pathinfo-changelog">
+  <h3 class="title">変更履歴</h3>
+  <p class="para">
+   <table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>バージョン</th>
+       <th>説明</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>5.2.0</td>
+       <td>
+        定数 <strong><code>PATHINFO_FILENAME</code></strong> が追加されました。
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.pathinfo-examples">
+  <h3 class="title">例</h3>
+  <p class="para">
+   <div class="example" id="example-2223">
+    <p><strong>例1 <span class="function"><strong>pathinfo()</strong></span> の例</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br />$path_parts&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">pathinfo</span><span style="color: #007700">(</span><span style="color: #DD0000">'/www/htdocs/inc/lib.inc.php'</span><span style="color: #007700">);<br /><br />echo&nbsp;</span><span style="color: #0000BB">$path_parts</span><span style="color: #007700">[</span><span style="color: #DD0000">'dirname'</span><span style="color: #007700">],&nbsp;</span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br />echo&nbsp;</span><span style="color: #0000BB">$path_parts</span><span style="color: #007700">[</span><span style="color: #DD0000">'basename'</span><span style="color: #007700">],&nbsp;</span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br />echo&nbsp;</span><span style="color: #0000BB">$path_parts</span><span style="color: #007700">[</span><span style="color: #DD0000">'extension'</span><span style="color: #007700">],&nbsp;</span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br />echo&nbsp;</span><span style="color: #0000BB">$path_parts</span><span style="color: #007700">[</span><span style="color: #DD0000">'filename'</span><span style="color: #007700">],&nbsp;</span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;&nbsp;</span><span style="color: #FF8000">//&nbsp;PHP&nbsp;5.2.0&nbsp;以降<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></div>
+    </div>
+
+    <div class="example-contents"><p>上の例の出力は以下となります。</p></div>
+    <div class="example-contents screen">
+<div class="cdata"><pre>
+/www/htdocs/inc
+lib.inc.php
+php
+lib.inc
+</pre></div>
+    </div>
+   </div>
+  </p>
+  <p class="para">
+   <div class="example" id="example-2224">
+    <p><strong>例2 <span class="function"><strong>pathinfo()</strong></span> での、拡張子を空にしたときと拡張子がないときの違いの例</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br />$path_parts&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">pathinfo</span><span style="color: #007700">(</span><span style="color: #DD0000">'/path/emptyextension.'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$path_parts</span><span style="color: #007700">[</span><span style="color: #DD0000">'extension'</span><span style="color: #007700">]);<br /><br /></span><span style="color: #0000BB">$path_parts&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">pathinfo</span><span style="color: #007700">(</span><span style="color: #DD0000">'/path/noextension'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$path_parts</span><span style="color: #007700">[</span><span style="color: #DD0000">'extension'</span><span style="color: #007700">]);<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></div>
+    </div>
+
+    <div class="example-contents"><p>上の例の出力は、
+たとえば以下のようになります。</p></div>
+    <div class="example-contents screen">
+<div class="cdata"><pre>
+string(0) &quot;&quot;
+
+Notice: Undefined index: extension in test.php on line 6
+NULL
+</pre></div>
+    </div>
+   </div>
+  </p>
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.pathinfo-notes">
+  <h3 class="title">注意</h3>
+  <blockquote class="note"><p><strong class="note">注意</strong>: 
+   <p class="para">
+    カレントのパスに関する情報を取得するには、
+    <a href="language.variables.predefined.html" class="link">定義済みの変数</a>
+    のセクションをご覧ください。
+   </p>
+  </p></blockquote>
+  <blockquote class="note"><p><strong class="note">注意</strong>: 
+   <p class="para">
+    <span class="function"><strong>pathinfo()</strong></span> はロケールを考慮して処理を行います。
+    マルチバイト文字を含むパスを正しく処理するには、正しいロケールを
+    <span class="function"><a href="function.setlocale.html" class="function">setlocale()</a></span> 関数で設定しておかなければなりません。
+   </p>
+  </p></blockquote>
+ </div>
+
+ 
+ <div class="refsect1 seealso" id="refsect1-function.pathinfo-seealso">
+  <h3 class="title">参考</h3>
+  <p class="para">
+   <ul class="simplelist">
+    <li class="member"><span class="function"><a href="function.dirname.html" class="function" rel="rdfs-seeAlso">dirname()</a> - 親ディレクトリのパスを返す</span></li>
+    <li class="member"><span class="function"><a href="function.basename.html" class="function" rel="rdfs-seeAlso">basename()</a> - パスの最後にある名前の部分を返す</span></li>
+    <li class="member"><span class="function"><a href="function.parse-url.html" class="function" rel="rdfs-seeAlso">parse_url()</a> - URL を解釈し、その構成要素を返す</span></li>
+    <li class="member"><span class="function"><a href="function.realpath.html" class="function" rel="rdfs-seeAlso">realpath()</a> - 絶対パス名を返す</span></li>
+   </ul>
+  </p>
+ </div>
+
+
+</div><hr /><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="function.parse-ini-string.html">parse_ini_string</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="function.pclose.html">pclose</a></div>
+ <div class="up"><a href="ref.filesystem.html">ファイルシステム 関数</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div></body></html>

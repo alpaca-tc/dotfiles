@@ -1,0 +1,15 @@
+kind=defined
+names=indexes,indices
+visibility=public
+
+--- indexes(*key) -> [String]
+--- indices(*key) -> [String]
+
+このメソッドは obsolete です。
+使用すると警告メッセージが表示されます。
+代わりに [[m:ENV.values_at]] を使用します。
+
+引数で指定された名前の環境変数の値の配列を返します。
+
+@param key  キーの名前を指定します。 to_str で文字列化されます。
+

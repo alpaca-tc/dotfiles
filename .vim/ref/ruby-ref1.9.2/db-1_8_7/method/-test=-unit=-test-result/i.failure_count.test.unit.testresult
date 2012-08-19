@@ -1,0 +1,8 @@
+kind=defined
+names=failure_count
+visibility=public
+
+--- failure_count    -> Integer
+
+今までに記録した失敗したテストの数を返します。
+

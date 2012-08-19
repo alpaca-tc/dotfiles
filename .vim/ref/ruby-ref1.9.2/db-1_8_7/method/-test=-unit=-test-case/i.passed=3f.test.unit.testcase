@@ -1,0 +1,10 @@
+kind=defined
+names=passed?
+visibility=private 
+
+--- passed?    -> bool
+
+テストが成功したなら、true を返します。そうでないなら、false を返します。
+[[m:Test::Unit::TestCase#teardown]] の中で使うことを意図されています。
+テスト実行前に何を返すかは不定です。
+

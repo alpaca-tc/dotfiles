@@ -1,0 +1,19 @@
+kind=defined
+names===
+visibility=public
+
+--- ==(c) -> bool
+c と等しければ、true を返します。
+
+例:
+
+  z1 = Complex.new(1, 2)
+  z2 = Complex.new(1, 0)
+  z3 = Complex.new(0, 1)
+
+  p z1 == Complex.new(1, 2)  #=> true
+  p z1 == z2                 #=> false
+  p z2 == 1.0                #=> true
+  p z3 == Complex::I         #=> true
+
+

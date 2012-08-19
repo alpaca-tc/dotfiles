@@ -1,0 +1,6 @@
+kind=defined
+names=obj2soap
+visibility=public
+
+--- obj2soap(obj, qname)
+

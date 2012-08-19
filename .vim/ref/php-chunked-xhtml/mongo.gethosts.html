@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>関連づけられたすべてのホストの状態を更新する</title>
+
+ </head>
+ <body><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="mongo.get.html">Mongo::__get</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="mongo.getpoolsize.html">Mongo::getPoolSize</a></div>
+ <div class="up"><a href="class.mongo.html">Mongo</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div><hr /><div id="mongo.gethosts" class="refentry">
+ <div class="refnamediv">
+  <h1 class="refname">Mongo::getHosts</h1>
+  <p class="verinfo">(PECL mongo &gt;=1.1.0)</p><p class="refpurpose"><span class="refname">Mongo::getHosts</span> &mdash; <span class="dc-title">関連づけられたすべてのホストの状態を更新する</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-mongo.gethosts-description">
+  <h3 class="title">説明</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="type">array</span> <span class="methodname"><strong>Mongo::getHosts</strong></span>
+    ( <span class="methodparam">void</span>
+   )</div>
+
+
+  <p class="para rdfs-comment">
+   このメソッドは、レプリカセットへの接続に対してのみ使えます。
+   レプリカセット内のすべてのホストの状態を返します。
+  </p>
+
+  <p class="para">
+   読み込みのスレーブへの分散についての情報は、このマニュアルの
+   <a href="mongo.queries.html" class="link">問い合わせの節</a> を参照ください。
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-mongo.gethosts-parameters">
+  <h3 class="title">パラメータ</h3>
+  <p class="para">この関数にはパラメータはありません。</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-mongo.gethosts-returnvalues">
+  <h3 class="title">返り値</h3>
+  <p class="para">
+   セット内のホストに関する情報の配列を返します。
+   各ホストのホスト名、健康状態 (1 が最高)、状態 (1 はプライマリ、2 はセカンダリ、
+   0 はそれ以外)、サーバーへの ping にかかる時間、
+   そして最後に ping したのはいつなのかが含まれます。
+   たとえば、ローカルで稼働しているメンバ 3 台のレプリカセットだとこのようになります。
+  </p>
+  <div class="example-contents screen">
+<div class="returnvaluescode"><pre class="returnvaluescode">array(2) {
+  [&quot;A:27017&quot;]=&gt;
+  array(4) {
+    [&quot;health&quot;]=&gt;
+    int(1)
+    [&quot;state&quot;]=&gt;
+    int(2)
+    [&quot;ping&quot;]=&gt;
+    int(369)
+    [&quot;lastPing&quot;]=&gt;
+    int(1309470644)
+  }
+  [&quot;B:27017&quot;]=&gt;
+  array(4) {
+    [&quot;health&quot;]=&gt;
+    int(1)
+    [&quot;state&quot;]=&gt;
+    int(1)
+    [&quot;ping&quot;]=&gt;
+    int(139)
+    [&quot;lastPing&quot;]=&gt;
+    int(1309470644)
+  }
+  [&quot;C:27017&quot;]=&gt;
+  array(4) {
+    [&quot;health&quot;]=&gt;
+    int(1)
+    [&quot;state&quot;]=&gt;
+    int(2)
+    [&quot;ping&quot;]=&gt;
+    int(1012)
+    [&quot;lastPing&quot;]=&gt;
+    int(1309470644)
+  }
+}</pre>
+</div>
+  </div>
+  <p class="para">
+   この例で、B と C はセカンダリ (状態が 2) です。B は slaveOkay
+   が設定されている婆愛の問い合わせ用に選択されやすくなります。
+   ping 時間が C より短い (したがって読み込みの負荷が低い) からです。
+  </p>
+ </div>
+
+</div><hr /><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="mongo.get.html">Mongo::__get</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="mongo.getpoolsize.html">Mongo::getPoolSize</a></div>
+ <div class="up"><a href="class.mongo.html">Mongo</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div></body></html>

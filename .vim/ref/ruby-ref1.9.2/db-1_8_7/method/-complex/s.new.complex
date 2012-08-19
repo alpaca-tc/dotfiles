@@ -1,0 +1,16 @@
+kind=defined
+names=new,new!
+visibility=public
+
+--- new(r, i) -> Complex
+--- new!(r, i = 0) -> Complex
+実部が r、虚部が i である[[c:Complex]]クラスのオブジェクトを生成します。
+
+@param r 生成する複素数の実部
+@param i 生成する複素数の虚部
+
+例:
+
+  p Complex.new(1, 1)   #=> Complex(1, 1)
+  p Complex.new!(3.5)   #=> Complex(3.5, 0)
+

@@ -1,0 +1,10 @@
+kind=defined
+names=print
+visibility=public
+
+--- print(*options){ ... } -> ()
+
+標準出力にブロックを評価した結果を書き込みます。
+
+@param options [[m:CGI_cgi_lib.header]] と同じです。
+

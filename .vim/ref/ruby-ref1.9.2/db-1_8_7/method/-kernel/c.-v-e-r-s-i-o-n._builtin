@@ -1,0 +1,10 @@
+kind=defined
+names=VERSION
+visibility=public
+
+--- VERSION -> String
+
+非推奨です。 [[m:Kernel::RUBY_VERSION]] の古い名前です。
+
+この定数は過去との互換性のために提供されています。 RUBY_VERSION を使ってください。
+

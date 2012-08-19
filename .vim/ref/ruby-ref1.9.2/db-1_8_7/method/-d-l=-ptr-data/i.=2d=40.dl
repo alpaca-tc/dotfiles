@@ -1,0 +1,15 @@
+kind=defined
+names=-@,ref
+visibility=public
+
+--- ref   -> DL::PtrData
+--- -@    -> DL::PtrData
+
+自身を指す PtrData オブジェクトを返します。
+C 言語におけるポインタへのアドレス演算子の適用 &p と同じです。
+
+この返り値には、free 関数がセットされていません。
+
+  s = "abc".to_ptr
+  p s == s.ref.ptr #=> true
+

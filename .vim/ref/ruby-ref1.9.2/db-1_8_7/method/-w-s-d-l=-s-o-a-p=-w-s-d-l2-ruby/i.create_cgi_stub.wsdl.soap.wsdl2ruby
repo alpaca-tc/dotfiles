@@ -1,0 +1,6 @@
+kind=defined
+names=create_cgi_stub
+visibility=private 
+
+--- create_cgi_stub(servicename)
+

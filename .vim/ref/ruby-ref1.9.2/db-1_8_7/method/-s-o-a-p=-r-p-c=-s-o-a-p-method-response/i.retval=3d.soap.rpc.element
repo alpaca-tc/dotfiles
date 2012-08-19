@@ -1,0 +1,6 @@
+kind=defined
+names=retval=
+visibility=public
+
+--- retval=(retval)
+

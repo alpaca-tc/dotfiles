@@ -1,0 +1,14 @@
+kind=defined
+names=proto
+visibility=public
+
+--- proto    -> String
+
+関数のプロトタイプを [[c:DL]] モジュールの型指定文字列で返します。
+
+ require 'dl'
+ h = DL.dlopen('./libtest.so')
+ s = h.sym('slen', 'IS')
+ 
+ p s.proto #=> "IS"
+

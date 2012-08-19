@@ -1,0 +1,231 @@
+# rspec
+snippet     con
+abbr        context do
+    context '${1}' do
+      ${2}
+    end
+
+snippet     bef
+abbr        before do
+    before do
+      ${1}
+    end
+
+snippet     it
+abbr        it do
+    it '${1}' do
+      ${2}
+    end
+
+snippet     des
+abbr        describe do
+    describe '${1}' do
+      ${2}
+    end
+
+snippet     sub
+abbr        subject
+prev_word    '^'
+    subject { ${1} }
+
+snippet     share
+abbr        shared_examples_for
+prev_word      '^'
+    shared_examples_for "${1:name}" do
+    end
+
+snippet     behave
+abbr        it_should_behave_like
+prev_word   '^'
+    it_should_behave_like "${1:name}"
+
+snippet     let
+abbr        let(:name) {}
+prev_word   '^'
+    let(:${1:symbol}) { ${2} }
+
+# ruby
+snippet     ini
+abbr        def initialize end
+    def initialize( ${1:valid} )
+      ${2}
+    end
+
+snippet def
+    def ${1:method_name}
+        ${2}
+    end
+
+snippet if
+    if ${1:condition}
+        ${2}
+    end
+
+snippet ife
+    if ${1:condition}
+        ${2}
+    else
+        ${3}
+    end
+snippet elsif
+    elsif ${1:condition}
+        ${2}
+
+snippet unless
+    unless ${1:condition}
+        ${2}
+    end
+
+snippet until
+    until ${1:condition}
+        ${2}
+    end
+
+snippet mod module .. end
+    module ${1:`substitute(Filename(), '^.', '\u&', '')`}
+        ${2}
+    end
+
+snippet     class
+abbr        class end
+    class ${1:className}
+      ${2}
+    end
+
+snippet     cla
+abbr        class end
+    class ${1:name}
+      ${2}
+    end
+
+snippet am
+    alias_method :${1:new_name}, :${2:old_name}
+
+snippet array
+    Array.new(${1:10}) { |${2:i}| ${3} }
+
+snippet hash
+    Hash.new { |${1:hash}, ${2:key}| $1[$2] = ${3} }
+
+snippet dir
+    Filename.dirname(__FILE__)
+
+snippet defs
+    def self.${1:class_method_name}
+        ${2}
+    end
+
+snippet r
+    attr_reader :${1:attr_names}
+# attr_writer
+snippet w
+    attr_writer :${1:attr_names}
+# attr_accessor
+snippet rw
+    attr_accessor :${1:attr_names}
+# include Enumerable
+
+snippet     begin
+abbr        begin rescue end
+    begin
+      ${1}
+    rescue => e
+      ${2}
+    end
+
+snippet     begine
+abbr        begin rescue end
+    begin
+      ${1}
+    rescue => e
+      ${2}
+    ensure
+      ${3}
+    end
+
+snippet     each
+abbr        each do
+    each do |${1}|
+      ${2}
+    end
+
+snippet     while
+abbr        while end
+    while ${1} do
+      ${2}
+    end
+
+snippet     utf
+abbr        utf-8 magick
+prev_word    '^'
+    #-*-coding:utf-8-*-
+
+snippet     #!
+abbr        #!/usr/local/bin/ruby
+prev_word   '^'
+    #!/usr/local/bin/ruby
+
+snippet     =b
+abbr        =begin rdoc ...  =end
+prev_word   '^'
+    =begin rdoc
+        ${1}
+    =end
+
+snippet     y
+abbr        yields
+prev_word  '^'
+    :yields: ${1:arguments}
+
+snippet req
+    require '${1}'
+
+snippet end
+    __END__
+snippet case
+    case ${1:object}
+    when ${2:condition}
+        ${3}
+    end
+snippet when
+    when ${1:condition}
+        ${2}
+
+snippet nam
+    namespace :${1:`Filename()`} do
+        ${2}
+    end
+
+snippet     watcher
+prev_word        '^'
+    require 'digest/md5'
+    def calc_md5(filename)
+      Digest::MD5.hexdigest(File.open(filename, 'rb').read)
+    end
+
+    def main
+      @md5 = {}
+      Dir.glob("app/**/*.rb").each  { |f| @md5[f] = calc_md5(f) }
+      Dir.glob("spec/**/*.rb").each { |f| @md5[f] = calc_md5(f) }
+    end
+
+    main
+
+    watch('app/(.*)\.rb') {|code|
+      if @md5[code[0]] == calc_md5(code[0])
+        puts "Saved: #{code[0]}"
+      else
+        puts "Saved & Changed: #{code[0]}"
+        system "bundle exec rspec spec/#{code[1]}_spec.rb"
+        @md5[code[0]] = calc_md5(code[0])
+      end
+    }
+    watch('spec/(.*)_spec\.rb') {|code|
+      if @md5[code[0]] == calc_md5(code[0])
+        puts "Saved: #{code[0]}"
+      else
+        puts "Saved & Changed: #{code[0]}"
+        system "bundle exec rspec #{code[0]}"
+        @md5[code[0]] = calc_md5(code[0])
+      end
+    }

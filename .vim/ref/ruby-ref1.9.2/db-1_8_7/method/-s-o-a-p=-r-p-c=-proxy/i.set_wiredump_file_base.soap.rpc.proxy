@@ -1,0 +1,6 @@
+kind=defined
+names=set_wiredump_file_base
+visibility=public
+
+--- set_wiredump_file_base(wiredump_file_base)
+

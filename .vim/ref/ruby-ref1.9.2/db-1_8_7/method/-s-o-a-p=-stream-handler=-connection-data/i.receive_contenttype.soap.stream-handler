@@ -1,0 +1,7 @@
+kind=defined
+names=receive_contenttype,receive_contenttype=
+visibility=public
+
+--- receive_contenttype
+--- receive_contenttype=(value)
+

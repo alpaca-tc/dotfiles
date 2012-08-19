@@ -1,0 +1,17 @@
+kind=defined
+names=read
+visibility=public
+
+--- read(path, length = nil, offset = nil) -> Array
+
+path で指定された CSV ファイルを読み込み、配列の配列でデータを返します。
+
+@param path パースするファイルのファイル名
+@param length 対象ファイルの読み込みサイズ
+@param offset 読み込み開始位置
+
+===== 注意
+
+パース時に""(空文字)と値なしを区別します。
+例えば、a, "", , b の行をパースした場合には ["a", "", nil, "b"] の配列を返します。
+

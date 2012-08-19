@@ -1,0 +1,454 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>配列をコレクションに追加する</title>
+
+ </head>
+ <body><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="mongocollection.group.html">MongoCollection::group</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="mongocollection.remove.html">MongoCollection::remove</a></div>
+ <div class="up"><a href="class.mongocollection.html">MongoCollection</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div><hr /><div id="mongocollection.insert" class="refentry">
+ <div class="refnamediv">
+  <h1 class="refname">MongoCollection::insert</h1>
+  <p class="verinfo">(PECL mongo &gt;=0.9.0)</p><p class="refpurpose"><span class="refname">MongoCollection::insert</span> &mdash; <span class="dc-title">配列をコレクションに追加する</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-mongocollection.insert-description">
+  <h3 class="title">説明</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="type"><span class="type bool|array">bool|array</span></span> <span class="methodname"><strong>MongoCollection::insert</strong></span>
+    ( <span class="methodparam"><span class="type">array</span> <code class="parameter">$a</code></span>
+   [, <span class="methodparam"><span class="type">array</span> <code class="parameter">$options</code><span class="initializer"> = array()</span></span>
+  ] )</div>
+
+  <p class="para rdfs-comment">
+   データベースに送信する文字列は UTF-8 でなければなりません。
+   UTF-8 以外の文字列を送信した場合は
+   <a href="class.mongoexception.html" class="classname">MongoException</a> がスローされます。非 UTF-8 文字列を追加
+   (あるいは問い合わせ) するには <a href="class.mongobindata.html" class="classname">MongoBinData</a> を使います。
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-mongocollection.insert-parameters">
+  <h3 class="title">パラメータ</h3>
+  <p class="para">
+   <dl>
+
+    <dt>
+
+     <span class="term">
+      <em><code class="parameter">a</code></em>
+     </span>
+     <dd>
+
+      <p class="para">
+       配列。
+      </p>
+     </dd>
+
+    </dt>
+   
+    <dt>
+
+     <span class="term">
+      <em><code class="parameter">options</code></em>
+     </span>
+     <dd>
+
+      <p class="para">
+       追加時のオプション。
+       <ul class="itemizedlist">
+        <li class="listitem">
+         <p class="para">
+          <em>&quot;safe&quot;</em>
+         </p>
+         <p class="para">
+          boolean あるいは整数値で、デフォルトは <strong><code>FALSE</code></strong> です。<strong><code>FALSE</code></strong>
+          の場合、データベースからの応答を待たずにプログラムを続行します。
+          <strong><code>TRUE</code></strong> の場合、プログラムはデータベースからの応答を待ち、
+          追加に失敗したときには
+          <a href="class.mongocursorexception.html" class="classname">MongoCursorException</a> をスローします。
+         </p>
+         <p class="para">
+          レプリケーションを使っていてマスタを変更している場合、もし &quot;safe&quot;
+          を使っていればドライバはマスタとの接続を切断して例外をスローし、
+          次の操作時に新しいマスタを探そうとします
+          (新しいマスタに対して操作を再試行するかどうかは
+          アプリケーション側で判断しなければなりません)。
+         </p>
+         <p class="para">
+          レプリカセットで &quot;safe&quot; を <em class="emphasis">使わずに</em>
+          マスタを変更する場合は、ドライバがその変更について知るすべがありません。
+          そのため、何もエラーを出さずに書き込みに失敗し続けます。
+         </p>
+         <p class="para">
+          <em>safe</em> が整数値の場合は、
+          指定した数のマシンで追加が成功するまでは成功したと見なしません
+          (処理がタイムアウトした場合は例外をスローします。wtimeout を参照ください)。
+          これは、コレクションに設定された w 変数をオーバーライドします。
+         </p>
+        </li>
+        <li class="listitem">
+         <p class="para">
+          <em>&quot;fsync&quot;</em>
+         </p>
+         <p class="para">
+          boolean で、デフォルトは <strong><code>FALSE</code></strong> です。
+          追加操作がディスク上に同期されるまで成功とは見なさないようにさせます。
+          <strong><code>TRUE</code></strong> の場合は &quot;安全な&quot; 追加操作が前提となり、
+          <em>safe</em> の設定を <strong><code>FALSE</code></strong> にオーバーライドします。
+         </p>
+        </li>
+        <li class="listitem">
+         <p class="para">
+          <em>&quot;timeout&quot;</em>
+         </p>
+         <p class="para">
+          整数値。デフォルトは <em>MongoCursor::$timeout</em> です。
+          &quot;safe&quot; が設定されている場合に、クライアントがデータベースからの応答をどれだけ待つかを
+          (ミリ秒単位で) 指定します。ここで指定した時間内にデータベースからの応答がない場合は
+          <a href="class.mongocursortimeoutexception.html" class="classname">MongoCursorTimeoutException</a>
+          がスローされます。
+         </p>
+        </li>
+       </ul>
+      </p>
+     </dd>
+
+    </dt>
+
+   </dl>
+
+  </p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-mongocollection.insert-returnvalues">
+  <h3 class="title">返り値</h3>
+  <p class="para">
+   <em><code class="parameter">safe</code></em> が設定されている場合は、
+   追加結果を含む配列を返します。設定されていない場合は、
+   配列が空でなかったかどうかをあらわす boolean 値を返します (空の配列は追加されません)。
+  </p>
+  <p class="para">
+   配列が返された場合、その中に含まれる要素は次のようになります。
+   <dl>
+
+    <dt>
+
+     <span class="term">
+      <em><code class="parameter">ok</code></em>
+     </span>
+     <dd>
+
+      <p class="para">
+       これは常に 1 です (ただし last_error 自体が失敗した場合は除く)。
+      </p>
+     </dd>
+
+    </dt>
+
+    <dt>
+
+     <span class="term">
+      <em><code class="parameter">err</code></em>
+     </span>
+     <dd>
+
+      <p class="para">
+       このフィールドに null 以外の値が入っている場合は、直前の操作でエラーが発生しています。
+       このフィールドが設定されている場合、その内容は発生したエラーを表す文字列となります。
+      </p>
+     </dd>
+
+    </dt>
+
+    <dt>
+
+     <span class="term">
+      <em><code class="parameter">code</code></em>
+     </span>
+     <dd>
+
+      <p class="para">
+       データベースのエラーが発生した場合に、そのエラーコードをクライアントに戻します。
+      </p>
+     </dd>
+
+    </dt>
+
+    <dt>
+
+     <span class="term">
+      <em><code class="parameter">errmsg</code></em>
+     </span>
+     <dd>
+
+      <p class="para">
+       このフィールドが設定されるのは、データベースコマンドで何か問題が発生したときです。
+       <em>ok</em> を 0 にすることと組み合わせて使います。
+       たとえば、もし <em>w</em> が設定されているときにタイムアウトが発生すると、
+       errmsg は &quot;timed out waiting for slaves&quot; そして <em>ok</em> は 0 になります。
+       このフィールドが設定されている場合、その内容は発生したエラーを表す文字列となります。
+      </p>
+     </dd>
+
+    </dt>
+
+    <dt>
+
+     <span class="term">
+      <em><code class="parameter">n</code></em>
+     </span>
+     <dd>
+
+      <p class="para">
+       直近の操作が insert、update あるいは remove だった場合に、影響を受けた行の数を返します。
+       of objects affected will be returned. 
+      </p>
+     </dd>
+
+    </dt>
+
+    <dt>
+
+     <span class="term">
+      <em><code class="parameter">wtimeout</code></em>
+     </span>
+     <dd>
+
+      <p class="para">
+       直近の操作がレプリケーション待ちでタイムアウトしたかどうか。
+      </p>
+     </dd>
+
+    </dt>
+
+    <dt>
+
+     <span class="term">
+      <em><code class="parameter">waiter</code></em>
+     </span>
+     <dd>
+
+      <p class="para">
+       操作がタイムアウトするまでにどれだか待ったか。
+      </p>
+     </dd>
+
+    </dt>
+
+    <dt>
+
+     <span class="term">
+      <em><code class="parameter">wtime</code></em>
+     </span>
+     <dd>
+
+      <p class="para">
+       <em>w</em> を設定して、かつ操作が成功した場合に、
+       <em>w</em> サーバへのレプリケートにかかった時間。
+      </p>
+     </dd>
+
+    </dt>
+
+    <dt>
+
+     <span class="term">
+      <em><code class="parameter">upserted</code></em>
+     </span>
+     <dd>
+
+      <p class="para">
+       upsert が発生した場合は、このフィールドに新しいレコードの
+       <em>_id</em> が格納されます。upsert の場合は、このフィールドあるいは
+       <em>updatedExisting</em> のいずれかが (エラーが発生しない限り) 必ず存在します。
+      </p>
+     </dd>
+
+    </dt>
+
+    <dt>
+
+     <span class="term">
+      <em><code class="parameter">updatedExisting</code></em>
+     </span>
+     <dd>
+
+      <p class="para">
+       upsert が既存の要素を更新した場合に、このフィールドが true となります。
+       <em>_id</em> が格納されます。upsert の場合は、このフィールドあるいは
+       upsearted のいずれかが (エラーが発生しない限り) 必ず存在します。
+      </p>
+     </dd>
+
+    </dt>
+
+   </dl>
+
+  </p>
+ </div>
+
+
+ <div class="refsect1 errors" id="refsect1-mongocollection.insert-errors">
+  <h3 class="title">エラー / 例外</h3>
+  <p class="para">
+   &quot;safe&quot; オプションが設定されていて追加に失敗した場合に
+   <a href="class.mongocursorexception.html" class="classname">MongoCursorException</a> をスローします (バージョン 1.0.1 以降)。
+  </p>
+  <p class="para">
+   &quot;safe&quot; オプションが設定されているときに
+   <em>MongoCollection::$wtimeout</em> ミリ秒以内に処理が終わらなければ
+   <a href="class.mongocursortimeoutexception.html" class="classname">MongoCursorTimeoutException</a> をスローします。
+   これはサーバ上の操作を終了させるわけではなく、あくまでもクライアント側のタイムアウトです。
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-mongocollection.insert-changelog">
+  <h3 class="title">変更履歴</h3>
+  <p class="para">
+   <table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>バージョン</th>
+       <th>説明</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>1.0.5</td>
+       <td>
+        二番目のパラメータがオプションの配列に変わりました。1.0.5
+        より前のバージョンでは、二番目のパラメータは &quot;safe&quot;
+        オプションを表す boolean 値でした。
+       </td>
+      </tr>
+
+      <tr>
+       <td>1.0.9</td>
+       <td>
+        &quot;safe&quot; オプションに整数値がわたせるようになり (以前は booleans
+        のみでした)、さらに &quot;fsync&quot; オプションが追加されました。
+       </td>
+      </tr>
+
+      <tr>
+       <td>1.0.9</td>
+       <td>
+        &quot;safe&quot; オプションを使っている場合の返り値の型が配列に変わりました。
+        配列にはエラー情報が含まれています。&quot;safe&quot; オプションを使わない場合は、今までどおり
+        boolean のままです。
+       </td>
+      </tr>
+
+      <tr>
+       <td>1.0.11</td>
+       <td>
+        &quot;safe&quot; が設定されている場合は、&quot;not master&quot; エラーで接続を切断するようになりました。
+       </td>
+      </tr>
+
+      <tr>
+       <td>1.2.0</td>
+       <td>
+        timeout オプションが追加されました。
+       </td>
+      </tr>
+
+      <tr>
+       <td>1.3.0</td>
+       <td>
+        <em><code class="parameter">options</code></em> パラメータで、boolean
+        だけを渡して安全な追加を指定することができなくなりました。
+        同じことをするには <em>array(&#039;safe&#039; =&gt; true)</em>
+        としなければなりません。
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-mongocollection.insert-examples">
+  <h3 class="title">例</h3>
+  <div class="example" id="example-1428">
+   <p><strong>例1 <span class="function"><strong>MongoCollection::insert()</strong></span> の _id の例</strong></p>
+   <div class="example-contents"><p>
+    オブジェクトを挿入すると、参照渡しでない限りはそこに _id フィールドを追加します。
+   </p></div>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /><br />$m&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">Mongo</span><span style="color: #007700">();&nbsp;<br /></span><span style="color: #0000BB">$db&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">$m</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">selectDB</span><span style="color: #007700">(</span><span style="color: #DD0000">'test'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$collection&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">MongoCollection</span><span style="color: #007700">(</span><span style="color: #0000BB">$db</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">'phpmanual'</span><span style="color: #007700">);<br /><br /></span><span style="color: #0000BB">$a&nbsp;</span><span style="color: #007700">=&nbsp;array(</span><span style="color: #DD0000">'x'&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #0000BB">12</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$collection</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">insert</span><span style="color: #007700">(</span><span style="color: #0000BB">$a</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$a</span><span style="color: #007700">);<br /><br /></span><span style="color: #0000BB">$b&nbsp;</span><span style="color: #007700">=&nbsp;array(</span><span style="color: #DD0000">'x'&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #0000BB">12</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$ref&nbsp;</span><span style="color: #007700">=&nbsp;&amp;</span><span style="color: #0000BB">$b</span><span style="color: #007700">;<br /></span><span style="color: #0000BB">$collection</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">insert</span><span style="color: #007700">(</span><span style="color: #0000BB">$ref</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$ref</span><span style="color: #007700">);<br /><br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></div>
+   </div>
+
+   <div class="example-contents"><p>上の例の出力は、
+たとえば以下のようになります。</p></div>
+   <div class="example-contents screen">
+<div class="cdata"><pre>
+array(2) {
+  [&quot;x&quot;]=&gt;
+  int(12)
+  [&quot;_id&quot;]=&gt;
+  object(MongoId)#4 (0) {
+  }
+}
+array(12) {
+  [&quot;x&quot;]=&gt;
+  int(1)
+}
+</pre></div>
+   </div>
+  </div>
+
+  <div class="example" id="example-1429">
+   <p><strong>例2 <span class="function"><strong>MongoCollection::insert()</strong></span> での safe の例</strong></p>
+   <div class="example-contents"><p>
+    この例は、同じ _id を持つ二つの要素を追加しようとするものです。
+    <em><code class="parameter">safe</code></em> が設定されていれば、
+    <a href="class.mongocursorexception.html" class="classname">MongoCursorException</a> がスローされます。
+   </p></div>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /><br />$person&nbsp;</span><span style="color: #007700">=&nbsp;array(</span><span style="color: #DD0000">"name"&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">"Joe"</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">"age"&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #0000BB">20</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$collection</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">insert</span><span style="color: #007700">(</span><span style="color: #0000BB">$person</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">true</span><span style="color: #007700">);<br /><br /></span><span style="color: #FF8000">//&nbsp;$person&nbsp;には&nbsp;_id&nbsp;フィールドができたので、<br />//&nbsp;もう一度追加しようとすると例外が発生します<br /></span><span style="color: #007700">try&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$collection</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">insert</span><span style="color: #007700">(</span><span style="color: #0000BB">$person</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">true</span><span style="color: #007700">);<br />}&nbsp;catch(</span><span style="color: #0000BB">MongoCursorException&nbsp;$e</span><span style="color: #007700">)&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;echo&nbsp;</span><span style="color: #DD0000">"Can't&nbsp;save&nbsp;the&nbsp;same&nbsp;person&nbsp;twice!\n"</span><span style="color: #007700">;<br />}<br /><br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></div>
+   </div>
+
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-mongocollection.insert-seealso">
+  <h3 class="title">参考</h3>
+  <ul class="simplelist">
+   <li class="member"><span class="function"><a href="mongocollection.batchinsert.html" class="function" rel="rdfs-seeAlso">MongoCollection::batchInsert()</a> - 複数のドキュメントをコレクションに追加する</span></li>
+   <li class="member"><span class="function"><a href="mongocollection.update.html" class="function" rel="rdfs-seeAlso">MongoCollection::update()</a> - 指定した条件にもとづいてレコードを更新する</span></li>
+   <li class="member"><span class="function"><a href="mongocollection.find.html" class="function" rel="rdfs-seeAlso">MongoCollection::find()</a> - コレクションに問い合わせ、結果セットの MongoCursor を返す</span></li>
+   <li class="member"><span class="function"><a href="mongocollection.remove.html" class="function" rel="rdfs-seeAlso">MongoCollection::remove()</a> - レコードをコレクションから削除する</span></li>
+   <li class="member">MongoDB コアドキュメントの <a href="http://dochub.mongodb.org/core/insert" class="link external">&raquo;&nbsp;insert</a></li>
+  </ul>
+ </div>
+
+
+</div><hr /><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="mongocollection.group.html">MongoCollection::group</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="mongocollection.remove.html">MongoCollection::remove</a></div>
+ <div class="up"><a href="class.mongocollection.html">MongoCollection</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div></body></html>

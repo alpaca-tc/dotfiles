@@ -1,0 +1,36 @@
+kind=defined
+names=capitalize!
+visibility=public
+
+--- capitalize! -> self | nil
+
+文字列先頭の文字を大文字に、残りを小文字に変更します。
+ただし、アルファベット以外の文字は位置に関わらず変更しません。
+
+@return capitalize! は self を変更して返しますが、
+        変更が起こらなかった場合は nil を返します。
+
+例:
+
+  str = "foobar"
+  str.capitalize!
+  p str   # => "Foobar"
+
+  str = "fooBAR"
+  str.capitalize!
+  p str   # => "Foobar"
+
+[[m:$KCODE]] が適切に設定されていない場合は、
+マルチバイト文字の一部をあやまって変換してしまう場合があります。
+この問題は以下のように Shift JIS エンコーディングを使う場合に発生します。
+
+  $KCODE = 'NONE'
+  # 文字列は Shift JIS エンコーディングで記述されている
+  puts "帰".capitalize   # => 蟻
+
+また、$KCODE を設定しても、
+マルチバイト文字のいわゆる全角アルファベットは処理しません。
+
+@see [[m:String#capitalize]], [[m:String#upcase]],
+     [[m:String#downcase]], [[m:String#swapcase]]
+

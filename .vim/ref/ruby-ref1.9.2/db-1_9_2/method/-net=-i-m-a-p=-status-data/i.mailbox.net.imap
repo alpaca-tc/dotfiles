@@ -1,0 +1,7 @@
+kind=defined
+names=mailbox
+visibility=public
+
+--- mailbox -> String
+メールボックス名を返します。
+

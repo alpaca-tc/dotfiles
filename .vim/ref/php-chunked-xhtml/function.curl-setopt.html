@@ -1,0 +1,1625 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>cURL 転送用オプションを設定する</title>
+
+ </head>
+ <body><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="function.curl-setopt-array.html">curl_setopt_array</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="function.curl-version.html">curl_version</a></div>
+ <div class="up"><a href="ref.curl.html">cURL 関数</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div><hr /><div id="function.curl-setopt" class="refentry">
+ <div class="refnamediv">
+  <h1 class="refname">curl_setopt</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5)</p><p class="refpurpose"><span class="refname">curl_setopt</span> &mdash; <span class="dc-title">cURL 転送用オプションを設定する</span></p>
+
+ </div>
+ 
+ <div class="refsect1 description" id="refsect1-function.curl-setopt-description">
+  <h3 class="title">説明</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="type">bool</span> <span class="methodname"><strong>curl_setopt</strong></span>
+    ( <span class="methodparam"><span class="type">resource</span> <code class="parameter">$ch</code></span>
+   , <span class="methodparam"><span class="type">int</span> <code class="parameter">$option</code></span>
+   , <span class="methodparam"><span class="type"><a href="language.pseudo-types.html#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$value</code></span>
+   )</div>
+
+  <p class="para rdfs-comment">
+   指定した cURL セッションハンドルのオプションを設定します。
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.curl-setopt-parameters">
+  <h3 class="title">パラメータ</h3>
+  <p class="para">
+   <dl>
+
+    <dt>
+<span class="term"><em><code class="parameter">ch</code></em>
+</span><dd>
+<p class="para"><span class="function"><a href="function.curl-init.html" class="function">curl_init()</a></span>
+が返す cURL ハンドル。</p></dd>
+</dt>
+
+    <dt>
+
+     <span class="term"><em><code class="parameter">option</code></em></span>
+     <dd>
+
+      <p class="para">
+       設定したい <em>CURLOPT_XXX</em> オプション。
+      </p>
+     </dd>
+
+    </dt>
+
+    <dt>
+
+     <span class="term"><em><code class="parameter">value</code></em></span>
+     <dd>
+
+      <p class="para">
+       <em><code class="parameter">option</code></em> に設定する値。
+      </p>
+      <p class="para">
+       <em><code class="parameter">value</code></em> には、
+       <em><code class="parameter">option</code></em> の以下の値に関して
+       bool 値を指定する必要があります。
+       <table class="doctable informaltable">
+        
+         <thead>
+          <tr>
+           <th>オプション</th>
+           <th><em><code class="parameter">value</code></em> への設定値</th>
+           <th>注記</th>
+          </tr>
+
+         </thead>
+
+         <tbody class="tbody">
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_AUTOREFERER</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、<em>Location:</em> によるリダイレクトを
+            たどる際には自動的に <em>Referer:</em> フィールドをリクエストに
+            追加します。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_BINARYTRANSFER</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、<strong><code>CURLOPT_RETURNTRANSFER</code></strong>
+            が使用された場合に出力結果を何も加工せずに返します。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_COOKIESESSION</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、クッキーの &quot;セッション&quot; を新しく開始します。
+            以前のセッションで読み込まれていた &quot;セッションクッキー&quot; は無視するよう、
+            libcurl に指示します。デフォルトでは、それがセッションクッキーであるか
+            どうかにかかわらず libcurl はすべてのクッキーを読み込んで保存します。
+            セッションクッキーとは、有効期限が指定されておらず &quot;セッション&quot; の間のみ
+            有効であるクッキーのことです。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_CERTINFO</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、セキュアな転送時に SSL 証明書の情報を
+            <em>STDERR</em> に出力します。
+           </td>
+           <td style="vertical-align: top;">
+            PHP 5.3.2 以降で使用可能です。これを使うには、<strong><code>CURLOPT_VERBOSE</code></strong>
+            を on にしておかなければなりません。
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_CRLF</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、転送時に Unix 形式の改行を CRLF 形式に変換します。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_DNS_USE_GLOBAL_CACHE</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、グローバル DNS キャッシュを利用します。
+            このオプションはスレッドセーフではありません。また、デフォルトで
+            有効になっています。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_FAILONERROR</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、HTTP で 400 以上のコードが返ってきた際に
+            処理失敗と判断し、何もしません。デフォルトでは、コードの値を無視して
+            ページの内容を取得します。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_FILETIME</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、ドキュメントの更新日時を取得しようと試みます。
+            この値を取得するには、<span class="function"><a href="function.curl-getinfo.html" class="function">curl_getinfo()</a></span> で
+            <em><code class="parameter">CURLINFO_FILETIME</code></em> オプションを用います。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_FOLLOWLOCATION</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、サーバが HTTP ヘッダの一部として送ってくる
+            <em>&quot;Location: &quot;</em> ヘッダの内容をたどります
+           （これは再帰的に行われます。<strong><code>CURLOPT_MAXREDIRS</code></strong>
+            が指定されていない限り、送ってくる <em>&quot;Location: &quot;</em>
+            ヘッダの内容をずっとたどり続けることに注意しましょう）。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_FORBID_REUSE</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、処理が終了した際に明示的に接続を切断します。
+            接続を再利用しません。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_FRESH_CONNECT</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、キャッシュされている接続を利用せずに
+            新しい接続を確立します。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_FTP_USE_EPRT</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、FTP のダウンロードに EPRT（および LPRT）
+            を利用します。<strong><code>FALSE</code></strong> の場合は EPRT・LPRT を無効にして PORT
+            を利用します。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_FTP_USE_EPSV</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、FTP 転送の際にまず EPSV コマンドの利用を
+            試みます。失敗した場合は PASV を利用します。<strong><code>FALSE</code></strong> を設定すると、
+            EPSV を無効にします。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_FTP_CREATE_MISSING_DIRS</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、FTP の操作中にパスが存在しなかったときに
+            ディレクトリを作成します。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_FTPAPPEND</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、リモートファイルを上書きせずに追記します。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_FTPASCII</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>CURLOPT_TRANSFERTEXT</code></strong> のエイリアスです。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_FTPLISTONLY</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、FTP でディレクトリ名のみ表示します。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_HEADER</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、ヘッダの内容も出力します。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLINFO_HEADER_OUT</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、リクエスト文字列を追跡します。
+           </td>
+           <td style="vertical-align: top;">
+            PHP 5.1.3 以降で使用可能です。プレフィックスが <strong><code>CURLINFO_</code></strong>
+            となっているのは意図的なものです。
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_HTTPGET</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、HTTP のリクエスト形式を GET に戻します。
+            GET はデフォルト設定なので、リクエスト形式が変更されている
+            場合にのみ必要となります。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_HTTPPROXYTUNNEL</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> 指定された HTTP プロキシを介してトンネルに。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_MUTE</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、cURL 関数に関連する出力を完全に抑えます。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_NETRC</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、リモートサイトと接続を確立する際に用いる
+            ユーザ名やパスワードを、<var class="filename">~/.netrc</var> から取得します。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_NOBODY</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、出力から本文を削除します。
+            リクエストメソッドは HEAD となります。これを <strong><code>FALSE</code></strong>
+            に変更してもリクエストメソッドは GET には変わりません。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_NOPROGRESS</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、cURL 転送の進捗状況表示を無効にします。
+            <blockquote class="note"><p><strong class="note">注意</strong>: 
+             <p class="para">
+              PHP は、このオプションを自動的に <strong><code>TRUE</code></strong> に設定します。
+              これを変更するのは、デバッグ時のみにすべきです。
+             </p>
+            </p></blockquote>
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_NOSIGNAL</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、cURL 関数が PHP プロセスに送信するシグナルを
+            無視します。マルチスレッド SAPI ではデフォルトで on となっており、
+            そのためタイムアウトオプションもまだ利用されています。
+           </td>
+           <td style="vertical-align: top;">
+            cURL 7.10 で追加されました。
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_POST</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、HTTP POST を行います。POST は、
+            <em>application/x-www-form-urlencoded</em> 形式で
+            行われます。これは一般的な HTML のフォームと同じ形式です。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_PUT</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、HTTP PUT を行います。PUT するファイルは
+            <strong><code>CURLOPT_INFILE</code></strong> および
+            <strong><code>CURLOPT_INFILESIZE</code></strong>
+            で指定されている必要があります。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_RETURNTRANSFER</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、<span class="function"><a href="function.curl-exec.html" class="function">curl_exec()</a></span> の返り値を
+            文字列で返します。通常はデータを直接出力します。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_SSL_VERIFYPEER</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>FALSE</code></strong> を設定すると、cURL はサーバ証明書の検証を行いません。
+            別の証明書を <strong><code>CURLOPT_CAINFO</code></strong> オプションで
+            指定するか、<strong><code>CURLOPT_CAPATH</code></strong> オプションで
+            証明ディレクトリを指定します。
+           </td>
+           <td style="vertical-align: top;">
+            cURL 7.10 以降、デフォルト値は <strong><code>TRUE</code></strong> です。また、
+            cURL 7.10 以降、デフォルトでインストールされています。
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_TRANSFERTEXT</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、FTP 転送を ASCII モードで行います。
+            LDAP の場合は、データを HTML ではなくプレーンテキストで取得します。
+            Windows システムでは <em>STDOUT</em>
+            に対してバイナリモードを設定しないでください。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_UNRESTRICTED_AUTH</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、（<strong><code>CURLOPT_FOLLOWLOCATION</code></strong>
+            を利用して）場所をたどっていく際にユーザ名とパスワードを送信し続けます。
+            これは、たとえホスト名が変わっても続けられます。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_UPLOAD</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、アップロードの準備をします。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_VERBOSE</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>TRUE</code></strong> を設定すると、詳細な情報を出力します。情報は
+            <em>STDERR</em> か、または
+            <strong><code>CURLOPT_STDERR</code></strong>
+            で指定したファイルに出力されます。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+         </tbody>
+        
+       </table>
+
+      </p>
+      <p class="para">
+       <em><code class="parameter">value</code></em> には、
+       <em><code class="parameter">option</code></em> の以下の値に関して
+       整数値を指定する必要があります。
+       <table class="doctable informaltable">
+        
+         <thead>
+          <tr>
+           <th>オプション</th>
+           <th><em><code class="parameter">value</code></em> への設定値</th>
+           <th>注記</th>
+          </tr>
+
+         </thead>
+
+         <tbody class="tbody">
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_BUFFERSIZE</code></strong></td>
+           <td style="vertical-align: top;">
+            1 回の読み込みに用いるバッファのサイズ。しかしながら、必ず
+            このバッファいっぱいまで読み込まれることを保証するものではありません。
+           </td>
+           <td style="vertical-align: top;">
+            cURL 7.10 で追加されました。
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_CLOSEPOLICY</code></strong></td>
+           <td style="vertical-align: top;">
+            <em><code class="parameter">CURLCLOSEPOLICY_LEAST_RECENTLY_USED</code></em> あるいは
+            <em><code class="parameter">CURLCLOSEPOLICY_OLDEST</code></em> です。
+            他にも 3 つの <em>CURLCLOSEPOLICY_</em> 定数が存在しますが、
+            cURL はそれらをまだサポートしていません。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_CONNECTTIMEOUT</code></strong></td>
+           <td style="vertical-align: top;">
+            接続の試行を待ち続ける秒数。0 は永遠に待ち続けることを意味します。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_CONNECTTIMEOUT_MS</code></strong></td>
+           <td style="vertical-align: top;">
+            接続の試行を待ち続けるミリ秒数。0 は永遠に待ち続けることを意味します。
+            
+            システムの標準の名前解決を使うように libcurl をビルドしている場合は、
+            接続のタイムアウトは秒単位の精度となり、最小のタイムアウトは 1 秒となります。
+           </td>
+           <td style="vertical-align: top;">
+            cURL 7.16.2 で追加されました。PHP 5.2.3 以降で使用可能です。
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_DNS_CACHE_TIMEOUT</code></strong></td>
+           <td style="vertical-align: top;">
+            DNS エントリをメモリ内に保持し続ける秒数。デフォルトでは
+            120（2 分）に設定されています。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_FTPSSLAUTH</code></strong></td>
+           <td style="vertical-align: top;">
+            （使用可能な場合の）FTP 認証方法。
+            <em>CURLFTPAUTH_SSL</em>（まず SSL を試す）、
+            <em>CURLFTPAUTH_TLS</em>（まず TLS を試す）あるいは
+            <em>CURLFTPAUTH_DEFAULT</em>（cURL が決める）のいずれかです。
+           </td>
+           <td style="vertical-align: top;">
+            cURL 7.12.2 で追加されました。
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_HTTP_VERSION</code></strong></td>
+           <td style="vertical-align: top;">
+            <em><code class="parameter">CURL_HTTP_VERSION_NONE</code></em> (デフォルト。
+            使用するバージョンを決めるのは cURL にまかせる)、
+            <em><code class="parameter">CURL_HTTP_VERSION_1_0</code></em> (HTTP/1.0 を使用する)、
+            あるいは <em><code class="parameter">CURL_HTTP_VERSION_1_1</code></em> (HTTP/1.1 を使用する)
+            のいずれかです。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_HTTPAUTH</code></strong></td>
+           <td style="vertical-align: top;">
+            <p class="para">
+             使用する HTTP 認証方法。以下の中から選びます。
+             <em><code class="parameter">CURLAUTH_BASIC</code></em>、
+             <em><code class="parameter">CURLAUTH_DIGEST</code></em>、
+             <em><code class="parameter">CURLAUTH_GSSNEGOTIATE</code></em>、
+             <em><code class="parameter">CURLAUTH_NTLM</code></em>、
+             <em><code class="parameter">CURLAUTH_ANY</code></em> および
+             <em><code class="parameter">CURLAUTH_ANYSAFE</code></em>。
+            </p>
+            <p class="para">
+             2 つ以上の方法を組み合わせるには、ビット演算子 <em>|</em>（or）
+             を使用します。このような場合、cURL はサーバがサポートしている方法を
+             問い合わせたうえで最適な方法を選択します。
+            </p>
+            <p class="para">
+             <em><code class="parameter">CURLAUTH_ANY</code></em> は
+             <em>CURLAUTH_BASIC | CURLAUTH_DIGEST | CURLAUTH_GSSNEGOTIATE | CURLAUTH_NTLM</em>
+             のエイリアスです。
+            </p>
+            <p class="para">
+              <em><code class="parameter">CURLAUTH_ANYSAFE</code></em> は
+              <em>CURLAUTH_DIGEST | CURLAUTH_GSSNEGOTIATE | CURLAUTH_NTLM</em>
+              のエイリアスです。
+            </p>
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_INFILESIZE</code></strong></td>
+           <td style="vertical-align: top;">
+            ファイルをリモートサイトにアップロードする際のファイルサイズ。
+            このオプションを指定しても、libcurl がそれ以上のデータを送信するのは止められないことに注意しましょう。
+            実際に何が送信されるのかは
+            <strong><code>CURLOPT_READFUNCTION</code></strong> に依存します。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_LOW_SPEED_LIMIT</code></strong></td>
+           <td style="vertical-align: top;">
+            1 秒あたりのバイト数で、転送速度がこれより遅い期間が
+            <strong><code>CURLOPT_LOW_SPEED_TIME</code></strong> 秒以上続いた場合に
+            PHP は転送を終了します。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_LOW_SPEED_TIME</code></strong></td>
+           <td style="vertical-align: top;">
+            転送速度が <strong><code>CURLOPT_LOW_SPEED_LIMIT</code></strong>
+            より遅い期間がどれだけ続いた場合に転送を異常終了させるかを、
+            秒単位で指定します。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_MAXCONNECTS</code></strong></td>
+           <td style="vertical-align: top;">
+            許可される持続的接続の最大数。もしこの値に達した場合、
+            どの接続を閉じるのかを <strong><code>CURLOPT_CLOSEPOLICY</code></strong>
+            によって決定します。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_MAXREDIRS</code></strong></td>
+           <td style="vertical-align: top;">
+            HTTP のリダイレクト先を追いかける最大値。
+            <strong><code>CURLOPT_FOLLOWLOCATION</code></strong> とあわせて使用します。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_PORT</code></strong></td>
+           <td style="vertical-align: top;">
+            接続先のポート番号。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_PROTOCOLS</code></strong></td>
+           <td style="vertical-align: top;">
+            <p class="para">
+             <strong><code>CURLPROTO_*</code></strong> の値のビットマスク。使用すると、
+             転送時に libcurl がどのプロトコルを使用するのかに制約を加えます。
+             さまざまなプロトコルに対応するよう libcurl をビルドしていた場合でも、
+             これによって特定の転送プロトコルのみを使用するように制限することができます。
+             デフォルトでは、libcurl がサポートしているすべてのプロトコルの使用を許可します。
+             <strong><code>CURLOPT_REDIR_PROTOCOLS</code></strong> も参照ください。
+            </p>
+            <p class="para">
+             使用できるプロトコルオプションは次のとおりです。
+             <em><code class="parameter">CURLPROTO_HTTP</code></em>,
+             <em><code class="parameter">CURLPROTO_HTTPS</code></em>,
+             <em><code class="parameter">CURLPROTO_FTP</code></em>,
+             <em><code class="parameter">CURLPROTO_FTPS</code></em>,
+             <em><code class="parameter">CURLPROTO_SCP</code></em>,
+             <em><code class="parameter">CURLPROTO_SFTP</code></em>,
+             <em><code class="parameter">CURLPROTO_TELNET</code></em>,
+             <em><code class="parameter">CURLPROTO_LDAP</code></em>,
+             <em><code class="parameter">CURLPROTO_LDAPS</code></em>,
+             <em><code class="parameter">CURLPROTO_DICT</code></em>,
+             <em><code class="parameter">CURLPROTO_FILE</code></em>,
+             <em><code class="parameter">CURLPROTO_TFTP</code></em>,
+             <em><code class="parameter">CURLPROTO_ALL</code></em>
+            </p>
+           </td>
+           <td style="vertical-align: top;">
+            cURL 7.19.4 で追加されました。
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_PROXYAUTH</code></strong></td>
+           <td style="vertical-align: top;">
+            プロキシ接続に使用する HTTP 認証の方法。
+            <strong><code>CURLOPT_HTTPAUTH</code></strong> で説明したのと同じオプションを
+            指定可能です。プロキシ認証でサポートされているのは、今のところ
+            <em><code class="parameter">CURLAUTH_BASIC</code></em> および
+            <em><code class="parameter">CURLAUTH_NTLM</code></em> のみです。
+           </td>
+           <td style="vertical-align: top;">
+            cURL 7.10.7 で追加されました。
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_PROXYPORT</code></strong></td>
+           <td style="vertical-align: top;">
+            プロキシ接続のポート番号。このポート番号は、
+            <strong><code>CURLOPT_PROXY</code></strong> で指定することも可能です。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_PROXYTYPE</code></strong></td>
+           <td style="vertical-align: top;">
+            <em><code class="parameter">CURLPROXY_HTTP</code></em>（デフォルト）あるいは
+            <em><code class="parameter">CURLPROXY_SOCKS5</code></em>。
+           </td>
+           <td style="vertical-align: top;">
+            cURL 7.10 で追加されました。
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_REDIR_PROTOCOLS</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>CURLPROTO_*</code></strong> の値のビットマスク。使用すると、
+            <strong><code>CURLOPT_FOLLOWLOCATION</code></strong> が有効な場合のリダイレクト時の転送に
+            libcurl がどのプロトコルを使用するのかに制約を加えます。これによって、
+            リダイレクト時に特定の転送プロトコルのみを使用するように制限することができます。
+            デフォルトでは、libcurl がサポートしているすべてのプロトコルのうち
+            FILE と SCP 以外のすべての使用を許可します。この挙動は 7.19.4
+            より前のバージョンとは異なります。7.19.4 より前のバージョンでは、
+            サポートするすべてのプロトコルを無条件に許可していました。
+            プロトコル定数の値は <strong><code>CURLOPT_PROTOCOLS</code></strong> を参照ください。
+           </td>
+           <td style="vertical-align: top;">
+            cURL 7.19.4 で追加されました。
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_RESUME_FROM</code></strong></td>
+           <td style="vertical-align: top;">
+            転送を途中から再開する場合のバイトオフセット。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_SSL_VERIFYHOST</code></strong></td>
+           <td style="vertical-align: top;">
+            1 は SSL ピア証明書に一般名が存在するかどうかを調べます。
+            2 はそれに加え、その名前がホスト名と一致することを検証します。
+            本番環境では、このオプションの値は常に
+            2 (デフォルト値) にしておかなければなりません。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_SSLVERSION</code></strong></td>
+           <td style="vertical-align: top;">
+            使用する SSL のバージョン（2 あるいは 3）。デフォルトでは
+            PHP が自動的に判断しますが、これを手動で設定する必要がある場合もあります。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_TIMECONDITION</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>CURLOPT_TIMEVALUE</code></strong> の扱いを決定します。
+            <strong><code>CURLOPT_TIMEVALUE</code></strong> で指定した時刻以降に
+            変更されたページのみを返す場合は
+            <em><code class="parameter">CURL_TIMECOND_IFMODSINCE</code></em> を使用します。
+            <strong><code>CURLOPT_HEADER</code></strong> が <strong><code>TRUE</code></strong> だと仮定すると、
+            ページが変更されていない場合は
+            <em>&quot;304 Not Modified&quot;</em> ヘッダが返されます。
+            <em><code class="parameter">CURL_TIMECOND_IFUNMODSINCE</code></em> は反対の意味です。
+            デフォルトは <em><code class="parameter">CURL_TIMECOND_IFMODSINCE</code></em>
+            です。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_TIMEOUT</code></strong></td>
+           <td style="vertical-align: top;">
+            cURL 関数の実行にかけられる時間の最大値。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_TIMEOUT_MS</code></strong></td>
+           <td style="vertical-align: top;">
+            cURL 関数の実行にかけられる最大のミリ秒数。
+            
+            システムの標準の名前解決を使うように libcurl をビルドしている場合は、
+            接続のタイムアウトは秒単位の精度となり、最小のタイムアウトは 1 秒となります。
+           </td>
+           <td style="vertical-align: top;">
+            cURL 7.16.2 で追加されました。PHP 5.2.3 以降で使用可能です。
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_TIMEVALUE</code></strong></td>
+           <td style="vertical-align: top;">
+            1970 年 1 月 1 日からの経過秒数。この値は
+            <strong><code>CURLOPT_TIMECONDITION</code></strong> で使用されます。デフォルトでは
+            <em><code class="parameter">CURL_TIMECOND_IFMODSINCE</code></em> が設定されます。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_MAX_RECV_SPEED_LARGE</code></strong></td>
+           <td style="vertical-align: top;">
+            ダウンロード速度 (単位は「バイト/秒」) の転送中累加平均がこの値を超えると、
+            転送を一時停止して、平均速度がこのパラメータの値以下に落ちるまで待ちます。
+            デフォルトは無制限です。
+           </td>
+           <td style="vertical-align: top;">
+            cURL 7.15.5 で追加されました。PHP 5.4.0 以降で使用可能です。
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_MAX_SEND_SPEED_LARGE</code></strong></td>
+           <td style="vertical-align: top;">
+            アップロード速度 (単位は「バイト/秒」) の転送中累加平均がこの値を超えると、
+            転送を一時停止して、平均速度がこのパラメータの値以下に落ちるまで待ちます。
+            デフォルトは無制限です。
+           </td>
+           <td style="vertical-align: top;">
+            cURL 7.15.5 で追加されました。PHP 5.4.0 以降で使用可能です。
+           </td>
+          </tr>
+
+		  <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_SSH_AUTH_TYPES</code></strong></td>
+           <td style="vertical-align: top;">
+			<strong><code>CURLSSH_AUTH_PUBLICKEY</code></strong>, 
+			<strong><code>CURLSSH_AUTH_PASSWORD</code></strong>, 
+			<strong><code>CURLSSH_AUTH_HOST</code></strong>, 
+			<strong><code>CURLSSH_AUTH_KEYBOARD</code></strong>
+			のビットマスク。
+			<strong><code>CURLSSH_AUTH_ANY</code></strong> にすると libcurl がいずれかひとつを選択します。
+           </td>
+           <td style="vertical-align: top;">
+            cURL 7.16.1 で追加されました。
+           </td>
+          </tr>
+
+         </tbody>
+        
+       </table>
+
+      </p>
+      <p class="para">
+       <em><code class="parameter">value</code></em> は、
+       <em><code class="parameter">option</code></em> パラメータの
+       以下の値に関して文字列である必要があります。
+       <table class="doctable informaltable">
+        
+         <thead>
+          <tr>
+           <th>オプション</th>
+           <th><em><code class="parameter">value</code></em> への設定値</th>
+           <th>注記</th>
+          </tr>
+
+         </thead>
+
+         <tbody class="tbody">
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_CAINFO</code></strong></td>
+           <td style="vertical-align: top;">
+            接続先を検証するための証明書を保持するファイル名。
+            これは <strong><code>CURLOPT_SSL_VERIFYPEER</code></strong> を使用する場合に
+            のみ意味を持ちます。
+           </td>
+           <td style="vertical-align: top;">
+            絶対パスで指定しなければなりません。
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_CAPATH</code></strong></td>
+           <td style="vertical-align: top;">
+            複数の証明書ファイルを保持するディレクトリ。このオプションは
+            <strong><code>CURLOPT_SSL_VERIFYPEER</code></strong> とともに使用します。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_COOKIE</code></strong></td>
+           <td style="vertical-align: top;">
+            HTTP リクエストにおける
+            <em>&quot;Cookie: &quot;</em> ヘッダの内容。
+            クッキーが複数ある場合は、セミコロンとスペースで区切られる
+            (例 &quot;<em>fruit=apple; colour=red</em>&quot;)
+            ことに注意しましょう。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_COOKIEFILE</code></strong></td>
+           <td style="vertical-align: top;">
+            クッキーのデータを保持するファイルの名前。クッキーファイルは、
+            Netscape フォーマットあるいは
+            HTTP ヘッダを単純にファイルにダンプしたものが使用可能です。
+            名前が空文字列の場合はクッキーを読み込みませんが、クッキーの処理は有効なままです。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_COOKIEJAR</code></strong></td>
+           <td style="vertical-align: top;">
+            ハンドルを閉じる際 (curl_close のコール後など) に、
+            すべての内部クッキーを保存するファイルの名前。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_CUSTOMREQUEST</code></strong></td>
+           <td style="vertical-align: top;">
+            HTTP リクエストで
+            <em>&quot;GET&quot;</em> あるいは <em>&quot;HEAD&quot;</em> 以外に
+            使用するカスタムメソッド。これが有用なのは、<em>&quot;DELETE&quot;</em>
+            やその他のあまり知られていない HTTP リクエストを実行する場合です。
+            使用可能な値は <em>&quot;GET&quot;</em>、
+            <em>&quot;POST&quot;</em>、<em>&quot;CONNECT&quot;</em> などです。
+            HTTP リクエストの内容をすべて指定するわけではありません。つまり、
+            <em>&quot;GET /index.html HTTP/1.0\r\n\r\n&quot;</em> のような
+            記述は間違いだということです。
+            <blockquote class="note"><p><strong class="note">注意</strong>: 
+             <p class="para">
+              使用しようとしているメソッドをサーバがサポートしていることを
+              確かめるまで、これを使用しないでください。
+             </p>
+            </p></blockquote>
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_EGDSOCKET</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>CURLOPT_RANDOM_FILE</code></strong> と似ていますが、
+            Entropy Gathering Daemon ソケットを使用してファイル名を生成する点が
+            違います。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_ENCODING</code></strong></td>
+           <td style="vertical-align: top;">
+            <em>&quot;Accept-Encoding: &quot;</em> ヘッダの内容。
+            これにより、応答のデコードを可能にします。サポートされる
+            エンコーディングは <em>&quot;identity&quot;</em>、
+            <em>&quot;deflate&quot;</em> および <em>&quot;gzip&quot;</em>
+            です。もし空文字列 <em>&quot;&quot;</em> が指定された場合、
+            サポートされるエンコーディングをすべて含むヘッダが送信されます。
+           </td>
+           <td style="vertical-align: top;">
+            cURL 7.10 で追加されました。
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_FTPPORT</code></strong></td>
+           <td style="vertical-align: top;">
+            FTP で &quot;POST&quot; を使用するための IP アドレスを取得する際に使用される値。
+            &quot;POST&quot; は、リモートサーバに対してこちらが指定した IP アドレスに
+            接続するよう指示します。この値に設定できる内容は IP アドレス、ホスト名、
+            ネットワークインターフェース名（Unix）、あるいは単に &#039;-&#039; を指定する
+            ことでシステムのデフォルト IP アドレスを指定します。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_INTERFACE</code></strong></td>
+           <td style="vertical-align: top;">
+            使用するネットワークインターフェースの名前。
+            インターフェース名、IP アドレスあるいはホスト名が指定可能です。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+		  <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_KEYPASSWD</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>CURLOPT_SSLKEY</code></strong>
+			あるいは <strong><code>CURLOPT_SSH_PRIVATE_KEYFILE</code></strong> 秘密鍵を使うときに必須となるパスワード。
+           </td>
+           <td style="vertical-align: top;">
+            cURL 7.16.1 で追加されました。
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_KRB4LEVEL</code></strong></td>
+           <td style="vertical-align: top;">
+            KRB4（Kerberos 4）セキュリティレベル。以下の値のいずれか
+            （セキュリティの低い順です）が指定可能です。
+            <em>&quot;clear&quot;</em>、
+            <em>&quot;safe&quot;</em>、
+            <em>&quot;confidential&quot;</em>、
+            <em>&quot;private&quot;</em>。
+            文字列がこれらのどれでもなかった場合は、
+            <em>&quot;private&quot;</em> が使用されます。このオプションを <strong><code>NULL</code></strong>
+            にすると KRB4 セキュリティを無効にします。現時点では、KRB4
+            セキュリティは FTP 転送にのみ使用可能です。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_POSTFIELDS</code></strong></td>
+           <td style="vertical-align: top;">
+            <span class="simpara">
+             HTTP &quot;POST&quot; で送信するすべてのデータ。
+             ファイルを送信するには、ファイル名の先頭に <em>@</em>
+             をつけてフルパスを指定します。ファイルタイプを明示的に指定するには、ファイル名の後に
+             &#039;<em>;type=mimetype</em>&#039; 形式で続けます。
+             このパラメータは
+             &#039;<em>para1=val1&amp;para2=val2&amp;...</em>&#039;
+             のように url エンコードされた文字列形式で渡すこともできますし、
+             フィールド名をキー、データを値とする配列で渡すこともできます。
+             <em><code class="parameter">value</code></em> が配列の場合、
+             <em>Content-Type</em> ヘッダには
+             <em>multipart/form-data</em> を設定します。
+            </span>
+            <span class="simpara">
+             5.2.0 以降、このオプションに
+             <em>@</em> プレフィックスつきでファイルを渡したときは
+             <em><code class="parameter">value</code></em> が配列でなければならなくなりました。
+            </span>
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_PROXY</code></strong></td>
+           <td style="vertical-align: top;">
+            リクエストを経由させる HTTP プロキシ。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_PROXYUSERPWD</code></strong></td>
+           <td style="vertical-align: top;">
+            プロキシに接続するためのユーザ名とパスワード。
+            <em>&quot;[username]:[password]&quot;</em> 形式で指定します。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_RANDOM_FILE</code></strong></td>
+           <td style="vertical-align: top;">
+            使用するファイル名を、SSL の乱数生成器を使用して作成します。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_RANGE</code></strong></td>
+           <td style="vertical-align: top;">
+            取得するデータの範囲を
+            <em>&quot;X-Y&quot;</em> 形式で指定します。X あるいは Y は省略可能です。
+            HTTP 転送では、いくつかの範囲をカンマで区切った
+            <em>&quot;X-Y,N-M&quot;</em> のような形式もサポートしています。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_REFERER</code></strong></td>
+           <td style="vertical-align: top;">
+            HTTP リクエストで使用される <em>&quot;Referer: &quot;</em>
+            ヘッダの内容。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+		  <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_SSH_HOST_PUBLIC_KEY_MD5</code></strong></td>
+           <td style="vertical-align: top;">
+            32 桁の十六進文字列。この文字列は、リモートホストの公開鍵の MD5 チェックサムでなければなりません。
+			md5sum がマッチしない限り、libcurl はホストとの接続を拒否します。
+			このオプションは、SCP および SFTP でのみ有効です。
+           </td>
+           <td style="vertical-align: top;">
+            cURL 7.17.1 で追加されました。
+           </td>
+          </tr>
+
+		  <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_SSH_PUBLIC_KEYFILE</code></strong></td>
+           <td style="vertical-align: top;">
+            公開鍵のファイル名。指定しなかった場合、libcurl はデフォルトの場所を探します。デフォルトは、
+			環境変数 HOME が設定されていれば $HOME/.ssh/id_dsa.pub、設定されていなければ
+			カレントディレクトリの &quot;id_dsa.pub&quot; です。
+           </td>
+           <td style="vertical-align: top;">
+            cURL 7.16.1 で追加されました。
+           </td>
+          </tr>
+
+		  <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_SSH_PRIVATE_KEYFILE</code></strong></td>
+           <td style="vertical-align: top;">
+            秘密鍵のファイル名。指定しなかった場合、libcurl はデフォルトの場所を探します。デフォルトは、
+			環境変数 HOME が設定されていれば $HOME/.ssh/id_dsa、設定されていなければ
+			カレントディレクトリの &quot;id_dsa&quot; です。
+			ファイルがパスワードで保護されている場合は、パスワードを
+			<strong><code>CURLOPT_KEYPASSWD</code></strong> に設定します。
+           </td>
+           <td style="vertical-align: top;">
+            cURL 7.16.1 で追加されました。
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_SSL_CIPHER_LIST</code></strong></td>
+           <td style="vertical-align: top;">
+            SSL で使用する暗号のリスト。例えば
+            <em>RC4-SHA</em> および <em>TLSv1</em> が
+            使用可能です。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_SSLCERT</code></strong></td>
+           <td style="vertical-align: top;">
+            PEM フォーマットの証明書を含むファイルの名前。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_SSLCERTPASSWD</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>CURLOPT_SSLCERT</code></strong>
+            証明書を使用する際に必要なパスワード。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_SSLCERTTYPE</code></strong></td>
+           <td style="vertical-align: top;">
+            証明書の形式。サポートされるフォーマットは
+            <em>&quot;PEM&quot;</em>（デフォルト）、<em>&quot;DER&quot;</em>
+            および <em>&quot;ENG&quot;</em> です。
+           </td>
+           <td style="vertical-align: top;">
+            cURL 7.9.3 で追加されました。
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_SSLENGINE</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>CURLOPT_SSLKEY</code></strong> で指定した SSL 秘密鍵の
+            暗号化エンジンの ID 。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_SSLENGINE_DEFAULT</code></strong></td>
+           <td style="vertical-align: top;">
+            非対称暗号化で使用する暗号化エンジンの ID 。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_SSLKEY</code></strong></td>
+           <td style="vertical-align: top;">
+            SSL 秘密鍵を含むファイルの名前。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_SSLKEYPASSWD</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>CURLOPT_SSLKEY</code></strong> で指定した SSL 秘密鍵を
+            使用するために必要なパスワード。
+            <blockquote class="note"><p><strong class="note">注意</strong>: 
+             <p class="para">
+              このオプションには重要なパスワードが含まれます。PHP スクリプトを
+              安全な状態におくことを忘れないでください。
+             </p>
+            </p></blockquote>
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_SSLKEYTYPE</code></strong></td>
+           <td style="vertical-align: top;">
+            <strong><code>CURLOPT_SSLKEY</code></strong> で指定した SSL 秘密鍵の
+            形式。サポートされる型は以下のとおりです。
+            <em>&quot;PEM&quot;</em>（デフォルト）、<em>&quot;DER&quot;</em>
+            および <em>&quot;ENG&quot;</em> 。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_URL</code></strong></td>
+           <td style="vertical-align: top;">
+            取得する URL 。<span class="function"><a href="function.curl-init.html" class="function">curl_init()</a></span> でセッションを
+            初期化する際に指定することも可能です。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_USERAGENT</code></strong></td>
+           <td style="vertical-align: top;">
+            HTTP リクエストで使用される <em>&quot;User-Agent: &quot;</em>
+            ヘッダの内容。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_USERPWD</code></strong></td>
+           <td style="vertical-align: top;">
+            接続に使用するユーザ名とパスワード。
+            <em>&quot;[username]:[password]&quot;</em> 形式で指定します。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+         </tbody>
+        
+       </table>
+
+      </p>
+      <p class="para">
+       <em><code class="parameter">value</code></em> には、
+       <em><code class="parameter">option</code></em> の以下の値に関して
+       配列を指定する必要があります。
+       <table class="doctable informaltable">
+        
+         <thead>
+          <tr>
+           <th>オプション</th>
+           <th><em><code class="parameter">value</code></em> への設定値</th>
+           <th>注記</th>
+          </tr>
+
+         </thead>
+
+         <tbody class="tbody">
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_HTTP200ALIASES</code></strong></td>
+           <td style="vertical-align: top;">
+            エラーではなく正常な応答として扱われる、HTTP 200 レスポンスの配列。
+           </td>
+           <td style="vertical-align: top;">
+            cURL 7.10.3 で追加されました。
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_HTTPHEADER</code></strong></td>
+           <td style="vertical-align: top;">
+            設定する HTTP ヘッダフィールドの配列。
+            <code class="code">
+             array(&#039;Content-type: text/plain&#039;, &#039;Content-length: 100&#039;)
+            </code>
+            形式。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_POSTQUOTE</code></strong></td>
+           <td style="vertical-align: top;">
+            FTP リクエストの実行後に、サーバ上で実行する FTP コマンドの配列。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_QUOTE</code></strong></td>
+           <td style="vertical-align: top;">
+            FTP リクエストの前にサーバ上で実行する FTP コマンドの配列。
+           </td>
+           <td style="vertical-align: top;">
+           </td>
+          </tr>
+
+         </tbody>
+        
+       </table>
+
+      </p>
+      <p class="para">
+       <em><code class="parameter">value</code></em> はストリームリソース（例えば
+       <span class="function"><a href="function.fopen.html" class="function">fopen()</a></span> が作成するもの）であり、以下の
+       <em><code class="parameter">option</code></em> パラメータに設定します。
+       <table class="doctable informaltable">
+        
+         <thead>
+          <tr>
+           <th>オプション</th>
+           <th><em><code class="parameter">value</code></em> に設定する内容</th>
+          </tr>
+
+         </thead>
+
+         <tbody class="tbody">
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_FILE</code></strong></td>
+           <td style="vertical-align: top;">
+            転送内容が書き込まれるファイル。デフォルトは <em>STDOUT</em>
+            （ブラウザウィンドウ）。
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_INFILE</code></strong></td>
+           <td style="vertical-align: top;">
+            アップロード時に転送内容を読み込むファイル。
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_STDERR</code></strong></td>
+           <td style="vertical-align: top;">
+            <em>STDERR</em> の代わりにエラーを出力する場所。
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_WRITEHEADER</code></strong></td>
+           <td style="vertical-align: top;">
+            転送のヘッダ部分が書き込まれるファイル。
+           </td>
+          </tr>
+
+         </tbody>
+        
+       </table>
+
+      </p>
+      <p class="para">
+       <em><code class="parameter">value</code></em> には、
+       <em><code class="parameter">option</code></em> の以下の値に関して
+       有効なコールバック関数の名前を指定する必要があります。
+       <table class="doctable informaltable">
+        
+         <thead>
+          <tr>
+           <th>オプション</th>
+           <th><em><code class="parameter">value</code></em> への設定値</th>
+          </tr>
+
+         </thead>
+
+         <tbody class="tbody">
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_HEADERFUNCTION</code></strong></td>
+           <td style="vertical-align: top;">
+            コールバック関数の名前で、このコールバック関数は 2 つの引数を
+            とります。最初のパラメータは CURL リソースで、2 番目は書き込む
+            ヘッダデータの文字列です。このコールバック関数を使用するにあたり、
+            ヘッダデータを書き込む処理を実装するのはあなたの役目となります。
+            書き込んだデータのバイト数を返します。
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_PASSWDFUNCTION</code></strong></td>
+           <td style="vertical-align: top;">
+            コールバック関数の名前で、このコールバック関数は 3 つの引数を
+            とります。最初のパラメータは CURL リソースで、2 番目はパスワード
+            プロンプトの文字列、そして 3 番目はパスワードの最大長です。
+            入力されたパスワードを文字列で返します。
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_PROGRESSFUNCTION</code></strong></td>
+           <td style="vertical-align: top;">
+            コールバック関数の名前で、このコールバック関数は 3 つの引数をとります。
+            最初のパラメータは cURL リソースで、2 番目はファイル記述子リソース、
+            そして 3 番目は長さです。データを文字列で返します。
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_READFUNCTION</code></strong></td>
+           <td style="vertical-align: top;">
+            コールバック関数の名前で、このコールバック関数は 3 つの引数を
+            とります。最初のパラメータは cURL リソースで、2 番目は
+            <strong><code>CURLOPT_INFILE</code></strong> で cURL に渡したストリームリソース、
+            そして最後が読み込むデータの最大量です。
+            コールバック関数は、要求したデータ量以下の長さの文字列を返さなければなりません。
+            一般的には、渡されたストリームリソースから読み込んだデータを返します。
+            <em>EOF</em> を伝えるには空文字列を返さなければなりません。
+           </td>
+          </tr>
+
+          <tr>
+           <td style="vertical-align: top;"><strong><code>CURLOPT_WRITEFUNCTION</code></strong></td>
+           <td style="vertical-align: top;">
+            コールバック関数の名前で、このコールバック関数は 2 つの引数を
+            とります。最初のパラメータは cURL リソースで、2 番目は書き込む
+            データの文字列です。データの保存には、
+            このコールバック関数を使わなければなりません。
+            書き込んだデータの正確なバイト数を返す必要があります。
+            返さなければ、エラーで転送が異常終了します。
+           </td>
+          </tr>
+
+         </tbody>
+        
+       </table>
+
+      </p>
+     </dd>
+
+    </dt>
+
+   </dl>
+
+  </p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.curl-setopt-returnvalues">
+  <h3 class="title">返り値</h3>
+  <p class="para">
+   成功した場合に <strong><code>TRUE</code></strong> を、失敗した場合に <strong><code>FALSE</code></strong> を返します。
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.curl-setopt-changelog">
+  <h3 class="title">変更履歴</h3>
+  <p class="para">
+   <table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>バージョン</th>
+       <th>説明</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>5.2.10</td>
+       <td>
+        <strong><code>CURLOPT_PROTOCOLS</code></strong> および
+        <strong><code>CURLOPT_REDIR_PROTOCOLS</code></strong>
+        が追加されました。
+       </td>
+      </tr>
+
+      <tr>
+       <td>5.1.0</td>
+       <td>
+        <strong><code>CURLOPT_AUTOREFERER</code></strong>,
+        <strong><code>CURLOPT_BINARYTRANSFER</code></strong>,
+        <strong><code>CURLOPT_FTPSSLAUTH</code></strong>,
+        <strong><code>CURLOPT_PROXYAUTH</code></strong> および
+        <strong><code>CURLOPT_TIMECONDITION</code></strong>
+        が追加されました。
+       </td>
+      </tr>
+
+      <tr>
+       <td>5.0.0</td>
+       <td>
+        <strong><code>CURLOPT_FTP_USE_EPRT</code></strong>,
+        <strong><code>CURLOPT_NOSIGNAL</code></strong>,
+        <strong><code>CURLOPT_UNRESTRICTED_AUTH</code></strong>,
+        <strong><code>CURLOPT_BUFFERSIZE</code></strong>,
+        <strong><code>CURLOPT_HTTPAUTH</code></strong>,
+        <strong><code>CURLOPT_PROXYPORT</code></strong>,
+        <strong><code>CURLOPT_PROXYTYPE</code></strong>,
+        <strong><code>CURLOPT_SSLCERTTYPE</code></strong> および
+        <strong><code>CURLOPT_HTTP200ALIASES</code></strong>
+        が追加されました。
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  </p>
+ </div>
+
+ 
+ <div class="refsect1 examples" id="refsect1-function.curl-setopt-examples">
+  <h3 class="title">例</h3>
+  <p class="para">
+   <div class="example" id="example-3856">
+    <p><strong>例1 新規に cURL セッションを初期化、ウェブページを取得する</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #FF8000">//&nbsp;新しい&nbsp;cURL&nbsp;リソースを作成します<br /></span><span style="color: #0000BB">$ch&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">curl_init</span><span style="color: #007700">();<br /><br /></span><span style="color: #FF8000">//&nbsp;URL&nbsp;その他のオプションを適切に設定します<br /></span><span style="color: #0000BB">curl_setopt</span><span style="color: #007700">(</span><span style="color: #0000BB">$ch</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">CURLOPT_URL</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">"http://www.example.com/"</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">curl_setopt</span><span style="color: #007700">(</span><span style="color: #0000BB">$ch</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">CURLOPT_HEADER</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">false</span><span style="color: #007700">);<br /><br /></span><span style="color: #FF8000">//&nbsp;URL&nbsp;の内容を取得し、ブラウザに渡します<br /></span><span style="color: #0000BB">curl_exec</span><span style="color: #007700">(</span><span style="color: #0000BB">$ch</span><span style="color: #007700">);<br /><br /></span><span style="color: #FF8000">//&nbsp;cURL&nbsp;リソースを閉じ、システムリソースを開放します<br /></span><span style="color: #0000BB">curl_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$ch</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></div>
+    </div>
+
+   </div>
+  </p>
+  <p class="para">
+   <div class="example" id="example-3857">
+    <p><strong>例2 ファイルのアップロード</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /><br /></span><span style="color: #FF8000">/*&nbsp;http://localhost/upload.php:<br />print_r($_POST);<br />print_r($_FILES);<br />*/<br /><br /></span><span style="color: #0000BB">$ch&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">curl_init</span><span style="color: #007700">();<br /><br /></span><span style="color: #0000BB">$data&nbsp;</span><span style="color: #007700">=&nbsp;array(</span><span style="color: #DD0000">'name'&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'Foo'</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">'file'&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'@/home/user/test.png'</span><span style="color: #007700">);<br /><br /></span><span style="color: #0000BB">curl_setopt</span><span style="color: #007700">(</span><span style="color: #0000BB">$ch</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">CURLOPT_URL</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">'http://localhost/upload.php'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">curl_setopt</span><span style="color: #007700">(</span><span style="color: #0000BB">$ch</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">CURLOPT_POST</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">1</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">curl_setopt</span><span style="color: #007700">(</span><span style="color: #0000BB">$ch</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">CURLOPT_POSTFIELDS</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$data</span><span style="color: #007700">);<br /><br /></span><span style="color: #0000BB">curl_exec</span><span style="color: #007700">(</span><span style="color: #0000BB">$ch</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></div>
+    </div>
+
+    <div class="example-contents"><p>上の例の出力は以下となります。</p></div>
+    <div class="example-contents screen">
+<div class="cdata"><pre>
+Array
+(
+    [name] =&gt; Foo
+)
+Array
+(
+    [file] =&gt; Array
+        (
+            [name] =&gt; test.png
+            [type] =&gt; image/png
+            [tmp_name] =&gt; /tmp/phpcpjNeQ
+            [error] =&gt; 0
+            [size] =&gt; 279
+        )
+
+)
+
+</pre></div>
+    </div>
+   </div>
+  </p>
+ </div>
+
+ 
+ <div class="refsect1 notes" id="refsect1-function.curl-setopt-notes">
+  <h3 class="title">注意</h3>
+  <blockquote class="note"><p><strong class="note">注意</strong>: 
+   <p class="para">
+    配列を <strong><code>CURLOPT_POSTFIELDS</code></strong> に渡すと、データを
+    <em class="emphasis">multipart/form-data</em> でエンコードします。
+    一方 URL エンコードされた文字列を渡すと、データを
+    <em class="emphasis">application/x-www-form-urlencoded</em> でエンコードします。
+   </p>
+  </p></blockquote>
+ </div>
+
+ 
+ <div class="refsect1 seealso" id="refsect1-function.curl-setopt-seealso">
+  <h3 class="title">参考</h3>
+  <p class="para">
+   <ul class="simplelist">
+    <li class="member"><span class="function"><a href="function.curl-setopt-array.html" class="function" rel="rdfs-seeAlso">curl_setopt_array()</a> - CURL 転送用の複数のオプションを設定する</span></li>
+   </ul>
+  </p>
+ </div>
+
+
+</div><hr /><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="function.curl-setopt-array.html">curl_setopt_array</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="function.curl-version.html">curl_version</a></div>
+ <div class="up"><a href="ref.curl.html">cURL 関数</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div></body></html>

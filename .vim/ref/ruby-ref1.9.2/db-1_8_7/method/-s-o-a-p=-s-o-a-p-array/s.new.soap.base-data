@@ -1,0 +1,6 @@
+kind=defined
+names=new
+visibility=public
+
+--- new(type = nil, rank = 1, arytype = nil)
+

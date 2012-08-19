@@ -1,0 +1,6 @@
+kind=defined
+names=class_from_name
+visibility=public
+
+--- class_from_name(name, lenient = false)
+

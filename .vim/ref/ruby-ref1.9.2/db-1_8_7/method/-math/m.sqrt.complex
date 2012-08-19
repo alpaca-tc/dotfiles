@@ -1,0 +1,23 @@
+kind=redefined
+names=sqrt
+visibility=public
+
+--- sqrt(z) -> Complex
+z の平方根を返します。
+
+複素関数としてのsqrt()の定義は以下です。
+
+  sqrt(z) = sqrt(r) * exp(i * t/2)
+
+@param z 平方根を求める複素数
+
+===== 注意
+
+虚部が 0 でも [[c:Complex]] クラスのオブジェクトであれば [[c:Complex]] クラスのオブジェクトを返すことに注意してください。
+
+  n = 2
+  z = Complex.new(2, 0)
+
+  p Math.sqrt(n) #=> 1.4142135623731
+  p Math.sqrt(z) #=> Complex(1.4142135623731, 0.0)
+

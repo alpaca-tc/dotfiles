@@ -1,0 +1,15 @@
+kind=defined
+names=DELETED
+visibility=public
+
+--- DELETED -> Symbol
+「:Deleted」というシンボルを返します。
+
+メッセージが削除されていることを意味します。
+EXPUNGE で完全に除去されます。
+
+フラグメッセージ属性として用いられます
+([[m:Net::IMAP::FetchData#attr]])。
+
+詳しくは [[RFC:2060]] を参照してください。
+

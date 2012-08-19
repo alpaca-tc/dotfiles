@@ -1,0 +1,8 @@
+kind=defined
+names=single_character_display
+visibility=public
+
+--- single_character_display -> String
+
+アサーションに失敗した時に表示する 'F' を返します。
+

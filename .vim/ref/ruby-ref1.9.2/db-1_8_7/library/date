@@ -1,0 +1,7 @@
+methods=
+sublibraries=
+requires=
+classes=Date,DateTime
+is_sublibrary=false
+
+日付をあつかうためのライブラリです。

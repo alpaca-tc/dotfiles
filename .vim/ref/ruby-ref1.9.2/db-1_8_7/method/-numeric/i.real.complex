@@ -1,0 +1,8 @@
+kind=added
+names=real
+visibility=public
+
+--- real -> self
+複素数として見た場合の実部を返します。
+つまり、self が実数の場合はそのまま、selfを返します。
+

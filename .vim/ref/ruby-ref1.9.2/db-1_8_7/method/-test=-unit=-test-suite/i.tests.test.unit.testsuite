@@ -1,0 +1,8 @@
+kind=defined
+names=tests
+visibility=public
+
+--- tests    -> [ Test::Unit::TestSuite | Test::Unit::TestCase ]
+
+自身が持っているテストを [[c:Test::Unit::TestSuite]] か
+[[c:Test::Unit::TestCase]] の配列で返します。

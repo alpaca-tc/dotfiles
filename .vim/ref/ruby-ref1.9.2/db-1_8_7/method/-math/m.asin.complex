@@ -1,0 +1,13 @@
+kind=redefined
+names=asin
+visibility=public
+
+--- asin(z) -> Complex
+複素関数としてのasin関数(逆sin関数)の結果を返します。
+
+asin関数は以下で定義されます。
+
+  asin(z) = -i * log(i*z + sqrt(1-z*z))
+
+@param z 複素数
+

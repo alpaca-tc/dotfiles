@@ -1,0 +1,9 @@
+kind=defined
+names=length,size
+visibility=public
+
+--- length -> Integer
+--- size   -> Integer
+
+与えられた Enumerable オブジェクトの数を返します。
+

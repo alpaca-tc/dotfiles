@@ -1,0 +1,6 @@
+kind=defined
+names=elename2name
+visibility=public
+
+--- elename2name(name)
+

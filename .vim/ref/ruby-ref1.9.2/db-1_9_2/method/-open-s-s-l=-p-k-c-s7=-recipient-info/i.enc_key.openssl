@@ -1,0 +1,12 @@
+kind=defined
+names=enc_key
+visibility=public
+
+--- enc_key -> String
+送信先の公開鍵で暗号化された共通鍵を返します。
+
+詳しくは [[RFC:2315]] の 10.2、10.3 を参照してください。
+
+通常は [[m:OpenSSL::PKCS7#decrypt]] で復号化するので
+あまり使わないでしょう。
+

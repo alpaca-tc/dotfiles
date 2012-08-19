@@ -1,0 +1,30 @@
+kind=redefined
+names=delete,delete!
+visibility=public
+
+--- delete(str) -> String
+--- delete!(str) -> String|nil
+
+[[m:String#delete]] の日本語対応版です。
+指定したパターンの文字列を取り除きます。
+
+ただしこのメソッドは置き換え前の物とは異なり
+複数の引数を取れません。
+
+@param str 取り除く文字のパターン。
+
+例：
+
+  #!/usr/bin/env ruby
+
+  $KCODE = 'EUC'
+  zstr = 'ＡＢＣＤＥＦ'
+  hoge = 'hogehoge'
+
+  p zstr.delete("Ａ")  # => "唾津\306"
+  p hoge.delete("e")   # => "hoghog"
+
+  require 'jcode'
+  p zstr.delete("Ａ")  # => "ＢＣＤＥＦ"
+  p hoge.delete("e")   # => "hoghog"
+    

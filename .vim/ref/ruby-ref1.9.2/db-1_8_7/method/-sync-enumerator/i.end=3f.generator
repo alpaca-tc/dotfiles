@@ -1,0 +1,11 @@
+kind=defined
+names=end?
+visibility=public
+
+--- end?(i = nil) -> bool
+
+SyncEnumerator が終わりに達している場合は真を返します。
+
+i を与えた場合は、i 番目の Enumerable オブジェクトが終わりに
+達している場合、真を返します。
+

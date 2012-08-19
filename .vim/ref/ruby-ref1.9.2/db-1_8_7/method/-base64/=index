@@ -1,0 +1,8 @@
+.b64encode	Base64.#b64encode
+.decode64	Base64.#decode64
+.decode_b	Base64.#decode_b
+.encode64	Base64.#encode64
+#b64encode	Base64.#b64encode
+#decode64	Base64.#decode64
+#decode_b	Base64.#decode_b
+#encode64	Base64.#encode64

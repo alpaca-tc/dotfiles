@@ -1,0 +1,22 @@
+kind=defined
+names=pipe
+visibility=public
+
+--- pipe                    -> [IO]
+
+[[man:pipe(2)]] を実行して、相互につながった2つの
+[[c:IO]] オブジェクトを要素とする配列を返します。
+
+戻り値の配列は最初の要素が読み込み側で、次の要素が書き込み側です。
+
+
+@raise Errno::EXXX IO オブジェクトの作成に失敗した場合に発生します。
+
+  r, w = IO.pipe
+  p [r, w]            # => [#<IO:0x401b90f8>, #<IO:0x401b7718>]
+  Thread.new do
+    w.puts "foo"
+    w.close
+  end
+  p r.gets           # => "foo\n"
+

@@ -1,0 +1,6 @@
+kind=defined
+names=assign_ns
+visibility=public
+
+--- assign_ns(attrs, ns, namespace, tag = nil)
+

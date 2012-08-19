@@ -1,0 +1,10 @@
+kind=defined
+names=guess2
+visibility=public
+
+--- guess2(str) -> Integer
+
+nkf2の漢字コード自動判定ルーチンを利用したものです。
+
+@param str 推測対象の文字列です。
+

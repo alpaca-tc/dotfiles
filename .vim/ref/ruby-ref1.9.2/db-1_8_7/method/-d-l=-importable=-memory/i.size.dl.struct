@@ -1,0 +1,10 @@
+kind=defined
+names=size
+visibility=public
+
+--- size
+
+DL::PtrData#size を呼びます。
+
+
+

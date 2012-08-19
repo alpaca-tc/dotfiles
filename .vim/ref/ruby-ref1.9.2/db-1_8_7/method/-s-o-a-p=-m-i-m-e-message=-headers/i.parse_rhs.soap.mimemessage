@@ -1,0 +1,6 @@
+kind=defined
+names=parse_rhs
+visibility=public
+
+--- parse_rhs(str)
+

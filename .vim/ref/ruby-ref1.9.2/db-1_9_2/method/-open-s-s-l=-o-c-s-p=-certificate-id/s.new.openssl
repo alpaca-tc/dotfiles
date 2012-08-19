@@ -1,0 +1,15 @@
+kind=defined
+names=new
+visibility=public
+
+--- new(subject, issuer, digest=nil) -> OpenSSL::OCSP::CertificateId
+CertificateId オブジェクトを生成します。
+
+subject には問合せ対象の証明書を、issuerにはsubjectのissuer(発行者)
+の証明書を渡します。
+
+@param subject 問合せ対象の証明書([[c:OpenSSL::X509::Certificate]] オブジェクト)
+@param issuer subjectのissuer(発行者)の証明書([[c:OpenSSL::X509::Certificate]] オブジェクト)
+
+@raise OpenSSL::OCSP::OCSPError オブジェクトの生成に失敗した際に発生します
+

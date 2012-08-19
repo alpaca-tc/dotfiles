@@ -1,0 +1,186 @@
+# ls -G 表示の設定
+# mac系
+export CLICOLOR=1
+export LSCOLORS=DxGxcxdxCxegedabagacad #背景黒に合う
+# export LSCOLORS=ExFxCxDxBxegedabagacad
+
+# coreUtils color
+# export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
+
+zstyle ':completion:*' list-colors \
+        'di=33;01' 'ln=36;01' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34'
+#         'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34' #見にくい
+#no text
+#fi file
+#di directory
+#ln symbolic
+#pi fifo pipe
+#so socket
+#bd block device
+#cd char device
+#ex exe
+#mi undifined
+#or no link symbolic
+
+# 色付きで補完する
+# zstyle ':completion:*' list-colors di=34 fi=0
+
+# 指定したコマンド名がなく、ディレクトリ名と一致した場合 cd する
+setopt auto_cd
+
+# cd でTabを押すとdir list を表示
+setopt auto_pushd
+
+# ディレクトリスタックに同じディレクトリを追加しないようになる
+setopt pushd_ignore_dups
+
+# コマンドのスペルチェックをする
+setopt correct
+
+# コマンドライン全てのスペルチェックをする
+setopt correct_all
+setopt correctall
+
+# コマンド オプションも補完
+autoload -U compinit
+compinit
+
+# 大文字小文字 補完する
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+
+# 拡張*()<>の検索が可能になる
+setopt extended_glob
+setopt nonomatch
+
+# 上書きリダイレクトの禁止
+setopt no_clobber
+
+# 補完候補リストを詰めて表示
+setopt list_packed
+
+# auto_list の補完候補一覧で、ls -F のようにファイルの種別をマーク表示
+setopt list_types
+
+# 補完候補が複数ある時に、一覧表示する
+setopt auto_list
+
+# コマンドラインの引数で --prefix=/usr などの = 以降でも補完できる
+setopt magic_equal_subst
+
+# カッコの対応などを自動的に補完する
+setopt auto_param_keys
+
+# ディレクトリ名の補完で末尾の / を自動的に付加し、次の補完に備える
+setopt auto_param_slash
+
+# {a-c} を a b c に展開する機能を使えるようにする
+setopt brace_ccl
+
+# シンボリックリンクは実体を追うようになる
+setopt chase_links
+
+# 補完キー（Tab,  Ctrl+I) を連打するだけで順に補完候補を自動で補完する
+setopt auto_menu
+
+# sudoも補完の対象
+zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin
+
+# 複数のリダイレクトやパイプなど、必要に応じて tee や cat の機能が使われる
+setopt multios
+
+# 最後がディレクトリ名で終わっている場合末尾の / を自動的に取り除かない
+setopt noautoremoveslash
+
+# beepを鳴らさないようにする
+setopt nolistbeep
+
+## Command history configuration
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+
+# 登録済コマンド行は古い方を削除
+setopt hist_ignore_all_dups
+
+# historyの共有
+setopt share_history
+
+# history 同じ行が続くなら記録しない
+setopt histignorealldups
+
+# 余分な空白は詰める
+setopt hist_reduce_blanks
+
+# add history when command executed.
+setopt inc_append_history
+
+# history (fc -l) コマンドをヒストリリストから取り除く。
+setopt hist_no_store
+
+# zsh の開始・終了時刻をヒストリファイルに書き込む
+setopt extended_history
+
+# コマンドラインの先頭がスペースで始まる場合ヒストリに追加しない
+setopt hist_ignore_space
+
+# ヒストリを呼び出してから実行する間に一旦編集できる状態になる
+setopt hist_verify
+
+# Ctrl+D では終了しないようになる（exit, logout などを使う）
+setopt ignore_eof
+
+# コマンドラインでも # 以降をコメントと見なす
+setopt interactive_comments
+
+# ファイル名の展開でディレクトリにマッチした場合末尾に / を付加する
+setopt mark_dirs
+
+# ファイル名の展開で、辞書順ではなく数値的にソートされるようになる
+#setopt numeric_glob_sort
+
+# コマンド名に / が含まれているとき PATH 中のサブディレクトリを探す
+setopt path_dirs
+
+# pushd を引数なしで実行した場合 pushd $HOME と見なされる
+setopt pushd_to_home
+
+# rm * などの際、本当に全てのファイルを消して良いかの確認しないようになる
+setopt rm_star_silent
+
+# 勝手にpushd
+setopt autopushd
+
+# エラーメッセージ本文出力に色付け
+e_normal=`echo -e "¥033[0;30m"`
+e_RED=`echo -e "¥033[1;31m"`
+e_BLUE=`echo -e "¥033[1;36m"`
+
+## zsh editor
+# autoload zed
+
+## Prediction configuration
+autoload predict-on
+#predict-off
+# zsh:1: command not found: vzp
+
+## Command Line Stack [Esc]-[q]
+bindkey -a 'q' push-line
+
+
+# C-M-h でチートシートを表示する
+cheat-sheet () { zle -M "`cat ~/dotfiles/.zsh/cheat-sheet`" }
+zle -N cheat-sheet
+
+# 追記
+autoload history-search-end
+zle -N history-beginning-search-backward-end history-search-end
+zle -N history-beginning-search-forward-end history-search-end
+bindkey '^P' history-beginning-search-backward-end
+bindkey '^N' history-beginning-search-forward-end
+bindkey '^F' history-incremental-search-backward
+
+#autojumpの設定
+ [[ -f ~/.autojump/etc/profile.d/autojump.zsh ]] && source ~/.autojump/etc/profile.d/autojump.zsh
+
+
+

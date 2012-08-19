@@ -1,0 +1,10 @@
+kind=defined
+names=<<
+visibility=public
+
+--- <<(test)    -> self
+
+自身にテストを加えます。self を返します。
+
+@param test 自身に加える TestCase か TestSuite のインスタンスを与えます。
+

@@ -1,0 +1,7 @@
+superclass=Object
+type=class
+library=wsdl.soap.clientSkeltonCreator
+extended=
+included=WSDL=SOAP=ClassDefCreatorSupport
+
+

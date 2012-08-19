@@ -1,0 +1,12 @@
+kind=defined
+names=get_row
+visibility=private 
+
+--- get_row(row) -> Fixnum
+CSVデータの1行分のデータを取得します。
+
+1行分のデータを取得し、パラメータrowに配列として出力します。
+返り値として、セルの数(配列のサイズ)を返します。
+
+@param row 1行分のデータを格納する配列
+

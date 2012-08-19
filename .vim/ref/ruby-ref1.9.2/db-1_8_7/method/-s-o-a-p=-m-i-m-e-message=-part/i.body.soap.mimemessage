@@ -1,0 +1,8 @@
+kind=defined
+names=body,body=,content
+visibility=public
+
+--- body
+--- body=(value)
+--- content
+

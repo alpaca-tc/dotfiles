@@ -1,0 +1,8 @@
+kind=redefined
+names=inspect
+visibility=public
+
+--- inspect
+有理数値を人間が読みやすい形の文字列表現にして返します。
+
+現在のバージョンでは "3/5", "-17/7" のように10進数の既約分数表記を返します。

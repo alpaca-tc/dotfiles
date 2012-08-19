@@ -1,0 +1,7 @@
+superclass=XSD=NSDBase
+type=class
+library=soap.baseData
+extended=
+included=SOAP=SOAPBasetype,SOAP=SOAPModuleUtils
+
+

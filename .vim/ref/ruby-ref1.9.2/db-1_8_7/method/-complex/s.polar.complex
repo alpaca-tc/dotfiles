@@ -1,0 +1,15 @@
+kind=defined
+names=polar
+visibility=public
+
+--- polar(r, theta) -> Complex
+絶対値が r、偏角が theta である [[c:Complex]]クラスのオブジェクトを生成します。
+
+@param r 生成する複素数の絶対値。
+@param theta 生成する複素数の偏角。単位はラジアンです。
+
+例:
+
+  p Complex.polar(2.0, 0)         #=> Complex(2.0, 0.0)
+  p Complex.polar(2.0, Math::PI)  #=> Complex(-2.0, 2.44929359829471e-16)
+

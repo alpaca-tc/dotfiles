@@ -1,0 +1,8 @@
+kind=defined
+names=data,text,text=
+visibility=public
+
+--- text
+--- text=(value)
+--- data
+

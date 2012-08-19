@@ -1,0 +1,7 @@
+superclass=StandardError
+type=class
+library=dl
+extended=
+included=
+
+DL に関する一般的なエラーが発生したときに投げられます。

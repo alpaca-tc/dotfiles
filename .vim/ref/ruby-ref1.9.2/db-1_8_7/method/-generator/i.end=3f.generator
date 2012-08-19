@@ -1,0 +1,8 @@
+kind=defined
+names=end?
+visibility=public
+
+--- end? -> bool
+
+次の要素がなく、ジェネレータが終わりに達しているなら真を返します。
+

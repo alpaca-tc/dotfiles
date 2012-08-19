@@ -1,0 +1,10 @@
+kind=defined
+names=escape
+visibility=public
+
+--- escape(str) -> String
+
+与えられた文字列を URL エンコードします。
+
+@param str 文字列を指定します。
+

@@ -1,0 +1,7 @@
+kind=defined
+names=no_proxy,no_proxy=
+visibility=public
+
+--- no_proxy
+--- no_proxy=(value)
+

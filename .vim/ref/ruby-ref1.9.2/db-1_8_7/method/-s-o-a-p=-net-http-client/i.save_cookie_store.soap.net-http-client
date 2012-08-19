@@ -1,0 +1,6 @@
+kind=defined
+names=save_cookie_store
+visibility=public
+
+--- save_cookie_store(filename)
+

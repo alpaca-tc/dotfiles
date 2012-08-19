@@ -1,0 +1,15 @@
+kind=defined
+names=assert_match,assert_matches
+visibility=public
+
+--- assert_match(str, re, message = "") -> ()
+--- assert_matches(str, re, message = "") -> ()
+
+与えられた文字列が与えられた正規表現にマッチする場合、検査にパスします。
+
+@param str 文字列を指定します。
+
+@param re 正規表現を指定します。
+
+@param message 検査に失敗したときのメッセージを指定します。
+

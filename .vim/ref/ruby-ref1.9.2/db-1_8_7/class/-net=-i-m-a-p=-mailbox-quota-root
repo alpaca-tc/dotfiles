@@ -1,0 +1,10 @@
+superclass=Struct
+type=class
+library=net.imap
+extended=
+included=
+
+[[m:Net::IMAP#getquotaroot]] の結果として得られる
+quota root 情報を表わすオブジェクトです。
+
+詳しくは [[RFC:2087]] を参照してください。

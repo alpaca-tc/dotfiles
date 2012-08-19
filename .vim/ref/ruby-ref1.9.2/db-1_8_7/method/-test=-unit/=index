@@ -1,0 +1,2 @@
+.run=	Test::Unit.run=
+.run?	Test::Unit.run?

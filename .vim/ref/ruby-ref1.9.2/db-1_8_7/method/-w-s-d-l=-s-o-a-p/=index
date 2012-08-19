@@ -1,0 +1,12 @@
+:EncodingStyleAttrName	WSDL::SOAP::EncodingStyleAttrName
+:HeaderFaultName	WSDL::SOAP::HeaderFaultName
+:LocationAttrName	WSDL::SOAP::LocationAttrName
+:MessageAttrName	WSDL::SOAP::MessageAttrName
+:NameAttrName	WSDL::SOAP::NameAttrName
+:NamespaceAttrName	WSDL::SOAP::NamespaceAttrName
+:PartAttrName	WSDL::SOAP::PartAttrName
+:PartsAttrName	WSDL::SOAP::PartsAttrName
+:SOAPActionAttrName	WSDL::SOAP::SOAPActionAttrName
+:StyleAttrName	WSDL::SOAP::StyleAttrName
+:TransportAttrName	WSDL::SOAP::TransportAttrName
+:UseAttrName	WSDL::SOAP::UseAttrName

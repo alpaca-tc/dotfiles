@@ -1,0 +1,11 @@
+kind=defined
+names=new
+visibility=public
+
+--- new
+素数を列挙するオブジェクトを作ります。
+
+例:
+  q = Prime.new
+  q.class    #=> Prime
+

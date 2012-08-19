@@ -1,0 +1,42 @@
+superclass=Object
+type=class
+library=test.unit.autorunner
+extended=
+included=
+
+テストの実行を操作したいときにこの AutoRunner クラスを使います。
+大量のテストの中から特定のテストスクリプトのみを実行したい場合、
+特定のテストクラスのみを実行したい場合などに使います。
+AutoRunner は Collector::Dir オブジェクトなどの Collector に
+テストを集めさせて、UI::Console::TestRunner オブジェクトなどの
+Runner にテストを実行させているクラスです。
+
+=== 例
+
+ディレクトリ ./somedir 以下にある全てのテストを実行したい場合は次のよう
+なファイル(runner.rb)を用意して実行します。テストは test_*.rb というファ
+イル名である必要があります。
+
+第一引数に true を与えると、./somedir 以下にある全てのテストを実行します。
+  require 'test/unit'
+  Test::Unit::AutoRunner.run(true, './somedir')
+
+単に実行します。
+
+  $ ruby runner.rb
+
+ディレクトリ ./somedir 以下にあるテストをファイル somefile を除いて実行
+したい場合は次のように runner.rb にオプションを与えます。
+
+  $ ruby runner.rb --exclude=somefile
+
+同じことは、runner.rb に直接オプションを書いても実現できます。
+
+  require 'test/unit'
+  Test::Unit::AutoRunner.run(true, './somedir', ['--exclude=somefile'])
+
+上のやり方では拡張子が .rb のファイルしか集めません。拡張子が .rbx のファイルも
+テストとして集めたい場合は次のようにします。
+
+  require 'test/unit'
+  Test::Unit::AutoRunner.run(true, './somedir', ['--pattern=/test_.*\.rbx\Z/'])

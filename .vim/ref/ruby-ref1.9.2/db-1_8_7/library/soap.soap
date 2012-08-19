@@ -1,0 +1,7 @@
+methods=
+sublibraries=
+requires=
+classes=SOAP,SOAP=Error,SOAP=StreamError,SOAP=HTTPStreamError,SOAP=PostUnavailableError,SOAP=MPostUnavailableError,SOAP=ArrayIndexOutOfBoundsError,SOAP=ArrayStoreError,SOAP=RPCRoutingError,SOAP=EmptyResponseError,SOAP=ResponseFormatError,SOAP=UnhandledMustUnderstandHeaderError,SOAP=FaultError,SOAP=Env
+is_sublibrary=true
+
+

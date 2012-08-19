@@ -1,0 +1,11 @@
+kind=defined
+names=disposition
+visibility=public
+
+--- disposition -> Net::IMAP::ContentDisposition | nil
+Content-Dispotition の値を返します。
+
+[[c:Net::IMAP::ContentDisposition]] オブジェクトを返します。
+
+@see [[RFC:1806]], [[RFC:2183]]
+

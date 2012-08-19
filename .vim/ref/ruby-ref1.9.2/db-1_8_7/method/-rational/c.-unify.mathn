@@ -1,0 +1,9 @@
+kind=added
+names=Unify
+visibility=public
+
+--- Unify
+内部実装で利用しています。深くは考えないでください。ユーザープログラムでは利用しないでください。
+
+この定数はRuby 1.9.1以降では削除されます。
+

@@ -1,0 +1,39 @@
+kind=added
+names=Rational
+visibility=public
+
+--- Rational(num, den = 1) -> Rational
+
+[[c:Rational]] オブジェクトを生成します。
+
+@param num 分子を指定します。
+
+@param den 分母を指定します。省略した場合は 1 です。
+
+@raise ZeroDivisionError den に 0 を指定した場合に発生します。
+
+引数 num、den の両方を指定した場合、num/den を既約になるまで約分した
+[[c:Rational]] オブジェクトを返します。
+
+num と den には整数を指定します。den が 1 の時に限り、num に
+[[c:Rational]] オブジェクトを指定する事もできます。
+
+例:
+
+  Rational(1, 3)              # => Rational(1, 3)
+  Rational(2, 6)              # => Rational(1, 3)
+  Rational(Rational(1, 3), 1) # => Rational(1, 3)
+
+それ以外のオブジェクトを指定すると例外が発生します。
+
+  Rational(Rational(1, 3), 2) # => NoMethodError
+  Rational(1.1, 2.3)          # => NoMethodError
+  Rational("1/3")             # => NoMethodError
+  Rational(nil)               # => NoMethodError
+
+約分していない [[c:Rational]] オブジェクトを作成する場合は
+[[m:Rational.new!]] を使用します。ただし、1.9系では使用できない事に注意
+してください。
+
+@see [[m:Rational.new!]], [[m:Rational.reduce]]
+

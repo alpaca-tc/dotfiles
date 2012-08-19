@@ -1,0 +1,7 @@
+methods=
+sublibraries=
+requires=soap.mapping.mapping,soap.baseData,soap.mapping,soap.mapping.rubytypeFactory,soap.mapping.registry,soap.soap,soap.mapping.factory,soap.mapping.typeMap
+classes=SOAP=SOAPAttachment,SOAP=Attachment,SOAP=Mapping=AttachmentFactory
+is_sublibrary=true
+
+

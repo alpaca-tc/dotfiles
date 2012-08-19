@@ -1,0 +1,7 @@
+kind=defined
+names=parse_attr
+visibility=public
+
+--- parse_attr(attr, value)
+
+

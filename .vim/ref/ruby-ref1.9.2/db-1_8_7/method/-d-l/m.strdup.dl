@@ -1,0 +1,13 @@
+kind=defined
+names=strdup
+visibility=public
+
+--- strdup(str)    -> DL::PtrData
+
+文字列 str を複製し、その新しい文字列へのポインタ
+[[c:DL::PtrData]] オブジェクトを返します。
+
+この返り値には、[[m:DL::FREE]] が free 関数としてセットされています。
+
+@param str 文字列を与えます。
+

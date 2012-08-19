@@ -1,0 +1,9 @@
+kind=defined
+names=Call,call
+visibility=public
+
+--- call(*args)
+--- Call(*args)
+
+[[m:DL::Symbol#call]] により関数を実行します。
+

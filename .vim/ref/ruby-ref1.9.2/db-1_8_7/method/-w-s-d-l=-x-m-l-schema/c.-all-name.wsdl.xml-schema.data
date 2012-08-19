@@ -1,0 +1,25 @@
+kind=defined
+names=AllName,AnnotationName,AnyName,AttributeName,ChoiceName,ComplexContentName,ComplexTypeName,ElementName,EnumerationName,ExtensionName,ImportName,IncludeName,LengthName,PatternName,RestrictionName,SchemaName,SequenceName,SimpleContentName,SimpleTypeName,UniqueName
+visibility=public
+
+--- AllName
+--- AnnotationName
+--- AnyName
+--- AttributeName
+--- ChoiceName
+--- ComplexContentName
+--- ComplexTypeName
+--- ElementName
+--- EnumerationName
+--- ExtensionName
+--- ImportName
+--- IncludeName
+--- LengthName
+--- PatternName
+--- RestrictionName
+--- SequenceName
+--- SchemaName
+--- SimpleContentName
+--- SimpleTypeName
+--- UniqueName
+

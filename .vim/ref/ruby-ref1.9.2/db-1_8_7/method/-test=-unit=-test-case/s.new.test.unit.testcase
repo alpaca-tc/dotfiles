@@ -1,0 +1,12 @@
+kind=defined
+names=new
+visibility=public
+
+--- new(test_method_name)    -> Test::Unit::TestCase
+
+このメソッドをユーザが直接呼ぶことはありません。
+
+test_method_name に対応した TestCase オブジェクトを生成して返します。
+
+@param test_method_name テストメソッドの名前を文字列で与えます。
+

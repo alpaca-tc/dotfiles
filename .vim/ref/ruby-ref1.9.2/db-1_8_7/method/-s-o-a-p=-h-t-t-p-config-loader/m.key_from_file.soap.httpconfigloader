@@ -1,0 +1,6 @@
+kind=defined
+names=key_from_file
+visibility=public
+
+--- key_from_file(filename)
+

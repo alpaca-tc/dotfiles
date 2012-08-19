@@ -1,0 +1,6 @@
+kind=defined
+names=mark_unmarshalled_obj
+visibility=public
+
+--- mark_unmarshalled_obj(node, obj)
+

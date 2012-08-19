@@ -1,0 +1,16 @@
+kind=defined
+names=+@,ptr
+visibility=public
+
+--- ptr   -> DL::PtrData
+--- +@    -> DL::PtrData
+
+自身の指す値を PtrData にして返します。
+自身の指す値はポインタであると仮定します。
+C 言語におけるポインタのポインタに対する間接参照 *p と同じです。 
+
+この返り値には、free 関数がセットされていません。
+
+ a = ['abc', 'def'].to_ptr
+ p a.ptr.to_s #=> "abc"
+

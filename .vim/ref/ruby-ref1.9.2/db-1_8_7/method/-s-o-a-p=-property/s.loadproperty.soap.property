@@ -1,0 +1,6 @@
+kind=defined
+names=loadproperty
+visibility=public
+
+--- loadproperty(propname)
+

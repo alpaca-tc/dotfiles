@@ -1,0 +1,23 @@
+kind=redefined
+names=log
+visibility=public
+
+--- log(z) -> Complex
+複素数 z の自然対数を返します。
+
+絶対値 r 偏角 theta の複素数 z に対する log(z) は以下で定義されます。
+
+  log(z)  = log(r) + i * theta
+
+@param z 複素数
+
+===== 注意
+
+虚部が 0 でも [[c:Complex]] クラスのオブジェクトであれば [[c:Complex]] クラスのオブジェクトを返すことに注意してください。
+
+  n = 2
+  z = Complex.new(2, 0)
+
+  p Math.log(n) #=> 0.693147180559945
+  p Math.log(z) #=> Complex(0.693147180559945, 0.0)
+

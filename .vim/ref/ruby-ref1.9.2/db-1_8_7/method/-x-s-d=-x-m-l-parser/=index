@@ -1,0 +1,4 @@
+.create_parser	XSD::XMLParser.#create_parser
+.filter_ns	XSD::XMLParser.#filter_ns
+#create_parser	XSD::XMLParser.#create_parser
+#filter_ns	XSD::XMLParser.#filter_ns

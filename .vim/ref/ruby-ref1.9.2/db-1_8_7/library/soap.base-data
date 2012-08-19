@@ -1,0 +1,7 @@
+methods=
+sublibraries=
+requires=soap.soap,soap.mapping.typeMap
+classes=SOAP=SOAPModuleUtils,SOAP=SOAPType,SOAP=SOAPBasetype,SOAP=SOAPCompoundtype,SOAP=SOAPReference,SOAP=SOAPExternalReference,SOAP=SOAPNil,SOAP=SOAPRawString,SOAP=SOAPAnySimpleType,SOAP=SOAPString,SOAP=SOAPBoolean,SOAP=SOAPDecimal,SOAP=SOAPFloat,SOAP=SOAPDouble,SOAP=SOAPDuration,SOAP=SOAPDateTime,SOAP=SOAPTime,SOAP=SOAPDate,SOAP=SOAPGYearMonth,SOAP=SOAPGYear,SOAP=SOAPGMonthDay,SOAP=SOAPGDay,SOAP=SOAPGMonth,SOAP=SOAPHexBinary,SOAP=SOAPBase64,SOAP=SOAPAnyURI,SOAP=SOAPQName,SOAP=SOAPInteger,SOAP=SOAPNonPositiveInteger,SOAP=SOAPNegativeInteger,SOAP=SOAPLong,SOAP=SOAPInt,SOAP=SOAPShort,SOAP=SOAPByte,SOAP=SOAPNonNegativeInteger,SOAP=SOAPUnsignedLong,SOAP=SOAPUnsignedInt,SOAP=SOAPUnsignedShort,SOAP=SOAPUnsignedByte,SOAP=SOAPPositiveInteger,SOAP=SOAPStruct,SOAP=SOAPElement,SOAP=SOAPArray
+is_sublibrary=true
+
+

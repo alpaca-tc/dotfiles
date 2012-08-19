@@ -1,0 +1,7 @@
+superclass=XSD=Error
+type=class
+library=xsd.xmlparser
+extended=
+included=
+
+

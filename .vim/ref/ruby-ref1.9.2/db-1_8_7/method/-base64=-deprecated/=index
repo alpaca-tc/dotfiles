@@ -1,0 +1,8 @@
+.b64encode	Base64::Deprecated.#b64encode
+.decode64	Base64::Deprecated.#decode64
+.decode_b	Base64::Deprecated.#decode_b
+.encode64	Base64::Deprecated.#encode64
+#b64encode	Base64::Deprecated.#b64encode
+#decode64	Base64::Deprecated.#decode64
+#decode_b	Base64::Deprecated.#decode_b
+#encode64	Base64::Deprecated.#encode64

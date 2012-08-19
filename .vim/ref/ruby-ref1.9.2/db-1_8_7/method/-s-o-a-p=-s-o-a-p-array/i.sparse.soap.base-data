@@ -1,0 +1,7 @@
+kind=defined
+names=sparse,sparse=
+visibility=public
+
+--- sparse
+--- sparse=(value)
+

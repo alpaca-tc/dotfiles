@@ -1,0 +1,6 @@
+kind=defined
+names=ServerException
+visibility=public
+
+--- ServerException
+

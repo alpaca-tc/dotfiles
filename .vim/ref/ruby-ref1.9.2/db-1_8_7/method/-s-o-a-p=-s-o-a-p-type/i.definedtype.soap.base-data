@@ -1,0 +1,7 @@
+kind=defined
+names=definedtype,definedtype=
+visibility=public
+
+--- definedtype
+--- definedtype=(value)
+

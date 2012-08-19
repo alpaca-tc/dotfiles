@@ -1,0 +1,7 @@
+kind=defined
+names=attr_reader_ref
+visibility=public
+
+--- attr_reader_ref(symbol)
+
+

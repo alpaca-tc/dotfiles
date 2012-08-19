@@ -1,0 +1,11 @@
+kind=defined
+names=path
+visibility=public
+
+--- path    -> String
+
+オープン時に使用したパスを文字列で返します。
+
+   File.new("testfile").path               #=> "testfile"
+   File.new("/tmp/../tmp/xxx", "w").path   #=> "/tmp/../tmp/xxx"
+

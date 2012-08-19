@@ -1,0 +1,12 @@
+.cert_from_file	SOAP::HTTPConfigLoader.#cert_from_file
+.key_from_file	SOAP::HTTPConfigLoader.#key_from_file
+.set_basic_auth	SOAP::HTTPConfigLoader.#set_basic_auth
+.set_options	SOAP::HTTPConfigLoader.#set_options
+.set_ssl_config	SOAP::HTTPConfigLoader.#set_ssl_config
+.ssl_config_int	SOAP::HTTPConfigLoader.#ssl_config_int
+#cert_from_file	SOAP::HTTPConfigLoader.#cert_from_file
+#key_from_file	SOAP::HTTPConfigLoader.#key_from_file
+#set_basic_auth	SOAP::HTTPConfigLoader.#set_basic_auth
+#set_options	SOAP::HTTPConfigLoader.#set_options
+#set_ssl_config	SOAP::HTTPConfigLoader.#set_ssl_config
+#ssl_config_int	SOAP::HTTPConfigLoader.#ssl_config_int

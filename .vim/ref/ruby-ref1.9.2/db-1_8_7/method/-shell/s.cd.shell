@@ -1,0 +1,17 @@
+kind=defined
+names=cd
+visibility=public
+
+--- cd(path = nil) -> self
+
+pathをカレントディレクトリとするShellオブジェクトを生成します.
+
+@param path カレントディレクトリとするディレクトリを文字列で指定します。
+
+
+使用例
+  require 'shell'
+  sh = Shell.new
+  sh.cd("/tmp")
+
+

@@ -1,0 +1,9 @@
+kind=added
+names=imag,image
+visibility=public
+
+--- image -> Fixnum
+--- imag -> Fixnum
+複素数として見た場合の虚部を返します。
+つまり、self が実数の場合は 0 を返します。
+

@@ -1,0 +1,6 @@
+kind=defined
+names=__attr_proxy
+visibility=public
+
+--- __attr_proxy(symbol, assignable = false)
+

@@ -1,0 +1,6 @@
+kind=defined
+names=collect_fault_messages
+visibility=private 
+
+--- collect_fault_messages
+

@@ -1,0 +1,16 @@
+kind=defined
+names=assert_equal_float
+visibility=public
+
+--- assert_equal_float(expected, actual, delta, message = "") -> ()
+
+期待値と実際の値の差の絶対値が与えられた絶対誤差以下である場合、検査にパスしたことになります。
+
+@param expected 期待値を指定します。
+
+@param actual 実際の値を指定します。
+
+@param delta 許容する絶対誤差を指定します。
+
+@param message 検査に失敗したときのメッセージを指定します。
+

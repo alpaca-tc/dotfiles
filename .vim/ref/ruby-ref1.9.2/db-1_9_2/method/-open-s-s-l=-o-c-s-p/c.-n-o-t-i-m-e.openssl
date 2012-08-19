@@ -1,0 +1,7 @@
+kind=defined
+names=NOTIME
+visibility=public
+
+--- NOTIME -> Integer
+OCSP 応答の生成時刻を正しく設定しないことを意味します。
+

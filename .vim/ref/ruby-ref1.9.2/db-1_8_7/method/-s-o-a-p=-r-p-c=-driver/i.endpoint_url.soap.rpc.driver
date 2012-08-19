@@ -1,0 +1,7 @@
+kind=defined
+names=endpoint_url,endpoint_url=
+visibility=public
+
+--- endpoint_url
+--- endpoint_url=(value)
+

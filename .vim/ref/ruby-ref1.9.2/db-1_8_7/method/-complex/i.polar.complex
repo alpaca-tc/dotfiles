@@ -1,0 +1,14 @@
+kind=defined
+names=polar
+visibility=public
+
+--- polar -> Array
+複素数の極座標表示、すなわち、配列 [self.abs, self.arg] を返します。
+
+例:
+
+  z = Complex.new(3.0, 4.0)
+
+  p z        #=> Complex(3.0, 4.0)
+  p z.polar  #=> [5.0, 0.927295218001612]
+

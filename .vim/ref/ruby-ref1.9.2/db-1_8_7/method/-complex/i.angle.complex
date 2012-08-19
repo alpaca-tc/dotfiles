@@ -1,0 +1,25 @@
+kind=defined
+names=angle,arg
+visibility=public
+
+--- angle -> Float
+--- arg -> Float
+複素数の偏角を[-π,π]の範囲で返します。
+
+例:
+
+  p Complex.new(0, 1).arg == Math::PI/2 #=> true
+  p Complex.new(0, -1).arg              #=> -1.5707963267949
+
+非正の実軸付近での挙動に注意してください。
+以下の例のように虚部が 0.0 と -0.0 では値が変わります。
+
+  p Complex.new(-1, 0).arg              #=>  3.14159265358979
+  p Complex.new(-1, -0).arg             #=>  3.14159265358979
+  p Complex.new(-1, -0.0).arg           #=> -3.14159265358979
+   
+  p Complex.new(0, 0.0).arg             #=>  0.0
+  p Complex.new(0, -0.0).arg            #=> -0.0
+  p Complex.new(-0.0, 0).arg            #=>  3.14159265358979
+  p Complex.new(-0.0, -0.0).arg         #=> -3.14159265358979
+

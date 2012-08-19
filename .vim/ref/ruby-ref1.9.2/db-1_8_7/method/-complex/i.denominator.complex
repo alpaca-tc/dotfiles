@@ -1,0 +1,15 @@
+kind=defined
+names=denominator
+visibility=public
+
+--- denominator -> Fixnum
+自分自身の実部・虚部の分母のLCM(最小公倍数)を返します。
+
+例:
+
+  z1 = Complex.new(1, 2)
+  z2 = Complex.new(Rational.new!(1, 3), Rational.new!(3, 5))
+
+  p z1.denominator  #=> 1
+  p z2.denominator  #=> 15
+

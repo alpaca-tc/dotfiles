@@ -1,0 +1,10 @@
+kind=defined
+names=certid
+visibility=public
+
+--- certid -> [OpenSSL::OCSP::CertificateId]
+Request オブジェクトが保持している問い合わせ対象の証明書の情報を
+配列で返します。
+
+@see [[m:OpenSSL::OCSP::Request#add_certid]]
+

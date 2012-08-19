@@ -1,0 +1,13 @@
+kind=defined
+names=session_remove_cb
+visibility=public
+
+--- session_remove_cb -> Proc | nil
+セッションが内部キャッシュから破棄されたときに呼び出される
+コールバックを返します。
+
+設定されていないときは nil を返します。
+
+@see [[m:OpenSSL::SSL::SSLContext#session_remove_cb=]]
+
+

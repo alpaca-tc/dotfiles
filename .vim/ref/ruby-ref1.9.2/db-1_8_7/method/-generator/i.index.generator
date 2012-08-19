@@ -1,0 +1,16 @@
+kind=defined
+names=index,pos
+visibility=public
+
+--- index -> Integer
+--- pos   -> Integer
+
+現在の位置を返します。
+
+例:
+
+  g = Generator.new(['A', 'B', 'C', 'Z'])
+  p g.pos     # => 0
+  p g.next    # => 'A'
+  p g.pos     # => 1
+

@@ -1,0 +1,8 @@
+.getpty	PTY.#getpty
+.protect_signal	PTY.#protect_signal
+.reset_signal	PTY.#reset_signal
+.spawn	PTY.#getpty
+#getpty	PTY.#getpty
+#protect_signal	PTY.#protect_signal
+#reset_signal	PTY.#reset_signal
+#spawn	PTY.#getpty

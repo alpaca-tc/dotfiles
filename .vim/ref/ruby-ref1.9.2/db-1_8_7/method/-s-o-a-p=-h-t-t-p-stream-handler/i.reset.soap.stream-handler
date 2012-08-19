@@ -1,0 +1,6 @@
+kind=defined
+names=reset
+visibility=public
+
+--- reset(endpoint_url = nil)
+

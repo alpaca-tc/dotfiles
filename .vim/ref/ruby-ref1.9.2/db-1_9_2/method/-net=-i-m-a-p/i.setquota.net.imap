@@ -1,0 +1,20 @@
+kind=defined
+names=setquota
+visibility=public
+
+--- setquota(mailbox, quota) -> Net::IMAP::TaggedResponse
+SETQUOTA コマンドを送り、指定したメールボッススに
+quota を設定します。
+
+quota が nil ならば、mailbox の quota を破棄します。
+quota が整数なら STORAGE をその値に変更します。
+
+詳しくは [[RFC:2087]] を見てください。
+このコマンドは [[m:Net::IMAP#capability]] の返り値を見ることで
+利用可能かどうか判断できます。
+
+@param mailbox quota を設定するメールボックス名(文字列)
+@param quota quotaの値(ストレージのサイズ、もしくは nil)
+@raise Net::IMAP::NoResponseError 指定したメールボックスが quota root 
+       でない場合、もしくは権限が存在しない場合に発生します。
+

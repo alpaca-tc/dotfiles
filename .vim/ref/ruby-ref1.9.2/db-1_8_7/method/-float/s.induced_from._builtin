@@ -1,0 +1,20 @@
+kind=defined
+names=induced_from
+visibility=public
+
+--- induced_from(num) -> Float
+num を Float に変換した結果を返します。
+
+@param num 変換前の数値
+
+@raise TypeError [[c:Fixnum]], [[c:Bignum]], [[c:Float]]以外を入力した場合に発生します
+
+
+  p Float.induced_from(30) #=> 30.0
+  p Float.induced_from(Math::PI) #=> 3.14159265358979
+  begin
+    Float.induced_from("1.732")
+  rescue TypeError
+    p $! #=> #<TypeError: failed to convert String into Float>
+  end
+

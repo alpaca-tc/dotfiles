@@ -1,0 +1,55 @@
+superclass=Numeric
+type=class
+library=complex
+extended=
+included=
+
+複素数を扱うためのクラスです。
+
+
+このライブラリを require すると、[[c:Math]] モジュールが複素数対応に拡張されます。
+対象となる複素数を以下のように極座標表示した時の
+  z = a + b * i = r * exp(i * t)
+偏角 t は[-π,π]の範囲であると考えて、関数は定義されます。
+[[m:Complex#arg]]を参照して下さい。
+
+以下が複素関数の定義です。
+
+  abs(z)  = r
+  sqrt(z) = sqrt(r) * exp(i * t/2)
+  exp(z)  = exp(a) * exp(i * b)
+  log(z)  = log(r) + i * t
+  
+  sin(z)  = (exp(i * z) - exp(-i * z)) / 2i
+  cos(z)  = (exp(i * z) + exp(-i * z)) / 2
+  tan(z)  = sin(z) / cos(z)
+  sinh(z) = (exp(z) - exp(-z)) / 2
+  cosh(z) = (exp(z) + exp(-z)) / 2
+  tanh(z) = sinh(z) / cosh(z)
+  
+  asin(z) = -i * log(i*z + sqrt(1-z*z))
+  acos(z) = -i * log(z + i*sqrt(1-z*z))
+  atan(z) = i/2 * log((i+z) / (i-z))
+  atan2(y, x) = -i * log( (x + i * y) / sqrt( x*x + y*y ) )
+  asinh(z) = log(z + sqrt(z*z+1))
+  acosh(z) = log(z + sqrt(z*z-1))
+  atanh(z) = 1/2 * log((1+z) / (1-z))
+
+また、添付ライブラリのベクトルクラス [[c:Vector]]、および、
+行列クラス [[c:Matrix]] を読み込んでいるとき、
+Vector や Matrix の要素として、複素数を使うことができます。
+Vector および Matrix のそれぞれの項目を参照してください。
+
+=== 例
+
+  require 'complex'
+ 
+  z1 = Complex.new(4, 3)
+  z2 = Complex.new(2, 1)
+ 
+  p z1 + z2 #=> Complex(6, 4)
+  p z1 * z2 #=> Complex(5, 10)
+ 
+  i = Complex::I
+ 
+  p z1 == 4 + 3 * i #=> true

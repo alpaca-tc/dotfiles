@@ -1,0 +1,12 @@
+kind=defined
+names=new
+visibility=public
+
+--- new(re1, re2) -> RegOr
+
+新しい RegOr オブジェクトを生成します。
+
+@param re1 正規表現オブジェクト。
+
+@param re2 正規表現オブジェクト。
+

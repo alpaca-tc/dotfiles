@@ -1,0 +1,12 @@
+kind=defined
+names=ctrl_cmd
+visibility=public
+
+--- ctrl_cmd(cmd, val=nil) -> self
+engine にコマンドを送ります。
+
+@param cmd コマンド名(文字列)
+@param val コマンド引数(文字列)
+@see [[m:OpenSSL::Engine#ctrl_cmd]]
+
+

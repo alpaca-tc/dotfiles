@@ -1,0 +1,13 @@
+kind=redefined
+names=sinh
+visibility=public
+
+--- sinh(z) -> Complex
+複素関数としてのsinh関数(双曲線sin関数)の結果を返します。
+
+sinh関数は以下で定義されます。
+
+  sinh(z) = (exp(z) - exp(-z)) / 2
+
+@param z 複素数
+

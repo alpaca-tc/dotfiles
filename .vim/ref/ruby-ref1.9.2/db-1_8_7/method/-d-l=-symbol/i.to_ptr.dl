@@ -1,0 +1,9 @@
+kind=defined
+names=to_ptr
+visibility=public
+
+--- to_ptr    -> DL::PtrData
+
+ダイナミックライブラリの関数へのポインタ [[c:DL::PtrData]] を返します。
+
+

@@ -1,0 +1,18 @@
+kind=defined
+names=chars,each_char
+visibility=public
+
+--- each_char {|cstr| block } -> self
+--- chars {|cstr| block }     -> self
+--- each_char -> Enumerable::Enumerator
+--- chars     -> Enumerable::Enumerator
+
+文字列の各文字に対して繰り返します。
+[[m:$KCODE]] が適切に設定されていれば、マルチバイト文字も正しく扱われます。
+
+たとえば、
+  "hello世界".each_char {|c| print c, ' ' }
+は次のように出力されます。
+  h e l l o 世 界
+
+

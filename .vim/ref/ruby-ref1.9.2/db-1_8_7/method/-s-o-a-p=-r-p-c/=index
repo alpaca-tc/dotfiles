@@ -1,0 +1,2 @@
+.defined_methods	SOAP::RPC.defined_methods
+:ServerException	SOAP::RPC::ServerException

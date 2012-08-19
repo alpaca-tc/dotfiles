@@ -1,0 +1,22 @@
+kind=defined
+names=select
+visibility=public
+
+--- select(mailbox) -> Net::IMAP::TaggedResponse
+SELECT コマンドを送り、指定したメールボックスを処理対象の
+メールボックスにします。
+
+このコマンドが成功すると、クライアントの状態が「selected」になります。
+
+このコマンドを実行した直後に [[m:Net::IMAP#responses]]["EXISTS"].last
+を調べると、メールボックス内のメールの数がわかります。
+また、[[m:Net::IMAP#responses]]["RECENT"].lastで、
+最新のメールの数がわかります。
+これらの値はセッション中に変わりうることに注意してください。
+[[m:Net::IMAP#add_response_handler]] を使うとそのような更新情報を
+即座に取得できます。
+
+@param mailbox 処理対象としたいメールボックスの名前(文字列)
+@raise Net::IMAP::NoResponseError mailboxが存在しない等の理由でコマンドの実行に失敗
+       した場合に発生します。
+

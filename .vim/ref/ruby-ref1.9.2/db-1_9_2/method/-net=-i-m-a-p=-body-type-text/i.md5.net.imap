@@ -1,0 +1,7 @@
+kind=defined
+names=md5
+visibility=public
+
+--- md5 -> String | nil
+ボディの MD5 値を文字列で返します。
+

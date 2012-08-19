@@ -1,0 +1,3 @@
+#add_listener	Test::Unit::Util::Observable#add_listener
+#notify_listeners	Test::Unit::Util::Observable#notify_listeners
+#remove_listener	Test::Unit::Util::Observable#remove_listener

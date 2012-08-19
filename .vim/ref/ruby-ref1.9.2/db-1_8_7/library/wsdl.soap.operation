@@ -1,0 +1,7 @@
+methods=
+sublibraries=
+requires=wsdl.info
+classes=WSDL=SOAP=Operation=OperationInfo,WSDL=SOAP=Operation
+is_sublibrary=true
+
+

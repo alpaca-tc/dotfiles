@@ -1,0 +1,15 @@
+kind=defined
+names=split
+visibility=public
+
+--- split(sep = $/, limit = 0) -> [String]
+
+$_.split と同じです。
+
+暗号的になりすぎるきらいがあるため、このメソッドの使用は推奨されていません。
+今後はより明示的な $_.split を使ってください。
+
+@param sep [[m:String#split]] 参照
+@param limit [[m:String#split]] 参照
+@see [[m:String#split]],[[m:$_]]
+

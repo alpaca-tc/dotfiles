@@ -1,0 +1,11 @@
+kind=defined
+names=seed=
+visibility=public
+
+--- seed=(s)
+seed を設定します。
+
+@param s seed(文字列)
+@raise OpenSSL::PKey::EC::Group::Error seedの設定に失敗した場合に発生します。
+@see [[m:OpenSSL::PKey::EC::Group#seed]]
+

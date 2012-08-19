@@ -1,0 +1,26 @@
+kind=defined
+names=sub,sub!
+visibility=public
+
+--- sub(pattern, replace)          -> String
+--- sub!(pattern, replace)         -> String
+--- sub(pattern) {|matched| ... }  -> String
+--- sub!(pattern) {|matched| ... } -> String
+
+組み込み変数 [[m:$_]] の指す文字列内で pattern に
+マッチする最初の部分を replace に置き換えます。$_ を返します。
+
+$_.sub, $_.sub! とほぼ同じです。
+
+暗号的になりすぎるきらいがあるため、このメソッドの使用は推奨されていません。
+今後はより明示的な $_.sub, $_.sub! を使ってください。
+
+$_.sub とこのメソッド sub は以下の点で違いがあります。
+
+  * sub は $_ の値をコピーして、コピーの方を更新し、
+  $_ に再代入します。
+
+@param pattern [[m:String#sub]] 参照
+@param replace [[m:String#sub]] 参照
+@see [[m:String#sub]],[[m:$_]]
+

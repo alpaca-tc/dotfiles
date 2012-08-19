@@ -1,0 +1,11 @@
+#assign	XSD::NS#assign
+#assigned?	XSD::NS#assigned?
+#assigned_tag?	XSD::NS#assigned_tag?
+#clone_ns	XSD::NS#clone_ns
+#compare	XSD::NS#compare
+#default_namespace	XSD::NS#default_namespace
+#each_ns	XSD::NS#each_ns
+#initialize	XSD::NS#initialize
+#name	XSD::NS#name
+#parse	XSD::NS#parse
+#parse_local	XSD::NS#parse_local

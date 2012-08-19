@@ -1,0 +1,6 @@
+kind=defined
+names=add_rpc_operation
+visibility=public
+
+--- add_rpc_operation(receiver, qname, soapaction, name, param_def, opt = {})
+

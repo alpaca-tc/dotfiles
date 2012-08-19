@@ -1,0 +1,8 @@
+kind=defined
+names=new
+visibility=public
+
+--- new -> RUNIT::CUI::TestRunner
+
+自身を初期化します。
+

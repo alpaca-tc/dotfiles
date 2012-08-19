@@ -1,0 +1,7 @@
+methods=
+sublibraries=
+requires=wsdl.info
+classes=WSDL=SOAP=HeaderFault
+is_sublibrary=true
+
+

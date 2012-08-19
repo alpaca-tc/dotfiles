@@ -1,0 +1,8 @@
+kind=defined
+names=each
+visibility=public
+
+--- each {|e| ... } -> self
+
+ジェネレータの要素を引数としてブロックを評価します。self を返します。
+

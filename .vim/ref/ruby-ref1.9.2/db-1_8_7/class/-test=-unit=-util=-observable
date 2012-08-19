@@ -1,0 +1,7 @@
+superclass=
+type=module
+library=test.unit.util.observable
+extended=
+included=
+
+イベントに対して通知を行うメソッドを提供するモジュールです。

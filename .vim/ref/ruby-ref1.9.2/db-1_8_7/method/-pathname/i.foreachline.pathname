@@ -1,0 +1,11 @@
+kind=defined
+names=foreachline
+visibility=public
+
+--- foreachline(*args){|line| ... } -> nil
+IO.foreach(self.to_s, *args, &block) と同じです。
+
+このメソッドは obsolete です。
+代わりに [[m:Pathname#each_line]] を使ってください。
+
+@see [[m:IO.foreach]]

@@ -1,0 +1,17 @@
+kind=defined
+names=kcode
+visibility=public
+
+--- kcode -> String | nil
+
+その正規表現が対応するようにコンパイルされている文字コードを
+[[m:$KCODE]] と同じ形式で返します。もし、正規表現が固定
+コードに対してコンパイルされていない(マッチ時点での [[m:$KCODE]]
+の値を用いる)場合には、nil を返します。
+
+  reg = Regexp.new("hogehoge", nil, "u")
+  p reg.kcode #=> "utf8"
+
+  reg = Regexp.new("hogehoge", nil)
+  p reg.kcode #=> "nil"
+

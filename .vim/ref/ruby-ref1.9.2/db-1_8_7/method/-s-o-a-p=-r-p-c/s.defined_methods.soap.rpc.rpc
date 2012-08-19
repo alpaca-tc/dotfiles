@@ -1,0 +1,6 @@
+kind=defined
+names=defined_methods
+visibility=public
+
+--- defined_methods(obj)
+

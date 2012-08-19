@@ -1,0 +1,10 @@
+methods=
+sublibraries=wsdl.definitions,wsdl.soap.clientSkeltonCreator,wsdl.data,wsdl.xmlSchema.import,wsdl.xmlSchema.complexType,wsdl.types,wsdl.xmlSchema.any,wsdl.soap.header,wsdl.xmlSchema.schema,wsdl.param,wsdl.operation,wsdl.documentation,wsdl.xmlSchema.simpleContent,wsdl.importer,wsdl.soap.complexType,wsdl.xmlSchema.simpleRestriction,wsdl.port,wsdl.xmlSchema.all,wsdl.message,wsdl.xmlSchema.complexContent,wsdl.soap.operation,wsdl.port_type,wsdl.wsdl,wsdl.operation_binding,wsdl.part,wsdl.info,wsdl.operationBinding,wsdl.xmlSchema.simpleExtension,wsdl.soap.servantSkeltonCreator,wsdl.soap.binding,wsdl.xmlSchema.sequence,wsdl.xmlSchema.enumeration,wsdl.soap.definitions,wsdl.soap.classDefCreator,wsdl.soap.cgiStubCreator,wsdl.xmlSchema.parser,wsdl.soap.data,wsdl.soap.fault,wsdl.xmlSchema.content,wsdl.xmlSchema.include,wsdl.soap.headerfault,wsdl.soap.methodDefCreator,wsdl.xmlSchema.xsd2ruby,wsdl.xmlSchema.pattern,wsdl.import,wsdl.soap.body,wsdl.binding,wsdl.soap.classDefCreatorSupport,wsdl.xmlSchema.simpleType,wsdl.xmlSchema.importer,wsdl.xmlSchema.attribute,wsdl.xmlSchema.choice,wsdl.xmlSchema.unique,wsdl.xmlSchema.length,wsdl.xmlSchema.data,wsdl.soap.address,wsdl.service,wsdl.soap.wsdl2ruby,wsdl.soap.standaloneServerStubCreator,wsdl.soap.element,wsdl.xmlSchema.annotation,wsdl.xmlSchema.element,wsdl.soap.mappingRegistryCreator,wsdl.parser,wsdl.soap.driverCreator,wsdl.portType
+requires=
+classes=
+is_sublibrary=false
+
+WSDL を扱うためのライブラリです。
+
+このページは wsdl ライブラリのまとめのページであり、require 'wsdl' を実行しても
+エラーになることに注意して下さい。

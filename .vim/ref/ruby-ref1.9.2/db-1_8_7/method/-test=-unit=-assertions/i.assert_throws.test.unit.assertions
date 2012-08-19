@@ -1,0 +1,15 @@
+kind=defined
+names=assert_throws
+visibility=public
+
+--- assert_throws(expected_symbol, message = "") { ... }    -> ()
+
+ブロックを実行して :expected_symbol が throw されたらパスします。
+
+@param expected_symbol throw されると期待するシンボルを指定します。
+
+@param message assert が失敗した時に表示するメッセージを文字列で指定し
+               ます。指定しなかった場合は表示しません。
+
+@raise Test::Unit::AssertionFailedError assert が失敗した時に発生します。
+

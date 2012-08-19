@@ -1,0 +1,6 @@
+kind=defined
+names=add_headerhandler
+visibility=public
+
+--- add_headerhandler(obj)
+

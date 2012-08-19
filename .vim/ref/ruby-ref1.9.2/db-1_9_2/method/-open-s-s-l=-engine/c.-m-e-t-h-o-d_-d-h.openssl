@@ -1,0 +1,10 @@
+kind=defined
+names=METHOD_DH
+visibility=public
+
+--- METHOD_DH -> Integer
+デフォルトの DH アルゴリズムのための engine に設定することを意味します。
+
+[[m:OpenSSL::Engine#set_default]] のフラグとして使います。
+
+

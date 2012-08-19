@@ -1,0 +1,10 @@
+kind=defined
+names=new
+visibility=public
+
+--- new(name = "Unnamed TestSuite")   -> Test::Unit::TestSuite
+
+TestSuite のインスタンスを生成して返します。
+
+@param name 生成する TestSuite の名前です。文字列で与えます。
+

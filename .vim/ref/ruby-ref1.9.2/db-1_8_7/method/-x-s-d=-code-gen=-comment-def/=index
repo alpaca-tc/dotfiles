@@ -1,0 +1,13 @@
+.new	XSD::CodeGen::CommentDef.new
+#capitalize	XSD::CodeGen::GenSupport.#capitalize
+#comment	XSD::CodeGen::CommentDef#comment
+#comment=	XSD::CodeGen::CommentDef#comment
+#format	XSD::CodeGen::GenSupport.#format
+#keyword?	XSD::CodeGen::GenSupport.#keyword?
+#safeconstname	XSD::CodeGen::GenSupport.#safeconstname
+#safeconstname?	XSD::CodeGen::GenSupport.#safeconstname?
+#safemethodname	XSD::CodeGen::GenSupport.#safemethodname
+#safemethodname?	XSD::CodeGen::GenSupport.#safemethodname?
+#safevarname	XSD::CodeGen::GenSupport.#safevarname
+#safevarname?	XSD::CodeGen::GenSupport.#safevarname?
+#uncapitalize	XSD::CodeGen::GenSupport.#uncapitalize

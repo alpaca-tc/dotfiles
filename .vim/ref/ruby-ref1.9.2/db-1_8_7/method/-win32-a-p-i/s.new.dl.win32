@@ -1,0 +1,8 @@
+kind=defined
+names=new
+visibility=public
+
+--- new(dllname, func, import, export = "0")
+
+指定された関数を [[c:DL::Symbol]] オブジェクトとして生成します。
+

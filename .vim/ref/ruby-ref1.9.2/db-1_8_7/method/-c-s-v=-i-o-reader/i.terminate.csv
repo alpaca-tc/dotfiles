@@ -1,0 +1,10 @@
+kind=defined
+names=terminate
+visibility=private 
+
+--- terminate -> nil
+オブジェクト破棄を行います。
+close_on_terminateメソッドが既に呼び出されていれば、IO(newメソッドでパラメタとして渡したオブジェクト)の終了処理を行います。
+
+
+

@@ -1,0 +1,9 @@
+kind=defined
+names=md5
+visibility=public
+
+--- md5(str) -> MD5
+
+MD5 ハッシュを生成します。
+
+@param str 文字列を指定します。

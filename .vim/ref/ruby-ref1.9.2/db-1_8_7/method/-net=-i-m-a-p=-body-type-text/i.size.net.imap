@@ -1,0 +1,7 @@
+kind=defined
+names=size
+visibility=public
+
+--- size -> Integer
+ボディのサイズのオクテット数を返します。
+

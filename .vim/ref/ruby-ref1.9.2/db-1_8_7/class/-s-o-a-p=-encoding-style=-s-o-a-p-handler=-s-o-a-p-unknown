@@ -1,0 +1,7 @@
+superclass=SOAP=EncodingStyle=SOAPHandler=SOAPTemporalObject
+type=class
+library=soap.encodingstyle.soapHandler
+extended=
+included=
+
+

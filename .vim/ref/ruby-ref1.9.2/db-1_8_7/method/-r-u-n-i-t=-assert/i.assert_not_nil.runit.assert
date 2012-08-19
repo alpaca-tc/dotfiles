@@ -1,0 +1,11 @@
+kind=defined
+names=assert_not_nil
+visibility=public
+
+--- assert_not_nil(actual, message = "") -> ()
+与えられたオブジェクトが nil でない場合、検査にパスしたことになります。
+
+@param actual 検査したいオブジェクトを指定します。
+
+@param message 検査に失敗したときのメッセージを指定します。
+

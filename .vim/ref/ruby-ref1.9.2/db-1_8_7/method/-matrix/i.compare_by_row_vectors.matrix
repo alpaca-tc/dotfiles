@@ -1,0 +1,18 @@
+kind=defined
+names=compare_by_row_vectors
+visibility=public
+
+--- compare_by_row_vectors(rows) -> bool
+
+自分自身([[c:Matrix]])を配列の配列([[c:Array]])とみなして引数rowsと比較します。
+
+@param rows 比較対象の配列の配列
+@return selfを配列の配列とみなしたときに引数rowと等しい時にtrue, それ以外にはfalseを返します。
+
+例:
+  a1 = [1, 2]
+  a2 = [-1.25, 2.2]
+  m = Matrix[a1, a2] # 行列
+  rows = Array[a1, a2] # 配列の配列
+  p m.compare_by_row_vectors(rows) #=> true
+

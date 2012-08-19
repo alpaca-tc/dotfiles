@@ -1,0 +1,11 @@
+kind=defined
+names=cmp_issuer
+visibility=public
+
+--- cmp_issuer(other) -> bool
+2つの CertificateId オブジェクトの issuer(証明書発行者)を比較し、
+同じ issuer であれば真を返します。
+
+@param other 比較する [[c:OpenSSL::OCSP::CertificateId]] オブジェクト
+@see [[m:OpenSSL::OCSP::CertificateId#cmp]]
+

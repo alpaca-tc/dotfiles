@@ -1,0 +1,22 @@
+kind=defined
+names=indexes,indices
+visibility=public
+
+--- indexes(*keys) -> [String]
+--- indices(*keys) -> [String]
+
+各引数の値をキーとする要素の値を含む配列を返します。
+
+このメソッドは obsolete です。
+
+@param keys 検索したいキー。複数指定可能。
+
+  require 'dbm'
+  
+  db1 = DBM.open('aaa.db', 0666, DBM::NEWDB)
+  db1[:a] = 'aaa'
+  db1[:b] = 'bbbbbb'
+  p db1.indexes('a', 'b') #=> ["aaa", "bbbbbb"]
+
+
+

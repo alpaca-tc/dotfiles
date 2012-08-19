@@ -1,0 +1,6 @@
+kind=defined
+names=check_lexical_format
+visibility=public
+
+--- check_lexical_format(value)
+

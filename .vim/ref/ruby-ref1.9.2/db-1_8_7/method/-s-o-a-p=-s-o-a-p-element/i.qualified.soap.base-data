@@ -1,0 +1,7 @@
+kind=defined
+names=qualified,qualified=
+visibility=public
+
+--- qualified
+--- qualified=(value)
+

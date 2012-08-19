@@ -1,0 +1,7 @@
+kind=defined
+names=add_method_with_namespace,add_rpc_method_with_namespace
+visibility=public
+
+--- add_rpc_method_with_namespace(namespace, obj, name, *param)
+--- add_method_with_namespace(namespace, obj, name, *param)
+

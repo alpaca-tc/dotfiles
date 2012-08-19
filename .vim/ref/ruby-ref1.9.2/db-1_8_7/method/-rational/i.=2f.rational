@@ -1,0 +1,22 @@
+kind=defined
+names=/
+visibility=public
+
+--- /(other)   -> Rational | Float
+
+商を計算します。
+
+@param other 自身を割る数
+
+other に [[c:Float]] を指定した場合は、計算結果を [[c:Float]] で返しま
+す。
+
+例:
+
+  Rational(3, 4) / 2              # => Rational(3, 8)
+  Rational(3, 4) / Rational(2, 1) # => Rational(3, 8)
+  Rational(3, 4) / 2.0            # => 0.375
+  Rational(3, 4) / 0              # => ZeroDivisionError
+
+@raise ZeroDivisionError other が 0 の時に発生します。
+

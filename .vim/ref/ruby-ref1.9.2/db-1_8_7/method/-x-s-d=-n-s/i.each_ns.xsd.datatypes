@@ -1,0 +1,6 @@
+kind=defined
+names=each_ns
+visibility=public
+
+--- each_ns {|ns, tag| .... }
+

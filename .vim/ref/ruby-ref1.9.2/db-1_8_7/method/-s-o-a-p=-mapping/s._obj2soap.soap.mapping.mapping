@@ -1,0 +1,6 @@
+kind=defined
+names=_obj2soap
+visibility=public
+
+--- _obj2soap(obj, registry, type = nil)
+

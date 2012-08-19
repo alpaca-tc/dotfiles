@@ -1,0 +1,11 @@
+kind=defined
+names=asn1_flag=
+visibility=public
+
+--- asn1_flag=(flags)
+自身に ASN1 フラグを設定します。
+
+現在利用可能なフラグは以下の通りです。
+  * [[m:OpenSSL::PKey::EC::NAMED_CURVE]]
+
+@see [[m:OpenSSL::PKey::EC::Group#asn1_flag]]

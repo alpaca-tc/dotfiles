@@ -1,0 +1,16 @@
+kind=defined
+names=new
+visibility=public
+
+--- new(enum = nil) -> Generator
+--- new(enum = nil) {|g|  ... } -> Generator
+
+[[c:Enumerable]] オブジェクトかブロックから Generator オブジェクトを生成します。
+
+ブロックは生成した Generator オブジェクトをブロック引数として呼ばれます。
+
+@param enum [[c:Enumerable]] をインクルードしたオブジェクトを与えます。
+            enum とブロックを同時に与えた場合は、ブロックは無視されます。
+
+
+

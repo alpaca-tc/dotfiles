@@ -1,0 +1,9 @@
+kind=defined
+names=succeed?
+visibility=public
+
+--- succeed? -> bool
+
+成功している場合は、真を返します。
+そうでない場合は、偽を返します。
+

@@ -1,0 +1,26 @@
+kind=added
+names=count_objects_size
+visibility=public
+
+--- count_objects_size(result_hash = nil) -> Hash
+
+型ごとのオブジェクトサイズをバイト単位で格納したハッシュを返します。
+
+@param result_hash 戻り値のためのハッシュを指定します。省略した場合は新
+                   しくハッシュを作成します。result_hash の内容は上書き
+                   されます。プローブ効果を避けるために使用します。
+
+戻り値の内容は完全ではない事に注意してください。この内容はあくまでもヒ
+ントとして扱う必要があります。特に T_DATA の合計値は正しくないでしょう。
+
+例:
+
+  ObjectSpace.count_objects_size
+  # => {:TOTAL=>1461154, :T_CLASS=>158280, :T_MODULE=>20672, :T_STRING=>527249, ...}
+
+@raise TypeError result_hash にハッシュ以外を指定した時に発生します。
+
+戻り値のハッシュは処理系に依存します。これは将来変更になるかもしれません。
+
+本メソッドは C Ruby 以外では動作しません。
+

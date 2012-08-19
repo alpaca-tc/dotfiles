@@ -1,0 +1,13 @@
+kind=added
+names=to_r
+visibility=public
+
+--- to_r -> Rational
+
+自身を [[c:Rational]] に変換します。
+
+例:
+
+  1.to_r        # => Rational(1, 1)
+  (1<<64).to_r  # => Rational(18446744073709551616, 1)
+

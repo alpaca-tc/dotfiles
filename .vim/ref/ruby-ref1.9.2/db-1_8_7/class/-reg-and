@@ -1,0 +1,7 @@
+superclass=Object
+type=class
+library=eregex
+extended=
+included=
+
+二つの正規表現を内部で保持するクラスです。

@@ -1,0 +1,10 @@
+kind=defined
+names=inspect
+visibility=public
+
+--- inspect -> String
+
+自身の情報を人間に読みやすい文字列にして返します。
+
+  [1, 2, 3, 4].inspect # => "[1, 2, 3, 4]"
+

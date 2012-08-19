@@ -1,0 +1,10 @@
+methods=
+sublibraries=
+requires=
+classes=Test=Unit=UI,Test=Unit=UI=TestRunnerUtilities
+is_sublibrary=true
+
+各種 TestRunner を実装するために使われます。
+
+Unit テストを行いたいだけのユーザが、このライブラリを require する
+必要はありません。

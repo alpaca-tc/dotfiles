@@ -1,0 +1,8 @@
+kind=defined
+names=PROGRESS_ONLY
+visibility=public
+
+--- PROGRESS_ONLY -> Integer
+
+テスト結果の出力レベルを表す定数です。テストの進捗を表す「.」だけが出力されます。
+

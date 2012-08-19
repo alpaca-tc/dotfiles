@@ -1,0 +1,10 @@
+kind=defined
+names=EOL
+visibility=public
+
+--- EOL -> String
+
+改行文字です。
+
+
+

@@ -1,0 +1,19 @@
+kind=defined
+names=new
+visibility=public
+
+--- new(types, contents)
+
+types には DL::Types のインスタンス、contents には構造体の定義を
+以下のようにして与える。
+
+  ["int size",
+   "char *str"]
+  
+このようにして生成されたStructオブジェクトは、以下の構造体のように振舞う。
+
+  struct {
+    int size;
+    char *str;
+  }
+

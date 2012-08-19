@@ -1,0 +1,6 @@
+kind=defined
+names=def_attr
+visibility=public
+
+--- def_attr(attrname, writable = true, varname = nil)
+

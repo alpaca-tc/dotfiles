@@ -1,0 +1,16 @@
+kind=defined
+names=scan
+visibility=public
+
+--- scan(re)                  -> [String] | [[String]]
+--- scan(re) {|matched| ... } -> [String] | [[String]]
+
+$_.scan と同じです。
+
+暗号的になりすぎるきらいがあるため、このメソッドの使用は推奨されていません。
+今後はより明示的な $_.scan を使ってください。
+
+@param re [[m:String#scan]] 参照
+@see [[m:String#scan]],[[m:$_]]
+
+

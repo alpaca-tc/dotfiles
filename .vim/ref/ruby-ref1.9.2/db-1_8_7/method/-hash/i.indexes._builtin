@@ -1,0 +1,18 @@
+kind=defined
+names=indexes,indices
+visibility=public
+
+--- indexes(*keys) -> [object]
+--- indices(*keys) -> [object]
+
+引数で指定されたキーに対応する値の配列を返します。
+
+このメソッドは ((<obsolete>)) です。
+使用すると警告メッセージが表示されます。
+代わりに [[m:Hash#values_at]] を使用してください。
+
+@param keys キーを任意個指定します。
+
+
+@see [[m:Hash#values_at]],[[m:Hash#[] ]]
+

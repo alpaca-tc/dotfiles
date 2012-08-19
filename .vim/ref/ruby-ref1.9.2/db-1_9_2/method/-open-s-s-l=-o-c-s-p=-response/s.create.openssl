@@ -1,0 +1,13 @@
+kind=defined
+names=create
+visibility=public
+
+--- create(status, basic_resp) -> OpenSSL::OCSP::Response
+Response オブジェクトを [[c:OpenSSL::OCSP::BasicResponse]] オブジェクト
+から生成します。
+
+
+@param status ステータスコード(整数)
+@param basic_resp [[c:OpenSSL::OCSP::BasicResponse]] オブジェクト
+@see [[m:OpenSSL::OCSP::Response.new]]
+

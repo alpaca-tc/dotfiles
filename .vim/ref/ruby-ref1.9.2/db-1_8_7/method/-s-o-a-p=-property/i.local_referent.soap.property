@@ -1,0 +1,6 @@
+kind=defined
+names=local_referent
+visibility=protected 
+
+--- local_referent(key)
+

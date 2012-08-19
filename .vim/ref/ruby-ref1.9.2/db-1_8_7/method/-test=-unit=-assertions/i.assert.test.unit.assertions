@@ -1,0 +1,15 @@
+kind=defined
+names=assert
+visibility=public
+
+--- assert(boolean, message = nil)    -> ()
+
+boolean が真ならパスします。
+
+@param boolean 検証するオブジェクトを指定します。
+
+@param message assert が失敗した時に表示するメッセージを文字列で指定し
+               ます。指定しなかった場合は表示しません。
+
+@raise Test::Unit::AssertionFailedError assert が失敗した時に発生します。
+

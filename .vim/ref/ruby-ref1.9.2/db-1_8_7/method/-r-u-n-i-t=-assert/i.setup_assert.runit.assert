@@ -1,0 +1,8 @@
+kind=defined
+names=setup_assert
+visibility=public
+
+--- setup_assert
+
+何もしません。
+

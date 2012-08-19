@@ -1,0 +1,23 @@
+kind=defined
+names=idle
+visibility=public
+
+--- idle {|resp| ...} -> Net::IMAP::TaggedResponse
+IDLE 命令を送り、メールボックスの非同期的変化を待ち受けます。
+
+このメソッドに渡したブロックは
+[[m:Net::IMAP#add_response_handler]] によって
+レスポンスハンドラとして用いられます。
+また、このメソッドが終了する時点で
+[[m:Net::IMAP#remove_response_handler]] で
+ハンドラが削除されます。
+
+レスポンスハンドラについては
+[[m:Net::IMAP#add_response_handler]] を参照してください。
+
+別のスレッドが [[m:Net::IMAP#idle_done]] を呼びだすまで
+このメソッドを呼びだしたスレッドは停止します。
+
+この命令は [[RFC:2177]] で定義されています。詳しくはそちらを
+参照してください。
+

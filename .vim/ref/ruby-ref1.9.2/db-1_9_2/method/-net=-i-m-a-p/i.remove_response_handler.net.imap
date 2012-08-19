@@ -1,0 +1,10 @@
+kind=defined
+names=remove_response_handler
+visibility=public
+
+--- remove_response_handler(handler) -> ()
+レスポンスハンドラを削除します。
+
+@param handler 削除するハンドラ
+@see [[m:Net::IMAP#add_response_handler]]
+

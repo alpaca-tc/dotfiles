@@ -1,0 +1,7 @@
+kind=defined
+names=send_string,send_string=
+visibility=public
+
+--- send_string
+--- send_string=(value)
+

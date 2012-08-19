@@ -1,0 +1,12 @@
+kind=defined
+names=malloc
+visibility=public
+
+--- malloc(size, free = nil)    -> DL::PtrData
+
+サイズが size であるメモリ領域を確保し、それを指す DL::PtrData を返します。
+
+@param size 確保したいメモリ領域のサイズを指定します。
+
+@param free 返り値にセットされる free 関数を [[c:DL::Symbol]] で指定します。
+

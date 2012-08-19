@@ -1,0 +1,6 @@
+kind=defined
+names=def_const
+visibility=public
+
+--- def_const(const, value)
+

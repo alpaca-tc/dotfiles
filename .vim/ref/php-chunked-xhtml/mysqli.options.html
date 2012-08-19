@@ -1,0 +1,188 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>オプションを設定する</title>
+
+ </head>
+ <body><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="mysqli.next-result.html">mysqli::next_result</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="mysqli.ping.html">mysqli::ping</a></div>
+ <div class="up"><a href="class.mysqli.html">mysqli</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div><hr /><div id="mysqli.options" class="refentry">
+ <div class="refnamediv">
+  <h1 class="refname">mysqli::options</h1>
+  <h1 class="refname">mysqli_options</h1>
+  <p class="verinfo">(PHP 5)</p><p class="refpurpose"><span class="refname">mysqli::options</span> -- <span class="refname">mysqli_options</span> &mdash; <span class="dc-title">オプションを設定する</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-mysqli.options-description">
+  <h3 class="title">説明</h3>
+  <p class="para">オブジェクト指向型</p>
+  <div class="methodsynopsis dc-description">
+   <span class="type">bool</span> <span class="methodname"><strong>mysqli::options</strong></span>
+    ( <span class="methodparam"><span class="type">int</span> <code class="parameter">$option</code></span>
+   , <span class="methodparam"><span class="type"><a href="language.pseudo-types.html#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$value</code></span>
+   )</div>
+
+  <p class="para rdfs-comment">手続き型</p>
+  <div class="methodsynopsis dc-description">
+   <span class="type">bool</span> <span class="methodname"><strong>mysqli_options</strong></span>
+    ( <span class="methodparam"><span class="type"><a href="class.mysqli.html" class="type mysqli">mysqli</a></span> <code class="parameter">$link</code></span>
+   , <span class="methodparam"><span class="type">int</span> <code class="parameter">$option</code></span>
+   , <span class="methodparam"><span class="type"><a href="language.pseudo-types.html#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$value</code></span>
+   )</div>
+
+  <p class="para rdfs-comment">
+   接続に関する追加オプションを設定し、
+   接続の振る舞いに影響を与えるために使用します。
+  </p>
+  <p class="para">
+   この関数は、いくつかのオプションを設定して複数回コールされることがあります。
+  </p>
+  <p class="para">
+   <span class="function"><strong>mysqli_options()</strong></span> は、
+   <span class="function"><a href="mysqli.init.html" class="function">mysqli_init()</a></span> がコールされた後、
+   <span class="function"><a href="mysqli.real-connect.html" class="function">mysqli_real_connect()</a></span> の前にコールしなければなりません。
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-mysqli.options-parameters">
+  <h3 class="title">パラメータ</h3>
+  <p class="para">
+   <dl>
+
+    <dt>
+<span class="term"><em><code class="parameter">
+link</code></em></span><dd>
+<p class="para">手続き型のみ:
+<span class="function"><a href="function.mysqli-connect.html" class="function">mysqli_connect()</a></span> あるいは <span class="function"><a href="mysqli.init.html" class="function">mysqli_init()</a></span> が返すリンク ID。
+</p></dd>
+</dt>
+
+    <dt>
+
+     <span class="term"><em><code class="parameter">option</code></em></span>
+     <dd>
+
+      <p class="para">
+       指定するオプション。以下の値のいずれかです。
+       <table class="doctable table">
+        <caption><strong>使用可能なオプション</strong></caption>
+        
+         <thead>
+          <tr>
+           <th>名前</th>
+           <th>説明</th>
+          </tr>
+
+         </thead>
+
+         <tbody class="tbody">
+          <tr>
+           <td><strong><code>MYSQLI_OPT_CONNECT_TIMEOUT</code></strong></td>
+           <td>接続のタイムアウト秒数 (PHP 5.3.1 以降、Windows 上での TCP/IP 接続をサポートします)。</td>
+          </tr>
+
+          <tr>
+           <td><strong><code>MYSQLI_OPT_LOCAL_INFILE</code></strong></td>
+           <td><em>LOAD LOCAL INFILE</em> の使用可/不可。</td>
+          </tr>
+
+          <tr>
+           <td><strong><code>MYSQLI_INIT_COMMAND</code></strong></td>
+           <td>MySQL サーバへの接続後に実行するコマンド。</td>
+          </tr>
+
+          <tr>
+           <td><strong><code>MYSQLI_READ_DEFAULT_FILE</code></strong></td>
+           <td>
+            <var class="filename">my.cnf</var> の代わりに、指定した名前のファイルから
+            設定を読み込みます。
+           </td>
+          </tr>
+
+          <tr>
+           <td><strong><code>MYSQLI_READ_DEFAULT_GROUP</code></strong></td>
+           <td>
+            <var class="filename">my.cnf</var> の指定した名前のグループ、あるいは
+            <strong><code>MYSQL_READ_DEFAULT_FILE</code></strong> で指定したファイルから
+            設定を読み込みます。
+           </td>
+          </tr>
+
+         </tbody>
+        
+       </table>
+
+      </p>
+     </dd>
+
+    </dt>
+
+    <dt>
+
+     <span class="term"><em><code class="parameter">value</code></em></span>
+     <dd>
+
+      <p class="para">
+       オプションに設定する値。
+      </p>
+     </dd>
+
+    </dt>
+
+   </dl>
+
+  </p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-mysqli.options-returnvalues">
+  <h3 class="title">返り値</h3>
+  <p class="para">
+   成功した場合に <strong><code>TRUE</code></strong> を、失敗した場合に <strong><code>FALSE</code></strong> を返します。
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-mysqli.options-examples">
+  <h3 class="title">例</h3>
+  <p class="para">
+   <span class="function"><a href="mysqli.real-connect.html" class="function">mysqli_real_connect()</a></span> を参照ください。
+  </p>
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-mysqli.options-notes">
+  <h3 class="title">注意</h3>
+  <blockquote class="note"><p><strong class="note">注意</strong>: 
+<p class="para">MySQLnd は常に、サーバのデフォルト文字セットを想定しています。この文字セットは接続時の
+ハンドシェイク/認証 のときに送信され、これを mysqlnd が使います。</p>
+<p class="para">Libmysql が使うデフォルトの文字セットは <var class="filename">my.cnf</var>
+で設定したものです。あるいは明示的に <span class="function"><strong>mysqli_options()</strong></span> をコールして設定することもできます。
+これは、<span class="function"><a href="mysqli.init.html" class="function">mysqli_init()</a></span> のあとで <span class="function"><a href="mysqli.real-connect.html" class="function">mysqli_real_connect()</a></span>
+を実行する前にコールします。</p></p></blockquote>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-mysqli.options-seealso">
+  <h3 class="title">参考</h3>
+  <p class="para">
+   <ul class="simplelist">
+    <li class="member"><span class="function"><a href="mysqli.init.html" class="function" rel="rdfs-seeAlso">mysqli_init()</a> - MySQLi を初期化し、mysqli_real_connect() で使用するリソースを返す</span></li>
+    <li class="member"><span class="function"><a href="mysqli.real-connect.html" class="function" rel="rdfs-seeAlso">mysqli_real_connect()</a> - mysql サーバとの接続をオープンする</span></li>
+   </ul>
+  </p>
+ </div>
+
+
+</div><hr /><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="mysqli.next-result.html">mysqli::next_result</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="mysqli.ping.html">mysqli::ping</a></div>
+ <div class="up"><a href="class.mysqli.html">mysqli</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div></body></html>

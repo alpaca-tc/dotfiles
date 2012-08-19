@@ -1,0 +1,6 @@
+kind=defined
+names=uncapitalize
+visibility=public
+
+--- uncapitalize(target)
+

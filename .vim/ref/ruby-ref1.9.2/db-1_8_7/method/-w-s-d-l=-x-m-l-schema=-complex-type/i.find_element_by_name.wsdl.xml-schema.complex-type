@@ -1,0 +1,6 @@
+kind=defined
+names=find_element_by_name
+visibility=public
+
+--- find_element_by_name(name)
+

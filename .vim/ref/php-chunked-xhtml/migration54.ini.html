@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>INI ファイルの扱いに関する変更</title>
+
+ </head>
+ <body><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="migration54.global-constants.html">新しいグローバル定数</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="migration54.other.html">その他の変更</a></div>
+ <div class="up"><a href="migration54.html">PHP 5.3.x から PHP 5.4.x への移行</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div><hr /><div id="migration54.ini" class="section">
+  <h2 class="title">INI ファイルの扱いに関する変更</h2>
+  <p class="simpara">
+   デフォルト値が変更された ini ディレクティブは以下の通りです。
+  </p>
+  <ul class="itemizedlist">
+   <li class="listitem">
+    <span class="simpara">
+     <em>register_globals</em> および <em>register_long_arrays</em>
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <em>allow_call_time_pass_reference</em>
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <em>define_syslog_variables</em> およびそれに関連するすべての関数
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <em>highlight.bg</em>
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <em>session.bug_compat_42</em> および <em>session.bug_compat_warn</em>
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <em>y2k_compliance</em>
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <em>safe_mode</em> およびそれに関連するすべてのパラメータ
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <em>zend.ze1_compatibility_mode</em>
+    </span>
+   </li>
+  </ul>
+  <p class="simpara">
+   次の ini ディレクティブが追加されました。
+  </p>
+  <ul class="itemizedlist">
+   <li class="listitem">
+    <span class="simpara">
+     <em>cli.pager</em> および <em>cli.prompt</em>。
+     これは、readline を使った対話シェルモードで利用するものです。
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <em>max_input_vars</em> - 最大で何個までの GET/POST/COOKIE 入力変数を受け付けるか。
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <em>zend.multibyte</em> - 新たなマルチバイトサポートの制御。
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <em>session.upload_progress.enabled</em>, <em>session.upload_progress.cleanup</em>,
+     <em>session.upload_progress.prefix</em>, <em>session.upload_progress.name</em>,
+     <em>session.upload_progress.freq</em>, <em>session.upload_progress.min_freq</em>     
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <em>enable_post_data_reading</em> - 無効にすると、POST データの読み込みやその後の処理を行いません。
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <em>windows_show_crt_warning</em>
+    </span>
+   </li>
+   </ul>
+  <p class="simpara">
+   次の ini ディレクティブには変更がありました。
+  </p>
+  <ul class="itemizedlist">
+   <li class="listitem">
+    <span class="simpara">
+     <em>default_charset</em> のデフォルトが ISO-8859-1 から UTF-8 に変わりました。
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <em>session.entropy_file</em> のデフォルトが /dev/random あるいは /dev/urandom
+     となりました。これはコンパイル時に推測した結果で決まります。
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <em>session.entropy_length</em> のデフォルトが 32 に変わりました。
+    </span>
+   </li>
+   </ul>
+ </div><hr /><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="migration54.global-constants.html">新しいグローバル定数</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="migration54.other.html">その他の変更</a></div>
+ <div class="up"><a href="migration54.html">PHP 5.3.x から PHP 5.4.x への移行</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div></body></html>

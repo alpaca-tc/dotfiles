@@ -1,0 +1,30 @@
+source ~/.zsh/git-completion.bash
+source ~/.zsh/tmux-completion.bash
+source ~/.zsh/auto-fu.zsh
+
+# brewの読み込みなど
+fpath=(~/.zsh/functions/$fpath)
+
+# コマンドを一時避難
+show_buffer_stack() {
+  POSTDISPLAY="
+stack: $LBUFFER"
+  zle push-line-or-edit
+}
+zle -N show_buffer_stack
+setopt noflowcontrol
+bindkey '^Q' show_buffer_stack
+
+# w3mでgoogle検索
+function google() {
+local str opt
+if [ $ != 0 ]; then
+    for i in $*; do
+        str="$str+$i"
+    done
+    str=`echo $str | sed 's/^\+//'`
+    opt='search?num=50&hl=ja&lr=lang_ja'
+    opt="${opt}&q=${str}"
+fi
+w3m http://www.google.co.jp/$opt
+}

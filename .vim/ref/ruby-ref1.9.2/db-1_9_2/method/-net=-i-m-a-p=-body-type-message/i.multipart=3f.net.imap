@@ -1,0 +1,9 @@
+kind=defined
+names=multipart?
+visibility=public
+
+--- multipart?  -> bool
+マルチパートかどうかを返します。
+false を返します。
+
+

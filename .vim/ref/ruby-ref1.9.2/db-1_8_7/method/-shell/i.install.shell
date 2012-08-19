@@ -1,0 +1,20 @@
+kind=defined
+names=install
+visibility=public
+
+--- install(from, to, mode = nil, verbose = false) -> () 
+
+[[c:File]] クラスにある同名のクラスメソッドと同じです.
+
+@param from コピー元のファイル。
+
+@param to コピー先のファイル。
+
+@param mode ファイルのアクセスモード。8進数で指定します。
+
+@param verbose 真を指定すると詳細を表示します。
+
+@see [[m:File.install]]
+
+
+

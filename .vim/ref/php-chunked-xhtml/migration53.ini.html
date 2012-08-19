@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>INIファイル の扱いに関する変更</title>
+
+ </head>
+ <body><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="migration53.global-constants.html">新しいグローバル定数</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="migration53.other.html">その他の変更</a></div>
+ <div class="up"><a href="migration53.html">PHP 5.2.x から PHP 5.3.x への移行</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div><hr /><div id="migration53.ini" class="section">
+  <h2 class="title">INIファイル の扱いに関する変更</h2>
+  <p class="simpara">
+   PHP 5.3.0 はパフォーマンスが大きく向上しました。そして構文解析や構文の新機能があります。
+  </p>
+  <ul class="itemizedlist">
+   <li class="listitem">
+    <span class="simpara">
+     標準の <var class="filename">php.ini</var> ファイルは再び整理され、名前が変更されました。
+     <em>php.ini-development</em> ファイルには開発環境で推奨される設定があります。
+     <em>php.ini-production</em> は本番環境向けに設定されています。
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <em>[PATH=/opt/httpd/www.example.com/]</em> と
+     <em>[HOST=www.example.com]</em> という特別なセクションをサポートしました。
+     このセクションに置かれたディレクティブは、
+     実行時やユーザー定義のiniファイルで上書きすることができません。
+     詳しい情報は <a href="ini.sections.html" class="link">こちら</a> を参照してください。
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <em>zend_extension_debug</em> と <em>zend_extension_ts</em>
+     ディレクティブが削除されました。代替として <em>zend_extension</em>
+     をすべてのZend拡張機能をロードするのに使ってください。
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <em>zend.ze1_compatibility_mode</em> ディレクティブは削除されました。
+     このディレクティブをONにしていると、<strong><code>E_ERROR</code></strong> エラーが起動時に発生します。
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     &quot;<a href="ini.core.html#ini.extension" class="link"><em>extension</em></a>&quot;
+     ディレクティブを使ってロードするモジュールをフルパスで指定できるようになりました。
+     directive.
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <var class="filename">php.ini</var> ファイルのほとんどすべての場所で <em>&quot;ini-variables&quot;</em> の形式が使えるようになりました。
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     実行時に <em>open_basedir</em> の制限をより厳しくできるようになりました。
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     INI オプションの配列で 数値とアルファベットが混じった値が使えるようになりました。
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <span class="function"><a href="function.get-cfg-var.html" class="function">get_cfg_var()</a></span> 関数は &quot;配列の&quot; INIオプションを返せるようになりました。
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     新たなディレクティブ mail.add_x_header が追加されました。
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     user_ini.filename も追加されました。
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     user_ini.cache_ttl も追加されました。
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     exit_on_timeout も追加されました。
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     open_basedir が PHP_INI_ALL となりました。
+    </span>
+   </li>
+  </ul>
+  <p class="simpara">
+   新しく追加された iniディレクティブ は以下の通りです。
+  </p>
+  <ul class="itemizedlist">
+   <li class="listitem">
+    <span class="simpara">
+     <em>user_ini.filename</em> と <em>user_ini.cache_ttl</em> 
+     は、新しい .htaccess 形式のユーザー定義 INI ファイル用のものです。
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <em>mbstring.http_output_conv_mimetype</em> が追加されました。
+     このディレクティブは <span class="function"><a href="function.mb-output-handler.html" class="function">mb_output_handler()</a></span>
+     関数が呼び出された場合に使う Content-Type の正規表現パターンを指定します。
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <em>request_order</em> ディレクティブが追加されました。
+     これはどのリクエストオプションを <var class="varname"><var class="varname"><a href="reserved.variables.request.html" class="classname">$_REQUEST</a></var></var>
+     変数で正確に利用可能にすべきかを指定します。
+    </span>
+   </li>
+  </ul>
+  <p class="simpara">
+   デフォルト値が変更された ini ディレクティブは以下の通りです。
+  </p>
+  <ul class="itemizedlist">
+   <li class="listitem">
+    <span class="simpara">
+     <em>session.use_only_cookies</em> のデフォルト値は
+     <em>&quot;1&quot;</em> (有効) になりました。
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <em>oci8.default_prefetch</em> の値は
+     <em>&quot;10&quot;</em> から <em>&quot;100&quot;</em> に変更されました。
+    </span>
+   </li>
+  </ul>
+ </div><hr /><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="migration53.global-constants.html">新しいグローバル定数</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="migration53.other.html">その他の変更</a></div>
+ <div class="up"><a href="migration53.html">PHP 5.2.x から PHP 5.3.x への移行</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div></body></html>

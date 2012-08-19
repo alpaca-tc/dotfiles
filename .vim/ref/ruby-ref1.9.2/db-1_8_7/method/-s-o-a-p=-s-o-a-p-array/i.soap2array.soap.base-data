@@ -1,0 +1,6 @@
+kind=defined
+names=soap2array
+visibility=public
+
+--- soap2array(ary)
+

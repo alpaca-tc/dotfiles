@@ -1,0 +1,8 @@
+kind=defined
+names=document_send
+visibility=public
+
+--- document_send(name, header_obj, body_obj)
+
+
+

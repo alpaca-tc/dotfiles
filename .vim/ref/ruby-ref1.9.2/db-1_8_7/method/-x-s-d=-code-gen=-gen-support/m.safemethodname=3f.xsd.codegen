@@ -1,0 +1,6 @@
+kind=defined
+names=safemethodname?
+visibility=public
+
+--- safemethodname?(name)
+

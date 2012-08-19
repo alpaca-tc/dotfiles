@@ -1,0 +1,40 @@
+kind=defined
+names=upcase!
+visibility=public
+
+--- upcase! -> self | nil
+
+ASCII 文字列の範囲内で 'a' から 'z' までの
+アルファベット小文字を全て大文字にします。
+このメソッドは self を破壊的に変更して返しますが、
+置換が起こらなかった場合は nil を返します。
+
+このメソッドはマルチバイト文字列を認識しますが、
+それはあくまでも「1 文字を 1 文字として認識する」だけであって、
+いわゆる全角アルファベットの大文字小文字までは変換しません。
+
+また、マルチバイト文字列に対応するためには
+[[m:$KCODE]] を設定する必要があります。
+文字列が Shift JIS エンコーディングで
+[[m:$KCODE]] が適切に設定されていないときは
+以下のようにマルチバイト文字の一部も変換してしまいます。
+
+  #coding:Shift_JIS
+  $KCODE = "SJIS"
+  str = "蟻"
+  str.upcase!
+  puts str   # => 蟻   ($KCODE が適切なので正しく無視された)
+  
+  $KCODE = "NONE"
+  str = "蟻"
+  str.upcase!
+  puts str   # => 帰   ($KCODE が不適切なので誤って処理された)
+
+例:
+    buf = "stRIng? STring."
+    buf.upcase!
+    p buf   # => "STRING? STRING."
+
+@see [[m:String#upcase]], [[m:String#downcase!]],
+     [[m:String#swapcase!]], [[m:String#capitalize!]]
+

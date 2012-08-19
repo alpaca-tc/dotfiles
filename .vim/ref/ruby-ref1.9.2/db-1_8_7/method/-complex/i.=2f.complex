@@ -1,0 +1,34 @@
+kind=defined
+names=/
+visibility=public
+
+--- /(other) -> Complex
+複素数 other で除した結果を返します。
+
+  z1 = a + b * i
+  z2 = c + d * i
+
+としたとき、除算の定義は
+
+  z1 / z2 = ((a*c + b*d)/(c*c + d*d)) + ((b*c - a*d)/(c*c + d*d)) * i
+
+です。このため実部と虚部が全て整数だった場合、整数同士の除算として / が
+計算されることに注意してください。
+
+  z1 = Complex.new(4, 3)
+  z2 = Complex.new(2, 1)
+  
+  p z1 / z2       #=> Complex(2, 0)
+  p 1.0 * z1 / z2 #=> Complex(2.2, 0.4)
+  
+@param other 除算する数
+@return 除算結果を[[c:Complex]]クラスのオブジェクトとして返します。
+
+例:
+
+  z1 = Complex.new(4, 3)
+  z2 = Complex.new(2, 1)
+  
+  p z1 / z2       #=> Complex(2, 0)
+  p 1.0 * z1 / z2 #=> Complex(2.2, 0.4)
+

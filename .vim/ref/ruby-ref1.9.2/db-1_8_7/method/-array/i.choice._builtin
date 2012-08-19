@@ -1,0 +1,23 @@
+kind=defined
+names=choice
+visibility=public
+
+--- choice        -> object
+
+配列の要素を1個ランダムに選んで返します。
+
+配列が空の場合は nil を返します。
+
+srand()が有効です。
+
+このメソッドは Ruby 1.8.7 と Ruby 1.9.0 にしか存在しないメソッドです。
+Ruby 1.8.8 以降では Array#sample を使ってください。
+
+例:
+
+  a = (1..10).to_a
+  p a.choice        #=>  9
+  p a.choice        #=> 10
+  p a               #=> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+

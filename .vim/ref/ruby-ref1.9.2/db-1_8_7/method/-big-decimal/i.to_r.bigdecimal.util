@@ -1,0 +1,10 @@
+kind=added
+names=to_r
+visibility=public
+
+--- to_r -> Rational
+
+自身を [[c:Rational]] に変換します。
+
+@return [[c:Rational]] に変換したオブジェクト
+

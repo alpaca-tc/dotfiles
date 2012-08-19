@@ -1,0 +1,6 @@
+kind=defined
+names=parse_type
+visibility=public
+
+--- parse_type(string)
+

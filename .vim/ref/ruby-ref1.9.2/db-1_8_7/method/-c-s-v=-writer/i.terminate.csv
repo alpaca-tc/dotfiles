@@ -1,0 +1,8 @@
+kind=defined
+names=terminate
+visibility=private 
+
+--- terminate -> nil
+インスタンス破棄時処理が必要な場合に再定義してください。
+
+

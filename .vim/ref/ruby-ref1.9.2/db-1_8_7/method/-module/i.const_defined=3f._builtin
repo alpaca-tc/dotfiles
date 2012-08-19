@@ -1,0 +1,38 @@
+kind=defined
+names=const_defined?
+visibility=public
+
+--- const_defined?(name) -> bool
+
+モジュールに name で指定される名前の定数が定義されている時真
+を返します。
+
+スーパークラスや include したモジュールで定義された定数は対象には
+なりません。(ただし、[[c:Object]] だけは例外)
+
+@param name [[c:String]], [[c:Symbol]] で指定される定数名。
+
+
+  module Kernel
+    FOO = 1
+  end
+
+  # Object は include したモジュールの定数に対しても
+  # true を返す
+  p Object.const_defined?(:FOO)   # => true
+
+  module Bar
+    BAR = 1
+  end
+  class Object
+    include Bar
+  end
+  # ユーザ定義のモジュールに対しても同様
+  p Object.const_defined?(:BAR)   # => true
+
+  class Baz
+    include Bar
+  end
+  # Object 以外では自身の定数だけがチェック対象
+  p Baz.const_defined?(:BAR)      # => false
+

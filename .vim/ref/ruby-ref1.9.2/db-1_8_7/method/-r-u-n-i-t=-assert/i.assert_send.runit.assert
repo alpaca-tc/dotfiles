@@ -1,0 +1,14 @@
+kind=defined
+names=assert_send
+visibility=public
+
+--- assert_send(object, method, *args) -> ()
+
+object.__send__(method, *args) が真である場合、検査にパスしたことになります。
+
+@param object 任意のオブジェクトを指定します。
+
+@param method 呼び出すメソッド名を指定します。
+
+@param args メソッドに渡す引数を指定します。
+

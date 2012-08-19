@@ -1,0 +1,14 @@
+kind=defined
+names=connect
+visibility=public
+
+--- connect(host, port=Net::FTP::FTP_PORT) -> ()
+host で指定されたホストに接続します。
+
+[[m:Net::FTP#connect]] とは、発生する例外も含めほぼ同じです。
+
+@param host 接続するホスト名です。
+@param port 接続するポート番号です。
+@see [[m:Net::FTP#connect]]
+
+

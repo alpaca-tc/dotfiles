@@ -1,0 +1,26 @@
+kind=defined
+names=parse
+visibility=public
+
+--- parse(str_or_readable, fs = ',', rs = nil) -> CSV::StringReader
+--- parse(str_or_readable, fs = ',', rs = nil) {|row| ... } -> nil
+
+CSVデータを解析して、[[c:CSV::StringReader]]を返します。
+ブロックに渡された場合はパースした結果を1列づつArrayとして渡します。
+
+@param str_or_readable パースする対象の文字列
+@param fs フィールドセパレータの指定。
+          nil (デフォルト) で ',' をセパレータとします。
+@param rs 行区切り文字の指定。nil (デフォルト) で CrLf / Lf。
+          Cr を行区切りとしたい場合は ?\r を渡します。
+
+===== 注意
+
+パース時に""(空文字)と値なしを区別します。
+例えば、a, "", , b の行をパースした場合には ["a", "", nil, "b"] の配列を返します。
+
+例:
+  CSV::Reader.parse("1,2,3\nA,B,C\n"){|row|
+    p row
+  }
+

@@ -1,0 +1,7 @@
+superclass=Object
+type=class
+library=csv
+extended=
+included=
+
+ストリームバッファを扱うクラス。

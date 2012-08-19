@@ -1,0 +1,15 @@
+kind=defined
+names=dllink,dlload
+visibility=public
+
+--- dlload(*lib)    -> ()
+--- dllink(*lib)    -> ()
+
+[[m:DL.#dlopen]] を用いてライブラリをロードし、extend した
+モジュール内でそのライブラリで定義されている参照可能なシンボルを取得できるよ
+うにします。
+
+@param lib ロードしたいライブラリを文字列で与えます。
+
+@raise RuntimeError [[man:dlopen(3)]] に失敗した時に発生します。
+

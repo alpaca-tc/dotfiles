@@ -1,0 +1,7 @@
+kind=defined
+names=is_eos?
+visibility=public
+
+--- is_eos? -> bool
+ストリームの終端かどうかをtrue/falseで返します。
+

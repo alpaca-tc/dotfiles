@@ -1,0 +1,7 @@
+kind=defined
+names=lines
+visibility=public
+
+--- lines -> Integer
+ボディの行数を返します。
+

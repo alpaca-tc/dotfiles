@@ -1,0 +1,6 @@
+kind=defined
+names=require_from_name
+visibility=public
+
+--- require_from_name(fqname)
+

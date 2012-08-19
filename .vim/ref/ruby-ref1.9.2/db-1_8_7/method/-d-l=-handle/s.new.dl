@@ -1,0 +1,12 @@
+kind=defined
+names=new
+visibility=public
+
+--- new(lib)                    -> DL::Handle
+--- new(lib) {|handle| ... }    -> DL::Handle
+
+ライブラリ lib をオープンし、Handle オブジェクトとして返します。
+
+ブロックを指定すれば、生成した Handle を引数としてブロックを実行します。
+Handle はブロックの終りで自動的にクローズされます。
+

@@ -1,0 +1,27 @@
+"-------------------------------------------------------------------------------
+" 検索設定 Search
+"-------------------------------------------------------------------------------
+set wrapscan   " 最後まで検索したら先頭へ戻る
+"set grepprg    " grepとコマンドラインに打ってもvimgrepできる
+set ignorecase " 大文字小文字無視
+set smartcase  " 検索文字列に大文字が含まれている場合は区別して検索する
+set incsearch  " インクリメンタルサーチ
+set hlsearch   " 検索文字をハイライト
+
+"選択した文字列を検索
+"#で元々出来ることを知って衝撃だけど、直さない。。w
+" vnoremap <silent> // y/<C-R>=escape(@", '\\/.*$^~[]')<CR><CR>
+" nnoremap <silent> // /<C-R><C-W><CR>
+nnoremap <silent> n nvv
+nnoremap <silent> N Nvv
+
+" Ctrl-iでヘルプ
+"nnoremap <C-i>  :<C-u>help<Space>
+
+let Grep_Skip_Dirs = '.svn .git .swp'
+let Grep_Skip_Files = '*.bak *~'
+let Grep_Find_Use_Xargs = 0
+let Grep_Xargs_Options = '--print0'
+
+"grepをしたときにQuickFixで表示するようにする
+set grepprg=grep\ -nH

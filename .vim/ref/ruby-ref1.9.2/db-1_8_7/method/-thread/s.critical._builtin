@@ -1,0 +1,23 @@
+kind=defined
+names=critical,critical=
+visibility=public
+
+--- critical             -> bool
+--- critical=(newstate)
+
+真である間、スレッドの切替えを行いません。
+
+カレントスレッドが停止状態になった場合や、シグナルに割り込まれた場合には、
+自動的に false になります。
+ただし、[[m:Thread.new]] によりスレッドを生成した場合には、critical 
+の値に関わらず そのスレッドは実行されます。
+また、[[m:Thread.pass]] により明示的に切替えることもできます。
+
+デフォルトは false です。
+
+注意: I/O や GC、拡張ライブラリがからむとこのフラグは無視さ
+れることもあります。排他制御を行うにはこのメソッドに頼らず
+[[c:Mutex]] や [[c:Monitor]] を使うべきです。
+
+@param newstate スレッドの切替えを許すかどうかを、true か false で指定します。
+

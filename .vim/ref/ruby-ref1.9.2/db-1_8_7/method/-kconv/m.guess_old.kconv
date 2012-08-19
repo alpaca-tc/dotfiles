@@ -1,0 +1,19 @@
+kind=defined
+names=guess_old
+visibility=public
+
+--- guess_old(str) -> Integer
+文字列 str のエンコーディングを判定します。戻り値は
+Kconv の定数です。
+
+このモジュール関数で判定できるのは、
+  * ISO-2022-JP ([[m:Kconv::JIS]])
+  * Shift_JIS ([[m:Kconv::SJIS]])
+  * EUC-JP ([[m:Kconv::EUC]])
+  * 不明 ([[m:Kconv::UNKNOWN]])
+  * 以上のどれでもない ([[m:Kconv::BINARY]])
+のいずれかです。
+
+@param str エンコーディング判定対象の文字列
+@see [[m:Kconv.#guess]]
+

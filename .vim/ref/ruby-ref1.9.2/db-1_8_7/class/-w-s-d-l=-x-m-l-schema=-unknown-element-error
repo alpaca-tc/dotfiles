@@ -1,0 +1,7 @@
+superclass=WSDL=XMLSchema=FormatDecodeError
+type=class
+library=wsdl.xmlSchema.parser
+extended=
+included=
+
+

@@ -1,0 +1,7 @@
+methods=
+sublibraries=xsd.codegen.gensupport
+requires=
+classes=XSD=CodeGen=ClassDef,XSD=CodeGen=CommentDef,XSD=CodeGen=GenSupport,XSD=CodeGen=MethodDef,XSD=CodeGen=ModuleDef
+is_sublibrary=true
+
+

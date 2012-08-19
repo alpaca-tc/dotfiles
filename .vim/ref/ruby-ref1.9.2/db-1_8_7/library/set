@@ -1,0 +1,45 @@
+methods=Enumerable/i.to_set.set
+sublibraries=
+requires=
+classes=Set,SortedSet
+is_sublibrary=false
+
+集合を表す Set クラスと、取り出し順序を保証した SortedSet クラスを提供
+します。
+
+集合とは重複のないオブジェクトの集まりです。
+[[c:Array]] の持つ演算機能と [[c:Hash]] の高速な検索機能を合わせ持ちます。
+
+Set および SortedSet は内部記憶として [[c:Hash]] を使うため、集合要素の
+等価性は [[m:Object#eql?]] と [[m:Object#hash]] を用いて判断されます。
+したがって、集合の各要素には、これらのメソッドが適切に定義されている
+必要があります。
+
+Set クラスでは、集合要素を取り出す際の順序は保証されません。
+一方、SortedSort では、集合要素はソートされた順序で取り出されます。
+
+また、set ライブラリを require すると [[c:Enumerable]] モジュールが
+拡張され、[[m:Enumerable#to_set]] の形で集合オブジェクトを生成できる
+ようになります。
+
+=== 注意事項
+
+Ruby 1.8 では、集合オブジェクトに対する taint, untaint, freeze の各
+メソッドは、内部記憶として保持するハッシュには影響しません。
+このため、集合オブジェクトの凍結および汚染マークのセットは実質的な
+効果を持ちません。
+例えば、set.freeze に続いて set.add を呼び出しても、エラーは発生
+しません。
+
+
+=== 例
+  require 'set'
+  
+  set1 = Set.new ["foo", "bar", "baz", "foo"]
+
+  p set1                  #=> #<Set: {"baz", "foo", "bar"}>
+  p set1.include?("bar")  #=> true
+  
+  set1.add("heh")
+  set1.delete("foo")
+  p set1                  #=> #<Set: {"heh", "baz", "bar"}>

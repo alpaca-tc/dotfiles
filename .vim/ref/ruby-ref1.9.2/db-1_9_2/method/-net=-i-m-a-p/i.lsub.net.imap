@@ -1,0 +1,17 @@
+kind=defined
+names=lsub
+visibility=public
+
+--- lsub(refname, mailbox) -> [Net::IMAP::MailboxList]
+
+LIST コマンドを送り、active/subscribed なメールボックス名の集合から
+引数にマッチするものすべてを返します。
+
+詳しくは  [[RFC:2060]] の 6.3.8 を参照してください。
+
+返り値は [[c:Net::IMAP::MailboxList]] の配列で返します。
+返り値が空集合である場合は空の配列でなく nil を返します。
+
+@param refname 参照名(文字列)
+@param mailbox 調べるメールボックスの名前(文字列)。ワイルドカードを含んでいてもよい。
+

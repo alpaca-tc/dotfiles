@@ -1,0 +1,13 @@
+kind=defined
+names=hour
+visibility=public
+
+--- hour -> Integer
+時間を返します (0-23)。
+
+
+@param n 小数点以下の桁数
+
+
+@param n 小数点以下の桁数
+

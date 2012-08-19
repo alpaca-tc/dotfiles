@@ -1,0 +1,11 @@
+kind=defined
+names=dump
+visibility=public
+
+--- dump(table) -> String
+単なる [[m:Marshal.#dump]] のラッパーメソッドです。
+
+@param table ハッシュを指定します。
+
+@see [[m:Marshal.#load]]
+

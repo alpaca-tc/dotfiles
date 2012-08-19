@@ -1,0 +1,7 @@
+kind=added
+names=fault,fault=
+visibility=public
+
+--- fault
+--- fault=(fault)
+

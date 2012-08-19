@@ -1,0 +1,16 @@
+kind=defined
+names=abs2
+visibility=public
+
+--- abs2 -> Fixnum
+--- abs2 -> Float
+自分自身の絶対値の2乗を返します。
+
+  z = a + b * i
+
+としたとき、[[m:Complex#abs2]] の定義は
+
+  a*a + b*b
+
+です。
+

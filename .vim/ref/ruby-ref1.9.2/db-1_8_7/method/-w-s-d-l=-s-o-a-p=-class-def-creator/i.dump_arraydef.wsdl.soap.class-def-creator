@@ -1,0 +1,6 @@
+kind=defined
+names=dump_arraydef
+visibility=private 
+
+--- dump_arraydef(complextype)
+

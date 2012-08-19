@@ -1,0 +1,10 @@
+#add_at	WSDL::SOAP::ClassDefCreatorSupport#add_at
+#basetype_mapped_class	WSDL::SOAP::ClassDefCreatorSupport#basetype_mapped_class
+#create_class_name	WSDL::SOAP::ClassDefCreatorSupport#create_class_name
+#dq	WSDL::SOAP::ClassDefCreatorSupport#dq
+#dqname	WSDL::SOAP::ClassDefCreatorSupport#dqname
+#dump_inout_type	WSDL::SOAP::ClassDefCreatorSupport#dump_inout_type
+#dump_inputparam	WSDL::SOAP::ClassDefCreatorSupport#dump_inputparam
+#dump_method_signature	WSDL::SOAP::ClassDefCreatorSupport#dump_method_signature
+#ndq	WSDL::SOAP::ClassDefCreatorSupport#ndq
+#sym	WSDL::SOAP::ClassDefCreatorSupport#sym

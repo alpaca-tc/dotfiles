@@ -1,0 +1,6 @@
+kind=defined
+names=decode
+visibility=public
+
+--- decode(elename, refidstr)
+

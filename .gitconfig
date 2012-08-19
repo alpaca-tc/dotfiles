@@ -1,0 +1,13 @@
+[user]
+    email = alprhcp666@gmail.com
+    name  = Ikkun
+[color]
+    ui = true
+[alias]
+    ci = commit
+    st = status
+    co = checkout
+    tr = log --graph --pretty='format:%C(yellow)%h%Creset %C(magenta)%cd%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset' --date=iso
+
+[push]
+    default = tracking

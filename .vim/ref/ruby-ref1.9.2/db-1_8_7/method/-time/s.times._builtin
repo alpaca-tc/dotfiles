@@ -1,0 +1,23 @@
+kind=defined
+names=times
+visibility=public
+
+--- times    -> Struct::Tms
+
+このメソッドは obsolete です。
+
+自身のプロセスとその子プロセスが消費したユーザ/システム CPU
+時間の積算を [[c:Struct::Tms]] のオブジェクトとして返します。
+Struct::Tms は以下のメンバを持つ構造体クラスです。
+
+ * utime           # user time
+ * stime           # system time
+ * cutime          # user time of children
+ * cstime          # system time of children
+
+時間の単位は秒で、浮動小数点数で与えられます。詳細は
+[[man:times(3)]] を参照してください。
+
+このメソッドは [[m:Process.#times]] に移動しました。Time.times も使えます
+が、警告メッセージが出力されます。
+

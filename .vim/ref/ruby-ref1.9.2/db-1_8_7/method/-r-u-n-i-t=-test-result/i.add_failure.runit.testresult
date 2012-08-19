@@ -1,0 +1,10 @@
+kind=defined
+names=add_failure
+visibility=public
+
+--- add_failure(failure) -> ()
+
+失敗したテストを追加します。
+
+@param failure 失敗したテストを指定します。
+

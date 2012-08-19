@@ -1,0 +1,13 @@
+kind=defined
+names=conj,conjugate
+visibility=public
+
+--- conj -> Complex
+--- conjugate -> Complex
+自分の共役複素数を返します。
+
+例:
+
+  z = Complex.new(1, 1)
+  p z.conjugate   #=> Complex(1, -1)
+

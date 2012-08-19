@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>インストール手順</title>
+
+ </head>
+ <body><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="sqlsrv.requirements.html">要件</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="sqlsrv.configuration.html">実行時設定</a></div>
+ <div class="up"><a href="sqlsrv.setup.html">インストール/設定</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div><hr /><div id="sqlsrv.installation" class="section">
+ <h2 class="title">インストール手順</h2>
+ <p class="para">
+  The SQLSRV extension is enabled by adding appropriate DLL file to your PHP 
+  extension directory and the corresponding entry to the <var class="filename">php.ini</var> file. The 
+  SQLSRV download comes with several driver files. Which driver file you use 
+  will depend on 3 factors: the PHP version you are using, whether you are using 
+  thread-safe or non-thread-safe PHP, and whether your PHP installation was 
+  compiled with the VC6 or VC9 compiler. For example, if you are running PHP 5.3, 
+  you are using non-thread-safe PHP, and your PHP installation was compiled with 
+  the VC9 compiler, you should use the php_sqlsrv_53_nts_vc9.dll file. (You should 
+  use a non-thread-safe version compiled with the VC9 compiler if you are using 
+  IIS as your web server). If you are running PHP 5.2, you are using thread-safe 
+  PHP, and your PHP installation was compiled with the VC6 compiler, you should 
+  use the php_sqlsrv_52_ts_vc6.dll file.
+ </p>
+ <p class="para">
+  For more information about SQLSRV requirements, see 
+  <a href="http://msdn.microsoft.com/en-us/library/cc296170.aspx" class="link external">&raquo;&nbsp;SQLSRV System Requirements</a>.
+ </p>
+ <p class="para">
+  The SQLSRV extension is only compatible with PHP running on Windows.
+ </p>
+</div><hr /><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="sqlsrv.requirements.html">要件</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="sqlsrv.configuration.html">実行時設定</a></div>
+ <div class="up"><a href="sqlsrv.setup.html">インストール/設定</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div></body></html>

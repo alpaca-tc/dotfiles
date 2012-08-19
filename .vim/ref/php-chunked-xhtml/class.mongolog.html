@@ -1,0 +1,354 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>MongoLog クラス</title>
+
+ </head>
+ <body><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="mongo.miscellaneous.html">その他</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="mongolog.getlevel.html">MongoLog::getLevel</a></div>
+ <div class="up"><a href="mongo.miscellaneous.html">その他</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div><hr /><div id="class.mongolog" class="reference">
+
+ <h1 class="title">MongoLog クラス</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(バージョン情報なし。おそらく SVN 版にしか存在しないでしょう)</p>
+
+
+  <div class="section" id="mongolog.intro">
+   <h2 class="title">導入</h2>
+   <p class="para">
+    ログ機能を使うと、ドライバが何をしているのかに関する詳細な情報を取得できます。
+    PHP-CLI ではログの出力先は標準出力となります。アプリケーションサーバーの配下では、
+    通常ログメッセージはエラーログに出力されます。
+   </p>
+   <p class="para">
+    ログ機能はデフォルトでは無効になっています。このクラスを使うと、
+    ドライバの特定の部分について指定したレベルでのログ出力を有効にできます。
+    たとえば次のように使います。
+   </p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /><br /></span><span style="color: #FF8000">//&nbsp;すべてのログ出力を有効にします<br /></span><span style="color: #0000BB">MongoLog</span><span style="color: #007700">::</span><span style="color: #0000BB">setLevel</span><span style="color: #007700">(</span><span style="color: #0000BB">MongoLog</span><span style="color: #007700">::</span><span style="color: #0000BB">ALL</span><span style="color: #007700">);&nbsp;</span><span style="color: #FF8000">//&nbsp;すべてのログレベル<br /></span><span style="color: #0000BB">MongoLog</span><span style="color: #007700">::</span><span style="color: #0000BB">setModule</span><span style="color: #007700">(</span><span style="color: #0000BB">MongoLog</span><span style="color: #007700">::</span><span style="color: #0000BB">ALL</span><span style="color: #007700">);&nbsp;</span><span style="color: #FF8000">//&nbsp;ドライバのすべての部分<br /><br />//&nbsp;レプリカセットのフェイルオーバーに関する重大なイベントを表示します<br /></span><span style="color: #0000BB">MongoLog</span><span style="color: #007700">::</span><span style="color: #0000BB">setLevel</span><span style="color: #007700">(</span><span style="color: #0000BB">MongoLog</span><span style="color: #007700">::</span><span style="color: #0000BB">INFO</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">MongoLog</span><span style="color: #007700">::</span><span style="color: #0000BB">setModule</span><span style="color: #007700">(</span><span style="color: #0000BB">MongoLog</span><span style="color: #007700">::</span><span style="color: #0000BB">RS</span><span style="color: #007700">);<br /><br /></span><span style="color: #FF8000">//&nbsp;レプリカセットと接続プーリングに関する&nbsp;info&nbsp;および&nbsp;server&nbsp;tuning&nbsp;レベルのイベントを表示します<br /></span><span style="color: #0000BB">MongoLog</span><span style="color: #007700">::</span><span style="color: #0000BB">setLevel</span><span style="color: #007700">(</span><span style="color: #0000BB">MongoLog</span><span style="color: #007700">::</span><span style="color: #0000BB">INFO</span><span style="color: #007700">|</span><span style="color: #0000BB">MongoLog</span><span style="color: #007700">::</span><span style="color: #0000BB">FINE</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">MongoLog</span><span style="color: #007700">::</span><span style="color: #0000BB">setModule</span><span style="color: #007700">(</span><span style="color: #0000BB">MongoLog</span><span style="color: #007700">::</span><span style="color: #0000BB">RS</span><span style="color: #007700">|</span><span style="color: #0000BB">MongoLog</span><span style="color: #007700">::</span><span style="color: #0000BB">POOL</span><span style="color: #007700">);<br /><br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></div>
+   </div>
+
+  </div>
+
+
+  <div class="section" id="mongolog.synopsis">
+   <h2 class="title">クラス概要</h2>
+
+
+   <div class="classsynopsis">
+    <div class="ooclass"></div>
+
+
+    <div class="classsynopsisinfo">
+     <span class="ooclass">
+      <strong class="classname">MongoLog</strong>
+     </span>
+     {</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* 定数 */</div>
+    <div class="fieldsynopsis">
+     <span class="modifier">const</span>
+     <span class="type">int</span>
+      <var class="fieldsynopsis_varname"><a href="class.mongolog.html#mongolog.constants.none"><var class="varname">NONE</var></a></var>
+    ;</div>
+
+    <div class="fieldsynopsis">
+     <span class="modifier">const</span>
+     <span class="type">int</span>
+      <var class="fieldsynopsis_varname"><a href="class.mongolog.html#mongolog.constants.all"><var class="varname">ALL</var></a></var>
+    ;</div>
+
+
+    <div class="classsynopsisinfo">レベル定数 {</div>
+    <div class="fieldsynopsis">
+     <span class="modifier">const</span>
+     <span class="type">int</span>
+      <var class="fieldsynopsis_varname"><a href="class.mongolog.html#mongolog.constants.warning"><var class="varname">WARNING</var></a></var>
+    ;</div>
+
+    <div class="fieldsynopsis">
+     <span class="modifier">const</span>
+     <span class="type">int</span>
+      <var class="fieldsynopsis_varname"><a href="class.mongolog.html#mongolog.constants.info"><var class="varname">INFO</var></a></var>
+    ;</div>
+
+    <div class="fieldsynopsis">
+     <span class="modifier">const</span>
+     <span class="type">int</span>
+      <var class="fieldsynopsis_varname"><a href="class.mongolog.html#mongolog.constants.fine"><var class="varname">FINE</var></a></var>
+    ;</div>
+
+
+    <div class="classsynopsisinfo">モジュール定数 {</div>
+    <div class="fieldsynopsis">
+     <span class="modifier">const</span>
+     <span class="type">int</span>
+      <var class="fieldsynopsis_varname"><a href="class.mongolog.html#mongolog.constants.rs"><var class="varname">RS</var></a></var>
+    ;</div>
+
+    <div class="fieldsynopsis">
+     <span class="modifier">const</span>
+     <span class="type">int</span>
+      <var class="fieldsynopsis_varname"><a href="class.mongolog.html#mongolog.constants.pool"><var class="varname">POOL</var></a></var>
+    ;</div>
+
+    <div class="fieldsynopsis">
+     <span class="modifier">const</span>
+     <span class="type">int</span>
+      <var class="fieldsynopsis_varname"><a href="class.mongolog.html#mongolog.constants.io"><var class="varname">IO</var></a></var>
+    ;</div>
+
+    <div class="fieldsynopsis">
+     <span class="modifier">const</span>
+     <span class="type">int</span>
+      <var class="fieldsynopsis_varname"><a href="class.mongolog.html#mongolog.constants.server"><var class="varname">SERVER</var></a></var>
+    ;</div>
+
+    <div class="fieldsynopsis">
+     <span class="modifier">const</span>
+     <span class="type">int</span>
+      <var class="fieldsynopsis_varname"><a href="class.mongolog.html#mongolog.constants.parse"><var class="varname">PARSE</var></a></var>
+    ;</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* フィールド */</div>
+    <div class="fieldsynopsis">
+     <span class="modifier">public</span>
+     <span class="modifier"/>
+     <span class="type">int</span>
+      <var class="varname">$<var class="varname">level</var></var>
+    ;</div>
+
+    <div class="fieldsynopsis">
+     <span class="modifier">public</span>
+     <span class="type">int</span>
+      <var class="varname">$<var class="varname">module</var></var>
+    ;</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* メソッド */</div>
+    <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span>  <span class="methodname"><a href="mongodate.construct.html" class="methodname">MongoDate::__construct</a></span>
+    ([ <span class="methodparam"><span class="type">int</span> <code class="parameter">$sec</code><span class="initializer"> = time()</span></span>
+   [, <span class="methodparam"><span class="type">int</span> <code class="parameter">$usec</code><span class="initializer"> = 0</span></span>
+  ]] )</div>
+<div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="type">string</span> <span class="methodname"><a href="mongodate.tostring.html" class="methodname">MongoDate::__toString</a></span>
+    ( <span class="methodparam">void</span>
+   )</div>
+
+   }</div>
+
+
+  </div>
+
+  <div class="section">
+   <h2 class="title">定義済み定数</h2>
+   <div class="section" id="mongolog.constants.types">
+    <h2 class="title">MongoLog 定数</h2>
+    <p class="para">
+     これらの定数は
+     <span class="function"><a href="mongolog.setlevel.html" class="function">MongoLog::setLevel()</a></span> および
+     <span class="function"><a href="mongolog.setmodule.html" class="function">MongoLog::setModule()</a></span> の両方で使えます。
+    </p>
+
+    <dl>
+
+     <dt id="mongolog.constants.none">
+      <span class="term"><strong><code>MongoLog::NONE</code></strong></span>
+      <dd>
+
+       <span class="simpara">
+        ログ出力を無効にする定数。
+       </span>
+      </dd>
+
+     </dt>
+
+     <dt id="mongolog.constants.all">
+      <span class="term"><strong><code>MongoLog::ALL</code></strong></span>
+      <dd>
+
+       <span class="simpara">
+        すべてをログ出力する定数。
+       </span>
+      </dd>
+
+     </dt>
+
+    </dl>
+
+   </div>
+
+   <div class="section">
+    <h2 class="title">MongoLog レベル定数</h2>
+    <p class="para">
+     これらの定数は <span class="function"><a href="mongolog.setlevel.html" class="function">MongoLog::setLevel()</a></span> で使えます。
+    </p>
+    <dl>
+
+     <dt id="mongolog.constants.warning">
+      <span class="term"><strong><code>MongoLog::WARNING</code></strong></span>
+      <dd>
+
+       <span class="simpara">
+        これは、何かおかしいけれども例外を発生させるほどではないハプニングのログメッセージを表示します。
+       </span>
+      </dd>
+
+     </dt>
+
+     <dt id="mongolog.constants.info">
+      <span class="term"><strong><code>MongoLog::INFO</code></strong></span>
+      <dd>
+
+       <span class="simpara">
+        管理者にとっては有用だと思われるが
+        特に注目には値しないできごとを記録します。
+       </span>
+      </dd>
+
+     </dt>
+
+     <dt id="mongolog.constants.fine">
+      <span class="term"><strong><code>MongoLog::FINE</code></strong></span>
+      <dd>
+
+       <span class="simpara">
+        ドライバの動作における大半のできごとを記録します。記録対象のモジュールにもよりますが、
+        ログがノイズまみれになる可能性もあります。主な用途はデバッグです。
+       </span>
+      </dd>
+
+     </dt>
+
+    </dl>
+
+   </div>
+
+   <div class="section">
+    <h2 class="title">MongoLog モジュール定数</h2>
+    <p class="para">
+     これらの定数は <span class="function"><a href="mongolog.setmodule.html" class="function">MongoLog::setModule()</a></span> で使えます。
+    </p>
+    <dl>
+
+     <dt id="mongolog.constants.io">
+      <span class="term"><strong><code>MongoLog::IO</code></strong></span>
+      <dd>
+
+       <span class="simpara">
+        データベースとのトラフィックを記録します。
+        ちょっとした小物プログラムでない限り、
+        これを有効にすると大量のログメッセージが記録されます。
+       </span>
+      </dd>
+
+     </dt>
+
+     <dt id="mongolog.constants.parse">
+      <span class="term"><strong><code>MongoLog::PARSE</code></strong></span>
+      <dd>
+
+       <span class="simpara">
+        サーバの文字列パースを記録します。
+       </span>
+      </dd>
+
+     </dt>
+
+     <dt id="mongolog.constants.pool">
+      <span class="term"><strong><code>MongoLog::POOL</code></strong></span>
+      <dd>
+
+       <span class="simpara">
+        接続プールの活動を記録します。新しい接続の作成や
+        既存の接続の再利用、そして接続の切断などです。
+       </span>
+      </dd>
+
+     </dt>
+
+     <dt id="mongolog.constants.rs">
+      <span class="term"><strong><code>MongoLog::RS</code></strong></span>
+      <dd>
+
+       <span class="simpara">
+        レプリカセットの活動を記録します。フェイルオーバーや ping、
+        読み込み元のセカンダリの選択などです。
+       </span>
+      </dd>
+
+     </dt>
+
+     <dt id="mongolog.constants.server">
+      <span class="term"><strong><code>MongoLog::SERVER</code></strong></span>
+      <dd>
+
+       <span class="simpara">
+        サーバの状態の変更を記録します。
+        プライマリやセカンダリ、そして複製の検出をします。
+       </span>
+      </dd>
+
+     </dt>
+
+    </dl>
+
+   </div>
+  </div>
+
+ </div>
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2>目次</h2><ul class="chunklist chunklist_reference"><li><a href="mongolog.getlevel.html">MongoLog::getLevel</a> — ログレベルを取得する</li><li><a href="mongolog.getmodule.html">MongoLog::getModule</a> — 現在ログを記録しているモジュールを取得する</li><li><a href="mongolog.setlevel.html">MongoLog::setLevel</a> — ログレベルを設定する</li><li><a href="mongolog.setmodule.html">MongoLog::setModule</a> — ログに記録するドライバの機能を設定する</li></ul>
+</div>
+<hr /><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="mongo.miscellaneous.html">その他</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="mongolog.getlevel.html">MongoLog::getLevel</a></div>
+ <div class="up"><a href="mongo.miscellaneous.html">その他</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div></body></html>

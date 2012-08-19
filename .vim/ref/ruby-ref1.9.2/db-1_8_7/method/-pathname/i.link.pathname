@@ -1,0 +1,16 @@
+kind=defined
+names=link
+visibility=public
+
+--- link(old) -> 0
+レシーバと引数がシステムコールの引数と逆順に対応していて紛らわしいため、
+このメソッドは obsolete です。
+代わりに [[m:Pathname#make_link]] を使ってください。
+
+File.link(old, self.to_s) と同じです。
+
+@param old ファイル名を表す文字列を指定します。
+
+@see [[m:File.link]]
+
+

@@ -1,0 +1,17 @@
+superclass=Object
+type=class
+library=dl.types
+extended=
+included=
+
+型の定義を保持するオブジェクトのクラス。
+
+=== 型を定義する
+
+  ["alias name", "type name",
+   encoding_method, decoding_method,   # for function prototypes
+   encoding_method, decoding_method]   # for structures (not implemented)
+
+という形式の配列を内部に持ちます。エイリアス名と実際の型、エンコーディング、
+デコーディングの方法を定義します。DL::Types::TYPES はデフォルトで持って
+いる定義です。

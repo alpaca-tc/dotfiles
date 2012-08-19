@@ -1,0 +1,53 @@
+superclass=
+type=module
+library=openssl
+extended=
+included=
+
+OCSP(Online Certificate Status Protocol)を取り扱うための
+モジュールです。OCSP は [[RFC:2560]] で定義されています。
+
+このモジュールは OCSP のリクエストとレスポンスを取り扱う
+機能を持っています。
+
+OCSP レスポンダと通信する機能はありません。ユーザが例えば
+OCSP over http などを実装する必要があります。
+
+=== 例
+OCSP レスポンダにリクエストを送ってその返答を表示する
+  require 'openssl'
+  require 'net/http'
+  # ...
+  cert # 検証対象の証明書(Certificate オブジェクト)
+  ca_cert # cert の CA の証明書(Certificate オブジェクト)
+  store # 信頼している証明書ストア
+  cid = OpenSSL::OCSP::CertificateId(cert, ca_cert)
+  req = OpenSSL::OCSP::Response.new(cid)
+  req.add_nonce
+  
+  http = Net::HTTP.new('http://ocsp.example.com', 80)
+  httpres = http.post("/", req.to_der, 'content-type' => 'application/ocsp-request')
+  raise "HTTP error" if !httpres.kind_of?(Net::HTTPOK)
+  res = OpenSSL::OCSP::Response.new(httpres.body)
+  
+  puts "Response status: #{res.status_string}"
+  exit if res.status != OpenSSL::OCSP::STATUS_SUCCESSFUL
+
+  basic_resp = res.basic
+  raise "nonce error" if req.check_nonce(basic_resp)
+  unless basic_resp.verify([], store)
+    puts "verify response fail"
+  end
+  rescid, status, reason, revtime, thisupd, nextupd, exts = basic_resp.status.first
+  STATUS2MESSAGE = { 
+    OpenSSL::OCSP::V_CERTSTATUS_GOOD => "OK", 
+    OpenSSL::OCSP::V_CERTSTATUS_REVOKED => "REVOKED", 
+    OpenSSL::OCSP::V_CERTSTATUS_UNKNOWN => "UNKNOWN", 
+  }
+  puts "status: #{STATUS2MESSAGE[status]}"
+  puts "reason: #{reason}" if status == OpenSSL::OCSP::V_CERTSTATUS_REVOKED
+  puts "revoked time: #{revtime}" if status == OpenSSL::OCSP::V_CERTSTATUS_REVOKED
+  puts "crl update: #{thisupd}"
+  puts "crl next update: #{nextupd}"
+  puts "extensions:"
+  exts.each{|ext| p ext}

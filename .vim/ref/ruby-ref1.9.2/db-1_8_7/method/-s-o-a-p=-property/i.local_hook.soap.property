@@ -1,0 +1,6 @@
+kind=defined
+names=local_hook
+visibility=protected 
+
+--- local_hook(key, dirent)
+

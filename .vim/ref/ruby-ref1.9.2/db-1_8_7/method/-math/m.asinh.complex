@@ -1,0 +1,13 @@
+kind=redefined
+names=asinh
+visibility=public
+
+--- asinh(z) -> Complex
+複素関数としてのasinh関数(双曲逆sin関数)の結果を返します。
+
+asinh関数は以下で定義されます。
+
+  asinh(z) = log(z + sqrt(z*z+1))
+
+@param z 複素数
+

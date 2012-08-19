@@ -1,0 +1,9 @@
+kind=defined
+names=in_reply_to
+visibility=public
+
+--- in_reply_to -> String | nil
+In-reply-to の内容を文字列で返します。
+
+エンベロープに存在しないときは nil を返します。
+

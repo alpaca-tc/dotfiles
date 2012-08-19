@@ -1,0 +1,27 @@
+kind=added
+names=copy,cp
+visibility=public
+
+--- copy(from, to, verbose = false) -> bool
+--- cp(from, to, verbose = false)  -> bool
+
+ファイルをコピーします。
+
+より正確には from を読んで to に書き、モードを変更します。
+ファイルの更新時刻はコピーした時刻に更新されます。
+
+@param from コピー元のファイル。
+
+@param to コピー先のファイル。
+
+@param verbose 真をセットすると詳細を表示します。
+
+@return コピーに成功したなら true、失敗したなら false を返します。
+
+例:
+  # 更新時刻を保持したい場合
+  File.copy(from, to)
+  stat = File.stat(from)
+  File.utime(stat.atime, stat.mtime, to)
+
+

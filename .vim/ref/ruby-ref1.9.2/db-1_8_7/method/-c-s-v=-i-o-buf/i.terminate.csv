@@ -1,0 +1,9 @@
+kind=defined
+names=terminate
+visibility=private 
+
+--- terminate -> nil
+オブジェクトの破棄処理を行います。
+
+親クラスの[[m:CSV::StreamBuf#terminate]]を呼び出します。
+

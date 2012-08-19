@@ -1,0 +1,7 @@
+methods=SOAP=Mapping/c.MapQName.soap.mapping.factory
+sublibraries=
+requires=
+classes=SOAP=Mapping=Factory,SOAP=Mapping=StringFactory_,SOAP=Mapping=BasetypeFactory_,SOAP=Mapping=DateTimeFactory_,SOAP=Mapping=Base64Factory_,SOAP=Mapping=URIFactory_,SOAP=Mapping=ArrayFactory_,SOAP=Mapping=TypedArrayFactory_,SOAP=Mapping=TypedStructFactory_,SOAP=Mapping=HashFactory_
+is_sublibrary=true
+
+

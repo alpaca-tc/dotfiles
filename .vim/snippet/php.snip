@@ -1,0 +1,18 @@
+snippet class
+    class ${1:ClassName} {
+    function ${2:__construct} ( ${3:argument} ) {
+        ${4:# code...}
+    }
+    }
+
+snippet     ex
+abbr        extends
+prev_word   '^'
+    extends ${1}
+
+snippet     func
+abbr        function
+prev_word     '^'
+    function ${1:__construct} ( ${2:argument} ) {
+        ${3:# code...}
+    }

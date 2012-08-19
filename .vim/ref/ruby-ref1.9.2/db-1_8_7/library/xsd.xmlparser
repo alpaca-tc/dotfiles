@@ -1,0 +1,7 @@
+methods=
+sublibraries=
+requires=
+classes=XSD=XMLParser=Parser,XSD=XMLParser=ParserError,XSD=XMLParser=FormatDecodeError,XSD=XMLParser=UnknownElementError,XSD=XMLParser=UnknownAttributeError,XSD=XMLParser=UnexpectedElementError,XSD=XMLParser=ElementConstraintError,XSD=XMLParser=REXMLParser,XSD=XMLParser=XMLParser,XSD=XMLParser=XMLScanner,XSD=XMLParser
+is_sublibrary=true
+
+

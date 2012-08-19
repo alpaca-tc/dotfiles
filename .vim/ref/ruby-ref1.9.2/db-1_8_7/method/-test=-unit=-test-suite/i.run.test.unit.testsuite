@@ -1,0 +1,16 @@
+kind=defined
+names=run
+visibility=public
+
+--- run(result) {|STARTED, name| ...}    -> ()
+
+このメソッドをユーザが直接呼ぶことはありません。
+
+自身が持っているテストを実行します。
+このメソッドは TestRunner オブジェクトから呼ばれます。
+
+テストは TestSuite へ加えられた順に実行されます。
+自身が TestSuite を含んでいる場合は、再帰的にテストを実行します。
+
+@param result TestResult オブジェクトを与えます。
+

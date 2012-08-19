@@ -1,0 +1,10 @@
+kind=defined
+names=REVOKED_STATUS_SUPERSEDED
+visibility=public
+
+--- REVOKED_STATUS_SUPERSEDED -> Integer
+[[m:OpenSSL::OCSP::BasicResponse#status]] の失効理由コードで、
+証明書が破棄されたことを意味します。
+
+詳しくは [[RFC:3280]] や X.509 を参照してください。
+

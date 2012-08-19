@@ -1,0 +1,7 @@
+superclass=CSV=Reader
+type=class
+library=csv
+extended=
+included=
+
+CSV形式の文字列の読み込み（パース）時に使用されるクラス

@@ -1,0 +1,6 @@
+kind=defined
+names=dump_operation
+visibility=private 
+
+--- dump_operation(operation)
+

@@ -1,0 +1,11 @@
+kind=defined
+names=REVOKED_STATUS_KEYCOMPROMISE
+visibility=public
+
+--- REVOKED_STATUS_KEYCOMPROMISE -> Integer
+[[m:OpenSSL::OCSP::BasicResponse#status]] の失効理由コードで、
+鍵が危殆化したことを意味します。
+
+詳しくは [[RFC:3280]] や X.509 を参照してください。
+
+

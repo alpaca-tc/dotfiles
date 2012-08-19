@@ -1,0 +1,8 @@
+kind=defined
+names=errors
+visibility=public
+
+--- errors -> Array
+
+エラーが発生したテストケースの配列を返します。
+

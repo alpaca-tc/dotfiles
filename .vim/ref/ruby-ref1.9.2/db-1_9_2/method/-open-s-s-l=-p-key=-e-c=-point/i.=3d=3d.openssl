@@ -1,0 +1,9 @@
+kind=defined
+names===,eql?
+visibility=public
+
+--- eql?(other) -> bool
+--- ==(other) -> bool
+自身が other と等しいならば true を返します。
+
+@raise OpenSSL::PKey::EC::Point::Error エラーが生じた場合に発生します

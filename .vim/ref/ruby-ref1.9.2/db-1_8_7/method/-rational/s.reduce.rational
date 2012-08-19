@@ -1,0 +1,32 @@
+kind=defined
+names=reduce
+visibility=public
+
+--- reduce(num, den = 1) -> Rational
+
+約分された [[c:Rational]] オブジェクトを生成します。
+
+@param num 分子を指定します。
+
+@param den 分母を指定します。省略した場合は 1 です。
+
+@raise ZeroDivisionError den に 0 を指定した場合に発生します。
+
+引数 num、den の両方を指定した場合、num/den を既約になるまで約分した
+[[c:Rational]] オブジェクトを返します。
+
+[[m:Kernel#Rational]] とは異なり、num と den には整数しか指定できません。
+
+例:
+
+  Rational.reduce(2, 6)              # => Rational(1, 3)
+  Rational.reduce(Rational(1, 3), 1) # => NoMethodError: undefined method `gcd' for Rational(1, 3):Rational
+
+注意:
+
+Rational.reduce は 1.9 系 では廃止されました。[[m:Kernel.#Rational]] の
+方を使用してください。
+
+  # 1.9.1 の場合
+  Rational.reduce(2, 6)  # => NoMethodError
+

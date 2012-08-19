@@ -1,0 +1,7 @@
+kind=defined
+names=node,node=
+visibility=public
+
+--- node
+--- node=(node)
+

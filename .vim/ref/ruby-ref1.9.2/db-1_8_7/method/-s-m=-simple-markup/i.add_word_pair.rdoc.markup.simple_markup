@@ -1,0 +1,10 @@
+kind=defined
+names=add_word_pair
+visibility=public
+
+--- add_word_pair(start, stop, name)
+
+Add to the sequences used to add formatting to an individual word
+(such as *bold*). Matching entries will generate attibutes
+that the output formatters can recognize by their +name+
+

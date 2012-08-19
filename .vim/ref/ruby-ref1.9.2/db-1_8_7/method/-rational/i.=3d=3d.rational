@@ -1,0 +1,31 @@
+kind=defined
+names===
+visibility=public
+
+--- ==(other) -> bool
+
+数値として等しいか判定します。
+
+@param other 自身と比較する数値
+
+@return      self と other が等しい場合 true を返します。
+             そうでなければ false を返します。
+
+例:
+
+  Rational(2, 3)  == Rational(2, 3)   # => true
+  Rational(5)     == 5                # => true
+  Rational(0)     == 0.0              # => true
+  Rational(1, 3)  == 0.33             # => false
+  Rational(1, 2)  == '1/2'            # => false
+
+注意:
+
+[[m:Rational.new!]] で作成したオブジェクトと比較した場合、同じ数値を表
+すオブジェクトでも true を返さない事があります。
+
+  Rational(1,2) == Rational(4,8)          # => true
+  Rational(1,2) == Rational.new!(4,8)     # => false
+
+詳しくは [[m:Rational.new!]] を確認してください。
+

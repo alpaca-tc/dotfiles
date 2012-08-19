@@ -1,0 +1,9 @@
+kind=defined
+names=METHOD_RAND
+visibility=public
+
+--- METHOD_RAND -> Integer
+デフォルトのセキュアな乱数生成のための engine に設定することを意味します。
+
+[[m:OpenSSL::Engine#set_default]] のフラグとして使います。
+

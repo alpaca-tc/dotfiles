@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>ソケットから最大バイト長まで読みこむ</title>
+
+ </head>
+ <body><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="function.socket-listen.html">socket_listen</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="function.socket-recv.html">socket_recv</a></div>
+ <div class="up"><a href="ref.sockets.html">ソケット 関数</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div><hr /><div id="function.socket-read" class="refentry">
+ <div class="refnamediv">
+  <h1 class="refname">socket_read</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.1.0, PHP 5)</p><p class="refpurpose"><span class="refname">socket_read</span> &mdash; <span class="dc-title">ソケットから最大バイト長まで読みこむ</span></p>
+
+ </div>
+ 
+ <div class="refsect1 description" id="refsect1-function.socket-read-description">
+  <h3 class="title">説明</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="type">string</span> <span class="methodname"><strong>socket_read</strong></span>
+    ( <span class="methodparam"><span class="type">resource</span> <code class="parameter">$socket</code></span>
+   , <span class="methodparam"><span class="type">int</span> <code class="parameter">$length</code></span>
+   [, <span class="methodparam"><span class="type">int</span> <code class="parameter">$type</code><span class="initializer"> = PHP_BINARY_READ</span></span>
+  ] )</div>
+
+  <p class="para rdfs-comment">
+   関数 <span class="function"><strong>socket_read()</strong></span> は、関数
+   <span class="function"><a href="function.socket-create.html" class="function">socket_create()</a></span> または
+   <span class="function"><a href="function.socket-accept.html" class="function">socket_accept()</a></span> により作成されたソケット
+   リソース <em><code class="parameter">socket</code></em> から読み込みます。
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.socket-read-parameters">
+  <h3 class="title">パラメータ</h3>
+  <p class="para">
+   <dl>
+
+    <dt>
+
+     <span class="term"><em><code class="parameter">socket</code></em></span>
+     <dd>
+
+      <p class="para">
+       <span class="function"><a href="function.socket-create.html" class="function">socket_create()</a></span> あるいは <span class="function"><a href="function.socket-accept.html" class="function">socket_accept()</a></span>
+       で作成したソケットリソース。
+      </p>
+     </dd>
+
+    </dt>
+
+    <dt>
+
+     <span class="term"><em><code class="parameter">length</code></em></span>
+     <dd>
+
+      <p class="para">
+       読み込まれる最大バイト長は、<em><code class="parameter">length</code></em> パラメータで
+       指定します。
+       読み込みを終了するために
+       <strong><code>\r</code></strong>、<strong><code>\n</code></strong>、
+       <strong><code>\0</code></strong> を使用することが可能です
+       (これは、以下に示す <em><code class="parameter">type</code></em> に依存します)。
+      </p>
+     </dd>
+
+    </dt>
+
+    <dt>
+
+     <span class="term"><em><code class="parameter">type</code></em></span>
+     <dd>
+
+      <p class="para">
+       オプションのパラメータ <em><code class="parameter">type</code></em> は、名前のある定数です。
+       <ul class="itemizedlist">
+        <li class="listitem">
+         <span class="simpara">
+          <strong><code>PHP_BINARY_READ</code></strong> (デフォルト) -
+          システムの <em>recv()</em> 関数を
+          使用します。バイナリデータ読み込みに関して安全です。
+         </span>
+        </li>
+        <li class="listitem">
+         <span class="simpara">
+          <strong><code>PHP_NORMAL_READ</code></strong> -
+          読み込みは、<em>\n</em> あるいは <em>\r</em> で中断されます。
+         </span>
+        </li>
+       </ul>
+      </p>
+     </dd>
+
+    </dt>
+
+   </dl>
+
+  </p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.socket-read-returnvalues">
+  <h3 class="title">返り値</h3>
+  <p class="para">
+   <span class="function"><strong>socket_read()</strong></span> は、成功時に文字列としてデータを返し、
+   エラー時 (リモートホストが接続をクローズした場合を含みます)
+   に <strong><code>FALSE</code></strong> を返します。
+   エラーコードは <span class="function"><a href="function.socket-last-error.html" class="function">socket_last_error()</a></span> で取得可能であり、
+   このコードは、エラー文字列を取得するために
+   <span class="function"><a href="function.socket-strerror.html" class="function">socket_strerror()</a></span> に渡すことができます。
+  </p>
+  <blockquote class="note"><p><strong class="note">注意</strong>: 
+   <p class="para">
+    <span class="function"><strong>socket_read()</strong></span> は、読み込むデータがもう存在しない
+    場合に長さゼロの文字列(&quot;&quot;)を返します。
+   </p>
+  </p></blockquote>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.socket-read-changelog">
+  <h3 class="title">変更履歴</h3>
+  <p class="para">
+   <table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>バージョン</th>
+       <th>説明</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>4.1.0</td>
+       <td>
+        <em><code class="parameter">type</code></em> のデフォルト値が
+        <strong><code>PHP_NORMAL_READ</code></strong> から
+        <strong><code>PHP_BINARY_READ</code></strong> に変わりました。
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.socket-read-seealso">
+  <h3 class="title">参考</h3>
+  <p class="para">
+   <ul class="simplelist">
+    <li class="member"><span class="function"><a href="function.socket-accept.html" class="function" rel="rdfs-seeAlso">socket_accept()</a> - ソケットへの接続を許可する</span></li>
+    <li class="member"><span class="function"><a href="function.socket-bind.html" class="function" rel="rdfs-seeAlso">socket_bind()</a> - ソケットに名前をバインドする</span></li>
+    <li class="member"><span class="function"><a href="function.socket-connect.html" class="function" rel="rdfs-seeAlso">socket_connect()</a> - ソケット上の接続を初期化する</span></li>
+    <li class="member"><span class="function"><a href="function.socket-listen.html" class="function" rel="rdfs-seeAlso">socket_listen()</a> - ソケット上で接続待ち(listen)する</span></li>
+    <li class="member"><span class="function"><a href="function.socket-last-error.html" class="function" rel="rdfs-seeAlso">socket_last_error()</a> - ソケットの直近のエラーを返す</span></li>
+    <li class="member"><span class="function"><a href="function.socket-strerror.html" class="function" rel="rdfs-seeAlso">socket_strerror()</a> - ソケットエラーの内容を文字列として返す</span></li>
+    <li class="member"><span class="function"><a href="function.socket-write.html" class="function" rel="rdfs-seeAlso">socket_write()</a> - ソケットに書き込む</span></li>
+   </ul>
+  </p>
+ </div>
+
+
+</div><hr /><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="function.socket-listen.html">socket_listen</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="function.socket-recv.html">socket_recv</a></div>
+ <div class="up"><a href="ref.sockets.html">ソケット 関数</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div></body></html>

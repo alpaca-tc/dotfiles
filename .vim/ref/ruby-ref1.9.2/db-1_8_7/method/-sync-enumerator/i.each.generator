@@ -1,0 +1,23 @@
+kind=defined
+names=each
+visibility=public
+
+--- each {|elem| ... } -> self
+
+与えられた Enumerable オブジェクトのそれぞれの要素の配列を引数として
+ブロックを評価します。self を返します。
+
+要素がある Enumerable オブジェクトがひとつでもあれば、評価を続けます。
+要素のなくなった Enumerable オブジェクトの代わりに nil を配列の要素とします。
+全ての Enumerable オブジェクトの要素がなくなるとそこで、ブロックの評価を止めます。
+
+例:
+
+  s = SyncEnumerator.new([1, 2, 3], ['a', 'b'], ['X'])
+  s.each{|arry| p arry}
+  
+  # => 結果
+  # [1, "a", "X"]
+  # [2, "b", nil]
+  # [3, nil, nil]
+

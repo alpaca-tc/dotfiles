@@ -1,0 +1,10 @@
+kind=added
+names=b64encode
+visibility=public
+
+--- b64encode(bin, len = 60) -> ()
+
+[[m:Base64.#b64encode]] と同じです。このメソッドは将来的に廃止される可能
+性があり、現在は Base64 モジュールを使うことが推奨されています。
+
+

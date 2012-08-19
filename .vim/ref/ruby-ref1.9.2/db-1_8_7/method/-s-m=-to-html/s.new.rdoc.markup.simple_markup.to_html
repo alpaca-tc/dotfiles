@@ -1,0 +1,10 @@
+kind=defined
+names=new
+visibility=public
+
+--- new -> SM::ToHtml
+
+自身を初期化します。
+
+@see [[m:SM::SimpleMarkup#convert]]
+

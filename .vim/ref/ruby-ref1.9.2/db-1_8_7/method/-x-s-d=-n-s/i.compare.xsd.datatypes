@@ -1,0 +1,6 @@
+kind=defined
+names=compare
+visibility=public
+
+--- compare(ns, name, rhs)
+

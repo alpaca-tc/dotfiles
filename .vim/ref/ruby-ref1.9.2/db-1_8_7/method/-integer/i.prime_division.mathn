@@ -1,0 +1,13 @@
+kind=added
+names=prime_division
+visibility=public
+
+--- prime_division
+
+各素因子について素因子と指数の組を並べた配列を返します。
+
+例:
+
+  72.prime_division
+  # => [[2, 3], [3, 2]]
+

@@ -1,0 +1,7 @@
+kind=defined
+names=close_on_terminate
+visibility=public
+
+--- close_on_terminate -> true
+本メソッドを呼び出すことで終了時に[[c:CSV::BasicWriter]]オブジェクトがIOクローズ処理を行います。
+

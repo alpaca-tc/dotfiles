@@ -1,0 +1,9 @@
+superclass=Object
+type=class
+library=rdoc.markup.simple_markup.to_html
+extended=
+included=
+
+rdoc 形式のドキュメントを HTML に整形するクラスです。
+
+[[c:SM::SimpleMarkup]] に処理を移譲します。

@@ -1,0 +1,17 @@
+kind=defined
+names=generate_line
+visibility=public
+
+--- generate_line(row, fs = nil, rs = nil) -> String
+--- generate_line(row, fs = nil, rs = nil){|s| ... } -> nil
+
+row で指定された配列をパースし、fs で指定された文字をフィールドセパレータとして
+1行分の文字列をブロックに渡します。
+ブロック未指定の場合は変換された文字列を返します。
+
+@param row パースする配列
+@param fs フィールドセパレータの指定。
+          nil (デフォルト) で ',' をセパレータとします。
+@param rs 行区切り文字の指定。nil (デフォルト) で CrLf / Lf。
+          Cr を行区切りとしたい場合は ?\r を渡します。
+

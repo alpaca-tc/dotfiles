@@ -1,0 +1,6 @@
+kind=defined
+names=rpc_operation_complextypes
+visibility=private 
+
+--- rpc_operation_complextypes(binding)
+

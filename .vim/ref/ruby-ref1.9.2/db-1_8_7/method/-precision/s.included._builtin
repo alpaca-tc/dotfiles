@@ -1,0 +1,14 @@
+kind=defined
+names=included
+visibility=public
+
+--- included(module_or_class) -> Precision
+
+Precision をインクルードするクラスやモジュールに対してメソッド induced_from を自動的に定義します。
+
+このメソッドは、Precision がインクルードされた時に呼ばれます。詳細は[[m:Module#included]] を参照してください。
+
+
+@param module_or_class Precision をインクルードするクラスまたはモジュール
+
+

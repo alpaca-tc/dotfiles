@@ -1,0 +1,7 @@
+kind=defined
+names=default_parser_option,default_parser_option=
+visibility=public
+
+--- default_parser_option
+--- default_parser_option=(rhs)
+

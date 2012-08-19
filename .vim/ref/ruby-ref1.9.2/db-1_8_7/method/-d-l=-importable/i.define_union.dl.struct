@@ -1,0 +1,12 @@
+kind=added
+names=define_union,union
+visibility=public
+
+--- define_union(contents)
+--- union(contents)
+
+共用体を定義します。
+contents については上記 define_struct と同様です。
+
+
+

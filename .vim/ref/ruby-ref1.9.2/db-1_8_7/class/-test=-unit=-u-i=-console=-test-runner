@@ -1,0 +1,8 @@
+superclass=Object
+type=class
+library=test.unit.ui.console.testrunner
+extended=Test=Unit=UI=TestRunnerUtilities
+included=
+
+コンソール上でユニットテストを実行し、結果を表示するための
+クラスです。

@@ -1,0 +1,7 @@
+methods=
+sublibraries=
+requires=
+classes=Test=Unit=Util=Observable
+is_sublibrary=true
+
+イベントに対して通知を行うメソッドを提供するためのライブラリです。

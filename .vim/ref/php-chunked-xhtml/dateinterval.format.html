@@ -1,0 +1,264 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>間隔をフォーマットする</title>
+
+ </head>
+ <body><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="dateinterval.createfromdatestring.html">DateInterval::createFromDateString</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="class.dateperiod.html">DatePeriod</a></div>
+ <div class="up"><a href="class.dateinterval.html">DateInterval</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div><hr /><div id="dateinterval.format" class="refentry">
+ <div class="refnamediv">
+  <h1 class="refname">DateInterval::format</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.3.0)</p><p class="refpurpose"><span class="refname">DateInterval::format</span> &mdash; <span class="dc-title">間隔をフォーマットする</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-dateinterval.format-description">
+  <h3 class="title">説明</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="type">string</span> <span class="methodname"><strong>DateInterval::format</strong></span>
+    ( <span class="methodparam"><span class="type">string</span> <code class="parameter">$format</code></span>
+   )</div>
+
+  <p class="para rdfs-comment">
+   間隔をフォーマットします。
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-dateinterval.format-parameters">
+  <h3 class="title">パラメータ</h3>
+  <p class="para">
+   <dl>
+
+    <dt>
+
+     <span class="term"><em><code class="parameter">format</code></em></span>
+     <dd>
+
+      <p class="para">
+       <table class="doctable table">
+        <caption><strong>
+         次の文字を、
+         <em><code class="parameter">format</code></em> パラメータ文字列に使用することができます。
+         フォーマット文字は、パーセント記号
+         (<em>%</em>) で始めなければなりません。
+        </strong></caption>
+        
+         <thead>
+          <tr>
+           <th><em><code class="parameter">format</code></em> 文字</th>
+           <th>説明</th>
+           <th>値の例</th>
+          </tr>
+
+         </thead>
+
+         <tbody class="tbody">
+          <tr>
+           <td><em>%</em></td>
+           <td>リテラルとしての <em>%</em></td>
+           <td><em>%</em></td>
+          </tr>
+
+          <tr>
+           <td><em>Y</em></td>
+           <td>年、数値、先頭に 0 を含む 2 桁</td>
+           <td><em>01</em>, <em>03</em></td>
+          </tr>
+
+          <tr>
+           <td><em>y</em></td>
+           <td>年、数値</td>
+           <td><em>1</em>, <em>3</em></td>
+          </tr>
+
+          <tr>
+           <td><em>M</em></td>
+           <td>月、数値、先頭に 0 を含む 2 桁</td>
+           <td><em>01</em>, <em>03</em>, <em>12</em></td>
+          </tr>
+
+          <tr>
+           <td><em>m</em></td>
+           <td>月、数値</td>
+           <td><em>1</em>, <em>3</em>, <em>12</em></td>
+          </tr>
+
+          <tr>
+           <td><em>D</em></td>
+           <td>日、数値、先頭に 0 を含む 2 桁</td>
+           <td><em>01</em>, <em>03</em>, <em>31</em></td>
+          </tr>
+
+          <tr>
+           <td><em>d</em></td>
+           <td>日、数値</td>
+           <td><em>1</em>, <em>3</em>, <em>31</em></td>
+          </tr>
+
+          <tr>
+           <td><em>a</em></td>
+           <td>総日数</td>
+           <td><em>4</em>, <em>18</em>, <em>8123</em></td>
+          </tr>
+
+          <tr>
+           <td><em>H</em></td>
+           <td>時間、数値、先頭に 0 を含む 2 桁</td>
+           <td><em>01</em>, <em>03</em>, <em>23</em></td>
+          </tr>
+
+          <tr>
+           <td><em>h</em></td>
+           <td>時間、数値</td>
+           <td><em>1</em>, <em>3</em>, <em>23</em></td>
+          </tr>
+
+          <tr>
+           <td><em>I</em></td>
+           <td>分、数値、先頭に 0 を含む 2 桁</td>
+           <td><em>01</em>, <em>03</em>, <em>59</em></td>
+          </tr>
+
+          <tr>
+           <td><em>i</em></td>
+           <td>分、数値</td>
+           <td><em>1</em>, <em>3</em>, <em>59</em></td>
+          </tr>
+
+          <tr>
+           <td><em>S</em></td>
+           <td>秒、数値、先頭に 0 を含む 2 桁</td>
+           <td><em>01</em>, <em>03</em>, <em>57</em></td>
+          </tr>
+
+          <tr>
+           <td><em>s</em></td>
+           <td>秒、数値</td>
+           <td><em>1</em>, <em>3</em>, <em>57</em></td>
+          </tr>
+
+          <tr>
+           <td><em>R</em></td>
+           <td>負の値の場合は &quot;<em>-</em>&quot;、正の値の場合は &quot;<em>+</em>&quot;</td>
+           <td><em>-</em>, <em>+</em></td>
+          </tr>
+
+          <tr>
+           <td><em>r</em></td>
+           <td>負の値の場合は &quot;<em>-</em>&quot;、正の値の場合は空文字</td>
+           <td><em>-</em>, <em></td>
+          </tr>
+
+         </tbody>
+        
+       </table>
+
+      </p>
+     </dd>
+
+    </dt>
+
+   </dl>
+
+  </p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-dateinterval.format-returnvalues">
+  <h3 class="title">返り値</h3>
+  <p class="para">
+   フォーマットされた間隔を返します。
+  </p>
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-dateinterval.format-notes">
+  <h3 class="title">注意</h3>
+  <blockquote class="note"><p><strong class="note">注意</strong>: 
+   <p class="para">
+     <span class="methodname"><strong>DateInterval::format()</strong></span> メソッドは、
+    時刻文字列や日付セグメントでの繰り越しを再計算しません。
+    これは意図的な仕様です。なぜなら <em>&quot;32 days&quot;</em>
+    のようにオーバーフローした値は <em>&quot;1 month and 4 days&quot;</em>
+    から <em>&quot;1 month and 1 day&quot;</em>
+    までのどれとでも解釈可能だからです。
+   </p>
+  </p></blockquote>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-dateinterval.format-examples">
+  <h3 class="title">例</h3>
+  <p class="para">
+   <div class="example" id="example-642">
+    <p><strong>例1 <a href="class.dateinterval.html" class="classname">DateInterval</a> の例</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /><br />$interval&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">DateInterval</span><span style="color: #007700">(</span><span style="color: #DD0000">'P2Y4DT6H8M'</span><span style="color: #007700">);<br />echo&nbsp;</span><span style="color: #0000BB">$interval</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">format</span><span style="color: #007700">(</span><span style="color: #DD0000">'%d&nbsp;days'</span><span style="color: #007700">);<br /><br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></div>
+    </div>
+
+    <div class="example-contents"><p>上の例の出力は以下となります。</p></div>
+    <div class="example-contents screen">
+<div class="cdata"><pre>
+4 days
+</pre></div>
+    </div>
+   </div>
+  </p>
+  <p class="para">
+   <div class="example" id="example-643">
+    <p><strong>例2 <a href="class.dateinterval.html" class="classname">DateInterval</a> での繰り越しの例</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /><br />$interval&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">DateInterval</span><span style="color: #007700">(</span><span style="color: #DD0000">'P32D'</span><span style="color: #007700">);<br />echo&nbsp;</span><span style="color: #0000BB">$interval</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">format</span><span style="color: #007700">(</span><span style="color: #DD0000">'%d&nbsp;days'</span><span style="color: #007700">);<br /><br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></div>
+    </div>
+
+    <div class="example-contents"><p>上の例の出力は以下となります。</p></div>
+   <div class="example-contents screen">
+<div class="cdata"><pre>
+32 days
+</pre></div>
+    </div>
+   </div>
+  </p>
+  <p class="para">
+   <div class="example" id="example-644">
+    <p><strong>例3 
+     <a href="class.dateinterval.html" class="classname">DateInterval</a> および
+      <span class="methodname"><a href="datetime.diff.html" class="methodname">DateTime::diff()</a></span> での修飾子 %a および %d
+    </strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /><br />$january&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">DateTime</span><span style="color: #007700">(</span><span style="color: #DD0000">'2010-01-01'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$february&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">DateTime</span><span style="color: #007700">(</span><span style="color: #DD0000">'2010-02-01'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$interval&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">$february</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">diff</span><span style="color: #007700">(</span><span style="color: #0000BB">$january</span><span style="color: #007700">);<br /><br /></span><span style="color: #FF8000">//&nbsp;%a&nbsp;は総日数を出力します<br /></span><span style="color: #007700">echo&nbsp;</span><span style="color: #0000BB">$interval</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">format</span><span style="color: #007700">(</span><span style="color: #DD0000">'%a&nbsp;total&nbsp;days'</span><span style="color: #007700">).</span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br /><br /></span><span style="color: #FF8000">//&nbsp;一方&nbsp;%d&nbsp;は、月数に含まれない日数のみを出力します<br /></span><span style="color: #007700">echo&nbsp;</span><span style="color: #0000BB">$interval</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">format</span><span style="color: #007700">(</span><span style="color: #DD0000">'%m&nbsp;month,&nbsp;%d&nbsp;days'</span><span style="color: #007700">);<br /><br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></div>
+    </div>
+
+    <div class="example-contents"><p>上の例の出力は以下となります。</p></div>
+    <div class="example-contents screen">
+<div class="cdata"><pre>
+31 total days
+1 month, 0 days
+</pre></div>
+    </div>
+   </div>
+  </p>
+ </div>
+
+
+</div><hr /><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="dateinterval.createfromdatestring.html">DateInterval::createFromDateString</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="class.dateperiod.html">DatePeriod</a></div>
+ <div class="up"><a href="class.dateinterval.html">DateInterval</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div></body></html>

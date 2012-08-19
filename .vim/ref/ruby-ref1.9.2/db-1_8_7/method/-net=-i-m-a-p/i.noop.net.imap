@@ -1,0 +1,9 @@
+kind=defined
+names=noop
+visibility=public
+
+--- noop -> Net::IMAP::TaggedResponse
+NOOP コマンドを送ります。
+
+このコマンドは何もしません。
+

@@ -1,0 +1,25 @@
+kind=defined
+names=with_index
+visibility=public
+
+--- with_index {|(*args), idx| ... } -> object
+--- with_index -> Enumerator
+
+生成時のパラメータに従って、要素にインデックスを添えて繰り返します。
+インデックスは 0 から始まります。
+
+ブロックを指定した場合の戻り値は生成時に指定したレシーバ自身です。
+
+例:
+    str = "xyz"
+    
+    enum = Enumerable::Enumerator.new(str, :each_byte)
+    enum.with_index {|byte, idx| p [byte, idx] }
+        # => [120, 0]
+        #    [121, 1]
+        #    [122, 2]
+
+
+生成時のパラメータに従って、要素にインデックスを添えてブロックを繰り返します。
+インデックスは 0 から始まります。
+

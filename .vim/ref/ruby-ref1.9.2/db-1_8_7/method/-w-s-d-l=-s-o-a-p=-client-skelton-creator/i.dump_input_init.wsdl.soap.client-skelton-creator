@@ -1,0 +1,6 @@
+kind=defined
+names=dump_input_init
+visibility=private 
+
+--- dump_input_init(input)
+

@@ -1,0 +1,7 @@
+superclass=DL=DLError
+type=class
+library=dl
+extended=
+included=
+
+型に関するエラーが発生したときに投げられます。

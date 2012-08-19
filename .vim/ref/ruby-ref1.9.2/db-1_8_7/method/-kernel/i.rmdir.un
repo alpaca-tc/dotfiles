@@ -1,0 +1,14 @@
+kind=added
+names=rmdir
+visibility=private 
+
+--- rmdir -> ()
+
+空のディレクトリを削除します。
+
+  ruby -run -e rmdir -- [OPTION] DIR
+
+  -v          詳細表示
+
+@see [[man:rmdir(1)]]
+

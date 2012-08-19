@@ -1,0 +1,7 @@
+methods=
+sublibraries=
+requires=xsd.qname
+classes=WSDL,WSDL=Error
+is_sublibrary=true
+
+

@@ -1,0 +1,23 @@
+kind=redefined
+names=exp
+visibility=public
+
+--- exp(z) -> Complex
+指数関数(自然対数 e の z 乗)を返します。
+
+複素数 z = a + b *i に対する exp(z) の定義は以下です。
+
+  exp(z)  = exp(a) * exp(i * b)
+
+@param z 複素数
+
+===== 注意
+
+虚部が 0 でも [[c:Complex]] クラスのオブジェクトであれば [[c:Complex]] クラスのオブジェクトを返すことに注意してください。
+
+  n = 2
+  z = Complex.new(2, 0)
+
+  p Math.exp(n) #=> 7.38905609893065
+  p Math.exp(z) #=> Complex(7.38905609893065, 0.0)
+

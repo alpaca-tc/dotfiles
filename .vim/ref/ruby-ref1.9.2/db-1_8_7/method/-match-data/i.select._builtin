@@ -1,0 +1,14 @@
+kind=defined
+names=select
+visibility=public
+
+--- select {|s| ... } -> [String]
+各要素に対してブロックを評価した値が真であった要素を全て含む配列を
+返します。真になる要素がひとつもなかった場合は空の配列を返します。
+
+self.to_a.select { ... } と同じです。
+
+   m = /(.)(.)(\d+)(\d)/.match("THX1138: The Movie")
+   p m.select{|x| /X/ =~ x}   #=> ["HX1138", "X"]
+
+

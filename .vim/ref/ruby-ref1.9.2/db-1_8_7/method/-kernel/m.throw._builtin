@@ -1,0 +1,40 @@
+kind=defined
+names=throw
+visibility=public
+
+--- throw(tag, value = nil) -> ()
+
+[[m:Kernel.#catch]]との組み合わせで大域脱出を行います。 throw 
+は同じ tag を指定した catch のブロックの終わりまでジャンプします。
+
+throw は探索時に呼び出しスタックをさかのぼるので、
+ジャンプ先は同じメソッド内にあるとは限りません。
+もし ensure節 が存在するならジャンプ前に実行します。
+
+もし同じ tag で待っている catch が存在しない場合は [[c:NameError]] で
+スレッドが終了します。
+
+
+@param tag シンボルまたは文字列です。
+@param value catch の戻り値になります。
+@raise NameError 同じ tag で待っている catch が存在しない場合に発生します。
+
+  def foo
+    throw :exit, 25
+  end
+  
+  ret = catch(:exit) do
+    begin
+      foo
+      some_process()    # 絶対に実行されない
+      10
+    ensure
+      puts "ensure"
+    end
+  end
+  puts ret
+  #=> ensure
+  #   25
+
+@see [[m:Kernel.#catch]]
+

@@ -1,0 +1,7 @@
+methods=Enumerable=Enumerator/i.next.generator,Enumerable=Enumerator/i.rewind.generator
+sublibraries=
+requires=
+classes=Generator,SyncEnumerator
+is_sublibrary=false
+
+外部イテレータを扱うためのライブラリです。

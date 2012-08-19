@@ -1,0 +1,7 @@
+superclass=XSD=XSDInt
+type=class
+library=xsd.datatypes
+extended=
+included=
+
+

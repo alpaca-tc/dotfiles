@@ -1,0 +1,13 @@
+kind=redefined
+names=tanh
+visibility=public
+
+--- tanh(z) -> Complex
+複素関数としてのtanh関数(双曲線tan関数)の結果を返します。
+
+tanh関数は以下で定義されます。
+
+  tanh(z) = sinh(z) / cosh(z)
+
+@param z 複素数
+

@@ -1,0 +1,10 @@
+.decode	URI.decode
+.encode	URI.encode
+.escape	URI.encode
+.extract	URI.extract
+.join	URI.join
+.parse	URI.parse
+.regexp	URI.regexp
+.split	URI.split
+.unescape	URI.decode
+:UNSAFE	URI::UNSAFE

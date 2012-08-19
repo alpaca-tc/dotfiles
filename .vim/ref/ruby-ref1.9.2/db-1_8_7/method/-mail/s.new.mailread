@@ -1,0 +1,27 @@
+kind=defined
+names=new
+visibility=public
+
+--- new(file)
+
+メールを解析します。
+file にはファイル名か [[c:IO]] オブジェクトを渡します。
+このメソッドを実行した時点でヘッダと本文が切り分けられ、
+ヘッダのハッシュ(ヘッダフィールド単位)と本文の配列(行単位)が作られます。
+
+@param file ファイル名か [[c:IO]] オブジェクトを指定します。
+
+1ファイル複数メールの形式(Unix mbox 形式)に対応しています
+(この場合 open 済みの IO を渡す必要があることに注意)。
+例えば以下のようにして各メールの Subject を表示できます。
+
+例:
+
+  require 'mailread'
+  require 'nkf'
+  
+  mailbox = File.open('/var/mail/foo')
+  until (m = Mail.new(mailbox)).header.empty?
+    puts NKF.nkf('-me', m['subject'])
+  end
+

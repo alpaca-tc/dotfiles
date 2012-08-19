@@ -1,0 +1,25 @@
+kind=defined
+names=yield
+visibility=public
+
+--- yield(val) -> self
+
+val をジェネレータに渡します。
+Generator.new() {|g|  ... } のブロックの中でしか呼ぶことができません。
+ジェネレータに渡された val は next などで取り出すことができます。
+
+例:
+
+  g = Generator.new() do |g|
+        n = 0
+        loop do
+          g.yield n
+          n += 1
+        end
+      end
+  p g.next # => 0
+  p g.next # => 1
+  p g.next # => 2
+  g.rewind
+  p g.next # => 0
+

@@ -1,0 +1,9 @@
+kind=added
+names=decode64
+visibility=public
+
+--- decode64(str) -> String
+
+[[m:Base64.#decode64]] と同じです。このメソッドは将来的に廃止される可能
+性があり、現在は Base64 モジュールを使うことが推奨されています。
+

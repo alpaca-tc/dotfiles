@@ -1,0 +1,23 @@
+kind=defined
+names=symbol
+visibility=public
+
+--- symbol(sym)    -> DL::PtrData
+ロードしたダイナミックライブラリ内のシンボルを検索し
+シンボルへのポインタを [[c:DL::PtrData]] として返します。
+
+@param sym 欲しいシンボル名を文字列で与えます。
+
+@raise RuntimeError ライブラリ内でシンボルが見つからない時に発生します。
+
+--- symbol(func, typespec)    -> DL::Symbol 
+
+ロードしたダイナミックライブラリ内の関数を検索し
+名前が func の関数を [[c:DL::Symbol]] として返します。
+
+@param func 欲しい関数名を文字列で与えます。
+
+@param typespec 関数の型を型指定子を使って文字列で与えます。
+
+@raise RuntimeError ライブラリ内でシンボルが見つからない時に発生します。
+

@@ -1,0 +1,11 @@
+kind=defined
+names=RESPONSE_STATUS_MALFORMEDREQUEST
+visibility=public
+
+--- RESPONSE_STATUS_MALFORMEDREQUEST -> Integer
+[[m:OpenSSL::OCSP::Response#status]] のステータスコードで 、
+リクエストの構文が正しくないことを意味します。
+
+詳しくは [[RFC:2560]] 2.3 を見てください。
+
+

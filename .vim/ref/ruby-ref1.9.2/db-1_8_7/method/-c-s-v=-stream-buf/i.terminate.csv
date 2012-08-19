@@ -1,0 +1,8 @@
+kind=defined
+names=terminate
+visibility=protected 
+
+--- terminate -> nil
+ストリームの解放処理を行います。
+本メソッドはその他のメソッドの内部から呼ばれます。
+

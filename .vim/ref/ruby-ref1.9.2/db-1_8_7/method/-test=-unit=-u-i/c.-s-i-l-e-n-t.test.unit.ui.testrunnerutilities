@@ -1,0 +1,8 @@
+kind=defined
+names=SILENT
+visibility=public
+
+--- SILENT        -> Integer
+
+テスト結果の出力レベルを表す定数です。何も出力しません。
+

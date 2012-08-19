@@ -1,0 +1,15 @@
+kind=defined
+names=merge
+visibility=public
+
+--- merge(enum) -> self
+
+元の集合に enum で与えられた要素を追加します。
+
+@param enum 追加対象の要素を格納した Enumerate オブジェクトを指定します。
+@raise ArgumentError 引数が Enumerable オブジェクトでない場合に発生します。
+
+  set = Set[10, 20]
+  set.merge([10, 30])
+  p set #=> #<Set: {30, 20, 10}>
+

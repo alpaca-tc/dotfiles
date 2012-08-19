@@ -1,0 +1,19 @@
+kind=added
+names=move,mv
+visibility=public
+
+--- move(from, to, verbose = false) -> bool
+--- mv(from, to, verbose = false)   -> bool
+
+ファイルを移動します。
+
+[[m:File.rename]] と異なりパーティションをまたがる移動もできます。
+
+@param from 移動元のファイル。
+
+@param to 移動先のファイル。
+
+@param verbose 真をセットすると詳細を表示します。
+
+@return 移動に成功したなら true、失敗したなら false を返します。
+

@@ -1,0 +1,6 @@
+kind=defined
+names=decode_tag
+visibility=public
+
+--- decode_tag(ns, elename, attrs, parent)
+

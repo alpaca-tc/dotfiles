@@ -1,0 +1,7 @@
+superclass=
+type=module
+library=test.unit.ui.testrunnerutilities
+extended=
+included=
+
+各種 TestRunner を実装するためのモジュールです。

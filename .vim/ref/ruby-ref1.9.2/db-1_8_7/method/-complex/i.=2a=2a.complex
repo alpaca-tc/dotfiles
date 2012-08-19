@@ -1,0 +1,21 @@
+kind=defined
+names=**
+visibility=public
+
+--- **(c) -> Complex
+複素数 c でべき乗した結果
+  exp(c * log(self)) 
+を返します
+
+@param c 累乗する数
+@return 演算結果を[[c:Complex]]クラスのオブジェクトとして返します。
+
+例:
+
+  z1 = Complex.new(1, 1)
+  z2 = Complex.new(2, 2)
+
+  p z1 ** 2     #=> Complex(0, 2)
+  p z1 ** z2    #=> Complex(-0.265653998849241, 0.319818113856136)
+
+

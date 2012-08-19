@@ -1,0 +1,22 @@
+kind=defined
+names=sign
+visibility=public
+
+--- sign(signer_cert, signer_key, certs=nil, flags=nil) -> self
+Request オブジェクトに署名をします。
+
+この署名はリクエスタが自分自身を証明するために署名します。
+OSCP レスポンダはこの署名を確認します。
+Request に対する署名は必須ではありません。
+
+certs に証明書の配列を渡すことで、この署名を検証するために
+必要となる別の証明書を付加することができます。
+
+@param signer_cert 署名者の証明書([[c:OpenSSL::X509::Certificate]] オブジェクト)
+@param signer_key 証明に用いる秘密鍵([[c:OpenSSL::PKey::PKey]] オブジェクト)
+@param certs 添付する証明書([[c:OpenSSL::X509::Certificate]] オブジェクトの配列)
+@param flags フラグ(整数)
+
+@raise OpenSSL::OCSP::OCSPError 署名に失敗した場合に発生します
+
+

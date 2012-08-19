@@ -1,0 +1,8 @@
+kind=defined
+names=count_test_cases
+visibility=public
+
+--- count_test_cases -> Integer
+
+テストの件数を返します。
+

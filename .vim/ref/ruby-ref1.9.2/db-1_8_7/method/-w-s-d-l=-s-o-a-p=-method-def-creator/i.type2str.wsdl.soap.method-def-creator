@@ -1,0 +1,6 @@
+kind=defined
+names=type2str
+visibility=private 
+
+--- type2str(type)
+

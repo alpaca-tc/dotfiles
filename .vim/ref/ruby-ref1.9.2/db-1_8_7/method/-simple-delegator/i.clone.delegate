@@ -1,0 +1,14 @@
+kind=defined
+names=clone,dup
+visibility=public
+
+--- clone -> object
+--- dup(obj) -> object
+
+オブジェクトの複製を作成して返します。
+dupの引数objについては、[[ruby-list:44914]]にて問題があることが報告されています。
+
+@see [[m:Object#clone]],[[m:Object#dup]]
+
+
+

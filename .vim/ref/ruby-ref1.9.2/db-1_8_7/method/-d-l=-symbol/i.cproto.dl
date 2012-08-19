@@ -1,0 +1,15 @@
+kind=defined
+names=cproto,to_s
+visibility=public
+
+--- cproto    -> String
+--- to_s      -> String
+
+C 言語形式のプロトタイプを文字列で返します。
+
+ require 'dl'
+ h = DL.dlopen('./libtest.so')
+ s = h.sym('slen', 'IS')
+ 
+ p s.cproto #=> "int slen(const char *);"
+

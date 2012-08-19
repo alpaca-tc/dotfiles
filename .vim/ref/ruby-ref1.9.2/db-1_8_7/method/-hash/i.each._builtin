@@ -1,0 +1,50 @@
+kind=defined
+names=each,each_pair
+visibility=public
+
+--- each {|key, value| ... } -> self
+--- each_pair {|key, value| ... } -> self
+--- each      -> Enumerable::Enumerator
+--- each_pair -> Enumerable::Enumerator
+
+ハッシュのキーと値を引数としてブロックを評価します。
+
+反復の際の評価順序は不定です。
+ブロック付きの場合 self を、
+無しで呼ばれた場合 [[c:Enumerable::Enumerator]] を返します。
+
+each と each_pair ではブロック引数の受渡し方が異なります。
+each は キーと値の配列を１引数で、each_pair は別々に２引数でブロックに値を渡します。
+これによりブロック引数をひとつだけ指定した場合の挙動が異なります。
+ブロック引数を２つ指定するようにすれば同じ挙動になります。
+
+  {:a=>1, :b=>2}.each {|a| p a}
+  #=> [:a, 1]
+      [:b, 2]
+  
+  {:a=>1, :b=>2}.each_pair {|*a| p a} #明示的に配列で受ける
+  #=> [:a, 1]
+      [:b, 2]
+  
+  {:a=>1, :b=>2}.each {|k, v| p [k, v]}  #each_pairでも同じ結果
+  #=> [:a, 1]
+      [:b, 2]
+
+each_pair は each のエイリアスです。
+
+  {:a=>1, :b=>2}.each {|a| p a}
+  #=> [:a, 1]
+      [:b, 2]
+ 
+  {:a=>1, :b=>2}.each_pair {|*a| p a} 
+  #=> [[:a, 1]]
+      [[:b, 2]]
+  
+  {:a=>1, :b=>2}.each {|k, v| p [k, v]}  #each_pairでも同じ結果
+  #=> [:a, 1]
+      [:b, 2]
+  
+  p({:a=>1, :b=>2}.each_pair)  # => #<Enumerable::Enumerator:0xbb19e4>
+
+@see [[m:Hash#each_key]],[[m:Hash#each_value]]
+

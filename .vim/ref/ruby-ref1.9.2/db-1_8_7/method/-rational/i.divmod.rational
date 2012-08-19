@@ -1,0 +1,24 @@
+kind=defined
+names=divmod
+visibility=public
+
+--- divmod(other) -> [Integer, Float | Rational]
+
+self を other で割った、商と余りの配列を返します。
+
+other に [[c:Float]] を指定した場合は、余りを [[c:Float]] で返します。
+
+@param other 自身を割る数
+
+例:
+
+  Rational(3,4).divmod(Rational(2,3))  # => [1, Rational(1, 12)]
+  Rational(-3,4).divmod(Rational(2,3)) # => [-2, Rational(7, 12)]
+  Rational(3,4).divmod(Rational(-2,3)) # => [-2, Rational(-7, 12)]
+
+  Rational(9,4).divmod(2)              # => [1, Rational(1, 4)]
+  Rational(9,4).divmod(Rational(2, 1)) # => [1, Rational(1, 4)]
+  Rational(9,4).divmod(2.0)            # => [1, 0.25]
+
+@see [[m:Numeric#divmod]]
+

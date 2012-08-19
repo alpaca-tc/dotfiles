@@ -1,0 +1,13 @@
+kind=redefined
+names=atan2
+visibility=public
+
+--- atan2(z) -> Complex
+複素関数としてのatan2関数の結果を返します。
+
+atan2関数は以下で定義されます。
+
+  atan2(y, x) = -i * log( (x + i * y) / sqrt( x*x + y*y ) )
+
+@param z 複素数
+

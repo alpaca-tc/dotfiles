@@ -1,0 +1,6 @@
+kind=defined
+names=define_attribute
+visibility=private 
+
+--- define_attribute(c, attributes)
+

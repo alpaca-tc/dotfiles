@@ -1,0 +1,7 @@
+superclass=SOAP=Error
+type=class
+library=soap.encodingstyle.handler
+extended=
+included=
+
+

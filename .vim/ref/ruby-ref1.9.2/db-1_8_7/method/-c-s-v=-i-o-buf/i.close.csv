@@ -1,0 +1,9 @@
+kind=defined
+names=close
+visibility=public
+
+--- close -> nil
+オブジェクト終了（破棄）処理を行います。
+
+内部的には、terminateメソッドを呼び出します。
+

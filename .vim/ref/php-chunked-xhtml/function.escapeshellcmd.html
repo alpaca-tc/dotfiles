@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>シェルのメタ文字をエスケープする</title>
+
+ </head>
+ <body><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="function.escapeshellarg.html">escapeshellarg</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="function.exec.html">exec</a></div>
+ <div class="up"><a href="ref.exec.html">プログラム実行関数</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div><hr /><div id="function.escapeshellcmd" class="refentry">
+ <div class="refnamediv">
+  <h1 class="refname">escapeshellcmd</h1>
+  <p class="verinfo">(PHP 4, PHP 5)</p><p class="refpurpose"><span class="refname">escapeshellcmd</span> &mdash; <span class="dc-title">シェルのメタ文字をエスケープする</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.escapeshellcmd-description">
+  <h3 class="title">説明</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="type">string</span> <span class="methodname"><strong>escapeshellcmd</strong></span>
+    ( <span class="methodparam"><span class="type">string</span> <code class="parameter">$command</code></span>
+   )</div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>escapeshellcmd()</strong></span> は、文字列中においてシェルコマンドを
+   だまして勝手なコマンドを実行する可能性がある文字をエスケープします。
+   この関数は、ユーザに入力されたデータを関数
+   <span class="function"><a href="function.exec.html" class="function">exec()</a></span> または <span class="function"><a href="function.system.html" class="function">system()</a></span> または、
+   <a href="language.operators.execution.html" class="link">バックティック演算子</a>
+   に渡す前に全てエスケープを行う場合に使用するべきです。
+  </p>
+  <p class="para">
+   <em>#&amp;;`|*?~&lt;&gt;^()[]{}$\</em>、<em>\x0A</em>
+   および <em>\xFF</em> については、その文字の前にバックスラッシュが
+   追加されます。<em>&#039;</em> および <em>&quot;</em>
+   は、対になっていない場合にのみエスケープされます。Windows では、
+   これらの文字に加えて <em>%</em> がスペースに置き換えられます。
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.escapeshellcmd-parameters">
+  <h3 class="title">パラメータ</h3>
+  <p class="para">
+   <dl>
+
+    <dt>
+
+     <span class="term"><em><code class="parameter">command</code></em></span>
+     <dd>
+
+      <p class="para">
+       エスケープされるコマンド
+      </p>
+     </dd>
+
+    </dt>
+
+   </dl>
+
+  </p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.escapeshellcmd-returnvalues">
+  <h3 class="title">返り値</h3>
+  <p class="para">
+   エスケープされた文字列
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.escapeshellcmd-examples">
+  <h3 class="title">例</h3>
+  <p class="para">
+   <div class="example" id="example-3388">
+    <p><strong>例1 <span class="function"><strong>escapeshellcmd()</strong></span> の例</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #FF8000">//&nbsp;意図的に、任意の数の引数を指定できるようにしています<br /></span><span style="color: #0000BB">$command&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #DD0000">'./configure&nbsp;'</span><span style="color: #007700">.</span><span style="color: #0000BB">$_POST</span><span style="color: #007700">[</span><span style="color: #DD0000">'configure_options'</span><span style="color: #007700">];<br /><br /></span><span style="color: #0000BB">$escaped_command&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">escapeshellcmd</span><span style="color: #007700">(</span><span style="color: #0000BB">$command</span><span style="color: #007700">);<br />&nbsp;<br /></span><span style="color: #0000BB">system</span><span style="color: #007700">(</span><span style="color: #0000BB">$escaped_command</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></div>
+    </div>
+
+   </div>
+  </p>
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.escapeshellcmd-notes">
+   <div class="warning"><strong class="warning">警告</strong>
+    <p class="para">
+     <span class="function"><strong>escapeshellcmd()</strong></span>
+     はコマンド文字列全体に適用しなければなりません。
+     また、そうしたところで、まだ任意の数の引数を渡すことによる攻撃を許してしまいます。
+     単一の引数をエスケープするには、かわりに <span class="function"><a href="function.escapeshellarg.html" class="function">escapeshellarg()</a></span>
+     を使わねばなりません。
+    </p>
+   </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.escapeshellcmd-seealso">
+  <h3 class="title">参考</h3>
+  <p class="para">
+   <ul class="simplelist">
+    <li class="member"><span class="function"><a href="function.escapeshellarg.html" class="function" rel="rdfs-seeAlso">escapeshellarg()</a> - シェル引数として使用される文字列をエスケープする</span></li>
+    <li class="member"><span class="function"><a href="function.exec.html" class="function" rel="rdfs-seeAlso">exec()</a> - 外部プログラムを実行する</span></li>
+    <li class="member"><span class="function"><a href="function.popen.html" class="function" rel="rdfs-seeAlso">popen()</a> - プロセスへのファイルポインタをオープンする</span></li>
+    <li class="member"><span class="function"><a href="function.system.html" class="function" rel="rdfs-seeAlso">system()</a> - 外部プログラムを実行し、出力を表示する</span></li>
+    <li class="member"><a href="language.operators.execution.html" class="link">バックティック演算子</a></li>
+   </ul>
+  </p>
+ </div>
+
+</div><hr /><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="function.escapeshellarg.html">escapeshellarg</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="function.exec.html">exec</a></div>
+ <div class="up"><a href="ref.exec.html">プログラム実行関数</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div></body></html>

@@ -1,0 +1,8 @@
+kind=defined
+names=callcc
+visibility=public
+
+--- callcc {|cont| .... } -> object
+
+継続を作成します。 [[c:Continuation]] を参照してください。
+

@@ -1,0 +1,13 @@
+.add	Finalizer.add
+.add_dependency	Finalizer.add
+.delete	Finalizer.delete
+.delete_all_by_dependant	Finalizer.delete_all_by_dependant
+.delete_all_dependency	Finalizer.delete_all_dependency
+.delete_by_dependant	Finalizer.delete_by_dependant
+.delete_dependency	Finalizer.delete
+.finalize_all	Finalizer.finalize_all
+.finalize_all_by_dependant	Finalizer.finalize_all_by_dependant
+.finalize_all_dependency	Finalizer.finalize_all_dependency
+.finalize_by_dependant	Finalizer.finalize_by_dependant
+.finalize_dependency	Finalizer.finalize_dependency
+.safe	Finalizer.safe

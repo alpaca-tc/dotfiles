@@ -1,0 +1,7 @@
+kind=defined
+names=decode_typemap,decode_typemap=
+visibility=public
+
+--- decode_typemap
+--- decode_typemap=(value)
+

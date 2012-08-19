@@ -1,0 +1,17 @@
+kind=added
+names=to_ptr
+visibility=public
+
+--- to_ptr    -> DL::PtrData
+
+自身を複製し、複製した文字列を指す [[c:DL::PtrData]] を返します。
+この返り値には、[[m:DL::FREE]] が free 関数としてセットされています。
+
+ s = 'abc'
+ sp = s.to_ptr
+ p sp.size #=> 3
+ p sp.to_s #=> "abc"
+ p sp[0] = 'A'
+ p sp.to_s #=> "Abc"
+ p s       #=> "abc"
+

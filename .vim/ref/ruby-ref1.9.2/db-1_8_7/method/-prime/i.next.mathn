@@ -1,0 +1,16 @@
+kind=defined
+names=next,succ
+visibility=public
+
+--- succ
+--- next
+
+次の素数を返します。
+
+例:
+
+  q = Prime.new
+  q.succ # => 2
+  q.succ # => 3
+  q.succ # => 5
+

@@ -1,0 +1,8 @@
+kind=defined
+names=size
+visibility=public
+
+--- size    -> Integer
+
+常に 1 を返します。
+

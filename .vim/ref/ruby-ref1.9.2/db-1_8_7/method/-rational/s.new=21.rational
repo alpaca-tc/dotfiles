@@ -1,0 +1,35 @@
+kind=defined
+names=new!
+visibility=public
+
+--- new!(num, den = 1) -> Rational
+
+[[c:Rational]] オブジェクトを生成します。
+
+@param num 分子を指定します。
+
+@param den 分母を指定します。省略した場合は 1 です。
+
+[[m:Kernel#Rational]] とは異なり、約分していない [[c:Rational]] オブジェ
+クトを返します。
+
+例:
+
+  Rational.new!(1, 3)         # => Rational(1, 3)
+  Rational.new!(2, 6)         # => Rational(2, 6)
+
+また、引数のチェックも行われません。
+
+例:
+
+  Rational.new!(1, 0)         # => Rational(1, 0)
+  Rational(1, 0)              # => ZeroDivisionError
+
+注意:
+
+Rational.new! は 1.9系 では廃止されました。[[m:Kernel.#Rational]] の方
+を使用してください。
+
+  # 1.9.1 の場合
+  Rational.new!(1, 3)  # => NoMethodError
+

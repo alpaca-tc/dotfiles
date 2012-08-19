@@ -1,0 +1,15 @@
+kind=defined
+names=tag
+visibility=public
+
+--- tag(element, attributes = {}) -> String
+--- tag(element, attributes = {}){ ... } -> String
+
+HTML タグを表す文字列を作って返します。
+
+ブロックが与えられた場合は、ブロックを評価した結果が HTML タグに挟まれます。
+
+@param element タグの名前を指定します。
+
+@param attributes タグに指定する属性をハッシュで指定します。
+

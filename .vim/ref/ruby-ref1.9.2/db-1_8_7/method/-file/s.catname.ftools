@@ -1,0 +1,12 @@
+kind=added
+names=catname
+visibility=public
+
+--- catname(from, to) -> String
+
+from, to から新しい to を作成して返します。
+
+to が有効なディレクトリの場合、to の後ろに from を追加します。
+また必要であれば、バックスラッシュをエスケープし、スラッシュを追加します。
+to がディレクトリでない場合は、 to をそのまま返します。
+

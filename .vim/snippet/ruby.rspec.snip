@@ -1,0 +1,49 @@
+# rspec
+snippet     con
+abbr        context do
+    context '${1}' do
+      ${2}
+    end
+
+snippet     bef
+abbr        before do
+    before do
+      ${1}
+    end
+
+snippet     it
+abbr        it do
+    it '${1}' do
+      ${2}
+    end
+
+snippet     des
+abbr        describe do
+    describe '${1}' do
+      ${2}
+    end
+
+snippet     sub
+abbr        subject
+prev_word    '^'
+    subject { ${1} }
+
+snippet     share
+abbr        shared_examples_for
+prev_word      '^'
+    shared_examples_for "${1:name}" do
+    end
+
+snippet     behave
+prev_word       '^'
+    it_should_behave_like "${1:name}"
+
+snippet     let
+abbr        let(:name) {}
+prev_word   '^'
+    let(:${1:symbol}) { ${2} }
+
+snippet     reqs
+abbr        require rspec
+prev_word     '^'
+    require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')

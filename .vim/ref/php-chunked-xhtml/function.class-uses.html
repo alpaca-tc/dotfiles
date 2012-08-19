@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>指定したクラスが使っているトレイトを返す</title>
+
+ </head>
+ <body><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="function.class-parents.html">class_parents</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="function.iterator-apply.html">iterator_apply</a></div>
+ <div class="up"><a href="ref.spl.html">SPL 関数</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div><hr /><div id="function.class-uses" class="refentry">
+ <div class="refnamediv">
+  <h1 class="refname">class_uses</h1>
+  <p class="verinfo">(バージョン情報なし。おそらく SVN 版にしか存在しないでしょう)</p><p class="refpurpose"><span class="refname">class_uses</span> &mdash; <span class="dc-title">
+   指定したクラスが使っているトレイトを返す
+  </span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.class-uses-description">
+  <h3 class="title">説明</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="type">array</span> <span class="methodname"><strong>class_uses</strong></span>
+    ( <span class="methodparam"><span class="type"><a href="language.pseudo-types.html#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$class</code></span>
+   [, <span class="methodparam"><span class="type">bool</span> <code class="parameter">$autoload</code><span class="initializer"> = true</span></span>
+  ] )</div>
+
+  <p class="para rdfs-comment">
+   この関数は、指定したクラスが使っているトレイトの名前を配列で返します。
+   しかし、親クラスで使っているトレイトは含まれません。
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.class-uses-parameters">
+  <h3 class="title">パラメータ</h3>
+  <p class="para">
+   <dl>
+
+    <dt>
+
+     <span class="term"><em><code class="parameter">class</code></em></span>
+     <dd>
+
+      <p class="para">
+       オブジェクト (クラスのインスタンス) あるいは文字列 (クラス名)。
+      </p>
+     </dd>
+
+    </dt>
+
+    <dt>
+
+     <span class="term"><em><code class="parameter">autoload</code></em></span>
+     <dd>
+
+      <p class="para">
+       マジックメソッド
+       <span class="function"><a href="function.autoload.html" class="function">__autoload()</a></span>
+       で、この関数からクラスを自動的に読み込ませるかどうか。
+      </p>
+     </dd>
+
+    </dt>
+
+   </dl>
+
+  </p>
+ </div>
+
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.class-uses-returnvalues">
+  <h3 class="title">返り値</h3>
+  <p class="para">
+   成功した場合に配列、エラー時には <strong><code>FALSE</code></strong> を返します。
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.class-uses-examples">
+  <h3 class="title">例</h3>
+  <p class="para">
+   <div class="example" id="example-3572">
+    <p><strong>例1 <span class="function"><strong>class_uses()</strong></span> の例</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /><br />trait&nbsp;foo&nbsp;</span><span style="color: #007700">{&nbsp;}<br />class&nbsp;</span><span style="color: #0000BB">bar&nbsp;</span><span style="color: #007700">{<br />&nbsp;&nbsp;use&nbsp;</span><span style="color: #0000BB">foo</span><span style="color: #007700">;<br />}<br /><br /></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">class_uses</span><span style="color: #007700">(new&nbsp;</span><span style="color: #0000BB">bar</span><span style="color: #007700">));<br /><br /></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">class_uses</span><span style="color: #007700">(</span><span style="color: #DD0000">'bar'</span><span style="color: #007700">));<br /><br /><br />function&nbsp;</span><span style="color: #0000BB">__autoload</span><span style="color: #007700">(</span><span style="color: #0000BB">$class_name</span><span style="color: #007700">)&nbsp;{<br />&nbsp;&nbsp;&nbsp;require_once&nbsp;</span><span style="color: #0000BB">$class_name&nbsp;</span><span style="color: #007700">.&nbsp;</span><span style="color: #DD0000">'.php'</span><span style="color: #007700">;<br />}<br /><br /></span><span style="color: #FF8000">//&nbsp;__autoload&nbsp;で&nbsp;'not_loaded'&nbsp;クラスを読み込みます<br /></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">class_implements</span><span style="color: #007700">(</span><span style="color: #DD0000">'not_loaded'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">true</span><span style="color: #007700">));<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></div>
+    </div>
+
+    <div class="example-contents"><p>上の例の出力は、
+たとえば以下のようになります。</p></div>
+    <div class="example-contents screen">
+<div class="cdata"><pre>
+Array
+(
+    [foo] =&gt; foo
+)
+
+Array
+(
+    [foo] =&gt; foo
+)
+
+Array
+(
+    [trait_of_not_loaded] =&gt; trait_of_not_loaded
+)
+</pre></div>
+    </div>
+   </div>
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.class-uses-seealso">
+  <h3 class="title">参考</h3>
+  <p class="para">
+   <ul class="simplelist">
+    <li class="member"><span class="function"><a href="function.class-parents.html" class="function" rel="rdfs-seeAlso">class_parents()</a> - 与えられたクラスの親クラスを返す</span></li>
+    <li class="member"><span class="function"><a href="function.get-declared-traits.html" class="function" rel="rdfs-seeAlso">get_declared_traits()</a> - 宣言されているすべてのトレイトの配列を返す</span></li>
+   </ul>
+  </p>
+ </div>
+
+</div><hr /><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="function.class-parents.html">class_parents</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="function.iterator-apply.html">iterator_apply</a></div>
+ <div class="up"><a href="ref.spl.html">SPL 関数</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div></body></html>

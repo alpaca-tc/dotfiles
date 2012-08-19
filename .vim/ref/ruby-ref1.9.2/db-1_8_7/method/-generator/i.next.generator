@@ -1,0 +1,20 @@
+kind=defined
+names=next
+visibility=public
+
+--- next -> object
+
+現在の位置にある要素を返し、位置を1つ進めます。
+
+@raise EOFError 次の要素が無い場合に発生します。
+
+例:
+
+  g = Generator.new() do |g|
+        ['A', 'B', 'C', 'Z'].each{|s|
+          g.yield s
+        }
+      end
+  p g.next # => 'A'
+  p g.next # => 'B'
+

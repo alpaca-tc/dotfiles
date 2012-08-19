@@ -1,0 +1,13 @@
+kind=redefined
+names=acosh
+visibility=public
+
+--- acosh(z) -> Complex
+複素関数としてのacosh関数(双曲逆cos関数)の結果を返します。
+
+acosh関数は以下で定義されます。
+
+  acosh(z) = log(z + sqrt(z*z-1))
+
+@param z 複素数
+

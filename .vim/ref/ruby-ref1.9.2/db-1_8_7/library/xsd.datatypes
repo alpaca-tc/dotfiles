@@ -1,0 +1,7 @@
+methods=
+sublibraries=
+requires=
+classes=XSD=Charset,XSD=Charset=CharsetConversionError,XSD=Charset=CharsetError,XSD=Charset=UnknownCharsetError,XSD=Charset=XSDError,XSD=Error,XSD=FloatConstants,XSD=IconvCharset,XSD=NS,XSD=NSDBase,XSD=NS=Assigner,XSD=NS=FormatError,XSD=NamedElements,XSD=QName,XSD=ValueSpaceError,XSD,XSD=XSDAnySimpleType,XSD=XSDAnyURI,XSD=XSDBase64Binary,XSD=XSDBoolean,XSD=XSDByte,XSD=XSDDate,XSD=XSDDateTime,XSD=XSDDateTimeImpl,XSD=XSDDecimal,XSD=XSDDouble,XSD=XSDDuration,XSD=XSDFloat,XSD=XSDGDay,XSD=XSDGMonth,XSD=XSDGMonthDay,XSD=XSDGYear,XSD=XSDGYearMonth,XSD=XSDHexBinary,XSD=XSDInt,XSD=XSDInteger,XSD=XSDLong,XSD=XSDNegativeInteger,XSD=XSDNil,XSD=XSDNonNegativeInteger,XSD=XSDNonPositiveInteger,XSD=XSDNormalizedString,XSD=XSDPositiveInteger,XSD=XSDQName,XSD=XSDShort,XSD=XSDString,XSD=XSDTime,XSD=XSDUnsignedByte,XSD=XSDUnsignedInt,XSD=XSDUnsignedLong,XSD=XSDUnsignedShort
+is_sublibrary=true
+
+

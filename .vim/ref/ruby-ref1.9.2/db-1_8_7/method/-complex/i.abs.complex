@@ -1,0 +1,16 @@
+kind=defined
+names=abs
+visibility=public
+
+--- abs -> Float
+自分自身の絶対値を返します。
+
+  z = a + b * i
+
+としたとき、絶対値の定義は
+
+  sqrt(a*a + b*b)
+
+です。
+計算結果として[[c:Float]]クラスのオブジェクトが返されることに注意してください。
+

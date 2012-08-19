@@ -1,0 +1,43 @@
+kind=defined
+names=popen3
+visibility=public
+
+--- popen3(*cmd) -> [IO, IO, IO]
+--- popen3(*cmd) {|stdin, stdout, stderr| ... } -> ()
+
+外部プログラム cmd を実行し、そのプロセスの標準入力、
+標準出力、標準エラー出力に接続されたパイプを 3 要素の配列で返します。
+cmd は組み込み関数 [[m:Kernel.#exec]] と同じ規則で解釈されます。
+
+  stdin, stdout, stderr = *Open3.popen3("/usr/bin/nroff -man")
+
+@param cmd 実行するコマンドを指定します。
+
+@return ブロックを指定した場合はブロックの最後に評価された値を返します。
+        ブロックを指定しなかった場合は標準入力、標準出力、標準エラー
+        を返します。
+
+ブロックを指定するとパイプの配列を引数にブロックを実行し、最後にパイプ
+を close します。この場合はブロックの最後の式の結果を返します。
+
+  require 'open3'
+
+  Open3.popen3("read stdin; echo stdout; echo stderr >&2") {|stdin, stdout, stderr|
+    stdin.puts "stdin"
+    stdin.close     # または close_write
+    p stdout.read
+    p stderr.read
+  }
+  #=> "stdout\n"
+      "stderr\n"
+
+
+stdin への入力が終わったらできる限り早く close か close_write
+で閉じるべきです。
+
+[UNIX系OS固有の注意] Open3 で作成した子プロセスは
+[[man:wait(2)]] しなくてもゾンビになりません。
+
+コマンドは実際には孫プロセスとして動作するため、組み込み変数 [[m:$?]] でコマンドの終了ステータスを得ることはできません。
+
+

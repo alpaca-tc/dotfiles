@@ -1,0 +1,15 @@
+kind=defined
+names=examine
+visibility=public
+
+--- examine(mailbox) -> Net::IMAP::TaggedResponse
+EXAMINE コマンドを送り、指定したメールボックスを処理対象の
+メールボックスにします。
+
+[[m:Net::IMAP#select]] と異なりセッション中はメールボックスが
+読み取り専用となります。それ以外は select と同じです。
+
+@param mailbox 処理対象としたいメールボックスの名前(文字列)
+@raise Net::IMAP::NoResponseError mailboxが存在しない等の理由でコマンドの実行に失敗
+       した場合に発生します。
+

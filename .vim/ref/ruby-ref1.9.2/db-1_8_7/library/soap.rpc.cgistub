@@ -1,0 +1,7 @@
+methods=
+sublibraries=
+requires=soap.header.handlerset,soap.mapping.mapping,soap.baseData,soap.mapping,soap.encodingstyle.soapHandler,soap.encodingstyle.handler,soap.encodingstyle.aspDotNetHandler,soap.rpc.router,soap.mimemessage,soap.element,soap.rpc.element,soap.rpc.rpc,soap.mapping.wsdlliteralregistry,soap.property,soap.httpconfigloader,soap.mapping.rubytypeFactory,soap.mapping.registry,soap.generator,soap.rpc.soaplet,soap.streamHandler,soap.attachment,soap.processor,soap.soap,soap.mapping.factory,soap.encodingstyle.literalHandler,soap.mapping.typeMap
+classes=SOAP=RPC=CGIStub,SOAP=RPC=CGIStub=SOAPRequest,SOAP=RPC=CGIStub=SOAPStdinRequest,SOAP=RPC=CGIStub=SOAPFCGIRequest
+is_sublibrary=true
+
+

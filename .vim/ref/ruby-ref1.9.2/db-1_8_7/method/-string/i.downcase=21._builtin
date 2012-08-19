@@ -1,0 +1,27 @@
+kind=defined
+names=downcase!
+visibility=public
+
+--- downcase! -> self | nil
+
+文字列中の 'A' から 'Z' までの
+アルファベット大文字をすべて破壊的に小文字に置き換えます。
+アルファベット大文字以外の文字はすべてそのまま保存されます。
+
+このメソッドはマルチバイト文字を認識しません。
+処理する文字列の文字コードが Shift JIS で、
+しかも [[m:$KCODE]] が適切に設定されていない場合、
+このメソッドはマルチバイト文字の一部も変換してしまう場合があります。
+逆に、[[m:$KCODE]] を適切に設定しても
+マルチバイト文字のアルファベットは処理できません。
+
+@return self を変更して返します。変更が無かった場合は nil を返します。
+
+例:
+    p "STRing?".downcase   # => "string?"
+
+    # -*- Coding: shift_jis -*-
+    $KCODE ='n'
+    puts "帰".downcase   # => 蟻
+@see [[m:String#upcase]], [[m:String#swapcase]], [[m:String#capitalize]]
+

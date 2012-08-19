@@ -1,0 +1,6 @@
+kind=defined
+names=op_bind_rpc?
+visibility=private 
+
+--- op_bind_rpc?(op_bind)
+

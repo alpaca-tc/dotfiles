@@ -1,0 +1,7 @@
+kind=defined
+names=literal_mapping_registry,literal_mapping_registry=
+visibility=public
+
+--- literal_mapping_registry
+--- literal_mapping_registry=(value)
+

@@ -1,0 +1,6 @@
+kind=defined
+names=sequence_elements=
+visibility=public
+
+--- sequence_elements=(elements)
+

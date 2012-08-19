@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>中に含むオブジェクトの一意な識別子を算出する</title>
+
+ </head>
+ <body><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="splobjectstorage.detach.html">SplObjectStorage::detach</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="splobjectstorage.getinfo.html">SplObjectStorage::getInfo</a></div>
+ <div class="up"><a href="class.splobjectstorage.html">SplObjectStorage</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div><hr /><div id="splobjectstorage.gethash" class="refentry">
+ <div class="refnamediv">
+  <h1 class="refname">SplObjectStorage::getHash</h1>
+  <p class="verinfo">(バージョン情報なし。おそらく SVN 版にしか存在しないでしょう)</p><p class="refpurpose"><span class="refname">SplObjectStorage::getHash</span> &mdash; <span class="dc-title">
+   中に含むオブジェクトの一意な識別子を算出する
+  </span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-splobjectstorage.gethash-description">
+  <h3 class="title">説明</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="type">string</span> <span class="methodname"><strong>SplObjectStorage::getHash</strong></span>
+    ( <span class="methodparam"><span class="type">string</span> <code class="parameter">$object</code></span>
+   )</div>
+
+  <p class="para rdfs-comment">
+   この <a href="class.splobjectstorage.html" class="classname">SplObjectStorage</a> オブジェクトに追加されたオブジェクトの識別子を算出します。
+  </p>
+  <p class="para">
+   <a href="class.splobjectstorage.html" class="classname">SplObjectStorage</a> の実装では、
+   <span class="function"><a href="function.spl-object-hash.html" class="function">spl_object_hash()</a></span> と同じ値を返します。
+  </p>
+  <p class="para">
+   この識別子は、格納されるオブジェクト間で一意でなければなりません。
+   つまり、このオブジェクトには同じ識別子のオブジェクトを複数格納できないということです。
+   それを利用して、セット (一意な値のコレクション) を実装するのにも使えます。
+   オブジェクトが一意であるという性質は、この関数の返す値が一意であるということで実現できます。
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-splobjectstorage.gethash-parameters">
+  <h3 class="title">パラメータ</h3>
+  <dl>
+
+   <dt>
+
+    <span class="term"><em><code class="parameter">object</code></em></span>
+    <dd>
+
+     <p class="para">
+      識別子を算出したいオブジェクト。
+     </p>
+    </dd>
+
+   </dt>
+
+  </dl>
+
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-splobjectstorage.gethash-returnvalues">
+  <h3 class="title">返り値</h3>
+  <p class="para">
+   算出した識別子を文字列で返します。返り値の型がそれ以外だった場合は例外をスローします。
+  </p>
+ </div>
+
+ <div class="refsect1 examples" id="refsect1-splobjectstorage.gethash-examples">
+  <h3 class="title">例</h3>
+  <p class="para">
+   <div class="example" id="example-3479">
+    <p><strong>例1 <span class="function"><strong>SplObjectStorage::getHash()</strong></span> の例</strong></p>
+<div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #007700">class&nbsp;</span><span style="color: #0000BB">OneSpecimenPerClassStorage&nbsp;</span><span style="color: #007700">extends&nbsp;</span><span style="color: #0000BB">SplObjectStorage&nbsp;</span><span style="color: #007700">{<br />&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;function&nbsp;</span><span style="color: #0000BB">getHash</span><span style="color: #007700">(</span><span style="color: #0000BB">$o</span><span style="color: #007700">)&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;</span><span style="color: #0000BB">get_class</span><span style="color: #007700">(</span><span style="color: #0000BB">$o</span><span style="color: #007700">);<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br />class&nbsp;</span><span style="color: #0000BB">A&nbsp;</span><span style="color: #007700">{}<br /><br /></span><span style="color: #0000BB">$s&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">OneSpecimenPerClassStorage</span><span style="color: #007700">;<br /></span><span style="color: #0000BB">$o1&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">stdClass</span><span style="color: #007700">;<br /></span><span style="color: #0000BB">$o2&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">stdClass</span><span style="color: #007700">;<br /></span><span style="color: #0000BB">$o3&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">A</span><span style="color: #007700">;<br /><br /></span><span style="color: #0000BB">$s</span><span style="color: #007700">[</span><span style="color: #0000BB">$o1</span><span style="color: #007700">]&nbsp;=&nbsp;</span><span style="color: #0000BB">1</span><span style="color: #007700">;<br /></span><span style="color: #FF8000">//&nbsp;$o2&nbsp;は&nbsp;$o1&nbsp;に等しいとみなされ、値が置き換えられます<br /></span><span style="color: #0000BB">$s</span><span style="color: #007700">[</span><span style="color: #0000BB">$o2</span><span style="color: #007700">]&nbsp;=&nbsp;</span><span style="color: #0000BB">2</span><span style="color: #007700">;<br /></span><span style="color: #0000BB">$s</span><span style="color: #007700">[</span><span style="color: #0000BB">$o3</span><span style="color: #007700">]&nbsp;=&nbsp;</span><span style="color: #0000BB">3</span><span style="color: #007700">;<br /><br /></span><span style="color: #FF8000">//&nbsp;これらは先ほどのオブジェクトと等しいとみなされ、<br />//&nbsp;さきほど格納した値にアクセスできるようになります<br /></span><span style="color: #0000BB">$p1&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">stdClass</span><span style="color: #007700">;<br /></span><span style="color: #0000BB">$p2&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">A</span><span style="color: #007700">;<br />echo&nbsp;</span><span style="color: #0000BB">$s</span><span style="color: #007700">[</span><span style="color: #0000BB">$p1</span><span style="color: #007700">],&nbsp;</span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br />echo&nbsp;</span><span style="color: #0000BB">$s</span><span style="color: #007700">[</span><span style="color: #0000BB">$p2</span><span style="color: #007700">],&nbsp;</span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></div>
+    </div>
+
+    <div class="example-contents"><p>上の例の出力は、
+たとえば以下のようになります。</p></div>
+    <div class="example-contents screen">
+<div class="cdata"><pre>
+2
+3
+</pre></div>
+    </div>
+   </div>
+  </p>
+ </div>
+
+
+</div><hr /><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="splobjectstorage.detach.html">SplObjectStorage::detach</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="splobjectstorage.getinfo.html">SplObjectStorage::getInfo</a></div>
+ <div class="up"><a href="class.splobjectstorage.html">SplObjectStorage</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div></body></html>

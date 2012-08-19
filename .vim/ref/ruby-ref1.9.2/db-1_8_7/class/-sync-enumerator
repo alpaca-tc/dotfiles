@@ -1,0 +1,16 @@
+superclass=Object
+type=class
+library=generator
+extended=
+included=Enumerable
+
+複数の [[c:Enumerable]] オブジェクトを並行して yield するためのクラスです。
+
+例:
+
+  require 'generator'
+  
+  s = SyncEnumerator.new([1,2,3], ['a', 'b', 'c'])
+  
+  # Yields [1, 'a'], [2, 'b'], and [3,'c']
+  s.each { |row| puts row.join(', ') }

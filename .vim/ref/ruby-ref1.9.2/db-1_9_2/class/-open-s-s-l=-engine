@@ -1,0 +1,11 @@
+superclass=Object
+type=class
+library=openssl
+extended=
+included=
+
+OpenSSL の Engine (プラグイン)を表すオブジェクトです。
+
+このインターフェースからハードウェアアクレラレータなどを利用できます。
+
+詳しくは openssl のドキュメントの engine の項を見てください。

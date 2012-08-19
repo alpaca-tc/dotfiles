@@ -1,0 +1,10 @@
+kind=defined
+names=FREE
+visibility=public
+
+--- FREE
+
+[[man:free(3)]] を表す [[c:DL::Symbol]] です。
+この定数に新たに DL::Symbol を代入しても、DL::PtrData にデフォルトでセットされる
+free 関数が変わることはありません。
+

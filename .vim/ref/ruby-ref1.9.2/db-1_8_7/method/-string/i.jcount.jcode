@@ -1,0 +1,34 @@
+kind=added
+names=jcount
+visibility=public
+
+--- jcount(str) -> Integer
+[[m:String#count]] の日本語対応版です。
+
+self に文字列 str で指定した文字がいくつ含まれているかを数えます
+
+ただし [[m:String#count]] とは異なり利用できるパターンは
+"Ａ-Ｄ" のような「^」(否定)を含まないパターンのみであり、
+また複数のパターンを取ることはできません。
+
+@param str 出現回数を数える文字のパターンを文字列で与えます。
+
+例：
+
+  #!/usr/bin/env ruby
+
+  $KCODE = 'e'
+  zstr = 'ＡＢＣＤＥＦ'
+  hogehoge = 'hogehoge'
+
+  p zstr.count('Ａ')     # => 7   これは正しくない
+  p zstr.jcount('ＡＢ')  # => 8 
+  p hogehoge.count('g')  # => 2
+
+  require 'jcode'
+  p zstr.jcount('Ａ')    # => 1   これは正しい
+  p hogehoge.jcount('g') # => 2
+
+  p zstr.jcount('ＡＢ')  # => 2 
+
+

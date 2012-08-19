@@ -1,0 +1,7 @@
+superclass=
+type=module
+library=ping
+extended=
+included=
+
+サーバが稼働しているかどうか調べるための単純なメソッドを提供します。

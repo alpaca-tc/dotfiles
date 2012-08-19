@@ -1,0 +1,7 @@
+kind=defined
+names=hour,hour=
+visibility=public
+
+--- hour
+--- hour=(hour)
+

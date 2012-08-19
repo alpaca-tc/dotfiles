@@ -1,0 +1,16 @@
+kind=defined
+names=hash
+visibility=public
+
+--- hash    -> Integer
+
+自身の [[m:Object#object_id]] を返します。これは [[c:Object]] クラスで定義されたデフォルトの動作です。
+メソッド hash の返り値は自身が保持するキーや値に影響されません。
+
+  a = {}
+  p a.hash    #=> 538688380
+  a[1] = :a
+  p a.hash    #=> 538688380
+
+
+

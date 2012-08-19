@@ -1,0 +1,6 @@
+kind=defined
+names=on_charref_hex
+visibility=public
+
+--- on_charref_hex(code)
+

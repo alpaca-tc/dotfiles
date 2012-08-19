@@ -1,0 +1,7 @@
+kind=defined
+names=wiredump_dev,wiredump_dev=
+visibility=public
+
+--- wiredump_dev
+--- wiredump_dev=(value)
+

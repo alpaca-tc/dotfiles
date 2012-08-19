@@ -1,0 +1,6 @@
+kind=defined
+names=class2qname
+visibility=public
+
+--- class2qname(klass)
+

@@ -1,0 +1,15 @@
+kind=defined
+names=typealias
+visibility=public
+
+--- typealias(alias, type, enc, dec, struct_enc, struct_dec)
+
+型定義の追加を行う。
+
+インスタンス変数 @TYDEFS の先頭に
+
+  [alias, type,
+   enc, dec, struct_end, struct_dec]
+
+の組を追加する。
+

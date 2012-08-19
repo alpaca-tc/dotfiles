@@ -1,0 +1,38 @@
+kind=defined
+names=store
+visibility=public
+
+--- store(set, attr, flags) -> [Net::IMAP::FetchData] | nil
+STORE コマンドを送り、メールボックス内のメッセージを
+更新します。
+
+set で更新するメッセージを指定します。
+これには sequence number、sequence number の配列、もしくは
+[[c:Range]] オブジェクトを渡します。
+
+[[m:Net::IMAP#select]] で指定したメールボックスを対象とします。
+
+attr で何をどのように変化させるかを指定します。
+以下を指定することができます。
+  * "FLAGS"
+  * "+FLAGS"
+  * "-FLAGS"
+それぞれメッセージのフラグの置き換え、追加、削除を意味します。
+詳しくは [[RFC:2060]] の 6.4.6 を参考にしてください。
+
+flags には シンボルの配列で置き換え、追加もしくは削除される
+フラグを指定します。
+
+返り値は更新された内容を [[c:Net::IMAP::FetchData]] オブジェクトの
+配列で返します。
+
+例:
+
+  p imap.store(6..8, "+FLAGS", [:Deleted])
+  #=> [#<Net::IMAP::FetchData seqno=6, attr={"FLAGS"=>[:Seen, :Deleted]}>, #<Net::IMAP::FetchData seqno=7, attr={"FLAGS"=>[:Seen, :Deleted]}>, #<Net::IMAP::FetchData seqno=8, attr={"FLAGS"=>[:Seen, :Deleted]}>]
+
+@param set 更新するメッセージのsequence number
+@param attr 更新方式(文字列)
+@param flags 更新内容([[c:Symbol]] の配列)
+@see [[m:Net::IMAP#uid_store]], [[m:Net::IMAP#fetch]]
+

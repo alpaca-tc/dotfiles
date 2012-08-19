@@ -1,0 +1,6 @@
+kind=defined
+names=parse_error
+visibility=public
+
+--- parse_error(msg)
+

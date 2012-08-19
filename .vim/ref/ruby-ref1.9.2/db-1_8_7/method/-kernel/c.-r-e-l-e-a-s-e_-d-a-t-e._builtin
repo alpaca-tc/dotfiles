@@ -1,0 +1,10 @@
+kind=defined
+names=RELEASE_DATE
+visibility=public
+
+--- RELEASE_DATE -> String
+
+非推奨です。 [[m:Kernel::RUBY_RELEASE_DATE]] の古い名前です。
+
+この定数は過去との互換性のために提供されています。 RUBY_RELEASE_DATE を使ってください。
+

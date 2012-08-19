@@ -1,0 +1,6 @@
+kind=defined
+names=element_basetype
+visibility=private 
+
+--- element_basetype(ele)
+

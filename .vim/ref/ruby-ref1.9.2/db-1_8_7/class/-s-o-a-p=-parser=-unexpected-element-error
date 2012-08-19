@@ -1,0 +1,7 @@
+superclass=SOAP=Parser=ParseError
+type=class
+library=soap.parser
+extended=
+included=
+
+

@@ -1,0 +1,8 @@
+kind=defined
+names=run_tests
+visibility=public
+
+--- run_tests -> Integer
+
+テストの件数を返します。
+

@@ -1,0 +1,6 @@
+kind=defined
+names=scanner_kcode=
+visibility=public
+
+--- scanner_kcode=(charset)
+

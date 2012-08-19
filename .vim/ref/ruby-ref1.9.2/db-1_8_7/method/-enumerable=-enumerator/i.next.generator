@@ -1,0 +1,13 @@
+kind=added
+names=next
+visibility=public
+
+--- next -> object
+
+現在の位置にある要素を返し、位置を一つ進めます。
+
+@raise EOFError 次の要素が無い場合に発生します。
+
+@see [[m:Generator#next]]
+
+

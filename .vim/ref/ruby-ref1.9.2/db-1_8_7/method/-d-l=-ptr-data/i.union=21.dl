@@ -1,0 +1,13 @@
+kind=defined
+names=union!
+visibility=public
+
+--- union!(type, *members)    -> nil
+
+共用体のメンバにメソッド [[m:DL::PtrData#[] ]] でアクセスできるようにします。
+C 言語における共用体のポインタへのキャストと同じです。
+
+@param type 共用体の型を文字列で指定します。型指定子は [[c:DL]] を参照して下さい。
+
+@param members メンバの名前を文字列かシンボルで指定します。
+

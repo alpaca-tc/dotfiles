@@ -1,0 +1,6 @@
+kind=defined
+names=find_mapped_soap_class
+visibility=public
+
+--- find_mapped_soap_class(target_obj_class)
+

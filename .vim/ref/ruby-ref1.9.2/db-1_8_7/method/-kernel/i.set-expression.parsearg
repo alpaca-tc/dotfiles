@@ -1,0 +1,13 @@
+kind=added
+names=setExpression
+visibility=private 
+
+--- setExpression(ex, opt, c) -> String
+
+内部で利用します。
+
+@param ex 式を文字列で指定します。
+
+@param opt オプション文字列です。
+
+@param c オプションが出てくる位置です。

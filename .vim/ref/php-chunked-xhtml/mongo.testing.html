@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>ドライバのテストの実行</title>
+
+ </head>
+ <body><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="mongo.trouble.html">トラブルシューティング</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="mongo.core.html">コアクラス群</a></div>
+ <div class="up"><a href="mongo.manual.html">マニュアル</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div><hr /><div id="mongo.testing" class="section">
+ <h2 class="title">ドライバのテストの実行</h2>
+
+ <p class="para">
+  PECL パッケージにはテストが含まれていませんが、
+  <a href="http://github.com/mongodb/mongo-php-driver" class="link external">&raquo;&nbsp;Github</a> で公開しています。
+  テストには二種類あります。PHPUnit のテストと C のテストです。
+ </p>
+
+ <div class="section">
+  <h2 class="title">PHPUnit のテスト</h2>
+  <p class="para">
+   テストを実行するには、ドライバを Github からダウンロードしなければなりません
+   (テストは <em>tests/</em> ディレクトリにあります)。
+   さらに <a href="www.phpunit.de/manual/2.3/en/installation.html" class="link external">&raquo;&nbsp;PHPUnit</a> も必要です。
+   PHPUnit は PEAR でインストールできます (いくつか要件があるので、
+   インストール手順を確認しなければなりません)。
+  </p>
+  <p class="para">
+   テストの中には、警告やエラーが発生することを想定しているものもあります。
+   すべてのテストを成功させるには、php.ini の <em>error_reporting</em>
+   を <em>E_STRICT | E_ALL</em> に設定しなければなりません。
+   そうしないと、発生するはずの警告やエラーが出ないせいでいくつかのテストが失敗します。
+  </p>
+  <p class="para">
+   テストを実行する際には、MongoDB サーバをローカルのポート 27017 で動かしておきましょう。
+   バグ報告を出す前に、最新の開発版の MongoDB でテストを実行してみてください。
+   テストの中には、まだ安定版のリリースには含まれていない機能のテストが含まれていることがよくあります。
+  </p>
+  <p class="para">
+   テストスイートで使っているデータベースは &quot;phpunit&quot; です。
+   もし自分のアプリケーションで &quot;phpunit&quot; という名前のデータベースを使っている場合は、
+   MongoDB が別のデータディレクトリを指すように設定してからテストを実行してください。
+  </p>
+  <p class="para">
+   Github からダウンロードしたドライバのソースのメインディレクトリにいることを確認し、次のコマンドを実行します。
+  </p>
+  <div class="example-contents">
+<div class="cdata"><pre>
+
+$ phpunit tests/MongoSuite.php
+
+</pre></div>
+ </div>
+
+ </div>
+
+ <div class="section">
+  <h2 class="title">C のテスト</h2>
+  <p class="para">
+   C のテストのほとんどは、PHP 側に公開していない内部関数をチェックするためのものです。
+   これらのテストを実行したければ、PHP のコンパイル時に
+   <em>--enable-embed</em> フラグを指定しなければなりません。
+   それから、<var class="filename">tests</var> ディレクトリに移動して <em>make</em>
+   を実行します。これは、<em>unit</em> というバイナリを作ります。
+   この <em>unit</em> を実行すればテストが動きます。
+   このテストでは、データベースが稼働している必要はありません。
+  </p>
+
+  <p class="para">
+   テストが通ると &quot;.&quot; と表示します。テストが失敗すると、警告を表示してテストが止まります。
+   表示された内容をレポートしてください。
+  </p>
+
+  <p class="para">
+   <em>make</em> コマンドが PHP の組み込みライブラリ (libphp5.so)
+   やヘッダファイルを見つけられない場合は、<em>PHP_PATH</em>
+   変数を指定します。
+  </p>
+
+  <p class="para">
+   <em>make clean</em> を実行すると、すべてのテスト用オブジェクトを削除します。
+  </p>
+
+  <p class="para">
+   <var class="filename">valgrind</var> とともにテストを実行すると、
+   無効なメモリアクセスエラーは決して発生せず、最後に
+   &quot;no leaks are possible&quot; と表示されるはずです。
+  </p>
+ </div>
+
+ <div class="section">
+  <h2 class="title">エラーのレポート</h2>
+  <p class="para">
+   テストに失敗したりエラーが発生したりした場合は、
+   <a href="http://jira.mongodb.org/browse/PHP" class="link external">&raquo;&nbsp;バグトラッカー</a>へのレポートをお願いします。
+   いくつかのテストがスキップされることがありますが、
+   これは通常の動作であり無視してもかまいません。
+  </p>
+  <p class="para">
+   新しいテストの提供も歓迎します! あらゆる形式の、あらゆる機能に対する新しいテストの提供を楽しみに待っています。
+  </p>
+ </div>
+</div><hr /><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="mongo.trouble.html">トラブルシューティング</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="mongo.core.html">コアクラス群</a></div>
+ <div class="up"><a href="mongo.manual.html">マニュアル</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div></body></html>

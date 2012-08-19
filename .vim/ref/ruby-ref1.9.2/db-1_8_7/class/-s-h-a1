@@ -1,0 +1,8 @@
+superclass=Digest=SHA1
+type=class
+library=sha1
+extended=
+included=
+
+SHA1 ハッシュを生成するためのライブラリです。
+[[c:Digest::SHA1]] を使ってください。

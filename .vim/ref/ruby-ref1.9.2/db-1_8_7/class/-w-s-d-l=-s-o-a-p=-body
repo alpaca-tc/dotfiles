@@ -1,0 +1,7 @@
+superclass=WSDL=Info
+type=class
+library=wsdl.soap.body
+extended=
+included=
+
+

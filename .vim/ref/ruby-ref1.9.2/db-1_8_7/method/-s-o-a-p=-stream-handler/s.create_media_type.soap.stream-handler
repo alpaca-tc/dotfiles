@@ -1,0 +1,6 @@
+kind=defined
+names=create_media_type
+visibility=public
+
+--- create_media_type(charset)
+

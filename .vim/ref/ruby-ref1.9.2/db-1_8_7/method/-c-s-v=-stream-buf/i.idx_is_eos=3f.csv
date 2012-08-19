@@ -1,0 +1,10 @@
+kind=defined
+names=idx_is_eos?
+visibility=private 
+
+--- idx_is_eos?(idx)
+引数idxで指定した位置がストリームの終端かどうかを判定します。
+
+@param idx 判定を行う位置インデックス
+
+

@@ -1,0 +1,15 @@
+kind=defined
+names=flunk
+visibility=public
+
+--- flunk(message = "Flunked")    -> ()
+
+常に失敗します。
+
+ちゃんとしたテストを書くまでの間、テストを失敗させておきたい場合などに使います。
+
+@param message assert が失敗した時に表示するメッセージを文字列で指定し
+               ます。指定しなかった場合は表示しません。
+
+@raise Test::Unit::AssertionFailedError 常に発生します。
+

@@ -1,0 +1,12 @@
+kind=defined
+names=chdir
+visibility=public
+
+--- chdir{|path| ... } -> object
+このメソッドは obsolete です。
+代わりに [[m:Dir.chdir]] を使ってください。
+
+Dir.chdir(self.to_s, &block) と同じです。
+
+@see [[m:Dir.chdir]]
+

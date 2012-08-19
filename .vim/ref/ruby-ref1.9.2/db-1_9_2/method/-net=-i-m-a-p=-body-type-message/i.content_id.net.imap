@@ -1,0 +1,9 @@
+kind=defined
+names=content_id
+visibility=public
+
+--- content_id -> String | nil
+Content-ID の値を文字列で返します。
+
+@see [[RFC:2045]]
+

@@ -1,0 +1,9 @@
+kind=added
+names=conj,conjugate
+visibility=public
+
+--- conj -> self
+--- conjugate -> self
+複素数として見た場合の共役を返します。
+つまり、self が実数の場合はselfを返します。
+

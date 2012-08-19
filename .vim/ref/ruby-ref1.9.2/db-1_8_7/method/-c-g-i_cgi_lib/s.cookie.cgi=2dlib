@@ -1,0 +1,10 @@
+kind=defined
+names=cookie
+visibility=public
+
+--- cookie(options) -> String
+
+生のクッキー文字列を作成します。
+
+@param options ハッシュを指定します。
+

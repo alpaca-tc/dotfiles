@@ -1,0 +1,7 @@
+superclass=Object
+type=class
+library=soap.mapping.registry
+extended=
+included=SOAP=Marshallable
+
+

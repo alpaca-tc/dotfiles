@@ -1,0 +1,6 @@
+kind=defined
+names=dump_method_signature
+visibility=public
+
+--- dump_method_signature(operation)
+

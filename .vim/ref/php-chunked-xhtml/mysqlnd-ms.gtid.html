@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Global transaction IDs</title>
+
+ </head>
+ <body><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="mysqlnd-ms.qos-consistency.html">Service level and consistency</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="mysqlnd-ms.supportedclusters.html">Supported clusters</a></div>
+ <div class="up"><a href="mysqlnd-ms.concepts.html">Concepts</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div><hr /><div id="mysqlnd-ms.gtid" class="section">
+  <h2 class="title">Global transaction IDs</h2>
+  <blockquote class="note"><p><strong class="note">注意</strong>: 
+   <strong>Version requirement</strong><br />
+   <p class="para">
+    Client side global transaction ID injection exists as of mysqlnd_ms version 1.2.0-alpha.
+    Transaction boundaries are detected by monitoring API calls. This is possible
+    as of PHP 5.4.0. Please, see also <a href="mysqlnd-ms.transaction.html" class="link">Transaction handling</a>.
+   </p>
+  </p></blockquote>
+  <p class="para">
+   PECL/mysqlnd_ms can do client-side transparent global transaction ID injection.
+   In its most basic form, a global transaction identifier is a counter which is
+   incremented for every transaction executed on the master. The counter is held
+   in a table on the master. Slaves replicate the counter table.
+  </p>
+  <p class="para">
+   In case of a master failure a database administrator can easily identify the
+   most recent slave for promiting it as a new master. The most recent slave has
+   the highest transaction identifier.
+  </p>
+  <p class="para">
+   Application developers can ask the plugin for the global transaction identifier
+   (GTID) for their last successful write operation. The plugin will return
+   an identifier that refers to an transaction no older than that of the clients last
+   write operation. Then, the GTID can be passed as a parameter
+   to the quality of service (QoS) filter as an option for session consistency.
+   Session consistency ensures read your writes. The filter ensures that all
+   reads are either directed to a master or a slave which has replicated the write
+   referenced by the GTID.
+  </p>
+  <p class="para">
+   <em class="emphasis">When injection is done</em>
+  </p>
+  <p class="para">
+   The plugin transparently maintains the GTID table on the master.
+   In autocommit mode the plugin injects an <em>UPDATE</em> statement
+   before executing the users statement for every master use. In manual
+   transaction mode, the injection is done before the application calls
+   <em>commit()</em> to close a transaction. The configuration option
+   <em>report_error</em> of the GTID section in the plugins configuration
+   file is used to control whether a failed injection shall abort the current
+   operation or be ignored silently (default).
+  </p>
+  <p class="para">
+   Please note, the
+   PHP version requirements for
+   <a href="mysqlnd-ms.transaction.html" class="link">transaction boundary monitoring</a>
+   and their limits.
+  </p>
+  <p class="para">
+   <em class="emphasis">Limitations</em>
+  </p>
+  <p class="para">
+   Client-side global transaction ID injection has shortcomings. The potential
+   issues are not specific to PECL/mysqlnd_ms but are rather of general nature.
+   <ul class="itemizedlist">
+    <li class="listitem">
+     <span class="simpara">
+      The GTID can have holes. Only PHP clients using the plugin will
+      maintain the table. Other clients will not.
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      Client-side transaction boundary detection is based on API calls only.
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      Client-side transaction boundary detection does not take implicit
+      commit into account. Some MySQL SQL statements cause an implicit
+      commit and cannot be rolled back.
+     </span>
+    </li>
+   </ul>
+  </p>
+  <blockquote class="note"><p><strong class="note">注意</strong>: 
+   <strong>Server-side global transaction ID support</strong><br />
+   <p class="para">
+    The plugin is prepared to support MySQL servers which implement global
+    transaction ID support and which maintain a global transaction ID themselves.
+    Client-side injection would not be necessary with such servers. However,
+    without any server supporting it yet and, in heterogenous environments with
+    old MySQL servers, client-side injection is a valuable, although not perfect,
+    option.
+   </p>
+  </p></blockquote>
+ </div><hr /><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="mysqlnd-ms.qos-consistency.html">Service level and consistency</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="mysqlnd-ms.supportedclusters.html">Supported clusters</a></div>
+ <div class="up"><a href="mysqlnd-ms.concepts.html">Concepts</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div></body></html>

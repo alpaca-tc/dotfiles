@@ -1,0 +1,20 @@
+superclass=
+type=module
+library=dl.import
+extended=
+included=
+
+DL モジュールの各クラスの便利なラッパーです。
+
+Importable モジュールは、モジュールから extend を呼んで使います。include ではありません。
+クラスやオブジェクトから extend を呼んで使うことはできません。
+
+  require "dl/import"
+  
+  module M
+    extend DL::Importable
+    dlload "libc.so.6"
+    extern "int strlen(char*)"
+  end
+  
+  p M.strlen("abc") #=> 3

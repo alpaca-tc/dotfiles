@@ -1,0 +1,108 @@
+"-------------------------------------------------------------------------------
+" 表示 Apperance
+"-------------------------------------------------------------------------------
+set showmatch         " 括弧の対応をハイライト
+set number            " 行番号表示
+set list              " 不可視文字表示
+"set listchars=tab:,trail:,extends:,precedes:  " 不可視文字の表示形式
+set listchars=tab:>.,trail:_,extends:>,precedes:< " 不可視文字の表示形式
+"set display=uhex      " 印字不可能文字を16進数で表示
+set t_Co=256          " 確かカラーコード
+set lazyredraw        " コマンド実行中は再描画しない
+set ttyfast           " 高速ターミナル接続を行う
+" set scrolloff=999     " 常にカーソルを真ん中に
+syntax on
+
+" 全角スペースの表示
+highlight ZenkakuSpace cterm=underline ctermfg=lightblue guibg=darkgray
+match ZenkakuSpace /　/
+"au BufRead,BufNew * match JpSpace /　/
+
+" カーソル行をハイライト
+set cursorline
+
+" カレントウィンドウにのみ罫線を引く
+augroup cch
+  autocmd! cch
+  autocmd WinLeave * set nocursorline
+  autocmd WinEnter,BufRead * set cursorline
+augroup END
+
+"折り畳み
+set foldmethod=marker "{{ { という感じの文字が入る
+" set foldmethod=manual "手動
+"set foldmethod=indent "indent
+
+"画面サイズの変更
+"現在のウィンドウ高を減らす
+"nnoremap c <C-W>-
+"現在のウィンドウ幅を減らす
+"nnoremap C <C-W>+
+
+"現在のウィンドウ幅を増やす
+"nnoremap b <C-W><
+"現在のウィンドウ幅を減らす
+"nnoremap B <C-W>>
+
+" 設定を上書きしない為に、最後に書く
+" colorscheme darkblue
+" colorscheme pyte
+" colorscheme solarized
+colorscheme molokai
+
+"****************************************
+"titanium用のsyntax
+"****************************************
+function! TitaniumSyn()
+  hi def link titanium Define
+  syn match titanium '\s*\(Ti\|Titanium\)\.[a-zA-Z0-9_\.]\+'
+endfunction
+au FileType javascript,javascript.titanium call TitaniumSyn()
+
+"****************************************
+"zend用のsyntax
+"****************************************
+function! ZendSyn()
+  hi def link zend Define
+"  syn match zend '\s*Zend_[a-zA-Z0-9_\.]\+'
+  syn match zend '\s*Zend'
+endfunction
+au FileType php call ZendSyn()
+
+"****************************************
+" コマンドラインの色を修正する
+"****************************************
+function! RefrashCmdColor()
+  hi Pmenu ctermbg=0
+  hi PmenuSel ctermbg=4
+  hi PmenuSbar ctermbg=2
+  hi PmenuThumb ctermfg=3
+endfunction
+au FileType * call RefrashCmdColor()
+
+
+"****************************************
+" Rspec
+"****************************************
+function! RSpecSyntax()
+  hi def link rubyRailsTestMethod             Function
+  syn keyword rubyRailsTestMethod describe context it its specify shared_examples_for it_should_behave_like before after around subject fixtures controller_name helper_name
+  syn match rubyRailsTestMethod '\<let\>!\='
+  syn keyword rubyRailsTestMethod violated pending expect double mock mock_model stub_model
+  syn match rubyRailsTestMethod '\.\@<!\<stub\>!\@!'
+endfunction
+autocmd BufReadPost *_spec.rb call RSpecSyntax()
+
+"****************************************
+" tmux
+"****************************************
+" augroup filetypedetect
+"   au BufNewFile,BufRead  *.tmux.conf setl ft = tmux
+" augroup END
+"
+
+"****************************************
+" less
+"****************************************
+au BufNewFile,BufRead *.less setf less
+

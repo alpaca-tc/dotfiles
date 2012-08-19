@@ -1,0 +1,10 @@
+kind=defined
+names==~
+visibility=public
+
+--- =~(str) -> bool
+
+str が内部で保持している正規表現の両方にマッチすれば真を返します。
+
+@param str 文字列。
+

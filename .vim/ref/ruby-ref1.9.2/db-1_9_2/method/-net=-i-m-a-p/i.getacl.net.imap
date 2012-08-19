@@ -1,0 +1,19 @@
+kind=defined
+names=getacl
+visibility=public
+
+--- getacl(mailbox) -> [Net::IMAP::MailboxACLItem]
+GETACL コマンドを送り、メールボックスの 
+ACL(Access Control List) を取得します。
+
+[[m:Net::IMAP#getacl]] で指定したメールボックスに
+対し何らかの権限を持つ各ユーザに対して
+[[c:Net::IMAP::MailboxACLItem]] オブジェクトが
+作られ、その配列が返されます。
+
+GETACL コマンドは [[RFC:2086]] で定義されています。
+詳しくはそちらを参照してください。
+
+@param mailbox メールボックス名(文字列)
+@see [[c:Net::IMAP::MailboxACLItem]]
+

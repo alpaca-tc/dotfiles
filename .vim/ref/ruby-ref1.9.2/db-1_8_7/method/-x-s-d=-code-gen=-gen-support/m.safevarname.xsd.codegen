@@ -1,0 +1,6 @@
+kind=defined
+names=safevarname
+visibility=public
+
+--- safevarname(name)
+

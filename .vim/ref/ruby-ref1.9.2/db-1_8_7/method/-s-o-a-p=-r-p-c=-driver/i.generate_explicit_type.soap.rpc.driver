@@ -1,0 +1,7 @@
+kind=defined
+names=generate_explicit_type,generate_explicit_type=
+visibility=public
+
+--- generate_explicit_type
+--- generate_explicit_type=(value)
+

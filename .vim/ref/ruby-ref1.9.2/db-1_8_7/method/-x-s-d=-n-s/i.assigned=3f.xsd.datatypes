@@ -1,0 +1,6 @@
+kind=defined
+names=assigned?
+visibility=public
+
+--- assigned?(ns)
+

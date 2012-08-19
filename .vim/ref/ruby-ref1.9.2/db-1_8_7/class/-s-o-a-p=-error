@@ -1,0 +1,7 @@
+superclass=StandardError
+type=class
+library=soap.soap
+extended=
+included=
+
+

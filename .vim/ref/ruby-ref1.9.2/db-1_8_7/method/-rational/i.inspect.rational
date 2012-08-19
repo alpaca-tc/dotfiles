@@ -1,0 +1,25 @@
+kind=defined
+names=inspect
+visibility=public
+
+--- inspect -> String
+
+自身を"Rational(分子, 分母)" 形式の文字列にして返します。
+
+@return 文字列を返します。
+
+例:
+
+  Rational(5, 8).inspect  # => "Rational(5, 8)"
+  Rational(2).inspect     # => "Rational(2, 1)"
+  Rational(-8, 6).inspect # => "Rational(-4, 3)"
+
+1.9系とは結果が異なる事に注意してください。
+
+  # 1.9.1の場合
+  Rational(5, 8).inspect  # => "(5/8)"
+  Rational(2).inspect     # => "(2/1)"
+  Rational(-8, 6).inspect # => "(-4/3)"
+
+@see [[m:Rational#to_s]]
+

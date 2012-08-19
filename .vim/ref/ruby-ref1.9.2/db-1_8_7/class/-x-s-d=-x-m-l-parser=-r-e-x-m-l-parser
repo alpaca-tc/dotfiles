@@ -1,0 +1,10 @@
+superclass=XSD=XMLParser=Parser
+type=class
+library=xsd.xmlparser
+extended=
+included=
+
+require 'rexml/streamlistener'
+require 'rexml/document'
+
+include REXML::StreamListener

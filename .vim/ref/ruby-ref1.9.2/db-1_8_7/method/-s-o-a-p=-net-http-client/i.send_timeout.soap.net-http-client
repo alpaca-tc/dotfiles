@@ -1,0 +1,7 @@
+kind=defined
+names=send_timeout,send_timeout=
+visibility=public
+
+--- send_timeout
+--- send_timeout=(value)
+

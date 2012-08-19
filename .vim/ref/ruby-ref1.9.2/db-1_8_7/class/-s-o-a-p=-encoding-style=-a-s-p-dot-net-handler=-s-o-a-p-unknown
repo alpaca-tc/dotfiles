@@ -1,0 +1,7 @@
+superclass=SOAP=EncodingStyle=ASPDotNetHandler=SOAPTemporalObject
+type=class
+library=soap.encodingstyle.aspDotNetHandler
+extended=
+included=
+
+

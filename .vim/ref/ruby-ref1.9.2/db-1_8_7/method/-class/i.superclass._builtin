@@ -1,0 +1,10 @@
+kind=defined
+names=superclass
+visibility=public
+
+--- superclass    -> Class | nil
+
+自身のスーパークラスを返します。
+
+ただし [[c:Object]].superclass は nil を返します。
+

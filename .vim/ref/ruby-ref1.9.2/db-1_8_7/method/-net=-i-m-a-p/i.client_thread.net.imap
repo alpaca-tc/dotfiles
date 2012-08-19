@@ -1,0 +1,8 @@
+kind=defined
+names=client_thread
+visibility=public
+
+--- client_thread -> Thread
+例外が送出されるスレッドを返します。
+
+

@@ -1,0 +1,9 @@
+kind=defined
+names=new
+visibility=public
+
+--- new(ptr, names, ty, len, enc, dec)
+
+DL::PtrData オブジェクト ptr の各メンバへアクセスするためのメソッドを
+動的に定義する。Struct, Union のインスタンスがこれらの情報を保持する。
+

@@ -1,0 +1,10 @@
+kind=defined
+names=to_s
+visibility=public
+
+--- to_s    -> String
+
+[[m:Array#join]]([[m:$,]]) と同じです。
+
+  [1, 2, 3, 4].to_s    # => "1234"
+

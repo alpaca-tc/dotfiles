@@ -1,0 +1,3 @@
+.getenv	SOAP::Env.getenv
+:HTTP_PROXY	SOAP::Env::HTTP_PROXY
+:NO_PROXY	SOAP::Env::NO_PROXY

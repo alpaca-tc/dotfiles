@@ -1,0 +1,19 @@
+kind=defined
+names=coerce
+visibility=public
+
+--- coerce(other) -> Array
+自分自身とotherのペアの配列を生成し、生成した配列を返します。
+
+otherが [[c:Complex]] のオブジェクトではないときは [[c:Complex]] オブジェクト化したものが配列の要素となります。
+
+@param other 配列の要素となるオブジェクト
+
+例:
+
+  z1 = Complex.new(1, 2)
+  z2 = Complex.new(3, 4)
+
+  p z1.coerce(5)  #=>  [Complex(5, 0), Complex(1, 2)]
+  p z1.coerce(z2) #=>  [Complex(3, 4), Complex(1, 2)]
+

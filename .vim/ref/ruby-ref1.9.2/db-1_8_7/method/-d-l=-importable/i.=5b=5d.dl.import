@@ -1,0 +1,14 @@
+kind=defined
+names=[]
+visibility=public
+
+--- [](func)    -> nil |  DL::Symbol | DL::PtrData
+
+[[m:DL::Importable#extern]]、[[m:DL::Importable#import]] または
+[[m:DL::Importable#callback]] によって定義した、
+C レベルの関数や変数名 func に対応する [[c:DL::Symbol]] オブジェクトを返します。
+
+定義されていない場合は、nil を返します。
+
+@param func 取得したいシンボルを文字列で与えます。
+

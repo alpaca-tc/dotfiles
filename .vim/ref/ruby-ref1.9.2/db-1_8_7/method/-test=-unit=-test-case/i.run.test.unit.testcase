@@ -1,0 +1,12 @@
+kind=defined
+names=run
+visibility=public
+
+--- run(result) {|STARTED, name| ...}
+
+このメソッドをユーザが直接呼ぶことはありません。
+
+自身に対応したテストメソッドを実行して failures や errors を集計します。
+
+@param result [[c:Test::Unit::TestResult]] オブジェクトを与えます。
+

@@ -1,0 +1,84 @@
+# pythonbrew
+alias pb="pythonbrew"
+
+# ls
+alias ls="ls -G"
+alias la="ls -a"
+alias lf="ls -F"
+alias ll="ls -l"
+
+# ディレクトリ登録
+alias cdh="cd /Applications/XAMPP/htdocs/"
+alias cdd="cd ~/Dropbox/test/"
+alias cdd="cd cd ~/Documents/Titanium\ Studio\ Workspace/"
+
+# すぐに編修出来る
+alias vv="vim ~/.vim/config/.vimrc"
+alias vp="vim ~/.vim/config/.vimrc.plugins"
+alias vvp="vim ~/.vim/config/.vimrc.plugins_setting"
+alias vz="vim ~/.zsh/.zshrc"
+alias vza="vim ~/.zsh/.zshrc.alias"
+alias vzo="vim ~/.zsh/.zshrc.osx"
+alias vzp="vim ~/.zsh/.zshrc.prompt"
+alias vzb="vim ~/.zsh/.zshrc.basic"
+alias sz="source ~/.zshrc"
+
+# process
+alias pk='pkill -f'
+alias diff='colordiff'
+
+# grep
+alias 'grep'='egrep --color=auto -RUIn'
+# alias 'grep'='egrep --color=auto -UIn'
+
+# tmux
+alias tmux='SHELL=/bin/zsh tmux -f ~/.tmux.conf'
+alias tm='tmux'
+alias tmu='tmux'
+alias tma='tmux attach'
+alias tml='tmux list-window'
+
+# git
+alias g='git'
+alias gA='git add -A'
+alias ga='git add'
+alias gb='git branch'
+alias gc='git checkout'
+alias gcp='git cherry-pick'
+alias gd='git diff'
+alias gdn='git diff --name-only'
+alias gf='git fetch'
+alias gg='git grep'
+alias gl='git log'
+alias gla='git log --abbrev-commit'
+alias glo='git log --oneline'
+alias glp='git log -p'
+alias glr='git log --relative-date'
+alias gm='git commit'
+alias grl='git reflog'
+alias gr='git reset'
+alias gs='git status'
+alias gst='git stash'
+alias gt='git tr'
+alias gv='git revert'
+
+# アプリケーションの別パス
+alias rm='gmv -f --backup=numbered --target-directory ~/.Trash/'
+# alias vim='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/mvim'
+alias vim='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
+alias v='vim'
+alias vi='vim'
+alias rb='ruby'
+alias ctags='/Applications/MacVim.app/Contents/MacOS/ctags "$@"'
+alias rtags='/Applications/MacVim.app/Contents/MacOS/ctags -R --langmap=RUBY:.rb ~/.rvm/rubies/ruby-1.9.3-p194 ~/.rvm/gems/ruby-1.9.3-p194/gems -f ~/tags'
+alias vlc='/Applications/VLC.app/Contents/MacOS/VLC --intf=rc'
+alias redis='redis-server /usr/local/etc/redis.conf'
+
+# rals
+alias r='rails'
+alias rg='rails generate'
+alias rgc='rails generate controller'
+alias rgm='rails generate model'
+alias rgs='rails generate scaffold'
+
+

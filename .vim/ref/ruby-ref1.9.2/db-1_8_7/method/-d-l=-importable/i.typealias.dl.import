@@ -1,0 +1,10 @@
+kind=defined
+names=typealias
+visibility=public
+
+--- typealias(newtype, oldtype)    -> ()
+
+newtype 型を oldtype 型のエイリアスとして定義する。
+newtype で与えた型は extern や callback メソッド
+のプロトタイプを与えるときに利用します。
+

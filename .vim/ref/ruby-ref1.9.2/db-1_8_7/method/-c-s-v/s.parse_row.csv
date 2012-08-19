@@ -1,0 +1,55 @@
+kind=defined
+names=parse_row
+visibility=public
+
+--- parse_row(src, index, out_dev, fs = nil, rs = nil) -> Array
+
+CSV形式の文字列をパースしてCSV1行(row)分のデータを配列に変換し out_dev に出力します。
+
+@param src パースする文字列(CSV形式)
+@param index パース開始位置
+@param out_dev 変換したデータの出力先。
+@param fs フィールドセパレータの指定。
+          nil (デフォルト) で ',' をセパレータとします。
+@param rs 行区切り文字の指定。nil (デフォルト) で CrLf / Lf。
+          Cr を行区切りとしたい場合は ?\r を渡します。
+@return  変換したArrayのサイズと変換をした文字列の位置をArrayとして返します。
+
+===== 注意
+
+パース時に""(空文字)と値なしを区別します。
+例えば、a, "", , b の行をパースした場合には ["a", "", nil, "b"] の配列を返します。
+
+例:
+   src = "a,b,c\n1,2\nA,B,C,D"
+   i = 0
+
+   x = [] #結果を格納する配列
+   begin
+     parsed = []
+     parsed_cells, i = CSV.parse_row(src, i, parsed)
+     x.push(parsed)
+   end while parsed_cells > 0
+
+   x.each{ |row|
+     p '-----'
+     row.each{ |cell|
+       p cell
+     }
+   }
+
+実行結果:
+  a
+  b
+  c
+  -----
+  1
+  2
+  -----
+  A
+  B
+  C
+  D
+
+
+

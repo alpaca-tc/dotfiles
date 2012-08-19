@@ -1,0 +1,200 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>新しい SimpleXMLElement オブジェクトを作成する</title>
+
+ </head>
+ <body><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="simplexmlelement.children.html">SimpleXMLElement::children</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="simplexmlelement.count.html">SimpleXMLElement::count</a></div>
+ <div class="up"><a href="class.simplexmlelement.html">SimpleXMLElement</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div><hr /><div id="simplexmlelement.construct" class="refentry">
+ <div class="refnamediv">
+  <h1 class="refname">SimpleXMLElement::__construct</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.0.1)</p><p class="refpurpose"><span class="refname">SimpleXMLElement::__construct</span> &mdash; <span class="dc-title">
+   新しい SimpleXMLElement オブジェクトを作成する
+  </span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-simplexmlelement.construct-description">
+  <h3 class="title">説明</h3>
+  <div class="constructorsynopsis dc-description">
+   <span class="modifier">final</span> <span class="modifier">public</span>  <span class="methodname"><strong>SimpleXMLElement::__construct()</strong></span>
+    ( <span class="methodparam"><span class="type">string</span> <code class="parameter">$data</code></span>
+   [, <span class="methodparam"><span class="type">int</span> <code class="parameter">$options</code><span class="initializer"> = 0</span></span>
+   [, <span class="methodparam"><span class="type">bool</span> <code class="parameter">$data_is_url</code><span class="initializer"> = false</span></span>
+   [, <span class="methodparam"><span class="type">string</span> <code class="parameter">$ns</code><span class="initializer"> = &quot;&quot;</span></span>
+   [, <span class="methodparam"><span class="type">bool</span> <code class="parameter">$is_prefix</code><span class="initializer"> = false</span></span>
+  ]]]] )</div>
+
+  <p class="para rdfs-comment">
+   新しい <a href="class.simplexmlelement.html" class="classname">SimpleXMLElement</a> オブジェクトを作成します。
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-simplexmlelement.construct-parameters">
+  <h3 class="title">パラメータ</h3>
+  <p class="para">
+   <dl>
+
+    <dt>
+
+     <span class="term"><em><code class="parameter">data</code></em></span>
+     <dd>
+
+      <p class="para">
+       整形式 XML 文字列。
+       もし <em><code class="parameter">data_is_url</code></em> が <strong><code>TRUE</code></strong>
+       の場合には、XML ドキュメントへのパスあるいは URL。
+      </p>
+     </dd>
+
+    </dt>
+
+    <dt>
+
+     <span class="term"><em><code class="parameter">options</code></em></span>
+     <dd>
+
+      <p class="para">
+       オプションで、<a href="libxml.constants.html" class="link">追加の
+       Libxml パラメータ</a>を指定するために使用します。
+      </p>
+     </dd>
+
+    </dt>
+
+    <dt>
+
+     <span class="term"><em><code class="parameter">data_is_url</code></em></span>
+     <dd>
+
+      <p class="para">
+       デフォルトでは <em><code class="parameter">data_is_url</code></em> は <strong><code>FALSE</code></strong> です。
+       <em><code class="parameter">data</code></em> が、文字列データではなく
+       XML ドキュメントへのパスあるいは URL である場合に
+       <strong><code>TRUE</code></strong> を使用します。
+      </p>
+     </dd>
+
+    </dt>
+
+    <dt>
+
+     <span class="term"><em><code class="parameter">ns</code></em></span>
+     <dd>
+
+      <p class="para">
+       名前空間プレフィックスあるいは URI。
+      </p>
+     </dd>
+
+    </dt>
+
+    <dt>
+
+     <span class="term"><em><code class="parameter">is_prefix</code></em></span>
+     <dd>
+
+      <p class="para">
+       <em><code class="parameter">ns</code></em> がプレフィックスの場合は <strong><code>TRUE</code></strong>、
+       URI の場合は <strong><code>FALSE</code></strong>。デフォルトは <strong><code>FALSE</code></strong>。
+      </p>
+     </dd>
+
+    </dt>
+
+   </dl>
+
+  </p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-simplexmlelement.construct-returnvalues">
+  <h3 class="title">返り値</h3>
+  <p class="para">
+   <em><code class="parameter">data</code></em> を表す
+   <span class="type"><a href="class.simplexmlelement.html" class="type SimpleXMLElement">SimpleXMLElement</a></span> オブジェクトを返します。
+  </p>
+ </div>
+
+
+ <div class="refsect1 errors" id="refsect1-simplexmlelement.construct-errors">
+  <h3 class="title">エラー / 例外</h3>
+  <p class="para">
+   XML データ内でエラーが見つかるたびに <strong><code>E_WARNING</code></strong>
+   エラーメッセージが発生します。さらに、XML データのパースに失敗した場合は例外をスローします。
+  </p>
+  <div class="tip"><strong class="tip">ヒント</strong>
+   <p class="para">
+    <span class="function"><a href="function.libxml-use-internal-errors.html" class="function">libxml_use_internal_errors()</a></span> ですべての XML エラーを抑制し、
+    後から <span class="function"><a href="function.libxml-get-errors.html" class="function">libxml_get_errors()</a></span> で取得することもできます。
+   </p>
+  </div>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-simplexmlelement.construct-examples">
+  <h3 class="title">例</h3>
+  <p class="para">
+   <blockquote class="note"><p><strong class="note">注意</strong>: 
+    <p class="para">
+     この例では <em>example.php</em> をインクルードしていますが、これは
+     <a href="simplexml.examples-basic.html" class="link">基本的な使用法</a>
+     の最初のサンプルにある XML 文字列を参照しています。
+    </p>
+   </p></blockquote>
+   <div class="example" id="example-5069">
+    <p><strong>例1 SimpleXMLElement オブジェクトの作成</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /><br /></span><span style="color: #007700">include&nbsp;</span><span style="color: #DD0000">'example.php'</span><span style="color: #007700">;<br /><br /></span><span style="color: #0000BB">$sxe&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">SimpleXMLElement</span><span style="color: #007700">(</span><span style="color: #0000BB">$xmlstr</span><span style="color: #007700">);<br />echo&nbsp;</span><span style="color: #0000BB">$sxe</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">movie</span><span style="color: #007700">[</span><span style="color: #0000BB">0</span><span style="color: #007700">]-&gt;</span><span style="color: #0000BB">title</span><span style="color: #007700">;<br /><br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></div>
+    </div>
+
+    <div class="example-contents"><p>上の例の出力は以下となります。</p></div>
+    <div class="example-contents screen">
+<div class="cdata"><pre>
+PHP: Behind the Parser
+</pre></div>
+    </div>
+   </div>
+  </p>
+  <p class="para">
+   <div class="example" id="example-5070">
+    <p><strong>例2 URL からの SimpleXMLElement オブジェクトの作成</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /><br />$sxe&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">SimpleXMLElement</span><span style="color: #007700">(</span><span style="color: #DD0000">'http://example.org/document.xml'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">NULL</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">TRUE</span><span style="color: #007700">);<br />echo&nbsp;</span><span style="color: #0000BB">$sxe</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">asXML</span><span style="color: #007700">();<br /><br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></div>
+    </div>
+
+   </div>
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-simplexmlelement.construct-seealso">
+  <h3 class="title">参考</h3>
+  <p class="para">
+   <ul class="simplelist">
+    <li class="member"><a href="simplexml.examples-basic.html" class="xref">基本的な SimpleXML の使用法</a></li>
+    <li class="member"><span class="function"><a href="function.simplexml-load-string.html" class="function" rel="rdfs-seeAlso">simplexml_load_string()</a> - XML 文字列をオブジェクトに代入する</span></li>
+    <li class="member"><span class="function"><a href="function.simplexml-load-file.html" class="function" rel="rdfs-seeAlso">simplexml_load_file()</a> - XMLファイルをパースし、オブジェクトに代入する</span></li>
+    <li class="member"><a href="simplexml.examples-errors.html" class="xref">XML エラーの対応</a></li>
+    <li class="member"><span class="function"><a href="function.libxml-use-internal-errors.html" class="function" rel="rdfs-seeAlso">libxml_use_internal_errors()</a> - libxmlエラーを無効にし、ユーザが必要に応じてエラー情報を取得できるようにする</span></li>
+   </ul>
+  </p>
+ </div>
+
+</div><hr /><div class="manualnavbar" style="text-align: center;">
+ <div class="prev" style="text-align: left; float: left;"><a href="simplexmlelement.children.html">SimpleXMLElement::children</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="simplexmlelement.count.html">SimpleXMLElement::count</a></div>
+ <div class="up"><a href="class.simplexmlelement.html">SimpleXMLElement</a></div>
+ <div class="home"><a href="index.html">PHP Manual</a></div>
+</div></body></html>

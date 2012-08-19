@@ -1,0 +1,11 @@
+superclass=Object
+type=class
+library=test.unit.testsuite
+extended=
+included=
+
+複数のテストをひとつにまとめたクラスです。TestSuite 同士をまとめてひとつの
+TestSuite にすることもできます。
+[[m:Test::Unit::TestSuite#run]] によりまとめたテストを一度に
+実行することができます。テストは TestSuite へ加えられた順に実行されます。
+自身が TestSuite を含んでいる場合は、再帰的にテストを実行します。

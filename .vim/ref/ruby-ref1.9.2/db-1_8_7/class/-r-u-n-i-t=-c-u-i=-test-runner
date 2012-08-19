@@ -1,0 +1,7 @@
+superclass=Test=Unit=UI=Console=TestRunner
+type=class
+library=runit.cui.testrunner
+extended=
+included=
+
+CUI でテストを実行するためのクラスです。

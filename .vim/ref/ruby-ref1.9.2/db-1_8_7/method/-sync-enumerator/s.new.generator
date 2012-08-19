@@ -1,0 +1,11 @@
+kind=defined
+names=new
+visibility=public
+
+--- new(*enums) -> SyncEnumerator
+
+SyncEnumerator オブジェクトを生成します。
+
+複数の [[c:Enumerable]] オブジェクトを与えます。
+Enumerable オブジェクトのサイズは異なっていても構いません。
+

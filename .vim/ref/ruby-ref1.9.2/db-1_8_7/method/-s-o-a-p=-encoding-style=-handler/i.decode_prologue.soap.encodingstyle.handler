@@ -1,0 +1,6 @@
+kind=defined
+names=decode_prologue
+visibility=public
+
+--- decode_prologue
+

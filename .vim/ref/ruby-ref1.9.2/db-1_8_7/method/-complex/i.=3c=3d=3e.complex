@@ -1,0 +1,23 @@
+kind=defined
+names=<=>
+visibility=public
+
+--- <=>(c) -> Fixnum
+cとselfの絶対値absを比較した結果を返します。
+
+self と c の[[m:Complex#abs]]メソッドの結果を比較し、
+ * self が大きい場合は正の数
+ * c が大きい場合は負の数
+ * 同じ場合には 0
+を返します。
+
+@param c 比較する[[c:Complex]]クラスのオブジェクト
+
+例:
+
+  z1 = Complex.new(1, 1)
+  z2 = Complex.new(2, -2)
+  p z1 <=> z2   #=> -1
+
+[注意] このメソッドは Ruby 1.9 で廃止されます。
+

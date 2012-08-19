@@ -1,0 +1,7 @@
+superclass=SOAP=Mapping=Factory
+type=class
+library=soap.mapping.rubytypeFactory
+extended=
+included=
+
+

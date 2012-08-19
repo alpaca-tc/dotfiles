@@ -1,0 +1,7 @@
+kind=defined
+names=allow_unqualified_element,allow_unqualified_element=
+visibility=public
+
+--- allow_unqualified_element
+--- allow_unqualified_element=(value)
+

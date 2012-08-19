@@ -1,0 +1,10 @@
+kind=added
+names=syscopy
+visibility=public
+
+--- syscopy(from, to) -> bool
+
+from から to へファイルをコピーします。
+
+to がディレクトリの場合は、 to/from へコピーします。
+

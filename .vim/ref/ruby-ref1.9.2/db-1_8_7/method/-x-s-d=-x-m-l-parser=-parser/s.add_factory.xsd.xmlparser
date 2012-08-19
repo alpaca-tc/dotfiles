@@ -1,0 +1,6 @@
+kind=defined
+names=add_factory
+visibility=public
+
+--- add_factory(factory)
+

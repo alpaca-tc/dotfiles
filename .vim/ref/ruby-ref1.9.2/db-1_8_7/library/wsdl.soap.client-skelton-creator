@@ -1,0 +1,7 @@
+methods=
+sublibraries=
+requires=soap.baseData,soap.mapping.mapping,soap.mapping,wsdl.soap.classDefCreatorSupport,wsdl.info,soap.mapping.rubytypeFactory,soap.mapping.registry,xsd.codegen.gensupport,soap.soap,soap.mapping.factory,soap.mapping.typeMap
+classes=WSDL=SOAP=ClientSkeltonCreator
+is_sublibrary=true
+
+

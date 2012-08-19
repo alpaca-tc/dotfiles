@@ -1,0 +1,6 @@
+kind=defined
+names=ssl_config_int
+visibility=public
+
+--- ssl_config_int(value)
+

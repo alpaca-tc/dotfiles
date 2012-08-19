@@ -1,0 +1,8 @@
+kind=defined
+names=to_ptr
+visibility=public
+
+--- to_ptr    -> DL::PtrData
+
+自身が表すハンドル([[man:dlopen(3)]] が返したもの)へのポインタ [[c:DL::PtrData]]
+を返します。この返り値には、free 関数がセットされていません。

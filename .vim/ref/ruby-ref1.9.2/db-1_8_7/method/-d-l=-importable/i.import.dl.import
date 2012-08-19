@@ -1,0 +1,17 @@
+kind=defined
+names=import
+visibility=public
+
+--- import(sym, rettype, argtypes = nil)    -> DL::Symbol
+
+ダイナミックライブラリ内のシンボルを検索し、
+自身の特異メソッドとして、定義します。
+
+@param sym 欲しいシンボル名を文字列で与えます。
+
+@param rettype 返り値の型を、C の関数プロトタイプを使って文字列で与えます。
+
+@param argtypes 引数の型を、C の関数プロトタイプを使って文字列の配列で与えます。
+
+ import("get_length", "int", ["void*", "int"])
+

@@ -1,0 +1,69 @@
+au Filetype php nmap <Leader>R :! phptohtml<CR>
+
+"****************************************
+"オリジナルfunction
+"今日の日付を書き出す
+function! Today()
+  return strftime("%Y/%m/%d")
+endfunction
+
+function! PhpDoc2()
+  set fo=mcroql
+  return ""
+endfunction
+
+function! PhpDoc()
+  set fo=
+  let text = ""
+        \."/**\n"
+        \." *  説明用の関数\n"
+        \."*  @param Integer hoge\n"
+        \."*\n"
+        \."*  @return Integer soge\n"
+        \."*  @author "
+  " 日付の書き出し
+  let text .= Today()
+  let text .= " Ikkun\n*/"
+  return text
+endfunction
+inoremap <C-D><C-D> <C-R>=Today()<CR>
+
+function! PrintLine()
+  set fo=
+  let text = ""
+        \."/* \n"
+        \."-------------------------------------------------- */"
+  return text
+endfunction
+
+" campus用のコメントを書き出す
+"au FileType css,php,javascript inoremap <silent><C-p> <C-R>=PhpDoc()<CR><C-R>=PhpDoc2()<CR>
+
+au FileType * inoremap <silent><C-D><C-P> <C-R>=PhpDoc()<CR><C-R>=PhpDoc2()<CR>
+au FileType * inoremap <silent><C-D><C-L> <C-R>=PrintLine()<CR><C-R>=PhpDoc2()<CR>
+
+" sseの案件で仕様
+"function! Sse()
+"  %s/<h3.*">/echo mkH4('/g
+"  %s/<\/h3>/');/g
+"  %s/<p>/echo mkP('/g
+"  %s/<\/p>/');/g
+"endfunction
+"nmap <space>S :call Sse()<CR>
+
+"/* coffee script
+"-------------------------------------------------- */
+autocmd BufWritePost *.coffee silent CoffeeMake! -cb | cwindow | redraw!
+
+"-------------------------------------------------- */
+" sassの設定
+"-------------------------------------------------- */
+let g:sass_started_dirs = []
+function! Sass_start()
+    let current_dir = expand('%:p:h')
+    if match(g:sass_started_dirs, '^'.current_dir.'$') == -1
+        call add(g:sass_started_dirs, current_dir)
+        call system('sass --watch ' . current_dir . ' &')
+    endif
+endfunction
+" au! BufRead *.scss call Sass_start()

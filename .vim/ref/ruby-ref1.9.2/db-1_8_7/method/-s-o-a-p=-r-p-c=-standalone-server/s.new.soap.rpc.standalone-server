@@ -1,0 +1,6 @@
+kind=defined
+names=new
+visibility=public
+
+--- new(appname, default_namespace, host = "0.0.0.0", port = 8080)
+

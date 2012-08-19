@@ -1,0 +1,14 @@
+kind=defined
+names=suite
+visibility=public
+
+--- suite    -> Test::Unit::TestSuite
+
+「test」ではじまるインスタンスメソッド全てに対して、それぞれに対応する
+TestCase オブジェクトを生成し、[[c:Test::Unit::TestSuite]] オブジェクト
+としてまとめたものを返します。
+
+「test」ではじまるインスタンスメソッドがない場合は、
+[[m:Test::Unit::TestCase#default_test]] に対応づけされた TestCase オブ
+ジェクトのみを持つ、TestSuite オブジェクトを返します。
+

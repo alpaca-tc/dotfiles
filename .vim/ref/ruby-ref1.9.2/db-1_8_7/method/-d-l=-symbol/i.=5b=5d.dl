@@ -1,0 +1,25 @@
+kind=defined
+names=[],call
+visibility=public
+
+--- call(*args)    -> object
+--- [](*args)      -> object
+
+自身が表しているライブラリ関数を呼び出します。関数の
+戻り値 result と、 call に渡された引数の配列 args = [arg1, arg2, ... argN] 
+からなる配列 [result, args] を返します。
+
+ require 'dl'
+ h = DL.dlopen('./libtest.so')
+ s = h.sym('slen', 'IS')
+ result, args = s.call('abc') 
+ p result #=> 3
+ p args   #=> ["abc"]
+
+//emlist{
+ /* libtest.so */
+ int slen(const char* s){
+   return strlen(s);
+ }
+//}
+

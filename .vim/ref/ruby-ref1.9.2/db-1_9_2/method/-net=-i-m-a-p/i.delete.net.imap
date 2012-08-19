@@ -1,0 +1,12 @@
+kind=defined
+names=delete
+visibility=public
+
+--- delete(mailbox) -> Net::IMAP::TaggedResponse
+DELETE コマンドを送り、指定したメールボックスを削除します。
+
+@param mailbox 削除するメールボックスの名前(文字列)
+@raise Net::IMAP::NoResponseError 指定した名前のメールボックスを削除できなかった場合
+       に発生します。指定した名前のメールボックスが存在しない場合や、
+       ユーザにメールボックスを削除する権限がない場合に発生します。
+

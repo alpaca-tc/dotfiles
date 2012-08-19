@@ -1,0 +1,68 @@
+"-------------------------------------------------------------------------------
+" 編集関連 Edit
+"-------------------------------------------------------------------------------
+set autoread                     " 他で書き換えられたら自動で読み直す
+" set textwidth=100                  "0なら一行に長い文章を書いていても自動折り返しをしない
+set textwidth=0                  "0なら一行に長い文章を書いていても自動折り返しをしない
+set hidden                       " 編集中でも他のファイルを開けるようにする
+set nrformats-=octal             " 01を<C-A>で増加させる時に、8進数扱いにしない
+
+" コンマの後に自動的にスペースを挿入
+"inoremap , ,<Space>
+"開いているファイルのディレクトリに自動で移動
+au BufEnter * execute ":lcd " . expand("%:p:h")
+
+"-------------------------------------------------------------------------------
+" キーマップ
+"-------------------------------------------------------------------------------
+"<Space>w or <Space>qで画面を閉じる
+nmap <Space>w :wq<CR>
+nmap <Space>q :q!<CR>
+nmap <Space>s :w sudo:%<CR>
+
+"削除の標準キーマップを逆に。
+"また、レジスタに入れないようにする
+"nmap x <BS>
+"nmap X <Del>
+"<C-Space>で削除
+imap <C-@> <BS>
+" imap <C-o> <C-x><C-o>
+
+" 括弧を自動補完
+inoremap { {}<LEFT>
+inoremap [ []<LEFT>
+inoremap ( ()<LEFT>
+inoremap " ""<LEFT>
+inoremap ' ''<LEFT>
+au FileType ruby,eruby inoremap <buffer>\| \|\|<LEFT>
+
+" 一括インデント
+vnoremap < <gv
+vnoremap > >gv
+
+"コメントを書くときに便利
+inoremap <leader>* ****************************************
+inoremap <leader>- ----------------------------------------
+inoremap <leader>h <!--/--><left><left><left>
+
+"-------------------------------------------------------------------------------
+" 編集関連 Edit
+"-------------------------------------------------------------------------------
+function! s:remove_tab()
+  " TODO スペースの文字数を、stsから取得する
+  " %s/\t/    /ge
+  %retab!
+  %s/\s\+$//ge
+endfunction
+
+retab
+function! s:remove_dust()
+  let cursor = getpos(".")
+  call <SID>remove_tab()
+  call setpos(".", cursor)
+  unlet cursor
+endfunction
+
+"保存時に無駄な文字を消す
+autocmd BufWritePre * call <SID>remove_dust()
+

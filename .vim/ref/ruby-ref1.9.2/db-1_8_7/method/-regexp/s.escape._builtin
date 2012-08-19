@@ -1,0 +1,22 @@
+kind=defined
+names=escape,quote
+visibility=public
+
+--- escape(string, kcode = $KCODE) -> String
+--- quote(string, kcode = $KCODE) -> String
+
+string の中で正規表現において特別な意味を持つ文字の直前にエ
+スケープ文字(バックスラッシュ)を挿入した文字列を返します。
+
+省略可能な引数 kcode で文字列の文字コードを指定します
+(省略時は [[m:$KCODE]] の値が使用されます)。
+
+文字コードの指定は [[m:$KCODE]] と同様に行います。
+
+@param string 正規表現において特別な意味をもつ文字をもつ文字列を指定します。
+
+@param kcode 文字コードを文字列で指定します。文字コードの指定は [[m:$KCODE]] と同様に行います。
+
+  rp = Regexp.escape("$bc^")
+  puts rp #=> \$bc\^
+

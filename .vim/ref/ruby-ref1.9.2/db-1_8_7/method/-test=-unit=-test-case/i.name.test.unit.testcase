@@ -1,0 +1,7 @@
+kind=defined
+names=name
+visibility=public
+
+--- name    -> String
+自身に対応しているテストメソッドの名前を人間が読みやすい形式で返します。
+

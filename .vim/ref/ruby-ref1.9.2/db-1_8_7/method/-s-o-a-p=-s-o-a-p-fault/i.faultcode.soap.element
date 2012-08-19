@@ -1,0 +1,7 @@
+kind=defined
+names=faultcode,faultcode=
+visibility=public
+
+--- faultcode
+--- faultcode=(rhs)
+

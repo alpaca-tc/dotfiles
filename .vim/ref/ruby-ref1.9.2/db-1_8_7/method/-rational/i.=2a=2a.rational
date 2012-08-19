@@ -1,0 +1,28 @@
+kind=defined
+names=**
+visibility=public
+
+--- **(other) -> Rational | Float
+
+冪(べき)乗を計算します。
+
+@param other 自身を other 乗する数
+
+other に整数を指定した場合は、計算結果を [[c:Rational]] で返します。
+other に整数以外を指定した場合は計算結果を [[c:Float]] で返します。
+
+例:
+
+  Rational(3, 4) ** 2              # => Rational(9, 16)
+  Rational(3, 4) ** Rational(2, 1) # => 0.5625
+  Rational(3, 4) ** 2.0            # => 0.5625
+
+注意:
+
+1.9 系とは計算結果のオブジェクトが異なる場合がある事に注意してください。
+other に [[c:Rational]] を指定した場合には戻り値が [[c:Rational]] を返
+す場合があります。
+
+  # 1.9.1 の場合
+  Rational(3, 4) ** Rational(2, 1)  # => (9/16)
+

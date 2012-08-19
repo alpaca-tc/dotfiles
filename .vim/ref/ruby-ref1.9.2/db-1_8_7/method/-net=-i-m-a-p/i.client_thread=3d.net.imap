@@ -1,0 +1,10 @@
+kind=defined
+names=client_thread=
+visibility=public
+
+--- client_thread=(th)
+例外が送出されるスレッドを設定します。
+
+@param th 設定するスレッド
+
+

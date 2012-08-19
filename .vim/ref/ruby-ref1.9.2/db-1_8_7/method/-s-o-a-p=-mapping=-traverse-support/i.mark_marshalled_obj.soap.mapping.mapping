@@ -1,0 +1,6 @@
+kind=defined
+names=mark_marshalled_obj
+visibility=public
+
+--- mark_marshalled_obj(obj, soap_obj)
+

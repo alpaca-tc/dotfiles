@@ -1,0 +1,6 @@
+kind=defined
+names=name_element
+visibility=private 
+
+--- name_element(element)
+

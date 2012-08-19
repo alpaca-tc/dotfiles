@@ -1,0 +1,7 @@
+superclass=XSD=Charset=XSDError
+type=class
+library=xsd.datatypes
+extended=
+included=
+
+

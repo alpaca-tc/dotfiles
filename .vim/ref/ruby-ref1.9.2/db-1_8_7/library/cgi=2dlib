@@ -1,0 +1,8 @@
+methods=
+sublibraries=
+requires=
+classes=CGI_cgi_lib
+is_sublibrary=false
+
+このライブラリは obsolete です。
+[[lib:cgi]] ライブラリを使ってください。

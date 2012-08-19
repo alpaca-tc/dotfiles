@@ -1,0 +1,10 @@
+kind=defined
+names=unescape
+visibility=public
+
+--- unescape(str) -> String
+
+URL エンコードされた文字列をデコードします。
+
+@param str URL エンコードされた文字列を指定します。
+

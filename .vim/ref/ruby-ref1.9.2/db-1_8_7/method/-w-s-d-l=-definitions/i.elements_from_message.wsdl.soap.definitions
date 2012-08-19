@@ -1,0 +1,6 @@
+kind=defined
+names=elements_from_message
+visibility=private 
+
+--- elements_from_message(message)
+

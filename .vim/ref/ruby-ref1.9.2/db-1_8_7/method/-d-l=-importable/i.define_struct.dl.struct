@@ -1,0 +1,10 @@
+kind=added
+names=define_struct,struct
+visibility=public
+
+--- define_struct(contents)
+--- struct(contents)
+
+構造体を定義します。
+contentsについては [[m:DL::Importable::Struct.new]] を参照せよ。
+

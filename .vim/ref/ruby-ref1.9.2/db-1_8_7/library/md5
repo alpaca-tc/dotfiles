@@ -1,0 +1,7 @@
+methods=
+sublibraries=
+requires=
+classes=MD5
+is_sublibrary=false
+
+このライブラリは obsolete です。[[lib:digest]] ライブラリを使ってください。

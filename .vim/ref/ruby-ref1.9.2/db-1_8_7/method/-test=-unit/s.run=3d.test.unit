@@ -1,0 +1,14 @@
+kind=defined
+names=run=
+visibility=public
+
+--- run=(flag)
+
+ユニットテストを自動実行したかどうかを指定します。
+
+@param flag ユニットテストを自動実行したかどうか
+
+trueをセットすると[[c:Test::Unit]]はユニットテストを自動実行``しなくなります''。
+runは過去分詞のrunです。trueにするとテストを実行し終えたという意味になります。
+
+

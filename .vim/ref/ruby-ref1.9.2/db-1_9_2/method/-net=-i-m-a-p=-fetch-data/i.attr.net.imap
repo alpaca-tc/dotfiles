@@ -1,0 +1,53 @@
+kind=defined
+names=attr
+visibility=public
+
+--- attr -> { String => object }
+
+各メッセージのアトリビュートの値をハッシュテーブルで返します。
+
+キーはアトリビュート名の文字列、値はアトリビュートの値となります。
+値のクラスはアトリビュートによって異なります。
+
+利用可能なアトリビュートは以下の通りです。
+
+: BODY
+    BODYSTRUCTURE の拡張データなしの形式。
+    [[c:Net::IMAP::BodyTypeBasic]], [[c:Net::IMAP::BodyTypeText]],
+    [[c:Net::IMAP::BodyTypeMessage]], [[c:Net::IMAP::BodyTypeMultipart]]
+    のいずれか。
+: BODY[<section>]<<partial>>
+    section で指定されたセクションのボディの内容。文字列。
+: BODY.PEEK[<section>]<<partial>>
+    section で指定されたセクションのメッセージボディの内容。文字列。
+    ただしこれで内容を見ても :Seen フラグを設定しない点が
+    BODY[<section>]と同様
+: BODYSTRUCTURE
+    MIME-IMB でのメッセージボディ。
+    [[c:Net::IMAP::BodyTypeBasic]], [[c:Net::IMAP::BodyTypeText]],
+    [[c:Net::IMAP::BodyTypeMessage]], [[c:Net::IMAP::BodyTypeMultipart]]
+    のいずれか。
+: ENVELOPE
+    メッセージのエンベロープ。
+    [[c:Net::IMAP::Envelope]] オブジェクト。
+: FLAGS
+    メッセージにセットされたフラグ。
+    [[c:Symbol]] の配列。[[m:String#capitalize]] でキャピタライズ
+    されている。
+: INTERNALDATE
+    メッセージの内部日付。文字列。
+: RFC822
+    BODY[] と同じ。文字列。
+: RFC822.HEADER
+    BODY.PEEK[HEADER] と同じ。文字列。
+: RFC822.SIZE
+    メッセージの [[RFC:822]] サイズ。整数。
+: RFC822.TEXT
+    BODY[TEXT] と同じ。文字列。
+: UID
+    UID。整数。
+
+詳しくは [[RFC:2060]] の FETCH command の節を見てください。
+
+@see [[m:Net::IMAP#fetch]], [[m:Net::IMAP#uid_fetch]]
+

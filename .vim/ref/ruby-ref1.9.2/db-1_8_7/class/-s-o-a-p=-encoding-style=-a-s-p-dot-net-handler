@@ -1,0 +1,7 @@
+superclass=SOAP=EncodingStyle=Handler
+type=class
+library=soap.encodingstyle.aspDotNetHandler
+extended=
+included=
+
+

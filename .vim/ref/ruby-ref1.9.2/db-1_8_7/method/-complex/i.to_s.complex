@@ -1,0 +1,7 @@
+kind=defined
+names=to_s
+visibility=public
+
+--- to_s -> String
+自分自身について "実部 + 虚部i" 形式の文字列を返します。
+

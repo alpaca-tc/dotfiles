@@ -1,0 +1,7 @@
+kind=defined
+names=str,str=
+visibility=public
+
+--- str
+--- str=(value)
+

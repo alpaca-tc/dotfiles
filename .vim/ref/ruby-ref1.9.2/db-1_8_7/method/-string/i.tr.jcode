@@ -1,0 +1,31 @@
+kind=redefined
+names=tr,tr!
+visibility=public
+
+--- tr(search, replace) -> String
+--- tr!(search, replace) -> String|nil
+
+[[m:String#tr]] の日本語対応版です。
+search に含まれる文字を検索し、 replace の対応する文字に
+置き換えます。
+
+@param search    置き換える文字のパターン
+@param replace    pattern で指定した文字を置き換える文字
+
+例:
+
+  #!/usr/bin/env ruby
+
+  $KCODE = 'EUC'
+  zstr = 'ＡＡＢＢＣＣ'
+  hoge = 'hhoge'
+
+  p zstr.tr('Ａ-Ｚ','A-Z')    # => "A疏疏汰汰蛋\303"
+  p hoge.tr('a-z','Ａ-Ｚ')    # => "旙旙\332"
+
+  require 'jcode'
+  p zstr.tr('Ａ-Ｚ','A-Z')    # => "AABBCC"
+  p hoge.tr('a-z','Ａ-Ｚ')    # => "ＨＨＯＧＥ"
+
+@see [[m:String#tr_s]]
+

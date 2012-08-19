@@ -1,0 +1,7 @@
+methods=
+sublibraries=
+requires=test.unit.util.observable
+classes=Test=Unit=TestResult
+is_sublibrary=true
+
+テストの結果を処理するときに使われます。

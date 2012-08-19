@@ -1,0 +1,13 @@
+kind=defined
+names=size,size=
+visibility=public
+
+--- size        -> Integer
+--- size=(s)    
+
+自身の指す領域のサイズを返します。
+s を指定した場合は、自身の指す領域のサイズは s であると設定します。
+ただし、自身が指すメモリのサイズが s になるように再割り当てはしません。
+
+@param s 自身が指すメモリのサイズを指定します。
+

@@ -1,0 +1,11 @@
+kind=added
+names=gcd2
+visibility=public
+
+--- gcd2(int)
+
+Îã:
+
+  12.gcd2 8
+  # => 4
+

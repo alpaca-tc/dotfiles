@@ -1,0 +1,7 @@
+kind=defined
+names=count_waiters
+visibility=public
+
+--- count_waiters -> Integer
+その条件変数で待っているスレッドの数を返します。
+

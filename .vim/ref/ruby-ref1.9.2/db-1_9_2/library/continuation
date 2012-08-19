@@ -1,0 +1,7 @@
+methods=Kernel/m.callcc.continuation
+sublibraries=
+requires=
+classes=Continuation
+is_sublibrary=false
+
+Ruby 1.9で継続オブジェクトを扱うためのライブラリです。

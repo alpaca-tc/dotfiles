@@ -1,0 +1,34 @@
+kind=defined
+names=generate_row
+visibility=public
+
+--- generate_row(src, cells, out_dev, fs = nil, rs = nil) -> Fixnum
+
+src で指定された配列をパースして csv形式の文字列として(行区切り文字も含めて) out_dev に出力します。
+返り値として fs で区切ったフィールド(cell)の数を返します。
+
+@param src パースする配列
+@param cells パースするフィールド数。
+@param out_dev csv形式の文字列の出力先。
+@param fs フィールドセパレータの指定。
+          nil (デフォルト) で ',' をセパレータとします。
+@param rs 行区切り文字の指定。nil (デフォルト) で CrLf / Lf。
+          Cr を行区切りとしたい場合は ?\r を渡します。
+
+===== 注意
+
+配列のパース時に""(空文字)と値なし(nil)を区別します。
+例えば、["a", "", nil, "b"] の配列を渡した場合に a,"", , b という文字列を生成します。
+
+例:
+  row1 = ['a', 'b', 'c']
+  row2 = ['1', '2', '3']
+  row3 = ['A', 'B', 'C']
+  src = [row1, row2, row3]
+  buf = ''
+  src.each do |row|
+    parsed_cells = CSV.generate_row(row, 2, buf)
+  end
+  p buf #=>"a,b\n1,2\n,A,B\n"
+
+

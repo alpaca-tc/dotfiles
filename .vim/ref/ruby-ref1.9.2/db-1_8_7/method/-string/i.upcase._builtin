@@ -1,0 +1,32 @@
+kind=defined
+names=upcase
+visibility=public
+
+--- upcase -> String
+
+'a' から 'z' までのアルファベット小文字を大文字に変換した文字列を作成し返します。
+
+このメソッドはマルチバイト文字列を認識しますが、
+それはあくまでも「1 文字を 1 文字として認識する」だけであって、
+いわゆる全角アルファベットの大文字小文字までは変換しません。
+
+また、マルチバイト文字列に対応するためには
+[[m:$KCODE]] を設定する必要があります。
+文字列が Shift JIS エンコーディングで
+[[m:$KCODE]] が適切に設定されていないときは
+以下のようにマルチバイト文字の一部も変換してしまいます。
+
+  #coding:Shift_JIS
+  $KCODE = "SJIS"
+  puts "蟻".upcase   # => 蟻   ($KCODE が適切なので正しく無視された)
+
+  $KCODE = "NONE"
+  puts "蟻".upcase   # => 帰   ($KCODE が不適切なので誤って処理された)
+
+
+例:
+    p "stRIng? STring.".upcase   # => "STRING? STRING."
+
+@see [[m:String#upcase!]], [[m:String#downcase]],
+     [[m:String#swapcase]], [[m:String#capitalize]]
+

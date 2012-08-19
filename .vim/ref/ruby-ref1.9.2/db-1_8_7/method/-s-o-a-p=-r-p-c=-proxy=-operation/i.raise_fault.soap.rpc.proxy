@@ -1,0 +1,6 @@
+kind=defined
+names=raise_fault
+visibility=public
+
+--- raise_fault(mapping_registry, literal_mapping_registry)
+

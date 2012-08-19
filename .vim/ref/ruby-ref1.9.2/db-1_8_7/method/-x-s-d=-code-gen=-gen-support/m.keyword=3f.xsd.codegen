@@ -1,0 +1,6 @@
+kind=defined
+names=keyword?
+visibility=public
+
+--- keyword?(word)
+

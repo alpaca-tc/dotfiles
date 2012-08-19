@@ -1,0 +1,7 @@
+kind=defined
+names=size_fixed,size_fixed=
+visibility=public
+
+--- size_fixed
+--- size_fixed=(value)
+

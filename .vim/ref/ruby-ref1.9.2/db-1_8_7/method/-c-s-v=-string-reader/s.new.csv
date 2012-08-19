@@ -1,0 +1,13 @@
+kind=defined
+names=new
+visibility=public
+
+--- new(string, fs = ',', rs = nil) -> CSV::StringReader
+CSV形式の文字列を初期値として与えてインスタンスを生成します。
+
+@param string 初期値の文字列
+@param fs フィールドセパレータの指定。
+          nil (デフォルト) で ',' をセパレータとします。
+@param rs 行区切り文字の指定。nil (デフォルト) で CrLf / Lf。
+          Cr を行区切りとしたい場合は ?\r を渡します。
+

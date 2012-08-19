@@ -1,0 +1,10 @@
+kind=defined
+names=raw_data
+visibility=public
+
+--- raw_data -> String
+
+レスポンス文字列を返します。
+
+@see [[m:Net::IMAP::TaggedResponse#data]]
+

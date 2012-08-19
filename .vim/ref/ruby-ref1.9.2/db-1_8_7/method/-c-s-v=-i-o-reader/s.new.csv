@@ -1,0 +1,13 @@
+kind=defined
+names=new
+visibility=public
+
+--- new(io, fs = ',', rs = nil) -> CSV::IOReader
+引数に従い、[[c:CSV::IOReader]]クラスのオブジェクトを生成します。
+
+@param io 読み込み先の指定。
+@param fs フィールドセパレータの指定。
+          nil (デフォルト) で ',' をセパレータとします。
+@param rs 行区切り文字の指定。nil (デフォルト) で CrLf / Lf。
+          Cr を行区切りとしたい場合は ?\r を渡します。
+

@@ -1,0 +1,34 @@
+methods=Kernel/i.parseArgs.parsearg,Kernel/i.printUsageAndExit.parsearg,Kernel/i.setParenthesis.parsearg,Kernel/i.setOrAnd.parsearg,Kernel/i.setExpression.parsearg
+sublibraries=
+requires=
+classes=
+is_sublibrary=false
+
+このライブラリは obsolete です。
+代わりに [[lib:optparse]] か [[lib:getoptlong]] を使ってください。
+
+[[lib:getopts]] ライブラリを拡張して
+コマンドラインオプションの条件を指定できるようにするライブラリです。
+また、指定したオプションが条件にあっていない場合はヘルプメッセージを出力します。
+
+=== オプション解析
+
+parsearg ライブラリのオプション解析規則は
+[[lib:getopts]] とまったく同じです．
+
+=== ヘルプメッセージの設定
+
+オプションの解析に失敗したときのヘルプメッセージを設定するには、
+まずヘルプメッセージを出力するメソッドを定義し、
+そのメソッド名をグローバル変数 $USAGE に代入します。
+
+例：
+
+  def usage
+    puts "Usage: #{File.basename($0)} <file>..."
+    puts "Options:"
+          :
+          :
+  end
+
+  $USAGE = 'usage'

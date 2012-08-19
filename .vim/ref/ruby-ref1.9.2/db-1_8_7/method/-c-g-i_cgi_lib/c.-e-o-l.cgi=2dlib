@@ -1,0 +1,8 @@
+kind=defined
+names=EOL
+visibility=public
+
+--- EOL -> String
+
+行末です。
+

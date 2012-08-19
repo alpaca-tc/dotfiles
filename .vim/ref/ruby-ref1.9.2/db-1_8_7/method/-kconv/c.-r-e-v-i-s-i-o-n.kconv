@@ -1,0 +1,7 @@
+kind=defined
+names=REVISION
+visibility=public
+
+--- REVISION -> String
+この定数は使うべきではありません。
+

@@ -1,0 +1,54 @@
+"-------------------------------------------------------------------------------
+" 基本設定 Basics
+"-------------------------------------------------------------------------------
+let mapleader = ","              " <Leader>のキー
+"let mapleader = "\"              " キーマップリーダー
+set scrolloff=5                  " スクロール時の余白確保
+"set backup
+set backspace=indent,eol,start   " <BS>で何でも消す
+set formatoptions=lmoq           " テキスト整形オプション，マルチバイト系を追加
+set formatoptions+=mM
+set vb t_vb=                     " ビープを消す
+set browsedir=buffer             " Exploreの初期ディレクトリ
+set showcmd                      " コマンドをステータス行に表示
+set showmode                     " 現在のモードを表示
+
+" viminfoの設定
+" コンパイル時に +viminfo が必要 それぞれ、履歴の数
+set viminfo='50,<500,s100,\"100
+set modelines=0                  " モードラインは無効
+
+"キーマップの入力に制限時間を設ける デフォルトは1000
+set timeout timeoutlen=400 ttimeoutlen=100
+
+"swapfileの設定
+"ファイル編集時の~.swp
+" set noswapfile
+set directory=~/.vim.swapfile
+
+"backupの設定
+"ファイル編集時のaaa~
+set nobackup
+" set backup
+set backupdir=~/.vim.swapfile
+
+" OSのクリップボードを使用する
+set clipboard+=unnamed
+set clipboard+=autoselect
+
+"-------------------------------------------------------------------------------
+" help Fileの設定
+"-------------------------------------------------------------------------------
+autocmd FileType help nnoremap <buffer> q <C-w>c
+set helpfile=$VIMRUNTIME/doc/help.txt
+
+"-------------------------------------------------------------------------------
+" マッピング
+"-------------------------------------------------------------------------------
+" vmrcのソースを再読み込み
+" nmap <Space>s :source ~/.vimrc<CR>
+
+
+" カーソル下のキーワードをヘルプでひく
+nnoremap <Space>i :<C-u>help<Space><C-r><C-w><Enter>
+

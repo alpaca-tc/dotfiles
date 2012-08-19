@@ -1,0 +1,16 @@
+kind=defined
+names=point_conversion_form=
+visibility=public
+
+--- point_conversion_form=(sym)
+点のエンコーディング方式を設定します。
+
+以下のいずれかを設定します。
+  * :compressed
+  * :uncompressed
+  * :hybrid
+詳しくは  X9.62 (ECDSA) などを参照してください。
+
+@param sym 設定する方式([[c:Symbol]])
+@see [[m:OpenSSL::PKey::EC::Group#point_conversion_form]]
+

@@ -1,0 +1,10 @@
+kind=defined
+names=cc
+visibility=public
+
+--- cc -> [Net::IMAP::Address] | nil
+Cc を [[c:Net::IMAP::Address]] オブジェクトの配列で返します。
+
+エンベロープに存在しないときは nil を返します。
+
+

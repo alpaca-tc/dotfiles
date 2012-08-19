@@ -1,0 +1,17 @@
+superclass=Object
+type=class
+library=mailread
+extended=
+included=
+
+Unix mbox 形式のメールファイルを解析するライブラリです。
+
+=== mailread の使い方
+
+  require 'mailread'
+  
+  m = Mail.new('/var/mail/foo')
+  puts 'From: ' + m['From'],
+       'Subject: ' + m['Subject'],
+       '--',
+       m.body[0,5]

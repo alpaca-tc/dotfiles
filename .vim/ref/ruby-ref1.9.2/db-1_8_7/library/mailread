@@ -1,0 +1,7 @@
+methods=
+sublibraries=
+requires=
+classes=Mail
+is_sublibrary=false
+
+Unix mbox 形式のメールファイルを解析するライブラリです。

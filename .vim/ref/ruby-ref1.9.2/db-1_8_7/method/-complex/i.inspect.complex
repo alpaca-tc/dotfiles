@@ -1,0 +1,7 @@
+kind=defined
+names=inspect
+visibility=public
+
+--- inspect -> String
+自分自身について "Complex(実部, 虚部)" 形式の文字列を返します。
+

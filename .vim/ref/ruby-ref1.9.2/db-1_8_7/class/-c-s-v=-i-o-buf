@@ -1,0 +1,7 @@
+superclass=CSV=StreamBuf
+type=class
+library=csv
+extended=
+included=
+
+IOのバッファリングを実現するクラス

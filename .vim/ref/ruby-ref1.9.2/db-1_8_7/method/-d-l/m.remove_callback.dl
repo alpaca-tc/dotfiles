@@ -1,0 +1,11 @@
+kind=defined
+names=remove_callback
+visibility=public
+
+--- remove_callback(sym)    -> nil
+
+コールバック関数 sym を [[m:DL::FuncTable]] から削除します。
+以後 sym.call を呼ぶことができなくなります。
+
+@param sym テーブルから削除したい [[c:DL::Symbol]] オブジェクトを与えます。
+

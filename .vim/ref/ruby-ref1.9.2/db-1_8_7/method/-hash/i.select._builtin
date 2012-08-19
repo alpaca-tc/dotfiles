@@ -1,0 +1,17 @@
+kind=defined
+names=select
+visibility=public
+
+--- select                        -> Enumerable::Enumerator
+--- select {|key, value| ... }   -> Array
+
+key, value のペアについてブロックを評価し、真となるペアだけを含む
+配列を生成して返します。
+
+生成される配列は、[key, value] を要素とする配列です。
+
+   h = { "a" => 100, "b" => 200, "c" => 300 }
+   h.select {|k,v| k > "a"}  #=> [["b", 200], ["c", 300]]
+   h.select {|k,v| v < 200}  #=> [["a", 100]]
+
+

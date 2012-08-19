@@ -1,0 +1,5 @@
+.included	Precision.included
+.induced_from	Precision.induced_from
+#prec	Precision#prec
+#prec_f	Precision#prec_f
+#prec_i	Precision#prec_i

@@ -1,0 +1,6 @@
+kind=defined
+names=on_chardata
+visibility=public
+
+--- on_chardata(str)
+

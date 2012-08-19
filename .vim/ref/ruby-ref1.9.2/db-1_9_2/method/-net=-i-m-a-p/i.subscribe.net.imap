@@ -1,0 +1,15 @@
+kind=defined
+names=subscribe
+visibility=public
+
+--- subscribe(mailbox) -> Net::IMAP::TaggedResponse
+SUBSCRIBE コマンドを送り、指定したメールボックスを
+"active" もしくは "subscribe" なメールボックスの集合に
+追加します。
+
+@param mailbox 追加するメールボックスの名前(文字列)
+@raise Net::IMAP::NoResponseError 指定した名前のメールボックスを
+       追加できなかった場合に発生します。
+       指定した名前のメールボックスが存在しない場合などに
+       生じます。
+

@@ -1,0 +1,7 @@
+kind=defined
+names=send_contenttype,send_contenttype=
+visibility=public
+
+--- send_contenttype
+--- send_contenttype=(value)
+

@@ -1,0 +1,6 @@
+kind=defined
+names=__setobj__
+visibility=public
+
+--- __setobj__(obj)
+

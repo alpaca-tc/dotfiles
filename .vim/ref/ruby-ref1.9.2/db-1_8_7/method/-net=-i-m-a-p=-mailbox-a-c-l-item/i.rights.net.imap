@@ -1,0 +1,12 @@
+kind=defined
+names=rights
+visibility=public
+
+--- rights -> String
+アクセス権限を文字列で返します。
+
+[[m:Net::IMAP::MailboxACLItem#user]] で得られるユーザが
+持っている権限が返されます。
+
+この文字列の意味については [[RFC:2086]] を参照してください。
+

@@ -1,0 +1,6 @@
+kind=defined
+names=schema_type_definition
+visibility=public
+
+--- schema_type_definition(klass)
+

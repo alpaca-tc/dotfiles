@@ -1,0 +1,6 @@
+kind=defined
+names=create_request
+visibility=public
+
+--- create_request(qname, *params)
+

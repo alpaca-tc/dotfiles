@@ -1,0 +1,7 @@
+methods=
+sublibraries=
+requires=soap.baseData,soap.mapping.mapping,soap.mapping,wsdl.soap.classDefCreatorSupport,wsdl.soap.methodDefCreator,wsdl.info,soap.rpc.element,soap.mapping.rubytypeFactory,soap.mapping.registry,wsdl.soap.mappingRegistryCreator,xsd.codegen.gensupport,soap.soap,soap.mapping.factory,soap.mapping.typeMap
+classes=WSDL=SOAP=CGIStubCreator
+is_sublibrary=true
+
+

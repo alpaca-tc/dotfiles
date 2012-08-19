@@ -1,0 +1,9 @@
+kind=added
+names=to_ptr
+visibility=public
+
+--- to_ptr    -> DL::PtrData
+
+自身を指す [[c:DL::PtrData]] を返します。これは C レベルでは「FILE *」です。
+
+@raise IOError 自身が close されていたら発生します。

@@ -1,0 +1,8 @@
+kind=defined
+names=to_s
+visibility=public
+
+--- to_s    -> String
+
+実行したテストメソッドの数と assert の数、テストの失敗・エラーそれぞれの回数を
+人間が読みやすい文字列にして返します。

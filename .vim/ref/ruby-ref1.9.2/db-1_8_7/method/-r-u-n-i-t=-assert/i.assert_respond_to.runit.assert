@@ -1,0 +1,14 @@
+kind=defined
+names=assert_respond_to
+visibility=public
+
+--- assert_respond_to(method, object, message = "") -> ()
+
+与えられたオブジェクトが与えられたメソッドを持つ場合、検査にパスしたことになります。
+
+@param method メソッド名を指定します。
+
+@param object 任意のオブジェクトを指定します。
+
+@param message 検査に失敗したときのメッセージを指定します。
+

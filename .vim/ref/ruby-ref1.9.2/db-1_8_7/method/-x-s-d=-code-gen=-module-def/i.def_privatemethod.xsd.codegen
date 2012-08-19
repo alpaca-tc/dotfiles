@@ -1,0 +1,6 @@
+kind=defined
+names=def_privatemethod
+visibility=public
+
+--- def_privatemethod(name, *params) { ... }
+

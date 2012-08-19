@@ -1,0 +1,7 @@
+superclass=XSD=XSDGYear
+type=class
+library=soap.baseData
+extended=SOAP=SOAPModuleUtils
+included=SOAP=SOAPBasetype
+
+

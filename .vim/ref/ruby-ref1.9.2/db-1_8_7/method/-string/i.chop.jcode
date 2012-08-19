@@ -1,0 +1,24 @@
+kind=redefined
+names=chop,chop!
+visibility=public
+
+--- chop -> String
+--- chop! -> String|nil
+
+[[m:String#chop]] ¤ÎÆüËÜ¸ìÂÐ±þÈÇ¤Ç¤¹¡£
+
+Îã¡§
+
+  #!/usr/bin/env ruby
+
+  $KCODE = 'e'
+  zstr = '£Á£Â£Ã£Ä£Å£Æ'
+  hoge = 'hogehoge'
+
+  p zstr.chop       # => "£Á£Â£Ã£Ä£Å\243"
+  p hoge.chop       # => "hogehog"
+
+  require 'jcode'
+  p zstr.chop       # => "£Á£Â£Ã£Ä£Å"
+  p hoge.chop       # => "hogehog"
+

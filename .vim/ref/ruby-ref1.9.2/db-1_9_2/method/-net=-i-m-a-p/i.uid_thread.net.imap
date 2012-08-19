@@ -1,0 +1,18 @@
+kind=defined
+names=uid_thread
+visibility=public
+
+--- uid_thread(algorithm, search_keys, charset)  -> [Net::IMAP::ThreadMember]
+THREADコマンドを送り、メールボックスを検索した結果を
+スレッド形式の木構造で返します。
+
+ほぼ [[m:Net::IMAP#thread]] と同じですが、返ってくるオブジェクトの
+[[m:Net::IMAP::ThreadMember#seqno]] の内容が message sequence number
+ではなく UID となります。
+
+@param algorithm スレッド構造構築アルゴリズム名(文字列)
+@param search_key 検索条件(文字列配列)
+@param charset 検索条件の解釈に用いるCHARSET名(文字列)
+@see [[c:Net::IMAP::ThreadMember]], [[m:Net::IMAP#thread]]
+
+

@@ -1,0 +1,14 @@
+kind=defined
+names=NOSELECT
+visibility=public
+
+--- NOSELECT -> Symbol
+「:Noselect」というシンボルを返します。
+
+メールボックスが選択可能でないことを意味します。
+
+LIST応答の属性
+ ([[m:Net::IMAP#list]]、[[m:Net::IMAP::MailboxList#attr]])
+として用いられます。
+
+詳しくは [[RFC:2060]] を参照してください。

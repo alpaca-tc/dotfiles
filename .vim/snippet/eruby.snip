@@ -1,0 +1,18 @@
+snippet     form_tag
+abbr        form_tag
+prev_word         '^'
+    form_tag ${1:url_opts [, opts]} do
+      ${2:..body..}
+    end
+
+snippet     ac
+abbr        action
+prev_word   '^'
+    action: '${1: name}'
+
+snippet     cl
+abbr        class
+prev_word   '^'
+    class: '${1: name}'
+
+

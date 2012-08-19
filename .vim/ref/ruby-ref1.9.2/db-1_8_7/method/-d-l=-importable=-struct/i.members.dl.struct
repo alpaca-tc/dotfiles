@@ -1,0 +1,8 @@
+kind=defined
+names=members
+visibility=public
+
+--- members
+
+構造体の要素名で構成される [[c:Array]] オブジェクトを返します。
+

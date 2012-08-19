@@ -1,0 +1,13 @@
+methods=
+sublibraries=runit.testcase,runit.assert,runit.cui.testrunner,runit.error,runit.testresult,runit.testsuite,runit.topublic
+requires=runit.assert,runit.error,runit.testsuite,runit.testcase,runit.testresult
+classes=
+is_sublibrary=false
+
+このライブラリはobsoleteです。[[lib:test/unit]] ライブラリを使ってください。
+
+rubyunit ライブラリは、
+過去に使われていたユニットテストフレームワークである
+RubyUnit との互換性を提供するためだけに提供されています。
+これからユニットテストを書くときは
+[[lib:test/unit]] ライブラリを使ってください。

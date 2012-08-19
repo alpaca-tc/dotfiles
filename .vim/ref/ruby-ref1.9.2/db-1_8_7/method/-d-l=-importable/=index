@@ -1,0 +1,15 @@
+#[]	DL::Importable#[]
+#_args_	DL::Importable#_args_
+#_retval_	DL::Importable#_retval_
+#callback	DL::Importable#callback
+#define_struct	DL::Importable#define_struct
+#define_union	DL::Importable#define_union
+#dllink	DL::Importable#dllink
+#dlload	DL::Importable#dllink
+#extern	DL::Importable#extern
+#import	DL::Importable#import
+#struct	DL::Importable#define_struct
+#symbol	DL::Importable#symbol
+#typealias	DL::Importable#typealias
+#union	DL::Importable#define_union
+:LIB_MAP	DL::Importable::LIB_MAP

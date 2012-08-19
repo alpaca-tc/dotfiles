@@ -1,0 +1,6 @@
+kind=defined
+names=param_count
+visibility=public
+
+--- param_count(paramdef, *type)
+

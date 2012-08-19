@@ -1,0 +1,9 @@
+kind=defined
+names=buf_size
+visibility=private 
+
+--- buf_size(idx) -> Fixnum
+idxで指定したバッファのデータサイズを取得します。
+
+@param idx サイズを取得するデータのインデックス
+

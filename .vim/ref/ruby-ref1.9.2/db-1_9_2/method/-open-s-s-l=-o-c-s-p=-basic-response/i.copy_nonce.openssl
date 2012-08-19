@@ -1,0 +1,9 @@
+kind=defined
+names=copy_nonce
+visibility=public
+
+--- copy_nonce(request) -> Integer
+request から nonce の値をコピーします。
+
+@param request コピー元のnonceを保持している Request ([[c:OpenSSL::OCSP::Request]] オブジェクト)
+

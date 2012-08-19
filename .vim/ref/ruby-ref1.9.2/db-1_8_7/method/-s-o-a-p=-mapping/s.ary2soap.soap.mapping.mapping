@@ -1,0 +1,6 @@
+kind=defined
+names=ary2soap
+visibility=public
+
+--- ary2soap(ary, type_ns = XSD::Namespace, typename = XSD::AnyTypeLiteral, registry = nil, opt = EMPTY_OPT)
+

@@ -1,0 +1,7 @@
+methods=
+sublibraries=
+requires=wsdl.info,xsd.namedelements
+classes=WSDL=XMLSchema=SimpleExtension
+is_sublibrary=true
+
+

@@ -1,0 +1,6 @@
+kind=defined
+names=replace_node
+visibility=public
+
+--- replace_node(node)
+

@@ -1,0 +1,10 @@
+kind=defined
+names=data
+visibility=public
+
+--- data -> Net::IMAP::ResponseText 
+
+レスポンスを解析したオブジェクトを返します。
+
+@see [[c:Net::IMAP::ResponseText]]
+

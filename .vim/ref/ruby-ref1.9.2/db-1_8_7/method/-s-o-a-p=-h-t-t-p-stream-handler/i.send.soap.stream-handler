@@ -1,0 +1,6 @@
+kind=defined
+names=send
+visibility=public
+
+--- send(endpoint_url, conn_data, soapaction = nil, charset = @charset)
+

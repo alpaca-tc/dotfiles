@@ -1,0 +1,16 @@
+kind=defined
+names=message,to_s,to_str
+visibility=public
+
+--- message    -> String
+--- to_s       -> String
+--- to_str    -> String
+
+エラーメッセージをあらわす文字列を返します。
+
+  begin 
+    1 + nil 
+  rescue => e
+    p e.message   #=>  "nil can't be coerced into Fixnum"
+  end
+

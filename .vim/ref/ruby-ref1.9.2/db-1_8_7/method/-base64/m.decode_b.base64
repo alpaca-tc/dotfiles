@@ -1,0 +1,28 @@
+kind=defined
+names=decode_b
+visibility=public
+
+--- decode_b(str) -> String
+
+[[RFC:2047]] で定義されている encoded-word を含む
+文字列 str をデコードします。
+
+encoded-word は、
+
+  "=?" + charset + "?" + encoding + "?" + encoded-text + "?="
+
+という形式の文字列で、メールヘッダに使用されます。
+
+この関数は charset として "iso-2022-jp" と "shift_jis" を、
+encoding として "B" encoding (Base64) だけをサポートしています。
+
+バグ:
+
+実際は、内部で [[m:Kconv.#toeuc]] を呼んでいるため、 [[lib:kconv]] が内
+部的に利用する [[lib:nkf]] ライブラリが勝手にデコードを行ってしまいます。
+したがって、この関数はあまり意味がなくなってしまっています(昔の Kconv
+の実装は NKF を使用しなかったためこのようなことになっているのだと思われ
+ます)。
+
+@param src デコードしたい文字列です。
+

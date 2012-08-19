@@ -1,0 +1,7 @@
+kind=defined
+names=day,day=
+visibility=public
+
+--- day
+--- day=(day)
+

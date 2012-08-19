@@ -1,0 +1,8 @@
+kind=defined
+names=UTF16
+visibility=public
+
+--- UTF16 -> Integer
+
+UTF-16 (BigEndian) コードを表します。
+

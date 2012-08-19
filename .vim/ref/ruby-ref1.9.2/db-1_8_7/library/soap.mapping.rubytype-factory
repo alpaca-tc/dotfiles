@@ -1,0 +1,7 @@
+methods=
+sublibraries=
+requires=
+classes=SOAP=Mapping=RubytypeFactory
+is_sublibrary=true
+
+

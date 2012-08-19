@@ -1,0 +1,6 @@
+kind=defined
+names=basetype_class
+visibility=private 
+
+--- basetype_class(type)
+

@@ -1,0 +1,14 @@
+kind=defined
+names=current
+visibility=public
+
+--- current -> object
+
+現在の位置にある要素を返します。next と違い位置は移動しません。
+
+例:
+
+  g = Generator.new(['A', 'B', 'C', 'Z'])
+  p g.current # => 'A'
+  p g.current # => 'A'
+

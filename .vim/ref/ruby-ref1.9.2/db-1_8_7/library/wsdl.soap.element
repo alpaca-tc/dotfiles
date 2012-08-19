@@ -1,0 +1,7 @@
+methods=WSDL=XMLSchema=Element/i.map_as_array=3f.wsdl.soap.element,WSDL=XMLSchema=Element/i.attributes.wsdl.soap.element
+sublibraries=
+requires=wsdl.info,wsdl.xmlSchema.element
+classes=
+is_sublibrary=true
+
+

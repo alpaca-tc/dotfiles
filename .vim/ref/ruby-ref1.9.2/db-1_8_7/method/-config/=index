@@ -1,0 +1,5 @@
+.expand	Config.expand
+:CONFIG	Config::CONFIG
+:DESTDIR	Config::DESTDIR
+:MAKEFILE_CONFIG	Config::MAKEFILE_CONFIG
+:TOPDIR	Config::TOPDIR

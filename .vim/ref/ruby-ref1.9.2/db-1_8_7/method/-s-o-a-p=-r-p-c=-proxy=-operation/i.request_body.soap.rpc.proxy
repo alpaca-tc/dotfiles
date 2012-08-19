@@ -1,0 +1,6 @@
+kind=defined
+names=request_body
+visibility=public
+
+--- request_body(values, mapping_registry, literal_mapping_registry, opt)
+

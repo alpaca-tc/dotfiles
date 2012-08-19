@@ -1,0 +1,8 @@
+superclass=Object
+type=class
+library=openssl
+extended=
+included=
+
+Netscape SPKI、もしくは SPKAC(Signed Public Key And Challenge) と呼ばれる
+データフォーマットを扱うためのクラスです。

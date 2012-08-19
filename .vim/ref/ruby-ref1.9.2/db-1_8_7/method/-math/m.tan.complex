@@ -1,0 +1,13 @@
+kind=redefined
+names=tan
+visibility=public
+
+--- tan(z) -> Complex
+複素関数としてのtan関数の結果を返します。
+
+tan関数は以下で定義されます。
+
+  tan(z)  = sin(z) / cos(z)
+
+@param z 複素数
+

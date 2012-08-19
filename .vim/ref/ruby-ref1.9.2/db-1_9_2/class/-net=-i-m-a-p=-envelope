@@ -1,0 +1,9 @@
+superclass=Struct
+type=class
+library=net.imap
+extended=
+included=
+
+メッセージのエンベロープを表すクラスです。
+
+[[m:Net::IMAP::FetchData#attr]] の要素として用いられます。

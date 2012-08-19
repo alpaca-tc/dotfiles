@@ -1,0 +1,7 @@
+kind=defined
+names=external_ces,external_ces=
+visibility=public
+
+--- external_ces
+--- external_ces=(value)
+

@@ -1,0 +1,6 @@
+kind=defined
+names=add_document_request_operation
+visibility=public
+
+--- add_document_request_operation(factory, soapaction, name, param_def, opt = {})
+

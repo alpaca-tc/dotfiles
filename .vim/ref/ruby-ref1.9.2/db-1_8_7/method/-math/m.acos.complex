@@ -1,0 +1,13 @@
+kind=redefined
+names=acos
+visibility=public
+
+--- acos(z) -> Complex
+複素関数としてのacos関数(逆cos関数)の結果を返します。
+
+acos関数は以下で定義されます。
+
+  acos(z) = -i * log(z + i*sqrt(1-z*z))
+
+@param z 複素数
+

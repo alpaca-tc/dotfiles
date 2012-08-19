@@ -1,0 +1,14 @@
+kind=defined
+names=group=
+visibility=public
+
+--- group=(gr)
+鍵パラメータとなる群を表すオブジェクトを設定します。
+
+通常このメソッドで値を変更することはありません。
+よく考えて必要な場合のみ利用してください。
+
+@param gr 設定する [[c:OpenSSL::PKey::EC::Group]] オブジェクト
+@raise OpenSSL::PKey::ECError Group オブジェクトの設定に失敗した場合に発生します
+@see [[m:OpenSSL::PKey::EC#group]]
+

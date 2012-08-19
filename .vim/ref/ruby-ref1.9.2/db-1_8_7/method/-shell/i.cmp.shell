@@ -1,0 +1,15 @@
+kind=defined
+names=cmp,compare
+visibility=public
+
+--- compare(file1, file2) -> bool
+--- cmp(file1, file2) -> bool
+
+[[c:File]] クラスにある同名のクラスメソッドと同じです.
+
+@param file1 ファイルの名前を文字列で与えます。
+
+@param file2 新しいファイル名を文字列で与えます。
+
+@see [[m:File.compare]]
+

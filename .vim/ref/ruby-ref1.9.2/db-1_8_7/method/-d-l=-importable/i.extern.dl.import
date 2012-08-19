@@ -1,0 +1,21 @@
+kind=defined
+names=extern
+visibility=public
+
+--- extern(proto)    -> DL::Symbol
+
+与えられたプロトタイプにしたがって、ダイナミックライブラリ内のシンボルを検索し、
+自身の特異メソッドとして、定義します。
+
+@param proto C の関数プロトタイプを文字列で与えます。頭文字が大文字の場合は小文字に自動的に変換されます。
+
+  require "dl/import"
+  
+  module M
+    extend DL::Importable
+    dlload "libc.so.6"
+    extern "double strtod(char*, void**)"
+  end
+  
+  p M.strtod("1.23", nil) #=> 1.23
+

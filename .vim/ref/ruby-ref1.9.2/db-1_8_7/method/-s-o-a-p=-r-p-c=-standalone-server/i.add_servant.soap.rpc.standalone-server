@@ -1,0 +1,6 @@
+kind=defined
+names=add_servant
+visibility=public
+
+--- add_servant(obj, namespace = @default_namespace)
+

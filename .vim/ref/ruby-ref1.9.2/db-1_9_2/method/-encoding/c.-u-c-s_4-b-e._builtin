@@ -1,0 +1,10 @@
+kind=defined
+names=UCS_4BE,UTF_32BE
+visibility=public
+
+--- UTF_32BE
+--- UCS_4BE
+UTF-32BE (ビッグエンディアン) です。
+
+BOM を含みません。
+

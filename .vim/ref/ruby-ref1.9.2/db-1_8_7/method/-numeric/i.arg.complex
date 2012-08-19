@@ -1,0 +1,16 @@
+kind=added
+names=arg
+visibility=public
+
+--- arg -> Fixnum | Float
+複素数として見た場合の偏角を[-π,π]の範囲で返します。
+非負なら0、負なら [[m:Math::PI]] を返します。
+
+例:
+
+  n = 1000
+  f = -12.345
+
+  p n.arg    #=> 0
+  p f.arg    #=> 3.14159265358979
+

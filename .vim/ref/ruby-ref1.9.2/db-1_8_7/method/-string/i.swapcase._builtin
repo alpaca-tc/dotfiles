@@ -1,0 +1,25 @@
+kind=defined
+names=swapcase
+visibility=public
+
+--- swapcase -> String
+
+'A' から 'Z' までのアルファベット大文字を小文字に、
+'a' から 'z' までのアルファベット小文字を大文字に変更した文字列を返します。
+
+このメソッドはマルチバイト文字を認識しません。
+そのため、文字列が Shift JIS エンコーディングで、
+かつ [[m:$KCODE]] が適切に設定されていない場合、
+マルチバイト文字の一部も変換してしまう場合があります。
+逆に、[[m:$KCODE]] を設定しても
+マルチバイト文字のアルファベットは処理しません。
+
+例:
+    p "ABCxyz".swapcase   # => "abcXYZ"
+    p "Access".swapcase   # => "aCCESS"
+
+    # -*- Coding: shift_jis -*-
+    $KCODE = 'n'
+    puts "蟻".swapcase   # => 帰
+@see [[m:String#upcase]], [[m:String#downcase]], [[m:String#capitalize]]
+

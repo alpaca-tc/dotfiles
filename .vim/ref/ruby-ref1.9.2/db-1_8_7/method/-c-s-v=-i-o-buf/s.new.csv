@@ -1,0 +1,9 @@
+kind=defined
+names=new
+visibility=public
+
+--- new(s) -> self
+インスタンスを生成します。
+
+@param s バッファリングするIOのオブジェクト
+

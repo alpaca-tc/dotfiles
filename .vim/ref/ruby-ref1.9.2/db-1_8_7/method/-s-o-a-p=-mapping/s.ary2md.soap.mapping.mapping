@@ -1,0 +1,6 @@
+kind=defined
+names=ary2md
+visibility=public
+
+--- ary2md(ary, rank, type_ns = XSD::Namespace, typename = XSD::AnyTypeLiteral, registry = nil, opt = EMPTY_OPT)
+

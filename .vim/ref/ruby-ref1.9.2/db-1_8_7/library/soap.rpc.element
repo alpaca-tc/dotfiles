@@ -1,0 +1,7 @@
+methods=SOAP=SOAPBody/i.request.soap.rpc.element,SOAP=SOAPBody/i.response.soap.rpc.element,SOAP=SOAPBody/i.outparams.soap.rpc.element,SOAP=SOAPBody/i.fault.soap.rpc.element
+sublibraries=
+requires=soap.baseData,soap.soap,soap.mapping.typeMap
+classes=SOAP=RPC=RPCError,SOAP=RPC=MethodDefinitionError,SOAP=RPC=ParameterError,SOAP=RPC=SOAPMethod,SOAP=RPC=SOAPMethodRequest,SOAP=RPC=SOAPMethodResponse,SOAP=RPC=SOAPVoid
+is_sublibrary=true
+
+

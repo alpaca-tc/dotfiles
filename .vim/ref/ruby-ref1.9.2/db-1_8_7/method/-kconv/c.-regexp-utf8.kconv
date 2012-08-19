@@ -1,0 +1,7 @@
+kind=defined
+names=RegexpUtf8
+visibility=public
+
+--- RegexpUtf8 -> Regexp
+この定数は使うべきではありません。
+

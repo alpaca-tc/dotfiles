@@ -1,0 +1,11 @@
+superclass=Object
+type=class
+library=dl.struct
+extended=
+included=
+
+DL::PtrData のラッパー用クラス。
+ドット形式で構造体や共用体の要素へアクセスできるようになります。
+Struct,Unionのインスタンスのmalloc,newメソッドを呼ぶことによって、
+Memoryクラスのインスタンスが生成できます。
+そのため、通常、直接生成する必要はありません。

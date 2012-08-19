@@ -1,0 +1,14 @@
+kind=defined
+names=by_id
+visibility=public
+
+--- by_id(id) -> OpenSSL::Engine
+id で指定した engine をロードします。
+
+[[m:OpenSSL::Engine#load]] ではコンパイル時に決められた engine しか
+読み込めませんが、これは動的なロードが可能です。
+
+@param id engine の名前(文字列)
+@raise OpenSSL::Engine::EngineError ロードが失敗した場合に発生します。
+
+

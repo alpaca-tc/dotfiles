@@ -1,0 +1,6 @@
+kind=defined
+names=encode_argument_type
+visibility=public
+
+--- encode_argument_type(alias_type)
+

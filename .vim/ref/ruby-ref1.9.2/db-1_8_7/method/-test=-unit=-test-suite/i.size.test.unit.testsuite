@@ -1,0 +1,10 @@
+kind=defined
+names=size
+visibility=public
+
+--- size    -> Integer
+
+実行するテストの総数を返します。
+もし自身が他の TestSuite を含んでいる場合は、その TestSuite が
+持っているテストを再帰的に合計した数を返します。
+

@@ -1,0 +1,6 @@
+kind=defined
+names=add_ervant
+visibility=public
+
+--- add_ervant(obj, namespace)
+

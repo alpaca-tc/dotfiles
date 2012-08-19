@@ -1,0 +1,18 @@
+kind=defined
+names=prec
+visibility=public
+
+--- prec(klass) -> object
+
+self を精度 klass に変換した結果を返します。
+
+デフォルトの定義では
+klass.induced_from(self) を呼び出し、
+その結果を返します。
+
+新しく精度クラスを作るときは組み込みクラスの
+[[m:Precision.induced_from]] を変更するのではなく、この
+prec の再定義で対応するべきです。
+
+@param klass 精度を持つ数値クラス
+

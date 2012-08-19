@@ -1,0 +1,7 @@
+methods=
+sublibraries=
+requires=
+classes=Ping
+is_sublibrary=false
+
+サーバが稼働しているかどうか調べるための単純なメソッドを提供します。

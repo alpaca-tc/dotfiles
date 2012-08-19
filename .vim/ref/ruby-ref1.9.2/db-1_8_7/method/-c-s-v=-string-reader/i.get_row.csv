@@ -1,0 +1,12 @@
+kind=defined
+names=get_row
+visibility=private 
+
+--- get_row(row) -> Fixnum
+CSV 形式の文字列から1 行(row)分のデータを配列に変換し、row に出力する。
+
+@param row 初期値の文字列
+@return パースして出力した1行分のデータの cell の数(変換した配列のサイズ)
+
+
+

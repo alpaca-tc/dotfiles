@@ -1,0 +1,16 @@
+kind=defined
+names=to_s,to_str
+visibility=public
+
+--- to_s   -> String
+--- to_str -> String
+パス名を文字列で返します。
+
+to_str は、[[m:File.open]] などの引数にそのまま Pathname オブジェクトを
+渡せるようにするために用意されています。
+
+    require 'pathname'
+    
+    path = Pathname.new("/tmp/hogehoge")
+    File.open(path)
+

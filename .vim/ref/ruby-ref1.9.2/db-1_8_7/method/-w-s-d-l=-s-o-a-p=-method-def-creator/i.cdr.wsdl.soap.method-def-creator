@@ -1,0 +1,6 @@
+kind=defined
+names=cdr
+visibility=private 
+
+--- cdr(ary)
+

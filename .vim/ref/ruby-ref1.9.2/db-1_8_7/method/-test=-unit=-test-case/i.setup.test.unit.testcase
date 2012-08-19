@@ -1,0 +1,7 @@
+kind=defined
+names=setup
+visibility=public
+
+--- setup    -> ()
+各テストメソッドが呼ばれる前に必ず呼ばれます。
+

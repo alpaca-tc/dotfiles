@@ -1,0 +1,22 @@
+kind=added
+names=mbchar?
+visibility=public
+
+--- mbchar? -> Integer|nil
+
+self に多バイト文字が最初に現れる位置を返します。
+多バイト文字が含まれていなければ nil を返します。
+
+例：
+
+  #!/usr/bin/env ruby
+
+  $KCODE = 'EUC'
+  zstr = 'ＡＢＣＤＥＦ'
+  hoge = 'hogehoge'
+
+  require 'jcode'
+  p zstr.mbchar?   # => 0
+  p hoge.mbchar?   # => nil
+
+

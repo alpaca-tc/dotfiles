@@ -1,0 +1,54 @@
+kind=defined
+names=open
+visibility=public
+
+--- open(path, mode, fs = nil, rs = nil) {|row| ... } -> nil
+--- open(path, mode, fs = nil, rs = nil) -> CSV::Reader | CSV::Writer
+
+CSVファイルを読み込んでパースします。
+
+読み込みモード時には path にあるファイルを開き各行を配列として
+ブロックに渡します。
+
+@param path パースするファイルのファイル名
+@param mode 処理モードの指定
+            'r', 'w', 'rb', 'wb' から指定可能です。
+            - 'r' 読み込み
+            - 'w' 書き込み
+            - 'b' バイナリモード
+@param fs フィールドセパレータの指定。
+          nil (デフォルト) で ',' をセパレータとします。
+@param rs 行区切り文字の指定。nil (デフォルト) で CRLF / LF。
+          CR を行区切りとしたい場合は ?\r を渡します。
+
+===== 注意
+
+パース時に""(空文字)と値なし(nil)を区別します。
+例えば、読み込みモード時にa, "", , b の行をパースした場合には ["a", "", nil, "b"] の配列を返します。
+
+例:
+
+  CSV.open("/temp/test.csv", 'r') do |row|
+    puts row.join("<>")
+  end
+
+tsv(Tab Separated Values)ファイルなどのセパレータをカンマ以外で指定
+
+  CSV.open("/temp/test.tsv", 'r', "\t") do |row|
+    puts row.join("<>")
+  end
+
+ブロックを渡さなかった場合 CSV::Reader を返します。
+
+書き込みモード時には path にあるファイルを開き CSV::Writer をブロックに渡します。
+
+例:
+
+  CSV.open("/temp/test.csv", 'w') do |writer|
+    writer << ["ruby", "perl", "python"]
+    writer << ["java", "C", "C++"]
+  end
+
+ブロック未指定の場合 CSV::Writer を返します。
+
+

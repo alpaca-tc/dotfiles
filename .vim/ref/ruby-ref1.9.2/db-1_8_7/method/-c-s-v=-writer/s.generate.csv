@@ -1,0 +1,21 @@
+kind=defined
+names=generate
+visibility=public
+
+--- generate(str_or_writable, fs = ',', rs = nil) -> CSV::BasicWriter
+--- generate(str_or_writable, fs = ',', rs = nil) { |row| ... } -> nil
+str_or_writable を書き込み先とする [[c:CSV::BasicWriter]] クラスのインスタンスを生成し、書き込み先(str_or_writable)をブロックに渡します。
+
+@param str_or_writable CSVデータの書き込み先。このパラメータとして渡すインスタンスには<<メソッドが定義されている必要があります。
+@param fs 書き込みデータのフィールドセパレータの指定。
+          nil (デフォルト) で ',' をセパレータとします。
+@param rs 行区切り文字の指定。nil (デフォルト) で CrLf / Lf。
+          Cr を行区切りとしたい場合は ?\r を渡します。
+
+例:
+  s = "1,2,3,4\n"
+  CSV::Writer.generate(s){|data|
+    data << ['a', 'b', 'c']
+  }
+  p s #=> "1,2,3,4\na,b,c\n"
+

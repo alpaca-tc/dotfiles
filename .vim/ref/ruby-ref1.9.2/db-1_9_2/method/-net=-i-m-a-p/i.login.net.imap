@@ -1,0 +1,22 @@
+kind=defined
+names=login
+visibility=public
+
+--- login(user, password) -> Net::IMAP::TaggedResponse
+LOGIN コマンドを送り、平文でパスワードを送りクライアント
+ユーザを認証します。
+
+[[m:Net::IMAP#authenticate]] で "LOGIN" を使うのとは異なる
+ことに注意してください。authenticate では AUTHENTICATE コマンドを
+送ります。
+
+認証成功時には
+認証成功レスポンスを返り値として返します。
+
+認証失敗時には例外が発生します。
+
+@param user ユーザ名文字列
+@param password パスワード文字列
+@raise Net::IMAP::NoResponseError 認証に失敗した場合に発生します
+@see [[m:Net::IMAP#authenticate]]
+

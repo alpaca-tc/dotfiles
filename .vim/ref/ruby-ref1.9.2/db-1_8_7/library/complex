@@ -1,0 +1,7 @@
+methods=Numeric/i.im.complex,Numeric/i.real.complex,Numeric/i.imag.complex,Numeric/i.arg.complex,Numeric/i.conj.complex,Math/m.sqrt.complex,Math/m.exp.complex,Math/m.log.complex,Math/m.log10.complex,Math/m.cos.complex,Math/m.sin.complex,Math/m.tan.complex,Math/m.cosh.complex,Math/m.sinh.complex,Math/m.tanh.complex,Math/m.acos.complex,Math/m.asin.complex,Math/m.atan.complex,Math/m.atan2.complex,Math/m.acosh.complex,Math/m.asinh.complex,Math/m.atanh.complex
+sublibraries=
+requires=
+classes=Complex
+is_sublibrary=false
+
+複素数を扱うためのライブラリです。

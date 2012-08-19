@@ -1,0 +1,22 @@
+kind=defined
+names=sizeof
+visibility=public
+
+--- sizeof(type)    -> Integer
+
+型のサイズを返します。
+
+sizeof("C") + sizeof("L") は、sizeof("CL") と等価ではありません。
+後者は構造体 struct foo { char c; long l; } の
+十分なサイズを返すと推定されますが、
+そのサイズは C の sizeof(foo) と同じではないかもしれません。
+つまり、sizeof メソッドは独自にアラインメントを考慮してサイズを決定
+しますが、 C 言語のそれとは異なるかもしれません。
+
+sizeof("L3") のように型の後に数字を付けることもできます。
+指定できる型については [[c:DL]] を参照してください。
+
+@param type 型指定子を文字列で与えます。
+
+@raise DL::DLTypeError 定められた文字以外を型指定子として与えると発生します。
+

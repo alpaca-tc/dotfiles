@@ -1,0 +1,11 @@
+kind=defined
+names=use_pp=
+visibility=public
+
+--- use_pp=(value)
+
+出力に [[lib:pp]] を使用するかどうかを指定します。偽を指定した場合は
+[[lib:pp]] は require されません。
+
+@param value [[lib:pp]] を使用するかどうか。
+

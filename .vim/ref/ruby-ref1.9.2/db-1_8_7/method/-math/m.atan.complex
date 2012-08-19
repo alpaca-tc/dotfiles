@@ -1,0 +1,13 @@
+kind=redefined
+names=atan
+visibility=public
+
+--- atan(z) -> Complex
+複素関数としてのatan関数(逆tan関数)の結果を返します。
+
+atan関数は以下で定義されます。
+
+  atan(z) = i/2 * log((i+z) / (i-z))
+
+@param z 複素数
+

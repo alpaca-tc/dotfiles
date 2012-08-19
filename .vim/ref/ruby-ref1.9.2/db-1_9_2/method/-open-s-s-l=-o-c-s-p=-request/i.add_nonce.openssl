@@ -1,0 +1,11 @@
+kind=defined
+names=add_nonce
+visibility=public
+
+--- add_nonce(nonce = nil) -> self
+Request オブジェクトに nonce を追加します。
+
+nonce とは、リプレイ攻撃を防止するために設定する乱数です。
+
+@param nonce 設定するnonce文字列。nilの場合は適当な乱数を自動で設定します
+

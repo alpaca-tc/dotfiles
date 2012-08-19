@@ -1,0 +1,6 @@
+kind=defined
+names=lock
+visibility=public
+
+--- lock(cascade = false)
+

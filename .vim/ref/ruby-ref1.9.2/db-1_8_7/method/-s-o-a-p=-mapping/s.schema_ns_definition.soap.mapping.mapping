@@ -1,0 +1,6 @@
+kind=defined
+names=schema_ns_definition
+visibility=public
+
+--- schema_ns_definition(klass)
+

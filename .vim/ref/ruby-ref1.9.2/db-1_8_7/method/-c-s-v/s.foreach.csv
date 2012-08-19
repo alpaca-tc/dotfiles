@@ -1,0 +1,23 @@
+kind=defined
+names=foreach
+visibility=public
+
+--- foreach(path, rs = nil) {|row| ... } -> nil
+
+読み込みモードでファイルを開き、各行を配列でブロックに渡します。
+
+@param path パースするファイルのファイル名
+@param rs 行区切り文字の指定。nil (デフォルト) で CrLf / Lf。
+          Cr を行区切りとしたい場合は ?\r を渡します。
+
+===== 注意
+
+パース時に""(空文字)と値なしを区別します。
+例えば、a, "", , b の行をパースした場合には ["a", "", nil, "b"] の配列を返します。
+
+例:
+
+  CSV.foreach('test.csv'){|row|
+    puts row.join(':')
+  }
+

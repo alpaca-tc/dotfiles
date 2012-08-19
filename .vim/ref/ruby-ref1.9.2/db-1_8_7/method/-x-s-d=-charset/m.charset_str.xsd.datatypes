@@ -1,0 +1,6 @@
+kind=defined
+names=charset_str
+visibility=public
+
+--- charset_str(label)
+

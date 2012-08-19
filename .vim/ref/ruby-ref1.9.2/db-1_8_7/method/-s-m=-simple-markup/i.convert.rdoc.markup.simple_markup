@@ -1,0 +1,11 @@
+kind=defined
+names=convert
+visibility=public
+
+--- convert(str, op)
+
+We take a string, split it into lines, work out the type of
+each line, and from there deduce groups of lines (for example
+all lines in a paragraph). We then invoke the output formatter
+using a Visitor to display the result
+

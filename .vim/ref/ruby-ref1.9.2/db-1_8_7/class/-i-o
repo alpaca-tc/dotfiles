@@ -1,0 +1,45 @@
+superclass=Object
+type=class
+library=_builtin
+extended=
+included=Enumerable,File=Constants
+
+基本的な入出力機能のためのクラスです。
+
+  * [[unknown:Traps: IO ポートのオープンに関わる問題|trap::IO]]
+
+File::Constants は、[[c:File]] から IO へ移動しました。
+
+
+=== EOF での読み込みメソッドの振る舞いの違い
+
+空ファイルや EOF での各読み込みメソッドの振る舞いは以下のとおりです。
+ただし、length を指定できるメソッドに関しては、length に nil または 0 を指定した場合、
+EOF であっても常に空文字列 "" を返します。
+ただし、[[m:IO#read]](0) は EOF では nil を返します。
+
+//emlist{
+メソッド                      空のファイルに対して
+
+IO.read(空ファイル)           ""
+IO.read(空ファイル, length)   nil
+IO.readlines(空ファイル)      []
+IO.foreach(空ファイル)        何もしない
+//}
+
+//emlist{
+メソッド                      既にEOFだったら
+
+IO#each                       何もしない
+IO#each_byte                  何もしない
+IO#getc                       nil
+IO#gets                       nil
+IO#read()                     ""
+IO#read(length)               nil
+IO#read_nonblock              EOFError
+IO#readchar                   EOFError
+IO#readline                   EOFError
+IO#readlines                  []
+IO#readpartial                EOFError
+IO#sysread                    EOFError
+//}

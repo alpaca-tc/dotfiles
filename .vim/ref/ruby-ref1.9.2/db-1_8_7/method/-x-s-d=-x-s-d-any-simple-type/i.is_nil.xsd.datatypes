@@ -1,0 +1,7 @@
+kind=defined
+names=is_nil,is_nil=
+visibility=public
+
+--- is_nil
+--- is_nil=(bool)
+

@@ -1,0 +1,7 @@
+methods=
+sublibraries=
+requires=
+classes=SOAP=Property,SOAP=Property=Util
+is_sublibrary=true
+
+

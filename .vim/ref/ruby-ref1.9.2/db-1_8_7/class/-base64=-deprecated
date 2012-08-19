@@ -1,0 +1,10 @@
+superclass=
+type=module
+library=base64
+extended=
+included=
+
+後方互換性を維持する目的で、 [[c:Base64]] モジュールに定義された各種の
+モジュール関数を [[c:Kernel]] モジュールに include するために存在するモ
+ジュールです。通常、ユーザが利用することはありません。また、将来的に廃
+止される可能性があります。

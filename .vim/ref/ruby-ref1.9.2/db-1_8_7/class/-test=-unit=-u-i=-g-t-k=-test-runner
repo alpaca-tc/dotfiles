@@ -1,0 +1,10 @@
+superclass=Object
+type=class
+library=test.unit.ui.gtk.testrunner
+extended=Test=Unit=UI=TestRunnerUtilities
+included=
+
+GTK を用いた UI で Test::Unit::TestSuite を実行します。
+
+この機能を利用するには、GTK の拡張ライブラリをインストールする必要があ
+ります。

@@ -1,0 +1,9 @@
+kind=added
+names=printUsageAndExit
+visibility=private 
+
+--- printUsageAndExit -> ()
+
+グローバル変数 $USAGE がセットされていれば [[m:Kernel.#eval]] して [[m:Kernel.#exit]] します。
+セットされていない場合は、単に [[m:Kernel.#exit]] します。
+

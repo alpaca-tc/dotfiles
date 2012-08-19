@@ -1,0 +1,19 @@
+superclass=Object
+type=class
+library=_builtin
+extended=
+included=Enumerable
+
+each 以外のメソッドにも [[c:Enumerable]] の機能を提供するためのラッパークラスです。
+また、外部イテレータとしても使えます。
+Ruby 1.8.8 以降では Enumerable::Enumerator は Enumerator になっています。
+
+[[c:Enumerable]] モジュールは、 [[m:Module#include]] 先のクラスが持つ
+each メソッドを元に様々なメソッドを提供します。
+例えば Array#map は [[m:Array#each]] の繰り返しを元にして定義されます。
+Enumerator を介することにより [[m:String#each_byte]] のような
+異なる名前のイテレータについても each と同様に Enumerable の機能を利用できます。
+
+Enumerator を生成するには
+[[m:Enumerable::Enumerator.new]]
+あるいは [[m:Object#to_enum]], [[m:Object#enum_for]] を利用します。

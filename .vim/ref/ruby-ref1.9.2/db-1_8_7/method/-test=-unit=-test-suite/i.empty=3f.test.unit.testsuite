@@ -1,0 +1,8 @@
+kind=defined
+names=empty?
+visibility=public
+
+--- empty?    -> bool
+
+実行すべきテストが空なら true を返します。そうでないなら false を返します。
+

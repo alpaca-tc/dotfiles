@@ -1,0 +1,10 @@
+kind=defined
+names=quiet_mode=
+visibility=public
+
+--- quiet_mode=(bool)
+
+真をセットすると出力が静かになります。
+
+@param bool 真を指定すると、出力が静かになります。
+

@@ -1,0 +1,7 @@
+methods=
+sublibraries=
+requires=test.unit,test.unit.assertions,test.unit.testsuite,test.unit.autorunner,test.unit.testcase,test.unit.ui.testrunnerutilities
+classes=Test=Unit=AutoRunner
+is_sublibrary=true
+
+ユニットテストの実行を操作したいときに使います。

@@ -1,0 +1,13 @@
+kind=defined
+names=assert_not_match
+visibility=public
+
+--- assert_not_match(str, re, message = "") -> ()
+与えられた文字列が与えられた正規表現にマッチしない場合、検査にパスします。
+
+@param str 文字列を指定します。
+
+@param re 正規表現を指定します。
+
+@param message 検査に失敗したときのメッセージを指定します。
+

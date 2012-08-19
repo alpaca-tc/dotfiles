@@ -1,0 +1,8 @@
+kind=defined
+names=failure_size
+visibility=public
+
+--- failure_size -> Integer
+
+失敗した件数を返します。
+

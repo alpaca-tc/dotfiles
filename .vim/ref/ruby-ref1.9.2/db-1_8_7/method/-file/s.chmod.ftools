@@ -1,0 +1,16 @@
+kind=redefined
+names=chmod
+visibility=public
+
+--- chmod(mode, *files) -> Integer
+
+(複数の)ファイルの属性を変えます。
+
+オリジナルの [[m:File.chmod]] に verbose の指定が
+追加されるだけです。
+
+@param mode
+
+@param files ファイルを指定します。
+             最後の引数が文字列でない場合または真の場合、詳細を出力します。
+

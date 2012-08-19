@@ -1,0 +1,14 @@
+kind=defined
+names=cmds
+visibility=public
+
+--- cmds -> [[String, String, String]]
+その engine がサポートしているコマンドの一覧を
+配列で返します。
+
+配列の各要素は
+  [コマンド名、コマンドの説明、コマンドのフラグ]
+という3つの文字列の配列です。
+
+@see [[m:OpenSSL::Engine#ctrl_cmd]]
+

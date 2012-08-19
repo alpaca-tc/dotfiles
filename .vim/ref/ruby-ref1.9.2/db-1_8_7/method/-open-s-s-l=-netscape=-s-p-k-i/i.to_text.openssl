@@ -1,0 +1,7 @@
+kind=defined
+names=to_text
+visibility=public
+
+--- to_text -> String
+SPKI オブジェクトを人間が読める形式の文字列に変換します。
+

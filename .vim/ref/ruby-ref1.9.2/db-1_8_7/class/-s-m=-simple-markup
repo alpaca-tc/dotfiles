@@ -1,0 +1,49 @@
+superclass=Object
+type=class
+library=rdoc.markup.simple_markup
+extended=
+included=
+
+This code converts <tt>input_string</tt>, which is in the format
+described in markup/simple_markup.rb, to HTML. The conversion
+takes place in the +convert+ method, so you can use the same
+SimpleMarkup object to convert multiple input strings.
+
+  require 'rdoc/markup/simple_markup'
+  require 'rdoc/markup/simple_markup/to_html'
+
+  p = SM::SimpleMarkup.new
+  h = SM::ToHtml.new
+
+  puts p.convert(input_string, h)
+
+You can extend the SimpleMarkup parser to recognise new markup
+sequences, and to add special processing for text that matches a
+regular epxression. Here we make WikiWords significant to the parser,
+and also make the sequences {word} and \<no>text...</no> signify
+strike-through text. When then subclass the HTML output class to deal
+with these:
+
+  require 'rdoc/markup/simple_markup'
+  require 'rdoc/markup/simple_markup/to_html'
+
+  class WikiHtml < SM::ToHtml
+    def handle_special_WIKIWORD(special)
+      "<font color=red>" + special.text + "</font>"
+    end
+  end
+
+  p = SM::SimpleMarkup.new
+  p.add_word_pair("{", "}", :STRIKE)
+  p.add_html("no", :STRIKE)
+
+  p.add_special(/\b([A-Z][a-z]+[A-Z]\w+)/, :WIKIWORD)
+
+  h = WikiHtml.new
+  h.add_tag(:STRIKE, "<strike>", "</strike>")
+
+  puts "<body>" + p.convert(ARGF.read, h) + "</body>"
+
+=== Output Formatters
+
+_missing_

@@ -1,0 +1,7 @@
+superclass=XSD=XSDAnySimpleType
+type=class
+library=xsd.datatypes
+extended=
+included=XSD=FloatConstants
+
+

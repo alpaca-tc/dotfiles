@@ -1,0 +1,12 @@
+kind=defined
+names=+
+visibility=public
+
+--- +(n)   -> DL::PtrData
+
+自身のアドレスに n バイトを足した新しい PtrData オブジェクトを返します。
+
+この返り値には、free 関数がセットされていません。
+
+@param n アドレスの増分を整数で指定します。
+

@@ -1,0 +1,15 @@
+kind=defined
+names=hash
+visibility=public
+
+--- hash -> Fixnum
+複素数のハッシュ値を返します。
+
+例:
+
+  z1 = Complex.new(3.5, 1.20)
+  z2 = Complex.new(3.5, 1.21)
+
+  p z1.hash    #=> 1889428376
+  p z2.hash    #=> 425788526
+

@@ -1,0 +1,15 @@
+kind=defined
+names=div
+visibility=public
+
+--- div(other) -> Integer
+
+self を other で割った整数の商を返します。
+
+@param other 自身を割る数
+
+例:
+
+  Rational(1, 2).div(Rational(2, 3)) # => 0
+
+

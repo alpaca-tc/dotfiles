@@ -1,0 +1,7 @@
+methods=DL=Importable/i.define_struct.dl.struct,DL=Importable/i.define_union.dl.struct
+sublibraries=
+requires=dl.import,dl.types,dl
+classes=DL=Importable=Memory,DL=Importable=Struct,DL=Importable=Union
+is_sublibrary=true
+
+DL::Importable を extend したモジュールに構造体/共用体を定義する機能を与えます。

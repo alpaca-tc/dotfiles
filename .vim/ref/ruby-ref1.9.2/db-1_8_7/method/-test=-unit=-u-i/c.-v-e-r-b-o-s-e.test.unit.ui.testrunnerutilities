@@ -1,0 +1,8 @@
+kind=defined
+names=VERBOSE
+visibility=public
+
+--- VERBOSE       -> Integer
+
+テスト結果の出力レベルを表す定数です。詳細な出力を行います。
+

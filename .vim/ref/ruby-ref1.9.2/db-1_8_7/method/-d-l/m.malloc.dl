@@ -1,0 +1,13 @@
+kind=defined
+names=malloc
+visibility=public
+
+--- malloc(size)    -> DL::PtrData
+
+size バイトのメモリ領域を確保し、
+その領域を指す [[c:DL::PtrData]] オブジェクトを返します。
+
+この返り値には、[[m:DL::FREE]] が free 関数としてセットされています。
+
+@param size 必要なメモリ領域のサイズを指定します。
+

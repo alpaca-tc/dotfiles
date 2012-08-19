@@ -1,0 +1,9 @@
+kind=defined
+names=check_fault
+visibility=public
+
+--- check_fault(body)
+
+
+
+

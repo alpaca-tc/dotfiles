@@ -1,0 +1,6 @@
+kind=defined
+names=new
+visibility=public
+
+--- new(send_string = nil)
+

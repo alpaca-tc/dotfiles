@@ -1,0 +1,6 @@
+kind=defined
+names=initialize
+visibility=public
+
+--- initialize(tag2ns = {})
+

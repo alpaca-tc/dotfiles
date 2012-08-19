@@ -1,0 +1,8 @@
+kind=defined
+names=parse_element
+visibility=public
+
+--- parse_element(element)
+
+[[m:WSDL::Info#parse_element]]を呼び出そうとするが実装が無い
+

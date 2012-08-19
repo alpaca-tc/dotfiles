@@ -1,0 +1,5 @@
+.dump	SOAP::Marshal.dump
+.load	SOAP::Marshal.load
+.marshal	SOAP::Marshal.marshal
+.unmarshal	SOAP::Marshal.unmarshal
+:MarshalMappingRegistry	SOAP::Marshal::MarshalMappingRegistry

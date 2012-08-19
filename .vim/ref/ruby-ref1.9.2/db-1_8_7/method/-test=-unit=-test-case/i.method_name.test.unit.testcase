@@ -1,0 +1,12 @@
+kind=defined
+names=method_name
+visibility=public
+
+--- method_name    -> String
+
+自身に対応しているテストメソッドの名前を文字列で返します。
+
+[[m:Test::Unit::TestCase#setup]] や [[m:Test::Unit::TestCase#teardown]]
+において、実行する(あるいは、実行した)テストメソッドの名前を知るのに
+使うことができます。
+

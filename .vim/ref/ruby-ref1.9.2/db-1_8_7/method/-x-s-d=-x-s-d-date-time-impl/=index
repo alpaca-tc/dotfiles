@@ -1,0 +1,8 @@
+#_set	XSD::XSDDateTimeImpl#_set
+#add_tz	XSD::XSDDateTimeImpl#add_tz
+#of2tz	XSD::XSDDateTimeImpl#of2tz
+#to_date	XSD::XSDDateTimeImpl#to_date
+#to_datetime	XSD::XSDDateTimeImpl#to_datetime
+#to_obj	XSD::XSDDateTimeImpl#to_obj
+#to_time	XSD::XSDDateTimeImpl#to_time
+#tz2of	XSD::XSDDateTimeImpl#tz2of

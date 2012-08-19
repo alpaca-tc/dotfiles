@@ -1,0 +1,6 @@
+kind=defined
+names=encode_return_type
+visibility=public
+
+--- encode_return_type(ty)
+

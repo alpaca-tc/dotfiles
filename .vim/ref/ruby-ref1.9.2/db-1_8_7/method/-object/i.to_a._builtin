@@ -1,0 +1,24 @@
+kind=defined
+names=to_a
+visibility=public
+
+--- to_a -> Array
+
+オブジェクトを配列に変換した結果を返します。
+
+配列に変換できない(to_ary を持たない)オブジェクトは、自身のみを含む長さ 1 の配
+列に変換されます。
+このメソッドは、将来 Object のメソッドからは取り除かれます。
+なので to_a を使用する場合、
+
+ * すべてのオブジェクトに to_a が定義されているという期待はしない。
+ * ユーザー定義のクラスには必要に応じて自分で定義する
+
+などということが必要です。
+    p( {'a'=>1}.to_a )  # [["a", 1]]
+    p ['array'].to_a    # ["array"]
+    p 1.to_a            # [1]       (warning: default `to_a' will be obsolete)
+    p nil.to_a          # []
+
+@see [[m:Object#to_ary]],[[m:Kernel.#Array]]
+

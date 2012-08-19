@@ -1,0 +1,6 @@
+kind=defined
+names=RTLD_NOW
+visibility=public
+
+--- RTLD_NOW
+

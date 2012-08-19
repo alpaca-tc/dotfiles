@@ -1,0 +1,6 @@
+kind=defined
+names=dump_simpleclassdef
+visibility=private 
+
+--- dump_simpleclassdef(type_or_element)
+

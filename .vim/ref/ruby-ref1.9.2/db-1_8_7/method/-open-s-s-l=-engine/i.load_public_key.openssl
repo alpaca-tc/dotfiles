@@ -1,0 +1,10 @@
+kind=defined
+names=load_public_key
+visibility=public
+
+--- load_public_key(id=nil, data=nil) -> OpenSSL::PKey::PKey
+公開鍵を engine にロードします。
+
+@param id key id(文字列)
+@param data 文字列
+

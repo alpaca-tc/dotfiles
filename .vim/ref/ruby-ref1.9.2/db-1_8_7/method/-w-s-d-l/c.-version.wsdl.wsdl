@@ -1,0 +1,9 @@
+kind=defined
+names=Version
+visibility=public
+
+--- Version
+
+このライブラリのバージョンを表す定数。
+
+

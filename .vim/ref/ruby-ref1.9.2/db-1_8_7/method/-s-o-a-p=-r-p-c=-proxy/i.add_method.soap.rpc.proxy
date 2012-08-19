@@ -1,0 +1,8 @@
+kind=defined
+names=add_method,add_rpc_method,add_rpc_operation
+visibility=public
+
+--- add_rpc_operation(qname, soapaction, name, param_def, opt = {})
+--- add_method(qname, soapaction, name, param_def, opt = {})
+--- add_rpc_method(qname, soapaction, name, param_def, opt = {})
+

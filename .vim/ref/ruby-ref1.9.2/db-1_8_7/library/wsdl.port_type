@@ -1,0 +1,7 @@
+methods=
+sublibraries=
+requires=wsdl.info,xsd.namedelements
+classes=WSDL=PortType
+is_sublibrary=true
+
+

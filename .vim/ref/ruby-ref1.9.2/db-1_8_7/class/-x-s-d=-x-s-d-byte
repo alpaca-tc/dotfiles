@@ -1,0 +1,7 @@
+superclass=XSD=XSDShort
+type=class
+library=xsd.datatypes
+extended=
+included=
+
+

@@ -1,0 +1,26 @@
+kind=defined
+names=floor
+visibility=public
+
+--- floor -> Integer
+
+自身と等しいかより小さな整数のうち最大のものを返します。
+
+例:
+
+  Rational(3).floor     # => 3
+  Rational(2, 3).floor  # => 0
+  Rational(-3, 2).floor # => -2
+
+自身にもっとも近い整数を返す [[m:Rational#to_i]] とは違う結果を返す事に
+注意してください。
+
+例:
+
+  Rational(+7, 4).to_i  # => 1
+  Rational(+7, 4).floor # => 1
+  Rational(-7, 4).to_i  # => -1
+  Rational(-7, 4).floor # => -2
+
+@see [[m:Rational#ceil]], [[m:Rational#round]], [[m:Rational#truncate]]
+

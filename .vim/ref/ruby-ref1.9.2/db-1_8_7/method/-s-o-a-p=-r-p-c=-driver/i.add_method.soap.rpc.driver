@@ -1,0 +1,7 @@
+kind=defined
+names=add_method,add_rpc_method
+visibility=public
+
+--- add_rpc_method(name, *params)
+--- add_method(name, *params)
+

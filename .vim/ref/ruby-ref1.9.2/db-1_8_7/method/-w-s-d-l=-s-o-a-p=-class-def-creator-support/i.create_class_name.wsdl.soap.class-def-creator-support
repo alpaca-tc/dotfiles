@@ -1,0 +1,6 @@
+kind=defined
+names=create_class_name
+visibility=public
+
+--- create_class_name(qname)
+

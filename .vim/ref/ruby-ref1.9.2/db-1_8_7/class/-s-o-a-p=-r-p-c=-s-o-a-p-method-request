@@ -1,0 +1,7 @@
+superclass=SOAP=RPC=SOAPMethod
+type=class
+library=soap.rpc.element
+extended=
+included=
+
+

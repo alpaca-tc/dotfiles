@@ -1,0 +1,13 @@
+methods=File/s.copy.ftools,File/s.move.ftools,File/s.cmp.ftools,File/s.rm_f.ftools,File/s.makedirs.ftools,File/s.install.ftools,File/s.catname.ftools,File/s.syscopy.ftools,File/s.chmod.ftools
+sublibraries=
+requires=
+classes=
+is_sublibrary=false
+
+ファイル操作のためのライブラリです。
+
+=== 注意
+1.8 以降では、ftools の利用は推奨しません。ファイル操作をするには [[lib:fileutils]] を使ってください。
+
+=== 概要
+require 'ftools' とすると、ファイルのコピーや削除などのメソッドが追加されます。

@@ -1,0 +1,10 @@
+kind=defined
+names=to_text
+visibility=public
+
+--- to_text -> String
+鍵を人間が読める形式に変換します。
+
+@param OpenSSL::PKey::ECError 文字列への変換に失敗した場合に発生します。
+       公開鍵が含まれていない場合や、鍵が妥当でない場合などに失敗します。
+

@@ -1,0 +1,8 @@
+kind=defined
+names=rpc_call
+visibility=public
+
+--- rpc_call(name, *values)
+
+
+

@@ -1,0 +1,6 @@
+kind=defined
+names=new
+visibility=public
+
+--- new(handler, elename, type, extraattr)
+

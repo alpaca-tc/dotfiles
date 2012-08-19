@@ -1,0 +1,26 @@
+kind=defined
+names=AttributeFormDefaultAttrName,BaseAttrName,DefaultAttrName,ElementFormDefaultAttrName,FinalAttrName,FixedAttrName,FormAttrName,IdAttrName,MaxOccursAttrName,MinOccursAttrName,MixedAttrName,NameAttrName,NamespaceAttrName,NillableAttrName,ProcessContentsAttrName,RefAttrName,SchemaLocationAttrName,TargetNamespaceAttrName,TypeAttrName,UseAttrName,ValueAttrName
+visibility=public
+
+--- AttributeFormDefaultAttrName
+--- BaseAttrName
+--- DefaultAttrName
+--- ElementFormDefaultAttrName
+--- FinalAttrName
+--- FixedAttrName
+--- FormAttrName
+--- IdAttrName
+--- MaxOccursAttrName
+--- MinOccursAttrName
+--- MixedAttrName
+--- NameAttrName
+--- NamespaceAttrName
+--- NillableAttrName
+--- ProcessContentsAttrName
+--- RefAttrName
+--- SchemaLocationAttrName
+--- TargetNamespaceAttrName
+--- TypeAttrName
+--- UseAttrName
+--- ValueAttrName
+

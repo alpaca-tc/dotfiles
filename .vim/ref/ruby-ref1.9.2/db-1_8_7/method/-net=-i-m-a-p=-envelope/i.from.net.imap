@@ -1,0 +1,10 @@
+kind=defined
+names=from
+visibility=public
+
+--- from -> [Net::IMAP::Address] | nil
+From を [[c:Net::IMAP::Address]] オブジェクトの配列で返します。
+
+エンベロープに存在しないときは nil を返します。
+
+

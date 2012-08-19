@@ -1,0 +1,22 @@
+kind=defined
+names=assert_block
+visibility=public
+
+--- assert_block(message = "assert_block failed.") { ... }    -> ()
+
+ブロックを実行し、その結果が真ならパスします。
+
+新しい assert メソッドを定義する時にも使います。
+
+  def deny(boolean, message = nil)
+    message = build_message message, '<?> is not false or nil.', boolean
+    assert_block message do
+      not boolean
+    end
+  end
+
+@param message assert が失敗した時に表示するメッセージを文字列で指定し
+               ます。指定しなかった場合は表示しません。
+
+@raise Test::Unit::AssertionFailedError assert が失敗した時に発生します。
+

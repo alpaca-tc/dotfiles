@@ -1,0 +1,8 @@
+kind=defined
+names=ProgName
+visibility=public
+
+--- ProgName -> String
+ログファイル作成時に使うプログラム名。
+
+

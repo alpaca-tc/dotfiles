@@ -1,0 +1,10 @@
+kind=defined
+names=mu_unlock,unlock
+visibility=public
+
+--- mu_unlock -> self | nil
+--- unlock -> self | nil
+ロックを解放します。ロック待ちになっていたスレッドの実行は再開されます。
+
+self がロックされていなければ nil を返します。そうでなければself を返します。
+

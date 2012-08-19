@@ -1,0 +1,8 @@
+kind=defined
+names=soapaction,soapaction=
+visibility=public
+
+--- soapaction
+--- soapaction=(value)
+
+

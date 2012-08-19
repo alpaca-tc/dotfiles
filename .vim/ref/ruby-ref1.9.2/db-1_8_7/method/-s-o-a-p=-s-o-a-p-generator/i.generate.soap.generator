@@ -1,0 +1,6 @@
+kind=defined
+names=generate
+visibility=public
+
+--- generate(obj, io = nil)
+

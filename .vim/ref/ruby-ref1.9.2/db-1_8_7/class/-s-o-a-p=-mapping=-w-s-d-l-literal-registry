@@ -1,0 +1,7 @@
+superclass=SOAP=Mapping=Registry
+type=class
+library=soap.mapping.wsdlliteralregistry
+extended=
+included=
+
+

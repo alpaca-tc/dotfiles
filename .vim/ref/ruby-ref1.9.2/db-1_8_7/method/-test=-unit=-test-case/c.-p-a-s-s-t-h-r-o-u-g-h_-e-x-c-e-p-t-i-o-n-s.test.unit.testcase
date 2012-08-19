@@ -1,0 +1,8 @@
+kind=defined
+names=PASSTHROUGH_EXCEPTIONS
+visibility=private 
+
+--- PASSTHROUGH_EXCEPTIONS
+
+[[m:Test::Unit::TestCase#run]] の実行時に rescue されない例外の一覧です。
+

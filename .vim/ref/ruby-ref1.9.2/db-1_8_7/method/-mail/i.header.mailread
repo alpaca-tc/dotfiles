@@ -1,0 +1,15 @@
+kind=defined
+names=header
+visibility=public
+
+--- header -> Hash
+
+ヘッダを [[c:Hash]] で返します。
+
+キーは 'From'、'Subject' などのフィールド名で、すべてのキーは
+[[m:String#capitalize]] されています。
+
+値の末尾の改行は削除されます。
+複数行に分かれている場合、間に改行をはさみます(継続行を表す空白は削除されます)。
+MIME encoded-word のデコードなどを行いたい場合は [[lib:nkf]] などを使用してください。
+

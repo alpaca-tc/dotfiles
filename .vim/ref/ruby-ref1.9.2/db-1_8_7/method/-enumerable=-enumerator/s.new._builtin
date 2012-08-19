@@ -1,0 +1,23 @@
+kind=defined
+names=new
+visibility=public
+
+--- new(obj, method = :each, *args) -> Enumerable::Enumerator
+
+オブジェクト obj について、 each の代わりに method という
+名前のメソッドを使って繰り返すオブジェクトを生成して返します。
+args を指定すると、 method の呼び出し時に渡されます。
+
+@param obj イテレータメソッドのレシーバとなるオブジェクト
+@param method イテレータメソッドの名前を表すシンボルまたは文字列
+@param args イテレータメソッドの呼び出しに渡す任意個の引数
+
+例:
+
+  str = "xyz"
+  
+  enum = Enumerable::Enumerator.new(str, :each_byte)
+  p enum.map {|b| '%02x' % b }   # => ["78", "79", "7a"]
+
+
+

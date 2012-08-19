@@ -1,0 +1,7 @@
+kind=defined
+names=faultactor,faultactor=
+visibility=public
+
+--- faultactor
+--- faultactor=(rhs)
+

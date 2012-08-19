@@ -1,0 +1,18 @@
+kind=defined
+names=session_new_cb=
+visibility=public
+
+--- session_new_cb=(cb)
+新たなセッションが作られたときに呼び出されるコールバックを
+指定します。
+
+コールバックオブジェクトを call するときの引数は
+  [ 接続オブジェクト(OpenSSL::SSL::SSLSocket), 新たなセッション(OpenSSL::SSL::Session)]
+という配列です。
+
+セッションキャッシュについて詳しくは [[c:OpenSSL::SSL::Session]] を
+見てください。
+
+@param cb コールバックオブジェクト([[c:Proc]] もしくは [[c:Method]])
+@see [[m:OpenSSL::SSL::SSLContext#session_new_cb]]
+

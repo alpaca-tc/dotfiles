@@ -1,0 +1,24 @@
+kind=defined
+names=enum_for,to_enum
+visibility=public
+
+--- to_enum(method = :each, *args) -> Enumerable::Enumerator
+--- enum_for(method = :each, *args) -> Enumerable::Enumerator
+
+[[m:Enumerable::Enumerator.new]](self, method, *args) を返します。
+
+@param method メソッド名の文字列かシンボルです。
+@param args 呼び出すメソッドに渡される引数です。
+@raise NameError 存在しないメソッド名を指定すると発生します。
+
+  str = "xyz"
+
+  enum = str.enum_for(:each_byte)
+  p(a = enum.map{|b| '%02x' % b }) #=> ["78", "79", "7a"]
+
+  # protects an array from being modified
+  a = [1, 2, 3]
+  p(a.to_enum) #=> #<Enumerable::Enumerator:0xbaf7ac>
+
+@see [[c:Enumerable::Enumerator]]
+

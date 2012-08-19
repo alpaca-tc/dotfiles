@@ -1,0 +1,34 @@
+kind=defined
+names=callback,define_callback
+visibility=public
+
+--- callback(type)         -> DL::Symbol
+--- define_callback(type)  -> DL::Symbol
+
+Cレベルのコールバック関数を定義し、その関数(へのポインタ)を保持した
+[[c:DL::Symbol]] を返します。
+
+@param type コールバック関数の型指定子を与えます。
+
+@raise DL::DLError 定義できるコールバック関数の数には制限があります。それを越えると、DL::DLError が発生します。
+
+ require 'dl/import'
+ strlast = DL.callback('IS'){|s|
+   s[-1]
+ }
+ 
+ module M
+   extend DL::Importable
+   dlload "./libtest.so"
+   extern "int call(void *, const char*)"
+ end
+ p LIBC.call(strlast, "abcd").chr #=> "d"
+
+
+//emlist{
+ /* libtest.so */ 
+ int call(int (*cb)(const char*), const char* s){
+   return (*cb)(s);
+ }
+//}
+

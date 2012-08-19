@@ -1,0 +1,9 @@
+kind=defined
+names=disconnect
+visibility=public
+
+--- disconnect -> nil
+サーバとの接続を切断します。
+
+@see [[m:Net::IMAP#disconnected?]]
+

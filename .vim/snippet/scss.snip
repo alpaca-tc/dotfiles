@@ -1,0 +1,36 @@
+# 標準構文
+snippet     for
+abbr        for
+    @for $i from ${1} through ${2} {
+      ${3:${i}}
+    }
+
+snippet     r
+abbr        return
+    @return
+
+# 拡張関数
+snippet     ex
+abbr        extend
+    @extend ${1}
+
+snippet     d
+abbr        darken
+    darken( ${1:#fff}, ${2:14%} )
+
+snippet     if
+abbr        if
+    @if ${1:$flg > 0} {
+        ${2}
+    }
+
+# include
+snippet     icf
+abbr        clearfix
+prev_word    '^'
+    @include clearfix;
+
+snippet     ibr
+abbr        abbr
+prev_word    '^'
+    @include border-radius(${1});

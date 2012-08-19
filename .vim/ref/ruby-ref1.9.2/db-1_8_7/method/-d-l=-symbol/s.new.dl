@@ -1,0 +1,14 @@
+kind=defined
+names=new
+visibility=public
+
+--- new(addr, type = nil, name = nil)    -> DL::Symbol 
+
+ダイナミックライブラリの関数のアドレス addr から DL::Symbol を生成して返します。
+
+@param addr 関数のアドレスを整数で与えます。
+
+@param type 関数の型を型指定子を使って文字列で与えます。
+
+@param name 関数の名前を文字列で与えます。
+

@@ -1,0 +1,7 @@
+methods=
+sublibraries=
+requires=wsdl.info,xsd.namedelements
+classes=WSDL=XMLSchema=SimpleRestriction
+is_sublibrary=true
+
+

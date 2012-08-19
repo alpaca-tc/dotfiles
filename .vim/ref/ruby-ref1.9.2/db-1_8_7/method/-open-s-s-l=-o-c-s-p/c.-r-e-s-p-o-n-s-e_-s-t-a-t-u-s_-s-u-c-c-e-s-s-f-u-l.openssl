@@ -1,0 +1,10 @@
+kind=defined
+names=RESPONSE_STATUS_SUCCESSFUL
+visibility=public
+
+--- RESPONSE_STATUS_SUCCESSFUL -> Integer
+[[m:OpenSSL::OCSP::Response#status]] のステータスコードで 、
+正しく応答したことを意味します。
+
+詳しくは [[RFC:2560]] 2.3 を見てください。
+

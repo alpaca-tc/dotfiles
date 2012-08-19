@@ -1,0 +1,12 @@
+kind=defined
+names=run
+visibility=public
+
+--- run(suite, quiet_mode = @@quiet_mode) -> ()
+
+与えられたテストスイートを実行します。
+
+@param suite テストスイートを指定します。
+
+@param quiet_mode 真を指定すると、出力が静かになります。
+

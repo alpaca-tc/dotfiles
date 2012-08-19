@@ -1,0 +1,22 @@
+superclass=Object
+type=class
+library=openssl
+extended=
+included=
+
+PKCS #7 クラス
+
+PKCS #7 は暗号技術とともに用いられるデータのフォーマットの仕様です。
+データやそれに対する署名、証明した日時など任意の属性を含むことができ、
+S/MIME などに使用されています。
+
+[[RFC:2315]] を参照してください。
+
+
+=== S/MIME メッセージの種類
+S/MIME には以下の種類のメッセージがあります
+  * enveloped-only 
+  * signed-only 
+    * signedData フォーマット
+    * multipart/signed フォーマット
+  * Certificate-only

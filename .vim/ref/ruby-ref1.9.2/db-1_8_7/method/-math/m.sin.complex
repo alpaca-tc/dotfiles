@@ -1,0 +1,13 @@
+kind=redefined
+names=sin
+visibility=public
+
+--- sin(z) -> Complex
+複素関数としてのsin関数の結果を返します。
+
+sin関数は以下で定義されます。
+
+  sin(z)  = (exp(i * z) - exp(-i * z)) / 2
+
+@param z 複素数
+

@@ -1,0 +1,10 @@
+kind=defined
+names=read
+visibility=protected 
+
+--- read(size) -> []
+NotImplementedError例外を発生させます。
+
+[[c:CSV::StreamBuf]] クラスを継承した場合は必ず、readメソッドをオーバーライドして下さい。
+その際の注意点として読み込み時に EndOfStream を検出した場合には nil を返してください。
+

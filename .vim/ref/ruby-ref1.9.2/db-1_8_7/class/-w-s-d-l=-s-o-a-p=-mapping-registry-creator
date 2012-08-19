@@ -1,0 +1,7 @@
+superclass=Object
+type=class
+library=wsdl.soap.mappingRegistryCreator
+extended=
+included=WSDL=SOAP=ClassDefCreatorSupport
+
+

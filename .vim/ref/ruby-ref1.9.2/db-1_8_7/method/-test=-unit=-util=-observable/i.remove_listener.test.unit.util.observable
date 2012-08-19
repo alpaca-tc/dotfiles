@@ -1,0 +1,16 @@
+kind=defined
+names=remove_listener
+visibility=public
+
+--- remove_listener(channel_name, listener_key) -> Proc | nil
+
+listener_key で指定したキーで登録された listener を channel_name で指定
+したチャンネルから削除します。
+
+@param channel_name チャンネルの名前を文字列で指定します。
+
+@param listener_key listener を削除する時のキーを指定します。
+
+@return 削除に成功した場合は登録されていた [[c:Proc]] オブジェクトを返します。
+        そうでない場合は nil を返します。
+

@@ -1,0 +1,6 @@
+kind=defined
+names=RTLD_LAZY
+visibility=public
+
+--- RTLD_LAZY
+

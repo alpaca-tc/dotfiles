@@ -1,0 +1,10 @@
+kind=defined
+names=assert_no_exception
+visibility=public
+
+--- assert_no_exception(*args) { ... }
+与えられたブロックを評価中に与えられた例外が発生しない場合、検査にパスしたことになります。
+
+@param args 例外クラスを一つ以上指定します。最後の引数に文字列を指定した場合、それは検査に
+            失敗したときのメッセージになります。
+

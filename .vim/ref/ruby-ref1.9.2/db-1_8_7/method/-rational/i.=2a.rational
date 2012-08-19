@@ -1,0 +1,24 @@
+kind=defined
+names=*
+visibility=public
+
+--- *(other) -> Rational | Float
+
+積を計算します。
+
+@param other 自身に掛ける数
+
+other に [[c:Float]] を指定した場合は、計算結果を [[c:Float]] で返しま
+す。
+
+例:
+
+  Rational(3, 4) * 2              # => Rational(3, 2)
+  Rational(3, 4) * 4              # => Rational(3, 1)
+  Rational(3, 4) * 0.5            # => 0.375
+  Rational(3, 4) * Rational(1, 2) # => Rational(3, 8)
+
+other に 0 を指定した場合も [[c:Rational]] を返します。
+
+  Rational(3, 4) * 0              # => Rational(0, 1)
+

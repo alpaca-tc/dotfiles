@@ -1,0 +1,8 @@
+kind=defined
+names=body
+visibility=public
+
+--- body -> [ String ]
+
+本文の各行を要素とする [[c:Array]] を返します。
+

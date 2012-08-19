@@ -1,0 +1,6 @@
+kind=defined
+names=get_content
+visibility=public
+
+--- get_content(url, header = {})
+

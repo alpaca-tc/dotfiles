@@ -1,0 +1,21 @@
+kind=defined
+names=parse
+visibility=public
+
+--- parse(str_or_readable, fs = nil, rs = nil) -> Array
+--- parse(str_or_readable, fs = nil, rs = nil){|rows| ... } -> nil
+
+str_or_readable で指定された文字列をパースし配列の配列に変換、ブロックに渡します。
+ブロック未指定の場合は変換された配列の配列を返します。
+
+@param str_or_readable パースする文字列
+@param fs フィールドセパレータの指定。
+          nil (デフォルト) で ',' をセパレータとします。
+@param rs 行区切り文字の指定。nil (デフォルト) で CrLf / Lf。
+          Cr を行区切りとしたい場合は ?\r を渡します。
+
+例:
+  CSV.parse("A,B,C\nd,e,f\nG,H,I"){|rows|
+    p rows
+  }
+

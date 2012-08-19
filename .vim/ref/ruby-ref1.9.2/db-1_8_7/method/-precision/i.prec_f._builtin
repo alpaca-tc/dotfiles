@@ -1,0 +1,8 @@
+kind=defined
+names=prec_f
+visibility=public
+
+--- prec_f -> Float
+
+self を [[c:Float]] に変換します。
+prec(Float) と等価です。

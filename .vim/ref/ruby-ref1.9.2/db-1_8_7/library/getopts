@@ -1,0 +1,30 @@
+methods=Kernel/i.getopts.getopts
+sublibraries=
+requires=
+classes=
+is_sublibrary=false
+
+このライブラリは obsolete です。
+[[lib:optparse]] を使ってください。
+
+オプションを解析するためのライブラリです。
+$OPT_xxx に値を設定します。
+
+典型的な使い方は以下のようになります。
+
+  require 'getopts'
+  
+  unless getopts('vh', 'version', 'help')
+    abort "usage: #$0 [-vh] [--version] [--help] file"
+  end
+  
+  if $OPT_v or $OPT_version
+    puts VERSION_STRING
+    exit
+  end
+  
+  # ARGV からオプションは取り除かれる。
+  
+  while line = ARGF.gets
+    # ...
+  end

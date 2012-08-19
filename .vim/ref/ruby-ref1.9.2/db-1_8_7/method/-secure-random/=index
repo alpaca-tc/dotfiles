@@ -1,0 +1,4 @@
+.base64	SecureRandom.base64
+.hex	SecureRandom.hex
+.random_bytes	SecureRandom.random_bytes
+.random_number	SecureRandom.random_number

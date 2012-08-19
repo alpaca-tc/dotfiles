@@ -1,0 +1,10 @@
+kind=defined
+names=REVOKED_STATUS_CESSATIONOFOPERATION
+visibility=public
+
+--- REVOKED_STATUS_CESSATIONOFOPERATION -> Integer
+[[m:OpenSSL::OCSP::BasicResponse#status]] の失効理由コードで、
+証明書の運用を止めたことを意味します。
+
+詳しくは [[RFC:3280]] や X.509 を参照してください。
+

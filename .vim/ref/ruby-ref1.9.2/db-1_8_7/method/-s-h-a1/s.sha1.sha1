@@ -1,0 +1,8 @@
+kind=defined
+names=sha1
+visibility=public
+
+--- sha1(arg)  -> SHA1
+SHA1 ハッシュを生成します。
+
+@param arg 文字列を指定します。

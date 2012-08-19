@@ -1,0 +1,13 @@
+kind=redefined
+names=cosh
+visibility=public
+
+--- cosh(z) -> Complex
+複素関数としてのcosh関数(双曲線cos関数)の結果を返します。
+
+cosh関数は以下で定義されます。
+
+  cosh(z) = (exp(z) + exp(-z)) / 2
+
+@param z 複素数
+

@@ -1,0 +1,22 @@
+kind=defined
+names=[]
+visibility=public
+
+--- [](key)             -> object
+
+構造体または共用体メンバ key の値を返します。返り値は [[m:DL::PtrData#struct!]] 
+または [[m:DL::PtrData#union!]] によって定義された型により、Ruby のオブジェクトへ
+変換されたものです。
+
+@param key 取得したい構造体か共用体のメンバの名前を、シンボルか文字列を指定します。
+
+--- [](offset, len = 0)     -> String
+
+自身の指すアドレスに offset バイトを足したメモリ領域の先頭 len バイトを複製し、
+文字列として返します。(self + offset).to_s(len) と同等です。
+offset + len が自身のサイズより小さいかを検証しません。
+
+@param offset 値を得たい領域の先頭のアドレスまでのオフセットを整数で与えます。
+
+@param len 値を得たい領域のサイズを指定します。
+

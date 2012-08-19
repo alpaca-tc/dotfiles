@@ -1,0 +1,6 @@
+kind=defined
+names=finalize_dependency
+visibility=public
+
+--- finalize_dependency(id, dependant, method = :finalize)
+

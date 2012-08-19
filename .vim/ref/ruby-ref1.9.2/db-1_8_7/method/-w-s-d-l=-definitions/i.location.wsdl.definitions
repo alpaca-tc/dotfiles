@@ -1,0 +1,8 @@
+kind=defined
+names=location,location=
+visibility=public
+
+--- location
+--- location=(val)
+
+

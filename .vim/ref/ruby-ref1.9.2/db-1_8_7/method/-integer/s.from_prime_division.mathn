@@ -1,0 +1,13 @@
+kind=added
+names=from_prime_division
+visibility=public
+
+--- from_prime_division(pd) -> Integer
+素因数分解の配列 pd から数を求めます。
+pd は [素因数, 指数] 組の配列です。
+
+例:
+
+  Integer.from_prime_division [[2,3],[3,2]]
+  # => 72 == 2**3 * 3**2
+

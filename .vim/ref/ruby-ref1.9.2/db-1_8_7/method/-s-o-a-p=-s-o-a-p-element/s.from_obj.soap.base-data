@@ -1,0 +1,6 @@
+kind=defined
+names=from_obj
+visibility=public
+
+--- from_obj(obj, namespace = nil)
+

@@ -1,0 +1,13 @@
+kind=defined
+names=include?
+visibility=public
+
+--- include?(substr) -> bool
+
+文字列中に部分文字列 substr が含まれていれば真を返します。
+
+substr が 0 から 255 の範囲の [[c:Fixnum]] の場合、
+文字コードとみなして、その文字が含まれていれば真を返します。
+
+@param substr    検索する文字列もしくは文字コードを表す整数
+

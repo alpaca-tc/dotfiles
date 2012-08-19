@@ -1,0 +1,14 @@
+kind=redefined
+names=atanh
+visibility=public
+
+--- atanh(z) -> Complex
+複素関数としてのatanh関数(双曲逆tan関数)の結果を返します。
+
+atanh関数は以下で定義されます。
+
+  atanh(z) = 1/2 * log((1+z) / (1-z))
+
+@param z 複素数
+
+

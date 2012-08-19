@@ -1,0 +1,7 @@
+superclass=Object
+type=class
+library=soap.mapping.factory
+extended=
+included=SOAP=Mapping=TraverseSupport
+
+

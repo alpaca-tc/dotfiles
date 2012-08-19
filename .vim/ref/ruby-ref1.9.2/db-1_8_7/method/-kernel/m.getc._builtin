@@ -1,0 +1,10 @@
+kind=defined
+names=getc
+visibility=public
+
+--- getc -> Fixnum | nil
+
+このメソッドは廃止予定です。代わりに STDIN.getc を使ってください。
+
+@see [[m:IO#getc]]
+

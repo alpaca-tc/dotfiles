@@ -1,0 +1,8 @@
+kind=defined
+names=real
+visibility=public
+
+--- real -> Fixnum
+--- real -> Float
+実部を返します。
+

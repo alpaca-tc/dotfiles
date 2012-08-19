@@ -1,0 +1,8 @@
+kind=defined
+names=terminate
+visibility=private 
+
+--- terminate -> ()
+終了時処理を行う場合に再定義してください。
+
+

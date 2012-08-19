@@ -1,0 +1,28 @@
+kind=defined
+names=each_slice,enum_slice
+visibility=public
+
+--- each_slice(n)               -> Enumerable::Enumerator
+--- enum_slice(n)               -> Enumerable::Enumerator
+--- each_slice(n) {|list| ... } -> nil
+--- enum_slice(n) {|list| ... } -> nil
+
+n 要素ずつブロックに渡して繰り返します。
+
+要素数が n で割り切れないときは、最後の回だけ要素数が減ります。
+
+enum_slice は 1.9.1 以降ではなくなっています。
+代わりに each_slice を使ってください。
+
+@arg n   区切る要素数を示す整数です。
+
+例:
+
+  (1..10).each_slice(3) {|a| p a}
+      # => [1, 2, 3]
+      #    [4, 5, 6]
+      #    [7, 8, 9]
+      #    [10]
+
+@see [[m:Enumerable#each_cons]]
+

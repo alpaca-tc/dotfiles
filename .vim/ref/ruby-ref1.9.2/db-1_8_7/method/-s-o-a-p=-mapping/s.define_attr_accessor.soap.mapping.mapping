@@ -1,0 +1,6 @@
+kind=defined
+names=define_attr_accessor
+visibility=public
+
+--- define_attr_accessor(obj, name, getterproc, setterproc = nil)
+

@@ -1,0 +1,8 @@
+kind=defined
+names=EUC
+visibility=public
+
+--- EUC -> Integer
+
+EUC-JP を表します。
+

@@ -1,0 +1,13 @@
+kind=defined
+names=load_file
+visibility=public
+
+--- load_file(file) -> object
+
+単なる [[m:Marshal.#load]] のラッパーメソッドです。
+
+@param file ファイル名か [[c:IO]] オブジェクトを指定します。
+
+@see [[m:Marshal.#load]]
+
+

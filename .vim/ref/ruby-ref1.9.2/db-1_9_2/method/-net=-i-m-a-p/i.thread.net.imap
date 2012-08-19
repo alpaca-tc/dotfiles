@@ -1,0 +1,28 @@
+kind=defined
+names=thread
+visibility=public
+
+--- thread(algorithm, search_keys, charset) -> [Net::IMAP::ThreadMember]
+THREADコマンドを送り、メールボックスを検索した結果を
+スレッド形式の木構造で返します。
+
+THREAD コマンドは [[RFC:5256]] で定義されています。
+詳しくはそちらを参照してください。
+このコマンドは [[m:Net::IMAP#capability]] の返り値を見ることで
+利用可能かどうか判断できます。
+
+algorithm は木構造を決定するためのアルゴリズムを指定します。
+以下の2つが利用可能です。
+  * "ORDEREDSUBJECT" subjectを使って平坦に区切るだけ
+  * "REFERENCES" どのメッセージに返事をしているかを見て木構造を作る
+詳しくは [[RFC:5256]] を見てください。
+
+search_key には検索条件を渡します。
+[[m:Net::IMAP#search]] と同等です。
+
+
+@param algorithm スレッド構造構築アルゴリズム名(文字列)
+@param search_key 検索条件(文字列配列)
+@param charset 検索条件の解釈に用いるCHARSET名(文字列)
+@see [[c:Net::IMAP::ThreadMember]], [[m:Net::IMAP#uid_thread]]
+

@@ -1,0 +1,6 @@
+kind=defined
+names=deref_key
+visibility=protected 
+
+--- deref_key(key)
+

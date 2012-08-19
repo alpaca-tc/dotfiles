@@ -1,0 +1,7 @@
+methods=
+sublibraries=
+requires=
+classes=CSV,CSV=Cell,CSV=Row,CSV=BasicWriter,CSV=IOBuf,CSV=IOReader,CSV=IllegalFormatError,CSV=Reader,CSV=StreamBuf,CSV=StringReader,CSV=Writer
+is_sublibrary=false
+
+CSV (Comma Separated Values) を扱うライブラリです。

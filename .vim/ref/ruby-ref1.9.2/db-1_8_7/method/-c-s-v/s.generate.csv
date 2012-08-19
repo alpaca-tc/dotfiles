@@ -1,0 +1,33 @@
+kind=defined
+names=generate
+visibility=public
+
+--- generate(path, fs = nil, rs = nil) -> CSV::BasicWriter
+--- generate(path, fs = nil, rs = nil) {|writer| ... } -> nil
+
+path で指定されたファイルを書き込みモードで開き、ブロックに渡します。
+ブロック未指定の場合は [[c:CSV::BasicWriter]] を返します。
+
+@param path 書き込みモードでopenするファイルのファイル名
+@param fs フィールドセパレータの指定。
+          nil (デフォルト) で ',' をセパレータとします。
+@param rs 行区切り文字の指定。nil (デフォルト) で CrLf / Lf。
+          Cr を行区切りとしたい場合は ?\r を渡します。
+
+===== 注意
+
+ファイル書き込み時に""(空文字)と値なし(nil)を区別します。
+例えば、["a", "", nil, "b"] の配列を渡した場合に a, "", , b という行をファイルに書き込みます。
+
+例:
+  a = ["1","ABC","abc"]
+  b = ["2","DEF","def"]
+  c = ["3","GHI","ghi"]
+  x = [a, b, c]
+
+  CSV.generate("test2.csv"){|writer|
+    x.each{|row|
+      writer << row
+    }
+  }
+

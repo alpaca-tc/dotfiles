@@ -1,0 +1,10 @@
+kind=defined
+names=basic
+visibility=public
+
+--- basic -> OpenSSL::OCSP::BasicResponse | nil
+Response オブジェクトが保持している BasicResponse オブジェクトを
+返します。
+
+@see [[c:OpenSSL::OCSP::BasicResponse]]
+
