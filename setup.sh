@@ -4,15 +4,27 @@ read -p "install dotfiles? y/n " yn
 if [ $yn = "y" -o $yn = "Y" ]; then
     DOT_FILES=( .vim .vimrc .ctags .emacs.d .emacs.el .dir_colors .gitconfig .gitignore .inputrc .rsense .tmux.conf .tmux.split .zsh .zshrc local .autojump .zshrc .rspec )
 
-    echo "...install dotfiles..."
-    echo "..."
+    echo "...install dotfiles...\n"
     for file in ${DOT_FILES[@]}
     do
         if [ -a $HOME/$file ]; then
             echo "exists: ~/$file"
+
+            if [ "$yn" != "a" ]; then
+                read -p "override? y/n/a " yn
+            fi
         else
+            if [ $yn != "a" ]; then
+                export yn=y
+            fi
+        fi
+
+        if [ $yn = "y" -o $yn = "Y" -o $yn = "a" ]; then
+            rm -rf $HOME/$file
             ln -s `pwd`/$file $HOME/$file
-            echo "create symbolic link: ~/$file"
+            echo "done!: ~/$file"
+        else
+            echo "next"
         fi
     done
 
@@ -20,24 +32,24 @@ if [ $yn = "y" -o $yn = "Y" ]; then
     # viで使用するフォルダ生成
     for file in ${DOT_FILES[@]}
     do
-        echo "create folder: ~/$file"
+        echo "...create folder: ~/$file"
         mkdir -p $HOME/$file
     done
 
     # ~/.vim/のdict, colorsを生成
     if [ -a $HOME/.vim/dict ]; then
-        echo "remove folder : $HOME/.vim/dict"
+        echo "...remove folder : $HOME/.vim/dict"
         rm $HOME/.vim/dict
     fi
     if [ -a $HOME/.vim/colors ]; then
-        echo "remove folder : $HOME/.vim/colors"
+        echo "...remove folder : $HOME/.vim/colors"
         rm $HOME/.vim/colors
     fi
 
     ln -s $HOME/.bundle/alpaca/dict $HOME/.vim/dict
-    echo "create symbolic link: $HOME/.bunlde/alpaca/dict   => $HOME/.vim/dict"
+    echo "done!!: $HOME/.bunlde/alpaca/dict   => $HOME/.vim/dict"
     ln -s $HOME/.bundle/alpaca/colors $HOME/.vim/colors
-    echo "create symbolic link: $HOME/.bunlde/alpaca/colors => $HOME/.vim/colors"
+    echo "done!!: $HOME/.bunlde/alpaca/colors => $HOME/.vim/colors"
 fi
 
 # finderで隠しファイルを表示する
@@ -46,24 +58,28 @@ read -p "Do you wish to show hidden files on finder? y/n " yn
 if [ $yn = "y" -o $yn = "Y" ]; then
     defaults write com.apple.finder AppleShowAllFiles TRUE
     echo "done!! change setting about finder"
-    echo "...restart finder"
+    echo "...restart finder\n"
     killall Finder
 fi
 
 # 秘密鍵を生成して、githubから残りのファイルをDLする
-read -p "Do you wish to install .ssh and .memolist settings from github?" yn
+read -p "Do you wish to install .ssh and .memolist settings from github? " yn
 if [ $yn = "y" -o $yn = "Y" ]; then
     echo "...create .ssh directory"
     rm -rf ~/.ssh
     mkdir -p ~/.ssh
     cp `pwd`/config $HOME/.ssh/
-    echo "...decode identify file"
+    echo "decode identify file. please input password!"
+    echo "\n"
+    echo "hint:i love alpaca ・T・"
     openssl enc -d -aes256 -in github -out ~/.ssh/github
     chmod 700 $HOME/.ssh
     chmod 600 $HOME/.ssh/github
-    echo "...clone from github"
+    echo "\n"
+    echo "...clone from github\n"
     git clone github:taichouchou2/serclet.git `pwd`/serclet
     chmod +x `pwd`/serclet/setup.sh
+    echo "...run serclet setup.sh \n"
     `pwd`/serclet/setup.sh
 fi
 
