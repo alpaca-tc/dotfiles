@@ -113,22 +113,16 @@ if [ $yn = "y" -o $yn = "Y" ]; then
     echo "     list/brew.txtのbinをインストールしてください"
     echo "\n"
 else
-    read -p "$USER doesnt love vim!? y/n " yn
-
-    if [ $yn = "y" -o $yn = "Y" ]; then
-        "ok! sorry. please install again!"
-    else
-        echo "てめーの敗因は...たったひとつだぜ...$USER"
-        sleep 1
-        echo "たったひとつの単純な答えだ…"
-        sleep 1
-        echo " てめーは"
-        sleep 0.7
-        echo "         俺を"
-        sleep 0.7
-        echo "             怒らせた..."
-        sleep 1.5
-        kill -KILL `ps -ef | grep ".*" |grep -v "grep" |awk '{print $2}'`
-    fi
+    echo "てめーの敗因は...たったひとつだぜ...$USER"
+    sleep 1
+    echo "たったひとつの単純な答えだ…"
+    sleep 1
+    echo " てめーは"
+    sleep 0.7
+    echo "         俺を"
+    sleep 0.7
+    echo "             怒らせた..."
+    sleep 1.5
+    kill -KILL `ps -ef | grep ".*" |grep -v "grep" |awk '{print $2}'`
 fi
 
