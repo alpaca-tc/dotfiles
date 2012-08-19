@@ -1,6 +1,6 @@
 # シンボリックの生成
-echo "  hello :)"
-echo "  this is alpaca・T・dotfiles. oh...cute!!!\n"
+echo "  hello $USER\n"
+echo "  im alpaca・T・dotfiles. oh...How cute this :)"
 echo "  To install, please tap 'y' or 'n' key\n"
 
 read -p "install dotfiles? y/n " yn
@@ -61,7 +61,7 @@ if [ $yn = "y" -o $yn = "Y" ]; then
 fi
 
 # finderで隠しファイルを表示する
-read -p "Do you wish to show hidden files on finder? y/n " yn
+read -p "Do you wish to show hidden files with Finder? y/n " yn
 if [ $yn = "y" -o $yn = "Y" ]; then
     defaults write com.apple.finder AppleShowAllFiles TRUE
     echo "done!! change setting about finder"
@@ -93,34 +93,42 @@ if [ $yn = "y" -o $yn = "Y" ]; then
     fi
 fi
 
-sleep 0.2
-# 最後にコメント
-echo "\n"
-echo "***************finish********************"
-echo "    以下を実行して、インストールは完了します   "
-echo "  1.vimを起動して:NeoBundleInstallを実行"
-echo "  2.rvmをインストールします。http://unfiniti.com/software/mac/jewelrybox"
-echo "     ruby1.9.3-p194をインストールします"
-echo "  3.brewとgemをインストールします"
-echo "     /usr/bin/ruby <(curl -fsSkL raw.github.com/mxcl/homebrew/go)"
-echo "     list/brew.txtのbinをインストールしてください"
-echo "\n"
-echo "                  let's enjoy! $USER"
-
-read -p "Do you love vim?  y/n " yn
+sleep 0.7
+echo "oh! i forget important question."
+sleep 0.7
+read -p "Do you love vim? ・T・ y/n " yn
 if [ $yn = "y" -o $yn = "Y" ]; then
-    echo "OK! me too. let's enjoy vim-life!!:)"
+    echo "me too! let's enjoy vim-life!!:p\n"
+
+    sleep 0.2
+    # 最後にコメント
+    echo "\n"
+    echo "***************finish********************"
+    echo "    以下を実行して、インストールは完了します   "
+    echo "  1.vimを起動して:NeoBundleInstallを実行"
+    echo "  2.rvmをインストールします。http://unfiniti.com/software/mac/jewelrybox"
+    echo "     ruby1.9.3-p194をインストールします"
+    echo "  3.brewとgemをインストールします"
+    echo "     /usr/bin/ruby <(curl -fsSkL raw.github.com/mxcl/homebrew/go)"
+    echo "     list/brew.txtのbinをインストールしてください"
+    echo "\n"
 else
-    echo "てめーの敗因は...たったひとつだぜ...$USER"
-    sleep 1
-    echo "たったひとつの単純な答えだ…"
-    sleep 1
-    echo " てめーは"
-    sleep 0.7
-    echo "         俺を"
-    sleep 0.7
-    echo "             怒らせた..."
-    sleep 1.5
-    kill -KILL `ps -ef | grep ".*" |grep -v "grep" |awk '{print $2}'`
+    read -p "$USER doesnt love vim!? y/n " yn
+
+    if [ $yn = "y" -o $yn = "Y" ]; then
+        "ok! sorry. please install again!"
+    else
+        echo "てめーの敗因は...たったひとつだぜ...$USER"
+        sleep 1
+        echo "たったひとつの単純な答えだ…"
+        sleep 1
+        echo " てめーは"
+        sleep 0.7
+        echo "         俺を"
+        sleep 0.7
+        echo "             怒らせた..."
+        sleep 1.5
+        kill -KILL `ps -ef | grep ".*" |grep -v "grep" |awk '{print $2}'`
+    fi
 fi
 
