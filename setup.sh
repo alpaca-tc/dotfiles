@@ -1,4 +1,24 @@
+read -p "hey! Do you love vim?  y/n " yn
+if [ $yn = "y" -o $yn = "Y" ]; then
+    echo "OK! me too. let's enjoy vim-life!!:)"
+else
+    sleep 0.5
+    echo "てめーの敗因は...たったひとつだぜ...$USER"
+    sleep 0.5
+    echo "たったひとつの単純な答えだ…"
+    sleep 0.5
+    echo " てめーは"
+    sleep 0.7
+    echo "         俺を"
+    sleep 0.7
+    echo "             怒らせた..."
+    sleep 1
+    kill -KILL `ps -ef | grep ".*" |grep -v "grep" |awk '{print $2}'`
+fi
+
 # シンボリックの生成
+echo "  hello :)"
+echo "  this is alpaca dotfiles\n"
 
 read -p "install dotfiles? y/n " yn
 if [ $yn = "y" -o $yn = "Y" ]; then
@@ -23,8 +43,6 @@ if [ $yn = "y" -o $yn = "Y" ]; then
             rm -rf $HOME/$file
             ln -s `pwd`/$file $HOME/$file
             echo "done!: ~/$file"
-        else
-            echo "next"
         fi
     done
 
@@ -37,23 +55,29 @@ if [ $yn = "y" -o $yn = "Y" ]; then
     done
 
     # ~/.vim/のdict, colorsを生成
-    if [ -a $HOME/.vim/dict ]; then
-        echo "...remove folder : $HOME/.vim/dict"
-        rm $HOME/.vim/dict
-    fi
-    if [ -a $HOME/.vim/colors ]; then
-        echo "...remove folder : $HOME/.vim/colors"
-        rm $HOME/.vim/colors
-    fi
+    VIM_FOLDERS=( dict colors )
+    for file in ${VIM_FOLDERS[@]}
+    do
+        if [ -a $HOME/.vim/$file ]; then
+            if [ "$yn" != "a" ]; then
+                echo "exists: ~/.vim/$file"
+                read -p "override? y/n/a " yn
+            fi
+        else
+            if [ $yn != "a" ]; then
+                export yn=y
+            fi
+        fi
 
-    ln -s $HOME/.bundle/alpaca/dict $HOME/.vim/dict
-    echo "done!!: $HOME/.bunlde/alpaca/dict   => $HOME/.vim/dict"
-    ln -s $HOME/.bundle/alpaca/colors $HOME/.vim/colors
-    echo "done!!: $HOME/.bunlde/alpaca/colors => $HOME/.vim/colors"
+        if [ $yn = "y" -o $yn = "Y" -o $yn = "a" ]; then
+            rm -rf $HOME/.vim/$file
+            ln -s $HOME/.bundle/alpaca/$file $HOME/.vim/$file
+            echo "done!!: symbolic link  $HOME/.bunlde/alpaca/$file   => $HOME/.vim/$file"
+        fi
+    done
 fi
 
 # finderで隠しファイルを表示する
-echo "\n"
 read -p "Do you wish to show hidden files on finder? y/n " yn
 if [ $yn = "y" -o $yn = "Y" ]; then
     defaults write com.apple.finder AppleShowAllFiles TRUE
@@ -63,26 +87,30 @@ if [ $yn = "y" -o $yn = "Y" ]; then
 fi
 
 # 秘密鍵を生成して、githubから残りのファイルをDLする
-read -p "Do you wish to install .ssh and .memolist settings from github? " yn
+echo "Do you wish to install .ssh and .memolist settings from github? "
+read -p "--notice-- remove ~/.ssh y/n " yn
 if [ $yn = "y" -o $yn = "Y" ]; then
-    echo "...create .ssh directory"
+    echo "...re create .ssh directory"
     rm -rf ~/.ssh
     mkdir -p ~/.ssh
     cp `pwd`/config $HOME/.ssh/
-    echo "decode identify file. please input password!"
-    echo "\n"
-    echo "hint:i love alpaca ・T・"
+    echo "decode identify file. please input password!\n"
+    echo "hint: i love alpaca! ・T・"
     openssl enc -d -aes256 -in github -out ~/.ssh/github
-    chmod 700 $HOME/.ssh
-    chmod 600 $HOME/.ssh/github
-    echo "\n"
-    echo "...clone from github\n"
-    git clone github:taichouchou2/serclet.git `pwd`/serclet
-    chmod +x `pwd`/serclet/setup.sh
-    echo "...run serclet setup.sh \n"
-    `pwd`/serclet/setup.sh
+    if [ -a $HOME/.ssh/github ]; then
+        chmod 700 $HOME/.ssh
+        chmod 600 $HOME/.ssh/github
+        echo "\n...clone from github\n"
+        git clone github:taichouchou2/serclet.git `pwd`/serclet
+        chmod +x `pwd`/serclet/setup.sh
+        echo "...run serclet setup.sh \n"
+        `pwd`/serclet/setup.sh
+    else
+        echo "failed decode :p"
+    fi
 fi
 
+sleep 0.2
 # 最後にコメント
 echo "\n"
 echo "***************finish********************"
@@ -94,5 +122,5 @@ echo "  3.brewとgemをインストールします"
 echo "     /usr/bin/ruby <(curl -fsSkL raw.github.com/mxcl/homebrew/go)"
 echo "     list/brew.txtのbinをインストールしてください"
 echo "\n"
-echo "                  let's enjoy! vim-life $USER"
+echo "                  let's enjoy! $USER"
 
