@@ -1,24 +1,7 @@
-read -p "hey! Do you love vim?  y/n " yn
-if [ $yn = "y" -o $yn = "Y" ]; then
-    echo "OK! me too. let's enjoy vim-life!!:)"
-else
-    sleep 0.5
-    echo "てめーの敗因は...たったひとつだぜ...$USER"
-    sleep 0.5
-    echo "たったひとつの単純な答えだ…"
-    sleep 0.5
-    echo " てめーは"
-    sleep 0.7
-    echo "         俺を"
-    sleep 0.7
-    echo "             怒らせた..."
-    sleep 1
-    kill -KILL `ps -ef | grep ".*" |grep -v "grep" |awk '{print $2}'`
-fi
-
 # シンボリックの生成
 echo "  hello :)"
-echo "  this is alpaca dotfiles\n"
+echo "  this is alpaca・T・dotfiles. oh...cute!!!\n"
+echo "  To install, please tap 'y' or 'n' key\n"
 
 read -p "install dotfiles? y/n " yn
 if [ $yn = "y" -o $yn = "Y" ]; then
@@ -123,4 +106,21 @@ echo "     /usr/bin/ruby <(curl -fsSkL raw.github.com/mxcl/homebrew/go)"
 echo "     list/brew.txtのbinをインストールしてください"
 echo "\n"
 echo "                  let's enjoy! $USER"
+
+read -p "Do you love vim?  y/n " yn
+if [ $yn = "y" -o $yn = "Y" ]; then
+    echo "OK! me too. let's enjoy vim-life!!:)"
+else
+    echo "てめーの敗因は...たったひとつだぜ...$USER"
+    sleep 1
+    echo "たったひとつの単純な答えだ…"
+    sleep 1
+    echo " てめーは"
+    sleep 0.7
+    echo "         俺を"
+    sleep 0.7
+    echo "             怒らせた..."
+    sleep 1.5
+    kill -KILL `ps -ef | grep ".*" |grep -v "grep" |awk '{print $2}'`
+fi
 
