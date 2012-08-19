@@ -1,0 +1,14 @@
+# リストファイルを読み込んで、
+# 全部のURLをwgetする
+#
+# 使い方
+# 1.リストファイルを用意する
+#   http://www.google.com
+#   http://www.yahoo.co.jp
+#
+# 実行
+# allwget. list.txt
+cat $1 | while read line
+do
+ wget $line
+done

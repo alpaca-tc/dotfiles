@@ -1,0 +1,39 @@
+# README
+
+## 内容
+
+以下のdotfiles
+
+- .autojump/
+- .emacs.d/
+- .git/
+- .vim/
+- .vim.swapfile/
+- .zsh/
+- local/
+- .ctags
+- .emacs.el
+- .gitconfig
+- .gitignore
+- .inputrc
+- .tmux.conf
+- .tmux.split
+- .vimrc
+- .zshrc
+- php.ini
+
+## install
+
+`chmod +x setup.sh`
+`./setup.sh`
+
+後は、対話式でインストール。
+.sshとmemolistをインストールする場合は、対話の中で暗号鍵を複合する必要がある。
+必要のない場合は、`mkdir ~/.memolist`を実行しておく
+
+## mysql
+
+```sh
+unset TMPDIR
+mysql_install_db --verbose--user=`whoami` --basedir="$(brew --prefix mysql)" --datadir=/usr/local/var/mysql --tmpdir=/tmp
+```
