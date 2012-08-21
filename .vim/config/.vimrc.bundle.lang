@@ -28,11 +28,15 @@ NeoBundle 'taichouchou2/alpaca'
 NeoBundle 'thinca/vim-template'
 NeoBundle 'tpope/vim-haml'
 
-" cakephpを使いやすく
-" NeoBundle 'violetyk/cake.vim'
-
 "/で検索をかけるときでも\tで補完が出来る
 " NeoBundle 'vim-scripts/SearchComplete'
+
+"****************************************
+" php
+"****************************************
+" NeoBundle '2072/PHP-Indenting-for-VIm'
+" cakephpを使いやすく
+" NeoBundle 'violetyk/cake.vim'
 
 " バイナリエディタ
 NeoBundle 'Shougo/vinarise'
@@ -56,7 +60,7 @@ NeoBundle 'vim-ruby/vim-ruby'
 NeoBundle 'ujihisa/neco-ruby'
 
 " ruby用のmatchit拡張
-NeoBundle 'ruby-matchit'
+au FileType ruby,eruby NeoBundle 'ruby-matchit'
 
 " Rsense使っちゃうよ/その場でコードを読み込んで補完するよ
 NeoBundle 'taichouchou2/vim-rsense.git'

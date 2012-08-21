@@ -1,4 +1,4 @@
-source $VIMRUNTIME/macros/matchit.vim
+" source $VIMRUNTIME/macros/matchit.vim
 
 " neobundle"{{{
 filetype plugin indent off     " required!

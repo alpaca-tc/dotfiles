@@ -69,6 +69,13 @@ if [ $yn = "y" -o $yn = "Y" ]; then
     killall Finder
 fi
 
+# default shell を変更
+read -p "Do you wish to change default shell? zsh y/n " yn
+if [ $yn = "y" -o $yn = "Y" ]; then
+    chsh -s /bin/zsh
+    echo "done!!"
+fi
+
 # 秘密鍵を生成して、githubから残りのファイルをDLする
 echo "Do you wish to install .ssh and .memolist settings from github? "
 read -p "--notice-- remove ~/.ssh y/n " yn
@@ -84,6 +91,7 @@ if [ $yn = "y" -o $yn = "Y" ]; then
         chmod 700 $HOME/.ssh
         chmod 600 $HOME/.ssh/github
         echo "\n...clone from github\n"
+        rm -rf `pwd`/serclet
         git clone github:taichouchou2/serclet.git `pwd`/serclet
         chmod +x `pwd`/serclet/setup.sh
         echo "...run serclet setup.sh \n"

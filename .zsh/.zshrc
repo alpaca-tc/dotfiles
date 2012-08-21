@@ -59,6 +59,8 @@ source $HOME/.rvm/scripts/rvm
 # fpath=(~/.zsh/Completion $fpath)
 # export PATH=$PATH:$GEM_PATH/bin
 
+# git
+export GITHUB_HOST='github.com'
 
 ## alias設定
 source ~/.zsh/.zshrc.basic
@@ -68,6 +70,12 @@ source ~/.zsh/.zshrc.alias
 # export ZSH_THEME=none
 # source ~/.zsh/oh-my-zsh/templates/zshrc.zsh-template
 # source ~/.zsh/.zshrc.command
+
+# hub
+# if [ -f "$HOME/.zsh/hub.bash_completion.sh" ]; then
+#     source ~/.zsh/hub.bash_completion.sh
+#     alias git="hub"
+# fi
 
 # z.sh
 # source ~/.zsh/z.sh

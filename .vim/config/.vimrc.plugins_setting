@@ -115,7 +115,7 @@ nnoremap <Leader>g :<C-u>OpenBrowserSearch<Space><C-r><C-w><Enter>
 " 入力モードで開始する
 let g:unite_enable_start_insert=1
 
-" 全部乗せ
+" いろいろのせる
 nnoremap <C-H><C-U> :<C-u>UniteWithCurrentDir -split -buffer-name=files buffer file_mru bookmark file<CR>
 
 " 現在のバッファのカレントディレクトリからファイル一覧
@@ -130,6 +130,9 @@ nnoremap <C-H><C-U> :<C-u>UniteWithCurrentDir -split -buffer-name=files buffer f
 " 最近使ったファイルの一覧
 noremap <C-H><C-H> :Unite file_mru<CR>
 
+" レジスタ一覧
+noremap <C-H><C-R> :Unite -buffer-name=register register<CR>
+
 function! UniteSetting()
   " 動き
   imap <buffer><C-K> <Up>
@@ -141,6 +144,7 @@ function! UniteSetting()
   nnoremap <silent><buffer><expr><C-L> unite#do_action('vsplit')
   " inoremap <silent><buffer><expr><C-V> unite#do_action('vsplit')
   " inoremap <silent><buffer><expr><C-E> unite#do_action('split')
+  nnoremap <silent> <buffer> <ESC><ESC> :q<CR>
 endfunction
 
 au FileType unite call UniteSetting()
@@ -230,7 +234,7 @@ let g:quickrun_config['markdown'] = {
 
 " ruby
 let g:quickrun_config['ruby'] = {
-      \   'command': 'ruby',
+      \   'command': 'ruby'
       \ }
 
 " Rspec
@@ -958,8 +962,8 @@ nnoremap <C-H>gl :Gist -l<CR>
 " twitvim
 "------------------------------------
 "{{{
-nnoremap <silent><C-J><C-T>  :Unite tweetvim<CR>
-nnoremap <silent><C-J><C-N>  :TweetVimSay<CR>
+nnoremap <silent><C-H><C-N>  :Unite tweetvim<CR>
+nnoremap <silent><C-H><C-M>  :TweetVimSay<CR>
 
 " you can display tweet's source.
 let g:tweetvim_display_source = 1
@@ -980,4 +984,14 @@ let g:tweetvim_open_buffer_cmd = 'tabnew'
 " call altr#define('app/controllers/%.rb', 'spec/controllers/%_spec.rb')
 " call altr#define('app/helpers/%.rb', 'spec/helpers/%_spec.rb')
 
-
+"------------------------------------
+" php indent
+"------------------------------------
+" let g:PHP_autoformatcomment = 1
+" let g:PHP_outdentSLComments = N
+" let g:PHP_default_indenting = 1
+" let g:PHP_outdentphpescape = 1
+" let g:PHP_removeCRwhenUnix = 1
+" let g:PHP_BracesAtCodeLevel = 1
+" let g:PHP_vintage_case_default_indent = 1
+"

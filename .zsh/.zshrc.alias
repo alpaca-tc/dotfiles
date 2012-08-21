@@ -42,7 +42,8 @@ alias tml='tmux list-window'
 alias g='git'
 alias gA='git add -A'
 alias ga='git add'
-alias gb='git branch'
+alias gb='git blame'
+alias gB='git branch'
 alias gc='git checkout'
 alias gcp='git cherry-pick'
 alias gd='git diff'
@@ -61,6 +62,12 @@ alias gs='git status'
 alias gst='git stash'
 alias gt='git tr'
 alias gv='git revert'
+
+# hub
+alias hb='hub browse'
+alias hc='hub clone'
+alias hp='hub pull-request'
+alias hn='hub --noop'
 
 # アプリケーションの別パス
 alias rm='gmv -f --backup=numbered --target-directory ~/.Trash/'

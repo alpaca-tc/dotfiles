@@ -37,3 +37,14 @@
 unset TMPDIR
 mysql_install_db --verbose--user=`whoami` --basedir="$(brew --prefix mysql)" --datadir=/usr/local/var/mysql --tmpdir=/tmp
 ```
+
+## 他いれるソフト
+- [ rvm ]( http://unfiniti.com/software/mac/jewelrybox )
+- [MacVim](http://code.google.com/p/macvim-kaoriya/)
+- [homebrew](http://mxcl.github.com/homebrew/)
+- [command line xcode](https://developer.apple.com/downloads/index.action)
+- [limechat]( http://limechat.net )
+- [iterm2]( http://www.iterm2.com/#/section/home )
+- [better touch tool]( http://blog.boastr.net )
+- [Alfred]( http://www.alfredapp.com )
+

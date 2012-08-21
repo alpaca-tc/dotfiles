@@ -31,7 +31,7 @@ NeoBundle 'xmledit'
 NeoBundle 'Lokaltog/vim-powerline'
 
 " matchit.vim : 「%」による対応括弧へのカーソル移動機能を拡張
-NeoBundle 'matchit.zip'
+" NeoBundle 'matchit.zip'
 NeoBundle 'edsono/vim-matchit'
 
 " 指定の文字列をテキストに置き換える.
