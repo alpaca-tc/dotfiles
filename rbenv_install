@@ -1,0 +1,20 @@
+#!/bin/sh
+
+cd $HOME
+git clone git://github.com/sstephenson/rbenv.git ~/.rbenv
+
+if [ -x `which zsh` ];then
+    echo 'rbenvがインストール済みです'
+else
+    echo 'export PATH="$HOME/.rbenv/bin/:$HOME/.rbenv:$PATH"' >> ~/.zshrc
+    echo 'eval "$(rbenv init -)"' >> ~/.zshrc
+fi
+
+mkdir -p ~/.rbenv/plugins
+cd ~/.rbenv/plugins
+git clone git://github.com/sstephenson/ruby-build.git  ~/.rbenv/plugins/ruby-build
+
+#rubyのインスコ
+rbenv install 1.9.3-p125 #好きなバージョンでok
+rbenv global 1.9.3-p125 #好きなバージョンでok
+rbenv rehash

@@ -28,6 +28,9 @@ NeoBundle 'taichouchou2/alpaca'
 NeoBundle 'thinca/vim-template'
 NeoBundle 'tpope/vim-haml'
 
+" sassのコンパイル
+NeoBundle 'AtsushiM/sass-compile.vim'
+
 "/で検索をかけるときでも\tで補完が出来る
 " NeoBundle 'vim-scripts/SearchComplete'
 
@@ -126,3 +129,6 @@ NeoBundle 'SQLUtilities'
 
 " C言語など<Leader>;で全行に;を挿入できる
 " nmap NeoBundle 'vim-scripts/teol.vim'
+
+" shellscript indnt
+NeoBundle 'sh.vim'

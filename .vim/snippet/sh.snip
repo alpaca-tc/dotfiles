@@ -1,0 +1,9 @@
+snippet     opt
+abbr        getopt
+prev_word   '^'
+    while getopts ${1:a:b} OPT
+    do
+    case $OPT in
+        "${2}" ) ${3:code $OPTARG} ;;
+    esac
+    done

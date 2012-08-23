@@ -28,7 +28,9 @@ alias pk='pkill -f'
 alias diff='colordiff'
 
 # grep
-alias 'grep'='egrep --color=auto -RUIn'
+# alias 'grep'='grep -s --no-messages --color=auto -RUIn'
+alias 'grep'='egrep --color=auto -UIns'
+alias 'rgrep'='egrep -R --color=auto -UIns'
 # alias 'grep'='egrep --color=auto -UIn'
 
 # tmux

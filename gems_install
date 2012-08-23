@@ -1,0 +1,15 @@
+#!/bin/sh
+
+GEMS=( rails bundler rake passenger bluecloth redcloth )
+if [ -x `which gem` ];then
+    for gem in ${GEMS[@]}
+    do
+        gem install $gem
+    done
+fi
+
+# passenger-install
+passenger-install-apache2-module
+sudo echo "LoadModule passenger_module /usr/local/rvm/gems/ruby-1.9.3-p194/gems/passenger-3.0.14/ext/apache2/mod_passenger.so
+PassengerRoot /usr/local/rvm/gems/ruby-1.9.3-p194/gems/passenger-3.0.14
+PassengerRuby /usr/local/rvm/wrappers/ruby-1.9.3-p194/ruby" > /etc/httpd/conf.d/passenger.conf

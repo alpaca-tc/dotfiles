@@ -107,7 +107,7 @@ imap <expr><TAB> neocomplcache#sources#snippets_complete#expandable() ?
       \"\<Plug>(neocomplcache_snippets_expand)" : pumvisible() ? "\<C-n>" : "\<TAB>"
 
 " snippetの編集
-nmap <Space>e <C-U>:NeoComplCacheEditSnippets<CR>
+nmap <Space>e :<C-U>NeoComplCacheEditSnippets<CR>
 au BufRead,BufNewFile *.snip  set filetype=snippet
 
 if !exists('g:neocomplcache_auto_completion_start_length')

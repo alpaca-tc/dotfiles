@@ -82,3 +82,10 @@ nnoremap te  :execute 'tabnext' 1 + (tabpagenr() + v:count1 - 1) % tabpagenr('$'
 "tabを次のtabへ移動
 nnoremap tg  gT
 
+nnoremap t1  :tabnext 1<CR>
+nnoremap t2  :tabnext 2<CR>
+nnoremap t3  :tabnext 3<CR>
+nnoremap t4  :tabnext 4<CR>
+nnoremap t5  :tabnext 5<CR>
+nnoremap t6  :tabnext 6<CR>
+
