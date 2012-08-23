@@ -420,7 +420,7 @@ let g:user_zen_settings = {
 " をしなければいけない
 let g:ref_use_vimproc             = 1
 let g:ref_alc_start_linenumber    = 47
-let g:ref_no_default_key_mappings = 'K'
+" let g:ref_no_default_key_mappings = 'K'
 let g:ref_open                    = 'split'
 let g:ref_cache_dir               = expand('~/.Trash')
 let g:ref_refe_cmd                = expand('~/.vim/ref/ruby-ref1.9.2/refe-1_9_2')
@@ -428,7 +428,7 @@ let g:ref_phpmanual_path          = expand('~/.vim/ref/php-chunked-xhtml')
 let g:ref_ri_cmd                  = expand('~/.rvm/bin/ri')
 
 "リファレンスを簡単に見れる。
-nmap K <Nop>
+" nmap K <Nop>
 
 nmap <C-K> :<C-U>Ref alc <Space><C-R><C-W><CR>
 autocmd FileType ruby,eruby,ruby.rspec nmap <buffer>K :<C-U>Unite ref/refe <Space><C-R><C-W><CR>
@@ -492,8 +492,8 @@ let g:ref_refe_cmd      = 'lynx -dump -nonumbers -assume_charset=utf-8 -assume_l
 "{{{
 "vim上からgitを使う 便利
 nmap <Space>gd :GitDiff<CR>
-nmap <Space>gB :GitBlame<CR>
-nmap <Space>gb :Gitblanch<CR>
+nmap <Space>gb :GitBlame<CR>
+nmap <Space>gB :Gitblanch<CR>
 nmap <Space>gp :GitPush<CR>
 nmap <Space>gD :GitDiff --cached<CR>
 nmap <Space>gs :GitStatus<CR>
@@ -503,7 +503,6 @@ nmap <Space>gA :GitAdd -A<CR>
 nmap <Space>gm :GitCommit<CR>
 nmap <Space>gM :GitCommit --amend<CR>
 "}}}
-
 
 "----------------------------------------
 " html5.vim
@@ -995,3 +994,43 @@ let g:tweetvim_open_buffer_cmd = 'tabnew'
 " let g:PHP_BracesAtCodeLevel = 1
 " let g:PHP_vintage_case_default_indent = 1
 "
+
+"------------------------------------
+" php indent
+"------------------------------------
+let g:sh_indent_case_labels=1
+
+"------------------------------------
+" neocomplcache-snippets
+"------------------------------------
+au FileType snippet nmap <buffer><Space>e :e #<CR>
+
+"------------------------------------
+" neocomplcache-snippets
+"------------------------------------
+nmap <C-H><C-H><C-R> :<C-U>CompassCreate<CR>
+nmap <C-H><C-H><C-B> :<C-U>BourbonInstall<CR>
+
+" 編集したファイルから遡るフォルダの最大数
+let g:sass_compile_cdloop = 5
+
+" ファイル保存時に自動コンパイル（1で自動実行）
+let g:sass_compile_auto = 1
+
+" 自動コンパイルを実行する拡張子
+let g:sass_compile_file = ['scss', 'sass']
+
+" cssファイルが入っているディレクトリ名（前のディレクトリほど優先）
+let g:sass_compile_cssdir = ['css', 'stylesheet']
+
+let g:sass_compile_beforecmd = ""
+let g:sass_compile_aftercmd = ""
+
+"------------------------------------
+" im_controll.vim
+"------------------------------------
+" 「日本語入力固定モード」切替キー
+inoremap <silent> <C-j> <C-r>=IMState('FixMode')<CR>
+" PythonによるIBus制御指定
+let IM_CtrlIBusPython = 1
+

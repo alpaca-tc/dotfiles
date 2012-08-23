@@ -1,0 +1,7 @@
+#!/bin/sh
+
+brew install mysql
+sudo cp `pwd`/conf/my.cnf /etc/
+mysql_install_db --verbose --user=`whoami` --basedir="$(brew --prefix mysql)" --datadir=/usr/local/var/mysql --tmpdir=/tmp
+
+echo "mysqladmin "

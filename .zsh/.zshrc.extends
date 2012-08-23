@@ -28,3 +28,19 @@ if [ $ != 0 ]; then
 fi
 w3m http://www.google.co.jp/$opt
 }
+
+# hub
+# if [ -f "$HOME/.zsh/hub.bash_completion.sh" ]; then
+#     source $HOME/.zsh/hub.bash_completion.sh
+#     alias git="hub"
+# fi
+
+# z.sh
+# source ~/.zsh/z.sh
+# function precmd () {
+#     _z --add "$(pwd -P)"
+# }
+# _Z_CMD=z
+
+# tmuxinator
+[[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator

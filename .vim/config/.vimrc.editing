@@ -26,6 +26,7 @@ nmap <Space>s :w sudo:%<CR>
 "nmap X <Del>
 "<C-Space>で削除
 imap <C-@> <BS>
+imap <C-Space> <BS>
 " imap <C-o> <C-x><C-o>
 
 " 括弧を自動補完

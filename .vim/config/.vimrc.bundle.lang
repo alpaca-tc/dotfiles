@@ -28,6 +28,9 @@ NeoBundle 'taichouchou2/alpaca'
 NeoBundle 'thinca/vim-template'
 NeoBundle 'tpope/vim-haml'
 
+" sassのコンパイル
+NeoBundle 'AtsushiM/sass-compile.vim'
+
 "/で検索をかけるときでも\tで補完が出来る
 " NeoBundle 'vim-scripts/SearchComplete'
 
@@ -51,7 +54,7 @@ NeoBundle 'scrooloose/syntastic'
 " ruby
 "****************************************
 " rails.vim必須
-NeoBundle 'tpope/vim-rails'
+NeoBundle 'github:taichouchou2/vim-rails'
 
 " rubyのomni補完や、syntacsなど
 NeoBundle 'vim-ruby/vim-ruby'
@@ -63,7 +66,7 @@ NeoBundle 'ujihisa/neco-ruby'
 au FileType ruby,eruby NeoBundle 'ruby-matchit'
 
 " Rsense使っちゃうよ/その場でコードを読み込んで補完するよ
-NeoBundle 'taichouchou2/vim-rsense.git'
+NeoBundle 'github:taichouchou2/vim-rsense.git'
 
 " コメントを読み取って、対応する補完を検索する
 " gen install methodfinder
@@ -72,13 +75,19 @@ NeoBundle 'ujihisa/neco-rubymf'
 NeoBundle 'tpope/vim-endwise.git'
 
 " vim-ref-ri
-NeoBundle 'taichouchou2/vim-ref-ri'
+NeoBundle 'github:taichouchou2/vim-ref-ri'
 
 " unite rails
 NeoBundle 'basyura/unite-rails'
 
 " 関連するファイルを切り替えれる
 NeoBundle 'kana/vim-altr'
+
+" refactor rails
+NeoBundle 'sandeepravi/refactor-rails.vim'
+
+" Rfactoryメソッドなど追加
+NeoBundle 'romanvbabenko/rails.vim'
 
 "****************************************
 " CSS
@@ -126,3 +135,6 @@ NeoBundle 'SQLUtilities'
 
 " C言語など<Leader>;で全行に;を挿入できる
 " nmap NeoBundle 'vim-scripts/teol.vim'
+
+" shellscript indnt
+NeoBundle 'sh.vim'

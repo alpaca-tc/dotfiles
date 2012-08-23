@@ -35,6 +35,10 @@ set backupdir=~/.vim.swapfile
 " OSのクリップボードを使用する
 set clipboard+=unnamed
 set clipboard+=autoselect
+set shell=/usr/local/bin/zsh
+let $SHELL="/usr/local/bin/zsh"
+" let $PATH="/Users/taichou/.autojump/bin:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin/:/Users/taichou/.rbenv:/Applications/XAMPP/xamppfiles/bin:/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/usr/local/bin:/Users/taichou/local/bin:/Users/taichou/local/sbin:/Users/taichou/.autojump/bin:/bin:/sbin:/usr/sbin:/usr/bin"
+" set path="/Users/taichou/.autojump/bin:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin/:/Users/taichou/.rbenv:/Applications/XAMPP/xamppfiles/bin:/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/usr/local/bin:/Users/taichou/local/bin:/Users/taichou/local/sbin:/Users/taichou/.autojump/bin:/bin:/sbin:/usr/sbin:/usr/bin"
 
 "-------------------------------------------------------------------------------
 " help Fileの設定
@@ -47,7 +51,6 @@ set helpfile=$VIMRUNTIME/doc/help.txt
 "-------------------------------------------------------------------------------
 " vmrcのソースを再読み込み
 " nmap <Space>s :source ~/.vimrc<CR>
-
 
 " カーソル下のキーワードをヘルプでひく
 nnoremap <Space>i :<C-u>help<Space><C-r><C-w><Enter>

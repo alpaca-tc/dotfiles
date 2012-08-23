@@ -68,10 +68,13 @@ NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'h1mesuke/vim-alignta'
 
 " ヤンクの履歴を管理し、順々に参照、出力できるようにする
-NeoBundle 'YankRing.vim'
+" NeoBundle 'YankRing.vim'
 
 " 同時押しキーマップを使う
 NeoBundle 'kana/vim-arpeggio'
+
+" indentに色づけ
+NeoBundle 'nathanaelkane/vim-indent-guides'
 
 " ----------------------------------------
 "  他のアプリを呼び出す

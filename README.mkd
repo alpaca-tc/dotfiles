@@ -47,4 +47,5 @@ mysql_install_db --verbose--user=`whoami` --basedir="$(brew --prefix mysql)" --d
 - [iterm2]( http://www.iterm2.com/#/section/home )
 - [better touch tool]( http://blog.boastr.net )
 - [Alfred]( http://www.alfredapp.com )
+- [node.js]( http://nodejs.org/#download )
 

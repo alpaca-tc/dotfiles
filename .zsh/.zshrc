@@ -21,67 +21,58 @@ export BROWSER=w3m
 # alias gcc='/usr/local/bin/gcc-4.2'
 export ARCHFLAGS="-arch x86_64"
 export APXS2=/usr/sbin/apxs
-export RSENSE_HOME=$HOME/.vim/ref/rsense-0.3
 
-# PATH上から優先
 export PATH=''
+export PATH=/bin:/sbin:/usr/sbin:/usr/bin
+export MANPATH=$PATH:/usr/share/man
+
+# rvm
+# export PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+# source "$HOME/.rvm/scripts/rvm"
+# fpath=(~/.zsh/Completion $fpath)
+# export PATH=$PATH:$GEM_PATH/bin
+
+# XAMPP
+export PATH=/Applications/XAMPP/xamppfiles/bin:$PATH
 
 # java 1.7.0
-export PATH=$PATH:/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin
+export PATH=/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:$PATH
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home
 # export CLASSPATH=$JAVA_HOME'/lib/ext'
 
 # rsense
-export PATH=$PATH:$HOME/.vim/ref/rsense-0.3/bin
+export PATH=$HOME/.vim/ref/rsense-0.3/bin:$PATH
+export RSENSE_HOME=$HOME/.vim/ref/rsense-0.3
 
 # homebrew
-export PATH=$PATH:/usr/local/bin
-export MANPATH=$PATH:/usr/local/share/man
+export PATH=/usr/local/bin:$PATH
+export MANPATH=/usr/local/share/man:$MANPATH
 
 # pythonbrew
 # export PATH=$PATH:$HOME/.pythonbrew/bin
 
 # vim関連
-export PATH=$PATH:$HOME/local/bin
-export PATH=$PATH:$HOME/local/sbin
-# export MANPATH=$PATH:$HOME/local/man
+export PATH=$HOME/local/bin:$HOME/local/sbin:$PATH:
+export MANPATH=$HOME/local/man:$MANPATH
 
 # zsh関連
-export PATH=$PATH:$HOME/.autojump/bin
+export PATH=$HOME/.autojump/bin:$PATH
 
-# 基本
-export PATH=$PATH:/usr/bin:/usr/sbin
-export PATH=$PATH:/bin:/sbin
-export MANPATH=$PATH:/usr/share/man
+# rbenv
+# rbenv
+export PATH=$HOME/.rbenv/bin:$HOME/.rbenv:$PATH
 
-# rvm
-source $HOME/.rvm/scripts/rvm
-# fpath=(~/.zsh/Completion $fpath)
-# export PATH=$PATH:$GEM_PATH/bin
+eval "$(rbenv init -)"
 
 # git
 export GITHUB_HOST='github.com'
+
 
 ## alias設定
 source ~/.zsh/.zshrc.basic
 source ~/.zsh/.zshrc.prompt
 source ~/.zsh/.zshrc.extends
 source ~/.zsh/.zshrc.alias
-# export ZSH_THEME=none
-# source ~/.zsh/oh-my-zsh/templates/zshrc.zsh-template
 # source ~/.zsh/.zshrc.command
-
-# hub
-# if [ -f "$HOME/.zsh/hub.bash_completion.sh" ]; then
-#     source ~/.zsh/hub.bash_completion.sh
-#     alias git="hub"
-# fi
-
-# z.sh
-# source ~/.zsh/z.sh
-# function precmd () {
-#     _z --add "$(pwd -P)"
-# }
-# _Z_CMD=z
 
 

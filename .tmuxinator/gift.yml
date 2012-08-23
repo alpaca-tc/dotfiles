@@ -1,0 +1,17 @@
+# ~/.tmuxinator/gift.yml
+# you can make as many tabs as you wish...
+
+project_name: gift
+project_root: ~/project/gift
+# pre: sudo mysql.server start
+tabs:
+  - editor:
+      layout: 204x58, 0, 0[204x58, 0, 0, 104x24, 0, 0, 104x33, 0, 25]
+      panes:
+        - vim
+        - autotest
+  - console: rails c
+  - upserv:
+      panes:
+        - rails s
+        - spork

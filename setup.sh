@@ -5,7 +5,7 @@ echo "  To install, please tap 'y' or 'n' key\n"
 
 read -p "install dotfiles? y/n " yn
 if [ $yn = "y" -o $yn = "Y" ]; then
-    DOT_FILES=( .vim .vimrc .ctags .emacs.d .emacs.el .dir_colors .gitconfig .gitignore .inputrc .rsense .tmux.conf .tmux.split .zsh .zshrc local .autojump .zshrc .rspec )
+    DOT_FILES=( .vim .vimrc .ctags .emacs.d .emacs.el .dir_colors .gitconfig .gitignore .inputrc .rsense .tmux.conf .tmux.split .zsh .zshrc local .autojump .zshrc .rspec .tmuxinator .gvimrc .gemrc )
 
     echo "...install dotfiles...\n"
     for file in ${DOT_FILES[@]}

@@ -1,3 +1,2 @@
+# source ~/.zsh/git-completion.bash
 source ~/.zsh/.zshrc
-
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
