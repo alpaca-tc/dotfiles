@@ -1,6 +1,7 @@
 source ~/.zsh/git-completion.bash
 source ~/.zsh/tmux-completion.bash
 source ~/.zsh/auto-fu.zsh
+source ~/.zsh/rbenv.zsh
 
 # brewの読み込みなど
 fpath=(~/.zsh/functions/$fpath)

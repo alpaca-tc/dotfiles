@@ -432,7 +432,8 @@ let g:ref_ri_cmd                  = expand('~/.rvm/bin/ri')
 
 nmap <C-K> :<C-U>Ref alc <Space><C-R><C-W><CR>
 autocmd FileType ruby,eruby,ruby.rspec nmap <buffer>K :<C-U>Unite ref/refe <Space><C-R><C-W><CR>
-autocmd User Rails                     nmap <buffer><C-K> :<C-U>Unite ref/ri <Space><C-R><C-W><CR>
+" autocmd User Rails                     nmap <buffer><C-K> :<C-U>Unite ref/ri <Space><C-R><C-W><CR>
+autocmd User Rails                     nmap <buffer><C-K> :<C-U>Ref ri <Space><C-R><C-W><CR>
 
 " refビューワー内の設定
 " vim-ref内の移動を楽に
@@ -799,6 +800,7 @@ let g:tcomment_types = {
       \'eruby_block'             : "<%%=begin rdoc%s=end%%>",
       \'eruby_nodoc_block'       : "<%%=begin%s=end%%>"
       \}
+"{{{
 function! SetErubyMapping2()
   nmap <buffer> <C-_>c :TCommentAs eruby_surround<CR><Right><Right><Right>
   nmap <buffer> <C-_><C-C> :TCommentAs eruby_surround<CR><Right><Right><Right>
@@ -818,13 +820,34 @@ function! SetErubyMapping2()
   vmap <buffer> <C-_><C-C> :TCommentAs eruby_surround<CR>
   vmap <buffer> <C-_>- :TCommentAs eruby_surround_minus<CR>
   vmap <buffer> <C-_>= :TCommentAs eruby_surround_equality<CR>
+  nmap <buffer> <C-j>c :TCommentAs eruby_surround<CR><Right><Right><Right>
+  nmap <buffer> <C-j><C-C> :TCommentAs eruby_surround<CR><Right><Right><Right>
+  nmap <buffer> <C-j>- :TCommentAs eruby_surround_minus<CR><Right><Right><Right>
+  nmap <buffer> <C-j>= :TCommentAs eruby_surround_equality<CR><Right><Right><Right><Right>
+  nmap <buffer> <C-j>d :TCommentAs eruby_block<CR><Right><Right><Right><Right>
+  nmap <buffer> <C-j>n :TCommentAs eruby_nodoc_block<CR><Right><Right><Right><Right>
+  imap <buffer> <C-j>c <%  %><ESC><Left><Left>i
+  imap <buffer> <C-j><C-C> <%  %><ESC><Left><Left>i
+  imap <buffer> <C-j>- <%  -%><ESC><Left><Left><Left>i
+  imap <buffer> <C-j>= <%=  %><ESC><Left><Left>i
+  imap <buffer> <C-j>d <%=begin rdoc=end%><ESC><Left><Left>i
+  imap <buffer> <C-j>n <%=begin=end%><ESC><Left><Left>i
+  vmap <buffer> <C-j>c :TCommentAs eruby_surround<CR>
+  vmap <buffer> <C-j><C-C> :TCommentAs eruby_surround<CR>
+  vmap <buffer> <C-j>- :TCommentAs eruby_surround_minus<CR>
+  vmap <buffer> <C-j>= :TCommentAs eruby_surround_equality<CR>
 endfunction
 function! SetRubyMapping()
-  nmap <buffer> <C-_>d :TCommentAs ruby_block<CR><Right><Right><Right><Right>
+  nmap <buffer> <C-j>b :TCommentAs ruby_block<CR><Right><Right><Right><Right>
+  nmap <buffer> <C-j>n :TCommentAs ruby_nodoc_block<CR><Right><Right><Right><Right>
+  imap <buffer> <C-j>b <%=begin rdoc=end%><ESC><Left><Left>i
+  imap <buffer> <C-j>n <%=begin=end%><ESC><Left><Left>i
+  nmap <buffer> <C-_>b :TCommentAs ruby_block<CR><Right><Right><Right><Right>
   nmap <buffer> <C-_>n :TCommentAs ruby_nodoc_block<CR><Right><Right><Right><Right>
-  imap <buffer> <C-_>d <%=begin rdoc=end%><ESC><Left><Left>i
+  imap <buffer> <C-_>b <%=begin rdoc=end%><ESC><Left><Left>i
   imap <buffer> <C-_>n <%=begin=end%><ESC><Left><Left>i
 endfunction
+"}}}
 
 au FileType eruby call SetErubyMapping2()
 au FileType ruby,ruby.rspec call SetRubyMapping()

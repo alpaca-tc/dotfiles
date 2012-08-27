@@ -34,10 +34,14 @@ NeoBundle 'AtsushiM/sass-compile.vim'
 "/で検索をかけるときでも\tで補完が出来る
 " NeoBundle 'vim-scripts/SearchComplete'
 
+" syntax checking plugins exist for eruby, haml, html, javascript, php, python, ruby and sass.
+NeoBundle 'scrooloose/syntastic'
+
 "****************************************
 " php
 "****************************************
 " NeoBundle '2072/PHP-Indenting-for-VIm'
+NeoBundle 'oppara/vim-unite-cake'
 " cakephpを使いやすく
 " NeoBundle 'violetyk/cake.vim'
 
@@ -47,8 +51,8 @@ NeoBundle 'Shougo/vinarise'
 " objective-c
 NeoBundle 'msanders/cocoa.vim'
 
-" syntax checking plugins exist for eruby, haml, html, javascript, php, python, ruby and sass.
-NeoBundle 'scrooloose/syntastic'
+
+
 
 "****************************************
 " ruby
@@ -61,6 +65,8 @@ NeoBundle 'vim-ruby/vim-ruby'
 
 " rubyでrequire先を補完する
 NeoBundle 'ujihisa/neco-ruby'
+
+NeoBundle 'ujihisa/unite-rake'
 
 " ruby用のmatchit拡張
 au FileType ruby,eruby NeoBundle 'ruby-matchit'
@@ -88,6 +94,13 @@ NeoBundle 'sandeepravi/refactor-rails.vim'
 
 " Rfactoryメソッドなど追加
 NeoBundle 'romanvbabenko/rails.vim'
+
+" gemを探せる?
+NeoBundle 'unite-gem'
+
+NeoBundle 'railstab.vim'
+
+NeoBundle 'basyura/unite-rails'
 
 "****************************************
 " CSS
