@@ -35,6 +35,9 @@ export MANPATH=$PATH:/usr/share/man
 # XAMPP
 export PATH=/Applications/XAMPP/xamppfiles/bin:$PATH
 
+# XAMPP
+export PATH=$PATH:/Applications/XAMPP/xamppfiles/bin
+
 # java 1.7.0
 export PATH=/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:$PATH
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home
@@ -42,6 +45,7 @@ export JAVA_HOME=/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home
 
 # rsense
 export PATH=$HOME/.vim/ref/rsense-0.3/bin:$PATH
+export PATH=$PATH:$HOME/.vim/ref/rsense-0.3/bin
 export RSENSE_HOME=$HOME/.vim/ref/rsense-0.3
 
 # homebrew
@@ -59,9 +63,21 @@ export MANPATH=$HOME/local/man:$MANPATH
 export PATH=$HOME/.autojump/bin:$PATH
 
 # rbenv
-# rbenv
 export PATH=$HOME/.rbenv/bin:$HOME/.rbenv:$PATH
+eval "$(rbenv init -)"
+# 基本
+export PATH=$PATH:/bin:/sbin
+export PATH=$PATH:/usr/sbin:/usr/bin
+export MANPATH=$PATH:/usr/share/man
 
+# rvm
+# export PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+# source "$HOME/.rvm/scripts/rvm"
+# fpath=(~/.zsh/Completion $fpath)
+# export PATH=$PATH:$GEM_PATH/bin
+
+# rbenv
+export PATH="$HOME/.rbenv/bin/:$HOME/.rbenv:$PATH"
 eval "$(rbenv init -)"
 
 # git
@@ -74,5 +90,4 @@ source ~/.zsh/.zshrc.prompt
 source ~/.zsh/.zshrc.extends
 source ~/.zsh/.zshrc.alias
 # source ~/.zsh/.zshrc.command
-
 

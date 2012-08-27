@@ -3,6 +3,7 @@
 cd $HOME
 git clone git://github.com/sstephenson/rbenv.git ~/.rbenv
 
+<<<<<<< HEAD
 if [ -x `which rbenv` ];then
     echo 'rbenvがインストール済みです'
 else
