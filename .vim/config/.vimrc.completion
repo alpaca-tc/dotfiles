@@ -67,6 +67,10 @@ let g:neocomplcache_dictionary_patterns = {
       \'php': expand('~/.vim/dict/zendphp.dict'),
       \'javascript': expand('~/.vim/dict/timobile.dict'),
       \}
+let g:neocomplcache_source_rank = {
+      \ 'snippets_complete' : 110,
+      \ 'rubymf' : 1,
+      \ }
 
 " Define keyword.
 if !exists('g:neocomplcache_keyword_patterns')

@@ -16,6 +16,8 @@ alias cdd="cd cd ~/Documents/Titanium\ Studio\ Workspace/"
 alias vv="vim ~/.vim/config/.vimrc"
 alias vp="vim ~/.vim/config/.vimrc.plugins"
 alias vvp="vim ~/.vim/config/.vimrc.plugins_setting"
+alias vvb="vim ~/.vim/config/.vimrc.bundle"
+alias vvbl="vim ~/.vim/config/.vimrc.bundle.lang"
 alias vz="vim ~/.zsh/.zshrc"
 alias vza="vim ~/.zsh/.zshrc.alias"
 alias vzo="vim ~/.zsh/.zshrc.osx"
@@ -81,7 +83,8 @@ alias v='vim'
 alias vi='vim'
 alias rb='ruby'
 alias ctags='/Applications/MacVim.app/Contents/MacOS/ctags "$@"'
-alias rtags='/Applications/MacVim.app/Contents/MacOS/ctags -R --langmap=RUBY:.rb ~/.rvm/rubies/ruby-1.9.3-p194 ~/.rvm/gems/ruby-1.9.3-p194/gems -f ~/tags'
+# alias rtags='/Applications/MacVim.app/Contents/MacOS/ctags -R --langmap=RUBY:.rb ~/.rvm/rubies/ruby-1.9.3-p194 ~/.rvm/gems/ruby-1.9.3-p194/gems -f ~/tags'
+alias rtags='/Applications/MacVim.app/Contents/MacOS/ctags -R --langmap=RUBY:.rb ~/.rbenv/versions/1.9.3-p125 ~/.rbenv/shims -f ~/tags'
 alias vlc='/Applications/VLC.app/Contents/MacOS/VLC --intf=rc'
 alias redis='redis-server /usr/local/etc/redis.conf'
 

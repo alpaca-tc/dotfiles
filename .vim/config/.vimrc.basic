@@ -37,13 +37,13 @@ set clipboard+=unnamed
 set clipboard+=autoselect
 set shell=/usr/local/bin/zsh
 let $SHELL="/usr/local/bin/zsh"
-let $PATH="/Applications/MacVim.app/Contents/MacOS:/Users/taichou/.autojump/bin:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin:/Users/taichou/.rbenv:/Users/taichou/local/bin:/Users/taichou/local/sbin:/usr/local/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:/Applications/XAMPP/xamppfiles/bin:/bin:/sbin:/usr/sbin:/usr/bin"
+let $PATH="/Users/taichou/.autojump/bin:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin:/Users/taichou/.rbenv:/Users/taichou/local/bin:/Users/taichou/local/sbin:/usr/local/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:/Applications/XAMPP/xamppfiles/bin:/bin:/sbin:/usr/sbin:/usr/bin"
 
 "-------------------------------------------------------------------------------
 " help Fileの設定
 "-------------------------------------------------------------------------------
 autocmd FileType help nnoremap <buffer> q <C-w>c
-set helpfile=$VIMRUNTIME/doc/help.txt
+" set helpfile=$VIMRUNTIME/doc/help.txt
 
 "-------------------------------------------------------------------------------
 " マッピング

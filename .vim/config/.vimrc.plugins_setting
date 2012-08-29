@@ -224,7 +224,8 @@ let g:quickrun_config['coffee'] = {
       \}
 
 " should gem install bluecloth
-let markdownHead = "<!DOCTYPE HTML> <html lang=\"ja\"> <head> <meta charset=\"UTF-8\"> </head><body>"
+let markdownCss = '<link href="http://kevinburke.bitbucket.org/markdowncss/markdown.css" rel="stylesheet"></link>'
+let markdownHead = '<!DOCTYPE HTML> <html lang=\"ja\"> <head> <meta charset=\"UTF-8\">'.markdownCss.'</head><body>'
 let markdownFoot = "</body> </html>"
 let g:quickrun_config['markdown'] = {
       \ 'command'   : 'bluecloth',
@@ -290,7 +291,6 @@ function! RSpecQuickrun()
   let b:quickrun_config = {'type' : 'ruby.rspec'}
   " nnoremap <silent><buffer><Leader>lr :QuickRun ruby.rspec line('.')<CR>
   nnoremap <expr><silent><buffer><Leader>lr "<Esc>:QuickRun ruby.rspec -cmdopt \"-l" .  line('.') . "\"<CR>"
-
 endfunction
 au BufReadPost *_spec.rb call RSpecQuickrun()
 
@@ -423,7 +423,7 @@ let g:ref_alc_start_linenumber    = 47
 " let g:ref_no_default_key_mappings = 'K'
 let g:ref_open                    = 'split'
 let g:ref_cache_dir               = expand('~/.Trash')
-let g:ref_refe_cmd                = expand('~/.vim/ref/ruby-ref1.9.2/refe-1_9_2')
+let g:ref_refe_cmd               = expand('~/.vim/ref/ruby-ref1.9.2/refe-1_9_2')
 let g:ref_phpmanual_path          = expand('~/.vim/ref/php-chunked-xhtml')
 let g:ref_ri_cmd                  = expand('~/.rvm/bin/ri')
 
@@ -462,9 +462,10 @@ let g:ref_alc_encoding  = 'utf-8'
 "lynxの場合
 let g:ref_alc_cmd       = 'lynx -dump -nonumbers -assume_charset=utf-8 -assume_local_charset=utf-8 -assume_unrec_charset=utf-8 -display_charset=utf-8 %s'
 let g:ref_phpmanual_cmd = 'lynx -dump -nonumbers -assume_charset=utf-8 -assume_local_charset=utf-8 -assume_unrec_charset=utf-8 -display_charset=utf-8 %s'
-let g:ref_refe_cmd      = 'lynx -dump -nonumbers -assume_charset=utf-8 -assume_local_charset=utf-8 -assume_unrec_charset=utf-8 -display_charset=utf-8 %s'
+" let g:ref_refe_cmd      = 'lynx -dump -nonumbers -assume_charset=utf-8 -assume_local_charset=utf-8 -assume_unrec_charset=utf-8 -display_charset=utf-8 %s'
 
 "w3mの場合
+" let g:ref_refe_cmd      = 'w3m -dump %s'
 " let g:ref_alc_cmd        = 'w3m -dump %s'
 " let g:ref_html_cmd       = 'w3m -dump %s'
 " let g:ref_phpmanual_cmd  = 'w3m -dump %s'
@@ -952,7 +953,7 @@ autocmd User Rails call SetUpRailsSetting()
 "------------------------------------
 "{{{
 " Rsense
-let g:rsenseUseOmniFunc = 1
+let g:rsenseUseOmniFunc = 0
 let g:rsenseHome = expand('~/.vim/ref/rsense-0.3')
 
 function! SetUpRubySetting()
@@ -1056,4 +1057,16 @@ let g:sass_compile_aftercmd = ""
 inoremap <silent> <C-j> <C-r>=IMState('FixMode')<CR>
 " PythonによるIBus制御指定
 let IM_CtrlIBusPython = 1
+
+"------------------------------------
+" jasmine.vim
+"------------------------------------
+au BufRead,BufNewFile *Helper.js,*Spec.js  set filetype=jasmine.javascript
+au BufRead,BufNewFile *Helper.coffee,*Spec.coffee  set filetype=jasmine.coffee
+au BufRead,BufNewFile *Helper.coffee,*Spec.coffee  let b:quickrun_config = {'type' : 'coffee'}
+map <buffer> <leader>m :JasmineRedGreen<CR>
+call jasmine#load_snippets()
+command! JasmineRedGreen :call jasmine#redgreen()
+command! JasmineMake :call jasmine#make()
+
 

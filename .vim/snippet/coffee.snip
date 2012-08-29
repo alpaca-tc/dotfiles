@@ -1,0 +1,36 @@
+# 基礎
+# js
+snippet     js
+    JSON.stringify(${1})
+snippet     jp
+    JSON.parse(${1})
+
+snippet     con
+    constructor : (${1})->
+      ${2}
+
+# coffee
+snippet     cons
+    console.debug(${1})
+
+# jquery
+snippet     ajax
+    $.ajax({
+      url: ${1:http://..}
+      async: ${2:true/false}
+      dataType: ${3:'json' }
+    })
+snippet     getj
+    $.ajaxSetup({ cache: false, async:${1} }); # IE hack
+    _json = $.getJSON(
+      "${2:https://graph.facebook.com/#{ id }}",
+      (data, status)->
+        ${3}
+      'jsonp'
+    )
+snippet     ready
+    $(document).ready(
+      ->
+        ${1}
+    )
+

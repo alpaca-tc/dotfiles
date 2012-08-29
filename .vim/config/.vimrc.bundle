@@ -104,6 +104,9 @@ NeoBundle 'mattn/gist-vim'
 "/で検索をかけるときでも\tで補完が出来る
 " NeoBundle 'vim-scripts/SearchComplete'
 
+"markdownでメモを管理
+NeoBundle 'glidenote/memolist.vim'
+
 " ----------------------------------------
 "  filerなど
 " ----------------------------------------

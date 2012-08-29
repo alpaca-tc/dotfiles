@@ -8,25 +8,27 @@
 "html用の拡張(syntaxなどをvimはまだサポート出来ていないため)
 " 設定を修正後
 NeoBundle 'taichouchou2/html5.vim'
+NeoBundle 'tpope/vim-haml'
 
+"  js / coffee
+" ----------------------------------------
 " coffee script
 NeoBundle 'kchmck/vim-coffee-script'
+" js indent
+" syntaxが無駄に入っているので、インストール後削除
+NeoBundle 'claco/jasmine.vim'
+NeoBundle 'pangloss/vim-javascript'
+NeoBundle 'JavaScript-syntax'
 
+"  markdown
+" ----------------------------------------
 "markdownでの入力をリアルタイムでチェック
 NeoBundle 'mattn/mkdpreview-vim'
 NeoBundle 'tpope/vim-markdown'
 
-"markdownでメモを管理
-NeoBundle 'glidenote/memolist.vim'
-
-" vimにはjsの設定ファイルが存在しない。
-" jsのインデントが糞な理由はこれ。なので修正
-" ただし、syntacsが無駄に入っているので、インストール後削除
-NeoBundle 'pangloss/vim-javascript'
-
+" おまけ
 NeoBundle 'taichouchou2/alpaca'
 NeoBundle 'thinca/vim-template'
-NeoBundle 'tpope/vim-haml'
 
 " sassのコンパイル
 NeoBundle 'AtsushiM/sass-compile.vim'
@@ -37,70 +39,49 @@ NeoBundle 'AtsushiM/sass-compile.vim'
 " syntax checking plugins exist for eruby, haml, html, javascript, php, python, ruby and sass.
 NeoBundle 'scrooloose/syntastic'
 
-"****************************************
-" php
-"****************************************
+"  php
+" ----------------------------------------
 " NeoBundle '2072/PHP-Indenting-for-VIm'
 NeoBundle 'oppara/vim-unite-cake'
 " cakephpを使いやすく
 " NeoBundle 'violetyk/cake.vim'
 
-" バイナリエディタ
+"  binary
+" ----------------------------------------
 NeoBundle 'Shougo/vinarise'
 
 " objective-c
+" ----------------------------------------
 NeoBundle 'msanders/cocoa.vim'
 
-
-
-
-"****************************************
-" ruby
-"****************************************
-" rails.vim必須
-NeoBundle 'github:taichouchou2/vim-rails'
-
-" rubyのomni補完や、syntacsなど
-NeoBundle 'vim-ruby/vim-ruby'
-
-" rubyでrequire先を補完する
-NeoBundle 'ujihisa/neco-ruby'
-
-NeoBundle 'ujihisa/unite-rake'
-
-" ruby用のmatchit拡張
+" rails
+" ----------------------------------------
 au FileType ruby,eruby NeoBundle 'ruby-matchit'
-
-" Rsense使っちゃうよ/その場でコードを読み込んで補完するよ
-NeoBundle 'github:taichouchou2/vim-rsense.git'
+NeoBundle 'github:taichouchou2/vim-rails'
+NeoBundle 'vim-ruby/vim-ruby'
+NeoBundle 'ujihisa/neco-ruby'
+NeoBundle 'ujihisa/unite-rake'
+" NeoBundle 'github:taichouchou2/vim-rsense'
+NeoBundle 'taq/vim-rspec'
 
 " コメントを読み取って、対応する補完を検索する
 " gen install methodfinder
-NeoBundle 'ujihisa/neco-rubymf'
-
+" 開発が止まっていたので修正
+" NeoBundle 'ujihisa/neco-rubymf'
+NeoBundle 'github:taichouchou2/neco-rubymf'
 NeoBundle 'tpope/vim-endwise.git'
-
-" vim-ref-ri
 NeoBundle 'github:taichouchou2/vim-ref-ri'
-
-" unite rails
 NeoBundle 'basyura/unite-rails'
+" refactor rails
+NeoBundle 'sandeepravi/refactor-rails.vim'
+" Rfactoryメソッドなど追加
+NeoBundle 'romanvbabenko/rails.vim'
+NeoBundle 'unite-gem'
+NeoBundle 'basyura/unite-rails'
+NeoBundle 'railstab.vim'
 
 " 関連するファイルを切り替えれる
 NeoBundle 'kana/vim-altr'
-
-" refactor rails
-NeoBundle 'sandeepravi/refactor-rails.vim'
-
-" Rfactoryメソッドなど追加
-NeoBundle 'romanvbabenko/rails.vim'
-
-" gemを探せる?
-NeoBundle 'unite-gem'
-
-NeoBundle 'railstab.vim'
-
-NeoBundle 'basyura/unite-rails'
 
 "****************************************
 " CSS
@@ -112,16 +93,8 @@ NeoBundle 'hail2u/vim-css3-syntax'
 "                syntax
 "****************************************
 "{{{
-NeoBundle 'haml.zip'
-
-" JavaScript
-NeoBundle 'JavaScript-syntax'
-
 " jQuery
 NeoBundle 'jQuery'
-
-" Rspec
-" NeoBundle 'taq/vim-rspec'
 "}}}
 
 "****************************************
