@@ -22,7 +22,7 @@ nmap <Space>s :w sudo:%<CR>
 
 "削除の標準キーマップを逆に。
 "また、レジスタに入れないようにする
-"nmap x <BS>
+nmap x <BS>
 "nmap X <Del>
 "<C-Space>で削除
 imap <C-@> <BS>
@@ -56,12 +56,13 @@ function! s:remove_tab()
   %s/\s\+$//ge
 endfunction
 
-retab
 function! s:remove_dust()
-  let cursor = getpos(".")
-  call <SID>remove_tab()
-  call setpos(".", cursor)
-  unlet cursor
+    let cursor = getpos(".")
+
+    %s/\s\+$//ge
+    %s/\t/    /ge
+    call setpos(".", cursor)
+    unlet cursor
 endfunction
 
 "保存時に無駄な文字を消す

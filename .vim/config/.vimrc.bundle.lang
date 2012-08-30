@@ -23,12 +23,11 @@ NeoBundle 'JavaScript-syntax'
 "  markdown
 " ----------------------------------------
 "markdownでの入力をリアルタイムでチェック
-NeoBundle 'mattn/mkdpreview-vim'
+" NeoBundle 'mattn/mkdpreview-vim'
 NeoBundle 'tpope/vim-markdown'
 
 " おまけ
-NeoBundle 'taichouchou2/alpaca'
-NeoBundle 'thinca/vim-template'
+" NeoBundle 'thinca/vim-template'
 
 " sassのコンパイル
 NeoBundle 'AtsushiM/sass-compile.vim'
@@ -42,17 +41,17 @@ NeoBundle 'scrooloose/syntastic'
 "  php
 " ----------------------------------------
 " NeoBundle '2072/PHP-Indenting-for-VIm'
-NeoBundle 'oppara/vim-unite-cake'
+" NeoBundle 'oppara/vim-unite-cake'
 " cakephpを使いやすく
 " NeoBundle 'violetyk/cake.vim'
 
 "  binary
 " ----------------------------------------
-NeoBundle 'Shougo/vinarise'
+" NeoBundle 'Shougo/vinarise'
 
 " objective-c
 " ----------------------------------------
-NeoBundle 'msanders/cocoa.vim'
+" NeoBundle 'msanders/cocoa.vim'
 
 " rails
 " ----------------------------------------
@@ -61,27 +60,27 @@ NeoBundle 'github:taichouchou2/vim-rails'
 NeoBundle 'vim-ruby/vim-ruby'
 NeoBundle 'ujihisa/neco-ruby'
 NeoBundle 'ujihisa/unite-rake'
-" NeoBundle 'github:taichouchou2/vim-rsense'
+NeoBundle 'github:taichouchou2/vim-rsense'
 NeoBundle 'taq/vim-rspec'
 
 " コメントを読み取って、対応する補完を検索する
 " gen install methodfinder
 " 開発が止まっていたので修正
-" NeoBundle 'ujihisa/neco-rubymf'
+NeoBundle 'ujihisa/neco-rubymf'
 NeoBundle 'github:taichouchou2/neco-rubymf'
 NeoBundle 'tpope/vim-endwise.git'
 NeoBundle 'github:taichouchou2/vim-ref-ri'
-NeoBundle 'basyura/unite-rails'
 " refactor rails
 NeoBundle 'sandeepravi/refactor-rails.vim'
 " Rfactoryメソッドなど追加
 NeoBundle 'romanvbabenko/rails.vim'
-NeoBundle 'unite-gem'
 NeoBundle 'basyura/unite-rails'
 NeoBundle 'railstab.vim'
 
+
 " 関連するファイルを切り替えれる
-NeoBundle 'kana/vim-altr'
+" NeoBundle 'kana/vim-altr'
+
 
 "****************************************
 " CSS

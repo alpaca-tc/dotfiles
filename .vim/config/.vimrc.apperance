@@ -72,20 +72,19 @@ au FileType php call ZendSyn()
 "****************************************
 " コマンドラインの色を修正する
 "****************************************
-function! RefrashCmdColor()
-  hi Pmenu ctermbg=0
-  hi PmenuSel ctermbg=4
-  hi PmenuSbar ctermbg=2
-  hi PmenuThumb ctermfg=3
-endfunction
-au FileType * call RefrashCmdColor()
-
+" function! RefrashCmdColor()
+"   hi Pmenu ctermbg=0
+"   hi PmenuSel ctermbg=4
+"   hi PmenuSbar ctermbg=2
+"   hi PmenuThumb ctermfg=3
+" endfunction
+" au FileType * call RefrashCmdColor()
 
 "****************************************
 " Rspec
 "****************************************
 function! RSpecSyntax()
-  hi def link rubyRailsTestMethod             Function
+  hi def link rubyRailsTestMethod Function
   syn keyword rubyRailsTestMethod describe context it its specify shared_examples_for it_should_behave_like before after around subject fixtures controller_name helper_name
   syn match rubyRailsTestMethod '\<let\>!\='
   syn keyword rubyRailsTestMethod violated pending expect double mock mock_model stub_model
@@ -99,7 +98,6 @@ autocmd BufReadPost *_spec.rb call RSpecSyntax()
 " augroup filetypedetect
 "   au BufNewFile,BufRead  *.tmux.conf setl ft = tmux
 " augroup END
-"
 
 "****************************************
 " less

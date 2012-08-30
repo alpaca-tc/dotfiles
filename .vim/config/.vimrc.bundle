@@ -10,6 +10,7 @@ NeoBundle 'Shougo/neocomplcache-snippets-complete'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler'
 
+
 "vim内で再帰的grep
 NeoBundle 'grep.vim'
 
@@ -25,7 +26,7 @@ NeoBundle 'camelcasemotion'
 
 " XMLとかHTMLとかの編集機能を強化する
 " < % などの拡張
-NeoBundle 'xmledit'
+" NeoBundle 'xmledit'
 
 " ステータスラインをカッコよくする
 NeoBundle 'Lokaltog/vim-powerline'
@@ -74,7 +75,7 @@ NeoBundle 'h1mesuke/vim-alignta'
 NeoBundle 'kana/vim-arpeggio'
 
 " indentに色づけ
-NeoBundle 'nathanaelkane/vim-indent-guides'
+" NeoBundle 'nathanaelkane/vim-indent-guides'
 
 " ----------------------------------------
 "  他のアプリを呼び出す
@@ -82,7 +83,7 @@ NeoBundle 'nathanaelkane/vim-indent-guides'
 "URL上で操作することで、URLを開いたり
 "キーワード上で操作することで、ぐぐることができる
 NeoBundle 'open-browser.vim'
-NeoBundle 'thinca/vim-openbuf'
+" NeoBundle 'thinca/vim-openbuf'
 
 "各種リファレンスを引いたり、英和辞書を読む
 NeoBundle 'thinca/vim-ref'
@@ -96,7 +97,7 @@ NeoBundle 'Shougo/git-vim'
 NeoBundle 'vim-scripts/sudo.vim'
 
 " 保存と同時にブラウザをリロードする
-NeoBundle 'tell-k/vim-browsereload-mac'
+" NeoBundle 'tell-k/vim-browsereload-mac'
 
 " gistを利用する
 NeoBundle 'mattn/gist-vim'
@@ -111,16 +112,16 @@ NeoBundle 'glidenote/memolist.vim'
 "  filerなど
 " ----------------------------------------
 " tagsを利用したソースコード閲覧・移動補助機能 tagsファイルの自動生成
-NeoBundle 'vim-scripts/Source-Explorer-srcexpl.vim'
+" NeoBundle 'vim-scripts/Source-Explorer-srcexpl.vim'
 
 " ファイルを絞る
-NeoBundle 'kien/ctrlp.vim'
+" NeoBundle 'kien/ctrlp.vim'
 
 " プロジェクト管理用 tree filer
 NeoBundle 'scrooloose/nerdtree'
 
 " vimでwordpress
-NeoBundle 'vim-scripts/VimRepress'
+" NeoBundle 'vim-scripts/VimRepress'
 
 " vモードで選択
 " <Leader>seでsqlを実行
@@ -173,10 +174,10 @@ NeoBundle 'https://github.com/kana/vim-textobj-jabraces.git'
 "NeoBundle 'c9s/cascading.vim'
 
 " smartchr.vim : ==()などの前後を整形
-NeoBundle 'kana/vim-smartchr'
+" NeoBundle 'kana/vim-smartchr'
 
 " eregex.vim : vimの正規表現をrubyやperlの正規表現な入力でできる :%S/perlregex/
-NeoBundle 'eregex.vim'
+NeoBundle 'othree/eregex.vim'
 
 "}}}
 
@@ -201,19 +202,18 @@ NeoBundle 'tyru/urilib.vim'
 NeoBundle 'L9'
 
 " unite.vim : - すべてを破壊し、すべてを繋げ - vim scriptで実装されたanythingプラグイン
-NeoBundle 'tsukkee/unite-help'
-NeoBundle 'h1mesuke/unite-outline'
-NeoBundle 'Sixeight/unite-grep'
+" NeoBundle 'tsukkee/unite-help'
+" NeoBundle 'h1mesuke/unite-outline'
 NeoBundle 'basyura/unite-rails'
 NeoBundle 'thinca/vim-unite-history'
-NeoBundle 'Shougo/unite-ssh'
+" NeoBundle 'Shougo/unite-ssh'
 NeoBundle 'tsukkee/unite-tag'
 NeoBundle 'tacroe/unite-mark'
-NeoBundle 'ujihisa/unite-gem'
-NeoBundle 'sgur/unite-qf'
-NeoBundle 'oppara/vim-unite-cake'
-NeoBundle 'choplin/unite-vim_hacks'
-NeoBundle 'ujihisa/unite-colorscheme'
+" NeoBundle 'ujihisa/unite-gem'
+" NeoBundle 'sgur/unite-qf'
+" NeoBundle 'oppara/vim-unite-cake'
+" NeoBundle 'choplin/unite-vim_hacks'
+" NeoBundle 'ujihisa/unite-colorscheme'
 
 NeoBundle 'basyura/TweetVim'
 NeoBundle 'basyura/twibill.vim'

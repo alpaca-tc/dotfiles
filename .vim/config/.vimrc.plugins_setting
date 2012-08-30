@@ -83,7 +83,6 @@ let Tlist_Enable_Fold_Column = 1          " 折りたたみ
 let Tlist_Auto_Open = 0                   " 自動表示
 let Tlist_Auto_Update = 1
 let Tlist_WinWidth = 20
-" taglistを開くショットカットキー
 let g:tlist_javascript_settings = 'javascript;c:class;m:method;f:function'
 let tlist_objc_settings='objc;P:protocols;i:interfaces;I:implementations;M:instance methods;C:implementation methods;Z:protocol methods'
 nmap <Space>t :Tlist<CR>
@@ -152,8 +151,22 @@ au FileType unite call MovingInsertMode()
 
 " 初期設定関数を起動する
 " au FileType unite call s:unite_my_settings()
-let g:unite_source_file_mru_limit = 200     "最大数
+let g:unite_source_file_mru_limit = 400     "最大数
 "}}}
+
+"------------------------------------
+" Unite-mark.vim
+"------------------------------------
+let g:unite_source_mark_marks =
+      \   "abcdefghijklmnopqrstuvwxyz"
+      \ . "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+      \ . "0123456789.'`^<>[]{}()\""
+
+"------------------------------------
+" Unite-mark.vim
+"------------------------------------
+let g:unite_source_grep_command = "grep"
+let g:unite_source_grep_recursive_opt = "-R"
 
 "------------------------------------
 " VimFiler
@@ -425,15 +438,14 @@ let g:ref_open                    = 'split'
 let g:ref_cache_dir               = expand('~/.Trash')
 let g:ref_refe_cmd               = expand('~/.vim/ref/ruby-ref1.9.2/refe-1_9_2')
 let g:ref_phpmanual_path          = expand('~/.vim/ref/php-chunked-xhtml')
-let g:ref_ri_cmd                  = expand('~/.rvm/bin/ri')
+let g:ref_ri_cmd                  = expand('~/.rbenv/versions/1.9.3-p125/bin/ri')
 
 "リファレンスを簡単に見れる。
 " nmap K <Nop>
 
 nmap <C-K> :<C-U>Ref alc <Space><C-R><C-W><CR>
-autocmd FileType ruby,eruby,ruby.rspec nmap <buffer>K :<C-U>Unite ref/refe <Space><C-R><C-W><CR>
-" autocmd User Rails                     nmap <buffer><C-K> :<C-U>Unite ref/ri <Space><C-R><C-W><CR>
-autocmd User Rails                     nmap <buffer><C-K> :<C-U>Ref ri <Space><C-R><C-W><CR>
+autocmd FileType ruby,eruby,ruby.rspec nmap <buffer>K :<C-U>Ref refe <Space><C-R><C-W><CR>
+autocmd User Rails                     nmap <buffer>KK :<C-U>Ref ri <Space><C-R><C-W><CR>
 
 " refビューワー内の設定
 " vim-ref内の移動を楽に
@@ -493,9 +505,9 @@ let g:ref_phpmanual_cmd = 'lynx -dump -nonumbers -assume_charset=utf-8 -assume_l
 "----------------------------------------
 "{{{
 "vim上からgitを使う 便利
-nmap <Space>gd :GitDiff<CR>
+nmap <Space>gd :GitDiff
 nmap <Space>gb :GitBlame<CR>
-nmap <Space>gB :Gitblanch<CR>
+nmap <Space>gB :Gitblanch
 nmap <Space>gp :GitPush<CR>
 nmap <Space>gD :GitDiff --cached<CR>
 nmap <Space>gs :GitStatus<CR>
@@ -953,7 +965,7 @@ autocmd User Rails call SetUpRailsSetting()
 "------------------------------------
 "{{{
 " Rsense
-let g:rsenseUseOmniFunc = 0
+let g:rsenseUseOmniFunc = 1
 let g:rsenseHome = expand('~/.vim/ref/rsense-0.3')
 
 function! SetUpRubySetting()
@@ -1069,4 +1081,237 @@ call jasmine#load_snippets()
 command! JasmineRedGreen :call jasmine#redgreen()
 command! JasmineMake :call jasmine#make()
 
+"-------------------------------------------------------------------------------
+" プラグインごとの設定 Plugins2
+"-------------------------------------------------------------------------------
+"------------------------------------
+" Pydiction
+"------------------------------------
+"let g:pydiction_location = '~/.vim/bundle/pydiction/complete-dict'
 
+"------------------------------------
+" cascading.vim
+"------------------------------------
+"--でメソッドチェーンを整形 $this->aa()->bb()->
+"nmap <Leader>c :Cascading<CR>
+
+"------------------------------------
+" YankRing.vim
+"------------------------------------
+" Yankの履歴参照"{{{
+nmap <Leader>y :YRShow<CR>
+
+let g:yankring_enabled             = 1  " Disables the yankring
+let g:yankring_max_history         = 100
+let g:yankring_min_element_length  = 2
+let g:yankring_max_element_length  = 4194304 " 4M
+let g:yankring_max_display         = 70
+let g:yankring_dot_repeat_yank     = 0
+let g:yankring_window_use_separate = 0
+let g:yankring_window_auto_close   = 1
+let g:yankring_window_height       = 8
+let g:yankring_window_width        = 30
+let g:yankring_window_use_bottom   = 0
+let g:yankring_window_use_right    = 0
+let g:yankring_window_increment    = 5
+let g:yankring_history_dir         = '~/.yankring'
+let g:yankring_history_file        = 'yankring_text' . $USER
+let g:yankring_ignore_operator     = 'g~ gu gU ! = g? < > zf zo zc g@ @'
+let g:yankring_n_keys              = ''
+let g:yankring_o_keys              = ''
+let g:yankring_zap_keys            = ''
+let g:yankring_v_key               = ''
+let g:yankring_del_v_key           = ''
+let g:yankring_paste_n_bkey        = ''
+let g:yankring_paste_n_akey        = ''
+let g:yankring_paste_v_key         = ''
+let g:yankring_replace_n_pkey      = ''
+let g:yankring_replace_n_nkey      = ''
+let  g:yankring_default_menu_mode = 0
+"}}}
+
+"------------------------------------
+" operator-camelize.vim
+"------------------------------------
+" camel-caseへの変換
+"map <Leader>u <Plug>(operator-camelize)
+"map <Leader>U <Plug>(operator-decamelize)
+
+"------------------------------------
+" operator-replace.vim
+"------------------------------------
+" RwなどでYankしてるもので置き換える
+" よくわからん！
+"map R <Plug>(operator-replace)
+
+"------------------------------------
+" smartchr.vim
+"------------------------------------
+let g:smarchr_enable = 0
+
+function! SmartchrToggle() "{{{
+  if g:smarchr_enable == 1
+    inoremap <expr> = smartchr#loop('=', '==', '=>')
+    inoremap <expr> . smartchr#loop('.',  '->', '=>')
+
+    " 演算子の間に空白を入れる
+    inoremap <buffer><expr> + smartchr#one_of(' + ', ' ++ ', '+')
+    inoremap <buffer><expr> - smartchr#one_of(' - ', ' -- ', '-')
+    inoremap <buffer><expr> / smartchr#one_of(' / ', ' // ', '/')
+    inoremap <buffer><expr> * smartchr#one_of(' * ', ' ** ', '*')
+    inoremap <buffer><expr> , smartchr#one_of(', ', ',')
+    inoremap <buffer><expr> +=  smartchr#one_of(' += ')
+    inoremap <buffer><expr> -=  smartchr#one_of(' -= ')
+    inoremap <buffer><expr> /=  smartchr#one_of(' /= ')
+    inoremap <buffer><expr> *=  smartchr#one_of(' *= ')
+    inoremap <buffer><expr> & smartchr#one_of(' & ', ' && ', '&')
+    inoremap <buffer><expr> % smartchr#one_of(' % ', '%')
+    inoremap <buffer><expr> =>  smartchr#one_of(' => ')
+    inoremap <buffer><expr> <-   smartchr#one_of(' <-  ')
+    inoremap <buffer><expr> <Bar> smartchr#one_of(' <Bar> ', ' <Bar><Bar> ', '<Bar>')
+
+    " " 3項演算子の場合は、後ろのみ空白を入れる
+    noremap <buffer><expr> ? smartchr#one_of('? ', '?')
+    inoremap <buffer><expr> : smartchr#one_of(': ', '::', ':')
+
+    " " =の場合、単純な代入や比較演算子として入力する場合は前後にスペースをいれる。
+    " " 複合演算代入としての入力の場合は、直前のスペースを削除して=を入力
+    inoremap <buffer><expr> = search('¥(&¥<bar><bar>¥<bar>+¥<bar>-¥<bar>/¥<bar>>¥<bar><¥) ¥%#', 'bcn')? '<bs>= '  : search('¥(*¥<bar>!¥)¥%#', 'bcn') ? '= '  : smartchr#one_of(' = ', ' == ', '=')
+
+    " " 下記の文字は連続して現れることがまれなので、二回続けて入力したら改行する
+    inoremap <buffer><expr> } smartchr#one_of('}', '}<cr>')
+    inoremap <buffer><expr> ; smartchr#one_of(';', ';<cr>')
+
+    " "()は空白入れる
+    inoremap <buffer><expr> ( smartchr#one_of('( ')
+    inoremap <buffer><expr> ) smartchr#one_of(' )')
+
+    "()を閉じるときに、一つ右に移動
+    " inoremap <buffer><expr> ( search('¥<¥if¥%#', 'bcn')? '(': '('
+  else
+    inoremap  = =
+    inoremap  . .
+
+    " 演算子の間に空白を入れる
+    inoremap <buffer> + +
+    inoremap <buffer> - -
+    inoremap <buffer> / /
+    inoremap <buffer> * *
+    inoremap <buffer> , ,
+    inoremap <buffer> += +=
+    inoremap <buffer> -= -=
+    inoremap <buffer> /= /=
+    inoremap <buffer> *= *=
+    inoremap <buffer> & %
+    inoremap <buffer> % %
+    inoremap <buffer> => =>
+    inoremap <buffer> <- <-
+    inoremap <buffer> ? ?
+    inoremap <buffer> : :
+    inoremap <buffer> } }
+    inoremap <buffer> ; ;
+    inoremap <buffer> ) )
+    inoremap { {}<LEFT>
+    inoremap [ []<LEFT>
+    inoremap ( ()<LEFT>
+  endif
+
+  let g:smarchr_enable = !g:smarchr_enable
+endfunction
+" au BufReadPre * call SmartchrToggle()
+" nmap <C-H><C-O> :call SmartchrToggle()<CR>
+"}}}
+
+"------------------------------------
+" Srcexp
+"------------------------------------
+" [Srcexpl] tagsを利用したソースコード閲覧・移動補助機能"{{{
+let g:SrcExpl_UpdateTags    = 0         " tagsをsrcexpl起動時に自動で作成（更新）
+let g:SrcExpl_RefreshTime   = 0         " 自動表示するまでの時間(0:off)
+let g:SrcExpl_WinHeight     = 2         " プレビューウインドウの高さ
+let g:SrcExpl_gobackKey = "<SPACE>"
+let g:SrcExpl_jumpKey = "<ENTER>"
+" let g:SrcExpl_searchLocalDef = 1
+" let g:SrcExpl_isUpdateTags = 0
+" let g:SrcExpl_updateTagsKey = "<C-H><C-U>"
+let g:SrcExpl_RefreshMapKey = "<C-S>"   " 手動表示のMAP
+let g:SrcExpl_GoBackMapKey  = "<C-Q>"   " 戻る機能のMAP
+" let g:SrcExpl_updateTagsCmd = "jctags -R"
+
+" Source Explorerの機能ON/OFF
+nmap <C-H><C-E> :SrcExplToggle<CR>
+"}}}
+
+"------------------------------------
+" The Nerd Tree
+"------------------------------------
+"{{{
+"プロジェクト管理用ファイラー？
+"自動起動
+" autocmd FileType * NERDTreeToggle
+
+"閉じる<->開くのキーマップ
+nmap <C-H><C-F> :NERDTreeToggle<CR>
+
+function! NerdSetting()
+  nmap <buffer>l o
+  nmap <buffer>h x
+  " autocmd WinLeave * NERDTreeClose " nerdtreeから離れたら閉じる
+
+  "画面が残り一つになったら自動で閉じる
+  autocmd bufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+endfunction
+au FileType nerdtree call NerdSetting()
+
+"}}}
+
+"------------------------------------
+" Syntastic
+"------------------------------------
+"loadのときに、syntaxCheckをする"{{{
+let g:syntastic_check_on_open=0
+let g:syntastic_quiet_warnings=0
+let g:syntastic_enable_signs = 1
+let g:syntastic_enable_highlighting = 1
+let g:syntastic_enable_balloons = 1
+let g:syntastic_echo_current_error=1
+" let g:syntastic_auto_jump=1
+let g:syntastic_auto_loc_list=0
+let g:syntastic_loc_list_height=3
+
+" let g:syntastic_error_symbol='>'
+" let g:syntastic_warning_symbol='='
+let g:syntastic_error_symbol='✗'
+let g:syntastic_warning_symbol='⚠'
+
+let g:syntastic_mode_map = {
+      \ 'mode'              : 'active',
+      \ 'active_filetypes'  : ['ruby', 'php', 'js', 'javascript', 'scss', 'less' ],
+      \ 'passive_filetypes' : ['puppet', 'html']
+      \}
+" let g:syntastic_mode_map = {
+"   \ 'mode'              : 'active',
+"   \ 'active_filetypes'  : [],
+"   \ 'passive_filetypes' : ['html']
+" \}
+
+" let g:syntastic_ruby_checker = "mri"
+"}}}
+
+"------------------------------------
+" jslint
+"------------------------------------
+" javascriptファイルのsyntaxエラーをハイライトする
+let g:JSLintHighlightErrorLine = 0
+
+"------------------------------------
+" vimrepress
+"------------------------------------
+nmap <Space>bl :BlogList<CR>
+nmap <Space>bn :BlogNew<CR>
+nmap <Space>bs :BlogSave<CR>
+nmap <Space>bp :BlogPreview<CR>
+nmap <Space>bo :BlogOpen<CR>
+nmap <Space>bw :BlogSwitch<CR>
+nmap <Space>bu :BlogUpload<CR>
+nmap <Space>bc :BlogCode<CR>

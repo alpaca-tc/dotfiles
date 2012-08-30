@@ -9,6 +9,11 @@ alias ll="ls -l"
 
 # ディレクトリ登録
 alias cdh="cd /Applications/XAMPP/htdocs/"
+alias cd.="cd ../"
+alias cd..="cd ../../"
+alias cd...="cd ../../../"
+alias cd....="cd ../../../../"
+alias cd.....="cd ../../../../../"
 alias cdd="cd ~/Dropbox/test/"
 alias cdd="cd cd ~/Documents/Titanium\ Studio\ Workspace/"
 
@@ -82,9 +87,9 @@ alias vim='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"
 alias v='vim'
 alias vi='vim'
 alias rb='ruby'
-alias ctags='/Applications/MacVim.app/Contents/MacOS/ctags "$@"'
+alias ctags='/Applications/MacVim.app/Contents/MacOS/ctags --sort=yes "$@"'
 # alias rtags='/Applications/MacVim.app/Contents/MacOS/ctags -R --langmap=RUBY:.rb ~/.rvm/rubies/ruby-1.9.3-p194 ~/.rvm/gems/ruby-1.9.3-p194/gems -f ~/tags'
-alias rtags='/Applications/MacVim.app/Contents/MacOS/ctags -R --langmap=RUBY:.rb ~/.rbenv/versions/1.9.3-p125 ~/.rbenv/shims -f ~/tags'
+alias rtags='/Applications/MacVim.app/Contents/MacOS/ctags -R --langmap=RUBY:.rb --sort=yes ~/.rbenv/versions/1.9.3-p125 ~/.rbenv/shims -f ~/tags '
 alias vlc='/Applications/VLC.app/Contents/MacOS/VLC --intf=rc'
 alias redis='redis-server /usr/local/etc/redis.conf'
 

@@ -14,10 +14,10 @@ nmap <silent><Down> gj
 nmap <silent><Up>   gk
 
 " imapのまま拘束に編修出来るように
-imap <silent><C-L> <Esc>A
-imap <silent><C-k> <Right>
-imap <silent><C-H> <Esc>I
-imap <silent><C-j> <Left>
+imap <silent><C-L> <Right>
+imap <silent><C-L><C-L> <Esc>A
+imap <silent><C-H> <Left>
+imap <silent><C-H><C-H> <Left><Esc>I
 imap <silent><C-O> <Esc>o
 
 " imap <C-h> <Left>

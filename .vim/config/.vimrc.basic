@@ -1,56 +1,33 @@
-"-------------------------------------------------------------------------------
-" 基本設定 Basics
-"-------------------------------------------------------------------------------
+" basic
+"------------------------------------
 let mapleader = ","              " <Leader>のキー
-"let mapleader = "\"              " キーマップリーダー
-set scrolloff=5                  " スクロール時の余白確保
-"set backup
+set scrolloff=7                  " スクロール時の余白確保
 set backspace=indent,eol,start   " <BS>で何でも消す
-set formatoptions=lmoq           " テキスト整形オプション，マルチバイト系を追加
+set formatoptions+=lmoq           " テキスト整形オプション，マルチバイト系を追加
 set formatoptions+=mM
 set vb t_vb=                     " ビープを消す
 set browsedir=buffer             " Exploreの初期ディレクトリ
 set showcmd                      " コマンドをステータス行に表示
 set showmode                     " 現在のモードを表示
-
-" viminfoの設定
-" コンパイル時に +viminfo が必要 それぞれ、履歴の数
-set viminfo='50,<500,s100,\"100
+set helplang=ja,en               " helpで日本語を優先
+" viminfoの設定 コンパイル時に +viminfo が必要 それぞれ、履歴の数
+set viminfo='100,<800,s300,\"300
 set modelines=0                  " モードラインは無効
-
 "キーマップの入力に制限時間を設ける デフォルトは1000
 set timeout timeoutlen=400 ttimeoutlen=100
-
-"swapfileの設定
-"ファイル編集時の~.swp
-" set noswapfile
+" backup, swapfile
 set directory=~/.vim.swapfile
-
-"backupの設定
-"ファイル編集時のaaa~
 set nobackup
-" set backup
-set backupdir=~/.vim.swapfile
-
 " OSのクリップボードを使用する
 set clipboard+=unnamed
 set clipboard+=autoselect
 set shell=/usr/local/bin/zsh
 let $SHELL="/usr/local/bin/zsh"
-let $PATH="/Users/taichou/.autojump/bin:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin:/Users/taichou/.rbenv:/Users/taichou/local/bin:/Users/taichou/local/sbin:/usr/local/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:/Applications/XAMPP/xamppfiles/bin:/bin:/sbin:/usr/sbin:/usr/bin"
 
-"-------------------------------------------------------------------------------
-" help Fileの設定
-"-------------------------------------------------------------------------------
+" help
+"------------------------------------
 autocmd FileType help nnoremap <buffer> q <C-w>c
-" set helpfile=$VIMRUNTIME/doc/help.txt
-
-"-------------------------------------------------------------------------------
-" マッピング
-"-------------------------------------------------------------------------------
-" vmrcのソースを再読み込み
-" nmap <Space>s :source ~/.vimrc<CR>
 
 " カーソル下のキーワードをヘルプでひく
-nnoremap <Space>i :<C-u>help<Space><C-r><C-w><Enter>
+nnoremap <Space>h :<C-u>help<Space><C-r><C-w><CR>
 
