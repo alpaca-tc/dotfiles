@@ -80,7 +80,6 @@ function! s:remove_dust()
     unlet cursor
 endfunction
 autocmd BufWritePre * call <SID>remove_dust()
-
 "}}}
 
 "----------------------------------------
@@ -358,52 +357,61 @@ endif
 "----------------------------------------
 "vim基本機能拡張"{{{
 " NeoBundle 'Shougo/neobundle'
-
-NeoBundle 'Shougo/vimproc'
-NeoBundle 'yuroyoro/vimdoc_ja'
-NeoBundle 'grep.vim'
-NeoBundle 'smartword'
-NeoBundle 'camelcasemotion'
+NeoBundle 'Shougo/vimproc', {
+      \ 'build' : {
+      \     'windows' : 'echo "Sorry, cannot update vimproc binary file in Windows."',
+      \     'cygwin' : 'make -f make_cygwin.mak',
+      \     'mac' : 'make -f make_mac.mak',
+      \     'unix' : 'make -f make_unix.mak',
+      \    },
+      \ }
 NeoBundle 'Lokaltog/vim-powerline'
 NeoBundle 'edsono/vim-matchit'
 NeoBundle 'taichouchou2/surround.vim' " 独自の実装のものを使用、ruby用カスタマイズ、<C-G>のimap削除
+NeoBundle 'tpope/vim-fugitive'
 " NeoBundle 'yuroyoro/vim-autoclose'                          " 自動閉じタグ
 NeoBundle 'taichouchou2/alpaca'       " 個人的なカラーやフォントなど
-NeoBundle 'h1mesuke/vim-alignta'
 NeoBundle 'kana/vim-arpeggio'         " 同時押しキーマップを使う
+NeoBundle 'h1mesuke/vim-alignta'
 NeoBundle 'othree/eregex.vim'         " %S 正規表現を拡張
-NeoBundle 'vim-scripts/SearchComplete' " /で検索をかけるときでも\tで補完が出来る
+" NeoBundle 'vim-scripts/SearchComplete' " /で検索をかけるときでも\tで補完が出来る
+" 遅延読み込み
 
 "}}}
 
 "----------------------------------------
 " vim拡張"{{{
+NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'Shougo/neocomplcache'
+NeoBundle 'thinca/vim-quickrun' "<Leader>rで簡易コンパイル
+NeoBundle 'scrooloose/nerdtree' "プロジェクト管理用 tree filer
+NeoBundle 'grep.vim'
+NeoBundle 'smartword'
 NeoBundle 'Shougo/neocomplcache-snippets-complete'
 NeoBundle 'Shougo/vimshell'
-NeoBundle 'ujihisa/neco-look'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler'
-NeoBundle 'thinca/vim-quickrun' "<Leader>rで簡易コンパイル
+" NeoBundle 'yuroyoro/vimdoc_ja'
+NeoBundle 'camelcasemotion'
+" NeoBundle 'ujihisa/neco-look'
 " NeoBundle 'taku-o/vim-toggle' "true<=>false など、逆の意味のキーワードを切り替えられる
+
 NeoBundle 'mattn/zencoding-vim' "Zencodingを使う
-NeoBundle 'nathanaelkane/vim-indent-guides' "indentに色づけ
-NeoBundle 'kien/ctrlp.vim' "ファイルを絞る
-NeoBundle 'scrooloose/nerdtree' "プロジェクト管理用 tree filer
 NeoBundle 'vim-scripts/sudo.vim' "vimで開いた後にsudoで保存
 NeoBundle 'tpope/vim-endwise.git' "end endifなどを自動で挿入
+" NeoBundle 'nathanaelkane/vim-indent-guides' "indentに色づけ
+" NeoBundle 'kien/ctrlp.vim' "ファイルを絞る
 
 NeoBundle 'taglist.vim' "関数、変数を画面横にリストで表示する
 " NeoBundle 'majutsushi/tagbar'
 
 "コメントアウト
 " NeoBundle 'hrp/EnhancedCommentify'
-NeoBundle 'tomtom/tcomment_vim'
 
 "ヤンクの履歴を管理し、順々に参照、出力できるようにする
 " NeoBundle 'YankRing.vim'
 
-"/で検索をかけるときでも\tで補完が出来る
+" /で検索をかけるときでも\tで補完が出来る
 " NeoBundle 'vim-scripts/SearchComplete'
 
 "関連するファイルを切り替えれる
@@ -444,7 +452,6 @@ NeoBundle 'thinca/vim-ref'
 " NeoBundle 'soh335/vim-ref-jquery'
 
 "gitをvim内から操作する
-NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'Shougo/git-vim'
 NeoBundle 'mattn/gist-vim' "gistを利用する
 
@@ -471,10 +478,10 @@ NeoBundle 'scrooloose/syntastic'
 " NeoBundle 'thinca/vim-template'
 
 " NeoBundle 'c9s/cascading.vim' "メソッドチェーン整形
-" NeoBundle 'kana/vim-smartchr' "smartchr.vim : ==()などの前後を整形
+NeoBundle 'kana/vim-smartchr' "smartchr.vim : ==()などの前後を整形
 
 NeoBundle 'mattn/webapi-vim' "vim Interface to Web API
-NeoBundle 'tyru/urilib.vim' "urilib.vim : vim scriptからURLを扱うライブラリ
+" NeoBundle 'tyru/urilib.vim' "urilib.vim : vim scriptからURLを扱うライブラリ
 " NeoBundle 'cecutil' "cecutil.vim : 他のpluginのためのutillity1
 
 " NeoBundle 'L9' "utillity
@@ -496,110 +503,120 @@ NeoBundle 'tacroe/unite-mark'
 NeoBundle 'basyura/TweetVim'
 NeoBundle 'basyura/twibill.vim'
 NeoBundle 'basyura/bitly.vim'
+
 "}}}
 
 " bundle.lang"{{{
-function! HtmlSetting()
-  NeoBundle 'rstacruz/sparkup', {'rtp': 'vim/'}
-  NeoBundle 'hail2u/vim-css3-syntax'
-  NeoBundle 'jQuery'
-  NeoBundle 'taichouchou2/html5.vim'
-  NeoBundle 'tpope/vim-haml'
-  NeoBundleLazy 'xmledit'
-endfunction
+" function! HtmlSetting()
+NeoBundle 'rstacruz/sparkup', {'rtp': 'vim/'}
+NeoBundle 'hail2u/vim-css3-syntax'
+NeoBundle 'pasela/unite-webcolorname'
+NeoBundle 'jQuery'
+NeoBundle 'taichouchou2/html5.vim'
+NeoBundle 'tpope/vim-haml'
+NeoBundle 'xmledit'
+" endfunction
 " au FileType html,php,eruby,ruby,javascript,markdown call HtmlSetting()
-au FileType * call HtmlSetting()
+" au FileType * call HtmlSetting()
 
 "  js / coffee
 " ----------------------------------------
-function! JsSetting()
-  NeoBundle 'kchmck/vim-coffee-script'
-  NeoBundle 'claco/jasmine.vim'
-  NeoBundle 'pangloss/vim-javascript' " syntaxが無駄に入っているので、インストール後削除
-  NeoBundle 'hallettj/jslint.vim'
-  NeoBundle 'JavaScript-syntax'
-  NeoBundleLazy 'pekepeke/titanium-vim' " Titaniumを使うときに
-endfunction
-au FileType js,coffee call JsSetting()
+" function! JsSetting()
+NeoBundle 'kchmck/vim-coffee-script'
+NeoBundle 'claco/jasmine.vim'
+NeoBundle 'pangloss/vim-javascript' " syntaxが無駄に入っているので、インストール後削除
+NeoBundle 'hallettj/jslint.vim'
+NeoBundle 'JavaScript-syntax'
+NeoBundle 'pekepeke/titanium-vim' " Titaniumを使うときに
+" endfunction
+" au FileType js,coffee call JsSetting()
 
 "  markdown
 " ----------------------------------------
 " markdownでの入力をリアルタイムでチェック
-function! MarkdownSetting()
-  NeoBundle 'mattn/mkdpreview-vim'
-  NeoBundle 'tpope/vim-markdown'
-endfunction
-au FileType markdown call MarkdownSetting()
+" function! MarkdownSetting()
+" NeoBundle 'mattn/mkdpreview-vim'
+NeoBundle 'tpope/vim-markdown'
+" endfunction
+" au FileType markdown call MarkdownSetting()
 
 " sassのコンパイル
-function! SassSetting()
-  NeoBundle 'AtsushiM/sass-compile.vim'
-endfunction
-au FileType sass,scss call MarkdownSetting()
+" function! SassSetting()
+NeoBundle 'AtsushiM/sass-compile.vim'
+" endfunction
+" au FileType sass,scss call MarkdownSetting()
 
 "  php
 " ----------------------------------------
-function! PhpSetting()
-  NeoBundle 'oppara/vim-unite-cake'
-  NeoBundleLazy 'violetyk/cake.vim' " cakephpを使いやすく
-endfunction
-au FileType php,phtml call PhpSetting()
+" function! PhpSetting()
+" NeoBundle 'oppara/vim-unite-cake'
+" NeoBundle 'violetyk/cake.vim' " cakephpを使いやすく
+" endfunction
+" au FileType php,phtml call PhpSetting()
 
 "  binary
 " ----------------------------------------
-NeoBundleLazy 'Shougo/vinarise'
+" NeoBundle 'Shougo/vinarise'
 
 " objective-c
 " ----------------------------------------
-function! ObjcSetting()
-  NeoBundle 'msanders/cocoa.vim'
-endfunction
+" function! ObjcSetting()
+" NeoBundle 'msanders/cocoa.vim'
+" endfunction
 " au FileType c,m,h,objectivec call ObjcSetting()
 " au FileType * call ObjcSetting()
 
 " ruby
 " ----------------------------------------
-function! RubySetting()
-  " NeoBundle 'ujihisa/neco-ruby'
-  NeoBundle 'basyura/unite-rails'
-  NeoBundle 'github:taichouchou2/neco-rubymf' " gem install methodfinder
-  NeoBundle 'github:taichouchou2/vim-rails'
-  NeoBundle 'github:taichouchou2/vim-ref-ri'
-  " NeoBundle 'railstab.vim'
-  NeoBundle 'romanvbabenko/rails.vim' " Rfactoryメソッドなど追加
-  NeoBundle 'ruby-matchit'
-  NeoBundle 'sandeepravi/refactor-rails.vim' " refactor rails
-  NeoBundle 'taq/vim-rspec'
-  NeoBundle 'ujihisa/unite-rake'
-  NeoBundle 'vim-ruby/vim-ruby'
-endfunction
-NeoBundle 'github:taichouchou2/vim-rsense'
-au FileType eruby,ruby,erb,yml call RubySetting()
+" function! RubySetting()
+" NeoBundle 'ujihisa/neco-ruby'
+NeoBundle 'basyura/unite-rails'
+" NeoBundle 'astashov/vim-ruby-debugger'
+NeoBundle 'taichouchou2/vim-rails'
+NeoBundle 'taichouchou2/vim-ref-ri'
+NeoBundle 'taichouchou2/neco-rubymf' " gem install methodfinder
+NeoBundle 'romanvbabenko/rails.vim' " Rfactoryメソッドなど追加
+NeoBundle 'ruby-matchit'
+" NeoBundle 'sandeepravi/refactor-rails.vim' " refactor rails
+NeoBundle 'taq/vim-rspec'
+NeoBundle 'ujihisa/unite-rake'
+NeoBundle 'taichouchou2/vim-rsense'
+NeoBundle 'vim-ruby/vim-ruby'
+" endfunction
+" au FileType eruby,ruby,erb,yml call RubySetting()
 
 " python
 " ----------------------------------------
-function! PythonSetting()
-  NeoBundle 'Pydiction'
-  NeoBundle 'yuroyoro/vim-python'
-endfunction
-au FileType python call RubySetting()
+" function! PythonSetting()
+" NeoBundle 'Pydiction'
+" NeoBundle 'yuroyoro/vim-python'
+" endfunction
+" au FileType python call RubySetting()
 
 " scala
 " ----------------------------------------
-function! ScalaSetting()
-  NeoBundle 'yuroyoro/vim-scala'
-endfunction
-au FileType scala call RubySetting()
+" function! ScalaSetting()
+" NeoBundle 'yuroyoro/vim-scala'
+" endfunction
+" au FileType scala call RubySetting()
 
 " SQLUtilities : SQL整形、生成ユーティリティ
-NeoBundle 'SQLUtilities'
+" NeoBundle 'SQLUtilities'
 
 " C言語など<Leader>;で全行に;を挿入できる
 " NeoBundle 'vim-scripts/teol.vim'
 
 " shellscript indnt
-NeoBundle 'sh.vim'
+" NeoBundle 'sh.vim'
 "}}}
+
+" Installation check.
+if neobundle#exists_not_installed_bundles()
+  echomsg 'Not installed bundles : ' .
+        \ string(neobundle#get_not_installed_bundle_names())
+  echomsg 'Please execute ":NeoBundleInstall" command.'
+  " finish
+endif
 
 filetype plugin indent on
 "}}}
@@ -630,17 +647,16 @@ function! SetSurroundMapping()"{{{
   nmap ,' csw'
   nmap ," csw"
 endfunction
-
 " au FileType eruby call SetErubyMapping()
-""}}}
+"}}}
 
 " ------------------------------------
 " grep.vim
 "------------------------------------
 "{{{
 " カーソル下の単語をgrepする
-nnoremap <silent> <C-g><C-g> :<C-u>Rgrep<Space><C-r><C-w> *<Enter><CR>
-nnoremap <C-g><C-b> :<C-u>GrepBuffer<Space><C-r><C-w><ENTER>
+nnoremap <silent><C-g><C-g> :<C-u>Rgrep<Space><C-r><C-w> *<Enter><CR>
+nnoremap <silent><C-g><C-b> :<C-u>GrepBuffer<Space><C-r><C-w><ENTER>
 
 " 検索外のディレクトリ、ファイルパターン
 let Grep_Skip_Dirs = '.svn .git .hg .swp'
@@ -672,7 +688,6 @@ function! OpenGrepQF()
   "Enterで開ける
   nmap <CR> :call OpenInQF()<CR>
 endfunction
-
 autocmd Filetype qf call OpenGrepQF()
 "}}}
 
@@ -718,24 +733,20 @@ nnoremap <Leader>g :<C-u>OpenBrowserSearch<Space><C-r><C-w><Enter>
 "{{{
 " 入力モードで開始する
 let g:unite_enable_start_insert=1
+let g:unite_source_history_yank_enable = 1
+let g:unite_source_file_mru_limit = 400     "最大数
+let g:unite_winheight = 20
 
 " いろいろのせる
-nnoremap <C-H><C-U> :<C-u>UniteWithCurrentDir -split -buffer-name=files buffer file_mru bookmark file<CR>
-
-" 現在のバッファのカレントディレクトリからファイル一覧
-"nnoremap <C-P><C-P> :<C-u>UniteWithBufferDir file<CR>
-
-" バッファ一覧
-"noremap <C-P> :Unite buffer<CR>
-
-" ファイル一覧
-"noremap <C-H> :Unite -buffer-name=file file<CR>
+nmap <C-J><C-U> :<C-u>UniteWithCurrentDir -buffer-name=file file buffer file_mru directory_mru bookmark<CR>
 
 " 最近使ったファイルの一覧
-noremap <C-H><C-H> :Unite file_mru<CR>
+nmap <C-J><C-J> :Unite file_mru<CR>
 
 " レジスタ一覧
-noremap <C-H><C-R> :Unite -buffer-name=register register<CR>
+nmap <C-J><C-R> :Unite -buffer-name=register register<CR>
+
+nnoremap <silent><Space>b :<C-u>UniteBookmarkAdd<CR>
 
 function! UniteSetting()
   " 動き
@@ -750,27 +761,26 @@ function! UniteSetting()
   " inoremap <silent><buffer><expr><C-E> unite#do_action('split')
   nnoremap <silent> <buffer> <ESC><ESC> :q<CR>
 endfunction
-
 au FileType unite call UniteSetting()
-
-" 初期設定関数を起動する
-" au FileType unite call s:unite_my_settings()
-let g:unite_source_file_mru_limit = 400     "最大数
 "}}}
 
 "------------------------------------
 " Unite-mark.vim
 "------------------------------------
+"{{{
 let g:unite_source_mark_marks =
       \   "abcdefghijklmnopqrstuvwxyz"
       \ . "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
       \ . "0123456789.'`^<>[]{}()\""
+"}}}
 
 "------------------------------------
 " Unite-mark.vim
 "------------------------------------
+"{{{
 let g:unite_source_grep_command = "grep"
 let g:unite_source_grep_recursive_opt = "-R"
+"}}}
 
 "------------------------------------
 " VimFiler
@@ -820,8 +830,6 @@ function! s:git_root_dir()
     echoerr '!!!current directory is outside git working tree!!!'
   endif
 endfunction
-" nmap <buffer>gg <SID>git_root_dir()
-
 "}}}
 
 "------------------------------------
@@ -1086,7 +1094,6 @@ let g:ref_phpmanual_cmd = 'lynx -dump -nonumbers -assume_charset=utf-8 -assume_l
 " let g:ref_html_cmd       = 'w3m -dump %s'
 " let g:ref_phpmanual_cmd  = 'w3m -dump %s'
 " let g:ref_rails_cmd      = 'w3m -dump %s'
-
 "}}}
 
 "----------------------------------------
@@ -1103,23 +1110,28 @@ let g:ref_phpmanual_cmd = 'lynx -dump -nonumbers -assume_charset=utf-8 -assume_l
 " nnoremap <Space>gb :<C-u>Gblame<CR>
 "}}}
 
-
 "----------------------------------------
 " vim-git
 "----------------------------------------
 "{{{
 "vim上からgitを使う 便利
-nmap <Space>gd :GitDiff
-nmap <Space>gb :GitBlame<CR>
-nmap <Space>gB :Gitblanch
-nmap <Space>gp :GitPush<CR>
-nmap <Space>gD :GitDiff --cached<CR>
-nmap <Space>gs :GitStatus<CR>
-nmap <Space>gl :GitLog<CR>
-nmap <Space>ga :GitAdd
-nmap <Space>gA :GitAdd -A<CR>
-nmap <Space>gm :GitCommit<CR>
-nmap <Space>gM :GitCommit --amend<CR>
+let g:git_no_default_mappings = 1
+let g:git_use_vimproc = 1
+let g:git_command_edit = 'rightbelow vnew'
+nmap <silent><Space>gb :GitBlame<CR>
+nmap <silent><Space>gB :Gitblanch
+nmap <silent><Space>gp :GitPush<CR>
+nmap <silent><Space>gd :GitDiff --cached<CR>
+nmap <silent><Space>gD :GitDiff<CR>
+nmap <silent><Space>gs :GitStatus<CR>
+nmap <silent><Space>gl :GitLog<CR>
+nmap <silent><Space>gL :<C-u>GitLog -u \| head -10000<CR>
+nmap <silent><Space>ga :GitAdd<CR>
+nmap <silent><Space>gA :<C-u>GitAdd <cfile><CR>
+nmap <silent><Space>gm :GitCommit<CR>
+nmap <silent><Space>gM :GitCommit --amend<CR>
+nmap <silent><Space>gp q:Git push<Space>
+nmap <silent><Space>gt q:Git tag<Space>
 "}}}
 
 "----------------------------------------
@@ -1375,7 +1387,7 @@ map <Space>mg  :MemoGrep<CR>
 " coffee script
 "------------------------------------
 " filetypeを認識させる"{{{
-au BufRead,BufNewFile *.coffee  set filetype=coffee
+au BufEnter,BufRead,BufNewFile *.coffee,.coffee  setf coffee
 " 保存するたびに、コンパイル
 autocmd BufWritePost *.coffee silent CoffeeMake! -cb | cwindow | redraw!
 "}}}
@@ -1615,6 +1627,7 @@ let g:tweetvim_open_buffer_cmd = 'tabnew'
 "------------------------------------
 " alter
 "------------------------------------
+"{{{
 "specの設定
 " au User Rails nmap <buffer><Space>s <Plug>(altr-forward)
 " au User Rails nmap <buffer><Space>s <Plug>(altr-back)
@@ -1624,10 +1637,12 @@ let g:tweetvim_open_buffer_cmd = 'tabnew'
 " call altr#define('app/models/%.rb', 'spec/models/%_spec.rb', 'spec/factories/%s.rb')
 " call altr#define('app/controllers/%.rb', 'spec/controllers/%_spec.rb')
 " call altr#define('app/helpers/%.rb', 'spec/helpers/%_spec.rb')
+"}}}
 
 "------------------------------------
 " php indent
 "------------------------------------
+"{{{
 " let g:PHP_autoformatcomment = 1
 " let g:PHP_outdentSLComments = N
 " let g:PHP_default_indenting = 1
@@ -1636,6 +1651,7 @@ let g:tweetvim_open_buffer_cmd = 'tabnew'
 " let g:PHP_BracesAtCodeLevel = 1
 " let g:PHP_vintage_case_default_indent = 1
 "
+"}}}
 
 "------------------------------------
 " php indent
@@ -1645,17 +1661,15 @@ let g:sh_indent_case_labels=1
 "------------------------------------
 " neocomplcache-snippets
 "------------------------------------
-au FileType snippet nmap <buffer><Space>e :e #<CR>
+au FileType snippet nmap <buffer><Space>e :e #1<CR>
 
-"------------------------------------
-" neocomplcache-snippets
-"------------------------------------
-nmap <C-H><C-H><C-R> :<C-U>CompassCreate<CR>
-nmap <C-H><C-H><C-B> :<C-U>BourbonInstall<CR>
+" nmap <C-H><C-H><C-R> :<C-U>CompassCreate<CR>
+" nmap <C-H><C-H><C-B> :<C-U>BourbonInstall<CR>
 
 "------------------------------------
 " sass
 "------------------------------------
+""{{{
 let g:sass_compile_aftercmd = ""
 let g:sass_compile_auto = 1
 let g:sass_compile_beforecmd = ""
@@ -1670,19 +1684,23 @@ function! Sass_start()
         call system('sass --watch ' . current_dir . ' &')
     endif
 endfunction
-" au! BufRead *.scss call Sass_start()
+" au! BufRead *.scss,*sass call Sass_start()
+"}}}
 
 "------------------------------------
 " im_controll.vim
 "------------------------------------
+"{{{
 " 「日本語入力固定モード」切替キー
 inoremap <silent> <C-j> <C-r>=IMState('FixMode')<CR>
 " PythonによるIBus制御指定
 let IM_CtrlIBusPython = 1
+"}}}
 
 "------------------------------------
 " jasmine.vim
 "------------------------------------
+"{{{
 function! JasmineSetting()
   au BufRead,BufNewFile *Helper.js,*Spec.js  set filetype=jasmine.javascript
   au BufRead,BufNewFile *Helper.coffee,*Spec.coffee  set filetype=jasmine.coffee
@@ -1692,11 +1710,9 @@ function! JasmineSetting()
   command! JasmineRedGreen :call jasmine#redgreen()
   command! JasmineMake :call jasmine#make()
 endfunction
-au FileType js,coffee JasmineSetting()
+au FileType js,coffee call JasmineSetting()
+"}}}
 
-"-------------------------------------------------------------------------------
-" プラグインごとの設定 Plugins2
-"-------------------------------------------------------------------------------
 "------------------------------------
 " Pydiction
 "------------------------------------
@@ -1747,8 +1763,8 @@ let  g:yankring_default_menu_mode = 0
 " operator-camelize.vim
 "------------------------------------
 " camel-caseへの変換
-map <Space>u <Plug>(operator-camelize)
-map <Space>U <Plug>(operator-decamelize)
+map <Leader>u <Plug>(operator-camelize)
+map <Leader>U <Plug>(operator-decamelize)
 
 "------------------------------------
 " operator-replace.vim
@@ -1766,80 +1782,44 @@ map C  <Plug>(operator-uncomment)
 "------------------------------------
 " smartchr.vim
 "------------------------------------
-let g:smarchr_enable = 0
+"{{{
+let g:smartchr_enable = 0
 
-function! SmartchrToggle() "{{{
-  if g:smarchr_enable == 1
-    inoremap <expr> = smartchr#loop('=', '==', '=>')
-    inoremap <expr> . smartchr#loop('.',  '->', '=>')
+if g:smartchr_enable == 1
+  inoremap <expr> , smartchr#one_of(', ', ',')
+  inoremap <expr> ? smartchr#one_of('?', '? ')
+  " Smart =.
+  inoremap <expr> = search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '
+        \ : search('\(*\<bar>!\)\%#', 'bcn') ? '= '
+        \ : smartchr#one_of(' = ', '=', ' == ')
+  augroup MyAutoCmd
+    " Substitute .. into -> .
+    autocmd FileType c,cpp inoremap <buffer> <expr> . smartchr#loop('.', '->', '...')
+    autocmd FileType perl,php inoremap <buffer> <expr> . smartchr#loop(' . ', '->', '.')
+    autocmd FileType perl,php inoremap <buffer> <expr> - smartchr#loop('-', '->')
+    autocmd FileType vim inoremap <buffer> <expr> . smartchr#loop('.', ' . ', '..', '...')
 
-    " 演算子の間に空白を入れる
-    inoremap <buffer><expr> + smartchr#one_of(' + ', ' ++ ', '+')
-    inoremap <buffer><expr> - smartchr#one_of(' - ', ' -- ', '-')
-    inoremap <buffer><expr> / smartchr#one_of(' / ', ' // ', '/')
-    inoremap <buffer><expr> * smartchr#one_of(' * ', ' ** ', '*')
-    inoremap <buffer><expr> , smartchr#one_of(', ', ',')
-    inoremap <buffer><expr> +=  smartchr#one_of(' += ')
-    inoremap <buffer><expr> -=  smartchr#one_of(' -= ')
-    inoremap <buffer><expr> /=  smartchr#one_of(' /= ')
-    inoremap <buffer><expr> *=  smartchr#one_of(' *= ')
-    inoremap <buffer><expr> & smartchr#one_of(' & ', ' && ', '&')
-    inoremap <buffer><expr> % smartchr#one_of(' % ', '%')
-    inoremap <buffer><expr> =>  smartchr#one_of(' => ')
-    inoremap <buffer><expr> <-   smartchr#one_of(' <-  ')
-    inoremap <buffer><expr> <Bar> smartchr#one_of(' <Bar> ', ' <Bar><Bar> ', '<Bar>')
+    autocmd FileType haskell,int-ghci
+          \ inoremap <buffer> <expr> + smartchr#loop('+', ' ++ ')
+          \| inoremap <buffer> <expr> - smartchr#loop('-', ' -> ', ' <- ')
+          \| inoremap <buffer> <expr> $ smartchr#loop(' $ ', '$')
+          \| inoremap <buffer> <expr> \ smartchr#loop('\ ', '\')
+          \| inoremap <buffer> <expr> : smartchr#loop(':', ' :: ', ' : ')
+          \| inoremap <buffer> <expr> . smartchr#loop('.', ' . ', '..')
 
-    " " 3項演算子の場合は、後ろのみ空白を入れる
-    noremap <buffer><expr> ? smartchr#one_of('? ', '?')
-    inoremap <buffer><expr> : smartchr#one_of(': ', '::', ':')
+    autocmd FileType scala
+          \ inoremap <buffer> <expr> - smartchr#loop('-', ' -> ', ' <- ')
+          \| inoremap <buffer> <expr> = smartchr#loop(' = ', '=', ' => ')
+          \| inoremap <buffer> <expr> : smartchr#loop(': ', ':', ' :: ')
+          \| inoremap <buffer> <expr> . smartchr#loop('.', ' => ')
 
-    " " =の場合、単純な代入や比較演算子として入力する場合は前後にスペースをいれる。
-    " " 複合演算代入としての入力の場合は、直前のスペースを削除して=を入力
-    inoremap <buffer><expr> = search('¥(&¥<bar><bar>¥<bar>+¥<bar>-¥<bar>/¥<bar>>¥<bar><¥) ¥%#', 'bcn')? '<bs>= '  : search('¥(*¥<bar>!¥)¥%#', 'bcn') ? '= '  : smartchr#one_of(' = ', ' == ', '=')
-
-    " " 下記の文字は連続して現れることがまれなので、二回続けて入力したら改行する
-    inoremap <buffer><expr> } smartchr#one_of('}', '}<cr>')
-    inoremap <buffer><expr> ; smartchr#one_of(';', ';<cr>')
-
-    " "()は空白入れる
-    inoremap <buffer><expr> ( smartchr#one_of('( ')
-    inoremap <buffer><expr> ) smartchr#one_of(' )')
-
-    "()を閉じるときに、一つ右に移動
-    " inoremap <buffer><expr> ( search('¥<¥if¥%#', 'bcn')? '(': '('
-  else
-    inoremap  = =
-    inoremap  . .
-
-    " 演算子の間に空白を入れる
-    inoremap <buffer> + +
-    inoremap <buffer> - -
-    inoremap <buffer> / /
-    inoremap <buffer> * *
-    inoremap <buffer> , ,
-    inoremap <buffer> += +=
-    inoremap <buffer> -= -=
-    inoremap <buffer> /= /=
-    inoremap <buffer> *= *=
-    inoremap <buffer> & %
-    inoremap <buffer> % %
-    inoremap <buffer> => =>
-    inoremap <buffer> <- <-
-    inoremap <buffer> ? ?
-    inoremap <buffer> : :
-    inoremap <buffer> } }
-    inoremap <buffer> ; ;
-    inoremap <buffer> ) )
-    inoremap { {}<LEFT>
-    inoremap [ []<LEFT>
-    inoremap ( ()<LEFT>
-  endif
-
-  let g:smarchr_enable = !g:smarchr_enable
-endfunction
-" au BufReadPre * call SmartchrToggle()
-" nmap <C-H><C-O> :call SmartchrToggle()<CR>
+    autocmd FileType eruby
+          \ inoremap <buffer> <expr> > smartchr#loop('>', '%>')
+          \| inoremap <buffer> <expr> < smartchr#loop('<', '<%', '<%=')
+  augroup END
+endif
 "}}}
+
 
 "------------------------------------
 " Srcexp
@@ -1954,8 +1934,8 @@ autocmd FileType python               setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml                  setlocal omnifunc=xmlcomplete#CompleteTags
 autocmd FileType php                  setlocal omnifunc=phpcomplete#CompletePHP
 autocmd FileType c                    setlocal omnifunc=ccomplete#Complete
-autocmd FileType ruby,eruby,yml,ruby.rspec setlocal omnifunc=
-autocmd FileType ruby,eruby,yml,ruby.rspec setlocal completefunc+=RSenseCompleteFunction
+" autocmd FileType ruby,eruby,yml,ruby.rspec setlocal omnifunc=RSenseCompleteFunction
+" autocmd FileType ruby,eruby,yml,ruby.rspec setlocal completefunc+=RSenseCompleteFunction
 autocmd FileType ruby,eruby,ruby.rpec setlocal dict+=~/.vim/dict/ruby.dict
 autocmd FileType ruby.rpec            setlocal dict+=~/.vim/dict/rspec.dict
 
@@ -1990,6 +1970,7 @@ let g:neocomplcache_dictionary_filetype_lists = {
       \ 'ruby'       : $HOME.'/.vim/dict/ruby.dict',
       \ 'eruby'      : $HOME.'/.vim/dict/ruby.dict',
       \ 'javascript' : $HOME.'/.vim/dict/javascript.dict',
+      \ 'coffee'     : $HOME.'/.vim/dict/javascript.dict',
       \ 'lua'        : $HOME.'/.vim/dict/lua.dict',
       \ 'ocaml'      : $HOME.'/.vim/dict/ocaml.dict',
       \ 'perl'       : $HOME.'/.vim/dict/perl.dict',
@@ -2016,7 +1997,7 @@ let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 if !exists('g:neocomplcache_omni_functions')
   let g:neocomplcache_omni_functions = {}
 endif
-" let g:neocomplcache_omni_functions.ruby = 'RSenseCompleteFunction'
+let g:neocomplcache_omni_functions.ruby = 'RSenseCompleteFunction'
 
 " Enable heavy omni completion.
 if !exists('g:neocomplcache_omni_patterns')
@@ -2029,6 +2010,21 @@ let g:neocomplcache_omni_patterns['ruby.rspec'] = '[^. *\t]\.\w*\|\h\w*::'
 " let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
 " let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
 " let g:neocomplcache_omni_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+
+let g:neocomplcache_vim_completefuncs = {
+      \ 'Ref' : 'ref#complete',
+      \ 'Unite' : 'unite#complete_source',
+      \ 'VimShellExecute' :
+      \      'vimshell#vimshell_execute_complete',
+      \ 'VimShellInteractive' :
+      \      'vimshell#vimshell_execute_complete',
+      \ 'VimShellTerminal' :
+      \      'vimshell#vimshell_execute_complete',
+      \ 'VimShell' : 'vimshell#complete',
+      \ 'VimFiler' : 'vimfiler#complete',
+      \ 'Vinarise' : 'vinarise#complete',
+      \}
+
 
 " keymap"{{{
 " Plugin key-mappings.
