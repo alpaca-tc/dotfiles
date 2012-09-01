@@ -116,10 +116,6 @@ snippet head
     </head>
 snippet title
     <title>${1:`substitute(Filename('', 'Page Title'), '^.', '\u&', '')`}</title>${2}
-snippet script
-    <script type="text/javascript" charset="utf-8">
-        ${1}
-    </script>${2}
 snippet scriptsrc
     <script src="${1}.js" type="text/javascript" charset="utf-8"></script>${2}
 snippet style
@@ -188,3 +184,6 @@ snippet table
     </table>${4}
 snippet textarea
     <textarea name="${1:Name}" rows="${2:8}" cols="${3:40}">${4}</textarea>${5}
+
+snippet script
+    <script type="text/javascript" src="${1:http://}" charset="utf-8"></script>

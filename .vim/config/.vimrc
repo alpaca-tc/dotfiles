@@ -456,7 +456,7 @@ NeoBundle 'Shougo/git-vim'
 NeoBundle 'mattn/gist-vim' "gistを利用する
 
 "保存と同時にブラウザをリロードする
-" NeoBundle 'tell-k/vim-browsereload-mac'
+NeoBundle 'tell-k/vim-browsereload-mac'
 
 "markdownでメモを管理
 NeoBundle 'glidenote/memolist.vim'
@@ -499,11 +499,14 @@ NeoBundle 'tacroe/unite-mark'
 " NeoBundle 'oppara/vim-unite-cake'
 " NeoBundle 'choplin/unite-vim_hacks'
 " NeoBundle 'ujihisa/unite-colorscheme'
+NeoBundle 'liquidz/unite-git'
+NeoBundle 'joker1007/unite-git_grep'
 
 NeoBundle 'basyura/TweetVim'
 NeoBundle 'basyura/twibill.vim'
 NeoBundle 'basyura/bitly.vim'
 
+NeoBundle 'thinca/vim-qfreplace'
 "}}}
 
 " bundle.lang"{{{
@@ -803,7 +806,6 @@ aug VimFilerKeyMapping
   autocmd FileType vimfiler call s:vimfiler_local()
 
   function! s:vimfiler_local()
-
     if has('unix')
       " 開き方
       call vimfiler#set_execute_file('sh', 'sh')
@@ -811,25 +813,24 @@ aug VimFilerKeyMapping
     endif
 
     " Unite bookmark連携
-    nmap <buffer> z <C-u>:Unite bookmark<CR>
-    nmap <buffer> A <C-u>:UniteBookmarkAdd<CR>
+    nmap <buffer>B :<C-U>Unite bookmark<CR>
+    nmap <buffer>b :<C-U>UniteBookmarkAdd<CR>
+    " nmap <buffer>, call s:git_root_dir()
 
     " Unite bookmarkのアクションをVimFilerに
     call unite#custom_default_action('source/bookmark/directory' , 'vimfiler')
-
-    " incremental search
-    nmap <buffer> ? /^\s*\(\|-\\|\|+\\|+\\|-\) \zs
   endfunction
 aug END
 
 "gitの場合、ルートディレクトリに移動
-function! s:git_root_dir()
-  if(system('git rev-parse --is-inside-work-tree') == "true\n")
-    return ':VimFiler ' . system('git rev-parse --show-cdup') . '\<CR>'
-  else
-    echoerr '!!!current directory is outside git working tree!!!'
-  endif
-endfunction
+" function! s:git_root_dir()
+"   if(system('git rev-parse --is-inside-work-tree') == "true\n")
+"     return ':VimFiler ' . system('git rev-parse --show-cdup') . '\<CR>'
+"   else
+"     echoerr '!!!current directory is outside git working tree!!!'
+"   endif
+" endfunction
+
 "}}}
 
 "------------------------------------
@@ -1386,8 +1387,7 @@ map <Space>mg  :MemoGrep<CR>
 "------------------------------------
 " coffee script
 "------------------------------------
-" filetypeを認識させる"{{{
-au BufEnter,BufRead,BufNewFile *.coffee,.coffee  setf coffee
+"{{{
 " 保存するたびに、コンパイル
 autocmd BufWritePost *.coffee silent CoffeeMake! -cb | cwindow | redraw!
 "}}}
@@ -1398,16 +1398,16 @@ autocmd BufWritePost *.coffee silent CoffeeMake! -cb | cwindow | redraw!
 "{{{
 " リロード後に戻ってくるアプリ
 let g:returnApp = "iTerm"
-nmap Bc :ChromeReloadStart<CR>
-nmap BC :ChromeReloadStop<CR>
-nmap Bf :FirefoxReloadStart<CR>
-nmap BF :FirefoxReloadStop<CR>
-nmap Bs :SafariReloadStart<CR>
-nmap BS :SafariReloadStop<CR>
-nmap Bo :OperaReloadStart<CR>
-nmap BO :OperaReloadStop<CR>
-nmap Ba :AllBrowserReloadStart<CR>
-nmap BA :AllBrowserReloadStop<CR>
+nmap <Space>bc :ChromeReloadStart<CR>
+nmap <Space>bC :ChromeReloadStop<CR>
+nmap <Space>bf :FirefoxReloadStart<CR>
+nmap <Space>bF :FirefoxReloadStop<CR>
+nmap <Space>bs :SafariReloadStart<CR>
+nmap <Space>bS :SafariReloadStop<CR>
+nmap <Space>bo :OperaReloadStart<CR>
+nmap <Space>bO :OperaReloadStop<CR>
+nmap <Space>ba :AllBrowserReloadStart<CR>
+nmap <Space>bA :AllBrowserReloadStop<CR>
 "}}}
 
 "------------------------------------
@@ -1661,7 +1661,7 @@ let g:sh_indent_case_labels=1
 "------------------------------------
 " neocomplcache-snippets
 "------------------------------------
-au FileType snippet nmap <buffer><Space>e :e #1<CR>
+au FileType snippet nmap <buffer><Space>e :e #<CR>
 
 " nmap <C-H><C-H><C-R> :<C-U>CompassCreate<CR>
 " nmap <C-H><C-H><C-B> :<C-U>BourbonInstall<CR>
@@ -1703,14 +1703,15 @@ let IM_CtrlIBusPython = 1
 "{{{
 function! JasmineSetting()
   au BufRead,BufNewFile *Helper.js,*Spec.js  set filetype=jasmine.javascript
+  au BufRead,BufNewFile,BufReadPre *.coffee   set filetype=coffee
   au BufRead,BufNewFile *Helper.coffee,*Spec.coffee  set filetype=jasmine.coffee
-  au BufRead,BufNewFile *Helper.coffee,*Spec.coffee  let b:quickrun_config = {'type' : 'coffee'}
+  au BufRead,BufNewFile,BufReadPre *Helper.coffee,*Spec.coffee  let b:quickrun_config = {'type' : 'coffee'}
   map <buffer> <leader>m :JasmineRedGreen<CR>
   call jasmine#load_snippets()
   command! JasmineRedGreen :call jasmine#redgreen()
   command! JasmineMake :call jasmine#make()
 endfunction
-au FileType js,coffee call JasmineSetting()
+au BufRead,BufNewFile,BufReadPre *.coffee,*.js call JasmineSetting()
 "}}}
 
 "------------------------------------
@@ -1906,14 +1907,14 @@ let g:JSLintHighlightErrorLine = 0
 "------------------------------------
 " vimrepress
 "------------------------------------
-nmap <Space>bl :BlogList<CR>
-nmap <Space>bn :BlogNew<CR>
-nmap <Space>bs :BlogSave<CR>
-nmap <Space>bp :BlogPreview<CR>
-nmap <Space>bo :BlogOpen<CR>
-nmap <Space>bw :BlogSwitch<CR>
-nmap <Space>bu :BlogUpload<CR>
-nmap <Space>bc :BlogCode<CR>
+" nmap <Space>bl :BlogList<CR>
+" nmap <Space>bn :BlogNew<CR>
+" nmap <Space>bs :BlogSave<CR>
+" nmap <Space>bp :BlogPreview<CR>
+" nmap <Space>bo :BlogOpen<CR>
+" nmap <Space>bw :BlogSwitch<CR>
+" nmap <Space>bu :BlogUpload<CR>
+" nmap <Space>bc :BlogCode<CR>
 "}}}
 
 "----------------------------------------
@@ -1938,6 +1939,8 @@ autocmd FileType c                    setlocal omnifunc=ccomplete#Complete
 " autocmd FileType ruby,eruby,yml,ruby.rspec setlocal completefunc+=RSenseCompleteFunction
 autocmd FileType ruby,eruby,ruby.rpec setlocal dict+=~/.vim/dict/ruby.dict
 autocmd FileType ruby.rpec            setlocal dict+=~/.vim/dict/rspec.dict
+autocmd FileType jasmine.coffee,jasmine.js setlocal dict+=~/.vim/dict/js.jasmine.dict
+autocmd FileType coffee                setlocal dict+=~/.vim/dict/coffee.dict
 
 "----------------------------------------
 " neocomplcache
@@ -1978,6 +1981,7 @@ let g:neocomplcache_dictionary_filetype_lists = {
       \ 'php'        : $HOME.'/.vim/dict/php.dict',
       \ 'scheme'     : $HOME.'/.vim/dict/scheme.dict',
       \ 'vim'        : $HOME.'/.vim/dict/vim.dict',
+      \ 'jasmine'    : $HOME.'/.vim/dict/js.jasmine.dict',
       \ 'timobile'   : $HOME.'/.vim/dict/timobile.dict',
       \ }
 "}}}

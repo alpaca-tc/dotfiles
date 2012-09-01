@@ -315,3 +315,10 @@ snippet w [wa] waits(...)...
     waits(${1})${2}
 snippet wa
     waits(${1})${2}
+
+snippet fillBlank
+    _fillBlank = (target, length, word="0")->
+        strArray = []
+        strArray.push(word) for num in [ 0..length - target.length ]
+        strArray.push(target)
+        strArray.join()
