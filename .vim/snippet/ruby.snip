@@ -237,3 +237,27 @@ snippet     num_f
     def num_fmt(num)
       num.to_s.reverse.gsub( /(\d{3})(?=\d)/, '\1,' ).reverse
     end
+
+snippet     mod
+    module ${1:module_name}
+      ${2}
+    end
+
+snippet     module
+    module ${1:module_name}
+      ${2}
+    end
+
+snippet     config.inc
+  con ig.include ${1:ClassName},  type: ${2::modle}
+
+snippet     config.include
+  config.include ${1:ClassName},  type: ${2::modle}
+
+snippet     rdoc
+    # === ${1}
+    # ${2}
+    # === 引数
+    # ${3}
+    # === 戻り値
+

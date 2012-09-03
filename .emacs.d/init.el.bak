@@ -1,0 +1,20 @@
+(setq backup-inhibited t)
+(setq make-backup-files nil)
+
+(add-to-list 'default-frame-alist '(font . "fontset-default"))
+;; (set-frame-font "fontset-default")
+
+(set-face-attribute 'default nil
+                    :family "monaco"
+                    :height 140)
+
+(set-fontset-font "fontset-default"
+                  'japanese-jisx0208
+                  '("ヒラギノ丸ゴ pro w4*" . "jisx0208.*"))
+
+(set-fontset-font "fontset-default"
+                  'katakana-jisx0201
+                  '("ヒラギノ丸ゴ pro w4*" . "jisx0201.*"))
+
+(add-to-list 'face-font-rescale-alist
+             `(,(encode-coding-string ".*ヒラギノ丸ゴ pro w4.*" 'emacs-mule) . 1.2))

@@ -7,3 +7,9 @@ prev_word   '^'
         "${2}" ) ${3:code $OPTARG} ;;
     esac
     done
+
+snippet     yes
+    read -p "${1:message} y/n " yn
+    if [ $yn = "y" -o $yn = "Y" ]; then
+        ${2}
+    fi

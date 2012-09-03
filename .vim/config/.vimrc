@@ -1,3 +1,4 @@
+
 "----------------------------------------
 "基本"{{{
 let $SHELL="/usr/local/bin/zsh"
@@ -11,7 +12,8 @@ set formatoptions+=lmoqmM
 set helplang=ja,en
 set modelines=0
 set nobackup
-set scrolloff=7
+set scrolloff=0
+set scrolljump=-50
 set shell=/usr/local/bin/zsh
 set showcmd
 set showmode
@@ -205,23 +207,26 @@ if has("autocmd")
   " autocmd FileType html filetype indent off
 
   autocmd FileType apache     setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType conf       setlocal sw=4 sts=4 ts=4 et
   autocmd FileType aspvbs     setlocal sw=4 sts=4 ts=4 et
   autocmd FileType c          setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType coffee     setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType conf       setlocal sw=4 sts=4 ts=4 et
   autocmd FileType cpp        setlocal sw=4 sts=4 ts=4 et
   autocmd FileType cs         setlocal sw=4 sts=4 ts=4 et
   autocmd FileType css        setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType less,sass,scss setlocal sw=2 sts=2 ts=2 et
   autocmd FileType diff       setlocal sw=4 sts=4 ts=4 et
   autocmd FileType eruby      setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType haml       setlocal sw=2 sts=2 ts=2 et
   autocmd FileType html       setlocal sw=4 sts=4 ts=4 et
   autocmd FileType java       setlocal sw=4 sts=4 ts=4 et
   autocmd FileType javascript setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType less,sass,scss setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType lisp       setlocal sw=2 sts=2 ts=2 et
   autocmd FileType perl       setlocal sw=4 sts=4 ts=4 et
   autocmd FileType php        setlocal sw=4 sts=4 ts=4 et
   autocmd FileType python     setlocal sw=4 sts=4 ts=4 et
   autocmd FileType ruby       setlocal sw=2 sts=2 ts=2 et
-  autocmd FileType haml       setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType scala      setlocal sw=2 sts=2 ts=2 et
   autocmd FileType sh         setlocal sw=4 sts=4 ts=4 et
   autocmd FileType sql        setlocal sw=4 sts=4 ts=4 et
   autocmd FileType vb         setlocal sw=4 sts=4 ts=4 et
@@ -231,8 +236,6 @@ if has("autocmd")
   autocmd FileType xml        setlocal sw=4 sts=4 ts=4 et
   autocmd FileType yaml       setlocal sw=2 sts=2 ts=2 et
   autocmd FileType zsh        setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType scala      setlocal sw=2 sts=2 ts=2 et
-  autocmd FileType coffee     setlocal sw=2 sts=2 ts=2 et
 endif
 autocmd InsertLeave * set nopaste
 "}}}
@@ -349,7 +352,7 @@ au BufNewFile,BufRead *.less setf less
 filetype plugin indent off     " required!
 
 if has('vim_starting')
-  set runtimepath+=~/.vim/runtime/neobundle.vim
+  set runtimepath+=~/.bundle/neobundle.vim
   call neobundle#rc(expand('~/.bundle/'))
 endif
 
@@ -450,6 +453,9 @@ NeoBundle 'thinca/vim-openbuf'
 "各種リファレンスを引いたり、英和辞書を読む
 NeoBundle 'thinca/vim-ref'
 " NeoBundle 'soh335/vim-ref-jquery'
+NeoBundle 'soh335/vim-ref-jquery'
+NeoBundle 'ujihisa/ref-hoogle'
+NeoBundle 'pekepeke/ref-javadoc'
 
 "gitをvim内から操作する
 NeoBundle 'Shougo/git-vim'
@@ -507,6 +513,8 @@ NeoBundle 'basyura/twibill.vim'
 NeoBundle 'basyura/bitly.vim'
 
 NeoBundle 'thinca/vim-qfreplace'
+NeoBundle 'yuratomo/w3m.vim'
+NeoBundle 'TeTrIs.vim'
 "}}}
 
 " bundle.lang"{{{
@@ -524,15 +532,12 @@ NeoBundle 'xmledit'
 
 "  js / coffee
 " ----------------------------------------
-" function! JsSetting()
 NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'claco/jasmine.vim'
 NeoBundle 'pangloss/vim-javascript' " syntaxが無駄に入っているので、インストール後削除
 NeoBundle 'hallettj/jslint.vim'
 NeoBundle 'JavaScript-syntax'
 NeoBundle 'pekepeke/titanium-vim' " Titaniumを使うときに
-" endfunction
-" au FileType js,coffee call JsSetting()
 
 "  markdown
 " ----------------------------------------
@@ -584,7 +589,7 @@ NeoBundle 'ruby-matchit'
 NeoBundle 'taq/vim-rspec'
 NeoBundle 'ujihisa/unite-rake'
 NeoBundle 'taichouchou2/vim-rsense'
-NeoBundle 'vim-ruby/vim-ruby'
+" NeoBundle 'vim-ruby/vim-ruby'
 " endfunction
 " au FileType eruby,ruby,erb,yml call RubySetting()
 
@@ -618,6 +623,7 @@ if neobundle#exists_not_installed_bundles()
   echomsg 'Not installed bundles : ' .
         \ string(neobundle#get_not_installed_bundle_names())
   echomsg 'Please execute ":NeoBundleInstall" command.'
+  call NeoBundleInstall
   " finish
 endif
 
@@ -740,31 +746,59 @@ let g:unite_source_history_yank_enable = 1
 let g:unite_source_file_mru_limit = 400     "最大数
 let g:unite_winheight = 20
 
-" いろいろのせる
-nmap <C-J><C-U> :<C-u>UniteWithCurrentDir -buffer-name=file file buffer file_mru directory_mru bookmark<CR>
+" nmap <C-J><C-U> :<C-u>UniteWithCurrentDir -buffer-name=file file buffer file_mru directory_mru bookmark<CR>
+" nmap <C-J><C-J> :Unite file_mru<CR>
+" nmap <C-J><C-R> :Unite -buffer-name=register register<CR>
+" nmap <silent><Space>b :<C-u>UniteBookmarkAdd<CR>
 
-" 最近使ったファイルの一覧
-nmap <C-J><C-J> :Unite file_mru<CR>
+"unite prefix key.
+nnoremap [unite] <Nop>
+nmap <C-J> [unite]
 
-" レジスタ一覧
-nmap <C-J><C-R> :Unite -buffer-name=register register<CR>
+"unite general settings
+"インサートモードで開始
+let g:unite_enable_start_insert = 1
+"最近開いたファイル履歴の保存数
+let g:unite_source_file_mru_limit = 200
 
-nnoremap <silent><Space>b :<C-u>UniteBookmarkAdd<CR>
+"file_mruの表示フォーマットを指定。空にすると表示スピードが高速化される
+let g:unite_source_file_mru_filename_format = ''
 
-function! UniteSetting()
+nnoremap <silent> [unite]<C-U> :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
+nnoremap <silent> [unite]<C-R> :<C-u>Unite -buffer-name=register register<CR>
+nnoremap <silent> [unite]<C-J> :<C-u>Unite file_mru<CR>
+nnoremap <silent> [unite]<C-B> :<C-u>Unite bookmark<CR>
+nnoremap <silent> <Space>b :<C-u>UniteBookmarkAdd<CR>
+
+function! s:unite_my_settings()"{{{
+  nmap <buffer> <ESC> <Plug>(unite_exit)
+  " imap <buffer> jj <Plug>(unite_insert_leave)
+  imap <buffer> <C-w> <Plug>(unite_delete_backward_path)
+  " nnoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
+  " nnoremap <silent> <buffer> <expr> <C-l> unite#do_action('vsplit')
+  " nnoremap <silent> <buffer> <expr> <C-o> unite#do_action('open')
+  hi CursorLine                    guibg=#3E3D32
+  hi CursorColumn                  guibg=#3E3D32
+endfunction
+autocmd FileType unite call s:unite_my_settings()
+"}}}
+
+function! UniteSetting()"{{{
   " 動き
   imap <buffer><C-K> <Up>
   imap <buffer><C-L> <Left>
   imap <buffer><C-H> <Right>
   imap <buffer><C-J> <Down>
   " 開き方
-  nnoremap <silent><buffer><expr><C-K> unite#do_action('split')
-  nnoremap <silent><buffer><expr><C-L> unite#do_action('vsplit')
+  " nnoremap <silent><buffer><expr><C-K> unite#do_action('split')
+  " nnoremap <silent><buffer><expr><C-L> unite#do_action('vsplit')
   " inoremap <silent><buffer><expr><C-V> unite#do_action('vsplit')
   " inoremap <silent><buffer><expr><C-E> unite#do_action('split')
   nnoremap <silent> <buffer> <ESC><ESC> :q<CR>
 endfunction
 au FileType unite call UniteSetting()
+"}}}
+
 "}}}
 
 "------------------------------------
@@ -843,6 +877,11 @@ let g:quickrun_config._ = {'runner' : 'vimproc'}
 let g:quickrun_no_default_key_mappings = 1
 nmap <Leader>r <Plug>(quickrun)
 
+" lisp
+let g:quickrun_config['lisp'] = {
+      \   'command': 'clisp'
+      \ }
+
 " coffee
 let g:quickrun_config['coffee'] = {
       \'command' : 'coffee',
@@ -876,6 +915,7 @@ let rspec_outputter = quickrun#outputter#buffer#new()
 function! rspec_outputter.init(session)
   call call(quickrun#outputter#buffer#new().init, [a:session], self)
 endfunction
+
 
 " syntax color
 function! rspec_outputter.finish(session)
@@ -991,7 +1031,7 @@ let $JS_CMD='node'
 "}}}
 
 "----------------------------------------
-"   zencoding
+" zencoding
 "----------------------------------------
 "{{{
 "<C-Y>, でzencodingを使える
@@ -1529,10 +1569,11 @@ nnoremap <C-H><C-G> :CtrlPClearCache<Return>:call <SID>CallCtrlPBasedOnGitStatus
 "------------------------------------
 " vim-ruby
 "------------------------------------
-function! s:vimRuby()"{{{
+"{{{
+function! s:vimRuby()
   " let g:rubycomplete_buffer_loading = 1
-  let g:rubycomplete_classes_in_global = 1
-  let g:rubycomplete_rails = 1
+  let g:rubycomplete_classes_in_global = 0
+  let g:rubycomplete_rails = 0
 endfunction
 au FileType ruby,eruby,ruby.rspec call s:vimRuby()
 "}}}
@@ -1582,7 +1623,7 @@ autocmd User Rails call SetUpRailsSetting()
 "------------------------------------
 "{{{
 " Rsense
-let g:rsenseUseOmniFunc = 1
+let g:rsenseUseOmniFunc = 0
 let g:rsenseHome = expand('~/.vim/ref/rsense-0.3')
 
 function! SetUpRubySetting()
@@ -1692,9 +1733,9 @@ endfunction
 "------------------------------------
 "{{{
 " 「日本語入力固定モード」切替キー
-inoremap <silent> <C-j> <C-r>=IMState('FixMode')<CR>
+" inoremap <silent> <C-j> <C-r>=IMState('FixMode')<CR>
 " PythonによるIBus制御指定
-let IM_CtrlIBusPython = 1
+" let IM_CtrlIBusPython = 1
 "}}}
 
 "------------------------------------
@@ -1784,15 +1825,15 @@ map C  <Plug>(operator-uncomment)
 " smartchr.vim
 "------------------------------------
 "{{{
-let g:smartchr_enable = 0
+let g:smartchr_enable = 1
 
 if g:smartchr_enable == 1
   inoremap <expr> , smartchr#one_of(', ', ',')
   inoremap <expr> ? smartchr#one_of('?', '? ')
   " Smart =.
-  inoremap <expr> = search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '
-        \ : search('\(*\<bar>!\)\%#', 'bcn') ? '= '
-        \ : smartchr#one_of(' = ', '=', ' == ')
+  " inoremap <expr> = search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '
+  "       \ : search('\(*\<bar>!\)\%#', 'bcn') ? '= '
+  "       \ : smartchr#one_of(' = ', '=', ' == ')
   augroup MyAutoCmd
     " Substitute .. into -> .
     autocmd FileType c,cpp inoremap <buffer> <expr> . smartchr#loop('.', '->', '...')
@@ -1820,7 +1861,6 @@ if g:smartchr_enable == 1
   augroup END
 endif
 "}}}
-
 
 "------------------------------------
 " Srcexp
@@ -1907,6 +1947,7 @@ let g:JSLintHighlightErrorLine = 0
 "------------------------------------
 " vimrepress
 "------------------------------------
+"{{{
 " nmap <Space>bl :BlogList<CR>
 " nmap <Space>bn :BlogNew<CR>
 " nmap <Space>bs :BlogSave<CR>
@@ -1917,12 +1958,48 @@ let g:JSLintHighlightErrorLine = 0
 " nmap <Space>bc :BlogCode<CR>
 "}}}
 
+"------------------------------------
+" w3m.vim
+"------------------------------------
+"{{{
+let g:w3m#command = '/usr/local/bin/w3m'
+let g:w3m#external_browser = 'chrome'
+let g:w3m#homepage = "http://www.google.co.jp/"
+let g:w3m#hit_a_hint_key = 'f'
+let g:w3m#search_engine =
+    \ 'http://search.yahoo.co.jp/search?search.x=1&fr=top_ga1_sa_124&tid=top_ga1_sa_124&ei=' . &encoding . '&aq=&oq=&p='
+let g:w3m#disable_default_keymap = 1
+" unlet g:w3m#set_hover_on
+" let g:w3m#hover_set_on = -1
+let g:w3m#hover_delay_time = 100
+function! W3mSetting()
+  nmap <buffer><CR>        <Plug>(w3m-click)
+  nmap <buffer>i           <Plug>(w3m-click)
+  nmap <buffer><S-CR>      <Plug>(w3m-shift-click)
+  nmap <buffer><TAB>       <Plug>(w3m-next-link)
+  nmap <buffer><S-TAB>     <Plug>(w3m-prev-link)
+  nmap <buffer><BS>        <Plug>(w3m-back)
+  nmap <buffer>th          <Plug>(w3m-back)
+  nmap <buffer>tl          <Plug>(w3m-forward)
+  nmap <buffer>s           <Plug>(w3m-toggle-syntax)
+  nmap <buffer>c           <Plug>(w3m-toggle-use-cookie)
+  nmap <buffer>=           <Plug>(w3m-show-link)
+  nmap <buffer>/           <Plug>(w3m-search-start)
+  nmap <buffer>*           *<Plug>(w3m-search-end)
+  nmap <buffer>#           #<Plug>(w3m-search-end)
+  nmap <buffer>a           <Plug>(w3m-address-bar)
+endfunction
+au FileType w3m call W3mSetting()
+"}}}
+
+"}}}
+
 "----------------------------------------
 "補完・履歴 Complete "{{{
-set wildmenu               " コマンド補完を強化
-set wildchar=<tab>         " コマンド補完を開始するキー
+set wildmenu                 " コマンド補完を強化
+set wildchar=<tab>           " コマンド補完を開始するキー
 set wildmode=longest:full,full
-set history=1000           " コマンド・検索パターンの履歴数
+set history=1000             " コマンド・検索パターンの履歴数
 set complete+=k,U,kspell,t,d " 補完を充実
 set completeopt=menu,menuone,preview
 set infercase
@@ -2001,19 +2078,13 @@ let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 if !exists('g:neocomplcache_omni_functions')
   let g:neocomplcache_omni_functions = {}
 endif
-let g:neocomplcache_omni_functions.ruby = 'RSenseCompleteFunction'
+" let g:neocomplcache_omni_functions.ruby = 'RSenseCompleteFunction'
 
 " Enable heavy omni completion.
 if !exists('g:neocomplcache_omni_patterns')
   let g:neocomplcache_omni_patterns = {}
 endif
 let g:neocomplcache_omni_patterns.ruby       = '[^. *\t]\.\w*\|\h\w*::'
-let g:neocomplcache_omni_patterns['ruby.rspec'] = '[^. *\t]\.\w*\|\h\w*::'
-" let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*'
-" let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-" let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
-" let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
-" let g:neocomplcache_omni_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 
 let g:neocomplcache_vim_completefuncs = {
       \ 'Ref' : 'ref#complete',
@@ -2028,7 +2099,6 @@ let g:neocomplcache_vim_completefuncs = {
       \ 'VimFiler' : 'vimfiler#complete',
       \ 'Vinarise' : 'vinarise#complete',
       \}
-
 
 " keymap"{{{
 " Plugin key-mappings.

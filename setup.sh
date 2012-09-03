@@ -5,7 +5,7 @@ echo "  To install, please tap 'y' or 'n' key\n"
 
 read -p "install dotfiles? y/n " yn
 if [ $yn = "y" -o $yn = "Y" ]; then
-    DOT_FILES=( .ctags .dir_colors .emacs.el .gemrc .gitconfig .gitignore .gvimrc .inputrc .rsense .rspec .rvmrc .tmux.conf .tmux.split .vimrc .zshrc .autojump .emacs.d .tmuxinator .vim .zsh )
+    DOT_FILES=( .ctags .dir_colors .emacs.el .gemrc .gitconfig .gitignore .gvimrc .inputrc .rsense .rspec .rvmrc .tmux.conf .tmux.split .vimrc .zshrc .autojump .emacs.d .tmuxinator .vim .zsh local )
 
     echo "...install dotfiles...\n"
     for file in ${DOT_FILES[@]}
@@ -76,6 +76,8 @@ if [ $yn = "y" -o $yn = "Y" ]; then
     echo "done!!"
 fi
 
+git clone https://github.com/Shougo/neobundle.vim.git ~/.bundle/neobundle.vim
+
 # 秘密鍵を生成して、githubから残りのファイルをDLする
 echo "Do you wish to install .ssh and .memolist settings from github? "
 read -p "--notice-- remove ~/.ssh y/n " yn
@@ -99,6 +101,9 @@ if [ $yn = "y" -o $yn = "Y" ]; then
     else
         echo "failed decode :p"
     fi
+else
+    mkdir ~/.memolist
+    echo "~/.memolistを生成しました"
 fi
 
 sleep 0.7

@@ -28,6 +28,8 @@ alias vza="vim ~/.zsh/.zshrc.alias"
 alias vzo="vim ~/.zsh/.zshrc.osx"
 alias vzp="vim ~/.zsh/.zshrc.prompt"
 alias vzb="vim ~/.zsh/.zshrc.basic"
+alias em="emacs"
+alias ee="emacs ~/.emacs.el"
 alias sz="source ~/.zshrc"
 
 # process
