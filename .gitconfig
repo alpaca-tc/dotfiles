@@ -1,8 +1,13 @@
 [user]
     email = alprhcp666@gmail.com
     name  = Ikkun
+
+[core]
+    editor = /Applications/MacVim.app/Contents/MacOS/Vim
+
 [color]
     ui = true
+
 [alias]
     ci = commit
     st = status

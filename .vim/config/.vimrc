@@ -1,7 +1,7 @@
-
 "----------------------------------------
 "基本"{{{
-let $SHELL="/usr/local/bin/zsh"
+" let $SHELL="/usr/local/bin/zsh"
+" set shell=/usr/local/bin/zsh
 let mapleader = ","
 set backspace=indent,eol,start
 set browsedir=buffer
@@ -14,7 +14,6 @@ set modelines=0
 set nobackup
 set scrolloff=0
 set scrolljump=-50
-set shell=/usr/local/bin/zsh
 set showcmd
 set showmode
 set timeout timeoutlen=400 ttimeoutlen=100
@@ -50,9 +49,10 @@ nmap <Space>s :w sudo:%<CR>
 
 "削除の標準キーマップを逆に。
 "また、レジスタに入れないようにする
-nmap x <BS>
+" nmap x <BS>
 "nmap X <Del>
 imap <C-@> <BS>
+imap <C-H> <BS>
 imap <C-Space> <BS>
 
 " 括弧を自動補完
@@ -119,8 +119,8 @@ nmap <silent><Up>   gk
 
 imap <silent><C-L> <Right>
 imap <silent><C-L><C-L> <Esc>A
-imap <silent><C-H> <Left>
-imap <silent><C-H><C-H> <Left><Esc>I
+" imap <silent><C-H> <Left>
+" imap <silent><C-H><C-H> <Left><Esc>I
 imap <silent><C-O> <Esc>o
 vnoremap v G
 inoremap jj <Esc>
@@ -274,17 +274,6 @@ set foldmethod=marker "{{ { という感じの文字が入る
 " set foldmethod=manual "手動
 "set foldmethod=indent "indent
 
-"画面サイズの変更
-"現在のウィンドウ高を減らす
-"nnoremap c <C-W>-
-"現在のウィンドウ幅を減らす
-"nnoremap C <C-W>+
-
-"現在のウィンドウ幅を増やす
-"nnoremap b <C-W><
-"現在のウィンドウ幅を減らす
-"nnoremap B <C-W>>
-
 " 設定を上書きしない為に、最後に書く
 " colorscheme darkblue
 " colorscheme pyte
@@ -387,7 +376,7 @@ NeoBundle 'othree/eregex.vim'         " %S 正規表現を拡張
 NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'thinca/vim-quickrun' "<Leader>rで簡易コンパイル
-NeoBundle 'scrooloose/nerdtree' "プロジェクト管理用 tree filer
+" NeoBundle 'scrooloose/nerdtree' "プロジェクト管理用 tree filer
 NeoBundle 'grep.vim'
 NeoBundle 'smartword'
 NeoBundle 'Shougo/neocomplcache-snippets-complete'
@@ -507,6 +496,7 @@ NeoBundle 'tacroe/unite-mark'
 " NeoBundle 'ujihisa/unite-colorscheme'
 NeoBundle 'liquidz/unite-git'
 NeoBundle 'joker1007/unite-git_grep'
+" NeoBundle 'mattn/unite-source-simplenote'
 
 NeoBundle 'basyura/TweetVim'
 NeoBundle 'basyura/twibill.vim'
@@ -585,7 +575,6 @@ NeoBundle 'taichouchou2/vim-ref-ri'
 NeoBundle 'taichouchou2/neco-rubymf' " gem install methodfinder
 NeoBundle 'romanvbabenko/rails.vim' " Rfactoryメソッドなど追加
 NeoBundle 'ruby-matchit'
-" NeoBundle 'sandeepravi/refactor-rails.vim' " refactor rails
 NeoBundle 'taq/vim-rspec'
 NeoBundle 'ujihisa/unite-rake'
 NeoBundle 'taichouchou2/vim-rsense'
@@ -714,6 +703,7 @@ let Tlist_Auto_Update = 1
 let Tlist_WinWidth = 20
 let g:tlist_javascript_settings = 'javascript;c:class;m:method;f:function'
 let tlist_objc_settings='objc;P:protocols;i:interfaces;I:implementations;M:instance methods;C:implementation methods;Z:protocol methods'
+let g:tlist_coffee_settings = 'coffee;f:function;v:variable'
 nmap <Space>t :Tlist<CR>
 "}}}
 
@@ -757,17 +747,13 @@ nmap <C-J> [unite]
 
 "unite general settings
 "インサートモードで開始
-let g:unite_enable_start_insert = 1
-"最近開いたファイル履歴の保存数
-let g:unite_source_file_mru_limit = 200
-
-"file_mruの表示フォーマットを指定。空にすると表示スピードが高速化される
 let g:unite_source_file_mru_filename_format = ''
 
 nnoremap <silent> [unite]<C-U> :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
 nnoremap <silent> [unite]<C-R> :<C-u>Unite -buffer-name=register register<CR>
 nnoremap <silent> [unite]<C-J> :<C-u>Unite file_mru<CR>
 nnoremap <silent> [unite]<C-B> :<C-u>Unite bookmark<CR>
+nnoremap <silent> [unite]<C-T> :<C-u>Unite tag<CR>
 nnoremap <silent> <Space>b :<C-u>UniteBookmarkAdd<CR>
 
 function! s:unite_my_settings()"{{{
@@ -849,7 +835,10 @@ aug VimFilerKeyMapping
     " Unite bookmark連携
     nmap <buffer>B :<C-U>Unite bookmark<CR>
     nmap <buffer>b :<C-U>UniteBookmarkAdd<CR>
-    " nmap <buffer>, call s:git_root_dir()
+    nmap <buffer><silent><C-J>
+    nmap <buffer><silent><C-J><C-J> :<C-U>Unite file_mru<CR>
+    nmap <buffer><silent><C-J><C-U> :<C-U>Unite file<CR>
+    nmap <buffer><silent><C-J><C-U> :<C-U>UniteWithBufferDir -buffer-name=files file<CR>
 
     " Unite bookmarkのアクションをVimFilerに
     call unite#custom_default_action('source/bookmark/directory' , 'vimfiler')
@@ -1165,7 +1154,7 @@ nmap <silent><Space>gp :GitPush<CR>
 nmap <silent><Space>gd :GitDiff --cached<CR>
 nmap <silent><Space>gD :GitDiff<CR>
 nmap <silent><Space>gs :GitStatus<CR>
-nmap <silent><Space>gl :GitLog<CR>
+nmap <silent><Space>gl :GitLog -10<CR>
 nmap <silent><Space>gL :<C-u>GitLog -u \| head -10000<CR>
 nmap <silent><Space>ga :GitAdd<CR>
 nmap <silent><Space>gA :<C-u>GitAdd <cfile><CR>
@@ -1244,7 +1233,6 @@ nmap cie ci,e
 nmap daw da,w
 nmap dab da,b
 nmap dae da,e
-
 
 " text-objectで使用できるように
 omap <silent> iw <Plug>CamelCaseMotion_iw
@@ -1420,7 +1408,8 @@ let g:memolist_template_dir_path = "$HOME/.memolist"
 
 " mapping
 map <Space>mn  :MemoNew<CR>
-map <Space>ml  :MemoList<CR>
+" map <Space>ml  :MemoList<CR>
+nmap <silent> <Space>ml :Unite file:<C-r>=g:memolist_path."/"<CR><CR>
 map <Space>mg  :MemoGrep<CR>
 "}}}
 
@@ -1623,7 +1612,7 @@ autocmd User Rails call SetUpRailsSetting()
 "------------------------------------
 "{{{
 " Rsense
-let g:rsenseUseOmniFunc = 0
+let g:rsenseUseOmniFunc = 1
 let g:rsenseHome = expand('~/.vim/ref/rsense-0.3')
 
 function! SetUpRubySetting()
@@ -1661,7 +1650,7 @@ nnoremap <silent><C-H><C-M>  :TweetVimSay<CR>
 
 " you can display tweet's source.
 let g:tweetvim_display_source = 1
-let g:tweetvim_display_time = 0
+let g:tweetvim_display_time = 1
 let g:tweetvim_open_buffer_cmd = 'tabnew'
 "}}}
 
@@ -1837,9 +1826,9 @@ if g:smartchr_enable == 1
   augroup MyAutoCmd
     " Substitute .. into -> .
     autocmd FileType c,cpp inoremap <buffer> <expr> . smartchr#loop('.', '->', '...')
-    autocmd FileType perl,php inoremap <buffer> <expr> . smartchr#loop(' . ', '->', '.')
-    autocmd FileType perl,php inoremap <buffer> <expr> - smartchr#loop('-', '->')
-    autocmd FileType vim inoremap <buffer> <expr> . smartchr#loop('.', ' . ', '..', '...')
+    autocmd FileType perl,php imap <buffer> <expr> . smartchr#loop(' . ', '->', '.')
+    autocmd FileType perl,php imap <buffer> <expr> - smartchr#loop('-', '->')
+    autocmd FileType vim imap <buffer> <expr> . smartchr#loop('.', ' . ', '..', '...')
 
     autocmd FileType haskell,int-ghci
           \ inoremap <buffer> <expr> + smartchr#loop('+', ' ++ ')
@@ -2078,7 +2067,7 @@ let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 if !exists('g:neocomplcache_omni_functions')
   let g:neocomplcache_omni_functions = {}
 endif
-" let g:neocomplcache_omni_functions.ruby = 'RSenseCompleteFunction'
+let g:neocomplcache_omni_functions.ruby = 'RSenseCompleteFunction'
 
 " Enable heavy omni completion.
 if !exists('g:neocomplcache_omni_patterns')
