@@ -1,6 +1,6 @@
 export EDITOR=vim
 export LANG=ja_JP.UTF-8
-export SHELL=/usr/local/bin/zsh
+# export SHELL=/usr/local/bin/zsh
 export DOTFILES_DIR=$HOME/dotfiles_serclet
 export BROWSER=w3m
 
@@ -32,6 +32,10 @@ export MANPATH=$PATH:/usr/share/man
 # fpath=(~/.zsh/Completion $fpath)
 # export PATH=$PATH:$GEM_PATH/bin
 
+# pythonz
+# [[ -s $HOME/.pythonz/etc/bashrc ]] && source $HOME/.pythonz/etc/bashrc
+# export PATH=$HOME/.pythonz/pythons/CPython-3.2/bin:$PATH
+
 # XAMPP
 export PATH=/Applications/XAMPP/xamppfiles/bin:$PATH
 
@@ -51,9 +55,6 @@ export RSENSE_HOME=$HOME/.vim/ref/rsense-0.3
 # homebrew
 export PATH=/usr/local/bin:$PATH
 export MANPATH=/usr/local/share/man:$MANPATH
-
-# pythonbrew
-# export PATH=$PATH:$HOME/.pythonbrew/bin
 
 # vim関連
 export PATH=$HOME/local/bin:$HOME/local/sbin:$PATH:

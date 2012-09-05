@@ -119,12 +119,8 @@ if [ $yn = "y" -o $yn = "Y" ]; then
     echo "***************finish********************"
     echo "    以下を実行して、インストールは完了します   "
     echo "  1.vimを起動して:NeoBundleInstallを実行"
-    echo "  2.rvmをインストールします。http://unfiniti.com/software/mac/jewelrybox"
-    echo "     ruby1.9.3-p194をインストールします"
-    echo "  3.brewとgemをインストールします"
-    echo "     /usr/bin/ruby <(curl -fsSkL raw.github.com/mxcl/homebrew/go)"
-    echo "     list/brew.txtのbinをインストールしてください"
-    echo "\n"
+    echo "  2.必要なソフトをインストールします。README.mkdを参照のこと。"
+    echo "  3.任意で、他の必要なソフトがある場合は、chmod +x ファイル名 ./ファイル名を入力して実行"
 else
     echo "てめーの敗因は...たったひとつだぜ...$USER"
     sleep 1

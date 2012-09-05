@@ -1,0 +1,11 @@
+#!/bin/sh
+
+curl -kL https://raw.github.com/saghul/pythonz/master/pythonz-install | bash
+echo "[[ -s $HOME/.pythonz/etc/bashrc ]] && source $HOME/.pythonz/etc/bashrc >> ~/.zshrc"
+echo "pythonz install 2.7.3"
+
+echo "curl -O http://peak.telecommunity.com/dist/ez_setup.py"
+echo "python ez_setup.py"
+echo "easy_install pip"
+
+

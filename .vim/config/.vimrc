@@ -244,6 +244,8 @@ autocmd InsertLeave * set nopaste
 "表示"{{{
 set showmatch         " 括弧の対応をハイライト
 set number            " 行番号表示
+set noequalalways     " 画面の自動サイズ調整解除
+" set relativenumber    " 相対表示
 set list              " 不可視文字表示
 "set listchars=tab:,trail:,extends:,precedes:  " 不可視文字の表示形式
 set listchars=tab:>.,trail:_,extends:>,precedes:< " 不可視文字の表示形式
@@ -351,10 +353,7 @@ endif
 " NeoBundle 'Shougo/neobundle'
 NeoBundle 'Shougo/vimproc', {
       \ 'build' : {
-      \     'windows' : 'echo "Sorry, cannot update vimproc binary file in Windows."',
-      \     'cygwin' : 'make -f make_cygwin.mak',
       \     'mac' : 'make -f make_mac.mak',
-      \     'unix' : 'make -f make_unix.mak',
       \    },
       \ }
 NeoBundle 'Lokaltog/vim-powerline'
@@ -374,6 +373,8 @@ NeoBundle 'othree/eregex.vim'         " %S 正規表現を拡張
 "----------------------------------------
 " vim拡張"{{{
 NeoBundle 'tomtom/tcomment_vim'
+NeoBundle 'vim-scripts/tlib' " tcommentで使用
+
 NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'thinca/vim-quickrun' "<Leader>rで簡易コンパイル
 " NeoBundle 'scrooloose/nerdtree' "プロジェクト管理用 tree filer
@@ -385,13 +386,13 @@ NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler'
 " NeoBundle 'yuroyoro/vimdoc_ja'
 NeoBundle 'camelcasemotion'
-" NeoBundle 'ujihisa/neco-look'
 " NeoBundle 'taku-o/vim-toggle' "true<=>false など、逆の意味のキーワードを切り替えられる
+NeoBundle 'Lokaltog/vim-easymotion'
 
 NeoBundle 'mattn/zencoding-vim' "Zencodingを使う
 NeoBundle 'vim-scripts/sudo.vim' "vimで開いた後にsudoで保存
 NeoBundle 'tpope/vim-endwise.git' "end endifなどを自動で挿入
-" NeoBundle 'nathanaelkane/vim-indent-guides' "indentに色づけ
+NeoBundle 'nathanaelkane/vim-indent-guides' "indentに色づけ
 " NeoBundle 'kien/ctrlp.vim' "ファイルを絞る
 
 NeoBundle 'taglist.vim' "関数、変数を画面横にリストで表示する
@@ -407,7 +408,7 @@ NeoBundle 'taglist.vim' "関数、変数を画面横にリストで表示する
 " NeoBundle 'vim-scripts/SearchComplete'
 
 "関連するファイルを切り替えれる
-NeoBundle 'kana/vim-altr'
+" NeoBundle 'kana/vim-altr'
 
 "----------------------------------------
 " text-object拡張"{{{
@@ -442,9 +443,9 @@ NeoBundle 'thinca/vim-openbuf'
 "各種リファレンスを引いたり、英和辞書を読む
 NeoBundle 'thinca/vim-ref'
 " NeoBundle 'soh335/vim-ref-jquery'
-NeoBundle 'soh335/vim-ref-jquery'
-NeoBundle 'ujihisa/ref-hoogle'
-NeoBundle 'pekepeke/ref-javadoc'
+" NeoBundle 'soh335/vim-ref-jquery'
+" NeoBundle 'ujihisa/ref-hoogle'
+" NeoBundle 'pekepeke/ref-javadoc'
 
 "gitをvim内から操作する
 NeoBundle 'Shougo/git-vim'
@@ -491,16 +492,16 @@ NeoBundle 'tsukkee/unite-tag'
 NeoBundle 'tacroe/unite-mark'
 " NeoBundle 'ujihisa/unite-gem'
 " NeoBundle 'sgur/unite-qf'
-" NeoBundle 'oppara/vim-unite-cake'
 " NeoBundle 'choplin/unite-vim_hacks'
 " NeoBundle 'ujihisa/unite-colorscheme'
-NeoBundle 'liquidz/unite-git'
-NeoBundle 'joker1007/unite-git_grep'
+NeoBundle 'kmnk/vim-unite-giti'
+" NeoBundle 'joker1007/unite-git_grep'
 " NeoBundle 'mattn/unite-source-simplenote'
 
 NeoBundle 'basyura/TweetVim'
 NeoBundle 'basyura/twibill.vim'
 NeoBundle 'basyura/bitly.vim'
+NeoBundle 'daisuzu/facebook.vim'
 
 NeoBundle 'thinca/vim-qfreplace'
 NeoBundle 'yuratomo/w3m.vim'
@@ -524,10 +525,9 @@ NeoBundle 'xmledit'
 " ----------------------------------------
 NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'claco/jasmine.vim'
-NeoBundle 'pangloss/vim-javascript' " syntaxが無駄に入っているので、インストール後削除
+NeoBundle 'taichouchou2/vim-javascript' " syntaxが無駄に入っているので、インストール後削除
 NeoBundle 'hallettj/jslint.vim'
-NeoBundle 'JavaScript-syntax'
-NeoBundle 'pekepeke/titanium-vim' " Titaniumを使うときに
+" NeoBundle 'pekepeke/titanium-vim' " Titaniumを使うときに
 
 "  markdown
 " ----------------------------------------
@@ -546,11 +546,8 @@ NeoBundle 'AtsushiM/sass-compile.vim'
 
 "  php
 " ----------------------------------------
-" function! PhpSetting()
-" NeoBundle 'oppara/vim-unite-cake'
+NeoBundle 'oppara/vim-unite-cake'
 " NeoBundle 'violetyk/cake.vim' " cakephpを使いやすく
-" endfunction
-" au FileType php,phtml call PhpSetting()
 
 "  binary
 " ----------------------------------------
@@ -558,17 +555,11 @@ NeoBundle 'AtsushiM/sass-compile.vim'
 
 " objective-c
 " ----------------------------------------
-" function! ObjcSetting()
 " NeoBundle 'msanders/cocoa.vim'
-" endfunction
-" au FileType c,m,h,objectivec call ObjcSetting()
-" au FileType * call ObjcSetting()
 
 " ruby
 " ----------------------------------------
-" function! RubySetting()
 " NeoBundle 'ujihisa/neco-ruby'
-NeoBundle 'basyura/unite-rails'
 " NeoBundle 'astashov/vim-ruby-debugger'
 NeoBundle 'taichouchou2/vim-rails'
 NeoBundle 'taichouchou2/vim-ref-ri'
@@ -579,23 +570,15 @@ NeoBundle 'taq/vim-rspec'
 NeoBundle 'ujihisa/unite-rake'
 NeoBundle 'taichouchou2/vim-rsense'
 " NeoBundle 'vim-ruby/vim-ruby'
-" endfunction
-" au FileType eruby,ruby,erb,yml call RubySetting()
 
 " python
 " ----------------------------------------
-" function! PythonSetting()
 " NeoBundle 'Pydiction'
 " NeoBundle 'yuroyoro/vim-python'
-" endfunction
-" au FileType python call RubySetting()
 
 " scala
 " ----------------------------------------
-" function! ScalaSetting()
 " NeoBundle 'yuroyoro/vim-scala'
-" endfunction
-" au FileType scala call RubySetting()
 
 " SQLUtilities : SQL整形、生成ユーティリティ
 " NeoBundle 'SQLUtilities'
@@ -612,7 +595,6 @@ if neobundle#exists_not_installed_bundles()
   echomsg 'Not installed bundles : ' .
         \ string(neobundle#get_not_installed_bundle_names())
   echomsg 'Please execute ":NeoBundleInstall" command.'
-  call NeoBundleInstall
   " finish
 endif
 
@@ -1131,37 +1113,47 @@ let g:ref_phpmanual_cmd = 'lynx -dump -nonumbers -assume_charset=utf-8 -assume_l
 "----------------------------------------
 "{{{
 "vim上からgitを使う 便利
-" nnoremap <Space>gd :<C-u>Gdiff<CR>
-" nnoremap <Space>gs :<C-u>Gstatus<CR>
-" nnoremap <Space>gl :<C-u>Glog<CR>
-" nnoremap <Space>ga :<C-u>Gwrite<CR>
-" nnoremap <Space>gm :<C-u>Gcommit<CR>
-" nnoremap <Space>gM :<C-u>Git commit --amend<CR>
-" nnoremap <Space>gb :<C-u>Gblame<CR>
+" nmap <Space>gd :<C-U>Gdiff<CR>
+" nmap <Space>gs :<C-U>Gstatus<CR>
+" nmap <Space>gl :<C-U>Glog<CR>
+" nmap <Space>ga :<C-U>Gwrite<CR>
+nmap <Space>gm :<C-U>Gcommit<CR>
+nmap <Space>gM :<C-U>Git commit --amend<CR>
+nmap <Space>gb :<C-U>Gblame<CR>
+nmap <Space>gg :<C-U>Ggrep<Space>
+au FileType fugitiveblame vertical res 25
 "}}}
 
 "----------------------------------------
 " vim-git
 "----------------------------------------
-"{{{
-"vim上からgitを使う 便利
+" "{{{
+" "vim上からgitを使う 便利
 let g:git_no_default_mappings = 1
 let g:git_use_vimproc = 1
 let g:git_command_edit = 'rightbelow vnew'
-nmap <silent><Space>gb :GitBlame<CR>
-nmap <silent><Space>gB :Gitblanch
-nmap <silent><Space>gp :GitPush<CR>
+" nmap <silent><Space>gb :GitBlame<CR>
+" nmap <silent><Space>gB :Gitblanch
+" nmap <silent><Space>gp :GitPush<CR>
 nmap <silent><Space>gd :GitDiff --cached<CR>
-nmap <silent><Space>gD :GitDiff<CR>
-nmap <silent><Space>gs :GitStatus<CR>
-nmap <silent><Space>gl :GitLog -10<CR>
-nmap <silent><Space>gL :<C-u>GitLog -u \| head -10000<CR>
+" nmap <silent><Space>gD :GitDiff<CR>
+" " nmap <silent><Space>gs :GitStatus<CR>
+" " nmap <silent><Space>gl :GitLog -10<CR>
+" " nmap <silent><Space>gL :<C-u>GitLog -u \| head -10000<CR>
 nmap <silent><Space>ga :GitAdd<CR>
-nmap <silent><Space>gA :<C-u>GitAdd <cfile><CR>
-nmap <silent><Space>gm :GitCommit<CR>
-nmap <silent><Space>gM :GitCommit --amend<CR>
-nmap <silent><Space>gp q:Git push<Space>
-nmap <silent><Space>gt q:Git tag<Space>
+" nmap <silent><Space>gA :<C-u>GitAdd <cfile><CR>
+" nmap <silent><Space>gm :GitCommit<CR>
+" nmap <silent><Space>gM :GitCommit --amend<CR>
+nmap <silent><Space>gp :Git push<Space>
+" nmap <silent><Space>gt :Git tag<Space>
+" "}}}
+
+"----------------------------------------
+" unite-giti
+"----------------------------------------
+"{{{
+nmap <silent><Space>gl :Unite giti/log<CR>
+nmap <silent><Space>gs :Unite giti/status<CR>
 "}}}
 
 "----------------------------------------
@@ -1708,13 +1700,14 @@ let g:sass_compile_cssdir = ['css', 'stylesheet']
 let g:sass_compile_file = ['scss', 'sass']
 let g:sass_started_dirs = []
 function! Sass_start()
-    let current_dir = expand('%:p:h')
-    if match(g:sass_started_dirs, '^'.current_dir.'$') == -1
-        call add(g:sass_started_dirs, current_dir)
-        call system('sass --watch ' . current_dir . ' &')
-    endif
+  let current_dir = expand('%:p:h')
+  if match(g:sass_started_dirs, '^'.current_dir.'$') == -1
+    call add(g:sass_started_dirs, current_dir)
+    call system('sass --watch ' . current_dir . ' &')
+  endif
 endfunction
-" au! BufRead *.scss,*sass call Sass_start()
+au! BufRead *.scss,*sass call Sass_start()
+au! Filetype scss,sass call Sass_start()
 "}}}
 
 "------------------------------------
@@ -1807,14 +1800,16 @@ map <Leader>U <Plug>(operator-decamelize)
 "------------------------------------
 " operator-comment.vim
 "------------------------------------
-map C  <Plug>(operator-comment)
-map C  <Plug>(operator-uncomment)
+"{{{
+" map C  <Plug>(operator-comment)
+" map C  <Plug>(operator-uncomment)
+"}}}
 
 "------------------------------------
 " smartchr.vim
 "------------------------------------
 "{{{
-let g:smartchr_enable = 1
+let g:smartchr_enable = 0
 
 if g:smartchr_enable == 1
   inoremap <expr> , smartchr#one_of(', ', ',')
@@ -1980,6 +1975,50 @@ function! W3mSetting()
 endfunction
 au FileType w3m call W3mSetting()
 "}}}
+
+
+"------------------------------------
+" Easy motion
+"------------------------------------
+"{{{
+let g:EasyMotion_do_shade = 1
+let g:EasyMotion_do_mapping = 0 " マッピングは自分で行う
+
+nnoremap <silent> <Tab>      :call EasyMotion#WB(0, 0)<CR>
+" nnoremap <silent> j<Tab>      :call EasyMotion#JK(0, 0)<CR>
+" nnoremap <silent> N<Tab>      :call EasyMotion#Search(0, 1)<CR>
+" nnoremap <silent> n<Tab>      :call EasyMotion#Search(0, 0)<CR>
+" nnoremap <silent> T<Tab>      :call EasyMotion#T(0, 1)<CR>
+nnoremap <silent> F<Tab>      :call EasyMotion#F(0, 1)<CR>
+nnoremap <silent> f<Tab>      :call EasyMotion#F(0, 0)<CR>
+"}}}
+
+"------------------------------------
+" Easy motion
+"------------------------------------
+let g:facebook_timezone = '+0900'
+let g:facebook_access_token_file = expand('~/.fb_access_token')
+
+"------------------------------------
+" indent_guides
+"------------------------------------
+"{{{
+" call indent_guides#enable()
+" IndentGuidesEnable
+let g:indent_guides_start_level = 2
+let g:indent_guides_auto_colors=0
+let g:indent_guides_enable_on_vim_startup=0
+let g:indent_guides_color_change_percent = 20
+" let g:indent_guides_guide_size=&tabstop
+let g:indent_guides_guide_size=1
+let g:indent_guides_space_guides = 1
+
+hi IndentGuidesOdd  ctermbg=235
+hi IndentGuidesEven ctermbg=237
+au FileType coffee,ruby,javascript,python IndentGuidesEnable
+nmap <silent><Leader>ig <Plug>IndentGuidesToggle
+"}}}
+
 
 "}}}
 
@@ -2150,43 +2189,33 @@ nnoremap th  :<C-u>pop<CR>
 
 "----------------------------------------
 "外部コマンドの実行"{{{
+
+"----------------------------------------
+" phptohtml
+"----------------------------------------
 au Filetype php nmap <Leader>R :! phptohtml<CR>
 
+"----------------------------------------
+" 独自関数
+"----------------------------------------
 function! Today()
   return strftime("%Y/%m/%d")
 endfunction
-
-function! PhpDoc2()
-  set fo=mcroql
-  return ""
-endfunction
-
-function! PhpDoc()
-  set fo=
-  let text = ""
-        \."/**\n"
-        \." *  説明用の関数\n"
-        \."*  @param Integer hoge\n"
-        \."*\n"
-        \."*  @return Integer soge\n"
-        \."*  @author "
-  " 日付の書き出し
-  let text .= Today()
-  let text .= " Ikkun\n*/"
-  return text
-endfunction
 inoremap <C-D><C-D> <C-R>=Today()<CR>
 
-function! PrintLine()
-  set fo=
-  let text = ""
-        \."/* \n"
-        \."-------------------------------------------------- */"
-  return text
-endfunction
+function! s:smart_split(cmd)
+    if winwidth(0) > winheight(0) * 2
+        vsplit
+    else
+        split
+    endif
 
-au FileType * inoremap <silent><C-D><C-P> <C-R>=PhpDoc()<CR><C-R>=PhpDoc2()<CR>
-au FileType * inoremap <silent><C-D><C-L> <C-R>=PrintLine()<CR><C-R>=PhpDoc2()<CR>
+    if !empty(a:cmd)
+        execute a:cmd
+    endif
+endfunction
+command! -nargs=? -complete=command SmartSplit call <SID>smart_split(<q-args>)
+nnoremap <silent><C-w><Space> :<C-u>SmartSplit<CR>
 
 "}}}
 

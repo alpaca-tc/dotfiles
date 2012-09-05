@@ -328,20 +328,20 @@
 ;; (setq load-path (cons (expand-file-name "~/.emacs.d/slime") load-path)) 
 (setq inferior-lisp-program "/usr/local/bin/clisp")    ; clisp用
 ;; (setq inferior-lisp-program "/opt/local/bin/sbcl")     ; sbcl用
-(require 'slime)
-(slime-setup)
+;;(require 'slime)
+;;(slime-setup)
 
 ;; ライン行数を表示する
-(require 'wb-line-number)
-(setq truncate-partial-width-windows nil)
-(setq wb-line-number-scroll-bar t)
-(wb-line-number-toggle)
+;;(require 'wb-line-number)
+;;(setq truncate-partial-width-windows nil)
+;;(setq wb-line-number-scroll-bar t)
+;;(wb-line-number-toggle)
 
 ;; yasnippetを実行する
-(require 'yasnippet)
-(yas/initialize)
-(setq yas/root-directory "~/.emacs.d/snippets")
-(yas/load-directory yas/root-directory)
+;;(require 'yasnippet)
+;;(yas/initialize)
+;;(setq yas/root-directory "~/.emacs.d/snippets")
+;;(yas/load-directory yas/root-directory)
 
 ;; ;; yasnippet で k が挿入できないバグがある
 ;; (local-set-key (kbd "k") 'self-insert-command)
@@ -352,9 +352,9 @@
      (insert "k")))
 
 ;; 色設定
-(require 'color-theme)
-(color-theme-initialize)
-(color-theme-arjen)
+;;(require 'color-theme)
+;;(color-theme-initialize)
+;;(color-theme-arjen)
 
 ;; カーソルがある行を強調表示させる
 (defface hlline-face
