@@ -74,7 +74,7 @@ snippet mix
 # @include - Use a mixin
 snippet inc
     @include ${1:mixin};
-    ${2}
+
 # Standard CSS Declarations
 # positioning
 snippet di
@@ -185,9 +185,6 @@ snippet f
 snippet font
     font: ${1:weight} ${2:style} ${3:variant} ${4:size}/${5:line-height} ${6:family};
     ${7}
-snippet ff
-    font-family: ${1:"Helvetica Neue", Helvetica, Arial, sans-serif};
-    ${2}
 snippet fs
     font-size: ${1:1.2em};
     ${2}
@@ -332,3 +329,8 @@ snippet abs
     abs(${1:value})
 snippet     imp
     @import "${1:compass/css3}"
+
+snippet ff
+    font-family: Verdana,Arial,"メイリオ",Meiryo,"ヒラギノ角ゴPro W3","Hiragino Kaku Gothic Pro","ＭＳ Ｐゴシック","MS PGothic",sans-serif;
+    font-weight:normal;
+    color:${1:#CCC};

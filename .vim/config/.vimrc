@@ -220,7 +220,8 @@ if has("autocmd")
   autocmd FileType html       setlocal sw=4 sts=4 ts=4 et
   autocmd FileType java       setlocal sw=4 sts=4 ts=4 et
   autocmd FileType javascript setlocal sw=2 sts=2 ts=2 et
-  autocmd FileType less,sass,scss setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType scss       setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType less,sass  setlocal sw=2 sts=2 ts=2 et
   autocmd FileType lisp       setlocal sw=2 sts=2 ts=2 et
   autocmd FileType perl       setlocal sw=4 sts=4 ts=4 et
   autocmd FileType php        setlocal sw=4 sts=4 ts=4 et
@@ -532,17 +533,11 @@ NeoBundle 'hallettj/jslint.vim'
 "  markdown
 " ----------------------------------------
 " markdownでの入力をリアルタイムでチェック
-" function! MarkdownSetting()
 " NeoBundle 'mattn/mkdpreview-vim'
 NeoBundle 'tpope/vim-markdown'
-" endfunction
-" au FileType markdown call MarkdownSetting()
 
 " sassのコンパイル
-" function! SassSetting()
 NeoBundle 'AtsushiM/sass-compile.vim'
-" endfunction
-" au FileType sass,scss call MarkdownSetting()
 
 "  php
 " ----------------------------------------
@@ -1006,6 +1001,7 @@ let $JS_CMD='node'
 "----------------------------------------
 "{{{
 "<C-Y>, でzencodingを使える
+imap <C-E> <C-Y>,
 let g:user_zen_leader_key = '<C-Y>'
 let g:user_zen_settings = {
       \  'lang' : 'ja',
@@ -1214,9 +1210,9 @@ nmap diw di,w
 nmap dib di,b
 nmap die di,e
 
-nmap viw vi,w
-nmap vib vi,b
-nmap vie vi,e
+" nmap viw vi,w
+" nmap vib vi,b
+" nmap vie vi,e
 
 nmap ciw ci,w
 nmap cib ci,b
@@ -1588,7 +1584,6 @@ function! SetUpRailsSetting()
   nmap <buffer><Space>gc :Rgen contoller<Space>
   nmap <buffer><Space>gs :Rgen scaffold<Space>
   nmap <buffer><Space>p :Rpreview<CR>
-  autocmd FileType css,scss,less setlocal sw=2 sts=2 ts=2 et
   au FileType ruby,eruby,ruby.rspec let g:neocomplcache_dictionary_filetype_lists = {
         \'ruby' : $HOME.'/.vim/dict/rails.dict',
         \'eruby' : $HOME.'/.vim/dict/rails.dict'
@@ -1699,15 +1694,18 @@ let g:sass_compile_cdloop = 5
 let g:sass_compile_cssdir = ['css', 'stylesheet']
 let g:sass_compile_file = ['scss', 'sass']
 let g:sass_started_dirs = []
-function! Sass_start()
-  let current_dir = expand('%:p:h')
-  if match(g:sass_started_dirs, '^'.current_dir.'$') == -1
-    call add(g:sass_started_dirs, current_dir)
-    call system('sass --watch ' . current_dir . ' &')
-  endif
-endfunction
-au! BufRead *.scss,*sass call Sass_start()
-au! Filetype scss,sass call Sass_start()
+" function! Sass_start()
+"   let current_dir = expand('%:p:h')
+"   if match(g:sass_started_dirs, '^'.current_dir.'$') == -1
+"     call add(g:sass_started_dirs, current_dir)
+"     call system('sass --watch ' . current_dir . ' &')
+"   endif
+" endfunction
+" au! BufRead *.scss,*sass call Sass_start()
+" au! Filetype scss,sass call Sass_start()
+
+
+au! BufWritePost * SassCompile
 "}}}
 
 "------------------------------------
@@ -1984,20 +1982,22 @@ au FileType w3m call W3mSetting()
 let g:EasyMotion_do_shade = 1
 let g:EasyMotion_do_mapping = 0 " マッピングは自分で行う
 
-nnoremap <silent> <Tab>      :call EasyMotion#WB(0, 0)<CR>
+nmap <silent> f      :call EasyMotion#WB(0, 0)<CR>
 " nnoremap <silent> j<Tab>      :call EasyMotion#JK(0, 0)<CR>
 " nnoremap <silent> N<Tab>      :call EasyMotion#Search(0, 1)<CR>
 " nnoremap <silent> n<Tab>      :call EasyMotion#Search(0, 0)<CR>
 " nnoremap <silent> T<Tab>      :call EasyMotion#T(0, 1)<CR>
-nnoremap <silent> F<Tab>      :call EasyMotion#F(0, 1)<CR>
-nnoremap <silent> f<Tab>      :call EasyMotion#F(0, 0)<CR>
+" nmap <silent> F<Tab>      :call EasyMotion#F(0, 1)<CR>
+nmap <silent> <C-S>      :call EasyMotion#F(0, 0)<CR>
 "}}}
 
 "------------------------------------
-" Easy motion
+" Facebook
 "------------------------------------
+"{{{
 let g:facebook_timezone = '+0900'
 let g:facebook_access_token_file = expand('~/.fb_access_token')
+"}}}
 
 "------------------------------------
 " indent_guides
@@ -2204,19 +2204,23 @@ endfunction
 inoremap <C-D><C-D> <C-R>=Today()<CR>
 
 function! s:smart_split(cmd)
-    if winwidth(0) > winheight(0) * 2
-        vsplit
-    else
-        split
-    endif
+  if winwidth(0) > winheight(0) * 2
+    vsplit
+  else
+    split
+  endif
 
-    if !empty(a:cmd)
-        execute a:cmd
-    endif
+  if !empty(a:cmd)
+    execute a:cmd
+  endif
 endfunction
 command! -nargs=? -complete=command SmartSplit call <SID>smart_split(<q-args>)
 nnoremap <silent><C-w><Space> :<C-u>SmartSplit<CR>
 
+if executable('pdftotext')
+  command! -complete=file -nargs=1 Pdf :r !pdftotext -nopgbrk -layout <q-args> -
+endif
+au BufRead *.pdf call Pdf
 "}}}
 
 set secure
