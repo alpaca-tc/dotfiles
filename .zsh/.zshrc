@@ -84,7 +84,6 @@ eval "$(rbenv init -)"
 # git
 export GITHUB_HOST='github.com'
 
-
 ## alias設定
 source ~/.zsh/.zshrc.basic
 source ~/.zsh/.zshrc.prompt

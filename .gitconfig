@@ -13,6 +13,7 @@
     st = status
     co = checkout
     tr = log --graph --pretty='format:%C(yellow)%h%Creset %C(magenta)%cd%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset' --date=iso
+    st = !sh -c 'git ls-remote . | grep `git log -1 --grep="git-svn-id"`
 
 [push]
     default = tracking

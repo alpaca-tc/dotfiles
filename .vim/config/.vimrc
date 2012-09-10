@@ -484,6 +484,7 @@ NeoBundle 'mattn/webapi-vim' "vim Interface to Web API
 " NeoBundle 'tyru/urilib.vim' "urilib.vim : vim scriptからURLを扱うライブラリ
 " NeoBundle 'cecutil' "cecutil.vim : 他のpluginのためのutillity1
 
+NeoBundle 'taichouchou2/alpaca-look'
 " NeoBundle 'L9' "utillity
 
 "unite.vim : - すべてを破壊し、すべてを繋げ - vim scriptで実装されたanythingプラグイン
@@ -1568,6 +1569,7 @@ autocmd User Rails call SetUpRailsSetting()
 " Rsense
 let g:rsenseUseOmniFunc = 1
 let g:rsenseHome = expand('~/.vim/ref/rsense-0.3')
+let g:rsenseMatchFunc = "[a-zA-Z_?]"
 
 function! SetUpRubySetting()
   setlocal completefunc=RSenseCompleteFunction
@@ -2017,25 +2019,32 @@ autocmd FileType coffee                setlocal dict+=~/.vim/dict/coffee.dict
 "----------------------------------------
 " neocomplcache
 " default config"{{{
+let g:neocomplcache_use_vimproc=1
 let g:neocomplcache_enable_at_startup = 1
 let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 let g:neocomplcache_max_list = 300
 " let g:neocomplcache_max_keyword_width = 40
 " let g:neocomplcache_max_menu_width = 19
 " let g:neocomplcache_auto_completion_start_length = 2
-" let g:neocomplcache_manual_completion_start_length = 2
+" let g:neocomplcache_manual_completion_start_length = 0
 " let g:neocomplcache_min_keyword_length = 2
 " let g:neocomplcache_min_syntax_length = 4
-" let g:neocomplcache_cursor_hold_i_time = 300
+let g:neocomplcache_cursor_hold_i_time = 300
 " let g:neocomplcache_enable_insert_char_pre = 0
-" let g:neocomplcache_enable_auto_select = 1
+let g:neocomplcache_enable_auto_select = 1
 " let g:neocomplcache_enable_auto_delimiter = 0
 let g:neocomplcache_enable_camel_case_completion = 1
 let g:neocomplcache_enable_underbar_completion = 1
-let g:neocomplcache_ctags_program = "jctags"
+let g:neocomplcache_ctags_program = "ctags"
 
 " default config snippet
 let g:neocomplcache_snippets_dir=expand('~/.vim/snippet')
+" let g:neocomplcache_text_mode_filetypes = { 'markdown' : 1, }
+let g:neocomplcache_ignore_composite_filetype_lists = {
+      \ 'ruby.spec'          : 'ruby',
+      \ 'javascirpt.jasmine' : 'javascript',
+      \ 'coffee.jasmine'     : 'coffee',
+      \ }
 "}}}
 
 " ファイルタイプ毎の辞書ファイルの場所"{{{
@@ -2056,8 +2065,15 @@ let g:neocomplcache_dictionary_filetype_lists = {
       \ 'jasmine'    : $HOME.'/.vim/dict/js.jasmine.dict',
       \ 'timobile'   : $HOME.'/.vim/dict/timobile.dict',
       \ }
+
+function! SetUpMarkDownSetting()
+  let g:source_look_length = 3
+  let g:source_look_rank = 400
+endfunction
+let g:source_look_length = 3
+au FileType markdown,text call SetUpMarkDownSetting()
 "}}}
-"
+
 let g:neocomplcache_dictionary_patterns = {
       \'php': expand('~/.vim/dict/zendphp.dict'),
       \'javascript': expand('~/.vim/dict/timobile.dict'),
@@ -2113,15 +2129,20 @@ imap <expr><TAB> neocomplcache#sources#snippets_complete#expandable() ?
 nmap <Space>e :<C-U>NeoComplCacheEditSnippets<CR>
 au BufRead,BufNewFile *.snip  set filetype=snippet
 
-if !exists('g:neocomplcache_auto_completion_start_length')
-  inoremap <silent><expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-  " inoremap <expr><C-h>  neocomplcache#smart_close_popup()."\<C-h>"
-  inoremap <silent><expr><BS>   neocomplcache#smart_close_popup()."\<C-h>"
-  " inoremap <expr><C-y>  neocomplcache#close_popup()
-  " inoremap <expr><C-e>  neocomplcache#cancel_popup()
-  inoremap <silent><CR>  <C-R>=neocomplcache#smart_close_popup()<CR><CR>
-endif
+" if !exists('g:neocomplcache_auto_completion_start_length')
+inoremap <silent><expr><TAB>  pumvisible() ? "\<C-N>" : "\<TAB>"
+inoremap <silent><expr><S-TAB> pumvisible() ? "\<C-P>" : "\<S-TAB>"
+inoremap <silent><expr><BS>   neocomplcache#smart_close_popup()."\<C-h>"
+" inoremap <expr><C-h>  neocomplcache#smart_close_popup()."\<C-h>"
+" inoremap <expr><C-y>  neocomplcache#close_popup()
+" inoremap <expr><C-e>  neocomplcache#cancel_popup()
+" inoremap <silent><CR>  <C-R>=neocomplcache#smart_close_popup()<CR><CR>
+inoremap <silent><CR>  <CR><C-R>=neocomplcache#smart_close_popup()<CR>
+" inoremap <silent><expr><CR> neocomplcache#smart_close_popup() . "\<CR>"
+" inoremap <silent><expr><CR>   neocomplcache#smart_close_popup()."\<C-h>"
+" endif
 "}}}
+
 "}}}
 
 "----------------------------------------
