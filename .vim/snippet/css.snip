@@ -1229,3 +1229,12 @@ snippet     clearfix
     }
     .clearfix:after {clear: both;}
     .clearfix {zoom: 1;} /* IE < 8 */
+snippet     hover
+    a.alpha:hover img{
+        /*モダンブラウザ用*/
+        opacity:0.8;
+        /*IE7以下用*/
+        filter:alpha(opacity=80);
+        /*IE8用*/
+        -ms-filter:"alpha(opacity=80)";
+    }

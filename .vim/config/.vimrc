@@ -198,9 +198,9 @@ command! Sjis edit ++enc=sjis
 set autoindent
 set smartindent
 set expandtab
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
+" set tabstop=4
+" set softtabstop=4
+" set shiftwidth=4
 if has("autocmd")
   filetype indent on
   " 無効にしたい場合
@@ -250,6 +250,9 @@ set noequalalways     " 画面の自動サイズ調整解除
 set list              " 不可視文字表示
 "set listchars=tab:,trail:,extends:,precedes:  " 不可視文字の表示形式
 set listchars=tab:>.,trail:_,extends:>,precedes:< " 不可視文字の表示形式
+set listchars=tab:␣.,trail:_,extends:>,precedes:< " 不可視文字の表示形式
+" set listchars=tab:✃.,trail:_,extends:>,precedes:< " 不可視文字の表示形式
+
 "set display=uhex      " 印字不可能文字を16進数で表示
 set t_Co=256          " 確かカラーコード
 set lazyredraw        " コマンド実行中は再描画しない
@@ -511,10 +514,10 @@ NeoBundle 'TeTrIs.vim'
 
 " bundle.lang"{{{
 " function! HtmlSetting()
-NeoBundle 'rstacruz/sparkup', {'rtp': 'vim/'}
+" NeoBundle 'rstacruz/sparkup', {'rtp': 'vim/'}
 NeoBundle 'hail2u/vim-css3-syntax'
 NeoBundle 'pasela/unite-webcolorname'
-NeoBundle 'jQuery'
+" NeoBundle 'jQuery'
 NeoBundle 'taichouchou2/html5.vim'
 NeoBundle 'tpope/vim-haml'
 NeoBundle 'xmledit'
@@ -623,6 +626,11 @@ function! SetSurroundMapping()"{{{
   nmap ," csw"
 endfunction
 " au FileType eruby call SetErubyMapping()
+if exists("g:loaded_surround")
+  if !exists("b:surround_35") " #
+    let b:surround_35 = "#{ \r }"
+  endif
+end
 "}}}
 
 " ------------------------------------
@@ -637,7 +645,7 @@ nnoremap <silent><C-g><C-b> :<C-u>GrepBuffer<Space><C-r><C-w><ENTER>
 let Grep_Skip_Dirs = '.svn .git .hg .swp'
 let Grep_Skip_Files = '*.bak *~'
 
-"qf内でファイルを開いた後画面を閉じる
+" qf内でファイルを開いた後画面を閉じる
 function! OpenInQF()
   .cc
   ccl
@@ -734,7 +742,7 @@ nnoremap <silent> [unite]<C-T> :<C-u>Unite tag<CR>
 nnoremap <silent> <Space>b :<C-u>UniteBookmarkAdd<CR>
 
 function! s:unite_my_settings()"{{{
-  nmap <buffer> <ESC> <Plug>(unite_exit)
+  " nmap <buffer> <ESC> <Plug>(unite_exit)
   " imap <buffer> jj <Plug>(unite_insert_leave)
   imap <buffer> <C-w> <Plug>(unite_delete_backward_path)
   " nnoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
@@ -882,20 +890,11 @@ function! rspec_outputter.init(session)
   call call(quickrun#outputter#buffer#new().init, [a:session], self)
 endfunction
 
-
 " syntax color
 function! rspec_outputter.finish(session)
   " 文字に色をつける。
-  " highlight default RSpecGreen   ctermfg=Green ctermbg=none guifg=Green guibg=none
-  " highlight default RSpecRed     ctermfg=Red   ctermbg=none guifg=Red   guibg=none
-  " highlight default RSpecComment ctermfg=Cyan  ctermbg=none guifg=Cyan  guibg=none
-  " highlight default RSpecNormal  ctermfg=White ctermbg=none guifg=Black guibg=White
-
-  " 背景に色をつける。
   highlight default RSpecGreen   ctermfg=White ctermbg=Green guifg=White guibg=Green
   highlight default RSpecRed     ctermfg=White ctermbg=Red   guifg=White guibg=Red
-  " highlight default RSpecComment ctermfg=White ctermbg=Cyan  guifg=White guibg=Cyan
-  " highlight default RSpecNormal  ctermfg=Black ctermbg=White guifg=Black guibg=White
 
   call matchadd("RSpecGreen", "^[\.F]*\.[\.F]*$")
   call matchadd("RSpecGreen", "^.*, 0 failures$")
@@ -907,12 +906,9 @@ function! rspec_outputter.finish(session)
   call matchadd("RSpecRed", "^ *got.*$")
   call matchadd("RSpecRed", "Failure/Error:.*$")
   call matchadd("RSpecRed", "^.*(FAILED - [0-9]*)$")
-  " call matchadd("RSpecRed", "^rspec .*:.*$")
-  " call matchadd("RSpecComment", " # .*$")
   call matchadd("NonText", "Failures:")
   call matchadd("NonText", "Finished")
   call matchadd("NonText", "Failed")
-
   call call(quickrun#outputter#buffer#new().finish,  [a:session], self)
 endfunction
 call quickrun#register_outputter("rspec_outputter", rspec_outputter)
@@ -1000,48 +996,19 @@ let $JS_CMD='node'
 " zencoding
 "----------------------------------------
 "{{{
-"<C-Y>, でzencodingを使える
+" codaのデフォルトと一緒にする
 imap <C-E> <C-Y>,
 let g:user_zen_leader_key = '<C-Y>'
+" 言語別に対応させる
 let g:user_zen_settings = {
       \  'lang' : 'ja',
       \  'html' : {
       \    'filters' : 'html',
       \    'indentation' : ' '
       \  },
-      \  'perl' : {
-      \    'indentation' : '  ',
-      \    'aliases' : {
-      \      'req' : "require '|'"
-      \    },
-      \    'snippets' : {
-      \      'use' : "use strict\nuse warnings\n\n",
-      \      'w' : "warn \"${cursor}\";",
-      \    },
-      \  },
-      \  'php' : {
-      \    'extends' : 'html',
-      \    'filters' : 'html,c',
-      \  },
       \  'css' : {
       \    'filters' : 'fc',
       \  },
-      \  'javascript' : {
-      \    'snippets' : {
-      \      'jq' : "$(function() {\n\t${cursor}${child}\n});",
-      \      'jq:each' : "$.each(arr, function(index, item)\n\t${child}\n});",
-      \      'fn' : "(function() {\n\t${cursor}\n})();",
-      \      'tm' : "setTimeout(function() {\n\t${cursor}\n}, 100);",
-      \    },
-      \  },
-      \ 'java' : {
-      \  'indentation' : '    ',
-      \  'snippets' : {
-      \   'main': "public static void main(String[] args) {\n\t|\n}",
-      \   'println': "System.out.println(\"|\");",
-      \   'class': "public class | {\n}\n",
-      \  },
-      \ },
       \}
 "}}}
 
@@ -1547,12 +1514,12 @@ nnoremap <C-H><C-G> :CtrlPClearCache<Return>:call <SID>CallCtrlPBasedOnGitStatus
 " vim-ruby
 "------------------------------------
 "{{{
-function! s:vimRuby()
-  " let g:rubycomplete_buffer_loading = 1
-  let g:rubycomplete_classes_in_global = 0
-  let g:rubycomplete_rails = 0
-endfunction
-au FileType ruby,eruby,ruby.rspec call s:vimRuby()
+" function! s:vimRuby()
+"   " let g:rubycomplete_buffer_loading = 1
+"   let g:rubycomplete_classes_in_global = 0
+"   let g:rubycomplete_rails = 0
+" endfunction
+" au FileType ruby,eruby,ruby.rspec call s:vimRuby()
 "}}}
 
 "------------------------------------
@@ -1580,9 +1547,9 @@ function! SetUpRailsSetting()
   nmap <buffer><Space>c :Rcontroller<Space>
   nmap <buffer><Space>v :Rview<Space>
   nmap <buffer><Space>s :Rspec<Space>
-  nmap <buffer><Space>gm :Rgen model<Space>
-  nmap <buffer><Space>gc :Rgen contoller<Space>
-  nmap <buffer><Space>gs :Rgen scaffold<Space>
+  nmap <buffer><Space>m :Rgen model<Space>
+  nmap <buffer><Space>c :Rgen contoller<Space>
+  nmap <buffer><Space>s :Rgen scaffold<Space>
   nmap <buffer><Space>p :Rpreview<CR>
   au FileType ruby,eruby,ruby.rspec let g:neocomplcache_dictionary_filetype_lists = {
         \'ruby' : $HOME.'/.vim/dict/rails.dict',
@@ -1890,7 +1857,8 @@ au FileType nerdtree call NerdSetting()
 "------------------------------------
 " Syntastic
 "------------------------------------
-"loadのときに、syntaxCheckをする"{{{
+"{{{
+"loadのときに、syntaxCheckをする
 let g:syntastic_check_on_open=0
 let g:syntastic_quiet_warnings=0
 let g:syntastic_enable_signs = 1
@@ -1974,7 +1942,6 @@ endfunction
 au FileType w3m call W3mSetting()
 "}}}
 
-
 "------------------------------------
 " Easy motion
 "------------------------------------
@@ -2014,11 +1981,11 @@ let g:indent_guides_guide_size=1
 let g:indent_guides_space_guides = 1
 
 hi IndentGuidesOdd  ctermbg=235
-hi IndentGuidesEven ctermbg=237
+" hi IndentGuidesEven ctermbg=237
+hi IndentGuidesEven ctermbg=233
 au FileType coffee,ruby,javascript,python IndentGuidesEnable
 nmap <silent><Leader>ig <Plug>IndentGuidesToggle
 "}}}
-
 
 "}}}
 

@@ -16,7 +16,7 @@ module Win32
     def self.set_proc(proc)
       @@proc = proc
     end
-
+    
     def service_main
       @@proc.call method(:running?)
     end
@@ -65,7 +65,7 @@ class RSense
     @pid_file ||= IS_WIN ? File.join(@rsense_home, 'rsense-pid') : '/tmp/rsense-pid'
 
     @service_log ||= File.join(@rsense_home, 'rsense-service.log') if IS_WIN
-
+    
     @classpath ||= '.' + ['', 'rsense.jar', 'antlr-runtime-3.2.jar', 'jruby.jar'].join(File.join(File::PATH_SEPARATOR + @rsense_home, 'lib', ''))
 
     @config ||= File.join(ENV['HOME'], '.rsense')
@@ -176,7 +176,7 @@ class RSense
     else
       # already started
       return if File.exists? @pid_file
-
+      
       die "Server daemon is not supported in Windows.\nRegister service instead like:
 
     > ruby #{$0} service create
@@ -185,11 +185,11 @@ And start service like:
 
     > ruby #{$0} service start" if IS_WIN
 
-    fork do
-      daemonize
-      server_process
-    end
-    wait_for_server
+      fork do
+        daemonize
+        server_process
+      end
+      wait_for_server
     end
   end
 
@@ -225,14 +225,12 @@ And start service like:
       when 'create'
         path = Pathname.new(@rsense_home).realpath
         command = Shellwords.unshellwords %W(rubyw.exe #{path}/bin/rsense --config=#@config service daemon)
-        Win32::Service.create(
-          :service_name       => SERVICE_NAME,
-          :service_type       => Win32::Service::WIN32_OWN_PROCESS,
-          :description        => 'RSense Service',
-          :start_type         => Win32::Service::DEMAND_START,
-          :binary_path_name   => command,
-          :display_name       => 'RSense'
-        )
+        Win32::Service.create(:service_name       => SERVICE_NAME,
+                              :service_type       => Win32::Service::WIN32_OWN_PROCESS,
+                              :description        => 'RSense Service',
+                              :start_type         => Win32::Service::DEMAND_START,
+                              :binary_path_name   => command,
+                              :display_name       => 'RSense')
       when 'delete'
         Win32::Service.delete(SERVICE_NAME)
       when 'daemon'

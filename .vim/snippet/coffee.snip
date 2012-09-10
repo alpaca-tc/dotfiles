@@ -316,9 +316,54 @@ snippet w [wa] waits(...)...
 snippet wa
     waits(${1})${2}
 
-snippet fillBlank
+###
+# 便利な関数
+###
+snippet ffillBlank
     _fillBlank = (target, length, word="0")->
-        strArray = []
-        strArray.push(word) for num in [ 0..length - target.length ]
-        strArray.push(target)
-        strArray.join()
+      strArray = []
+      strArray.push(word) for num in [ 0..length - target.length ]
+      strArray.push(target)
+      strArray.join()
+
+snippet fextend
+    extend = (obj, mixin) ->
+      obj[name] method for name, method of mixin
+      obj
+
+
+snippet finclude
+    extend = (obj, mixin) ->
+      obj[name] method for name, method of mixin
+      obj
+
+    include = (klass, mixin) ->
+      extend klass.prototype.mixin
+
+snippet cModule
+    class Module
+      @extend: (obj) ->
+        for key, value of obj when key not in moduleKeywords
+          @[key] = value
+
+        obj.extended?.apply(@)
+        @
+
+      # ${1:indent修正}
+      @include: (obj) ->
+        for key, value of obj when key not in moduleKeywords
+          # Assign properties to tye prototype
+          @::[key] = value
+
+        obj.included?.apply(@)
+        @
+
+snippet ftype
+    type = do ->
+      classToType = {}
+      for name in "Boolean Number String Function Array Date RegExp Undefined Null".split(" ")
+        classToType["[object " + name + "]"] = name.toLowerCase()
+
+      (obj) ->
+        strType = Object::toString.call(obj)
+        classToType[strType] or "object"
