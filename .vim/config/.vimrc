@@ -21,7 +21,8 @@ set vb t_vb=
 set viminfo='100,<800,s300,\"300
 
 autocmd FileType help nnoremap <buffer> q <C-w>c
-nnoremap <Space>h :<C-u>help<Space><C-r><C-w><CR>
+nmap <Space>h :<C-u>help<Space><C-r><C-w><CR>
+nmap <Space><Space>s :<C-U>so ~/.vimrc<CR>
 "}}}
 
 "----------------------------------------
@@ -276,9 +277,23 @@ augroup cch
 augroup END
 
 "折り畳み
-set foldmethod=marker "{{ { という感じの文字が入る
-" set foldmethod=manual "手動
-"set foldmethod=indent "indent
+function! ChangeFoldMethod()
+  if g:foldMethodCount == 0
+    set foldmethod=marker "{{ { という感じの文字が入る
+    echo "foldmethod is marker"
+  elseif g:foldMethodCount == 1
+    set foldmethod=manual "手動
+    echo "foldmethod is manual"
+  elseif g:foldMethodCount == 2
+    set foldmethod=indent "indent
+    echo "foldmethod is indent"
+  endif
+  let g:foldMethodCount = ( g:foldMethodCount + 1 ) % 3
+endfunction
+
+let g:foldMethodCount = 0
+set foldmethod=marker
+nmap <Space><Space>f :<C-U>call ChangeFoldMethod()<CR>
 
 " 設定を上書きしない為に、最後に書く
 " colorscheme darkblue
@@ -1033,7 +1048,7 @@ let g:ref_ri_cmd                  = expand('~/.rbenv/versions/1.9.3-p125/bin/ri'
 
 nmap <C-K> :<C-U>Ref alc <Space><C-R><C-W><CR>
 autocmd FileType ruby,eruby,ruby.rspec nmap <buffer>K :<C-U>Ref refe <Space><C-R><C-W><CR>
-autocmd User Rails                     nmap <buffer>KK :<C-U>Ref ri <Space><C-R><C-W><CR>
+autocmd FileType ruby,eruby,ruby.rspec nmap <buffer>KK :<C-U>Ref ri <Space><C-R><C-W><CR>
 
 " refビューワー内の設定
 " vim-ref内の移動を楽に
@@ -1534,7 +1549,7 @@ let g:rails_syntax = 1
 let g:rails_statusline = 1
 let g:rails_url='http://localhost:3000'
 let g:rails_subversion=0
-" let g:dbext_default_SQLITE_bin = 'mysql2'
+let g:dbext_default_SQLITE_bin = 'mysql2'
 let g:rails_default_file='config/database.yml'
 " let g:rails_ctags_arguments = ''
 function! SetUpRailsSetting()
@@ -1552,12 +1567,6 @@ function! SetUpRailsSetting()
   nmap <buffer><Space>c :Rgen contoller<Space>
   nmap <buffer><Space>s :Rgen scaffold<Space>
   nmap <buffer><Space>p :Rpreview<CR>
-  au FileType ruby,eruby,ruby.rspec let g:neocomplcache_dictionary_filetype_lists = {
-        \'ruby' : $HOME.'/.vim/dict/rails.dict',
-        \'eruby' : $HOME.'/.vim/dict/rails.dict'
-        \}
-  setl dict+=~/.vim/dict/rails.dict
-  setl dict+=~/.vim/dict/ruby.dict
 endfunction
 autocmd User Rails call SetUpRailsSetting()
 "}}}
@@ -1572,7 +1581,6 @@ let g:rsenseHome = expand('~/.vim/ref/rsense-0.3')
 let g:rsenseMatchFunc = "[a-zA-Z_?]"
 
 function! SetUpRubySetting()
-  setlocal completefunc=RSenseCompleteFunction
   nmap <buffer>tj :RSenseJumpToDefinition<CR>
   nmap <buffer>tk :RSenseWhereIs<CR>
   nmap <buffer>td :RSenseTypeHelp<CR>
@@ -1673,8 +1681,7 @@ let g:sass_started_dirs = []
 " au! BufRead *.scss,*sass call Sass_start()
 " au! Filetype scss,sass call Sass_start()
 
-
-au! BufWritePost * SassCompile
+au! BufWritePost sass,scss SassCompile
 "}}}
 
 "------------------------------------
@@ -2009,12 +2016,11 @@ autocmd FileType python               setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml                  setlocal omnifunc=xmlcomplete#CompleteTags
 autocmd FileType php                  setlocal omnifunc=phpcomplete#CompletePHP
 autocmd FileType c                    setlocal omnifunc=ccomplete#Complete
-" autocmd FileType ruby,eruby,yml,ruby.rspec setlocal omnifunc=RSenseCompleteFunction
-" autocmd FileType ruby,eruby,yml,ruby.rspec setlocal completefunc+=RSenseCompleteFunction
 autocmd FileType ruby,eruby,ruby.rpec setlocal dict+=~/.vim/dict/ruby.dict
 autocmd FileType ruby.rpec            setlocal dict+=~/.vim/dict/rspec.dict
 autocmd FileType jasmine.coffee,jasmine.js setlocal dict+=~/.vim/dict/js.jasmine.dict
 autocmd FileType coffee                setlocal dict+=~/.vim/dict/coffee.dict
+autocmd FileType html,php,eruby        setlocal dict+=~/.vim/dict/html.dict
 
 "----------------------------------------
 " neocomplcache
@@ -2031,7 +2037,7 @@ let g:neocomplcache_max_list = 300
 " let g:neocomplcache_min_syntax_length = 4
 let g:neocomplcache_cursor_hold_i_time = 300
 " let g:neocomplcache_enable_insert_char_pre = 0
-let g:neocomplcache_enable_auto_select = 1
+" let g:neocomplcache_enable_auto_select = 1
 " let g:neocomplcache_enable_auto_delimiter = 0
 let g:neocomplcache_enable_camel_case_completion = 1
 let g:neocomplcache_enable_underbar_completion = 1
@@ -2070,7 +2076,8 @@ function! SetUpMarkDownSetting()
   let g:source_look_length = 3
   let g:source_look_rank = 400
 endfunction
-let g:source_look_length = 3
+let g:source_look_length = 4
+let g:source_look_rank = 5
 au FileType markdown,text call SetUpMarkDownSetting()
 "}}}
 
@@ -2111,6 +2118,10 @@ let g:neocomplcache_vim_completefuncs = {
       \ 'Vinarise' : 'vinarise#complete',
       \}
 
+if has('conceal')
+  set conceallevel=2 concealcursor=i
+endif
+
 " keymap"{{{
 " Plugin key-mappings.
 imap <C-F>     <Plug>(neocomplcache_snippets_expand)
@@ -2119,17 +2130,16 @@ imap <C-U>     <Esc>:Unite snippet<CR>
 inoremap <expr><C-g>     neocomplcache#undo_completion()
 " inoremap <expr><C-L>     neocomplcache#complete_common_string()
 
-if has('conceal')
-  set conceallevel=2 concealcursor=i
-endif
-imap <expr><TAB> neocomplcache#sources#snippets_complete#expandable() ?
-      \"\<Plug>(neocomplcache_snippets_expand)" : pumvisible() ? "\<C-n>" : "\<TAB>"
+" imap <expr><TAB> neocomplcache#sources#snippets_complete#expandable() ?
+"       \"\<Plug>(neocomplcache_snippets_expand)" : pumvisible() ? "\<C-n>" : "\<TAB>"
 
 " snippetの編集
 nmap <Space>e :<C-U>NeoComplCacheEditSnippets<CR>
+au FileType ruby,eruby nmap <buffer><Space>d :<C-U>e ~/.vim/dict/ruby.dict
+au User Rails          nmap <buffer><Space>dd :<C-U>e ~/.vim/dict/rails.dict
 au BufRead,BufNewFile *.snip  set filetype=snippet
 
-" if !exists('g:neocomplcache_auto_completion_start_length')
+" let g:neocomplcache_enable_auto_select = 1
 inoremap <silent><expr><TAB>  pumvisible() ? "\<C-N>" : "\<TAB>"
 inoremap <silent><expr><S-TAB> pumvisible() ? "\<C-P>" : "\<S-TAB>"
 inoremap <silent><expr><BS>   neocomplcache#smart_close_popup()."\<C-h>"
@@ -2140,7 +2150,6 @@ inoremap <silent><expr><BS>   neocomplcache#smart_close_popup()."\<C-h>"
 inoremap <silent><CR>  <CR><C-R>=neocomplcache#smart_close_popup()<CR>
 " inoremap <silent><expr><CR> neocomplcache#smart_close_popup() . "\<CR>"
 " inoremap <silent><expr><CR>   neocomplcache#smart_close_popup()."\<C-h>"
-" endif
 "}}}
 
 "}}}
@@ -2209,6 +2218,22 @@ if executable('pdftotext')
   command! -complete=file -nargs=1 Pdf :r !pdftotext -nopgbrk -layout <q-args> -
 endif
 au BufRead *.pdf call Pdf
+
+function! OpenYard(...)
+  let gem = a:1 == "" ? "" : a:1
+  if gem == ""
+    call OpenBrowser("http://localhost:8808/")
+  else
+    let url = "http://localhost:8808/docs/" . gem . "/frames/"
+    call OpenBrowser(url)
+  endif
+endfunction
+
+command!
+\   -nargs=* -complete=file
+\   OpenYard
+\   call OpenYard(<q-args>)
+nmap <Space>y :<C-U>OpenYard<Space>
 "}}}
 
 set secure
