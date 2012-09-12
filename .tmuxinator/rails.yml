@@ -1,0 +1,16 @@
+# ~/.tmuxinator/gift.yml
+# you can make as many tabs as you wish...
+
+project_name: gift
+project_root: /Applications/XAMPP/htdocs/project/jenkins
+# pre: sudo mysql.server start
+tabs:
+  - editor: vim
+  - test: autotest
+  - console: rails c
+  - upserv:
+      panes:
+        - rails s
+        - spork
+        - mysql.server start
+        - yard server --gems

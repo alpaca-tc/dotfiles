@@ -97,14 +97,17 @@ _rtags() {
     if [ -d ~/.rbenv ]; then
         echo "rbenv"
         export RUBIES_DIR=`rbenv which ruby | sed -e 's/\/bin\/ruby//'`
-        ctags -R --sort=yes --exclude=*.js --exclude=log --exclude=.git --langmap=RUBY:.rb $RUBIES_DIR   -f ~/tags
+        ctags -R -a --sort=yes --exclude=*.js --exclude=*.h --exclude=log --exclude=*.yml --exclude=.git --langmap=RUBY:.rb ~/.rbenv/versions/1.9.3-p125/lib/ruby/1.9.1 -f ~/rubyTags
+        ctags -R -a --sort=yes --exclude=*.js --exclude=*.h --exclude=log --exclude=*.yml --exclude=.git --langmap=RUBY:.rb ~/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems -f ~/gemTags
     else if [ -d ~/.rvm ]
         echo "rvm"
         export RUBIES_DIR=`rbenv which ruby | sed -e 's/\/bin\/ruby//'`
-        ctags -R --sort=yes --exclude=*.js --exclude=log --exclude=.git --langmap=RUBY:.rb $RUBIES_DIR $GEM_HOME -f ~/tags
+        ctags -R --sort=yes --exclude=*.js --exclude=*.h --exclude=log --exclude=*.yml --exclude=.git --langmap=RUBY:.rb $RUBIES_DIR $GEM_HOME -f ~/tags
     fi
 }
 
+alias rtags='ctags -R -a --sort=yes --exclude=*.js --exclude=*.h --exclude=log --exclude=*.yml --exclude=.git --langmap=RUBY:.rb ~/.rbenv/versions/1.9.3-p125/lib/ruby/1.9.1 -f ~/rubyTags'
+alias gtags='ctags -R -a --sort=yes --exclude=*.js --exclude=*.h --exclude=log --exclude=*.yml --exclude=.git --langmap=RUBY:.rb ~/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems -f ~/gemTags'
 alias vlc='/Applications/VLC.app/Contents/MacOS/VLC --intf=rc'
 alias redis='redis-server /usr/local/etc/redis.conf'
 

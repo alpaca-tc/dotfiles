@@ -82,7 +82,7 @@ function! s:remove_dust()
     call setpos(".", cursor)
     unlet cursor
 endfunction
-autocmd BufWritePre * call <SID>remove_dust()
+au BufWritePre * call <SID>remove_dust()
 "}}}
 
 "----------------------------------------
@@ -149,9 +149,9 @@ nmap <C-W><C-J> <C-W>J
 nnoremap t  <Nop>
 nnoremap tn  :tabn<CR>
 nnoremap tp  :tabprevious<CR>
-nnoremap tN  :tabnew<CR>
-nnoremap tc  :tabc<CR>
-nnoremap to  :tabo<CR>
+nnoremap tc  :tabnew<CR>
+nnoremap tx  :tabclose<CR>
+" nnoremap to  :tabo<CR>
 nnoremap te  :execute 'tabnext' 1 + (tabpagenr() + v:count1 - 1) % tabpagenr('$')<CR>
 "tabを次のtabへ移動
 nnoremap tg  gT
@@ -376,6 +376,7 @@ NeoBundle 'Shougo/vimproc', {
       \    },
       \ }
 NeoBundle 'Lokaltog/vim-powerline'
+NeoBundle 'vim-jp/vital.vim'
 NeoBundle 'edsono/vim-matchit'
 NeoBundle 'taichouchou2/surround.vim' " 独自の実装のものを使用、ruby用カスタマイズ、<C-G>のimap削除
 NeoBundle 'tpope/vim-fugitive'
@@ -410,7 +411,7 @@ NeoBundle 'Lokaltog/vim-easymotion'
 
 NeoBundle 'mattn/zencoding-vim' "Zencodingを使う
 NeoBundle 'vim-scripts/sudo.vim' "vimで開いた後にsudoで保存
-NeoBundle 'tpope/vim-endwise.git' "end endifなどを自動で挿入
+NeoBundle 'taichouchou2/vim-endwise.git' "end endifなどを自動で挿入
 NeoBundle 'nathanaelkane/vim-indent-guides' "indentに色づけ
 " NeoBundle 'kien/ctrlp.vim' "ファイルを絞る
 
@@ -736,6 +737,8 @@ let g:unite_enable_start_insert=1
 let g:unite_source_history_yank_enable = 1
 let g:unite_source_file_mru_limit = 400     "最大数
 let g:unite_winheight = 20
+let g:unite_source_file_rec_min_cache_files = 300
+let g:unite_source_file_mru_filename_format = ''
 
 " nmap <C-J><C-U> :<C-u>UniteWithCurrentDir -buffer-name=file file buffer file_mru directory_mru bookmark<CR>
 " nmap <C-J><C-J> :Unite file_mru<CR>
@@ -748,13 +751,11 @@ nmap <C-J> [unite]
 
 "unite general settings
 "インサートモードで開始
-let g:unite_source_file_mru_filename_format = ''
 
 nnoremap <silent> [unite]<C-U> :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
 nnoremap <silent> [unite]<C-R> :<C-u>Unite -buffer-name=register register<CR>
 nnoremap <silent> [unite]<C-J> :<C-u>Unite file_mru<CR>
 nnoremap <silent> [unite]<C-B> :<C-u>Unite bookmark<CR>
-nnoremap <silent> [unite]<C-T> :<C-u>Unite tag<CR>
 nnoremap <silent> <Space>b :<C-u>UniteBookmarkAdd<CR>
 
 function! s:unite_my_settings()"{{{
@@ -799,11 +800,21 @@ let g:unite_source_mark_marks =
 "}}}
 
 "------------------------------------
-" Unite-mark.vim
+" Unite-grep.vim
 "------------------------------------
 "{{{
 let g:unite_source_grep_command = "grep"
 let g:unite_source_grep_recursive_opt = "-R"
+"}}}
+
+"------------------------------------
+" Unite-tag.vim
+"------------------------------------
+"{{{
+autocmd BufEnter *
+      \   if empty(&buftype)
+      \|     noremap <silent> [unite]<C-K> :<C-u>UniteWithCursorWord -immediately tag<CR>
+      \|  endif
 "}}}
 
 "------------------------------------
@@ -1047,8 +1058,8 @@ let g:ref_ri_cmd                  = expand('~/.rbenv/versions/1.9.3-p125/bin/ri'
 " nmap K <Nop>
 
 nmap <C-K> :<C-U>Ref alc <Space><C-R><C-W><CR>
-autocmd FileType ruby,eruby,ruby.rspec nmap <buffer>K :<C-U>Ref refe <Space><C-R><C-W><CR>
-autocmd FileType ruby,eruby,ruby.rspec nmap <buffer>KK :<C-U>Ref ri <Space><C-R><C-W><CR>
+autocmd FileType ruby,eruby,ruby.rspec nmap <silent><buffer>KK :<C-u>Unite -no-start-insert ref/ri -input=<C-R><C-W><CR>
+autocmd FileType ruby,eruby,ruby.rspec nmap <silent><buffer>K :<C-u>Unite -no-start-insert ref/refe -input=<C-R><C-W><CR>
 
 " refビューワー内の設定
 " vim-ref内の移動を楽に
@@ -1065,11 +1076,13 @@ autocmd FileType ref call s:initialize_ref_viewer()
 "alc
 nmap ra :<C-U>Ref alc<Space>
 nmap rp :<C-U>Ref phpmanual<Space>
-nmap rr :<C-U>Ref refe<Space>
-nmap ri :<C-U>Ref ri<Space>
-nmap rm :<C-U>Unite ref/man<Space>
-nmap rpy :<C-U>Unite ref/pydoc<Space>
-nmap rpe :<C-U>Unite ref/perldoc<Space>
+" nmap rr :<C-U>Ref refe<Space>
+" nmap ri :<C-U>Ref ri<Space>
+nmap rr :<C-U>Unite ref/refe -input=
+nmap ri :<C-U>Unite ref/ri -input=
+nmap rm :<C-U>Unite ref/man -input=
+nmap rpy :<C-U>Unite ref/pydoc -input=
+nmap rpe :<C-U>Unite ref/perldoc -input=
 
 let g:ref_alc_encoding  = 'utf-8'
 
@@ -2009,18 +2022,19 @@ set completeopt=menu,menuone,preview
 set infercase
 
 " FileType毎のOmni補完を設定
-autocmd FileType css                  setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown        setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript           setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType python               setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml                  setlocal omnifunc=xmlcomplete#CompleteTags
-autocmd FileType php                  setlocal omnifunc=phpcomplete#CompletePHP
-autocmd FileType c                    setlocal omnifunc=ccomplete#Complete
-autocmd FileType ruby,eruby,ruby.rpec setlocal dict+=~/.vim/dict/ruby.dict
-autocmd FileType ruby.rpec            setlocal dict+=~/.vim/dict/rspec.dict
-autocmd FileType jasmine.coffee,jasmine.js setlocal dict+=~/.vim/dict/js.jasmine.dict
-autocmd FileType coffee                setlocal dict+=~/.vim/dict/coffee.dict
-autocmd FileType html,php,eruby        setlocal dict+=~/.vim/dict/html.dict
+au FileType css                  setlocal omnifunc=csscomplete#CompleteCSS
+au FileType html,markdown        setlocal omnifunc=htmlcomplete#CompleteTags
+au FileType javascript           setlocal omnifunc=javascriptcomplete#CompleteJS
+au FileType python               setlocal omnifunc=pythoncomplete#Complete
+au FileType xml                  setlocal omnifunc=xmlcomplete#CompleteTags
+au FileType php                  setlocal omnifunc=phpcomplete#CompletePHP
+au FileType c                    setlocal omnifunc=ccomplete#Complete
+au FileType ruby,eruby,ruby.rpec setlocal dict+=~/.vim/dict/ruby.dict
+au FileType ruby.rpec            setlocal dict+=~/.vim/dict/rspec.dict
+au FileType jasmine.coffee,jasmine.js setlocal dict+=~/.vim/dict/js.jasmine.dict
+au FileType coffee                setlocal dict+=~/.vim/dict/coffee.dict
+au FileType html,php,eruby        setlocal dict+=~/.vim/dict/html.dict
+au User Rails          set dict+=~/.vim/dict/rails.dict
 
 "----------------------------------------
 " neocomplcache
@@ -2039,6 +2053,8 @@ let g:neocomplcache_cursor_hold_i_time = 300
 " let g:neocomplcache_enable_insert_char_pre = 0
 " let g:neocomplcache_enable_auto_select = 1
 " let g:neocomplcache_enable_auto_delimiter = 0
+let g:neocomplcache_caching_limit_file_size=1000000
+let g:neocomplcache_tags_caching_limit_file_size=1000000
 let g:neocomplcache_enable_camel_case_completion = 1
 let g:neocomplcache_enable_underbar_completion = 1
 let g:neocomplcache_ctags_program = "ctags"
@@ -2158,29 +2174,33 @@ inoremap <silent><CR>  <CR><C-R>=neocomplcache#smart_close_popup()<CR>
 "Tags関連 cTags使う場合は有効化"{{{
 "http://vim-users.jp/2010/06/hack154/
 
-set tags=""
+setl tags=""
 let current_dir = expand("%:p:h")
 
 if has('path_extra')
-  set tags+=tags;**/tags
+  " setl tags=*4/tags
 endif
 
 " rtagsは独自shコマンドrtags -Rで作成
-if filereadable(expand('~/tags'))
-  au FileType ruby,eruby setl tags+=~/rtags
-else
+" if filereadable(expand('~/tags'))
+au FileType ruby,eruby setl tags+=~/gtags
+" else
   " let res = system('ctags', '-R --langmap=Ruby:.rb --ruby-typescfFm =~/.rvm/rubies/default -f ~/rtags')
-  au FileType ruby,eruby setl tags+=~/rtags
-endif
+"   au FileType ruby,eruby setl tags+=~/rtags
+" endif
+
 
 "tags_jumpを使い易くする
 "「飛ぶ」
 nnoremap tt  <C-]>
 "「進む」
 nnoremap tl  :<C-u>tag<CR>
+nnoremap tk  :<C-u>tn<CR>
+nnoremap tj  :<C-u>tp<CR>
 "「戻る」
 nnoremap th  :<C-u>pop<CR>
 "履歴一覧
+nnoremap ts  :<C-u>ts<CR>
 " nnoremap tk  :<C-u>tags<CR>
 "}}}
 
@@ -2219,12 +2239,13 @@ if executable('pdftotext')
 endif
 au BufRead *.pdf call Pdf
 
+" カーソル下のgemのrdocを開く
 function! OpenYard(...)
   let gem = a:1 == "" ? "" : a:1
   if gem == ""
     call OpenBrowser("http://localhost:8808/")
   else
-    let url = "http://localhost:8808/docs/" . gem . "/frames/"
+    let url = "http://localhost:8808/docs/" . tolower(gem) . "/frames/"
     call OpenBrowser(url)
   endif
 endfunction
@@ -2233,7 +2254,10 @@ command!
 \   -nargs=* -complete=file
 \   OpenYard
 \   call OpenYard(<q-args>)
-nmap <Space>y :<C-U>OpenYard<Space>
+
+" マッピング
+nmap <Space>y :<C-U>OpenYard <C-R><C-W><CR>
+
 "}}}
 
 set secure
