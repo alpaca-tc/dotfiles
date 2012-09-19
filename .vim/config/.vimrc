@@ -12,9 +12,6 @@ set formatoptions+=lmoqmM
 set helplang=ja,en
 set modelines=0
 set nobackup
-set scrolloff=0
-set scrolljump=-50
-set showcmd
 set showmode
 set timeout timeoutlen=400 ttimeoutlen=100
 set vb t_vb=
@@ -221,14 +218,15 @@ if has("autocmd")
   autocmd FileType html       setlocal sw=4 sts=4 ts=4 et
   autocmd FileType java       setlocal sw=4 sts=4 ts=4 et
   autocmd FileType javascript setlocal sw=2 sts=2 ts=2 et
-  autocmd FileType scss       setlocal sw=2 sts=2 ts=2 et
   autocmd FileType less,sass  setlocal sw=2 sts=2 ts=2 et
   autocmd FileType lisp       setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType markdown   setlocal sw=4 sts=4 ts=4 et
   autocmd FileType perl       setlocal sw=4 sts=4 ts=4 et
   autocmd FileType php        setlocal sw=4 sts=4 ts=4 et
   autocmd FileType python     setlocal sw=4 sts=4 ts=4 et
   autocmd FileType ruby       setlocal sw=2 sts=2 ts=2 et
   autocmd FileType scala      setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType scss       setlocal sw=2 sts=2 ts=2 et
   autocmd FileType sh         setlocal sw=4 sts=4 ts=4 et
   autocmd FileType sql        setlocal sw=4 sts=4 ts=4 et
   autocmd FileType vb         setlocal sw=4 sts=4 ts=4 et
@@ -253,6 +251,9 @@ set list              " 不可視文字表示
 set listchars=tab:>.,trail:_,extends:>,precedes:< " 不可視文字の表示形式
 set listchars=tab:␣.,trail:_,extends:>,precedes:< " 不可視文字の表示形式
 " set listchars=tab:✃.,trail:_,extends:>,precedes:< " 不可視文字の表示形式
+set scrolloff=5
+" set scrolljump=-50
+set showcmd
 
 "set display=uhex      " 印字不可能文字を16進数で表示
 set t_Co=256          " 確かカラーコード
@@ -579,7 +580,7 @@ NeoBundle 'oppara/vim-unite-cake'
 NeoBundle 'taichouchou2/vim-rails'
 NeoBundle 'taichouchou2/vim-ref-ri'
 NeoBundle 'taichouchou2/neco-rubymf' " gem install methodfinder
-NeoBundle 'romanvbabenko/rails.vim' " Rfactoryメソッドなど追加
+" NeoBundle 'romanvbabenko/rails.vim' " Rfactoryメソッドなど追加
 NeoBundle 'ruby-matchit'
 NeoBundle 'taq/vim-rspec'
 NeoBundle 'ujihisa/unite-rake'
@@ -944,6 +945,7 @@ call quickrun#register_outputter("rspec_outputter", rspec_outputter)
 function! RSpecQuickrun()
   nmap <silent><buffer><Leader>lr :<C-U>QuickRun ruby.rspec.oneline<CR>
   let b:quickrun_config = {'type' : 'ruby.rspec'}
+  set ft=ruby.rspec
   " nnoremap <silent><buffer><Leader>lr :QuickRun ruby.rspec line('.')<CR>
   nnoremap <expr><silent><buffer><Leader>lr "<Esc>:QuickRun ruby.rspec -cmdopt \"-l" .  line('.') . "\"<CR>"
 endfunction
@@ -1127,8 +1129,8 @@ let g:git_command_edit = 'rightbelow vnew'
 " nmap <silent><Space>gb :GitBlame<CR>
 " nmap <silent><Space>gB :Gitblanch
 " nmap <silent><Space>gp :GitPush<CR>
-nmap <silent><Space>gd :GitDiff --cached<CR>
-" nmap <silent><Space>gD :GitDiff<CR>
+nmap <silent><Space>gd :<C-U>GitDiff HEAD<CR>
+nmap <silent><Space>gD :GitDiff
 " " nmap <silent><Space>gs :GitStatus<CR>
 " " nmap <silent><Space>gl :GitLog -10<CR>
 " " nmap <silent><Space>gL :<C-u>GitLog -u \| head -10000<CR>
@@ -1594,9 +1596,9 @@ let g:rsenseHome = expand('~/.vim/ref/rsense-0.3')
 let g:rsenseMatchFunc = "[a-zA-Z_?]"
 
 function! SetUpRubySetting()
-  nmap <buffer>tj :RSenseJumpToDefinition<CR>
-  nmap <buffer>tk :RSenseWhereIs<CR>
-  nmap <buffer>td :RSenseTypeHelp<CR>
+  nmap <buffer>rj :RSenseJumpToDefinition<CR>
+  nmap <buffer>rw :RSenseWhereIs<CR>
+  nmap <buffer>rt :RSenseTypeHelp<CR>
 endfunction
 autocmd FileType ruby,eruby,ruby.rspec call SetUpRubySetting()
 "}}}
@@ -2022,19 +2024,28 @@ set completeopt=menu,menuone,preview
 set infercase
 
 " FileType毎のOmni補完を設定
-au FileType css                  setlocal omnifunc=csscomplete#CompleteCSS
-au FileType html,markdown        setlocal omnifunc=htmlcomplete#CompleteTags
-au FileType javascript           setlocal omnifunc=javascriptcomplete#CompleteJS
-au FileType python               setlocal omnifunc=pythoncomplete#Complete
-au FileType xml                  setlocal omnifunc=xmlcomplete#CompleteTags
-au FileType php                  setlocal omnifunc=phpcomplete#CompletePHP
-au FileType c                    setlocal omnifunc=ccomplete#Complete
-au FileType ruby,eruby,ruby.rpec setlocal dict+=~/.vim/dict/ruby.dict
-au FileType ruby.rpec            setlocal dict+=~/.vim/dict/rspec.dict
-au FileType jasmine.coffee,jasmine.js setlocal dict+=~/.vim/dict/js.jasmine.dict
-au FileType coffee                setlocal dict+=~/.vim/dict/coffee.dict
-au FileType html,php,eruby        setlocal dict+=~/.vim/dict/html.dict
-au User Rails          set dict+=~/.vim/dict/rails.dict
+au FileType css                  setl omnifunc=csscomplete#CompleteCSS
+au FileType html,markdown        setl omnifunc=htmlcomplete#CompleteTags
+au FileType javascript           setl omnifunc=javascriptcomplete#CompleteJS
+au FileType python               setl omnifunc=pythoncomplete#Complete
+au FileType xml                  setl omnifunc=xmlcomplete#CompleteTags
+au FileType php                  setl omnifunc=phpcomplete#CompletePHP
+au FileType c                    setl omnifunc=ccomplete#Complete
+au FileType ruby,eruby,ruby.rpec setl dict+=~/.vim/dict/ruby.dict
+au FileType ruby.rspec           setl dict+=~/.vim/dict/rspec.dict
+
+au FileType jasmine.coffee,jasmine.js setl dict+=~/.vim/dict/js.jasmine.dict
+au FileType coffee               setl dict+=~/.vim/dict/coffee.dict
+au FileType html,php,eruby       setl dict+=~/.vim/dict/html.dict
+function! RailsSetting()
+  setl dict+=~/.vim/dict/rails.dict
+
+  let g:neocomplcache_dictionary_filetype_lists.ruby = expand('~/.vim/dict/rails.dict')
+  let g:neocomplcache_dictionary_filetype_lists.eruby = expand('~/.vim/dict/rails.dict')
+  " au FileType ruby       setl ft=ruby.rails
+  " au FileType eruby      setl ft=eruby.rails
+endfunction
+au User Rails call RailsSetting()
 
 "----------------------------------------
 " neocomplcache
@@ -2064,6 +2075,7 @@ let g:neocomplcache_snippets_dir=expand('~/.vim/snippet')
 " let g:neocomplcache_text_mode_filetypes = { 'markdown' : 1, }
 let g:neocomplcache_ignore_composite_filetype_lists = {
       \ 'ruby.spec'          : 'ruby',
+      \ 'ruby.rails'          : 'ruby',
       \ 'javascirpt.jasmine' : 'javascript',
       \ 'coffee.jasmine'     : 'coffee',
       \ }
@@ -2074,6 +2086,7 @@ let g:neocomplcache_dictionary_filetype_lists = {
       \ 'default'    : '',
       \ 'java'       : $HOME.'/.vim/dict/java.dict',
       \ 'ruby'       : $HOME.'/.vim/dict/ruby.dict',
+      \ 'ruby.rails' : $HOME.'/.vim/dict/rails.dict',
       \ 'eruby'      : $HOME.'/.vim/dict/ruby.dict',
       \ 'javascript' : $HOME.'/.vim/dict/javascript.dict',
       \ 'coffee'     : $HOME.'/.vim/dict/javascript.dict',
@@ -2100,6 +2113,8 @@ au FileType markdown,text call SetUpMarkDownSetting()
 let g:neocomplcache_dictionary_patterns = {
       \'php': expand('~/.vim/dict/zendphp.dict'),
       \'javascript': expand('~/.vim/dict/timobile.dict'),
+      \'ruby': expand('~/.vim/dict/ruby.dict'),
+      \'ruby.rails': expand('~/.vim/dict/rails.dict'),
       \}
 
 " Define keyword.
@@ -2153,7 +2168,8 @@ inoremap <expr><C-g>     neocomplcache#undo_completion()
 nmap <Space>e :<C-U>NeoComplCacheEditSnippets<CR>
 au FileType ruby,eruby nmap <buffer><Space>d :<C-U>e ~/.vim/dict/ruby.dict
 au User Rails          nmap <buffer><Space>dd :<C-U>e ~/.vim/dict/rails.dict
-au BufRead,BufNewFile *.snip  set filetype=snippet
+au BufRead,BufNewFile *.snip  setl filetype=snippet
+au FileType dict nmap <buffer><Space>e :e #<CR>
 
 " let g:neocomplcache_enable_auto_select = 1
 inoremap <silent><expr><TAB>  pumvisible() ? "\<C-N>" : "\<TAB>"
@@ -2188,7 +2204,6 @@ au FileType ruby,eruby setl tags+=~/gtags
   " let res = system('ctags', '-R --langmap=Ruby:.rb --ruby-typescfFm =~/.rvm/rubies/default -f ~/rtags')
 "   au FileType ruby,eruby setl tags+=~/rtags
 " endif
-
 
 "tags_jumpを使い易くする
 "「飛ぶ」

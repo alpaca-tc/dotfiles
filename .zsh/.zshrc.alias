@@ -107,16 +107,20 @@ _rtags() {
 }
 
 alias rtags='ctags -R -a --sort=yes --exclude=*.js --exclude=*.h --exclude=log --exclude=*.yml --exclude=.git --langmap=RUBY:.rb ~/.rbenv/versions/1.9.3-p125/lib/ruby/1.9.1 -f ~/rubyTags'
-alias gtags='ctags -R -a --sort=yes --exclude=*.js --exclude=*.h --exclude=log --exclude=*.yml --exclude=.git --langmap=RUBY:.rb ~/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems -f ~/gemTags'
+alias gtags='ctags -R -a --sort=yes --exclude=*.js --exclude=*.exp  --exclude=*.am --exclude=*.in --exclude=*.m4--exclude=*.o --exclude=*.h --exclude=log --exclude=*.yml --exclude=.git --langmap=RUBY:.rb ~/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems -f ~/gemTags'
 alias vlc='/Applications/VLC.app/Contents/MacOS/VLC --intf=rc'
 alias redis='redis-server /usr/local/etc/redis.conf'
+
+alias github='open github-mac://openRepo/file:/Volumes/disk1_pt1/git/'
 
 # rals
 alias r='rails'
 alias rg='rails generate'
 alias rgc='rails generate controller'
 alias rgm='rails generate model'
+alias rgd='rails destroy'
 alias rgs='rails generate scaffold'
+
 alias y='yard'
 alias yg='yard server --gems'
 

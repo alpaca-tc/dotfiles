@@ -263,5 +263,6 @@ snippet     rdoc
 snippet     d
     Rails.logger.debug ${1}
 
-snippet     gem
-    <`2:content`>
+snippet     mCallback
+    extend ActiveModel::Callbacks
+    define_model_callbacks ${1}
