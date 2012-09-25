@@ -94,3 +94,11 @@ snippet ftype
 
 snippet  strict
     'use strict'
+
+snippet  req
+    ${1} = require '${2}'
+
+snippet  cMixin
+    class Mixin
+      include: (t) ->
+        (t[n] = m unless n == 'augment' or !this[n].prototype?) for n, m of this

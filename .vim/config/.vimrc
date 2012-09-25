@@ -20,6 +20,7 @@ set viminfo='100,<800,s300,\"300
 autocmd FileType help nnoremap <buffer> q <C-w>c
 nmap <Space>h :<C-u>help<Space><C-r><C-w><CR>
 nmap <Space><Space>s :<C-U>so ~/.vimrc<CR>
+nmap <Space><Space>v :<C-U>e ~/.vim/config/.vimrc<CR>
 "}}}
 
 "----------------------------------------
@@ -417,7 +418,7 @@ NeoBundle 'nathanaelkane/vim-indent-guides' "indentに色づけ
 " NeoBundle 'kien/ctrlp.vim' "ファイルを絞る
 
 NeoBundle 'taglist.vim' "関数、変数を画面横にリストで表示する
-" NeoBundle 'majutsushi/tagbar'
+NeoBundle 'majutsushi/tagbar'
 
 "コメントアウト
 " NeoBundle 'hrp/EnhancedCommentify'
@@ -528,10 +529,11 @@ NeoBundle 'daisuzu/facebook.vim'
 NeoBundle 'thinca/vim-qfreplace'
 NeoBundle 'yuratomo/w3m.vim'
 NeoBundle 'TeTrIs.vim'
+
+" NeoBundle 'benmills/vimux'
 "}}}
 
 " bundle.lang"{{{
-" function! HtmlSetting()
 " NeoBundle 'rstacruz/sparkup', {'rtp': 'vim/'}
 NeoBundle 'hail2u/vim-css3-syntax'
 NeoBundle 'pasela/unite-webcolorname'
@@ -539,7 +541,6 @@ NeoBundle 'pasela/unite-webcolorname'
 NeoBundle 'taichouchou2/html5.vim'
 NeoBundle 'tpope/vim-haml'
 NeoBundle 'xmledit'
-" endfunction
 " au FileType html,php,eruby,ruby,javascript,markdown call HtmlSetting()
 " au FileType * call HtmlSetting()
 
@@ -562,7 +563,7 @@ NeoBundle 'AtsushiM/sass-compile.vim'
 
 "  php
 " ----------------------------------------
-NeoBundle 'oppara/vim-unite-cake'
+" NeoBundle 'oppara/vim-unite-cake'
 " NeoBundle 'violetyk/cake.vim' " cakephpを使いやすく
 
 "  binary
@@ -586,6 +587,10 @@ NeoBundle 'taq/vim-rspec'
 NeoBundle 'ujihisa/unite-rake'
 NeoBundle 'taichouchou2/vim-rsense'
 " NeoBundle 'vim-ruby/vim-ruby'
+NeoBundle 'taichouchou2/unite-reek',
+      \{  'depends' : 'Shougo/unite.vim' }
+NeoBundle 'taichouchou2/unite-rails_best_practices',
+      \{ 'depends' : 'Shougo/unite.vim' }
 
 " python
 " ----------------------------------------
@@ -707,15 +712,32 @@ let Tlist_WinWidth = 20
 let g:tlist_javascript_settings = 'javascript;c:class;m:method;f:function'
 let tlist_objc_settings='objc;P:protocols;i:interfaces;I:implementations;M:instance methods;C:implementation methods;Z:protocol methods'
 let g:tlist_coffee_settings = 'coffee;f:function;v:variable'
-nmap <Space>t :Tlist<CR>
+" nmap <Space>t :Tlist<CR>
 "}}}
 
 "------------------------------------
 " tagbar.vim
 "------------------------------------
 "{{{
-" nnoremap <Space>t :TagbarToggle<CR>
-let g:tagbar_ctags_bin="~/local/bin/jctags"
+nnoremap <Space>t :TagbarToggle<CR>
+let g:tagbar_ctags_bin="/Applications/MacVim.app/Contents/MacOS/ctags"
+
+" gem ins coffeetags
+if executable('coffeetags')
+  let g:tagbar_type_coffee = {
+        \ 'ctagsbin' : 'coffeetags',
+        \ 'ctagsargs' : '',
+        \ 'kinds' : [
+        \ 'f:functions',
+        \ 'o:object',
+        \ ],
+        \ 'sro' : ".",
+        \ 'kind2scope' : {
+        \ 'f' : 'object',
+        \ 'o' : 'object',
+        \ }
+        \ }
+endif
 "}}}
 
 "------------------------------------
@@ -741,20 +763,13 @@ let g:unite_winheight = 20
 let g:unite_source_file_rec_min_cache_files = 300
 let g:unite_source_file_mru_filename_format = ''
 
-" nmap <C-J><C-U> :<C-u>UniteWithCurrentDir -buffer-name=file file buffer file_mru directory_mru bookmark<CR>
-" nmap <C-J><C-J> :Unite file_mru<CR>
-" nmap <C-J><C-R> :Unite -buffer-name=register register<CR>
-" nmap <silent><Space>b :<C-u>UniteBookmarkAdd<CR>
-
 "unite prefix key.
 nnoremap [unite] <Nop>
 nmap <C-J> [unite]
 
-"unite general settings
-"インサートモードで開始
-
 nnoremap <silent> [unite]<C-U> :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
-nnoremap <silent> [unite]<C-R> :<C-u>Unite -buffer-name=register register<CR>
+" nnoremap <silent> [unite]<C-R> :<C-u>Unite -buffer-name=register register<CR>
+nnoremap <silent> [unite]<C-R> :<C-u>Unite reek<CR>
 nnoremap <silent> [unite]<C-J> :<C-u>Unite file_mru<CR>
 nnoremap <silent> [unite]<C-B> :<C-u>Unite bookmark<CR>
 nnoremap <silent> <Space>b :<C-u>UniteBookmarkAdd<CR>
@@ -762,10 +777,13 @@ nnoremap <silent> <Space>b :<C-u>UniteBookmarkAdd<CR>
 function! s:unite_my_settings()"{{{
   " nmap <buffer> <ESC> <Plug>(unite_exit)
   " imap <buffer> jj <Plug>(unite_insert_leave)
-  imap <buffer> <C-w> <Plug>(unite_delete_backward_path)
+  imap <buffer><C-w> <Plug>(unite_delete_backward_path)
+
+  nmap <buffer><C-L> <C-W><C-W>
   " nnoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
   " nnoremap <silent> <buffer> <expr> <C-l> unite#do_action('vsplit')
   " nnoremap <silent> <buffer> <expr> <C-o> unite#do_action('open')
+  call unite#custom_default_action('ref', 'split')
   hi CursorLine                    guibg=#3E3D32
   hi CursorColumn                  guibg=#3E3D32
 endfunction
@@ -779,7 +797,8 @@ function! UniteSetting()"{{{
   imap <buffer><C-H> <Right>
   imap <buffer><C-J> <Down>
   " 開き方
-  " nnoremap <silent><buffer><expr><C-K> unite#do_action('split')
+  nnoremap <silent><buffer><expr><C-W>s unite#do_action('split')
+  nnoremap <silent><buffer><expr><C-W>v unite#do_action('vsplit')
   " nnoremap <silent><buffer><expr><C-L> unite#do_action('vsplit')
   " inoremap <silent><buffer><expr><C-V> unite#do_action('vsplit')
   " inoremap <silent><buffer><expr><C-E> unite#do_action('split')
@@ -829,28 +848,28 @@ nnoremap <Leader><leader> :VimFilerBufferDir<CR>
 let g:vimfiler_safe_mode_by_default = 0
 let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_sort_type = "filename"
-let g:vimfiler_sendto = {
-      \   'unzip' : 'unzip'
-      \ , 'gedit' : 'gedit'
-      \ }
+" let g:vimfiler_sendto = {
+"       \   'unzip' : 'unzip'
+"       \ , 'gedit' : 'gedit'
+"       \ }
 
 aug VimFilerKeyMapping
   au!
   autocmd FileType vimfiler call s:vimfiler_local()
 
   function! s:vimfiler_local()
-    if has('unix')
-      " 開き方
-      call vimfiler#set_execute_file('sh', 'sh')
-      call vimfiler#set_execute_file('mp3', 'iTunes')
-    endif
+    " if has('unix')
+    "   " 開き方
+    "   call vimfiler#set_execute_file('sh', 'sh')
+    "   call vimfiler#set_execute_file('mp3', 'iTunes')
+    " endif
 
     " Unite bookmark連携
     nmap <buffer>B :<C-U>Unite bookmark<CR>
     nmap <buffer>b :<C-U>UniteBookmarkAdd<CR>
-    nmap <buffer><silent><C-J>
+    " nmap <buffer><silent><C-J>
     nmap <buffer><silent><C-J><C-J> :<C-U>Unite file_mru<CR>
-    nmap <buffer><silent><C-J><C-U> :<C-U>Unite file<CR>
+    " nmap <buffer><silent><C-J><C-U> :<C-U>Unite file<CR>
     nmap <buffer><silent><C-J><C-U> :<C-U>UniteWithBufferDir -buffer-name=files file<CR>
 
     " Unite bookmarkのアクションをVimFilerに
@@ -1052,7 +1071,7 @@ let g:ref_alc_start_linenumber    = 47
 " let g:ref_no_default_key_mappings = 'K'
 let g:ref_open                    = 'split'
 let g:ref_cache_dir               = expand('~/.Trash')
-let g:ref_refe_cmd               = expand('~/.vim/ref/ruby-ref1.9.2/refe-1_9_2')
+let g:ref_refe_cmd                = expand('~/.vim/ref/ruby-ref1.9.2/refe-1_9_2')
 let g:ref_phpmanual_path          = expand('~/.vim/ref/php-chunked-xhtml')
 let g:ref_ri_cmd                  = expand('~/.rbenv/versions/1.9.3-p125/bin/ri')
 
@@ -1080,11 +1099,11 @@ nmap ra :<C-U>Ref alc<Space>
 nmap rp :<C-U>Ref phpmanual<Space>
 " nmap rr :<C-U>Ref refe<Space>
 " nmap ri :<C-U>Ref ri<Space>
-nmap rr :<C-U>Unite ref/refe -input=
-nmap ri :<C-U>Unite ref/ri -input=
-nmap rm :<C-U>Unite ref/man -input=
-nmap rpy :<C-U>Unite ref/pydoc -input=
-nmap rpe :<C-U>Unite ref/perldoc -input=
+nmap rr :<C-U>Unite ref/refe     -default-action=split -input=
+nmap ri :<C-U>Unite ref/ri       -default-action=split -input=
+nmap rm :<C-U>Unite ref/man      -default-action=split -input=
+nmap rpy :<C-U>Unite ref/pydoc   -default-action=split -input=
+nmap rpe :<C-U>Unite ref/perldoc -default-action=split -input=
 
 let g:ref_alc_encoding  = 'utf-8'
 
@@ -1130,7 +1149,7 @@ let g:git_command_edit = 'rightbelow vnew'
 " nmap <silent><Space>gB :Gitblanch
 " nmap <silent><Space>gp :GitPush<CR>
 nmap <silent><Space>gd :<C-U>GitDiff HEAD<CR>
-nmap <silent><Space>gD :GitDiff
+nmap <silent><Space>gD :GitDiff<Space>
 " " nmap <silent><Space>gs :GitStatus<CR>
 " " nmap <silent><Space>gl :GitLog -10<CR>
 " " nmap <silent><Space>gL :<C-u>GitLog -u \| head -10000<CR>
@@ -1374,7 +1393,7 @@ function! s:vimshell_settings() "{{{
     NeoComplCacheEnable
 endfunction "}}}
 
-nmap <Leader>v :VimShell<CR>
+nmap <Space>v :VimShell<CR>
 "}}}
 
 "------------------------------------
@@ -1404,7 +1423,9 @@ map <Space>mg  :MemoGrep<CR>
 "------------------------------------
 "{{{
 " 保存するたびに、コンパイル
-autocmd BufWritePost *.coffee silent CoffeeMake! -cb | cwindow | redraw!
+function! CoffeeCompile()
+  autocmd BufWritePost *.coffee silent CoffeeMake! -cb | cwindow | redraw!
+endfunction
 "}}}
 
 "------------------------------------
@@ -2011,6 +2032,35 @@ au FileType coffee,ruby,javascript,python IndentGuidesEnable
 nmap <silent><Leader>ig <Plug>IndentGuidesToggle
 "}}}
 
+"------------------------------------
+" vimux
+"------------------------------------
+" " Prompt for a command to run
+" map <Leader>rp :VimuxPromptCommand<CR>
+"
+" " Run last command executed by VimuxRunCommand
+" map <Leader>rl :VimuxRunLastCommand<CR>
+"
+" " Inspect runner pane
+" map <Leader>ri :VimuxInspectRunner<CR>
+"
+" " Close all other tmux panes in current window
+" map <Leader>rx :VimuxClosePanes<CR>
+"
+" " Close vim tmux runner opened by VimuxRunCommand
+" map <Leader>rq :VimuxCloseRunner<CR>
+"
+" " Interrupt any command running in the runner pane
+" map <Leader>rs :VimuxInterruptRunner<CR>
+"
+" " Prompt for a command to run
+" nmap <LocalLeader>vp :VimuxPromptCommand<CR>
+"
+" " If text is selected, save it in the v buffer and send that buffer it to tmux
+" vmap <LocalLeader>vs "vy :call VimuxRunCommand(@v . "\n", 0)<CR>
+"
+" " Select current paragraph and send it to tmux
+" nmap <LocalLeader>vs vip<LocalLeader>vs<CR>
 "}}}
 
 "----------------------------------------
@@ -2037,13 +2087,35 @@ au FileType ruby.rspec           setl dict+=~/.vim/dict/rspec.dict
 au FileType jasmine.coffee,jasmine.js setl dict+=~/.vim/dict/js.jasmine.dict
 au FileType coffee               setl dict+=~/.vim/dict/coffee.dict
 au FileType html,php,eruby       setl dict+=~/.vim/dict/html.dict
+
+function! SetEditDict()
+  let extension =  expand(":e")
+  au FileType ruby,eruby nmap <buffer><expr><Space>d ':<C-U>e ~/.vim/dict/' . extension . '.dict'
+endfunction
+au FileReadPre * call SetEditDict()
+
 function! RailsSetting()
   setl dict+=~/.vim/dict/rails.dict
+  nmap <buffer><Space>d :<C-U>e ~/.vim/dict/rails.dict
 
   let g:neocomplcache_dictionary_filetype_lists.ruby = expand('~/.vim/dict/rails.dict')
   let g:neocomplcache_dictionary_filetype_lists.eruby = expand('~/.vim/dict/rails.dict')
-  " au FileType ruby       setl ft=ruby.rails
-  " au FileType eruby      setl ft=eruby.rails
+
+  let filepath = expand("%:p")
+  if filepath =~ 'models/[a-zA-Z_]\+.rb$'
+    setl dict+=~/.vim/dict/rails.models.dict
+    nmap <buffer><Space>d :<C-U>e ~/.vim/dict/rails.models.dict<CR>
+  endif
+
+  if filepath =~ 'views\/[a-zA-Z_]\+.rb$'
+    setl dict+=~/.vim/dict/rails.views.dict
+    nmap <buffer><Space>d :<C-U>e ~/.vim/dict/rails.views.dict<CR>
+  endif
+
+  if filepath =~ 'controllers\/[a-zA-Z_]\+.rb$'
+    setl dict+=~/.vim/dict/rails.controllers.dict
+    nmap <buffer><Space>d :<C-U>e ~/.vim/dict/rails.controllers.dict<CR>
+  endif
 endfunction
 au User Rails call RailsSetting()
 
@@ -2166,8 +2238,6 @@ inoremap <expr><C-g>     neocomplcache#undo_completion()
 
 " snippetの編集
 nmap <Space>e :<C-U>NeoComplCacheEditSnippets<CR>
-au FileType ruby,eruby nmap <buffer><Space>d :<C-U>e ~/.vim/dict/ruby.dict
-au User Rails          nmap <buffer><Space>dd :<C-U>e ~/.vim/dict/rails.dict
 au BufRead,BufNewFile *.snip  setl filetype=snippet
 au FileType dict nmap <buffer><Space>e :e #<CR>
 
@@ -2194,7 +2264,7 @@ setl tags=""
 let current_dir = expand("%:p:h")
 
 if has('path_extra')
-  " setl tags=*4/tags
+  setl tags=./*4/tags
 endif
 
 " rtagsは独自shコマンドrtags -Rで作成
@@ -2231,7 +2301,7 @@ au Filetype php nmap <Leader>R :! phptohtml<CR>
 " 独自関数
 "----------------------------------------
 function! Today()
-  return strftime("%Y/%m/%d")
+  return strftime("%Y-%m-%d")
 endfunction
 inoremap <C-D><C-D> <C-R>=Today()<CR>
 
@@ -2266,13 +2336,14 @@ function! OpenYard(...)
 endfunction
 
 command!
-\   -nargs=* -complete=file
+\   -nargs=*
 \   OpenYard
 \   call OpenYard(<q-args>)
 
 " マッピング
 nmap <Space>y :<C-U>OpenYard <C-R><C-W><CR>
 
+
 "}}}
 
-set secure
+

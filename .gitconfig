@@ -1,6 +1,6 @@
 [user]
     email = alprhcp666@gmail.com
-    name  = Ikkun
+    name  = Hiroyuki Ishii
 
 [core]
     editor = /Applications/MacVim.app/Contents/MacOS/Vim
@@ -17,3 +17,6 @@
 
 [push]
     default = tracking
+[github]
+    user = taichouchou2
+    token = a5577564bfa714ebff7d565d7406f08dcd22ac40

@@ -1,26 +1,27 @@
 #!/bin/sh
 
+#rubyのインスコ #好きなバージョンでok
+RUBIES=( 1.9.3-p125 1.9.2-p290 1.8.7-p357 )
 cd $HOME
 git clone git://github.com/sstephenson/rbenv.git ~/.rbenv
 
 if [ -x `which rbenv` ];then
     echo 'rbenvがインストール済みです'
+    mkdir -p ~/.rbenv/plugins
+    cd ~/.rbenv/plugins
+    git clone git://github.com/sstephenson/ruby-build.git  ~/.rbenv/plugins/ruby-build
+
+    for version in ${RUBIES[@]}
+    do
+    rbenv install $version
+    done
+
+    #好きなバージョンでok
+    rbenv global 1.9.3-p125
+    rbenv rehash
 else
     echo 'export PATH="$HOME/.rbenv/bin/:$HOME/.rbenv:$PATH"' >> ~/.zshrc
     echo 'eval "$(rbenv init -)"' >> ~/.zshrc
 fi
 
-mkdir -p ~/.rbenv/plugins
-cd ~/.rbenv/plugins
-git clone git://github.com/sstephenson/ruby-build.git  ~/.rbenv/plugins/ruby-build
 
-#rubyのインスコ #好きなバージョンでok
-RUBIES=( 1.9.3-p125 1.9.2-p290 1.8.7-p357 )
-for version in ${RUBIES[@]}
-do
-rbenv install $version
-done
-
-#好きなバージョンでok
-rbenv global 1.9.3-p125
-rbenv rehash
