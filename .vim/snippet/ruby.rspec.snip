@@ -47,3 +47,7 @@ snippet     reqs
 abbr        require rspec
 prev_word     '^'
     require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+
+snippet     its
+    its(${1}) { ${2} }
+

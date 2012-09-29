@@ -12,5 +12,6 @@ tabs:
       panes:
         - rails s
         - spork
+        - guard
         - mysql.server start
         - yard server --gems

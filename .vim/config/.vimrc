@@ -16,6 +16,7 @@ set showmode
 set timeout timeoutlen=400 ttimeoutlen=100
 set vb t_vb=
 set viminfo='100,<800,s300,\"300
+let PATH='/Users/taichou/.autojump/bin:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin/:/Users/taichou/.rbenv:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin:/Users/taichou/.rbenv:/Users/taichou/.autojump/bin:/Users/taichou/local/bin:/Users/taichou/local/sbin:/usr/local/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:/Applications/XAMPP/xamppfiles/bin:/bin:/sbin:/usr/sbin:/usr/bin:/Applications/XAMPP/xamppfiles/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/bin:/sbin:/usr/sbin:/usr/bin'
 
 autocmd FileType help nnoremap <buffer> q <C-w>c
 nmap <Space>h :<C-u>help<Space><C-r><C-w><CR>
@@ -226,6 +227,7 @@ if has("autocmd")
   autocmd FileType php        setlocal sw=4 sts=4 ts=4 et
   autocmd FileType python     setlocal sw=4 sts=4 ts=4 et
   autocmd FileType ruby       setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType gitcommit  setlocal sw=2 sts=2 ts=2 et
   autocmd FileType scala      setlocal sw=2 sts=2 ts=2 et
   autocmd FileType scss       setlocal sw=2 sts=2 ts=2 et
   autocmd FileType sh         setlocal sw=4 sts=4 ts=4 et
@@ -579,7 +581,7 @@ NeoBundle 'AtsushiM/sass-compile.vim'
 " NeoBundle 'ujihisa/neco-ruby'
 " NeoBundle 'astashov/vim-ruby-debugger'
 NeoBundle 'taichouchou2/vim-rails'
-NeoBundle 'taichouchou2/vim-ref-ri'
+NeoBundle 'taka84u9/vim-ref-ri'
 NeoBundle 'taichouchou2/neco-rubymf' " gem install methodfinder
 " NeoBundle 'romanvbabenko/rails.vim' " Rfactoryメソッドなど追加
 NeoBundle 'ruby-matchit'
@@ -591,6 +593,8 @@ NeoBundle 'taichouchou2/unite-reek',
       \{  'depends' : 'Shougo/unite.vim' }
 NeoBundle 'taichouchou2/unite-rails_best_practices',
       \{ 'depends' : 'Shougo/unite.vim' }
+NeoBundle 'taichouchou2/rails-complete',
+      \{ 'depends' : 'Shougo/neocomplcache' }
 
 " python
 " ----------------------------------------
@@ -770,9 +774,11 @@ nmap <C-J> [unite]
 nnoremap <silent> [unite]<C-U> :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
 " nnoremap <silent> [unite]<C-R> :<C-u>Unite -buffer-name=register register<CR>
 nnoremap <silent> [unite]<C-R> :<C-u>Unite reek<CR>
+nnoremap <silent> [unite]<C-R><C-R> :<C-u>Unite rails_best_practices<CR>
 nnoremap <silent> [unite]<C-J> :<C-u>Unite file_mru<CR>
 nnoremap <silent> [unite]<C-B> :<C-u>Unite bookmark<CR>
 nnoremap <silent> <Space>b :<C-u>UniteBookmarkAdd<CR>
+
 
 function! s:unite_my_settings()"{{{
   " nmap <buffer> <ESC> <Plug>(unite_exit)
@@ -784,8 +790,8 @@ function! s:unite_my_settings()"{{{
   " nnoremap <silent> <buffer> <expr> <C-l> unite#do_action('vsplit')
   " nnoremap <silent> <buffer> <expr> <C-o> unite#do_action('open')
   call unite#custom_default_action('ref', 'split')
-  hi CursorLine                    guibg=#3E3D32
-  hi CursorColumn                  guibg=#3E3D32
+  " hi CursorLine                    guibg=#3E3D32
+  " hi CursorColumn                  guibg=#3E3D32
 endfunction
 autocmd FileType unite call s:unite_my_settings()
 "}}}
@@ -2085,7 +2091,7 @@ au FileType ruby,eruby,ruby.rpec setl dict+=~/.vim/dict/ruby.dict
 au FileType ruby.rspec           setl dict+=~/.vim/dict/rspec.dict
 
 au FileType jasmine.coffee,jasmine.js setl dict+=~/.vim/dict/js.jasmine.dict
-au FileType coffee               setl dict+=~/.vim/dict/coffee.dict
+au FileType coffee               setl dict+=~/.vim/dict/coffee.dict,~/.vim/dict/javascript.dict
 au FileType html,php,eruby       setl dict+=~/.vim/dict/html.dict
 
 function! SetEditDict()
@@ -2144,6 +2150,7 @@ let g:neocomplcache_ctags_program = "ctags"
 
 " default config snippet
 let g:neocomplcache_snippets_dir=expand('~/.vim/snippet')
+let g:neocomplcache_snippets_disable_runtime_snippets=1
 " let g:neocomplcache_text_mode_filetypes = { 'markdown' : 1, }
 let g:neocomplcache_ignore_composite_filetype_lists = {
       \ 'ruby.spec'          : 'ruby',
@@ -2206,6 +2213,7 @@ if !exists('g:neocomplcache_omni_patterns')
   let g:neocomplcache_omni_patterns = {}
 endif
 let g:neocomplcache_omni_patterns.ruby       = '[^. *\t]\.\w*\|\h\w*::'
+let g:neocomplcache_omni_patterns.coffee     = '[^. *\t](.\| )\w*\|\h\w*::'
 
 let g:neocomplcache_vim_completefuncs = {
       \ 'Ref' : 'ref#complete',

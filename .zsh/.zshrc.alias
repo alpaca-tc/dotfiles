@@ -29,6 +29,7 @@ alias vzo="vim ~/.zsh/.zshrc.osx"
 alias vzp="vim ~/.zsh/.zshrc.prompt"
 alias vzb="vim ~/.zsh/.zshrc.basic"
 alias em="emacs"
+alias e="emacs"
 alias ee="emacs ~/.emacs.el"
 alias sz="source ~/.zshrc"
 
@@ -116,11 +117,20 @@ alias github='open github-mac://openRepo/file:/Volumes/disk1_pt1/git/'
 # rals
 alias r='rails'
 alias rg='rails generate'
+alias rc='rails console'
+alias rd='rails db'
 alias rgc='rails generate controller'
 alias rgm='rails generate model'
 alias rgd='rails destroy'
 alias rgs='rails generate scaffold'
+alias rgmg='rails generate migration'
 
+_rakeDbSetUp() {
+  rake db:drop:all
+  rake db:setup
+  rake db:setup RAILS_ENV=test
+}
+alias rs=_rakeDbSetUp
 alias y='yard'
 alias yg='yard server --gems'
 
