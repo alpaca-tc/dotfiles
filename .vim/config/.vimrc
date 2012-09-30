@@ -879,26 +879,35 @@ autocmd BufEnter *
 " 起動コマンド
 " default <leader><leader>
 nnoremap <Leader><leader> :VimFilerBufferDir<CR>
+nnoremap <C-H><C-F> :VimFilerExplorer<CR>
 
+" lean more [ utf8 glyph ]( http://sheet.shiar.nl/unicode )
 let g:vimfiler_safe_mode_by_default = 0
 let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_sort_type = "filename"
-" let g:vimfiler_sendto = {
-"       \   'unzip' : 'unzip'
-"       \ , 'gedit' : 'gedit'
-"       \ }
+" let g:vimfiler_split_action = "right"
+" let g:vimfiler_edit_action = "open"
+let g:vimfiler_preview_action = ""
+let g:vimfiler_max_directories_history = 100
+let g:vimfiler_enable_auto_cd= 1
+let g:vimfiler_file_icon = "-"
+let g:vimfiler_readonly_file_icon = "𐄂"
+let g:vimfiler_tree_closed_icon = "‣"
+let g:vimfiler_tree_leaf_icon = " "
+let g:vimfiler_tree_opened_icon = "▾"
+let g:vimfiler_marked_file_icon = "✓"
 
+"VimFilerKeyMapping{{{
 aug VimFilerKeyMapping
   au!
   autocmd FileType vimfiler call s:vimfiler_local()
 
   function! s:vimfiler_local()
-    " if has('unix')
-    "   " 開き方
-    "   call vimfiler#set_execute_file('sh', 'sh')
-    "   call vimfiler#set_execute_file('mp3', 'iTunes')
-    " endif
-
+    if has('unix')
+      " 開き方
+      call vimfiler#set_execute_file('sh', 'sh')
+      call vimfiler#set_execute_file('mp3', 'iTunes')
+    endif
 
     " Unite bookmark連携
     nmap <buffer>B :<C-U>Unite bookmark<CR>
@@ -913,16 +922,32 @@ aug VimFilerKeyMapping
     call unite#custom_default_action('source/bookmark/directory' , 'vimfiler')
   endfunction
 aug END
+"}}}
 
-"gitの場合、ルートディレクトリに移動
-" function! s:git_root_dir()
-"   if(system('git rev-parse --is-inside-work-tree') == "true\n")
-"     return ':VimFiler ' . system('git rev-parse --show-cdup') . '\<CR>'
-"   else
-"     echoerr '!!!current directory is outside git working tree!!!'
-"   endif
-" endfunction
+" VimFilerExplorerを自動起動
+" gitの場合はgit_rootかつ、バッファの有無でフォーカス変える
+function! VimFilerExplorerGit()
+  let cmd = bufname("%") != "" ? "2wincmd w" : ""
 
+  if(system('git rev-parse --is-inside-work-tree') == "true\n")
+    let git_root = system('git rev-parse --show-cdup')
+    exe 'VimFilerExplorer ' . substitute( git_root, '\n', "", "g" )
+  else
+    VimFilerExplorer
+  endif
+
+  exe cmd
+endfunction
+
+command!
+\   VimFilerExplorerGit
+\   call VimFilerExplorerGit()
+
+" vimfilerが最後のbufferならばvimを終了
+autocmd BufEnter * if (winnr('$') == 1 && &filetype ==# 'vimfiler') | q | endif
+
+" VimFilerExplorer自動起動
+autocmd VimEnter * call VimFilerExplorerGit()
 "}}}
 
 "------------------------------------
@@ -1927,7 +1952,7 @@ nmap <C-H><C-E> :SrcExplToggle<CR>
 " autocmd FileType * NERDTreeToggle
 
 "閉じる<->開くのキーマップ
-nmap <C-H><C-F> :NERDTreeToggle<CR>
+" nmap <C-H><C-F> :NERDTreeToggle<CR>
 
 function! NerdSetting()
   nmap <buffer>l o
@@ -2390,4 +2415,4 @@ nmap <Space>y :<C-U>OpenYard <C-R><C-W><CR>
 
 "}}}
 
-
+set secure
