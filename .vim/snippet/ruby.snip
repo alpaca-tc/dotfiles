@@ -1,4 +1,5 @@
-# rspec
+# rspec/*{{{*/
+#
 snippet     con
 abbr        context do
     context '${1}' do
@@ -44,7 +45,10 @@ abbr        let(:name) {}
 prev_word   '^'
     let(:${1:symbol}) { ${2} }
 
+#/*}}}*/
+
 # ruby
+#/*{{{*/
 snippet     ini
 abbr        def initialize end
     def initialize( ${1})
@@ -81,41 +85,16 @@ snippet until
         ${2}
     end
 
-snippet mod module .. end
-    module ${1:`substitute(Filename(), '^.', '\u&', '')`}
-        ${2}
-    end
-
 snippet     class
 abbr        class end
     class ${1:className}
       ${2}
     end
 
-snippet     cla
-abbr        class end
-    class ${1:name}
-      ${2}
-    end
-
-snippet am
-    alias_method :${1:new_name}, :${2:old_name}
-
-snippet array
-    Array.new(${1:10}) { |${2:i}| ${3} }
-
-snippet hash
-    Hash.new { |${1:hash}, ${2:key}| $1[$2] = ${3} }
-
-snippet dir
-    Filename.dirname(__FILE__)
-
 snippet defs
     def self.${1:class_method_name}
         ${2}
     end
-
-# include Enumerable
 
 snippet     begin
 abbr        begin rescue end
@@ -174,6 +153,7 @@ snippet req
 
 snippet end
     __END__
+
 snippet case
     case ${1:object}
     when ${2:condition}
@@ -188,6 +168,10 @@ snippet nam
         ${2}
     end
 
+#/*}}}*/
+
+# class etc..
+# /*{{{*/
 snippet     watcher
 prev_word        '^'
     require 'digest/md5'
@@ -222,29 +206,10 @@ prev_word        '^'
       end
     }
 
-snippet     404
-    match "*path" => 'error#handle404'
-
-snippet     num_f
-    def num_fmt(num)
-      num.to_s.reverse.gsub( /(\d{3})(?=\d)/, '\1,' ).reverse
-    end
-
-snippet     mod
-    module ${1:module_name}
-      ${2}
-    end
-
 snippet     module
     module ${1:module_name}
       ${2}
     end
-
-snippet     config.inc
-  con ig.include ${1:ClassName},  type: ${2::modle}
-
-snippet     config.include
-  config.include ${1:ClassName},  type: ${2::modle}
 
 snippet     rdoc
     # === ${1}
@@ -252,18 +217,11 @@ snippet     rdoc
     # === 引数
     # ${3}
     # === 戻り値
-snippet     d
+
+snippet     debug
     Rails.logger.debug ${1}
 
-snippet     mCallback
-    extend ActiveModel::Callbacks
-    define_model_callbacks ${1}
-
-snippet     I18
-    I18n.t('${1}')
-
-
-snippet     Hash2
+snippet     Hash
     Hash.new{|h,k| h[k]=Hash.new(&h.default_proc)}
 
 snippet     cValidate
@@ -272,5 +230,36 @@ snippet     cValidate
         ${2}
 
         record.errors[attribute] << I18n.t('${3:ja.errors}')
+      end
+    end
+
+snippet     cOption
+    class OptInit
+
+      def initialize( argv )
+        require 'optparse'
+        @opt = OptionParser.new
+        @opt.on( '-h', '--help', 'Show help')
+
+        opts = ARGV.getopts("m:e:", "mac:", "exist:", "list", "l", "h", "help", "j", "json" )
+        @params = opts.select {|k, v| v }
+      end
+
+#/*}}}*/
+
+snippet     cHash_deep_merge
+    class Hash
+      # Returns a new hash with +self+ and +other_hash+ merged recursively.
+      def deep_merge(other_hash)
+        dup.deep_merge!(other_hash)
+      end
+
+      # Same as +deep_merge+, but modifies +self+.
+      def deep_merge!(other_hash)
+        other_hash.each_pair do |k,v|
+          tv = self[k]
+          self[k] = tv.is_a?(Hash) && v.is_a?(Hash) ? tv.deep_merge(v) : v
+        end
+        self
       end
     end

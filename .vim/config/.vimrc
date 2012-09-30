@@ -17,6 +17,7 @@ set timeout timeoutlen=400 ttimeoutlen=100
 set vb t_vb=
 set viminfo='100,<800,s300,\"300
 let PATH='/Users/taichou/.autojump/bin:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin/:/Users/taichou/.rbenv:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin:/Users/taichou/.rbenv:/Users/taichou/.autojump/bin:/Users/taichou/local/bin:/Users/taichou/local/sbin:/usr/local/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:/Applications/XAMPP/xamppfiles/bin:/bin:/sbin:/usr/sbin:/usr/bin:/Applications/XAMPP/xamppfiles/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/bin:/sbin:/usr/sbin:/usr/bin'
+let $PATH='/Users/taichou/.autojump/bin:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin/:/Users/taichou/.rbenv:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin:/Users/taichou/.rbenv:/Users/taichou/.autojump/bin:/Users/taichou/local/bin:/Users/taichou/local/sbin:/usr/local/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:/Applications/XAMPP/xamppfiles/bin:/bin:/sbin:/usr/sbin:/usr/bin:/Applications/XAMPP/xamppfiles/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/bin:/sbin:/usr/sbin:/usr/bin'
 
 autocmd FileType help nnoremap <buffer> q <C-w>c
 nmap <Space>h :<C-u>help<Space><C-r><C-w><CR>
@@ -245,7 +246,7 @@ autocmd InsertLeave * set nopaste
 
 "----------------------------------------
 "表示"{{{
-set showmatch         " 括弧の対応をハイライト
+set showmatch         " 括弧の対応をハイライトa
 set number            " 行番号表示
 set noequalalways     " 画面の自動サイズ調整解除
 " set relativenumber    " 相対表示
@@ -257,12 +258,20 @@ set listchars=tab:␣.,trail:_,extends:>,precedes:< " 不可視文字の表示�
 set scrolloff=5
 " set scrolljump=-50
 set showcmd
+au FileType coffee,ruby,eruby,php,javascript,javascript.jasmine,ruby.spec,ruby.rails,ruby.rails.model,ruby.rails.controller,ruby.rspec,c,json,vim set colorcolumn=80
 
 "set display=uhex      " 印字不可能文字を16進数で表示
 set t_Co=256          " 確かカラーコード
 set lazyredraw        " コマンド実行中は再描画しない
 set ttyfast           " 高速ターミナル接続を行う
 " set scrolloff=999     " 常にカーソルを真ん中に
+if has('gui_macvim')
+  set transparency=10
+  " set guifont=Recty:h12
+  set lines=90 columns=200
+  set guioptions-=T
+endif
+
 syntax on
 
 " 全角スペースの表示
@@ -582,19 +591,19 @@ NeoBundle 'AtsushiM/sass-compile.vim'
 " NeoBundle 'astashov/vim-ruby-debugger'
 NeoBundle 'taichouchou2/vim-rails'
 NeoBundle 'taka84u9/vim-ref-ri'
-NeoBundle 'taichouchou2/neco-rubymf' " gem install methodfinder
+" NeoBundle 'taichouchou2/neco-rubymf' " gem install methodfinder
 " NeoBundle 'romanvbabenko/rails.vim' " Rfactoryメソッドなど追加
 NeoBundle 'ruby-matchit'
 NeoBundle 'taq/vim-rspec'
 NeoBundle 'ujihisa/unite-rake'
 NeoBundle 'taichouchou2/vim-rsense'
-" NeoBundle 'vim-ruby/vim-ruby'
+NeoBundle 'vim-ruby/vim-ruby'
 NeoBundle 'taichouchou2/unite-reek',
       \{  'depends' : 'Shougo/unite.vim' }
 NeoBundle 'taichouchou2/unite-rails_best_practices',
       \{ 'depends' : 'Shougo/unite.vim' }
-NeoBundle 'taichouchou2/rails-complete',
-      \{ 'depends' : 'Shougo/neocomplcache' }
+" NeoBundle 'taichouchou2/rails-complete',
+"       \{ 'depends' : 'Shougo/neocomplcache' }
 
 " python
 " ----------------------------------------
@@ -629,7 +638,9 @@ filetype plugin indent on
 "----------------------------------------
 "個別のプラグイン"{{{
 " jk同時押しで<ESC>
-call arpeggio#map('i', '', 0, 'jk', '<Esc>')
+call arpeggio#map('i', '', 0, 'jk', '<Esc>:noh<CR>')
+" call arpeggio#map('n', '', 0, 'jk', '<Esc>:noh<CR>')
+call arpeggio#map('v', '', 0, 'jk', '<Esc>:noh<CR>')
 
 "------------------------------------
 " Align
@@ -742,6 +753,24 @@ if executable('coffeetags')
         \ }
         \ }
 endif
+" let g:tagbar_type_markdown = {
+"   \ 'ctagstype' : 'markdown',
+"   \ 'kinds' : [
+"     \ 'h:Heading_L1',
+"     \ 'i:Heading_L2',
+"     \ 'k:Heading_L3'
+"   \ ]
+" \ }
+let g:tagbar_type_ruby = {
+    \ 'kinds' : [
+        \ 'm:modules',
+        \ 'c:classes',
+        \ 'd:describes',
+        \ 'C:contexts',
+        \ 'f:methods',
+        \ 'F:singleton methods'
+    \ ]
+\ }
 "}}}
 
 "------------------------------------
@@ -773,8 +802,8 @@ nmap <C-J> [unite]
 
 nnoremap <silent> [unite]<C-U> :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
 " nnoremap <silent> [unite]<C-R> :<C-u>Unite -buffer-name=register register<CR>
-nnoremap <silent> [unite]<C-R> :<C-u>Unite reek<CR>
-nnoremap <silent> [unite]<C-R><C-R> :<C-u>Unite rails_best_practices<CR>
+nnoremap <silent> [unite]<C-R> :<C-u>Unite -no-quit reek<CR>
+nnoremap <silent> [unite]<C-R><C-R> :<C-u>Unite -no-quit rails_best_practices<CR>
 nnoremap <silent> [unite]<C-J> :<C-u>Unite file_mru<CR>
 nnoremap <silent> [unite]<C-B> :<C-u>Unite bookmark<CR>
 nnoremap <silent> <Space>b :<C-u>UniteBookmarkAdd<CR>
@@ -870,9 +899,11 @@ aug VimFilerKeyMapping
     "   call vimfiler#set_execute_file('mp3', 'iTunes')
     " endif
 
+
     " Unite bookmark連携
     nmap <buffer>B :<C-U>Unite bookmark<CR>
     nmap <buffer>b :<C-U>UniteBookmarkAdd<CR>
+    nmap <buffer><CR> <Plug>(vimfiler_edit_file)
     " nmap <buffer><silent><C-J>
     nmap <buffer><silent><C-J><C-J> :<C-U>Unite file_mru<CR>
     " nmap <buffer><silent><C-J><C-U> :<C-U>Unite file<CR>
@@ -1085,6 +1116,7 @@ let g:ref_ri_cmd                  = expand('~/.rbenv/versions/1.9.3-p125/bin/ri'
 " nmap K <Nop>
 
 nmap <C-K> :<C-U>Ref alc <Space><C-R><C-W><CR>
+vmap <C-K> :<C-U>Ref alc <Space><C-R><C-W><CR>
 autocmd FileType ruby,eruby,ruby.rspec nmap <silent><buffer>KK :<C-u>Unite -no-start-insert ref/ri -input=<C-R><C-W><CR>
 autocmd FileType ruby,eruby,ruby.rspec nmap <silent><buffer>K :<C-u>Unite -no-start-insert ref/refe -input=<C-R><C-W><CR>
 
@@ -1136,10 +1168,10 @@ let g:ref_phpmanual_cmd = 'lynx -dump -nonumbers -assume_charset=utf-8 -assume_l
 " nmap <Space>gs :<C-U>Gstatus<CR>
 " nmap <Space>gl :<C-U>Glog<CR>
 " nmap <Space>ga :<C-U>Gwrite<CR>
-nmap <Space>gm :<C-U>Gcommit<CR>
-nmap <Space>gM :<C-U>Git commit --amend<CR>
-nmap <Space>gb :<C-U>Gblame<CR>
-nmap <Space>gg :<C-U>Ggrep<Space>
+nmap <silent>gm :<C-U>Gcommit<CR>
+nmap <silent>gM :<C-U>Git commit --amend<CR>
+nmap <silent>gb :<C-U>Gblame<CR>
+nmap <silent>gr :<C-U>Ggrep<Space>
 au FileType fugitiveblame vertical res 25
 "}}}
 
@@ -1154,16 +1186,16 @@ let g:git_command_edit = 'rightbelow vnew'
 " nmap <silent><Space>gb :GitBlame<CR>
 " nmap <silent><Space>gB :Gitblanch
 " nmap <silent><Space>gp :GitPush<CR>
-nmap <silent><Space>gd :<C-U>GitDiff HEAD<CR>
-nmap <silent><Space>gD :GitDiff<Space>
+nmap <silent>gd :<C-U>GitDiff HEAD<CR>
+nmap <silent>gD :GitDiff<Space>
 " " nmap <silent><Space>gs :GitStatus<CR>
 " " nmap <silent><Space>gl :GitLog -10<CR>
 " " nmap <silent><Space>gL :<C-u>GitLog -u \| head -10000<CR>
-nmap <silent><Space>ga :GitAdd<CR>
+nmap <silent>ga :GitAdd<CR>
 " nmap <silent><Space>gA :<C-u>GitAdd <cfile><CR>
 " nmap <silent><Space>gm :GitCommit<CR>
 " nmap <silent><Space>gM :GitCommit --amend<CR>
-nmap <silent><Space>gp :Git push<Space>
+nmap <silent>gp :Git push<Space>
 " nmap <silent><Space>gt :Git tag<Space>
 " "}}}
 
@@ -1171,8 +1203,9 @@ nmap <silent><Space>gp :Git push<Space>
 " unite-giti
 "----------------------------------------
 "{{{
-nmap <silent><Space>gl :Unite giti/log<CR>
-nmap <silent><Space>gs :Unite giti/status<CR>
+nmap <silent>gl :<C-U>Unite giti/log<CR>
+nmap <silent>gs :<C-U>Unite giti/status<CR>
+nmap <silent>gB :<C-U>Unite giti/branch<CR>
 "}}}
 
 "----------------------------------------
@@ -1267,12 +1300,11 @@ let b:match_ignorecase = 1
 "}}}
 
 "------------------------------------
-" powerline
+" vim-powerline
 "------------------------------------
 "{{{
 ">の形をを許可する
 "ちゃんと/.vim/fontsのfontを入れていないと動かないよ
-"set guifont=Ricty_for_Powerline:h10
 set guifontwide=Ricty:h10
 let g:Powerline_symbols = 'fancy'
 "let g:Powerline_symbols = 'compatible'
@@ -1572,12 +1604,12 @@ nnoremap <C-H><C-G> :CtrlPClearCache<Return>:call <SID>CallCtrlPBasedOnGitStatus
 " vim-ruby
 "------------------------------------
 "{{{
-" function! s:vimRuby()
-"   " let g:rubycomplete_buffer_loading = 1
-"   let g:rubycomplete_classes_in_global = 0
-"   let g:rubycomplete_rails = 0
-" endfunction
-" au FileType ruby,eruby,ruby.rspec call s:vimRuby()
+function! s:vimRuby()
+  let g:rubycomplete_buffer_loading = 0
+  let g:rubycomplete_classes_in_global = 0
+  let g:rubycomplete_rails = 0
+endfunction
+au FileType ruby,eruby,ruby.rspec call s:vimRuby()
 "}}}
 
 "------------------------------------
@@ -1593,6 +1625,10 @@ let g:rails_url='http://localhost:3000'
 let g:rails_subversion=0
 let g:dbext_default_SQLITE_bin = 'mysql2'
 let g:rails_default_file='config/database.yml'
+let g:rails_mappings=1
+let g:rails_modelines=1
+let g:rails_gnu_screen=1
+" let g:rails_ctags_arguments='--languages=-javascript'
 " let g:rails_ctags_arguments = ''
 function! SetUpRailsSetting()
   nmap <buffer><C-C> <Nop>
