@@ -1195,6 +1195,7 @@ let g:ref_phpmanual_cmd = 'lynx -dump -nonumbers -assume_charset=utf-8 -assume_l
 " nmap <Space>ga :<C-U>Gwrite<CR>
 nmap <silent>gm :<C-U>Gcommit<CR>
 nmap <silent>gM :<C-U>Git commit --amend<CR>
+
 nmap <silent>gb :<C-U>Gblame<CR>
 nmap <silent>gr :<C-U>Ggrep<Space>
 au FileType fugitiveblame vertical res 25
