@@ -16,6 +16,7 @@ set showmode
 set timeout timeoutlen=400 ttimeoutlen=100
 set vb t_vb=
 set viminfo='100,<800,s300,\"300
+set updatetime=4000 " swpを作るまでの時間(au CursorHoldの時間)
 let PATH='/Users/taichou/.autojump/bin:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin/:/Users/taichou/.rbenv:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin:/Users/taichou/.rbenv:/Users/taichou/.autojump/bin:/Users/taichou/local/bin:/Users/taichou/local/sbin:/usr/local/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:/Applications/XAMPP/xamppfiles/bin:/bin:/sbin:/usr/sbin:/usr/bin:/Applications/XAMPP/xamppfiles/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/bin:/sbin:/usr/sbin:/usr/bin'
 let $PATH='/Users/taichou/.autojump/bin:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin/:/Users/taichou/.rbenv:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin:/Users/taichou/.rbenv:/Users/taichou/.autojump/bin:/Users/taichou/local/bin:/Users/taichou/local/sbin:/usr/local/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:/Applications/XAMPP/xamppfiles/bin:/bin:/sbin:/usr/sbin:/usr/bin:/Applications/XAMPP/xamppfiles/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/bin:/sbin:/usr/sbin:/usr/bin'
 
@@ -265,11 +266,36 @@ set t_Co=256          " 確かカラーコード
 set lazyredraw        " コマンド実行中は再描画しない
 set ttyfast           " 高速ターミナル接続を行う
 " set scrolloff=999     " 常にカーソルを真ん中に
+
 if has('gui_macvim')
-  set transparency=10
+  " set transparency=10
   " set guifont=Recty:h12
-  set lines=90 columns=200
+  " set lines=90 columns=200
   set guioptions-=T
+  set guioptions-=L
+  set guioptions-=R
+  set guioptions-=B
+  set cmdheight=1
+
+  " 暫く触らないと、画面を薄くする
+  let g:visible = 0
+  function! SetShow()
+    if g:visible == 1
+      setl transparency=0
+      let g:visible = 0
+    endif
+  endfunction
+  function! SetVisible()
+    setl transparency=98
+    let g:visible = 1
+  endfunction
+  function! ToggleVisible()
+
+  endfunction
+
+  nmap <silent>_ :exec g:visible == 0 ? ":call SetVisible()" : ":call SetShow()"<CR>
+  " au CursorHold * call SetVisible()
+  " au CursorMoved,CursorMovedI,WinLeave * call SetShow()
 endif
 
 syntax on
@@ -879,7 +905,8 @@ autocmd BufEnter *
 " 起動コマンド
 " default <leader><leader>
 nnoremap <Leader><leader> :VimFilerBufferDir<CR>
-nnoremap <C-H><C-F> :VimFilerExplorer<CR>
+" nnoremap <C-H><C-F> :VimFilerExplorer<CR>
+nnoremap <C-H><C-F> :call VimFilerExplorerGit()<CR>
 
 " lean more [ utf8 glyph ]( http://sheet.shiar.nl/unicode )
 let g:vimfiler_safe_mode_by_default = 0
@@ -891,7 +918,8 @@ let g:vimfiler_preview_action = ""
 let g:vimfiler_max_directories_history = 100
 let g:vimfiler_enable_auto_cd= 1
 let g:vimfiler_file_icon = "-"
-let g:vimfiler_readonly_file_icon = "𐄂"
+" let g:vimfiler_readonly_file_icon = "𐄂"
+let g:vimfiler_readonly_file_icon = "x"
 let g:vimfiler_tree_closed_icon = "‣"
 let g:vimfiler_tree_leaf_icon = " "
 let g:vimfiler_tree_opened_icon = "▾"
@@ -908,6 +936,7 @@ aug VimFilerKeyMapping
       call vimfiler#set_execute_file('sh', 'sh')
       call vimfiler#set_execute_file('mp3', 'iTunes')
     endif
+    setl nonumber
 
     " Unite bookmark連携
     nmap <buffer>B :<C-U>Unite bookmark<CR>
@@ -931,10 +960,18 @@ function! VimFilerExplorerGit()
 
   if(system('git rev-parse --is-inside-work-tree') == "true\n")
     let git_root = system('git rev-parse --show-cdup')
+    if git_root == "" |let git_root = "."| endif
     exe 'VimFilerExplorer ' . substitute( git_root, '\n', "", "g" )
   else
-    VimFilerExplorer
+    VimFilerExplorer .
   endif
+
+  let s:vimfiler_enable = 1
+
+  autocmd BufWinLeave <buffer> let s:vimfiler_enable = 0
+
+  " vimfilerが最後のbufferならばvimを終了
+  autocmd BufEnter <buffer> if (winnr('$') == 1 && &filetype ==# 'vimfiler' && s:vimfiler_enable == 1) | q | endif
 
   exe cmd
 endfunction
@@ -943,11 +980,8 @@ command!
 \   VimFilerExplorerGit
 \   call VimFilerExplorerGit()
 
-" vimfilerが最後のbufferならばvimを終了
-autocmd BufEnter * if (winnr('$') == 1 && &filetype ==# 'vimfiler') | q | endif
-
 " VimFilerExplorer自動起動
-autocmd VimEnter * call VimFilerExplorerGit()
+au VimEnter * call VimFilerExplorerGit()
 "}}}
 
 "------------------------------------
@@ -1193,8 +1227,8 @@ let g:ref_phpmanual_cmd = 'lynx -dump -nonumbers -assume_charset=utf-8 -assume_l
 " nmap <Space>gs :<C-U>Gstatus<CR>
 " nmap <Space>gl :<C-U>Glog<CR>
 " nmap <Space>ga :<C-U>Gwrite<CR>
-nmap <silent>gm :<C-U>Gcommit<CR>
-nmap <silent>gM :<C-U>Git commit --amend<CR>
+nmap <silent>gM :<C-U>Gcommit<CR>
+nmap <silent>gm :<C-U>Gcommit --amend<CR>
 
 nmap <silent>gb :<C-U>Gblame<CR>
 nmap <silent>gr :<C-U>Ggrep<Space>
@@ -1220,7 +1254,7 @@ nmap <silent>gD :GitDiff<Space>
 nmap <silent>ga :GitAdd<CR>
 " nmap <silent><Space>gA :<C-u>GitAdd <cfile><CR>
 " nmap <silent><Space>gm :GitCommit<CR>
-" nmap <silent><Space>gM :GitCommit --amend<CR>
+" nmap <silent>gm :GitCommit --amend<CR>
 nmap <silent>gp :Git push<Space>
 " nmap <silent><Space>gt :Git tag<Space>
 " "}}}
@@ -1231,7 +1265,7 @@ nmap <silent>gp :Git push<Space>
 "{{{
 nmap <silent>gl :<C-U>Unite giti/log<CR>
 nmap <silent>gs :<C-U>Unite giti/status<CR>
-nmap <silent>gB :<C-U>Unite giti/branch<CR>
+nmap <silent>gh :<C-U>Unite giti/branch<CR>
 "}}}
 
 "----------------------------------------
@@ -1457,7 +1491,7 @@ function! s:vimshell_settings() "{{{
     NeoComplCacheEnable
 endfunction "}}}
 
-nmap <Space>v :VimShell<CR>
+nmap <Leader>v :VimShell<CR>
 "}}}
 
 "------------------------------------
@@ -2320,6 +2354,9 @@ inoremap <silent><expr><BS>   neocomplcache#smart_close_popup()."\<C-h>"
 " inoremap <expr><C-e>  neocomplcache#cancel_popup()
 " inoremap <silent><CR>  <C-R>=neocomplcache#smart_close_popup()<CR><CR>
 inoremap <silent><CR>  <CR><C-R>=neocomplcache#smart_close_popup()<CR>
+
+" vim-endwise
+exe "imap <silent><CR> ".maparg('<CR>', 'i')."<Plug>DiscretionaryEnd"
 " inoremap <silent><expr><CR> neocomplcache#smart_close_popup() . "\<CR>"
 " inoremap <silent><expr><CR>   neocomplcache#smart_close_popup()."\<C-h>"
 "}}}
