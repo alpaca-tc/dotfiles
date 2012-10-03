@@ -899,6 +899,29 @@ autocmd BufEnter *
 "}}}
 
 "------------------------------------
+" Unite-rails.vim
+"------------------------------------
+"{{{
+function! UniteRailsSetting()
+  nmap <buffer><C-H>mo          :<C-U>Unite rails/model<CR>
+  nmap <buffer><C-H><C-H><C-H>  :<C-U>Unite rails/model<CR>
+  nmap <buffer><C-H>v           :<C-U>Unite rails/view<CR>
+  nmap <buffer><C-H><C-H>       :<C-U>Unite rails/view<CR>
+  nmap <buffer><C-H>cont        :<C-U>Unite rails/controller<CR>
+  nmap <buffer><C-H>            :<C-U>Unite rails/controller<CR>
+  nmap <buffer><C-H>conf        :<C-U>Unite rails/config<CR>
+  nmap <buffer><C-H>sp          :<C-U>Unite rails/spec<CR>
+  nmap <buffer><C-H>db          :<C-U>Unite rails/db<CR>
+  nmap <buffer><C-H>ge          :<C-U>Unite rails/generate<CR>
+  " nmap <buffer><C-H>ro          :<C-U>Unite rails/route<CR>
+  nmap <buffer><C-H>ra          :<C-U>Unite rails/rake<CR>
+  nmap <buffer><C-H>de          :<C-U>Unite rails/destroy<CR>
+  nmap <buffer><C-H>he          :<C-U>Unite rails/heroku<CR>
+endfunction
+au User Rails call UniteRailsSetting()
+"}}}
+
+"------------------------------------
 " VimFiler
 "------------------------------------
 "{{{
@@ -1623,42 +1646,42 @@ au FileType php vmap <buffer><C-_>c :TCommentAs php_surround<CR><Right><Right><R
 "------------------------------------
 " ctrlp
 "------------------------------------
-" ctrlp"{{{
-let g:ctrlp_map = '<Nul>'
-let g:ctrlp_regexp = 1
-let g:ctrlp_tabpage_position = 'al'
-let g:ctrlp_clear_cache_on_exit = 0
-let g:ctrlp_custom_ignore = {
-      \ 'dir':  '\.\(hg\|git\|sass-cache\|svn\)$',
-      \ 'file': '\.\(dll\|exe\|gif\|jpg\|png\|psd\|so\|woff\)$' }
-let g:ctrlp_open_new_file = 't'
-let g:ctrlp_open_multiple_files = 'tj'
-let g:ctrlp_lazy_update = 1
-
-let g:ctrlp_mruf_max = 1000
-let g:ctrlp_mruf_exclude = '\(\\\|/\)\(Temp\|Downloads\)\(\\\|/\)\|\(\\\|/\)\.\(hg\|git\|svn\|sass-cache\)'
-let g:ctrlp_mruf_case_sensitive = 0
-let g:ctrlp_prompt_mappings = {
-      \ 'AcceptSelection("t")': ['<c-n>'],
-      \ }
-
-hi link CtrlPLinePre NonText
-hi link CtrlPMatch IncSearch
-
-function! s:CallCtrlPBasedOnGitStatus()
-  let s:git_status = system('git status')
-
-  if v:shell_error == 128
-    execute 'CtrlPCurFile'
-  else
-    execute 'CtrlP'
-  endif
-endfunction
-
-nnoremap <C-H><C-B> :CtrlPBuffer<Return>
-nnoremap <C-H><C-D> :CtrlPClearCache<Return>:CtrlP ~/Dropbox/Drafts<Return>
-nnoremap <C-H><C-G> :CtrlPClearCache<Return>:call <SID>CallCtrlPBasedOnGitStatus()<Return>
-"}}}
+" " ctrlp"{{{
+" let g:ctrlp_map = '<Nul>'
+" let g:ctrlp_regexp = 1
+" let g:ctrlp_tabpage_position = 'al'
+" let g:ctrlp_clear_cache_on_exit = 0
+" let g:ctrlp_custom_ignore = {
+"       \ 'dir':  '\.\(hg\|git\|sass-cache\|svn\)$',
+"       \ 'file': '\.\(dll\|exe\|gif\|jpg\|png\|psd\|so\|woff\)$' }
+" let g:ctrlp_open_new_file = 't'
+" let g:ctrlp_open_multiple_files = 'tj'
+" let g:ctrlp_lazy_update = 1
+"
+" let g:ctrlp_mruf_max = 1000
+" let g:ctrlp_mruf_exclude = '\(\\\|/\)\(Temp\|Downloads\)\(\\\|/\)\|\(\\\|/\)\.\(hg\|git\|svn\|sass-cache\)'
+" let g:ctrlp_mruf_case_sensitive = 0
+" let g:ctrlp_prompt_mappings = {
+"       \ 'AcceptSelection("t")': ['<c-n>'],
+"       \ }
+"
+" hi link CtrlPLinePre NonText
+" hi link CtrlPMatch IncSearch
+"
+" function! s:CallCtrlPBasedOnGitStatus()
+"   let s:git_status = system('git status')
+"
+"   if v:shell_error == 128
+"     execute 'CtrlPCurFile'
+"   else
+"     execute 'CtrlP'
+"   endif
+" endfunction
+"
+" nnoremap <C-H><C-B> :CtrlPBuffer<Return>
+" nnoremap <C-H><C-D> :CtrlPClearCache<Return>:CtrlP ~/Dropbox/Drafts<Return>
+" nnoremap <C-H><C-G> :CtrlPClearCache<Return>:call <SID>CallCtrlPBasedOnGitStatus()<Return>
+" "}}}
 
 "------------------------------------
 " vim-ruby
@@ -1697,14 +1720,14 @@ function! SetUpRailsSetting()
 
   nmap <buffer><Space>r :R<CR>
   nmap <buffer><Space>a :A<CR>
-  nmap <buffer><Space>m :Rmodel<Space>
-  nmap <buffer><Space>c :Rcontroller<Space>
-  nmap <buffer><Space>v :Rview<Space>
-  nmap <buffer><Space>s :Rspec<Space>
-  nmap <buffer><Space>m :Rgen model<Space>
-  nmap <buffer><Space>c :Rgen contoller<Space>
-  nmap <buffer><Space>s :Rgen scaffold<Space>
-  nmap <buffer><Space>p :Rpreview<CR>
+  " nmap <buffer><Space>m :Rmodel<Space>
+  " nmap <buffer><Space>c :Rcontroller<Space>
+  " nmap <buffer><Space>v :Rview<Space>
+  " nmap <buffer><Space>s :Rspec<Space>
+  " nmap <buffer><Space>m :Rgen model<Space>
+  " nmap <buffer><Space>c :Rgen contoller<Space>
+  " nmap <buffer><Space>s :Rgen scaffold<Space>
+  " nmap <buffer><Space>p :Rpreview<CR>
 endfunction
 autocmd User Rails call SetUpRailsSetting()
 "}}}
