@@ -84,6 +84,10 @@ function! s:remove_dust()
     unlet cursor
 endfunction
 au BufWritePre * call <SID>remove_dust()
+
+if has('gui_macvim')
+  map ¥ \
+endif
 "}}}
 
 "----------------------------------------
@@ -1288,7 +1292,7 @@ nmap <silent>gp :Git push<Space>
 "{{{
 nmap <silent>gl :<C-U>Unite giti/log<CR>
 nmap <silent>gs :<C-U>Unite giti/status<CR>
-nmap <silent>gh :<C-U>Unite giti/branch<CR>
+nmap <silent>gh :<C-U>Unite giti/branch_all<CR>
 "}}}
 
 "----------------------------------------
@@ -1720,14 +1724,14 @@ function! SetUpRailsSetting()
 
   nmap <buffer><Space>r :R<CR>
   nmap <buffer><Space>a :A<CR>
-  " nmap <buffer><Space>m :Rmodel<Space>
-  " nmap <buffer><Space>c :Rcontroller<Space>
-  " nmap <buffer><Space>v :Rview<Space>
+  nmap <buffer><Space>m :Rmodel<Space>
+  nmap <buffer><Space>c :Rcontroller<Space>
+  nmap <buffer><Space>v :Rview<Space>
   " nmap <buffer><Space>s :Rspec<Space>
   " nmap <buffer><Space>m :Rgen model<Space>
   " nmap <buffer><Space>c :Rgen contoller<Space>
   " nmap <buffer><Space>s :Rgen scaffold<Space>
-  " nmap <buffer><Space>p :Rpreview<CR>
+  nmap <buffer><Space>p :Rpreview<CR>
 endfunction
 autocmd User Rails call SetUpRailsSetting()
 "}}}

@@ -78,7 +78,7 @@ export MANPATH=$PATH:/usr/share/man
 # export PATH=$PATH:$GEM_PATH/bin
 
 # rbenv
-export PATH="$HOME/.rbenv/bin/:$HOME/.rbenv:$PATH"
+export PATH="$HOME/.rbenv/bin:$HOME/.rbenv:$PATH"
 eval "$(rbenv init -)"
 
 # git

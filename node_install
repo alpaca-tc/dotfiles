@@ -1,7 +1,6 @@
 #!/bin/sh
 
+# XCodeの設定画面から、macOS command toolをインストールしてください
 sudo ln -s /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain /Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain
-brew install node
-source ~/.zshrc
+brew install node.js
 npm install -g coffee-script
-coffee -h
