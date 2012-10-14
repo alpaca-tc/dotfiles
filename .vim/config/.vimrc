@@ -87,6 +87,10 @@ au BufWritePre * call <SID>remove_dust()
 
 if has('gui_macvim')
   map ¥ \
+  imap ¥ \
+  nmap ¥ \
+  cmap ¥ \
+  smap ¥ \
 endif
 "}}}
 
@@ -569,7 +573,8 @@ NeoBundle 'daisuzu/facebook.vim'
 
 NeoBundle 'thinca/vim-qfreplace'
 NeoBundle 'yuratomo/w3m.vim'
-NeoBundle 'TeTrIs.vim'
+" NeoBundle 'TeTrIs.vim'
+NeoBundle 'mattn/qiita-vim'
 
 " NeoBundle 'benmills/vimux'
 "}}}
@@ -624,7 +629,8 @@ NeoBundle 'taka84u9/vim-ref-ri'
 " NeoBundle 'taichouchou2/neco-rubymf' " gem install methodfinder
 " NeoBundle 'romanvbabenko/rails.vim' " Rfactoryメソッドなど追加
 NeoBundle 'ruby-matchit'
-NeoBundle 'taq/vim-rspec'
+" NeoBundle 'taq/vim-rspec'
+NeoBundle 'skwp/vim-rspec'
 NeoBundle 'ujihisa/unite-rake'
 NeoBundle 'taichouchou2/vim-rsense'
 NeoBundle 'vim-ruby/vim-ruby'
@@ -632,6 +638,7 @@ NeoBundle 'taichouchou2/unite-reek',
       \{  'depends' : 'Shougo/unite.vim' }
 NeoBundle 'taichouchou2/unite-rails_best_practices',
       \{ 'depends' : 'Shougo/unite.vim' }
+NeoBundle 'taichouchou2/alpaca_complete'
 " NeoBundle 'taichouchou2/rails-complete',
 "       \{ 'depends' : 'Shougo/neocomplcache' }
 
@@ -907,20 +914,20 @@ autocmd BufEnter *
 "------------------------------------
 "{{{
 function! UniteRailsSetting()
-  nmap <buffer><C-H>mo          :<C-U>Unite rails/model<CR>
+  nmap <buffer><C-H>m          :<C-U>Unite rails/model<CR>
   nmap <buffer><C-H><C-H><C-H>  :<C-U>Unite rails/model<CR>
   nmap <buffer><C-H>v           :<C-U>Unite rails/view<CR>
   nmap <buffer><C-H><C-H>       :<C-U>Unite rails/view<CR>
-  nmap <buffer><C-H>cont        :<C-U>Unite rails/controller<CR>
+  nmap <buffer><C-H>c        :<C-U>Unite rails/controller<CR>
   nmap <buffer><C-H>            :<C-U>Unite rails/controller<CR>
-  nmap <buffer><C-H>conf        :<C-U>Unite rails/config<CR>
-  nmap <buffer><C-H>sp          :<C-U>Unite rails/spec<CR>
-  nmap <buffer><C-H>db          :<C-U>Unite rails/db<CR>
-  nmap <buffer><C-H>ge          :<C-U>Unite rails/generate<CR>
+  nmap <buffer><C-H>f        :<C-U>Unite rails/config<CR>
+  nmap <buffer><C-H>s          :<C-U>Unite rails/spec<CR>
+  nmap <buffer><C-H>d          :<C-U>Unite rails/db<CR>
+  nmap <buffer><C-H>g          :<C-U>Unite rails/generate<CR>
   " nmap <buffer><C-H>ro          :<C-U>Unite rails/route<CR>
-  nmap <buffer><C-H>ra          :<C-U>Unite rails/rake<CR>
-  nmap <buffer><C-H>de          :<C-U>Unite rails/destroy<CR>
-  nmap <buffer><C-H>he          :<C-U>Unite rails/heroku<CR>
+  nmap <buffer><C-H>r          :<C-U>Unite rails/rake<CR>
+  nmap <buffer><C-H>ds          :<C-U>Unite rails/destroy<CR>
+  nmap <buffer><C-H>h          :<C-U>Unite rails/heroku<CR>
 endfunction
 au User Rails call UniteRailsSetting()
 "}}}
@@ -968,7 +975,9 @@ aug VimFilerKeyMapping
     " Unite bookmark連携
     nmap <buffer>B :<C-U>Unite bookmark<CR>
     nmap <buffer>b :<C-U>UniteBookmarkAdd<CR>
+    nmap <buffer><C-L> <C-W><C-W>
     nmap <buffer><CR> <Plug>(vimfiler_edit_file)
+    nmap <buffer>v <Plug>(vimfiler_view_file)
     " nmap <buffer><silent><C-J>
     nmap <buffer><silent><C-J><C-J> :<C-U>Unite file_mru<CR>
     " nmap <buffer><silent><C-J><C-U> :<C-U>Unite file<CR>
@@ -982,15 +991,17 @@ aug END
 
 " VimFilerExplorerを自動起動
 " gitの場合はgit_rootかつ、バッファの有無でフォーカス変える
+" XXX 関数内でsystemを呼ぶと、なぜか^]];95;cという文字が出る。。。今は外に出し
+" 原因不明
 function! VimFilerExplorerGit()
   let cmd = bufname("%") != "" ? "2wincmd w" : ""
+  let s:git_root = system('git rev-parse --show-cdup')
 
   if(system('git rev-parse --is-inside-work-tree') == "true\n")
-    let git_root = system('git rev-parse --show-cdup')
-    if git_root == "" |let git_root = "."| endif
-    exe 'VimFilerExplorer ' . substitute( git_root, '\n', "", "g" )
+    if s:git_root == "" |let g:git_root = "."| endif
+    exe 'VimFilerExplorer -simple ' . substitute( s:git_root, '\n', "", "g" )
   else
-    VimFilerExplorer .
+    exe 'VimFilerExplorer -simple .'
   endif
 
   let s:vimfiler_enable = 1
@@ -1278,7 +1289,8 @@ nmap <silent>gD :GitDiff<Space>
 " " nmap <silent><Space>gs :GitStatus<CR>
 " " nmap <silent><Space>gl :GitLog -10<CR>
 " " nmap <silent><Space>gL :<C-u>GitLog -u \| head -10000<CR>
-nmap <silent>ga :GitAdd<CR>
+nmap <silent>ga :GitAdd -A<CR>
+nmap <silent>gA :GitAdd<Space>
 " nmap <silent><Space>gA :<C-u>GitAdd <cfile><CR>
 " nmap <silent><Space>gm :GitCommit<CR>
 " nmap <silent>gm :GitCommit --amend<CR>
@@ -1741,9 +1753,10 @@ autocmd User Rails call SetUpRailsSetting()
 "------------------------------------
 "{{{
 " Rsense
+" let g:rsenseUseOmniFunc = 1
 let g:rsenseUseOmniFunc = 1
 let g:rsenseHome = expand('~/.vim/ref/rsense-0.3')
-let g:rsenseMatchFunc = "[a-zA-Z_?]"
+" let g:rsenseMatchFunc = "[a-zA-Z_?]"
 
 function! SetUpRubySetting()
   nmap <buffer>rj :RSenseJumpToDefinition<CR>
@@ -2190,6 +2203,13 @@ nmap <silent><Leader>ig <Plug>IndentGuidesToggle
 "
 " " Select current paragraph and send it to tmux
 " nmap <LocalLeader>vs vip<LocalLeader>vs<CR>
+
+
+"------------------------------------
+" qiita
+"------------------------------------
+nmap <C-H><C-Q> :unite qiita<CR>
+
 "}}}
 
 "----------------------------------------
@@ -2206,6 +2226,7 @@ set infercase
 au FileType css                  setl omnifunc=csscomplete#CompleteCSS
 au FileType html,markdown        setl omnifunc=htmlcomplete#CompleteTags
 au FileType javascript           setl omnifunc=javascriptcomplete#CompleteJS
+au FileType sql                  setl omnifunc=sqlcomplete#Complete
 au FileType python               setl omnifunc=pythoncomplete#Complete
 au FileType xml                  setl omnifunc=xmlcomplete#CompleteTags
 au FileType php                  setl omnifunc=phpcomplete#CompletePHP
@@ -2225,28 +2246,31 @@ au FileReadPre * call SetEditDict()
 
 function! RailsSetting()
   setl dict+=~/.vim/dict/rails.dict
-  nmap <buffer><Space>d :<C-U>e ~/.vim/dict/rails.dict
 
   let g:neocomplcache_dictionary_filetype_lists.ruby = expand('~/.vim/dict/rails.dict')
   let g:neocomplcache_dictionary_filetype_lists.eruby = expand('~/.vim/dict/rails.dict')
 
   let filepath = expand("%:p")
-  if filepath =~ 'models/[a-zA-Z_]\+.rb$'
+  if filepath =~ 'models/[/a-zA-Z_]\+.rb$'
     setl dict+=~/.vim/dict/rails.models.dict
     nmap <buffer><Space>d :<C-U>e ~/.vim/dict/rails.models.dict<CR>
-  endif
-
-  if filepath =~ 'views\/[a-zA-Z_]\+.rb$'
+  elseif filepath =~ 'views\/[/a-zA-Z_.]\+.erb$'
     setl dict+=~/.vim/dict/rails.views.dict
     nmap <buffer><Space>d :<C-U>e ~/.vim/dict/rails.views.dict<CR>
-  endif
-
-  if filepath =~ 'controllers\/[a-zA-Z_]\+.rb$'
+  elseif filepath =~ 'controllers\/[/a-zA-Z_]\+.rb$'
     setl dict+=~/.vim/dict/rails.controllers.dict
     nmap <buffer><Space>d :<C-U>e ~/.vim/dict/rails.controllers.dict<CR>
+  elseif filepath =~ 'db\/migrate\/[/0-9a-zA-Z_]\+.rb$'
+    setl dict+=~/.vim/dict/rails.migrate.dict
+    nmap <buffer><Space>d :<C-U>e ~/.vim/dict/rails.migrate.dict<CR>
+  elseif filepath =~ 'spec\/[/a-zA-Z_]\+.rb$'
+    setl dict+=~/.vim/dict/rails.spec.dict
+    nmap <buffer><Space>d :<C-U>e ~/.vim/dict/rails.spec.dict<CR>
+  else
+    nmap <buffer><Space>d :<C-U>e ~/.vim/dict/rails.dict
   endif
 endfunction
-au User Rails call RailsSetting()
+au User BufEnterRails call RailsSetting()
 
 "----------------------------------------
 " neocomplcache
@@ -2257,14 +2281,14 @@ let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 let g:neocomplcache_max_list = 300
 " let g:neocomplcache_max_keyword_width = 40
 " let g:neocomplcache_max_menu_width = 19
-" let g:neocomplcache_auto_completion_start_length = 2
+let g:neocomplcache_auto_completion_start_length = 2
 " let g:neocomplcache_manual_completion_start_length = 0
 " let g:neocomplcache_min_keyword_length = 2
 " let g:neocomplcache_min_syntax_length = 4
 let g:neocomplcache_cursor_hold_i_time = 300
 " let g:neocomplcache_enable_insert_char_pre = 0
 " let g:neocomplcache_enable_auto_select = 1
-" let g:neocomplcache_enable_auto_delimiter = 0
+" let g:neocomplcache_enable_auto_delimiter = 1
 let g:neocomplcache_caching_limit_file_size=1000000
 let g:neocomplcache_tags_caching_limit_file_size=1000000
 let g:neocomplcache_enable_camel_case_completion = 1
@@ -2329,7 +2353,7 @@ let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 if !exists('g:neocomplcache_omni_functions')
   let g:neocomplcache_omni_functions = {}
 endif
-let g:neocomplcache_omni_functions.ruby = 'RSenseCompleteFunction'
+" let g:neocomplcache_omni_functions.ruby = 'RSenseCompleteFunction'
 
 " Enable heavy omni completion.
 if !exists('g:neocomplcache_omni_patterns')
@@ -2372,7 +2396,6 @@ nmap <Space>e :<C-U>NeoComplCacheEditSnippets<CR>
 au BufRead,BufNewFile *.snip  setl filetype=snippet
 au FileType dict nmap <buffer><Space>e :e #<CR>
 
-" let g:neocomplcache_enable_auto_select = 1
 inoremap <silent><expr><TAB>  pumvisible() ? "\<C-N>" : "\<TAB>"
 inoremap <silent><expr><S-TAB> pumvisible() ? "\<C-P>" : "\<S-TAB>"
 inoremap <silent><expr><BS>   neocomplcache#smart_close_popup()."\<C-h>"
@@ -2380,12 +2403,10 @@ inoremap <silent><expr><BS>   neocomplcache#smart_close_popup()."\<C-h>"
 " inoremap <expr><C-y>  neocomplcache#close_popup()
 " inoremap <expr><C-e>  neocomplcache#cancel_popup()
 " inoremap <silent><CR>  <C-R>=neocomplcache#smart_close_popup()<CR><CR>
-inoremap <silent><CR>  <CR><C-R>=neocomplcache#smart_close_popup()<CR>
-
-" vim-endwise
-exe "imap <silent><CR> ".maparg('<CR>', 'i')."<Plug>DiscretionaryEnd"
-" inoremap <silent><expr><CR> neocomplcache#smart_close_popup() . "\<CR>"
-" inoremap <silent><expr><CR>   neocomplcache#smart_close_popup()."\<C-h>"
+" endwiseを使わない場合はこちら
+" inoremap <silent><expr><CR>  neocomplcache#smart_close_popup() . "\<CR>"
+" endwiseを使う場合はこちら
+imap <expr><CR> neocomplcache#smart_close_popup() . "<CR>" . "<Plug>DiscretionaryEnd"
 "}}}
 
 "}}}

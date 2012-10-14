@@ -1,9 +1,10 @@
 [user]
-    email = alprhcp666@gmail.com
-    name = Hiroyuki Ishii
+	email = alprhcp666@gmail.com
+	name = Hiroyuki Ishii
 
 [core]
     editor = /Applications/MacVim.app/Contents/MacOS/Vim
+	excludesfile = /Users/taichou/.gitignore_global
 
 [color]
     ui = true
@@ -21,3 +22,9 @@
 [github]
     user = taichouchou2
     token = a5577564bfa714ebff7d565d7406f08dcd22ac40
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true

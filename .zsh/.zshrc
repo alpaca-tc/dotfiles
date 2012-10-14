@@ -23,6 +23,7 @@ export ARCHFLAGS="-arch x86_64"
 export APXS2=/usr/sbin/apxs
 
 export PATH=''
+export PATH=$PATH:$HOME/Downloads/android-sdk-macosx/platform-tools
 export PATH=/bin:/sbin:/usr/sbin:/usr/bin
 export MANPATH=$PATH:/usr/share/man
 

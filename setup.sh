@@ -5,7 +5,7 @@ echo "  To install, please tap 'y' or 'n' key\n"
 
 read -p "install dotfiles? y/n " yn
 if [ $yn = "y" -o $yn = "Y" ]; then
-    DOT_FILES=( .ctags .dir_colors .emacs.el .gemrc .gitconfig .gitignore .gvimrc .inputrc .rsense .rspec .rvmrc .tmux.conf .tmux.split .vimrc .zshrc .autojump .emacs.d .tmuxinator .vim .zsh local )
+    DOT_FILES=( .ctags .dir_colors .emacs.el .gemrc .gitconfig .gitignore .gvimrc .inputrc .rsense .rspec .rvmrc .tmux.conf .tmux.split .vimrc .zshrc .autojump .emacs.d .tmuxinator .vim .zsh local .pryrc)
 
     echo "...install dotfiles...\n"
     for file in ${DOT_FILES[@]}
@@ -68,6 +68,13 @@ if [ $yn = "y" -o $yn = "Y" ]; then
     echo "...restart finder\n"
     killall Finder
 fi
+
+read -p "never create .DS_Store" yn
+if [ $yn = "y" -o $yn = "Y" ]; then
+    defaults write com.apple.desktopservices DSDontWriteNetworkStores true
+fi
+
+
 
 # default shell を変更
 read -p "Do you wish to change default shell? zsh y/n " yn
