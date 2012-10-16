@@ -229,7 +229,7 @@ snippet     cValidate
       def validate_each(record, attribute, value)
         ${2}
 
-        record.errors[attribute] << I18n.t('${3:ja.errors}')
+        record.errors[attribute] << I18n.t('${3:errors}')
       end
     end
 

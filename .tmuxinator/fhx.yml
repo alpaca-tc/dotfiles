@@ -6,12 +6,13 @@ project_root: ~/project/fhx.jp_hp
 pre: mysql.server start
 
 tabs:
-  - editor: vim
-  - test: autotest
+  - editor:
+      panes:
+        - autotest
+        - vim
   - console: rails c
   - server: rails s
   - upserv:
       panes:
-        - spork
         - guard
         - yard server --gems

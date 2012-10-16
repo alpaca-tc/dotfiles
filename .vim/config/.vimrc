@@ -493,6 +493,8 @@ NeoBundle 'nathanaelkane/vim-indent-guides' "indentに色づけ
 NeoBundle 'taglist.vim' "関数、変数を画面横にリストで表示する
 NeoBundle 'majutsushi/tagbar'
 
+" Ascii color code対応
+NeoBundle 'vim-scripts/AnsiEsc.vim'
 "コメントアウト
 " NeoBundle 'hrp/EnhancedCommentify'
 
@@ -1092,46 +1094,34 @@ let g:quickrun_config['ruby.rspec'] = {
       \ 'type' : 'ruby.rspec',
       \ 'command': 'rspec',
       \ 'exec': 'bundle exec %c %o %s',
-      \ 'outputter' : 'rspec_outputter'
       \}
+      " \ 'outputter' : 'rspec_outputter'
+      " \ 'exec': 'bundle exec %c --color --tty %o %s',
+      " \ 'outputter' : 'ansi_buffer'
 
-let rspec_outputter = quickrun#outputter#buffer#new()
-function! rspec_outputter.init(session)
-  call call(quickrun#outputter#buffer#new().init, [a:session], self)
+let ansi_buffer = quickrun#outputter#buffer#new()
+function! ansi_buffer.init(session)
+  call call(quickrun#outputter#buffer#new().init,  [a:session],  self)
 endfunction
 
-" syntax color
-function! rspec_outputter.finish(session)
-  " 文字に色をつける。
-  highlight default RSpecGreen   ctermfg=White ctermbg=Green guifg=White guibg=Green
-  highlight default RSpecRed     ctermfg=White ctermbg=Red   guifg=White guibg=Red
-
-  call matchadd("RSpecGreen", "^[\.F]*\.[\.F]*$")
-  call matchadd("RSpecGreen", "^.*, 0 failures$")
-  call matchadd("RSpecRed", "F")
-  call matchadd("RSpecRed", "^.*, [1-9]* failures.*$")
-  call matchadd("RSpecRed", "^.*, 1 failure.*$")
-  call matchadd("RSpecRed", "^ *(.*$")
-  call matchadd("RSpecRed", "^ *expected.*$")
-  call matchadd("RSpecRed", "^ *got.*$")
-  call matchadd("RSpecRed", "Failure/Error:.*$")
-  call matchadd("RSpecRed", "^.*(FAILED - [0-9]*)$")
-  call matchadd("NonText", "Failures:")
-  call matchadd("NonText", "Finished")
-  call matchadd("NonText", "Failed")
+function! ansi_buffer.finish(session)
+  AnsiEsc
   call call(quickrun#outputter#buffer#new().finish,  [a:session], self)
 endfunction
-call quickrun#register_outputter("rspec_outputter", rspec_outputter)
+call quickrun#register_outputter("ansi_buffer", ansi_buffer)
 
 " ファイル名が_spec.rbで終わるファイルを読み込んだ時に上記の設定を自動で読み込む
 function! RSpecQuickrun()
-  nmap <silent><buffer><Leader>lr :<C-U>QuickRun ruby.rspec.oneline<CR>
   let b:quickrun_config = {'type' : 'ruby.rspec'}
-  set ft=ruby.rspec
-  " nnoremap <silent><buffer><Leader>lr :QuickRun ruby.rspec line('.')<CR>
+  setl ft=ruby.rspec
   nnoremap <expr><silent><buffer><Leader>lr "<Esc>:QuickRun ruby.rspec -cmdopt \"-l" .  line('.') . "\"<CR>"
 endfunction
 au BufReadPost *_spec.rb call RSpecQuickrun()
+
+function! s:quickrun_auto_close()
+  autocmd WinEnter,BufRead <buffer> if (winnr('$') == 1) | q | endif
+endfunction
+autocmd FileType quickrun call s:quickrun_auto_close()
 
 "javascriptの実行をnode.jsで
 let $JS_CMD='node'
@@ -1497,6 +1487,8 @@ function! s:vimshell_settings() "{{{
 
     " Alias
     VimShellAlterCommand vi vim
+    VimShellAlterCommand g git
+    VimShellAlterCommand r rails
     VimShellAlterCommand df df -h
     VimShellAlterCommand diff diff --unified
     VimShellAlterCommand du du -h
@@ -1518,17 +1510,7 @@ function! s:vimshell_settings() "{{{
     call vimshell#set_alias('l.', 'ls -d .*')
 
     " Abbrev
-    inoreabbrev <buffer> l@ <Bar> less
-    inoreabbrev <buffer> g@ <Bar> grep
-    inoreabbrev <buffer> p@ <Bar> perl
-    inoreabbrev <buffer> s@ <Bar> sort
-    inoreabbrev <buffer> u@ <Bar> sort -u
-    inoreabbrev <buffer> c@ <Bar> xsel --input --clipboard
-    inoreabbrev <buffer> x@ <Bar> xargs --no-run-if-empty
-    inoreabbrev <buffer> n@ >/dev/null 2>/dev/null
-    inoreabbrev <buffer> e@ 2>&1
-    inoreabbrev <buffer> h@ --help 2>&1 <Bar> less
-    inoreabbrev <buffer> H@ --help 2>&1
+    " inoreabbrev <buffer> h@ --help 2>&1 <Bar> less
 
     if executable('perldocjp')
         VimShellAlterCommand perldoc perldocjp
@@ -1550,6 +1532,8 @@ function! s:vimshell_settings() "{{{
     " Unmap [n] -buffer <C-p>
     " Unmap [i] -buffer <C-k>
     " Map [i] -buffer -force <C-l> <Space><Bar><Space>
+    nmap <C-L> <C-W><C-W>
+    imap <C-L> <Nop>
     " Unmap [i] -buffer <Tab>
     " Map [i] -remap -buffer -force <Tab><Tab> <Plug>(vimshell_command_complete)
 
@@ -2262,7 +2246,6 @@ au FileType python               setl omnifunc=pythoncomplete#Complete
 au FileType xml                  setl omnifunc=xmlcomplete#CompleteTags
 au FileType php                  setl omnifunc=phpcomplete#CompletePHP
 au FileType c                    setl omnifunc=ccomplete#Complete
-au FileType ruby,eruby,ruby.rpec setl dict+=~/.vim/dict/ruby.dict
 au FileType ruby.rspec           setl dict+=~/.vim/dict/rspec.dict
 
 au FileType jasmine.coffee,jasmine.js setl dict+=~/.vim/dict/js.jasmine.dict
@@ -2275,33 +2258,36 @@ function! SetEditDict()
 endfunction
 au FileReadPre * call SetEditDict()
 
-function! RailsSetting()
+function! s:railsSetting()
   setl dict+=~/.vim/dict/rails.dict
 
-  let g:neocomplcache_dictionary_filetype_lists.ruby = expand('~/.vim/dict/rails.dict')
-  let g:neocomplcache_dictionary_filetype_lists.eruby = expand('~/.vim/dict/rails.dict')
-
   let filepath = expand("%:p")
-  if filepath =~ 'models/[/a-zA-Z_]\+.rb$'
+  if filepath =~ 'app\/models/[/a-zA-Z_]\+.rb$'
     setl dict+=~/.vim/dict/rails.models.dict
-    nmap <buffer><Space>d :<C-U>e ~/.vim/dict/rails.models.dict<CR>
-  elseif filepath =~ 'views\/[/a-zA-Z_.]\+.erb$'
+  elseif filepath =~ 'app\/views\/[/a-zA-Z_.]\+.erb$'
     setl dict+=~/.vim/dict/rails.views.dict
-    nmap <buffer><Space>d :<C-U>e ~/.vim/dict/rails.views.dict<CR>
-  elseif filepath =~ 'controllers\/[/a-zA-Z_]\+.rb$'
+  elseif filepath =~ 'app\/controllers\/[/a-zA-Z_]\+.rb$'
     setl dict+=~/.vim/dict/rails.controllers.dict
-    nmap <buffer><Space>d :<C-U>e ~/.vim/dict/rails.controllers.dict<CR>
   elseif filepath =~ 'db\/migrate\/[/0-9a-zA-Z_]\+.rb$'
     setl dict+=~/.vim/dict/rails.migrate.dict
-    nmap <buffer><Space>d :<C-U>e ~/.vim/dict/rails.migrate.dict<CR>
-  elseif filepath =~ 'spec\/[/a-zA-Z_]\+.rb$'
-    setl dict+=~/.vim/dict/rails.spec.dict
-    nmap <buffer><Space>d :<C-U>e ~/.vim/dict/rails.spec.dict<CR>
   else
     nmap <buffer><Space>d :<C-U>e ~/.vim/dict/rails.dict
   endif
 endfunction
-au User BufEnterRails call RailsSetting()
+au User BufEnterRails call s:railsSetting()
+
+" カスタムファイルタイプでも、自動でdictを読み込む
+" そして、編集画面までさくっと移動。
+func! s:auto_dict_setting()
+  let dict_name = split( &ft, '.' )
+  if !empty( dict_name )
+    exe  "setl dict+=~/.vim/dict/".dict_name[0].".dict"
+  endif
+
+  exe  "setl dict+=~/.vim/dict/".&ft.".dict"
+  nmap <buffer><expr><Space>dd ":e ~/.vim/dict/" . &ft .".dict<CR>"
+endfunc
+au FileType * call s:auto_dict_setting()
 
 "----------------------------------------
 " neocomplcache
@@ -2456,6 +2442,7 @@ endif
 " rtagsは独自shコマンドrtags -Rで作成
 " if filereadable(expand('~/tags'))
 au FileType ruby,eruby setl tags+=~/gtags
+setl tags+=./*4/tags
 " else
   " let res = system('ctags', '-R --langmap=Ruby:.rb --ruby-typescfFm =~/.rvm/rubies/default -f ~/rtags')
 "   au FileType ruby,eruby setl tags+=~/rtags
