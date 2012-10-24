@@ -72,6 +72,7 @@ export PATH=$PATH:/bin:/sbin
 export PATH=$PATH:/usr/sbin:/usr/bin
 export MANPATH=$PATH:/usr/share/man
 
+export PATH=$PATH:$HOME/dotfiles/android-sdk-macosx/tools
 # rvm
 # export PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 # source "$HOME/.rvm/scripts/rvm"

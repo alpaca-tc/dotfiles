@@ -54,3 +54,10 @@ prev_word     '^'
 snippet     its
     its(${1}) { ${2} }
 
+snippet     cassociate
+    context "should associate" do
+      [${1::column_name}].each do |associate|
+          # type ModelName before "should"
+          it { should be_associate(associate, ${2::belongs_to}) }
+      end
+    end

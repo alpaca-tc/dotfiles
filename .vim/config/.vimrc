@@ -72,21 +72,21 @@ au FileType ruby,eruby inoremap <buffer>\| \|\|<LEFT>
 vnoremap < <gv
 vnoremap > >gv
 
-if &term =~ "xterm"
-  let &t_ti .= "\e[?2004h"
-  let &t_te .= "\e[?2004l"
-  let &pastetoggle = "\e[201~"
-
-  function XTermPasteBegin(ret)
-    set paste
-    return a:ret
-  endfunction
-
-  noremap <special> <expr> <Esc>[200~ XTermPasteBegin("0i")
-  inoremap <special> <expr> <Esc>[200~ XTermPasteBegin("")
-  cnoremap <special> <Esc>[200~ <nop>
-  cnoremap <special> <Esc>[201~ <nop>
-endif
+" if &term =~ "xterm"
+"   let &t_ti .= "\e[?2004h"
+"   let &t_te .= "\e[?2004l"
+"   let &pastetoggle = "\e[201~"
+"
+"   function XTermPasteBegin(ret)
+"     set paste
+"     return a:ret
+"   endfunction
+"
+"   noremap <special> <expr> <Esc>[200~ XTermPasteBegin("0i")
+"   inoremap <special> <expr> <Esc>[200~ XTermPasteBegin("")
+"   cnoremap <special> <Esc>[200~ <nop>
+"   cnoremap <special> <Esc>[201~ <nop>
+" endif
 
 " HTML/XMLの閉じタグを </ が入力されたときに補完
 augroup MyXML
@@ -177,28 +177,36 @@ autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "norm
 " ****************
 " 画面の移動
 nmap <C-L> <C-W><C-W>
-nmap <C-W><C-H> <C-W>H
-nmap <C-W><C-K> <C-W>K
-nmap <C-W><C-L> <C-W>L
-nmap <C-W><C-J> <C-W>J
+" nmap <C-W><C-H> <C-W>h
+nmap <C-W><C-K> <C-W>k
+nmap <C-W><C-L> <C-W>l
+nmap <C-W><C-J> <C-W>j
+nmap <C-W><C-J><C-L> <C-W>j<C-W>l
+nmap <C-W><C-J><C-h> <C-W>j<C-W>h
+nmap <C-W><C-H><C-j> <C-W>h<C-W>j
+nmap <C-W><C-H><C-k> <C-W>h<C-W>k
+nmap <C-W><C-K><C-H> <C-W>k<C-W>h
+nmap <C-W><C-K><C-L> <C-W>k<C-W>l
+nmap <C-W><C-l><C-j> <C-W>l<C-W>j
+nmap <C-W><C-l><C-k> <C-W>l<C-W>k
 
 " tabを使い易く
-nnoremap t  <Nop>
-nnoremap tn  :tabn<CR>
-nnoremap tp  :tabprevious<CR>
-nnoremap tc  :tabnew<CR>
-nnoremap tx  :tabclose<CR>
+nmap <silent>t  <Nop>
+nmap <silent>tn  :tabn<CR>
+nmap <silent>tp  :tabprevious<CR>
+nmap <silent>tc  :tabnew<CR>
+nmap <silent>tx  :tabclose<CR>
 " nnoremap to  :tabo<CR>
-nnoremap te  :execute 'tabnext' 1 + (tabpagenr() + v:count1 - 1) % tabpagenr('$')<CR>
+nmap <silent>te  :execute 'tabnext' 1 + (tabpagenr() + v:count1 - 1) % tabpagenr('$')<CR>
 "tabを次のtabへ移動
-nnoremap tg  gT
+nmap tg  gT
 
-nnoremap t1  :tabnext 1<CR>
-nnoremap t2  :tabnext 2<CR>
-nnoremap t3  :tabnext 3<CR>
-nnoremap t4  :tabnext 4<CR>
-nnoremap t5  :tabnext 5<CR>
-nnoremap t6  :tabnext 6<CR>
+nmap <silent>t1  :tabnext 1<CR>
+nmap <silent>t2  :tabnext 2<CR>
+nmap <silent>t3  :tabnext 3<CR>
+nmap <silent>t4  :tabnext 4<CR>
+nmap <silent>t5  :tabnext 5<CR>
+nmap <silent>t6  :tabnext 6<CR>
 "}}}
 
 "----------------------------------------
@@ -475,7 +483,7 @@ NeoBundle 'thinca/vim-quickrun' "<Leader>rで簡易コンパイル
 " NeoBundle 'scrooloose/nerdtree' "プロジェクト管理用 tree filer
 NeoBundle 'grep.vim'
 NeoBundle 'smartword'
-NeoBundle 'Shougo/neocomplcache-snippets-complete'
+NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler'
@@ -647,7 +655,7 @@ NeoBundle 'AtsushiM/sass-compile.vim'
 
 "  binary
 " ----------------------------------------
-" NeoBundle 'Shougo/vinarise'
+NeoBundle 'Shougo/vinarise'
 
 " objective-c
 " ----------------------------------------
@@ -660,9 +668,7 @@ NeoBundle 'AtsushiM/sass-compile.vim'
 NeoBundle 'taichouchou2/vim-rails'
 NeoBundle 'taka84u9/vim-ref-ri'
 " NeoBundle 'taichouchou2/neco-rubymf' " gem install methodfinder
-" NeoBundle 'romanvbabenko/rails.vim' " Rfactoryメソッドなど追加
 NeoBundle 'ruby-matchit'
-" NeoBundle 'taq/vim-rspec'
 NeoBundle 'skwp/vim-rspec'
 NeoBundle 'ujihisa/unite-rake'
 NeoBundle 'taichouchou2/vim-rsense'
@@ -683,7 +689,7 @@ NeoBundle 'taichouchou2/alpaca_complete'
 " NeoBundle 'yuroyoro/vim-scala'
 
 " SQLUtilities : SQL整形、生成ユーティリティ
-" NeoBundle 'SQLUtilities'
+NeoBundle 'SQLUtilities'
 
 " C言語など<Leader>;で全行に;を挿入できる
 " NeoBundle 'vim-scripts/teol.vim'
@@ -1284,8 +1290,8 @@ let g:ref_phpmanual_cmd = 'lynx -dump -nonumbers -assume_charset=utf-8 -assume_l
 " nmap <Space>gs :<C-U>Gstatus<CR>
 " nmap <Space>gl :<C-U>Glog<CR>
 " nmap <Space>ga :<C-U>Gwrite<CR>
-nmap <silent>gM :<C-U>Gcommit<CR>
-nmap <silent>gm :<C-U>Gcommit --amend<CR>
+nmap <silent>gm :<C-U>Gcommit<CR>
+nmap <silent>gM :<C-U>Gcommit --amend<CR>
 
 nmap <silent>gb :<C-U>Gblame<CR>
 nmap <silent>gr :<C-U>Ggrep<Space>
@@ -2225,6 +2231,12 @@ nmap <silent><Leader>ig <Plug>IndentGuidesToggle
 "------------------------------------
 nmap <C-H><C-Q> :unite qiita<CR>
 
+"------------------------------------
+" webapi.vim
+"------------------------------------
+" nmap <C-J><C-L> :<C-U>call
+
+
 "}}}
 
 "----------------------------------------
@@ -2478,6 +2490,7 @@ function! Today()
 endfunction
 inoremap <C-D><C-D> <C-R>=Today()<CR>
 
+" 画面分割を抽象的に行う
 function! s:smart_split(cmd)
   if winwidth(0) > winheight(0) * 2
     vsplit
@@ -2515,7 +2528,6 @@ command!
 
 " マッピング
 nmap <Space>y :<C-U>OpenYard <C-R><C-W><CR>
-
 
 "}}}
 
