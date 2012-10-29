@@ -32,6 +32,7 @@ alias em="emacs"
 alias e="emacs"
 alias ee="emacs ~/.emacs.el"
 alias sz="source ~/.zshrc"
+alias msql="mysql -u root -p"
 
 # process
 alias pk='pkill -f'
@@ -143,3 +144,4 @@ alias y='yard'
 alias yg='yard server --gems'
 
 
+alias os='cat /etc/`ls /etc -F | grep "release$\|version$"`'

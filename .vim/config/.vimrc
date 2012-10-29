@@ -274,6 +274,7 @@ if has("autocmd")
   autocmd FileType python     setlocal sw=4 sts=4 ts=4 et
   autocmd FileType ruby       setlocal sw=2 sts=2 ts=2 et
   autocmd FileType gitcommit  setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType gitconfig  setlocal sw=2 sts=2 ts=2 et
   autocmd FileType scala      setlocal sw=2 sts=2 ts=2 et
   autocmd FileType scss       setlocal sw=2 sts=2 ts=2 et
   autocmd FileType sh         setlocal sw=4 sts=4 ts=4 et
@@ -377,6 +378,15 @@ endfunction
 let g:foldMethodCount = 0
 set foldmethod=marker
 nmap <Space><Space>f :<C-U>call ChangeFoldMethod()<CR>
+
+" vimを使っているときはtmuxのステータスラインを隠す
+if !has('gui_running') && $TMUX !=# ''
+  augroup Tmux
+    autocmd!
+    au VimEnter,FocusGained * silent !tmux set status off
+    au VimLeave,FocusLost * silent !tmux set status on
+  augroup END
+endif
 
 " 設定を上書きしない為に、最後に書く
 " colorscheme darkblue
@@ -663,7 +673,7 @@ NeoBundle 'Shougo/vinarise'
 
 " ruby
 " ----------------------------------------
-" NeoBundle 'ujihisa/neco-ruby'
+NeoBundle 'ujihisa/neco-ruby'
 " NeoBundle 'astashov/vim-ruby-debugger'
 NeoBundle 'taichouchou2/vim-rails'
 NeoBundle 'taka84u9/vim-ref-ri'
@@ -690,6 +700,7 @@ NeoBundle 'taichouchou2/alpaca_complete'
 
 " SQLUtilities : SQL整形、生成ユーティリティ
 NeoBundle 'SQLUtilities'
+NeoBundle 'Align'
 
 " C言語など<Leader>;で全行に;を挿入できる
 " NeoBundle 'vim-scripts/teol.vim'
@@ -717,11 +728,15 @@ call arpeggio#map('i', '', 0, 'jk', '<Esc>:noh<CR>')
 call arpeggio#map('v', '', 0, 'jk', '<Esc>:noh<CR>')
 
 "------------------------------------
-" Align
+" Align / alignta
 "------------------------------------
-" Alignを日本語環境で使用するための設定"{{{
+"{{{
+" Alignを日本語環境で使用するための設定
 let g:Align_xstrlen = 3
+let g:alignta_default_options="=<<<1:1"
+let g:alignta_default_arguments="="
 vmap <C-N> :Align<Space>
+vmap <C-N><C-N> :Align<CR>
 "}}}
 
 "------------------------------------
@@ -754,7 +769,7 @@ nnoremap <silent><C-g><C-g> :<C-u>Rgrep<Space><C-r><C-w> *<Enter><CR>
 nnoremap <silent><C-g><C-b> :<C-u>GrepBuffer<Space><C-r><C-w><ENTER>
 
 " 検索外のディレクトリ、ファイルパターン
-let Grep_Skip_Dirs = '.svn .git .hg .swp'
+let Grep_Skip_Dirs  = '.svn .git .hg .swp'
 let Grep_Skip_Files = '*.bak *~'
 
 " qf内でファイルを開いた後画面を閉じる
@@ -951,20 +966,22 @@ autocmd BufEnter *
 "------------------------------------
 "{{{
 function! UniteRailsSetting()
-  nmap <buffer><C-H>m          :<C-U>Unite rails/model<CR>
+  nmap <buffer><C-H>m           :<C-U>Unite rails/model<CR>
   nmap <buffer><C-H><C-H><C-H>  :<C-U>Unite rails/model<CR>
   nmap <buffer><C-H>v           :<C-U>Unite rails/view<CR>
   nmap <buffer><C-H><C-H>       :<C-U>Unite rails/view<CR>
-  nmap <buffer><C-H>c        :<C-U>Unite rails/controller<CR>
+  nmap <buffer><C-H>c           :<C-U>Unite rails/controller<CR>
   nmap <buffer><C-H>            :<C-U>Unite rails/controller<CR>
-  nmap <buffer><C-H>f        :<C-U>Unite rails/config<CR>
-  nmap <buffer><C-H>s          :<C-U>Unite rails/spec<CR>
-  nmap <buffer><C-H>d          :<C-U>Unite rails/db<CR>
-  nmap <buffer><C-H>g          :<C-U>Unite rails/generate<CR>
-  " nmap <buffer><C-H>ro          :<C-U>Unite rails/route<CR>
-  nmap <buffer><C-H>r          :<C-U>Unite rails/rake<CR>
+  nmap <buffer><C-H>f           :<C-U>Unite rails/config<CR>
+  nmap <buffer><C-H>sp           :<C-U>Unite rails/spec<CR>
+  nmap <buffer><C-H>d           :<C-U>Unite rails/db<CR>
+  nmap <buffer><expr><C-H>g     '<Esc>:e ' . RailsRoot() . '/Gemfile<CR>'
+  nmap <buffer><expr><C-H>lo    '<Esc>:e ' . RailsRoot() . '/config/locales<CR>'
+  nmap <buffer><expr><C-H>ro    '<Esc>:e ' . RailsRoot() . '/config/routes.rb<CR>'
+  nmap <buffer><expr><C-H>se    '<Esc>:e ' . RailsRoot() . '/db/seeds.rb<CR>'
+  nmap <buffer><C-H>ra          :<C-U>Unite rails/rake<CR>
   nmap <buffer><C-H>ds          :<C-U>Unite rails/destroy<CR>
-  nmap <buffer><C-H>h          :<C-U>Unite rails/heroku<CR>
+  nmap <buffer><C-H>h           :<C-U>Unite rails/heroku<CR>
 endfunction
 au User Rails call UniteRailsSetting()
 "}}}
@@ -1030,7 +1047,7 @@ aug END
 " gitの場合はgit_rootかつ、バッファの有無でフォーカス変える
 " XXX 関数内でsystemを呼ぶと、なぜか^]];95;cという文字が出る。。。今は外に出し
 " 原因不明
-function! VimFilerExplorerGit()
+function! VimFilerExplorerGit()"{{{
   let cmd = bufname("%") != "" ? "2wincmd w" : ""
   let s:git_root = system('git rev-parse --show-cdup')
 
@@ -1048,8 +1065,9 @@ function! VimFilerExplorerGit()
   " vimfilerが最後のbufferならばvimを終了
   autocmd BufEnter <buffer> if (winnr('$') == 1 && &filetype ==# 'vimfiler' && s:vimfiler_enable == 1) | q | endif
 
-  exe cmd
-endfunction
+  exe 'VimFilerExplorer'
+  " exe cmd
+endfunction"}}}
 
 command!
 \   VimFilerExplorerGit
@@ -1480,7 +1498,6 @@ let g:vimshell_prompt       = '$ '
 let g:vimshell_ignore_case  = 1
 let g:vimshell_smart_case   = 1
 
-autocmd FileType vimshell call s:vimshell_settings()
 function! s:vimshell_settings() "{{{
     " No -bar
     command!
@@ -1493,6 +1510,7 @@ function! s:vimshell_settings() "{{{
 
     " Alias
     VimShellAlterCommand vi vim
+    VimShellAlterCommand v vim
     VimShellAlterCommand g git
     VimShellAlterCommand r rails
     VimShellAlterCommand df df -h
@@ -1549,6 +1567,7 @@ function! s:vimshell_settings() "{{{
 
     NeoComplCacheEnable
 endfunction "}}}
+autocmd FileType vimshell call s:vimshell_settings()
 
 nmap <Leader>v :VimShell<CR>
 "}}}
@@ -2236,6 +2255,35 @@ nmap <C-H><C-Q> :unite qiita<CR>
 "------------------------------------
 " nmap <C-J><C-L> :<C-U>call
 
+"------------------------------------
+" SQLUtils
+"------------------------------------
+"{{{
+" let g:sqlutil_syntax_elements = 'Constant,sqlString'
+let g:sqlutil_default_menu_mode = 3
+let g:sqlutil_menu_priority = 30
+" let g:sqlutil_menu_root = 'MyPlugin.&SQLUtil'
+let g:sqlutil_use_syntax_support = 1
+" let g:sqlutil_<tab> to cycle through the various option names.
+" let g:sqlutil_cmd_terminator = "\ngo"
+" let g:sqlutil_cmd_terminator = "\ngo\n"
+" let g:sqlutil_cmd_terminator = ';'
+let g:sqlutil_load_default_maps = 0
+" let g:sqlutil_stmt_keywords = 'select,insert,update,delete,with,merge'
+let g:sqlutil_use_tbl_alias = 'd|a|n'
+
+let g:sqlutil_align_where = 1
+let g:sqlutil_keyword_case = '\U'
+let g:sqlutil_align_keyword_right = 0
+let g:sqlutil_align_first_word = 1
+let g:sqlutil_align_comma = 1
+" vmap <leader>sf    <Plug>SQLU_Formatter<CR>
+" nmap <leader>scl   <Plug>SQLU_CreateColumnList<CR>
+" nmap <leader>scd   <Plug>SQLU_GetColumnDef<CR>
+" nmap <leader>scdt  <Plug>SQLU_GetColumnDataType<CR>
+" nmap <leader>scp   <Plug>SQLU_CreateProcedure<CR>
+vmap sf :SQLUFormatter<CR>
+"}}}
 
 "}}}
 
@@ -2525,9 +2573,11 @@ command!
 \   -nargs=*
 \   OpenYard
 \   call OpenYard(<q-args>)
-
 " マッピング
 nmap <Space>y :<C-U>OpenYard <C-R><C-W><CR>
+
+" 指定したgemを開く
+au User Rails nmap <buffer><C-J><C-B> :!bundle open<Space>
 
 "}}}
 

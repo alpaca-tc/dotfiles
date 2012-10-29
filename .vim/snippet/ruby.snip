@@ -51,7 +51,7 @@ prev_word   '^'
 #/*{{{*/
 snippet     ini
 abbr        def initialize end
-    def initialize( ${1})
+    def initialize( ${1} )
       ${2}
     end
 
@@ -247,6 +247,7 @@ snippet     cOption
 
 #/*}}}*/
 
+# cHash_deep_merge/*{{{*/
 snippet     cHash_deep_merge
     class Hash
       # Returns a new hash with +self+ and +other_hash+ merged recursively.
@@ -263,3 +264,35 @@ snippet     cHash_deep_merge
         self
       end
     end
+#/*}}}*/
+
+# cBlank_present/*{{{*/
+snippet cBlank
+    class Object
+      def blank?
+        respond_to?(:empty?) ? empty? : !self
+      end
+
+      def present?
+        !blank?
+      end
+
+      def presence
+        self if present?
+      end
+    end
+#/*}}}*/
+
+# cTry/*{{{*/
+snippet cTry
+    class Object
+      def try(*a, &b)
+        if a.empty? && block_given?
+          yield self
+        else
+          __send__(*a, &b)
+        end
+      end
+    end
+#/*}}}*/
+
