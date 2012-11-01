@@ -113,6 +113,8 @@ function! s:remove_dust()
 endfunction
 au BufWritePre * call <SID>remove_dust()
 
+au BufReadPost .gitignore setl ft=conf
+
 if has('gui_macvim')
   map ¥ \
   imap ¥ \
@@ -189,6 +191,13 @@ nmap <C-W><C-K><C-H> <C-W>k<C-W>h
 nmap <C-W><C-K><C-L> <C-W>k<C-W>l
 nmap <C-W><C-l><C-j> <C-W>l<C-W>j
 nmap <C-W><C-l><C-k> <C-W>l<C-W>k
+
+" 画面のサイズ変更とともに均等化
+nmap <C-W>K <C-W>K<C-W>=
+nmap <C-W>L <C-W>L<C-W>=
+nmap <C-W>J <C-W>J<C-W>=
+nmap <C-W>H <C-W>H<C-W>=
+
 
 " tabを使い易く
 nmap <silent>t  <Nop>
@@ -270,7 +279,8 @@ if has("autocmd")
   autocmd FileType lisp       setlocal sw=2 sts=2 ts=2 et
   autocmd FileType markdown   setlocal sw=4 sts=4 ts=4 et
   autocmd FileType perl       setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType php        setlocal sw=4 sts=4 ts=4 et
+  " autocmd FileType php        setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType php        setlocal sw=2 sts=2 ts=2 et
   autocmd FileType python     setlocal sw=4 sts=4 ts=4 et
   autocmd FileType ruby       setlocal sw=2 sts=2 ts=2 et
   autocmd FileType gitcommit  setlocal sw=2 sts=2 ts=2 et
@@ -278,6 +288,7 @@ if has("autocmd")
   autocmd FileType scala      setlocal sw=2 sts=2 ts=2 et
   autocmd FileType scss       setlocal sw=2 sts=2 ts=2 et
   autocmd FileType sh         setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType snippet    setlocal sw=2 sts=2 ts=2 et
   autocmd FileType sql        setlocal sw=4 sts=4 ts=4 et
   autocmd FileType vb         setlocal sw=4 sts=4 ts=4 et
   autocmd FileType vim        setlocal sw=2 sts=2 ts=2 et
@@ -2358,7 +2369,7 @@ let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 let g:neocomplcache_max_list = 300
 " let g:neocomplcache_max_keyword_width = 40
 " let g:neocomplcache_max_menu_width = 19
-let g:neocomplcache_auto_completion_start_length = 2
+let g:neocomplcache_auto_completion_start_length = 1
 " let g:neocomplcache_manual_completion_start_length = 0
 " let g:neocomplcache_min_keyword_length = 2
 " let g:neocomplcache_min_syntax_length = 4

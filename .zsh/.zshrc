@@ -23,8 +23,8 @@ export ARCHFLAGS="-arch x86_64"
 export APXS2=/usr/sbin/apxs
 
 export PATH=''
-export PATH=$PATH:$HOME/Downloads/android-sdk-macosx/platform-tools
 export PATH=/bin:/sbin:/usr/sbin:/usr/bin
+export PATH=$PATH:$HOME/Downloads/android-sdk-macosx/platform-tools
 export MANPATH=$PATH:/usr/share/man
 
 # rvm
@@ -36,6 +36,8 @@ export MANPATH=$PATH:/usr/share/man
 # pythonz
 # [[ -s $HOME/.pythonz/etc/bashrc ]] && source $HOME/.pythonz/etc/bashrc
 # export PATH=$HOME/.pythonz/pythons/CPython-3.2/bin:$PATH
+
+# node
 
 # XAMPP
 export PATH=/Applications/XAMPP/xamppfiles/bin:$PATH
@@ -52,6 +54,10 @@ export JAVA_HOME=/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home
 export PATH=$HOME/.vim/ref/rsense-0.3/bin:$PATH
 export PATH=$PATH:$HOME/.vim/ref/rsense-0.3/bin
 export RSENSE_HOME=$HOME/.vim/ref/rsense-0.3
+
+# node
+export NODE_PATH=/usr/local/lib/node
+export PATH=/usr/local/mysql/bin:/usr/local/share/npm/bin:$PATH
 
 # homebrew
 export PATH=/usr/local/bin:$PATH

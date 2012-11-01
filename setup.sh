@@ -5,7 +5,7 @@ echo "  To install, please tap 'y' or 'n' key\n"
 
 read -p "install dotfiles? y/n " yn
 if [ $yn = "y" -o $yn = "Y" ]; then
-    DOT_FILES=( .ctags .dir_colors .emacs.el .gemrc .gitconfig .gitignore .gvimrc .inputrc .rsense .rspec .rvmrc .tmux.conf .tmux.split .vimrc .zshrc .autojump .emacs.d .tmuxinator .vim .zsh local .pryrc)
+    DOT_FILES=(.gitignore_global .ctags .dir_colors .emacs.el .gemrc .gitconfig .gitignore .gvimrc .inputrc .rsense .rspec .rvmrc .tmux.conf .tmux.split .vimrc .zshrc .autojump .emacs.d .tmuxinator .vim .zsh local .pryrc)
 
     echo "...install dotfiles...\n"
     for file in ${DOT_FILES[@]}
@@ -69,9 +69,10 @@ if [ $yn = "y" -o $yn = "Y" ]; then
     killall Finder
 fi
 
-read -p "never create .DS_Store" yn
+read -p "never create .DS_Store? y/n" yn
 if [ $yn = "y" -o $yn = "Y" ]; then
     defaults write com.apple.desktopservices DSDontWriteNetworkStores true
+    echo "...success"
 fi
 
 

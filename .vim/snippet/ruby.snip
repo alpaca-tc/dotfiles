@@ -264,6 +264,27 @@ snippet     cHash_deep_merge
         self
       end
     end
+
+snippet     cHash_full_join
+        class Hash
+          def full_join( str = ".", key="" )
+            dup.full_join! str, key
+          end
+
+          def full_join!( str = ".", key="")
+            res = {}
+            self.each do |k, v|
+              full_key = key.empty? ?  k : "#{key}.#{k}"
+              if v.is_a?(Hash)
+                res.deep_merge!( v.full_join( str, full_key ) )
+              else
+                res[full_key] = v
+              end
+            end
+
+            res
+          end
+        end
 #/*}}}*/
 
 # cBlank_present/*{{{*/
@@ -282,6 +303,28 @@ snippet cBlank
       end
     end
 #/*}}}*/
+
+snippet  cToRegexp
+    class String
+      REGEXP_DELIMITERS = {
+        '%r{' => '}',
+        '/' => '/'
+      }
+
+      def to_regexp
+        str = self.dup
+        delim_start, delim_end = REGEXP_DELIMITERS.detect { |k, v| str.start_with? k }.map { |delim| ::Regexp.escape delim }
+        %r{\A#{delim_start}(.*)#{delim_end}([^#{delim_end}]*)\z} =~ str.strip
+        # TODO BUG CHANGE $1, $2
+        content = $1
+        options = $2
+        content.gsub! '\\/', '/'
+        ignore_case = options.include?('i') ? ::Regexp::IGNORECASE : nil
+        multiline = options.include?('m') ? ::Regexp::MULTILINE : nil
+        extended = options.include?('x') ? ::Regexp::EXTENDED : nil
+        ::Regexp.new content, (ignore_case|multiline|extended)
+      end
+    end
 
 # cTry/*{{{*/
 snippet cTry
