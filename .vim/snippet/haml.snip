@@ -1,2 +1,30 @@
 snippet         semantic
-        semantic_form_for [:admin, ${1:@post}] do |f|
+    semantic_form_for [:admin, ${1:@post}] do |f|
+
+snippet     style
+    %link{ :type => "text/css", :rel => "stylesheet", :href => "${1}" }
+
+snippet    charset
+    %meta{ 'http-equiv' => "Content-Type", :content => "text/html;charset=UTF-8" }
+
+snippet     author
+    %meta{ 'name' => 'author', :content => '${1}' }
+
+snippet     script
+    %script{ :type => "text/javascript", :src => "${1}" }
+
+snippet     img
+    %img{ :src => "${1}", :alt => "${2}" }/
+
+snippet     frender
+  def render(target)
+    require 'haml'
+    target = "_#{target}.html.haml"
+
+    File.open(target) do |f|
+      puts Haml::Engine.new(f.read).render(Object.new)
+    end
+  end
+
+snippet     render
+  = render '${1}'

@@ -7,9 +7,9 @@ if [ -d $HOME/.node ]
 then
     echo "nodeフォルダは~/.nodeにインストール済みです"
 else
-    git clone git://github.com/creationix/nvm.git ~/.node
+    git clone git://github.com/creationix/nvm.git ~/.nvm
 fi
-. ~/.node/nvm.sh
+. ~/.nvm/nvm.sh
 nvm install v0.4.5
 nvm install v0.8.14
 nvm install v0.9.2

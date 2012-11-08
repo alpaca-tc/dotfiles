@@ -56,7 +56,7 @@ nmap <Space>s :w sudo:%<CR>
 "また、レジスタに入れないようにする
 " nmap x <BS>
 "nmap X <Del>
-imap <C-@> <BS>
+" imap <C-@> <BS>
 imap <C-H> <BS>
 imap <C-Space> <BS>
 
@@ -253,9 +253,9 @@ command! Sjis edit ++enc=sjis
 set autoindent
 set smartindent
 set expandtab
-" set tabstop=4
-" set softtabstop=4
-" set shiftwidth=4
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
 if has("autocmd")
   filetype indent on
   " 無効にしたい場合
@@ -472,7 +472,7 @@ endif
 
 "bundle"{{{
 "----------------------------------------
-"vim基本機能拡張"{{{
+" "vim基本機能拡張"{{{
 " NeoBundle 'Shougo/neobundle'
 NeoBundle 'Shougo/vimproc', {
       \ 'build' : {
@@ -667,7 +667,8 @@ NeoBundle 'hallettj/jslint.vim'
 NeoBundle 'tpope/vim-markdown'
 
 " sassのコンパイル
-NeoBundle 'AtsushiM/sass-compile.vim'
+" NeoBundle 'AtsushiM/sass-compile.vim'
+NeoBundle 'taichouchou2/sass-compile.vim'
 
 "  php
 " ----------------------------------------
@@ -1003,7 +1004,7 @@ au User Rails call UniteRailsSetting()
 "{{{
 " 起動コマンド
 " default <leader><leader>
-nnoremap <Leader><leader> :VimFilerBufferDir<CR>
+nnoremap <Leader><leader> :VimFilerCreate<CR>
 " nnoremap <C-H><C-F> :VimFilerExplorer<CR>
 nnoremap <C-H><C-F> :call VimFilerExplorerGit()<CR>
 
@@ -1110,13 +1111,16 @@ let g:quickrun_config['coffee'] = {
       \}
 
 " should gem install bluecloth
-let markdownCss = '<link href="http://kevinburke.bitbucket.org/markdowncss/markdown.css" rel="stylesheet"></link>'
-let markdownHead = '<!DOCTYPE HTML> <html lang=\"ja\"> <head> <meta charset=\"UTF-8\">'.markdownCss.'</head><body>'
-let markdownFoot = "</body> </html>"
+" let markdownCss = '<link href="http://kevinburke.bitbucket.org/markdowncss/markdown.css" rel="stylesheet"></link>'
+" let markdownHead = '<!DOCTYPE HTML> <html lang=\"ja\"> <head> <meta charset=\"UTF-8\">'.markdownCss.'</head><body>'
+" let markdownFoot = "</body> </html>"
+"       " \ 'command'   : 'bluecloth',
+" let g:quickrun_config['markdown'] = {
+"       \ 'exec'      : ["echo \'" . markdownHead. "'", '%c  %s', "echo \'" . markdownFoot. "'"],
+"       \ }
 let g:quickrun_config['markdown'] = {
-      \ 'command'   : 'bluecloth',
-      \ 'exec'      : ["echo \'" . markdownHead. "'", '%c  %s', "echo \'" . markdownFoot. "'"],
-      \ 'outputter' : 'browser',
+      \ 'outputter': 'browser',
+      \ 'cmdopt': '-s'
       \ }
 
 " ruby
@@ -1896,7 +1900,7 @@ au FileType snippet nmap <buffer><Space>e :e #<CR>
 let g:sass_compile_aftercmd = ""
 let g:sass_compile_auto = 1
 let g:sass_compile_beforecmd = ""
-let g:sass_compile_cdloop = 5
+let g:sass_compile_cdloop = 1
 let g:sass_compile_cssdir = ['css', 'stylesheet']
 let g:sass_compile_file = ['scss', 'sass']
 let g:sass_started_dirs = []
@@ -1910,7 +1914,7 @@ let g:sass_started_dirs = []
 " au! BufRead *.scss,*sass call Sass_start()
 " au! Filetype scss,sass call Sass_start()
 
-au! BufWritePost sass,scss SassCompile
+" au! BufWritePost sass,scss SassCompile
 "}}}
 
 "------------------------------------
@@ -2114,8 +2118,8 @@ let g:syntastic_warning_symbol='⚠'
 
 let g:syntastic_mode_map = {
       \ 'mode'              : 'active',
-      \ 'active_filetypes'  : ['ruby', 'php', 'js', 'javascript', 'scss', 'less' ],
-      \ 'passive_filetypes' : ['puppet', 'html']
+      \ 'active_filetypes'  : ['ruby', 'php', 'js', 'javascript', 'less', 'coffee' ],
+      \ 'passive_filetypes' : ['puppet', 'html', 'scss']
       \}
 " let g:syntastic_mode_map = {
 "   \ 'mode'              : 'active',
@@ -2296,6 +2300,10 @@ let g:sqlutil_align_comma = 1
 vmap sf :SQLUFormatter<CR>
 "}}}
 
+"------------------------------------
+" vim-endwise
+"------------------------------------
+let g:endwise_no_mappings=1
 "}}}
 
 "----------------------------------------
@@ -2506,14 +2514,23 @@ imap <expr><CR> neocomplcache#smart_close_popup() . "<CR>" . "<Plug>Discretionar
 setl tags=""
 let current_dir = expand("%:p:h")
 
-if has('path_extra')
-  setl tags=./*4/tags
-endif
+function! SetTags()
+  if has('path_extra')
+    set tags=./**/tags
+    setl tags+=./../tags
+    setl tags+=./../../tags
+    setl tags+=./../../../tags
+    setl tags+=./../../../../tags
+    setl tags+=./../../../../../tags
+    setl tags+=./../../../../../../tags
+    setl tags+=./../../../../../../../tags
+  endif
+endfunction
+au BufReadPost * call SetTags()
 
 " rtagsは独自shコマンドrtags -Rで作成
 " if filereadable(expand('~/tags'))
 au FileType ruby,eruby setl tags+=~/gtags
-setl tags+=./*4/tags
 " else
   " let res = system('ctags', '-R --langmap=Ruby:.rb --ruby-typescfFm =~/.rvm/rubies/default -f ~/rtags')
 "   au FileType ruby,eruby setl tags+=~/rtags
@@ -2544,12 +2561,18 @@ au Filetype php nmap <Leader>R :! phptohtml<CR>
 "----------------------------------------
 " 独自関数
 "----------------------------------------
+" ----------------------------------------
+" today
+" ----------------------------------------
 function! Today()
   return strftime("%Y-%m-%d")
 endfunction
 inoremap <C-D><C-D> <C-R>=Today()<CR>
 
+" ----------------------------------------
+" open window
 " 画面分割を抽象的に行う
+" ----------------------------------------
 function! s:smart_split(cmd)
   if winwidth(0) > winheight(0) * 2
     vsplit
@@ -2569,6 +2592,9 @@ if executable('pdftotext')
 endif
 au BufRead *.pdf call Pdf
 
+" ----------------------------------------
+" open yard
+" ----------------------------------------
 " カーソル下のgemのrdocを開く
 function! OpenYard(...)
   let gem = a:1 == "" ? "" : a:1
@@ -2589,6 +2615,60 @@ nmap <Space>y :<C-U>OpenYard <C-R><C-W><CR>
 
 " 指定したgemを開く
 au User Rails nmap <buffer><C-J><C-B> :!bundle open<Space>
+
+" ----------------------------------------
+" haml2html
+" ----------------------------------------
+function! ConvertHamlToHtml(fileType)
+  " 同じディレクトリに、pathというファイルを作り
+  " `cat path` -> `../`
+  " となっていれば、その相対パスディレクトリに保存する
+
+  " 設定ファイルを読み込む
+  let dir_name = expand("%:p:h")
+  let save_path = ''
+  if filereadable(dir_name . '/path')
+    let save_path = readfile("path")[0]
+  endif
+
+  " 2html
+  let current_file = expand("%")
+  let target_file  = substitute(current_file, '.html', '', 'g')
+  let target_file  = dir_name.'/'.save_path.substitute(target_file, '.'.expand("%:e").'$', '.html', 'g')
+
+  " コマンドの分岐
+  if a:fileType == 'eruby'
+    " exec ":call vimproc#system('rm " .target_file"')"
+    let convert_cmd  = 'erb ' . current_file . ' > ' . target_file
+  elseif a:fileType == 'haml'
+    " let convert_cmd  = 'haml_with_ruby2html ' . current_file . ' > ' . target_file
+    let convert_cmd  = 'haml --format html4 ' . current_file . ' > ' . target_file
+  endif
+
+  echo "convert " . a:fileType . ' to ' . target_file
+  exec ":call vimproc#system('" . convert_cmd . "')"
+endfunction
+
+function! HamlSetting()
+  nmap <buffer><Leader>R :<C-U>call ConvertHamlToHtml("haml")<CR>
+  au BufWritePost *.haml silent call ConvertHamlToHtml("haml")
+endfunction
+au Filetype haml call HamlSetting()
+
+function! ErubySetting()
+  nmap <buffer><Leader>R :<C-U>call ConvertHamlToHtml("eruby")<CR>
+  au BufWritePost *.erb silent call ConvertHamlToHtml("eruby")
+endfunction
+au Filetype eruby call ErubySetting()
+
+" ----------------------------------------
+" sass async compile
+" ----------------------------------------
+" function! ScssAsyncCompile()
+"   let cmd = 'compass compile '. expand("%:p:h")
+"   call vimproc#system_bg('apachectl stop')
+" endfunction
+" au BufWritePost *.scss call ScssAsyncCompile()
 
 "}}}
 

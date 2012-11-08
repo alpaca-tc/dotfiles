@@ -1,7 +1,14 @@
-snippet     s
+snippet     snippet
+  snippet     ${1}
     abbr        ${1:abbr}
     snippet     ${2:snippet}
         ${3}
 
-snippet     ${1}
-    ${2}
+snippet     snip
+  snippet     ${1}
+      abbr        ${2:abbr}
+      ${3}
+
+snippet     s
+  snippet     ${1}
+      ${2}
