@@ -1,3 +1,5 @@
+au!
+
 "----------------------------------------
 "基本"{{{
 " let $SHELL="/usr/local/bin/zsh"
@@ -19,6 +21,13 @@ set vb t_vb=
 set viminfo='100,<800,s300,\"300
 set updatetime=4000 " swpを作るまでの時間(au CursorHoldの時間)
 set norestorescreen=off
+if v:version >= 703
+  " Set undofile.
+  set undofile
+  let &undodir=&directory
+endif
+
+
 
 let PATH='/Users/taichou/.autojump/bin:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin/:/Users/taichou/.rbenv:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin:/Users/taichou/.rbenv:/Users/taichou/.autojump/bin:/Users/taichou/local/bin:/Users/taichou/local/sbin:/usr/local/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:/Applications/XAMPP/xamppfiles/bin:/bin:/sbin:/usr/sbin:/usr/bin:/Applications/XAMPP/xamppfiles/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/bin:/sbin:/usr/sbin:/usr/bin'
 let $PATH='/Users/taichou/.autojump/bin:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin/:/Users/taichou/.rbenv:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin:/Users/taichou/.rbenv:/Users/taichou/.autojump/bin:/Users/taichou/local/bin:/Users/taichou/local/sbin:/usr/local/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:/Applications/XAMPP/xamppfiles/bin:/bin:/sbin:/usr/sbin:/usr/bin:/Applications/XAMPP/xamppfiles/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/bin:/sbin:/usr/sbin:/usr/bin'
@@ -303,13 +312,20 @@ autocmd InsertLeave * set nopaste
 
 "----------------------------------------
 "表示"{{{
+set title
+set titlelen=95
+set linebreak
+set showfulltag
+set spelllang=en_us
+" set showbreak=>\
+set breakat=\\;:,!?
 set showmatch         " 括弧の対応をハイライトa
 set number            " 行番号表示
 set noequalalways     " 画面の自動サイズ調整解除
 " set relativenumber    " 相対表示
 set list              " 不可視文字表示
 "set listchars=tab:,trail:,extends:,precedes:  " 不可視文字の表示形式
-set listchars=tab:>.,trail:_,extends:>,precedes:< " 不可視文字の表示形式
+" set listchars=tab:>.,trail:_,extends:>,precedes:< " 不可視文字の表示形式
 set listchars=tab:␣.,trail:_,extends:>,precedes:< " 不可視文字の表示形式
 " set listchars=tab:✃.,trail:_,extends:>,precedes:< " 不可視文字の表示形式
 set scrolloff=5
@@ -321,6 +337,10 @@ au FileType coffee,ruby,eruby,php,javascript,javascript.jasmine,ruby.spec,ruby.r
 set t_Co=256          " 確かカラーコード
 set lazyredraw        " コマンド実行中は再描画しない
 set ttyfast           " 高速ターミナル接続を行う
+set matchpairs+=<:>
+set cdpath+=~
+" カーソル行をハイライト
+set cursorline
 " set scrolloff=999     " 常にカーソルを真ん中に
 
 if has('gui_macvim')
@@ -361,8 +381,6 @@ highlight ZenkakuSpace cterm=underline ctermfg=lightblue guibg=darkgray
 match ZenkakuSpace /　/
 "au BufRead,BufNew * match JpSpace /　/
 
-" カーソル行をハイライト
-set cursorline
 
 " カレントウィンドウにのみ罫線を引く
 augroup cch
@@ -387,6 +405,9 @@ function! ChangeFoldMethod()
 endfunction
 
 let g:foldMethodCount = 0
+set foldcolumn=1
+set foldenable
+set commentstring=%s
 set foldmethod=marker
 nmap <Space><Space>f :<C-U>call ChangeFoldMethod()<CR>
 
@@ -477,10 +498,11 @@ endif
 NeoBundle 'Shougo/vimproc', {
       \ 'build' : {
       \     'mac' : 'make -f make_mac.mak',
+      \     'unix' : 'make -f make_unix.mak',
       \    },
       \ }
 NeoBundle 'Lokaltog/vim-powerline'
-NeoBundle 'vim-jp/vital.vim'
+" NeoBundle 'vim-jp/vital.vim'
 NeoBundle 'edsono/vim-matchit'
 NeoBundle 'taichouchou2/surround.vim' " 独自の実装のものを使用、ruby用カスタマイズ、<C-G>のimap削除
 NeoBundle 'tpope/vim-fugitive'
@@ -488,21 +510,20 @@ NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'taichouchou2/alpaca'       " 個人的なカラーやフォントなど
 NeoBundle 'kana/vim-arpeggio'         " 同時押しキーマップを使う
 NeoBundle 'h1mesuke/vim-alignta'
-NeoBundle 'othree/eregex.vim'         " %S 正規表現を拡張
+" NeoBundle 'othree/eregex.vim'         " %S 正規表現を拡張
 " NeoBundle 'vim-scripts/SearchComplete' " /で検索をかけるときでも\tで補完が出来る
 " 遅延読み込み
-
 "}}}
 
 "----------------------------------------
 " vim拡張"{{{
 NeoBundle 'tomtom/tcomment_vim'
-NeoBundle 'vim-scripts/tlib' " tcommentで使用
+" NeoBundle 'vim-scripts/tlib' " tcommentで使用
 
 NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'thinca/vim-quickrun' "<Leader>rで簡易コンパイル
 " NeoBundle 'scrooloose/nerdtree' "プロジェクト管理用 tree filer
-NeoBundle 'grep.vim'
+" NeoBundle 'grep.vim'
 NeoBundle 'smartword'
 NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/vimshell'
@@ -519,11 +540,11 @@ NeoBundle 'taichouchou2/vim-endwise.git' "end endifなどを自動で挿入
 NeoBundle 'nathanaelkane/vim-indent-guides' "indentに色づけ
 " NeoBundle 'kien/ctrlp.vim' "ファイルを絞る
 
-NeoBundle 'taglist.vim' "関数、変数を画面横にリストで表示する
+" NeoBundle 'taglist.vim' "関数、変数を画面横にリストで表示する
 NeoBundle 'majutsushi/tagbar'
 
 " Ascii color code対応
-NeoBundle 'vim-scripts/AnsiEsc.vim'
+" NeoBundle 'vim-scripts/AnsiEsc.vim'
 "コメントアウト
 " NeoBundle 'hrp/EnhancedCommentify'
 
@@ -540,22 +561,22 @@ NeoBundle 'vim-scripts/AnsiEsc.vim'
 " text-object拡張"{{{
 " operator拡張の元
 " NeoBundle 'operator-camelize' "operator-camelize : camel-caseへの変換
-NeoBundle 'emonkak/vim-operator-comment'
-NeoBundle 'https://github.com/kana/vim-textobj-jabraces.git'
-NeoBundle 'kana/vim-operator-user'
-NeoBundle 'kana/vim-textobj-datetime'      " d 日付
-NeoBundle 'kana/vim-textobj-fold.git'      " z 折りたたまれた{{ {をtext-objectに
-NeoBundle 'kana/vim-textobj-function.git'  " f 関数をtext-objectに
-NeoBundle 'kana/vim-textobj-indent.git'    " i I インデントをtext-objectに
-NeoBundle 'kana/vim-textobj-lastpat.git'   " /? 最後に検索されたパターンをtext-objectに
-NeoBundle 'kana/vim-textobj-syntax.git'    " y syntax hilightされたものをtext-objectに
-NeoBundle 'kana/vim-textobj-user'          " textobject拡張の元
-NeoBundle 'textobj-entire'                 " e buffer全体をtext-objectに
-NeoBundle 'textobj-rubyblock'              " r rubyの、do-endまでをtext-objectに
-NeoBundle 'thinca/vim-textobj-comment'     " c commentをtext-objectに
+" NeoBundle 'emonkak/vim-operator-comment'
+" NeoBundle 'https://github.com/kana/vim-textobj-jabraces.git'
+" NeoBundle 'kana/vim-operator-user'
+" NeoBundle 'kana/vim-textobj-datetime'      " d 日付
+" NeoBundle 'kana/vim-textobj-fold.git'      " z 折りたたまれた{{ {をtext-objectに
+" NeoBundle 'kana/vim-textobj-function.git'  " f 関数をtext-objectに
+" NeoBundle 'kana/vim-textobj-indent.git'    " i I インデントをtext-objectに
+" NeoBundle 'kana/vim-textobj-lastpat.git'   " /? 最後に検索されたパターンをtext-objectに
+" NeoBundle 'kana/vim-textobj-syntax.git'    " y syntax hilightされたものをtext-objectに
+" NeoBundle 'kana/vim-textobj-user'          " textobject拡張の元
+" NeoBundle 'textobj-entire'                 " e buffer全体をtext-objectに
+" NeoBundle 'textobj-rubyblock'              " r rubyの、do-endまでをtext-objectに
+" NeoBundle 'thinca/vim-textobj-comment'     " c commentをtext-objectに
 " NeoBundle 'thinca/vim-textobj-plugins.git' " vim-textobj-plugins : いろんなものをtext-objectにする
 
-NeoBundle 'tyru/operator-html-escape.vim'
+" NeoBundle 'tyru/operator-html-escape.vim'
 "}}}
 "}}}
 
@@ -564,7 +585,7 @@ NeoBundle 'tyru/operator-html-escape.vim'
 "URL上で操作することで、URLを開いたり
 "キーワード上で操作することで、ぐぐることができる
 NeoBundle 'open-browser.vim'
-NeoBundle 'thinca/vim-openbuf'
+" NeoBundle 'thinca/vim-openbuf'
 
 "各種リファレンスを引いたり、英和辞書を読む
 NeoBundle 'thinca/vim-ref'
@@ -578,7 +599,7 @@ NeoBundle 'Shougo/git-vim'
 NeoBundle 'mattn/gist-vim' "gistを利用する
 
 "保存と同時にブラウザをリロードする
-NeoBundle 'tell-k/vim-browsereload-mac'
+NeoBundleLazy 'tell-k/vim-browsereload-mac'
 
 "markdownでメモを管理
 NeoBundle 'glidenote/memolist.vim'
@@ -588,7 +609,7 @@ NeoBundle 'glidenote/memolist.vim'
 
 "vモードで選択
 "<Leader>seでsqlを実行
-NeoBundle 'vim-scripts/dbext.vim'
+" NeoBundle 'vim-scripts/dbext.vim'
 
 "tagsを利用したソースコード閲覧・移動補助機能 tagsファイルの自動生成
 " NeoBundle 'vim-scripts/Source-Explorer-srcexpl.vim'
@@ -600,7 +621,7 @@ NeoBundle 'scrooloose/syntastic'
 " NeoBundle 'thinca/vim-template'
 
 " NeoBundle 'c9s/cascading.vim' "メソッドチェーン整形
-NeoBundle 'kana/vim-smartchr' "smartchr.vim : ==()などの前後を整形
+" NeoBundle 'kana/vim-smartchr' "smartchr.vim : ==()などの前後を整形
 
 NeoBundle 'mattn/webapi-vim' "vim Interface to Web API
 " NeoBundle 'tyru/urilib.vim' "urilib.vim : vim scriptからURLを扱うライブラリ
@@ -615,8 +636,8 @@ NeoBundle 'taichouchou2/alpaca-look'
 NeoBundle 'basyura/unite-rails'
 NeoBundle 'thinca/vim-unite-history'
 " NeoBundle 'Shougo/unite-ssh'
-NeoBundle 'tsukkee/unite-tag'
-NeoBundle 'tacroe/unite-mark'
+" NeoBundle 'tsukkee/unite-tag'
+" NeoBundle 'tacroe/unite-mark'
 " NeoBundle 'ujihisa/unite-gem'
 " NeoBundle 'sgur/unite-qf'
 " NeoBundle 'choplin/unite-vim_hacks'
@@ -629,12 +650,11 @@ NeoBundle 'taichouchou2/vim-unite-giti'
 NeoBundle 'basyura/TweetVim'
 NeoBundle 'basyura/twibill.vim'
 NeoBundle 'basyura/bitly.vim'
-NeoBundle 'daisuzu/facebook.vim'
+" NeoBundle 'daisuzu/facebook.vim'
 
-NeoBundle 'thinca/vim-qfreplace'
-NeoBundle 'yuratomo/w3m.vim'
+" NeoBundle 'yuratomo/w3m.vim'
 " NeoBundle 'TeTrIs.vim'
-NeoBundle 'mattn/qiita-vim'
+" NeoBundle 'mattn/qiita-vim'
 
 " NeoBundle 'osyo-manga/vim-itunes'
 
@@ -644,11 +664,11 @@ NeoBundle 'mattn/qiita-vim'
 " bundle.lang"{{{
 " NeoBundle 'rstacruz/sparkup', {'rtp': 'vim/'}
 NeoBundle 'hail2u/vim-css3-syntax'
-NeoBundle 'pasela/unite-webcolorname'
+" NeoBundle 'pasela/unite-webcolorname'
 " NeoBundle 'jQuery'
 NeoBundle 'taichouchou2/html5.vim'
 NeoBundle 'tpope/vim-haml'
-NeoBundle 'xmledit'
+" NeoBundle 'xmledit'
 " au FileType html,php,eruby,ruby,javascript,markdown call HtmlSetting()
 " au FileType * call HtmlSetting()
 
@@ -657,7 +677,7 @@ NeoBundle 'xmledit'
 NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'claco/jasmine.vim'
 NeoBundle 'taichouchou2/vim-javascript' " syntaxが無駄に入っているので、インストール後削除
-NeoBundle 'hallettj/jslint.vim'
+" NeoBundle 'hallettj/jslint.vim'
 " NeoBundle 'pekepeke/titanium-vim' " Titaniumを使うときに
 
 "  markdown
@@ -677,7 +697,7 @@ NeoBundle 'taichouchou2/sass-compile.vim'
 
 "  binary
 " ----------------------------------------
-NeoBundle 'Shougo/vinarise'
+" NeoBundle 'Shougo/vinarise'
 
 " objective-c
 " ----------------------------------------
@@ -711,8 +731,8 @@ NeoBundle 'taichouchou2/alpaca_complete'
 " NeoBundle 'yuroyoro/vim-scala'
 
 " SQLUtilities : SQL整形、生成ユーティリティ
-NeoBundle 'SQLUtilities'
-NeoBundle 'Align'
+" NeoBundle 'SQLUtilities'
+" NeoBundle 'Align'
 
 " C言語など<Leader>;で全行に;を挿入できる
 " NeoBundle 'vim-scripts/teol.vim'
@@ -745,10 +765,10 @@ call arpeggio#map('v', '', 0, 'jk', '<Esc>:noh<CR>')
 "{{{
 " Alignを日本語環境で使用するための設定
 let g:Align_xstrlen = 3
-let g:alignta_default_options="=<<<1:1"
-let g:alignta_default_arguments="="
+" let g:alignta_default_options="=<<<1:1"
+" let g:alignta_default_arguments="="
 vmap <C-N> :Align<Space>
-vmap <C-N><C-N> :Align<CR>
+vmap <C-N><C-N> :Align =<CR>
 "}}}
 
 "------------------------------------
@@ -1077,8 +1097,7 @@ function! VimFilerExplorerGit()"{{{
   " vimfilerが最後のbufferならばvimを終了
   autocmd BufEnter <buffer> if (winnr('$') == 1 && &filetype ==# 'vimfiler' && s:vimfiler_enable == 1) | q | endif
 
-  exe 'VimFilerExplorer'
-  " exe cmd
+  exe cmd
 endfunction"}}}
 
 command!
@@ -1086,7 +1105,7 @@ command!
 \   call VimFilerExplorerGit()
 
 " VimFilerExplorer自動起動
-au VimEnter * call VimFilerExplorerGit()
+" au VimEnter * call VimFilerExplorerGit()
 "}}}
 
 "------------------------------------
@@ -2513,6 +2532,7 @@ imap <expr><CR> neocomplcache#smart_close_popup() . "<CR>" . "<Plug>Discretionar
 
 setl tags=""
 let current_dir = expand("%:p:h")
+set tags& tags-=tags tags+=./tags;
 
 function! SetTags()
   if has('path_extra')
