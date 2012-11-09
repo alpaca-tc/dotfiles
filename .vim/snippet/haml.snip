@@ -28,3 +28,10 @@ snippet     frender
 
 snippet     render
   = render '${1}'
+
+snippet     default_css
+  - custom_css_lists  = %w[]
+  - default_css_lists = %w[]
+  - default_css_lists << custom_css_lists
+  - default_css_lists.flatten.each do |css|
+    %link{ :type => "text/css", :rel => "stylesheet", :href => "css/#{css}.css" }

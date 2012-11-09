@@ -1,8 +1,19 @@
+snippet right_contents
+        <div id='right_contents'>
+          <div id='right_contents_wrapper'>
+            <div id='pankuzu'>
+              <a href='/'>ホーム</a>
+              &nbsp;&gt;&nbsp;
+              <a href='company.html'>会社概要</a>
+            </div>
+          </div><!--/right_contents_wrapper-->
+        </div><!--/right_contents-->
+
 snippet class
     class ${1:ClassName} {
-    function ${2:__construct} ( ${3:argument} ) {
-        ${4:# code...}
-    }
+      function ${2:__construct} ( ${3:argument} ) {
+          ${4:# code...}
+      }
     }
 
 snippet     ex
@@ -14,10 +25,493 @@ snippet     func
 abbr        function
 prev_word     '^'
     function ${1:__construct} ( ${2:argument} ) {
-        ${3:# code...}
+      ${3:# code...}
     }
 
 snippet     header
 abbr        header
 prev_word   '^'
    header('Location: ${1:http://www.example.com}');
+
+# snipmate{{{
+snippet php
+    <?php
+    ${1}
+
+snippet ec
+    echo "${1:string}"${2};
+
+snippet inc
+    include '${1:file}';${2}
+
+snippet inc1
+    include_once '${1:file}';${2}
+
+snippet req
+    require '${1:file}';${2}
+
+snippet req1
+    require_once '${1:file}';${2}
+
+# $GLOBALS['...']
+snippet globals
+    $GLOBALS['${1:variable}']${2: = }${3:something}${4:;}${5}
+
+# Class - post doc
+snippet doc_cp
+    /**
+     * ${1:undocumented class}
+     *
+     * @package ${2:default}
+     * @author ${3:`g:snips_author`}
+    **/${4}
+
+snippet $_COOKIE['...']
+    $_COOKIE['${1:variable}']${2}
+
+snippet $_ENV['...']
+    $_ENV['${1:variable}']${2}
+
+snippet $_FILES['...']
+    $_FILES['${1:variable}']${2}
+
+snippet $_Get['...']
+    $_GET['${1:variable}']${2}
+
+snippet $_POST['...']
+    $_POST['${1:variable}']${2}
+
+snippet $_REQUEST['...']
+    $_REQUEST['${1:variable}']${2}
+
+snippet $_SERVER['...']
+    $_SERVER['${1:variable}']${2}
+
+snippet $_SESSION['...']
+    $_SESSION['${1:variable}']${2}
+
+# Start Docblock
+snippet /*
+    /**
+     * ${1}
+     **/
+
+# Class Variable - post doc
+snippet doc_vp
+    /**
+     * ${1:undocumented class variable}
+     *
+     * @var ${2:string}
+     **/${3}
+
+# Class Variable
+snippet doc_v
+    /**
+     * ${3:undocumented class variable}
+     *
+     * @var ${4:string}
+     **/
+    ${1:var} $${2};${5}
+
+# Class
+snippet doc_c
+    /**
+     * ${3:undocumented class}
+     *
+     * @packaged ${4:default}
+     * @author ${5:`g:snips_author`}
+     **/
+    ${1:}class ${2:}
+    {${6}
+    } // END $1class $2
+
+# Constant Definition - post doc
+snippet doc_dp
+    /**
+     * ${1:undocumented constant}
+     **/${2}
+
+# Constant Definition
+snippet doc_d
+    /**
+     * ${3:undocumented constant}
+     **/
+    define(${1}, ${2});${4}
+
+# Function - post doc
+snippet doc_fp
+    /**
+     * ${1:undocumented function}
+     *
+     * @return ${2:void}
+     * @author ${3:`g:snips_author`}
+     **/${4}
+
+# Function signature
+snippet doc_s
+    /**
+     * ${4:undocumented function}
+     *
+     * @return ${5:void}
+     * @author ${6:`g:snips_author`}
+     **/
+    ${1}function ${2}(${3});${7}
+
+# Function
+snippet doc_f
+    /**
+     * ${4:undocumented function}
+     *
+     * @return ${5:void}
+     * @author ${6:`g:snips_author`}
+     **/
+    ${1}function ${2}(${3})
+    {${7}
+    }
+
+# Header
+snippet doc_h
+    /**
+     * ${1}
+     *
+     * @author ${2:`g:snips_author`}
+     * @version ${3:$Id$}
+     * @copyright ${4:$2}, `strftime('%d %B, %Y')`
+     * @package ${5:default}
+     **/
+
+    /**
+     * Define DocBlock
+     *//
+
+# Interface
+snippet doc_i
+    /**
+     * ${2:undocumented class}
+     *
+     * @package ${3:default}
+     * @author ${4:`g:snips_author`}
+     **/
+    interface ${1:}
+    {${5}
+    } // END interface $1
+
+# define(...)
+snippet def
+    define('${1}'${2});${3}
+
+# defined(...)
+snippet def?
+    ${1}defined('${2}')${3}
+
+snippet wh
+    while (${1:/* condition */}) {
+        ${2:// code...}
+    }
+
+# do ... while
+snippet do
+    do {
+        ${2:// code... }
+    } while (${1:/* condition */});
+
+snippet if
+    if (${1:/* condition */}) {
+        ${2:// code...}
+    }
+
+snippet ife
+    if (${1:/* condition */}) {
+        ${2:// code...}
+    } else {
+        ${3:// code...}
+    }
+    ${4}
+
+snippet else
+    else {
+        ${1:// code...}
+    }
+
+snippet elseif
+    elseif (${1:/* condition */}) {
+        ${2:// code...}
+    }
+
+# Tertiary conditional
+snippet t
+    $${1:retVal} = (${2:condition}) ? ${3:a} : ${4:b};${5}
+
+snippet switch
+    switch ($${1:variable}) {
+        case '${2:value}':
+            ${3:// code...}
+            break;
+        ${5}
+        default:
+            ${4:// code...}
+            break;
+    }
+
+snippet case
+    case '${1:value}':
+        ${2:// code...}
+        break;${3}
+snippet for
+    for ($${2:i} = 0; $$2 < ${1:count}; $$2${3:++}) {
+        ${4: // code...}
+    }
+
+snippet foreach
+    foreach ($${1:variable} as $${2:key}) {
+        ${3:// code...}
+    }
+
+snippet fun
+    ${1:public }function ${2:FunctionName}(${3})
+    {
+        ${4:// code...}
+    }
+
+# $... = array (...)
+snippet array
+    $${1:arrayName} = array(
+        '${2}' => ${3},
+        );${4}
+
+##### CodeIgniter Snippets #####
+# Generic $this->
+snippet this
+    $this->${1:model/controller}->${2:method}(${3:array});${4}
+
+# New Model Class
+snippet classm
+    /*
+    * ${1:Describe the model's purpose}
+    */
+
+    class `Filename()` extends CI_Model
+    {
+        function __construct()
+        {
+            parent::__construct();
+        }
+        ${3:// Code...}
+    }
+
+# New Controller Class
+snippet classc
+    /*
+    * ${1:Describe the controller's purpose}
+    */
+
+    class `Filename()` extends CI_Controller
+    {
+        function __construct()
+        {
+            parent::__construct();
+        }
+        ${3:// Code...}
+    }
+
+# Form Validation Rules
+snippet formrule
+    $this->form_validation->set_rules('${1:field name}','${2:human name}', '${3:rules}');${4}
+
+# Data array - $data['key']
+snippet darr
+    $data['${1:arrayName}'] = array(
+        '${2}' => ${3},${4}
+        );
+
+# Additional array data
+snippet arrv
+    '${1}' => ${2},${3}
+
+# Load view template
+snippet loadtemp
+    $data['main_content'] = '${1:view}';
+    $this->load->view('includes/template', $data);${2}
+
+##### Common Functions #####
+# Form validation run == FALSE
+snippet funform
+    function ${1:function}()
+    {
+        ${2:rules}
+        if($this->form_validation_run() == FALSE)
+        {
+            ${3:form data arrays}
+        }
+        else
+        {
+            ${4:success view}
+        }
+    }
+
+# Return If
+snippet returnif
+    if ($q->num_rows() > 0)
+    {
+        $${1:array} = $q->row_array();
+
+        return $${1:array};
+    }
+    else
+    {
+        return FALSE;
+    }
+
+##### Form Helper #####
+# Validation Errors
+snippet valerr
+    <?php echo validation_errors(); ?>${1}
+
+# Form Open
+snippet formo
+    <?php echo form_open('${1:form controller}'); ?>${2}
+
+# Form Close
+snippet formc
+    <?php echo form_close(); ?>${1}
+
+## Form Fields ##
+# Hidden
+snippet fhidden
+    <?php echo form_hidden('${1:name}', ${2:array}); ?>${3}
+
+# Input
+snippet finput
+    <?php echo form_input('${1:array}', set_value('${2:name}')); ?>${3}
+
+# Password
+snippet fpass
+    <?php echo form_password('${1:array}', set_value('${2:name}')); ?>${3}
+
+# Upload
+snippet fupload
+    <?php echo form_upload('${1:array}', set_value('${2:name}')); ?>${3}
+
+# Text area
+snippet ftext
+    <?php echo form_textarea('${1:array}', set_value('${2:name}')); ?>${3}
+
+# Drop-down
+snippet fdrop
+    <?php echo form_dropdown('${1:name}',${2:array}, $this->input->post('${1}')); ?>${3}
+
+# Checkbox
+snippet fcheck
+    <?php echo form_checkbox($${1:array}['${2:key}'], '', set_checkbox('${1}[]', '${2}')); ?>${3}
+
+# Radio button
+snippet fradio
+    <?php echo form_radio($${1:array}['${2:key}'], '', set_radio('${1}[]', '${2}')); ?>${3}
+
+# Form submit
+snippet fsubmit
+    <?php echo form_submit('${1:name}', '${2:value}'); ?>${3}
+
+# Form reset
+snippet freset
+    <?php echo form_reset('${1:name}', '${2:value}'); ?>${3}
+
+# Fieldset open
+snippet fieldo
+    <?php form_fieldset('${1:label}', '${2:array}'); ?>${3}
+
+# Fieldset close
+snippet fieldc
+    <?php form_fieldset_close(); ?>${1}
+
+##### HTML Snippets #####
+# <br>
+snippet r
+    <br`Close()[1:]`>
+
+# Div with class
+snippet div
+    <div id="${1:name}" class="${2}">
+        ${3}
+    </div>
+
+# Ordered list
+snippet ol
+    <ol id="${1}">
+        ${2}
+    </ol>
+
+# Unordered list
+snippet ul
+    <ul id="${1}">
+        ${2}
+    </ul>
+
+# List Item
+snippet li
+    <li>${1}</li>${2}
+
+##### PHP/HTML Shorthand #####
+# PHP Foreach
+snippet sforeach
+    <?php foreach ($${1:array} as $${2:key}) : ?>
+        ${3:// code...}
+    <?php endforeach; ?>
+
+##### Database Class/Active Record #####
+# Get query
+snippet dbget
+    $q = $this->db->get('${1:table}');${2}
+
+# Get_where query
+snippet dbgetwhere
+    $q = $this->db->get_where('${1:table}', array('${2:field}' => $${3:input}));${4}
+
+# Select
+snippet dbselect
+    $this->db->select('${1:fields}');${2}
+
+# Where
+snippet dbwhere
+    $this->db->where('${1:field}', $${2:input});${3}
+
+# Insert
+snippet dbinsert
+    $this->db->insert('${1:table}', $${2:array});${3}
+
+# Update
+snippet dbupdate
+    $this->db->update('${1:table}', $${2:array});${3}
+
+# Delete
+snippet dbdelete
+    $this->db->delete('${1:table}', $${2:array});${3}
+
+##### URL Helper #####
+# Site URL
+snippet surl
+    <?php echo site_url("${1:segments}"); ?>${2}
+
+# Base URL
+snippet burl
+    <?php echo base_url(); ?>${1}
+
+# Current URL
+snippet curl
+    <?php echo current_url(); ?>${1}
+
+# Anchor
+snippet anchor
+    <?php echo anchor('${1:segments}', '${2:text}', '${3:attributes}'); ?>${4}
+
+# Safe Mailto
+snippet mailto
+    <?php echo safe_mailto('${1:email}', '${2:text}'); ?>${3}
+
+
+
+
+
+
+
+#}}}

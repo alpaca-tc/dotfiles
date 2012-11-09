@@ -78,8 +78,9 @@ inoremap ' ''<LEFT>
 au FileType ruby,eruby inoremap <buffer>\| \|\|<LEFT>
 
 " 一括インデント
-vnoremap < <gv
-vnoremap > >gv
+vmap < <gv
+vmap > >gv
+vmap <C-M> :sort<CR>
 
 " if &term =~ "xterm"
 "   let &t_ti .= "\e[?2004h"
@@ -159,8 +160,8 @@ set virtualedit+=block
 " set virtualedit=all " 仮想端末
 map $ g_
 
-nmap <silent>h <Left>
-nmap <silent>l <Right>
+" nmap <silent>h <Left>
+" nmap <silent>l <Right>
 nmap <silent>j gj
 nmap <silent>k gk
 nmap <silent><Down> gj
@@ -189,10 +190,10 @@ autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "norm
 " 画面の移動
 nmap <C-L> <C-W><C-W>
 " nmap <C-W><C-H> <C-W>h
-nmap <C-W><C-K> <C-W>k
-nmap <C-W><C-L> <C-W>l
-nmap <C-W><C-J> <C-W>j
-nmap <C-W><C-J><C-L> <C-W>j<C-W>l
+" nmap OA <C-W>k
+" nmap OC <C-W>l
+" nmap OB <C-W>j
+" nmap OD <C-W>h
 nmap <C-W><C-J><C-h> <C-W>j<C-W>h
 nmap <C-W><C-H><C-j> <C-W>h<C-W>j
 nmap <C-W><C-H><C-k> <C-W>h<C-W>k
@@ -331,7 +332,7 @@ set listchars=tab:␣.,trail:_,extends:>,precedes:< " 不可視文字の表示�
 set scrolloff=5
 " set scrolljump=-50
 set showcmd
-au FileType coffee,ruby,eruby,php,javascript,javascript.jasmine,ruby.spec,ruby.rails,ruby.rails.model,ruby.rails.controller,ruby.rspec,c,json,vim set colorcolumn=80
+au FileType haml,coffee,ruby,eruby,php,javascript,javascript.jasmine,ruby.spec,ruby.rails,ruby.rails.model,ruby.rails.controller,ruby.rspec,c,json,vim set colorcolumn=80
 
 "set display=uhex      " 印字不可能文字を16進数で表示
 set t_Co=256          " 確かカラーコード
@@ -599,7 +600,7 @@ NeoBundle 'Shougo/git-vim'
 NeoBundle 'mattn/gist-vim' "gistを利用する
 
 "保存と同時にブラウザをリロードする
-NeoBundleLazy 'tell-k/vim-browsereload-mac'
+NeoBundle 'tell-k/vim-browsereload-mac'
 
 "markdownでメモを管理
 NeoBundle 'glidenote/memolist.vim'
@@ -2137,8 +2138,8 @@ let g:syntastic_warning_symbol='⚠'
 
 let g:syntastic_mode_map = {
       \ 'mode'              : 'active',
-      \ 'active_filetypes'  : ['ruby', 'php', 'js', 'javascript', 'less', 'coffee' ],
-      \ 'passive_filetypes' : ['puppet', 'html', 'scss']
+      \ 'active_filetypes'  : ['ruby', 'php', 'js', 'javascript', 'less', 'coffee', 'scss', 'haml' ],
+      \ 'passive_filetypes' : ['puppet', 'html']
       \}
 " let g:syntastic_mode_map = {
 "   \ 'mode'              : 'active',
@@ -2244,7 +2245,7 @@ let g:indent_guides_space_guides = 1
 hi IndentGuidesOdd  ctermbg=235
 " hi IndentGuidesEven ctermbg=237
 hi IndentGuidesEven ctermbg=233
-au FileType coffee,ruby,javascript,python IndentGuidesEnable
+au FileType html,php,haml,scss,sass,less,coffee,ruby,javascript,python IndentGuidesEnable
 nmap <silent><Leader>ig <Plug>IndentGuidesToggle
 "}}}
 
@@ -2530,7 +2531,6 @@ imap <expr><CR> neocomplcache#smart_close_popup() . "<CR>" . "<Plug>Discretionar
 "Tags関連 cTags使う場合は有効化"{{{
 "http://vim-users.jp/2010/06/hack154/
 
-setl tags=""
 let current_dir = expand("%:p:h")
 set tags& tags-=tags tags+=./tags;
 
