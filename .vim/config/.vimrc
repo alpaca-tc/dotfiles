@@ -689,7 +689,8 @@ NeoBundle 'tpope/vim-markdown'
 
 " sassのコンパイル
 " NeoBundle 'AtsushiM/sass-compile.vim'
-NeoBundle 'taichouchou2/sass-compile.vim'
+" NeoBundle 'taichouchou2/sass-compile.vim'
+NeoBundle 'taichouchou2/sass-async-compile.vim'
 
 "  php
 " ----------------------------------------
@@ -2584,15 +2585,18 @@ au Filetype php nmap <Leader>R :! phptohtml<CR>
 " ----------------------------------------
 " today
 " ----------------------------------------
+"{{{
 function! Today()
   return strftime("%Y-%m-%d")
 endfunction
 inoremap <C-D><C-D> <C-R>=Today()<CR>
+"}}}
 
 " ----------------------------------------
 " open window
 " 画面分割を抽象的に行う
 " ----------------------------------------
+"{{{
 function! s:smart_split(cmd)
   if winwidth(0) > winheight(0) * 2
     vsplit
@@ -2611,11 +2615,13 @@ if executable('pdftotext')
   command! -complete=file -nargs=1 Pdf :r !pdftotext -nopgbrk -layout <q-args> -
 endif
 au BufRead *.pdf call Pdf
+"}}}
 
 " ----------------------------------------
 " open yard
 " ----------------------------------------
 " カーソル下のgemのrdocを開く
+"{{{
 function! OpenYard(...)
   let gem = a:1 == "" ? "" : a:1
   if gem == ""
@@ -2635,10 +2641,12 @@ nmap <Space>y :<C-U>OpenYard <C-R><C-W><CR>
 
 " 指定したgemを開く
 au User Rails nmap <buffer><C-J><C-B> :!bundle open<Space>
+"}}}
 
 " ----------------------------------------
 " haml2html
 " ----------------------------------------
+"{{{
 function! ConvertHamlToHtml(fileType)
   " 同じディレクトリに、pathというファイルを作り
   " `cat path` -> `../`
@@ -2680,10 +2688,12 @@ function! ErubySetting()
   au BufWritePost *.erb silent call ConvertHamlToHtml("eruby")
 endfunction
 au Filetype eruby call ErubySetting()
+"}}}
 
 " ----------------------------------------
 " sass async compile
 " ----------------------------------------
+
 " function! ScssAsyncCompile()
 "   let cmd = 'compass compile '. expand("%:p:h")
 "   call vimproc#system_bg('apachectl stop')
