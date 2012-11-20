@@ -139,7 +139,7 @@ _rakeDbSetUp() {
   rake db:migrate RAILS_ENV=test
   rake db:seed RAILS_ENV=test
 }
-alias rs=_rakeDbSetUp
+alias rreset=_rakeDbSetUp
 alias y='yard'
 alias yg='yard server --gems'
 

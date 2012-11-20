@@ -35,3 +35,12 @@ snippet     default_css
   - default_css_lists << custom_css_lists
   - default_css_lists.flatten.each do |css|
     %link{ :type => "text/css", :rel => "stylesheet", :href => "css/#{css}.css" }
+
+snippet     jq18
+    = javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"
+
+snippet     html5
+    = javascript_include_tag "http://html5shim.googlecode.com/svn/trunk/html5.js"
+
+snippet     mail
+  %a { href: "mailto:${1}" }${2}
