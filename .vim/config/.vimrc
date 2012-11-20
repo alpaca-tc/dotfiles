@@ -533,7 +533,7 @@ NeoBundle 'Shougo/vimfiler'
 " NeoBundle 'yuroyoro/vimdoc_ja'
 NeoBundle 'camelcasemotion'
 " NeoBundle 'taku-o/vim-toggle' "true<=>false など、逆の意味のキーワードを切り替えられる
-NeoBundle 'Lokaltog/vim-easymotion'
+" NeoBundle 'Lokaltog/vim-easymotion'
 
 NeoBundle 'mattn/zencoding-vim' "Zencodingを使う
 NeoBundle 'vim-scripts/sudo.vim' "vimで開いた後にsudoで保存
@@ -720,12 +720,18 @@ NeoBundle 'taichouchou2/unite-reek',
       \{  'depends' : 'Shougo/unite.vim' }
 NeoBundle 'taichouchou2/unite-rails_best_practices',
       \{ 'depends' : 'Shougo/unite.vim' }
-NeoBundle 'taichouchou2/alpaca_complete'
+" NeoBundle 'taichouchou2/alpaca_complete'
 
 " python
 " ----------------------------------------
 " NeoBundle 'Pydiction'
 " NeoBundle 'yuroyoro/vim-python'
+NeoBundle 'davidhalter/jedi-vim', {
+      \ 'build' : {
+      \     'mac' : 'git submodule update --init',
+      \     'unix' : 'git submodule update --init',
+      \    },
+      \ }
 
 " scala
 " ----------------------------------------
@@ -2381,16 +2387,16 @@ au FileType w3m call W3mSetting()
 " Easy motion
 "------------------------------------
 "{{{
-let g:EasyMotion_do_shade = 1
-let g:EasyMotion_do_mapping = 0 " マッピングは自分で行う
+" let g:EasyMotion_do_shade = 1
+" let g:EasyMotion_do_mapping = 0 " マッピングは自分で行う
 
-nmap <silent> f      :call EasyMotion#WB(0, 0)<CR>
-" nnoremap <silent> j<Tab>      :call EasyMotion#JK(0, 0)<CR>
-" nnoremap <silent> N<Tab>      :call EasyMotion#Search(0, 1)<CR>
-" nnoremap <silent> n<Tab>      :call EasyMotion#Search(0, 0)<CR>
-" nnoremap <silent> T<Tab>      :call EasyMotion#T(0, 1)<CR>
-" nmap <silent> F<Tab>      :call EasyMotion#F(0, 1)<CR>
-nmap <silent> <C-S>      :call EasyMotion#F(0, 0)<CR>
+" nmap <silent> f      :call EasyMotion#WB(0, 0)<CR>
+" " nnoremap <silent> j<Tab>      :call EasyMotion#JK(0, 0)<CR>
+" " nnoremap <silent> N<Tab>      :call EasyMotion#Search(0, 1)<CR>
+" " nnoremap <silent> n<Tab>      :call EasyMotion#Search(0, 0)<CR>
+" " nnoremap <silent> T<Tab>      :call EasyMotion#T(0, 1)<CR>
+" " nmap <silent> F<Tab>      :call EasyMotion#F(0, 1)<CR>
+" nmap <silent> <C-S>      :call EasyMotion#F(0, 0)<CR>
 "}}}
 
 "------------------------------------
@@ -2452,7 +2458,6 @@ nmap <silent><Leader>ig <Plug>IndentGuidesToggle
 " " Select current paragraph and send it to tmux
 " nmap <LocalLeader>vs vip<LocalLeader>vs<CR>
 
-
 "------------------------------------
 " qiita
 "------------------------------------
@@ -2497,6 +2502,21 @@ vmap sf :SQLUFormatter<CR>
 " vim-endwise
 "------------------------------------
 let g:endwise_no_mappings=1
+
+"------------------------------------
+" jedi-vim
+"------------------------------------
+let g:jedi#auto_initialization = 1
+let g:jedi#get_definition_command = "<leader>d"
+let g:jedi#goto_command = "<leader>g"
+let g:jedi#popup_on_dot = 0
+let g:jedi#pydoc = "K"
+let g:jedi#related_names_command = "<leader>n"
+let g:jedi#rename_command = "<leader>r"
+let g:jedi#use_tabs_not_buffers = 0
+autocmd FileType python let b:did_ftplugin = 1
+
+
 "}}}
 
 "----------------------------------------
@@ -2846,13 +2866,13 @@ function! HamlSetting()
   nmap <buffer><Leader>R :<C-U>call ConvertHamlToHtml("haml")<CR>
   au BufWritePost *.haml silent call ConvertHamlToHtml("haml")
 endfunction
-au Filetype haml call HamlSetting()
+" au Filetype haml call HamlSetting()
 
 function! ErubySetting()
   nmap <buffer><Leader>R :<C-U>call ConvertHamlToHtml("eruby")<CR>
   au BufWritePost *.erb silent call ConvertHamlToHtml("eruby")
 endfunction
-au Filetype eruby call ErubySetting()
+" au Filetype eruby call ErubySetting()
 
 " ----------------------------------------
 " sass async compile
@@ -2863,6 +2883,25 @@ au Filetype eruby call ErubySetting()
 " endfunction
 " au BufWritePost *.scss call ScssAsyncCompile()
 
+"}}}
+
+" Mac の辞書.appで開く {{{
+if has('mac')
+    " 引数に渡したワードを検索
+    command! -nargs=1 MacDict      call system('open '.shellescape('dict://'.<q-args>))
+    " カーソル下のワードを検索
+    command! -nargs=0 MacDictCWord call system('open '.shellescape('dict://'.shellescape(expand('<cword>'))))
+    " 辞書.app を閉じる
+    command! -nargs=0 MacDictClose call system("osascript -e 'tell application \"Dictionary\" to quit'")
+    " 辞書にフォーカスを当てる
+    command! -nargs=0 MacDictFocus call system("osascript -e 'tell application \"Dictionary\" to activate'")
+    " キーマッピング
+
+    nnoremap <silent>mm :<C-u>MacDictCWord<CR>
+    vnoremap <silent>mm y:<C-u>MacDict<Space><C-r>*<CR>
+    nnoremap <silent>mc :<C-u>MacDictClose<CR>
+    nnoremap <silent>mf :<C-u>MacDictFocus<CR>
+endif
 "}}}
 
 set secure

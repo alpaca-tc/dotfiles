@@ -30,6 +30,29 @@ abbr        clearfix
 prev_word    '^'
     @include clearfix;
 
+snippet     clearfix
+  @mixin cf {
+    /* For modern browsers */
+    &:before,
+    &:after {
+      content:"";
+      display:table;
+    }
+
+    &:after {
+      clear:both;
+    }
+
+    /* For IE 6/7 (trigger hasLayout) */
+    & {
+      zoom:1;
+    }
+  }
+
+  @mixin clearfix {
+    @include cf;
+  }
+
 snippet     ibr
 abbr        abbr
 prev_word    '^'
@@ -65,7 +88,6 @@ snippet i
 # Define a variable
 snippet v
     $${1:name}: ${2:value};
-    ${3}
 # @mixin - Define a mixin
 snippet mix
     @mixin ${1:name} {
@@ -79,161 +101,112 @@ snippet inc
 # positioning
 snippet di
     display: ${1:none};
-    ${2}
 snippet po
     position: ${1:relative};
-    ${2}
 snippet poa
     position: ${1:absolute};
-    ${2}
 snippet fl
     float: ${1:left};
-    ${2}
 snippet cl
     clear: ${1:left};
-    ${2}
 snippet top
     top: ${1:0};
-    ${2}
 snippet bot
     bottom: ${1:0};
-    ${2}
 snippet lef
     left: ${1:0};
-    ${2}
 snippet rig
     right: ${1:0};
-    ${2}
 # sizing
 snippet hi
     height: ${1:100%};
-    ${2}
 snippet wi
     width: ${1:80%};
-    ${2}
 snippet maw
     max-width: ${1:80%};
-    ${2}
 snippet miw
     min-width: ${1:25%};
-    ${2}
 # margins
 snippet m
     margin: ${1:0} ${2:auto};
-    ${3}
 snippet mt
     margin-top: ${1:0};
-    ${2}
 snippet mb
     margin-bottom: ${1:0};
-    ${2}
 snippet ml
     margin-left: ${1:0};
-    ${2}
 snippet mr
     margin-right: ${1:0};
-    ${2}
 # padding
 snippet p
     padding: ${1:0} ${2:0};
-    ${3}
 snippet pt
     padding-top: ${1:0};
-    ${2}
 snippet pb
     padding-bottom: ${1:0};
-    ${2}
 snippet pl
     padding-left: ${1:0};
-    ${2}
 snippet pr
     padding-right: ${1:0};
-    ${2}
 #borders
 snippet b
     border: ${1:1px} ${2:solid} ${3:#000};
-    ${4}
 snippet bt
     border-top: ${1:1px} ${2:solid} ${3:#000};
-    ${4}
 snippet bb
     border-bottom: ${1:1px} ${2:solid} ${3:#000};
-    ${4}
 snippet bl
     border-left: ${1:1px} ${2:solid} ${3:#000};
-    ${4}
 snippet br
     border-right: ${1:1px} ${2:solid} ${3:#000};
-    ${4}
 # backgrounds
 snippet ba
     background: ${1:#fff} ${2:url} ${3:repeat} ${4:left} ${5:top};
-    ${6}
 snippet bc
     background-color: ${1:#fff};
-    ${2}
 snippet bi
     background-image: url('${1}');
-    ${2}
 snippet bp
     background-position: ${1:left} ${2:top};
-    ${3}
 # fonts
 snippet f
     font: ${1:size}em/${2:1.5} ${3:"Helvetica Neue", Helvetica, Arial, sans-serif};
-    ${4}
 snippet font
     font: ${1:weight} ${2:style} ${3:variant} ${4:size}/${5:line-height} ${6:family};
-    ${7}
 snippet fs
     font-size: ${1:1.2em};
-    ${2}
 snippet fst
     font-style: ${1:italic};
-    ${2}
 snippet fv
     font-variant: ${1:small-caps};
-    ${2}
 snippet fw
     font-weight: ${1:bold};
-    ${2}
 snippet @ff
     @font-face {
         font-family: ${1:name};
         src: ${2:url};
     }
-    ${3}
 # text- & lettering
 snippet co
     color: ${1:#000};
-    ${2}
 snippet ta
     text-align: ${1:center};
-    ${2}
 snippet td
     text-decoration: ${1:none};
-    ${2}
 snippet ti
     text-indent: ${1:length};
-    ${2}
 snippet to
     text-overflow: ${1:ellipsis};
-    ${2}
 snippet tr
     text-rendering: ${1:optimizeLegibility};
-    ${2}
 snippet ts
     text-shadow: ${1:color} ${2:x} ${3:y} ${4:blur};
-    ${5}
 snippet tt
     text-transform: ${1:uppercase};
-    ${2}
 snippet lh
     line-height: ${1:1.5em};
-    ${2}
 snippet ls
     letter-spacing: ${1:0.025em};
-    ${2}
 # SASS RGB Functions
 # Converts an rgb(red, green, blue) triplet into a color.
 snippet rgb
@@ -330,7 +303,49 @@ snippet abs
 snippet     imp
     @import "${1:compass/css3}"
 
+snippet     utf8
+  @charset "UTF-8";
+
+## font lists{{{
 snippet ff
     font-family: Verdana,Arial,"メイリオ",Meiryo,"ヒラギノ角ゴPro W3","Hiragino Kaku Gothic Pro","ＭＳ Ｐゴシック","MS PGothic",sans-serif;
     font-weight:normal;
     color:${1:#CCC};
+
+snippet ffhira
+  font-family:"ヒラギノ明朝 Pro W6", "HiraMinPro-W6";
+
+snippet ffosaka
+  font-family:"Osaka";
+  font-weight:bold
+
+snippet     ffhiramarug
+  font-family:"ヒラギノ丸ゴシックPro W4", "Hiragino Maru Gothic Pro";font-weight:bold
+
+snippet     ffhirakakug
+  font-family:"ヒラギノ角ゴシック Std W8", "Hiragino Kaku Gothic Std"
+
+snippet     ffonts
+  http://nov.azarea.jp/fonts.html
+##}}}
+
+snippet     @mreset
+  @mixin reset {
+    border-collapse:collapse;
+    border-spacing:0;
+    border:0;
+    color:#000;
+    background:#FFF;
+    content:'';
+    font-size:100%;
+    font-style:normal;
+    font-variant:normal;
+    font-weight:normal;
+    list-style:none;
+    margin:0;
+    padding:0;
+    text-align:left;
+    vertical-align:text-bottom;
+  }
+
+
