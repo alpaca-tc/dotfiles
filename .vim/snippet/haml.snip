@@ -1,4 +1,4 @@
-snippet         semantic
+snippet     semantic
     semantic_form_for [:admin, ${1:@post}] do |f|
 
 snippet     style
@@ -44,3 +44,10 @@ snippet     html5
 
 snippet     mail
   %a { href: "mailto:${1}" }${2}
+
+
+snippet description
+    %meta{ name: "description", content: "${1}" }
+
+snippet keywords
+    %meta{ name: "keywords", content: "${1}" }

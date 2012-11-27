@@ -60,6 +60,8 @@ au BufEnter * execute ":lcd " . expand("%:p:h")
 nmap <Space>w :wq<CR>
 nmap <Space>q :q!<CR>
 nmap <Space>s :w sudo:%<CR>
+nmap / /\v
+nmap sub :%s/\v
 
 "削除の標準キーマップを逆に。
 "また、レジスタに入れないようにする
@@ -881,6 +883,15 @@ if executable('coffeetags')
         \ }
         \ }
 endif
+let g:tagbar_type_javascript = {
+    \'ctagstype' : 'JavaScript',
+    \'kinds'     : [
+    \   'o:objects',
+    \   'f:functions',
+    \   'a:arrays',
+    \   's:strings'
+  \]
+\}
 " let g:tagbar_type_markdown = {
 "   \ 'ctagstype' : 'markdown',
 "   \ 'kinds' : [
@@ -2898,6 +2909,7 @@ if has('mac')
     " キーマッピング
 
     nnoremap <silent>mm :<C-u>MacDictCWord<CR>
+    nnoremap <silent>mo :<C-u>MacDictCWord<CR>
     vnoremap <silent>mm y:<C-u>MacDict<Space><C-r>*<CR>
     nnoremap <silent>mc :<C-u>MacDictClose<CR>
     nnoremap <silent>mf :<C-u>MacDictFocus<CR>
