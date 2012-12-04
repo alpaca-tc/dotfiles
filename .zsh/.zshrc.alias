@@ -69,8 +69,9 @@ alias glp='git log -p'
 alias glr='git log --relative-date'
 alias gm='git commit'
 alias gmr='git merge'
-alias gr='git reset'
+alias grs='git reset'
 alias grl='git reflog'
+alias grm='git remote'
 alias gs='git status'
 alias gst='git stash'
 alias gt='git tr'
@@ -145,3 +146,6 @@ alias yg='yard server --gems'
 
 
 alias os='cat /etc/`ls /etc -F | grep "release$\|version$"`'
+
+# objdump homebrewだとgobjdumpという名前だから
+alias objdump='gobjdump'

@@ -15,3 +15,9 @@ snippet     yes
     fi
 snippet     me
     ${1%/*}
+
+snippet     receive-post
+  #!/bin/sh
+
+  www_dir="${HOME}/app"
+  (cd ${www_dir};git --git-dir=.git pull;)

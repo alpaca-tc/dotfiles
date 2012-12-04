@@ -57,9 +57,18 @@ set nrformats-=octal
 au BufEnter * execute ":lcd " . expand("%:p:h")
 
 "<Space>w or <Space>qで画面を閉じる
-nmap <Space>w :wq<CR>
-nmap <Space>q :q!<CR>
+nmap <silent><Space>w :wq<CR>
+nmap <silent><Space>q :q!<CR>
 nmap <Space>s :w sudo:%<CR>
+nmap / /\v
+nmap sub :%s/\v
+nmap <Leader>s :set ft=
+
+function! NewBuffer()
+  new
+  setl ft=ruby
+endfunction
+nmap <silent><C-W>n :call NewBuffer()<CR>
 
 "削除の標準キーマップを逆に。
 "また、レジスタに入れないようにする
@@ -67,7 +76,7 @@ nmap <Space>s :w sudo:%<CR>
 "nmap X <Del>
 " imap <C-@> <BS>
 imap <C-H> <BS>
-imap <C-Space> <BS>
+" imap <C-Space> <BS>
 
 " 括弧を自動補完
 inoremap { {}<LEFT>
@@ -105,7 +114,6 @@ augroup MyXML
   autocmd Filetype html inoremap <buffer> </ </<C-x><C-o>
   autocmd Filetype eruby inoremap <buffer> </ </<C-x><C-o>
 augroup END
-
 
 "コメントを書くときに便利
 inoremap <leader>* ****************************************
@@ -180,7 +188,7 @@ nnoremap H <Nop>
 vnoremap H <Nop>
 
 " マークを使い易くする
-nmap <silent>; :<C-U>echo "マーク"<CR><ESC>'
+" nmap <silent>; :<C-U>echo "マーク"<CR><ESC>'
 
 " 前回終了したカーソル行に移動
 autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal g`\"" | endif
@@ -309,6 +317,8 @@ if has("autocmd")
   autocmd FileType zsh        setlocal sw=4 sts=4 ts=4 et
 endif
 autocmd InsertLeave * set nopaste
+
+au BufFilePost wp-*.php set noexpandtab
 "}}}
 
 "----------------------------------------
@@ -700,6 +710,7 @@ NeoBundle 'taichouchou2/sass-async-compile.vim'
 "  binary
 " ----------------------------------------
 NeoBundle 'Shougo/vinarise'
+NeoBundle 's-yukikaze/vinarise-plugin-peanalysis'
 
 " objective-c
 " ----------------------------------------
@@ -884,6 +895,15 @@ if executable('coffeetags')
         \ }
         \ }
 endif
+" let g:tagbar_type_javascript = {
+"     \'ctagstype' : 'JavaScript',
+"     \'kinds'     : [
+"     \   'o:objects',
+"     \   'f:functions',
+"     \   'a:arrays',
+"     \   's:strings'
+"   \]
+" \}
 " let g:tagbar_type_markdown = {
 "   \ 'ctagstype' : 'markdown',
 "   \ 'kinds' : [
@@ -920,12 +940,13 @@ nnoremap <Leader>g :<C-u>OpenBrowserSearch<Space><C-r><C-w><Enter>
 "------------------------------------
 "{{{
 " 入力モードで開始する
+let g:unite_enable_split_vertically=1
 let g:unite_enable_start_insert=1
-let g:unite_source_history_yank_enable = 1
-let g:unite_source_file_mru_limit = 400     "最大数
-let g:unite_winheight = 20
-let g:unite_source_file_rec_min_cache_files = 300
 let g:unite_source_file_mru_filename_format = ''
+let g:unite_source_file_mru_limit = 400     "最大数
+let g:unite_source_file_rec_min_cache_files = 300
+let g:unite_source_history_yank_enable = 1
+let g:unite_winheight = 20
 
 "unite prefix key.
 nnoremap [unite] <Nop>
@@ -2519,6 +2540,10 @@ let g:jedi#rename_command = "<leader>r"
 let g:jedi#use_tabs_not_buffers = 0
 autocmd FileType python let b:did_ftplugin = 1
 
+"------------------------------------
+" jedi-vim
+"------------------------------------
+let g:vinarise_objdump_command='gobjdump' " homebrew
 
 "}}}
 
@@ -2911,6 +2936,7 @@ if has('mac')
     " キーマッピング
 
     nnoremap <silent>mm :<C-u>MacDictCWord<CR>
+    nnoremap <silent>mo :<C-u>MacDictCWord<CR>
     vnoremap <silent>mm y:<C-u>MacDict<Space><C-r>*<CR>
     nnoremap <silent>mc :<C-u>MacDictClose<CR>
     nnoremap <silent>mf :<C-u>MacDictFocus<CR>
