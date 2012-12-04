@@ -146,3 +146,6 @@ alias yg='yard server --gems'
 
 
 alias os='cat /etc/`ls /etc -F | grep "release$\|version$"`'
+
+# objdump homebrewだとgobjdumpという名前だから
+alias objdump='gobjdump'
