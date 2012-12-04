@@ -11,8 +11,14 @@ snippet     con
       ${2}
 
 # coffee
-snippet     cons
-    console.debug(${1})
+snippet     consd
+    console.debug ${1}
+
+snippet     consl
+    console.log ${1}
+
+snippet     consw
+    console.warn ${1}
 
 # jquery
 snippet     ajax
@@ -23,13 +29,14 @@ snippet     ajax
     })
 
 snippet     getj
-    $.ajaxSetup({ cache: false, async:${1} }); # IE hack
+    $.ajaxSetup { cache: false, async:${1} } # IE hack
     _json = $.getJSON(
       "${2:https://graph.facebook.com/#{ id }}",
       (data, status)->
         ${3}
       'jsonp'
     )
+
 snippet     ready
     $(document).ready ->
       ${1}

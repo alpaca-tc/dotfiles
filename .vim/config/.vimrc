@@ -699,7 +699,7 @@ NeoBundle 'taichouchou2/sass-async-compile.vim'
 
 "  binary
 " ----------------------------------------
-" NeoBundle 'Shougo/vinarise'
+NeoBundle 'Shougo/vinarise'
 
 " objective-c
 " ----------------------------------------
@@ -717,6 +717,7 @@ NeoBundle 'skwp/vim-rspec'
 NeoBundle 'ujihisa/unite-rake'
 NeoBundle 'taichouchou2/vim-rsense'
 NeoBundle 'vim-ruby/vim-ruby'
+NeoBundle 'skalnik/vim-vroom'
 NeoBundle 'taichouchou2/unite-reek',
       \{  'depends' : 'Shougo/unite.vim' }
 NeoBundle 'taichouchou2/unite-rails_best_practices',
@@ -733,6 +734,7 @@ NeoBundle 'davidhalter/jedi-vim', {
       \     'unix' : 'git submodule update --init',
       \    },
       \ }
+NeoBundle 'kevinw/pyflakes-vim'
 
 " scala
 " ----------------------------------------
@@ -1132,7 +1134,7 @@ let g:quickrun_config['lisp'] = {
       \ }
 
 " coffee
-let g:quickrun_config['coffee'] = {
+let g:quickrun_config['coffee_compile'] = {
       \'command' : 'coffee',
       \'exec' : ['%c -cbp %s']
       \}

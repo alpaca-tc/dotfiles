@@ -168,6 +168,13 @@ snippet nam
         ${2}
     end
 
+snippet am
+  alias_method ${1:to}, ${2:from}
+
+snippet dm
+  define_method ${1:method_name} do ${2}
+
+
 #/*}}}*/
 
 # class etc..
@@ -304,6 +311,7 @@ snippet cBlank
     end
 #/*}}}*/
 
+# cToRegexp# {{{
 snippet  cToRegexp
     class String
       REGEXP_DELIMITERS = {
@@ -325,6 +333,7 @@ snippet  cToRegexp
         ::Regexp.new content, (ignore_case|multiline|extended)
       end
     end
+## }}}
 
 # cTry/*{{{*/
 snippet cTry
