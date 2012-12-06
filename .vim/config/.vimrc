@@ -62,6 +62,8 @@ nmap <silent><Space>q :q!<CR>
 nmap <Space>s :w sudo:%<CR>
 nmap / /\v
 nmap sub :%s/\v
+" escape
+xnoremap e y:%s/<C-r>=substitute(@0, '/', '\\/', 'g')<Return>//g<Left><Left>
 nmap <Leader>s :set ft=
 
 function! NewBuffer()
@@ -87,25 +89,11 @@ inoremap ' ''<LEFT>
 au FileType ruby,eruby inoremap <buffer>\| \|\|<LEFT>
 
 " 一括インデント
-vmap < <gv
-vmap > >gv
-vmap <C-M> :sort<CR>
-
-" if &term =~ "xterm"
-"   let &t_ti .= "\e[?2004h"
-"   let &t_te .= "\e[?2004l"
-"   let &pastetoggle = "\e[201~"
-"
-"   function XTermPasteBegin(ret)
-"     set paste
-"     return a:ret
-"   endfunction
-"
-"   noremap <special> <expr> <Esc>[200~ XTermPasteBegin("0i")
-"   inoremap <special> <expr> <Esc>[200~ XTermPasteBegin("")
-"   cnoremap <special> <Esc>[200~ <nop>
-"   cnoremap <special> <Esc>[201~ <nop>
-" endif
+xmap < <gv
+xmap > >gv
+xmap <TAB>  >
+xmap <S-TAB>  <
+xmap <C-M> :sort<CR>
 
 " HTML/XMLの閉じタグを </ が入力されたときに補完
 augroup MyXML
@@ -118,7 +106,6 @@ augroup END
 "コメントを書くときに便利
 inoremap <leader>* ****************************************
 inoremap <leader>- ----------------------------------------
-inoremap <leader>h <!--/--><left><left><left>
 
 "保存時に無駄な文字を消す
 function! s:remove_dust()
@@ -131,8 +118,27 @@ function! s:remove_dust()
 endfunction
 au BufWritePre * call <SID>remove_dust()
 
-au BufReadPost .gitignore setl ft=conf
+" html {{{
+function! s:HtmlEscape()
+  silent s/&/\&amp;/eg
+  silent s/</\&lt;/eg
+  silent s/>/\&gt;/eg
+endfunction
+function! s:HtmlUnEscape()
+  silent s/&lt;/</eg
+  silent s/&gt;/>/eg
+  silent s/&amp;/\&/eg
+endfunction
 
+function! HtmlFunctions()
+  inoremap <leader>h <!--/--><left><left><left>
+  xnoremap <silent> <space>e :call <SID>HtmlEscape()<CR>
+  xnoremap <silent> <space>ue :call <SID>HtmlUnEscape()<CR>
+endfunction
+au FileType php,eruby,html,haml call HtmlFunctions()<CR>
+" }}}
+
+" 変なマッピングを修正 "{{{
 if has('gui_macvim')
   map ¥ \
   imap ¥ \
@@ -140,6 +146,51 @@ if has('gui_macvim')
   cmap ¥ \
   smap ¥ \
 endif
+"}}}
+
+" Improved visual selection.{{{
+" http://labs.timedia.co.jp/2012/10/vim-more-useful-blockwise-insertion.html
+xnoremap <expr> I  <SID>force_blockwise_visual('I')
+xnoremap <expr> A  <SID>force_blockwise_visual('A')
+
+function! s:force_blockwise_visual(next_key)
+  if mode() ==# 'v'
+    return "\<C-v>" . a:next_key
+  elseif mode() ==# 'V'
+    return "\<C-v>0o$" . a:next_key
+  else  " mode() ==# "\<C-v>"
+    return a:next_key
+  endif
+endfunction
+"}}}
+
+" Improved increment.{{{
+nmap <C-a> <SID>(increment)
+nmap <C-x> <SID>(decrement)
+nnoremap <silent> <SID>(increment)    :AddNumbers 1<CR>
+nnoremap <silent> <SID>(decrement)   :AddNumbers -1<CR>
+command! -range -nargs=1 AddNumbers
+      \ call s:add_numbers((<line2>-<line1>+1) * eval(<args>))
+function! s:add_numbers(num)
+  let prev_line = getline('.')[: col('.')-1]
+  let next_line = getline('.')[col('.') :]
+  let prev_num = matchstr(prev_line, '\d\+$')
+  if prev_num != ''
+    let next_num = matchstr(next_line, '^\d\+')
+    let new_line = prev_line[: -len(prev_num)-1] .
+          \ printf('%0'.len(prev_num).'d',
+          \    max([0, prev_num . next_num + a:num])) . next_line[len(next_num):]
+  else
+    let new_line = prev_line . substitute(next_line, '\d\+',
+          \ "\\=printf('%0'.len(submatch(0)).'d',
+          \         max([0, submatch(0) + a:num]))", '')
+  endif
+
+  if getline('.') !=# new_line
+    call setline('.', new_line)
+  endif
+endfunction "}}}
+
 "}}}
 
 "----------------------------------------
@@ -192,16 +243,15 @@ vnoremap H <Nop>
 
 " 前回終了したカーソル行に移動
 autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal g`\"" | endif
+nnoremap g: `.zz
+nnoremap g, g;
+nnoremap g; g,
 
 " windowの操作
 " ****************
 " 画面の移動
 nmap <C-L> <C-W><C-W>
 " nmap <C-W><C-H> <C-W>h
-" nmap OA <C-W>k
-" nmap OC <C-W>l
-" nmap OB <C-W>j
-" nmap OD <C-W>h
 nmap <C-W><C-J><C-h> <C-W>j<C-W>h
 nmap <C-W><C-H><C-j> <C-W>h<C-W>j
 nmap <C-W><C-H><C-k> <C-W>h<C-W>k
@@ -215,7 +265,88 @@ nmap <C-W>K <C-W>K<C-W>=
 nmap <C-W>L <C-W>L<C-W>=
 nmap <C-W>J <C-W>J<C-W>=
 nmap <C-W>H <C-W>H<C-W>=
+nmap <C-W>s :<C-U>split<CR><C-W>=
+nmap <C-W>v :<C-U>vsplit<CR><C-W>=
 
+nnoremap    [Window]   <Nop>
+nmap    s [Window]
+nnoremap <silent> [Window]p  :<C-u>call <SID>split_nicely()<CR>
+nnoremap <silent> [Window]v  :<C-u>vsplit<CR>
+nnoremap <silent> [Window]c  :<C-u>call <sid>smart_close()<CR>
+nnoremap <silent> -  :<C-u>call <sid>smart_close()<CR>
+nnoremap <silent> [Window]o  :<C-u>only<CR>
+
+" A .vimrc snippet that allows you to move around windows beyond tabs
+nnoremap <silent> <Tab> :call <SID>NextWindow()<CR>
+nnoremap <silent> <S-Tab> :call <SID>PreviousWindowOrTab()<CR>
+
+"{{{
+function! s:smart_close()
+  if winnr('$') != 1
+    close
+  endif
+endfunction
+
+function! s:NextWindow()
+  if winnr('$') == 1
+    silent! normal! ``z.
+  else
+    wincmd w
+  endif
+endfunction
+
+function! s:NextWindowOrTab()
+  if tabpagenr('$') == 1 && winnr('$') == 1
+    call s:split_nicely()
+  elseif winnr() < winnr("$")
+    wincmd w
+  else
+    tabnext
+    1wincmd w
+  endif
+endfunction
+
+function! s:PreviousWindowOrTab()
+  if winnr() > 1
+    wincmd W
+  else
+    tabprevious
+    execute winnr("$") . "wincmd w"
+  endif
+endfunction
+
+nnoremap <silent> [Window]<Space>  :<C-u>call <SID>ToggleSplit()<CR>
+
+function! s:MovePreviousWindow()
+  let prev_name = winnr()
+  silent! wincmd p
+  if prev_name == winnr()
+    silent! wincmd w
+  endif
+endfunction
+
+" If window isn't splited, split buffer.
+function! s:ToggleSplit()
+  let prev_name = winnr()
+  silent! wincmd w
+  if prev_name == winnr()
+    split
+  else
+    call s:smart_close()
+  endif
+endfunction
+
+command! SplitNicely call s:split_nicely()
+function! s:split_nicely()
+  " Split nicely.
+  if winwidth(0) > 2 * &winwidth
+    vsplit
+  else
+    split
+  endif
+  wincmd p
+endfunction
+"}}}
 
 " tabを使い易く
 nmap <silent>t  <Nop>
@@ -264,6 +395,24 @@ command! Eucjp edit ++enc=euc-jp
 command! Iso2022jp edit ++enc=iso-2022-jp
 command! Utf8 edit ++enc=utf-8
 command! Sjis edit ++enc=sjis
+"}}}
+
+"----------------------------------------
+" ファイルタイプ"{{{
+au BufRead,BufNewFile *Helper.js,*Spec.js  setl filetype=jasmine.javascript
+au BufRead,BufNewFile,BufReadPre *.coffee   setl filetype=coffee
+au BufRead,BufNewFile *Helper.coffee,*Spec.coffee  setl filetype=jasmine.coffee
+au BufFilePost wp-*.php setl noexpandtab
+au BufNewFile,BufRead *.less setf less
+au BufNewFile,BufRead *.dict setf dict
+au FileType haml,coffee,ruby,eruby,php,javascript,javascript.jasmine,ruby.spec,ruby.rails,ruby.rails.model,ruby.rails.controller,ruby.rspec,c,json,vim set colorcolumn=80
+au BufReadPost .gitignore setl ft=conf
+au BufRead,BufNewFile Gemfile set filetype=Gemfile
+au BufRead,BufNewFile *.css set ft=css syntax=css3
+au BufNewFile,BufRead *.json set filetype=json
+au BufNewFile,BufRead *.go set filetype=go
+au BufRead,BufNewFile *.mkd,*.markdown,*.md,*.mdown,*.mkdn   setlocal filetype=markdown autoindent formatoptions=tcroqn2 comments=n:>
+au BufNewFile,BufRead .tmux.conf*,tmux.conf* set filetype=tmux
 "}}}
 
 "----------------------------------------
@@ -318,7 +467,6 @@ if has("autocmd")
 endif
 autocmd InsertLeave * set nopaste
 
-au BufFilePost wp-*.php set noexpandtab
 "}}}
 
 "----------------------------------------
@@ -342,7 +490,6 @@ set listchars=tab:␣.,trail:_,extends:>,precedes:< " 不可視文字の表示�
 set scrolloff=5
 " set scrolljump=-50
 set showcmd
-au FileType haml,coffee,ruby,eruby,php,javascript,javascript.jasmine,ruby.spec,ruby.rails,ruby.rails.model,ruby.rails.controller,ruby.rspec,c,json,vim set colorcolumn=80
 
 "set display=uhex      " 印字不可能文字を16進数で表示
 set t_Co=256          " 確かカラーコード
@@ -486,10 +633,6 @@ autocmd BufReadPost *_spec.rb call RSpecSyntax()
 "   au BufNewFile,BufRead  *.tmux.conf setl ft = tmux
 " augroup END
 
-"****************************************
-" less
-"****************************************
-au BufNewFile,BufRead *.less setf less
 
 "}}}
 
@@ -520,6 +663,7 @@ NeoBundle 'tpope/vim-fugitive'
 " NeoBundle 'yuroyoro/vim-autoclose'                          " 自動閉じタグ
 NeoBundle 'taichouchou2/alpaca'       " 個人的なカラーやフォントなど
 NeoBundle 'kana/vim-arpeggio'         " 同時押しキーマップを使う
+NeoBundle 'rhysd/accelerated-jk'      " jkの移動を高速化
 NeoBundle 'h1mesuke/vim-alignta'
 " NeoBundle 'othree/eregex.vim'         " %S 正規表現を拡張
 " NeoBundle 'vim-scripts/SearchComplete' " /で検索をかけるときでも\tで補完が出来る
@@ -565,66 +709,38 @@ NeoBundle 'majutsushi/tagbar'
 " /で検索をかけるときでも\tで補完が出来る
 " NeoBundle 'vim-scripts/SearchComplete'
 
-"関連するファイルを切り替えれる
+" 関連するファイルを切り替えれる
 " NeoBundle 'kana/vim-altr'
+
+" visualモードで、文字列を直感的に移動
+NeoBundle 't9md/vim-textmanip'
+
+" undo履歴をツリー表示
+NeoBundle 'sjl/gundo.vim'
 
 "----------------------------------------
 " text-object拡張"{{{
 " operator拡張の元
-" NeoBundle 'operator-camelize' "operator-camelize : camel-caseへの変換
+NeoBundle 'operator-camelize' "operator-camelize : camel-caseへの変換
 " NeoBundle 'emonkak/vim-operator-comment'
 " NeoBundle 'https://github.com/kana/vim-textobj-jabraces.git'
-" NeoBundle 'kana/vim-operator-user'
+NeoBundle 'kana/vim-operator-user'
 " NeoBundle 'kana/vim-textobj-datetime'      " d 日付
 " NeoBundle 'kana/vim-textobj-fold.git'      " z 折りたたまれた{{ {をtext-objectに
 " NeoBundle 'kana/vim-textobj-function.git'  " f 関数をtext-objectに
 " NeoBundle 'kana/vim-textobj-indent.git'    " i I インデントをtext-objectに
 " NeoBundle 'kana/vim-textobj-lastpat.git'   " /? 最後に検索されたパターンをtext-objectに
 " NeoBundle 'kana/vim-textobj-syntax.git'    " y syntax hilightされたものをtext-objectに
-" NeoBundle 'kana/vim-textobj-user'          " textobject拡張の元
+NeoBundle 'kana/vim-textobj-user'          " textobject拡張の元
 " NeoBundle 'textobj-entire'                 " e buffer全体をtext-objectに
 " NeoBundle 'textobj-rubyblock'              " r rubyの、do-endまでをtext-objectに
 " NeoBundle 'thinca/vim-textobj-comment'     " c commentをtext-objectに
-" NeoBundle 'thinca/vim-textobj-plugins.git' " vim-textobj-plugins : いろんなものをtext-objectにする
+NeoBundle 'thinca/vim-textobj-plugins.git' " vim-textobj-plugins : いろんなものをtext-objectにする
 
 " NeoBundle 'tyru/operator-html-escape.vim'
 "}}}
 "}}}
 
-"----------------------------------------
-" 他のアプリを呼び出す"{{{
-"URL上で操作することで、URLを開いたり
-"キーワード上で操作することで、ぐぐることができる
-NeoBundle 'open-browser.vim'
-" NeoBundle 'thinca/vim-openbuf'
-
-"各種リファレンスを引いたり、英和辞書を読む
-NeoBundle 'thinca/vim-ref'
-" NeoBundle 'soh335/vim-ref-jquery'
-" NeoBundle 'soh335/vim-ref-jquery'
-" NeoBundle 'ujihisa/ref-hoogle'
-" NeoBundle 'pekepeke/ref-javadoc'
-
-"gitをvim内から操作する
-NeoBundle 'Shougo/git-vim'
-NeoBundle 'mattn/gist-vim' "gistを利用する
-
-"保存と同時にブラウザをリロードする
-NeoBundle 'tell-k/vim-browsereload-mac'
-
-"markdownでメモを管理
-NeoBundle 'glidenote/memolist.vim'
-
-"vimでwordpress
-" NeoBundle 'vim-scripts/VimRepress'
-
-"vモードで選択
-"<Leader>seでsqlを実行
-" NeoBundle 'vim-scripts/dbext.vim'
-
-"tagsを利用したソースコード閲覧・移動補助機能 tagsファイルの自動生成
-" NeoBundle 'vim-scripts/Source-Explorer-srcexpl.vim'
-"}}}
 
 " syntax checking plugins exist for eruby, haml, html, javascript, php, python, ruby and sass.
 NeoBundle 'scrooloose/syntastic'
@@ -632,7 +748,7 @@ NeoBundle 'scrooloose/syntastic'
 " NeoBundle 'thinca/vim-template'
 
 " NeoBundle 'c9s/cascading.vim' "メソッドチェーン整形
-" NeoBundle 'kana/vim-smartchr' "smartchr.vim : ==()などの前後を整形
+NeoBundle 'kana/vim-smartchr' "smartchr.vim : ==()などの前後を整形
 
 NeoBundle 'mattn/webapi-vim' "vim Interface to Web API
 " NeoBundle 'tyru/urilib.vim' "urilib.vim : vim scriptからURLを扱うライブラリ
@@ -646,7 +762,9 @@ NeoBundle 'taichouchou2/alpaca-look'
 " NeoBundle 'h1mesuke/unite-outline'
 NeoBundle 'basyura/unite-rails'
 NeoBundle 'thinca/vim-unite-history'
-" NeoBundle 'Shougo/unite-ssh'
+NeoBundle 'Shougo/unite-ssh'
+NeoBundle 'ujihisa/vimshell-ssh'
+NeoBundle 'fsouza/go.vim'
 " NeoBundle 'tsukkee/unite-tag'
 " NeoBundle 'tacroe/unite-mark'
 " NeoBundle 'ujihisa/unite-gem'
@@ -661,6 +779,7 @@ NeoBundle 'taichouchou2/vim-unite-giti'
 NeoBundle 'basyura/TweetVim'
 NeoBundle 'basyura/twibill.vim'
 NeoBundle 'basyura/bitly.vim'
+NeoBundle 'tyru/eskk.vim'
 " NeoBundle 'daisuzu/facebook.vim'
 
 " NeoBundle 'yuratomo/w3m.vim'
@@ -700,7 +819,7 @@ NeoBundle 'tpope/vim-markdown'
 " sassのコンパイル
 " NeoBundle 'AtsushiM/sass-compile.vim'
 " NeoBundle 'taichouchou2/sass-compile.vim'
-NeoBundle 'taichouchou2/sass-async-compile.vim'
+" NeoBundle 'taichouchou2/sass-async-compile.vim'
 
 "  php
 " ----------------------------------------
@@ -726,7 +845,7 @@ NeoBundle 'taka84u9/vim-ref-ri'
 NeoBundle 'ruby-matchit'
 NeoBundle 'skwp/vim-rspec'
 NeoBundle 'ujihisa/unite-rake'
-NeoBundle 'taichouchou2/vim-rsense'
+" NeoBundle 'taichouchou2/vim-rsense'
 NeoBundle 'vim-ruby/vim-ruby'
 NeoBundle 'skalnik/vim-vroom'
 NeoBundle 'taichouchou2/unite-reek',
@@ -734,6 +853,10 @@ NeoBundle 'taichouchou2/unite-reek',
 NeoBundle 'taichouchou2/unite-rails_best_practices',
       \{ 'depends' : 'Shougo/unite.vim' }
 " NeoBundle 'taichouchou2/alpaca_complete'
+NeoBundle 'Shougo/neocomplcache-rsense'
+NeoBundle 'rhysd/unite-ruby-require.vim'
+NeoBundle 'rhysd/neco-ruby-keyword-args'
+NeoBundle 'rhysd/vim-textobj-ruby'
 
 " python
 " ----------------------------------------
@@ -745,7 +868,7 @@ NeoBundle 'davidhalter/jedi-vim', {
       \     'unix' : 'git submodule update --init',
       \    },
       \ }
-NeoBundle 'kevinw/pyflakes-vim'
+" NeoBundle 'kevinw/pyflakes-vim'
 
 " scala
 " ----------------------------------------
@@ -760,6 +883,41 @@ NeoBundle 'kevinw/pyflakes-vim'
 
 " shellscript indnt
 " NeoBundle 'sh.vim'
+"}}}
+
+" 他のアプリを呼び出す"{{{
+"URL上で操作することで、URLを開いたり
+"キーワード上で操作することで、ぐぐることができる
+NeoBundle 'open-browser.vim'
+" NeoBundle 'thinca/vim-openbuf'
+
+"各種リファレンスを引いたり、英和辞書を読む
+NeoBundle 'thinca/vim-ref'
+" NeoBundle 'soh335/vim-ref-jquery'
+" NeoBundle 'soh335/vim-ref-jquery'
+" NeoBundle 'ujihisa/ref-hoogle'
+" NeoBundle 'pekepeke/ref-javadoc'
+
+"gitをvim内から操作する
+NeoBundle 'Shougo/git-vim'
+NeoBundle 'mattn/gist-vim' "gistを利用する
+
+"保存と同時にブラウザをリロードする
+NeoBundle 'tell-k/vim-browsereload-mac'
+
+"markdownでメモを管理
+NeoBundle 'glidenote/memolist.vim'
+
+"vimでwordpress
+" NeoBundle 'vim-scripts/VimRepress'
+
+"vモードで選択
+"<Leader>seでsqlを実行
+" NeoBundle 'vim-scripts/dbext.vim'
+
+"tagsを利用したソースコード閲覧・移動補助機能 tagsファイルの自動生成
+" NeoBundle 'vim-scripts/Source-Explorer-srcexpl.vim'
+NeoBundle 'tsukkee/lingr-vim'
 "}}}
 
 " Installation check.
@@ -805,12 +963,50 @@ function! SetSurroundMapping()"{{{
   nmap ,' csw'
   nmap ," csw"
 endfunction
-" au FileType eruby call SetErubyMapping()
-if exists("g:loaded_surround")
-  if !exists("b:surround_35") " #
-    let b:surround_35 = "#{ \r }"
-  endif
-end
+" surround_custom_mappings.vim"{{{
+let g:surround_custom_mapping = {}
+let g:surround_custom_mapping._ = {
+            \ 'p':  "<pre> \r </pre>",
+            \ 'w':  "%w(\r)",
+            \ }
+let g:surround_custom_mapping.help = {
+            \ 'p':  "> \r <",
+            \ }
+let g:surround_custom_mapping.ruby = {
+            \ '-':  "<% \r %>",
+            \ '=':  "<%= \r %>",
+            \ '9':  "(\r)",
+            \ '5':  "%(\r)",
+            \ '%':  "%(\r)",
+            \ 'w':  "%w(\r)",
+            \ '#':  "#{\r}",
+            \ '3':  "#{\r}",
+            \ 'e':  "begin \r end",
+            \ 'E':  "<<EOS \r EOS",
+            \ 'i':  "if \1if\1 \r end",
+            \ 'u':  "unless \1unless\1 \r end",
+            \ 'c':  "class \1class\1 \r end",
+            \ 'm':  "module \1module\1 \r end",
+            \ 'd':  "def \1def\1\2args\r..*\r(&)\2 \r end",
+            \ 'p':  "\1method\1 do \2args\r..*\r|&| \2\r end",
+            \ 'P':  "\1method\1 {\2args\r..*\r|&|\2 \r }",
+            \ }
+let g:surround_custom_mapping.javascript = {
+            \ 'f':  "function(){ \r }"
+            \ }
+let g:surround_custom_mapping.lua = {
+            \ 'f':  "function(){ \r }"
+            \ }
+let g:surround_custom_mapping.python = {
+            \ 'p':  "print( \r)",
+            \ '[':  "[\r]",
+            \ }
+let g:surround_custom_mapping.vim= {
+            \'f':  "function! \r endfunction"
+            \ }
+"}}}
+
+
 "}}}
 
 " ------------------------------------
@@ -959,7 +1155,11 @@ nnoremap <silent> [unite]<C-R><C-R> :<C-u>Unite -no-quit rails_best_practices<CR
 nnoremap <silent> [unite]<C-J> :<C-u>Unite file_mru<CR>
 nnoremap <silent> [unite]<C-B> :<C-u>Unite bookmark<CR>
 nnoremap <silent> <Space>b :<C-u>UniteBookmarkAdd<CR>
-
+let g:unite_quick_match_table = {
+      \'a' : 1, 's' : 2, 'd' : 3, 'f' : 4, 'g' : 5, 'h' : 6, 'j' : 7, 'k' : 8, 'l' : 9, ':' : 10,
+      \'q' : 11, 'w' : 12, 'e' : 13, 'r' : 14, 't' : 15, 'y' : 16, 'u' : 17, 'i' : 18, 'o' : 19, 'p' : 20,
+      \'1' : 21, '2' : 22, '3' : 23, '4' : 24, '5' : 25, '6' : 26, '7' : 27, '8' : 28, '9' : 29, '0' : 30,
+      \}
 
 function! s:unite_my_settings()"{{{
   " nmap <buffer> <ESC> <Plug>(unite_exit)
@@ -1804,6 +2004,12 @@ function! s:vimshell_settings() "{{{
     setlocal updatetime=1000
 
     NeoComplCacheEnable
+    let g:vimshell_escape_colors = [
+      \'#3c3c3c', '#ff6666', '#66ff66', '#ffd30a', '#1e95fd', '#ff13ff', '#1bc8c8', '#C0C0C0',
+      \'#686868', '#ff6666', '#66ff66', '#ffd30a', '#6699ff', '#f820ff', '#4ae2e2', '#ffffff'
+      \]
+
+
 endfunction "}}}
 autocmd FileType vimshell call s:vimshell_settings()
 
@@ -2155,16 +2361,13 @@ let g:sass_started_dirs = []
 "------------------------------------
 "{{{
 function! JasmineSetting()
-  au BufRead,BufNewFile *Helper.js,*Spec.js  set filetype=jasmine.javascript
-  au BufRead,BufNewFile,BufReadPre *.coffee   set filetype=coffee
-  au BufRead,BufNewFile *Helper.coffee,*Spec.coffee  set filetype=jasmine.coffee
-  au BufRead,BufNewFile,BufReadPre *Helper.coffee,*Spec.coffee  let b:quickrun_config = {'type' : 'coffee'}
-  map <buffer> <leader>m :JasmineRedGreen<CR>
+  let b:quickrun_config = {'type' : 'coffee'}
+  nmap <buffer> <leader>m :JasmineRedGreen<CR>
   call jasmine#load_snippets()
   command! JasmineRedGreen :call jasmine#redgreen()
   command! JasmineMake :call jasmine#make()
 endfunction
-au BufRead,BufNewFile,BufReadPre *.coffee,*.js call JasmineSetting()
+au BufRead,BufNewFile,BufReadPre *Helper.coffee,*Spec.coffee  call JasmineSetting()
 "}}}
 
 "------------------------------------
@@ -2239,7 +2442,14 @@ map <Leader>U <Plug>(operator-decamelize)
 " smartchr.vim
 "------------------------------------
 "{{{
-let g:smartchr_enable = 0
+let g:smartchr_enable = 1
+
+inoremap <expr> , smartchr#one_of(', ', ',')
+inoremap <expr> ? smartchr#one_of('?', '? ')
+" Smart =.
+inoremap <expr> = search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '
+      \ : search('\(*\<bar>!\)\%#', 'bcn') ? '= '
+      \ : smartchr#one_of(' = ', '=', ' == ')
 
 if g:smartchr_enable == 1
   inoremap <expr> , smartchr#one_of(', ', ',')
@@ -2455,6 +2665,7 @@ nmap <silent><Leader>ig <Plug>IndentGuidesToggle
 "------------------------------------
 " vimux
 "------------------------------------
+"{{{
 " " Prompt for a command to run
 " map <Leader>rp :VimuxPromptCommand<CR>
 "
@@ -2481,11 +2692,14 @@ nmap <silent><Leader>ig <Plug>IndentGuidesToggle
 "
 " " Select current paragraph and send it to tmux
 " nmap <LocalLeader>vs vip<LocalLeader>vs<CR>
+"}}}
 
 "------------------------------------
 " qiita
 "------------------------------------
+"{{{
 nmap <C-H><C-Q> :unite qiita<CR>
+"}}}
 
 "------------------------------------
 " webapi.vim
@@ -2530,20 +2744,69 @@ let g:endwise_no_mappings=1
 "------------------------------------
 " jedi-vim
 "------------------------------------
+"{{{
 let g:jedi#auto_initialization = 1
 let g:jedi#get_definition_command = "<leader>d"
 let g:jedi#goto_command = "<leader>g"
 let g:jedi#popup_on_dot = 0
 let g:jedi#pydoc = "K"
 let g:jedi#related_names_command = "<leader>n"
-let g:jedi#rename_command = "<leader>r"
+let g:jedi#rename_command = "<leader>R"
 let g:jedi#use_tabs_not_buffers = 0
+let g:vinarise_objdump_command='gobjdump' " homebrew
 autocmd FileType python let b:did_ftplugin = 1
+"}}}
 
 "------------------------------------
-" jedi-vim
+" text-manipvim
 "------------------------------------
-let g:vinarise_objdump_command='gobjdump' " homebrew
+"{{{
+xmap <C-j> <Plug>(textmanip-move-down)
+xmap <C-k> <Plug>(textmanip-move-up)
+xmap <C-h> <Plug>(textmanip-move-left)
+xmap <C-l> <Plug>(textmanip-move-right)
+"}}}
+
+"------------------------------------
+" Gundo.vim
+"------------------------------------
+nnoremap U      :<C-u>GundoToggle<CR>
+
+"------------------------------------
+" accelerated-jk
+"------------------------------------
+nmap <silent>j <Plug>(accelerated_jk_gj)
+nmap gj j
+nmap <silent>k <Plug>(accelerated_jk_gk)
+nmap gk k
+
+"------------------------------------
+" eskk.vim
+"------------------------------------
+set imdisable
+let g:eskk#enable_completion = 1
+let g:eskk#directory = expand('~/.eskk')
+let g:eskk#dictionary = {
+      \    'path': "~/.eskk_dict",
+      \    'sorted': 0,
+      \    'encoding': 'utf-8',
+      \}
+
+let g:eskk#large_dictionary = { 'path': "~/.eskk_dict/SKK-JISYO.L", 'sorted': 1, 'encoding': 'euc-jp', }
+" let g:eskk#use_color_cursor
+let g:eskk#cursor_color = {
+      \   'ascii': ['#8b8b83', '#bebebe'],
+      \   'hira': ['#8b3e2f', '#ffc0cb'],
+      \   'kata': ['#228b22', '#00ff00'],
+      \   'abbrev': '#4169e1',
+      \   'zenei': '#ffd700',
+      \}
+imap <C-J> <Plug>(eskk:toggle)
+" let g:eskk#marker_henkan
+" let g:eskk#marker_okuri
+" let g:eskk#marker_henkan_select
+" let g:eskk#marker_jisyo_touroku
+"
 
 "}}}
 
@@ -2566,17 +2829,15 @@ au FileType python               setl omnifunc=pythoncomplete#Complete
 au FileType xml                  setl omnifunc=xmlcomplete#CompleteTags
 au FileType php                  setl omnifunc=phpcomplete#CompletePHP
 au FileType c                    setl omnifunc=ccomplete#Complete
-au FileType ruby.rspec           setl dict+=~/.vim/dict/rspec.dict
 
+au FileType ruby.rspec           setl dict+=~/.vim/dict/rspec.dict
 au FileType jasmine.coffee,jasmine.js setl dict+=~/.vim/dict/js.jasmine.dict
+au FileType coffee,javascript    setl dict+=~/.vim/dict/jquery.dict
 au FileType coffee               setl dict+=~/.vim/dict/coffee.dict,~/.vim/dict/javascript.dict
 au FileType html,php,eruby       setl dict+=~/.vim/dict/html.dict
 
-function! SetEditDict()
-  let extension =  expand(":e")
-  au FileType ruby,eruby nmap <buffer><expr><Space>d ':<C-U>e ~/.vim/dict/' . extension . '.dict'
-endfunction
-au FileReadPre * call SetEditDict()
+au FileType * nmap <buffer><expr><Space>d ':<C-U>e ~/.vim/dict/' . &filetype . '.dict<CR>'
+au FileType dict nmap <buffer><Space>d :<C-U>e #<CR>
 
 function! s:railsSetting()
   setl dict+=~/.vim/dict/rails.dict
@@ -2633,7 +2894,7 @@ let g:neocomplcache_enable_underbar_completion = 1
 let g:neocomplcache_ctags_program = "ctags"
 
 " default config snippet
-let g:neocomplcache_snippets_dir=expand('~/.vim/snippet')
+let g:neosnippet#snippets_directory = '~/.vim/snippet,~/.bundle/neosnippet/autoload/neosnippet/snippets'
 let g:neocomplcache_snippets_disable_runtime_snippets=1
 " let g:neocomplcache_text_mode_filetypes = { 'markdown' : 1, }
 let g:neocomplcache_ignore_composite_filetype_lists = {
@@ -2729,7 +2990,10 @@ inoremap <expr><C-g>     neocomplcache#undo_completion()
 "       \"\<Plug>(neocomplcache_snippets_expand)" : pumvisible() ? "\<C-n>" : "\<TAB>"
 
 " snippetの編集
-nmap <Space>e :<C-U>NeoComplCacheEditSnippets<CR>
+nmap <Space>e :<C-U>NeoSnippetEdit -split<CR>
+" imap <C-B> <Plug>(neosnippet_jump)
+" smap <C-B> <Plug>(neosnippet_jump)
+" nmap <C-B> a<C-\>
 au BufRead,BufNewFile *.snip  setl filetype=snippet
 au FileType dict nmap <buffer><Space>e :e #<CR>
 
@@ -2745,7 +3009,6 @@ inoremap <silent><expr><BS>   neocomplcache#smart_close_popup()."\<C-h>"
 " endwiseを使う場合はこちら
 imap <expr><CR> neocomplcache#smart_close_popup() . "<CR>" . "<Plug>DiscretionaryEnd"
 "}}}
-
 "}}}
 
 "----------------------------------------
@@ -2921,7 +3184,6 @@ endfunction
 " endfunction
 " au BufWritePost *.scss call ScssAsyncCompile()
 
-"}}}
 
 " Mac の辞書.appで開く {{{
 if has('mac')
@@ -2941,6 +3203,137 @@ if has('mac')
     nnoremap <silent>mc :<C-u>MacDictClose<CR>
     nnoremap <silent>mf :<C-u>MacDictFocus<CR>
 endif
+"}}}
+
+" ----------------------------------------
+" Diff
+" ----------------------------------------
+"{{{
+" Display diff with the file.
+command! -nargs=1 -complete=file Diff vertical diffsplit <args>
+" Display diff from last save.
+command! DiffOrig vert new | setlocal bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
+" Disable diff mode.
+command! -nargs=0 Undiff setlocal nodiff noscrollbind wrap
+"}}}
+
+" ----------------------------------------
+" プラットフォーム依存
+" ----------------------------------------
+" "{{{
+"
+if exists( 's:is_windows' )
+  " For Windows"{{{
+
+  " In Windows, can't find exe, when $PATH isn't contained $VIM.
+  if $PATH !~? '\(^\|;\)' . escape($VIM, '\\') . '\(;\|$\)'
+    let $PATH = $VIM . ';' . $PATH
+  endif
+
+  " Shell settings.
+  " Use NYAOS.
+  "set shell=nyaos.exe
+  "set shellcmdflag=-e
+  "set shellpipe=\|&\ tee
+  "set shellredir=>%s\ 2>&1
+  "set shellxquote=\"
+
+  " Use bash.
+  "set shell=bash.exe
+  "set shellcmdflag=-c
+  "set shellpipe=2>&1\|\ tee
+  "set shellredir=>%s\ 2>&1
+  "set shellxquote=\"
+
+  " Change colorscheme.
+  " Don't override colorscheme.
+  if !exists('g:colors_name') && !has('gui_running')
+    colorscheme darkblue
+  endif
+  " Disable error messages.
+  let g:CSApprox_verbose_level = 0
+
+  " Popup color.
+  hi Pmenu ctermbg=8
+  hi PmenuSel ctermbg=1
+  hi PmenuSbar ctermbg=0
+  "}}}
+else
+  " For Linux"{{{
+  if exists('$WINDIR')
+    " Cygwin.
+
+    " Use bash.
+    set shell=bash
+  else
+    " Use zsh.
+    set shell=zsh
+  endif
+
+  " Set path.
+  let $PATH = expand('~/bin').':/usr/local/bin/:'.$PATH
+
+  " For non GVim.
+  if !has('gui_running')
+    " Enable 256 color terminal.
+    if !exists('$TMUX')
+      set t_Co=256
+
+      " For screen."{{{
+      if &term =~ '^screen'
+        augroup MyAutoCmd
+          " Show filename on screen statusline.
+          " But invalid 'another' screen buffer.
+          autocmd BufEnter * if $WINDOW != 0 &&  bufname("") !~ "[A-Za-z0-9\]*://"
+                \ | silent! exe '!echo -n "kv:%:t\\"' | endif
+          " When 'mouse' isn't empty, Vim will freeze. Why?
+          autocmd VimLeave * :set mouse=
+        augroup END
+
+        " For Vim inside screen.
+        set ttymouse=xterm2
+      endif
+
+      " For prevent bug.
+      autocmd MyAutoCmd VimLeave * set term=screen
+      "}}}
+    endif
+
+    if has('gui')
+      " Use CSApprox.vim
+      NeoBundleSource CSApprox
+
+      " Convert colorscheme in Konsole.
+      let g:CSApprox_konsole = 1
+      let g:CSApprox_attr_map = {
+            \ 'bold' : 'bold',
+            \ 'italic' : '', 'sp' : ''
+            \ }
+      if !exists('g:colors_name')
+        colorscheme candy
+      endif
+    else
+      " Use guicolorscheme.vim
+      NeoBundleSource guicolorscheme.vim
+
+      autocmd MyAutoCmd VimEnter,BufAdd *
+            \ if !exists('g:colors_name') | GuiColorScheme candy
+
+      " Disable error messages.
+      let g:CSApprox_verbose_level = 0
+    endif
+
+    " Change cursor shape.
+    if &term =~ "xterm"
+      let &t_SI = "\<Esc>]12;lightgreen\x7"
+      let &t_EI = "\<Esc>]12;white\x7"
+    endif
+  endif
+
+  "}}}
+endif
+
+"}}}
 "}}}
 
 set secure
