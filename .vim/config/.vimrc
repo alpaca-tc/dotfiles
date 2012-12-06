@@ -10,8 +10,8 @@ set browsedir=buffer
 set clipboard+=autoselect
 set clipboard+=unnamed
 set directory=~/.vim.swapfile
-set formatoptions+=lmoqmM
-set formatoptions-=ro
+set formatoptions+=lcoqmM
+au VimEnter * set formatoptions-=ro
 set helplang=ja,en
 set modelines=0
 set nobackup
@@ -26,8 +26,6 @@ if v:version >= 703
   set undofile
   let &undodir=&directory
 endif
-
-
 
 let PATH='/Users/taichou/.autojump/bin:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin/:/Users/taichou/.rbenv:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin:/Users/taichou/.rbenv:/Users/taichou/.autojump/bin:/Users/taichou/local/bin:/Users/taichou/local/sbin:/usr/local/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:/Applications/XAMPP/xamppfiles/bin:/bin:/sbin:/usr/sbin:/usr/bin:/Applications/XAMPP/xamppfiles/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/bin:/sbin:/usr/sbin:/usr/bin'
 let $PATH='/Users/taichou/.autojump/bin:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin/:/Users/taichou/.rbenv:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin:/Users/taichou/.rbenv:/Users/taichou/.autojump/bin:/Users/taichou/local/bin:/Users/taichou/local/sbin:/usr/local/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:/Applications/XAMPP/xamppfiles/bin:/bin:/sbin:/usr/sbin:/usr/bin:/Applications/XAMPP/xamppfiles/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/bin:/sbin:/usr/sbin:/usr/bin'
@@ -51,34 +49,30 @@ set textwidth=0
 set hidden
 set nrformats-=octal
 
-" コンマの後に自動的にスペースを挿入
-"inoremap , ,<Space>
 "開いているファイルのディレクトリに自動で移動
-au BufEnter * execute ":lcd " . expand("%:p:h")
+" au BufEnter * execute ":lcd " . expand("%:p:h")
 
-"<Space>w or <Space>qで画面を閉じる
+" 便利キーマップ追記
 nmap <silent><Space>w :wq<CR>
 nmap <silent><Space>q :q!<CR>
 nmap <Space>s :w sudo:%<CR>
-nmap / /\v
-nmap sub :%s/\v
-" escape
-xnoremap e y:%s/<C-r>=substitute(@0, '/', '\\/', 'g')<Return>//g<Left><Left>
+nmap sub :%s!\v
+vmap sub y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<Return>!!g<Left><Left>
 nmap <Leader>s :set ft=
 
+" デフォルトキーマップの変更
+nmap / /\v
+nmap ? ?\v
+nmap p [p
+nmap P [P
+imap <C-H> <BS>
+
+" 新しいバッファを開くときに、rubyで開く
 function! NewBuffer()
   new
   setl ft=ruby
 endfunction
 nmap <silent><C-W>n :call NewBuffer()<CR>
-
-"削除の標準キーマップを逆に。
-"また、レジスタに入れないようにする
-" nmap x <BS>
-"nmap X <Del>
-" imap <C-@> <BS>
-imap <C-H> <BS>
-" imap <C-Space> <BS>
 
 " 括弧を自動補完
 inoremap { {}<LEFT>
@@ -86,7 +80,7 @@ inoremap [ []<LEFT>
 inoremap ( ()<LEFT>
 inoremap " ""<LEFT>
 inoremap ' ''<LEFT>
-au FileType ruby,eruby inoremap <buffer>\| \|\|<LEFT>
+au FileType ruby,eruby,haml inoremap <buffer>\| \|\|<LEFT>
 
 " 一括インデント
 xmap < <gv
@@ -399,20 +393,20 @@ command! Sjis edit ++enc=sjis
 
 "----------------------------------------
 " ファイルタイプ"{{{
-au BufRead,BufNewFile *Helper.js,*Spec.js  setl filetype=jasmine.javascript
-au BufRead,BufNewFile,BufReadPre *.coffee   setl filetype=coffee
-au BufRead,BufNewFile *Helper.coffee,*Spec.coffee  setl filetype=jasmine.coffee
-au BufFilePost wp-*.php setl noexpandtab
+au BufNewFile,BufRead *Helper.js,*Spec.js  setl filetype=jasmine.javascript
+au BufNewFile,BufRead *.coffee   setl filetype=coffee
+au BufNewFile,BufRead *Helper.coffee,*Spec.coffee  setl filetype=jasmine.coffee
+au BufNewFile,BufRead wp-*.php setl noexpandtab
 au BufNewFile,BufRead *.less setf less
 au BufNewFile,BufRead *.dict setf dict
-au FileType haml,coffee,ruby,eruby,php,javascript,javascript.jasmine,ruby.spec,ruby.rails,ruby.rails.model,ruby.rails.controller,ruby.rspec,c,json,vim set colorcolumn=80
-au BufReadPost .gitignore setl ft=conf
-au BufRead,BufNewFile Gemfile set filetype=Gemfile
-au BufRead,BufNewFile *.css set ft=css syntax=css3
+au BufNewFile,BufRead Gemfile set filetype=Gemfile
+au BufNewFile,BufRead .gitignore setl ft=conf
+au BufNewFile,BufRead *.css set ft=css syntax=css3
 au BufNewFile,BufRead *.json set filetype=json
 au BufNewFile,BufRead *.go set filetype=go
-au BufRead,BufNewFile *.mkd,*.markdown,*.md,*.mdown,*.mkdn   setlocal filetype=markdown autoindent formatoptions=tcroqn2 comments=n:>
+au BufNewFile,BufRead *.mkd,*.markdown,*.md,*.mdown,*.mkdn   setlocal filetype=markdown autoindent formatoptions=tcroqn2 comments=n:>
 au BufNewFile,BufRead .tmux.conf*,tmux.conf* set filetype=tmux
+au BufNewFile,BufRead .htaccess,httpd.conf set filetype=apache
 if expand("%:p")  =~ 'conf.d'
   au BufNewFile,BufRead *.conf set filetype=apache
 endif
@@ -493,6 +487,7 @@ set listchars=tab:␣.,trail:_,extends:>,precedes:< " 不可視文字の表示�
 set scrolloff=5
 " set scrolljump=-50
 set showcmd
+au FileType haml,coffee,ruby,eruby,php,javascript,javascript.jasmine,ruby.spec,ruby.rails,ruby.rails.model,ruby.rails.controller,ruby.rspec,c,json,vim set colorcolumn=80
 
 "set display=uhex      " 印字不可能文字を16進数で表示
 set t_Co=256          " 確かカラーコード
@@ -639,7 +634,7 @@ autocmd BufReadPost *_spec.rb call RSpecSyntax()
 
 "}}}
 
-" commitqメッセージの編集時には余分なプラグインを読み込まない
+" commitメッセージの編集時には余分なプラグインを読み込まない
 if expand("%") =~ "COMMIT_EDITMSG"
   finish
 endif
