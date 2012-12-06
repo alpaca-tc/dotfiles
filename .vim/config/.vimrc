@@ -413,6 +413,9 @@ au BufNewFile,BufRead *.json set filetype=json
 au BufNewFile,BufRead *.go set filetype=go
 au BufRead,BufNewFile *.mkd,*.markdown,*.md,*.mdown,*.mkdn   setlocal filetype=markdown autoindent formatoptions=tcroqn2 comments=n:>
 au BufNewFile,BufRead .tmux.conf*,tmux.conf* set filetype=tmux
+if expand("%:p")  =~ 'conf.d'
+  au BufNewFile,BufRead *.conf set filetype=apache
+endif
 "}}}
 
 "----------------------------------------
