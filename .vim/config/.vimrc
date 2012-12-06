@@ -135,7 +135,7 @@ function! HtmlFunctions()
   xnoremap <silent> <space>e :call <SID>HtmlEscape()<CR>
   xnoremap <silent> <space>ue :call <SID>HtmlUnEscape()<CR>
 endfunction
-au FileType php,eruby,html,haml call HtmlFunctions()<CR>
+au FileType php,eruby,html,haml call HtmlFunctions()
 " }}}
 
 " 変なマッピングを修正 "{{{
@@ -639,6 +639,11 @@ autocmd BufReadPost *_spec.rb call RSpecSyntax()
 
 "}}}
 
+" commitqメッセージの編集時には余分なプラグインを読み込まない
+if expand("%") =~ "COMMIT_EDITMSG"
+  finish
+endif
+
 "----------------------------------------
 " neobundle"{{{
 filetype plugin indent off     " required!
@@ -782,7 +787,7 @@ NeoBundle 'taichouchou2/vim-unite-giti'
 NeoBundle 'basyura/TweetVim'
 NeoBundle 'basyura/twibill.vim'
 NeoBundle 'basyura/bitly.vim'
-NeoBundle 'tyru/eskk.vim'
+" NeoBundle 'tyru/eskk.vim'
 " NeoBundle 'daisuzu/facebook.vim'
 
 " NeoBundle 'yuratomo/w3m.vim'
@@ -1258,7 +1263,7 @@ au User Rails call UniteRailsSetting()
 "{{{
 " 起動コマンド
 " default <leader><leader>
-nnoremap <Leader><leader> :VimFilerCreate<CR>
+nnoremap <Leader><leader> :VimFilerBufferDir<CR>
 " nnoremap <C-H><C-F> :VimFilerExplorer<CR>
 nnoremap <C-H><C-F> :call VimFilerExplorerGit()<CR>
 
@@ -1971,6 +1976,7 @@ function! s:vimshell_settings() "{{{
     VimShellAlterCommand go gopen
     VimShellAlterCommand termtter iexe termtter
     VimShellAlterCommand sudo iexe sudo
+    VimShellAlterCommand ssh iexe ssh
 
     call vimshell#set_alias('l.', 'ls -d .*')
 
@@ -2447,8 +2453,6 @@ map <Leader>U <Plug>(operator-decamelize)
 "{{{
 let g:smartchr_enable = 1
 
-inoremap <expr> , smartchr#one_of(', ', ',')
-inoremap <expr> ? smartchr#one_of('?', '? ')
 " Smart =.
 inoremap <expr> = search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '
       \ : search('\(*\<bar>!\)\%#', 'bcn') ? '= '
@@ -2464,7 +2468,7 @@ if g:smartchr_enable == 1
   augroup MyAutoCmd
     " Substitute .. into -> .
     autocmd FileType c,cpp inoremap <buffer> <expr> . smartchr#loop('.', '->', '...')
-    autocmd FileType perl,php imap <buffer> <expr> . smartchr#loop(' . ', '->', '.')
+    autocmd FileType perl,php imap <buffer> <expr> . smartchr#loop('.', '->', ' . ')
     autocmd FileType perl,php imap <buffer> <expr> - smartchr#loop('-', '->')
     autocmd FileType vim imap <buffer> <expr> . smartchr#loop('.', ' . ', '..', '...')
 
@@ -2778,39 +2782,38 @@ nnoremap U      :<C-u>GundoToggle<CR>
 "------------------------------------
 " accelerated-jk
 "------------------------------------
+"{{{
 nmap <silent>j <Plug>(accelerated_jk_gj)
 nmap gj j
 nmap <silent>k <Plug>(accelerated_jk_gk)
 nmap gk k
+"}}}
 
 "------------------------------------
 " eskk.vim
 "------------------------------------
-set imdisable
-let g:eskk#enable_completion = 1
-let g:eskk#directory = expand('~/.eskk')
-let g:eskk#dictionary = {
-      \    'path': "~/.eskk_dict",
-      \    'sorted': 0,
-      \    'encoding': 'utf-8',
-      \}
-
-let g:eskk#large_dictionary = { 'path': "~/.eskk_dict/SKK-JISYO.L", 'sorted': 1, 'encoding': 'euc-jp', }
-" let g:eskk#use_color_cursor
-let g:eskk#cursor_color = {
-      \   'ascii': ['#8b8b83', '#bebebe'],
-      \   'hira': ['#8b3e2f', '#ffc0cb'],
-      \   'kata': ['#228b22', '#00ff00'],
-      \   'abbrev': '#4169e1',
-      \   'zenei': '#ffd700',
-      \}
-imap <C-J> <Plug>(eskk:toggle)
-" let g:eskk#marker_henkan
-" let g:eskk#marker_okuri
-" let g:eskk#marker_henkan_select
-" let g:eskk#marker_jisyo_touroku
-"
-
+" "{{{
+" " set imdisable
+" let g:eskk#debug = 0
+" let g:eskk#egg_like_newline = 1
+" let g:eskk#revert_henkan_style = "okuri"
+" let g:eskk#enable_completion = 1
+" let g:eskk#dictionary = { 'path': expand( "~/.eskk/MY_DCIT.skk" ), 'sorted': 0, 'encoding': 'utf-8', }
+" let g:eskk#large_dictionary = { 'path':  "~/.eskk_dict/SKK-JISYO.L", 'sorted': 1, 'encoding': 'euc-jp', }
+" let g:eskk#cursor_color = {
+"       \   'ascii': ['#8b8b83', '#bebebe'],
+"       \   'hira': ['#8b3e2f', '#ffc0cb'],
+"       \   'kata': ['#228b22', '#00ff00'],
+"       \   'abbrev': '#4169e1',
+"       \   'zenei': '#ffd700',
+"       \}
+" imap <C-J> <Plug>(eskk:toggle)
+" " let g:eskk#marker_henkan
+" " let g:eskk#marker_okuri
+" " let g:eskk#marker_henkan_select
+" " let g:eskk#marker_jisyo_touroku
+" "
+" "}}}
 "}}}
 
 "----------------------------------------
