@@ -101,16 +101,23 @@ augroup END
 inoremap <leader>* ****************************************
 inoremap <leader>- ----------------------------------------
 
-"保存時に無駄な文字を消す
+"保存時に無駄な文字を消す{{{
 function! s:remove_dust()
     let cursor = getpos(".")
+    let space_length = &ts > 0? &ts : 2
+    let space  = ""
+    while space_length > 0
+      let space .= " "
+      let space_length -= 1
+    endwhile
 
-    %s/\s\+$//ge
-    %s/\t/    /ge
+    exec "%s/\s\+$//ge"
+    exec "%s/\t/".space."/ge"
     call setpos(".", cursor)
     unlet cursor
 endfunction
 au BufWritePre * call <SID>remove_dust()
+"}}}
 
 " html {{{
 function! s:HtmlEscape()
@@ -262,14 +269,6 @@ nmap <C-W>H <C-W>H<C-W>=
 nmap <C-W>s :<C-U>split<CR><C-W>=
 nmap <C-W>v :<C-U>vsplit<CR><C-W>=
 
-nnoremap    [Window]   <Nop>
-nmap    s [Window]
-nnoremap <silent> [Window]p  :<C-u>call <SID>split_nicely()<CR>
-nnoremap <silent> [Window]v  :<C-u>vsplit<CR>
-nnoremap <silent> [Window]c  :<C-u>call <sid>smart_close()<CR>
-nnoremap <silent> -  :<C-u>call <sid>smart_close()<CR>
-nnoremap <silent> [Window]o  :<C-u>only<CR>
-
 " A .vimrc snippet that allows you to move around windows beyond tabs
 nnoremap <silent> <Tab> :call <SID>NextWindow()<CR>
 nnoremap <silent> <S-Tab> :call <SID>PreviousWindowOrTab()<CR>
@@ -342,7 +341,7 @@ function! s:split_nicely()
 endfunction
 "}}}
 
-" tabを使い易く
+" tabを使い易く{{{
 nmap <silent>t  <Nop>
 nmap <silent>tn  :tabn<CR>
 nmap <silent>tp  :tabprevious<CR>
@@ -359,6 +358,7 @@ nmap <silent>t3  :tabnext 3<CR>
 nmap <silent>t4  :tabnext 4<CR>
 nmap <silent>t5  :tabnext 5<CR>
 nmap <silent>t6  :tabnext 6<CR>
+"}}}
 "}}}
 
 "----------------------------------------
@@ -782,7 +782,7 @@ NeoBundle 'taichouchou2/vim-unite-giti'
 NeoBundle 'basyura/TweetVim'
 NeoBundle 'basyura/twibill.vim'
 NeoBundle 'basyura/bitly.vim'
-" NeoBundle 'tyru/eskk.vim'
+NeoBundle 'tyru/eskk.vim'
 " NeoBundle 'daisuzu/facebook.vim'
 
 " NeoBundle 'yuratomo/w3m.vim'
@@ -2449,13 +2449,15 @@ map <Leader>U <Plug>(operator-decamelize)
 let g:smartchr_enable = 1
 
 " Smart =.
-inoremap <expr> = search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '
-      \ : search('\(*\<bar>!\)\%#', 'bcn') ? '= '
-      \ : smartchr#one_of(' = ', '=', ' == ')
 
 if g:smartchr_enable == 1
-  inoremap <expr> , smartchr#one_of(', ', ',')
-  inoremap <expr> ? smartchr#one_of('?', '? ')
+  " inoremap <expr> = search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '
+  "       \ : search('\(*\<bar>!\)\%#', 'bcn') ? '= '
+  "       \ : smartchr#one_of(' = ', '=', ' == ')
+  imap <expr> , smartchr#one_of(', ', ',')
+  imap <expr> ? smartchr#one_of('?', '? ')
+  imap <expr> = smartchr#one_of(' = ', '=')
+  
   " Smart =.
   " inoremap <expr> = search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '
   "       \ : search('\(*\<bar>!\)\%#', 'bcn') ? '= '
@@ -2789,25 +2791,21 @@ nmap gk k
 "------------------------------------
 " "{{{
 " " set imdisable
-" let g:eskk#debug = 0
+let g:eskk#debug = 0
 " let g:eskk#egg_like_newline = 1
 " let g:eskk#revert_henkan_style = "okuri"
-" let g:eskk#enable_completion = 1
-" let g:eskk#dictionary = { 'path': expand( "~/.eskk/MY_DCIT.skk" ), 'sorted': 0, 'encoding': 'utf-8', }
-" let g:eskk#large_dictionary = { 'path':  "~/.eskk_dict/SKK-JISYO.L", 'sorted': 1, 'encoding': 'euc-jp', }
-" let g:eskk#cursor_color = {
-"       \   'ascii': ['#8b8b83', '#bebebe'],
-"       \   'hira': ['#8b3e2f', '#ffc0cb'],
-"       \   'kata': ['#228b22', '#00ff00'],
-"       \   'abbrev': '#4169e1',
-"       \   'zenei': '#ffd700',
-"       \}
-" imap <C-J> <Plug>(eskk:toggle)
-" " let g:eskk#marker_henkan
-" " let g:eskk#marker_okuri
-" " let g:eskk#marker_henkan_select
-" " let g:eskk#marker_jisyo_touroku
-" "
+let g:eskk#enable_completion = 1
+let g:eskk#directory = "~/.eskk"
+let g:eskk#dictionary = { 'path': expand( "~/.eskk_jisyo" ), 'sorted': 0, 'encoding': 'utf-8', }
+let g:eskk#large_dictionary = { 'path':  expand("~/.eskk_dict/SKK-JISYO.L"), 'sorted': 1, 'encoding': 'euc-jp', }
+let g:eskk#cursor_color = {
+      \   'ascii': ['#8b8b83', '#bebebe'],
+      \   'hira': ['#8b3e2f', '#ffc0cb'],
+      \   'kata': ['#228b22', '#00ff00'],
+      \   'abbrev': '#4169e1',
+      \   'zenei': '#ffd700',
+      \}
+imap <C-J> <Plug>(eskk:toggle)
 " "}}}
 "}}}
 
@@ -2840,6 +2838,7 @@ au FileType html,php,eruby       setl dict+=~/.vim/dict/html.dict
 au FileType * nmap <buffer><expr><Space>d ':<C-U>e ~/.vim/dict/' . &filetype . '.dict<CR>'
 au FileType dict nmap <buffer><Space>d :<C-U>e #<CR>
 
+" 読み込む辞書をファイルによって変更
 function! s:railsSetting()
   setl dict+=~/.vim/dict/rails.dict
 
@@ -3056,7 +3055,7 @@ nnoremap ts  :<C-u>ts<CR>
 "}}}
 
 "----------------------------------------
-"外部コマンドの実行"{{{
+" コマンドの実行"{{{
 
 "----------------------------------------
 " phptohtml
