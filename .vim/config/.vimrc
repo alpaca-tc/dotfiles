@@ -63,8 +63,8 @@ nmap <Leader>s :set ft=
 " デフォルトキーマップの変更
 nmap / /\v
 nmap ? ?\v
-nmap p [p
-nmap P [P
+" nmap p [p
+" nmap P [P
 imap <C-H> <BS>
 
 " 新しいバッファを開くときに、rubyで開く
@@ -2456,7 +2456,7 @@ if g:smartchr_enable == 1
   "       \ : smartchr#one_of(' = ', '=', ' == ')
   imap <expr> , smartchr#one_of(', ', ',')
   imap <expr> ? smartchr#one_of('?', '? ')
-  imap <expr> = smartchr#one_of(' = ', '=')
+  " imap <expr> = smartchr#one_of(' = ', '=')
   
   " Smart =.
   " inoremap <expr> = search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '

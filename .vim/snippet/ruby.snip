@@ -348,3 +348,9 @@ snippet cTry
     end
 #/*}}}*/
 
+# migration
+snippet     mig_change_table
+abbr        change_table
+  change_table ${1::table_name} do |t|
+    t.change ${2::column_name}, ${3::column_type}
+  end
