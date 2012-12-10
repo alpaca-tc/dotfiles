@@ -111,12 +111,14 @@ function! s:remove_dust()
       let space_length -= 1
     endwhile
 
-    exec "%s/\s\+$//ge"
+    %s/\s\+$//ge
     exec "%s/\t/".space."/ge"
     call setpos(".", cursor)
     unlet cursor
 endfunction
-au BufWritePre * call <SID>remove_dust()
+augroup ProgramFiles
+  au BufWritePre * call <SID>remove_dust()
+augroup END
 "}}}
 
 " html {{{
@@ -396,7 +398,8 @@ command! Sjis edit ++enc=sjis
 au BufNewFile,BufRead *Helper.js,*Spec.js  setl filetype=jasmine.javascript
 au BufNewFile,BufRead *.coffee   setl filetype=coffee
 au BufNewFile,BufRead *Helper.coffee,*Spec.coffee  setl filetype=jasmine.coffee
-au BufNewFile,BufRead wp-*.php setl noexpandtab
+au BufNewFile,BufRead wp-*.php setl ft=wordpress.php noexpandtab
+au FileType wordpress.php au! ProgramFiles
 au BufNewFile,BufRead *.less setf less
 au BufNewFile,BufRead *.dict setf dict
 au BufNewFile,BufRead Gemfile set filetype=Gemfile
@@ -407,6 +410,7 @@ au BufNewFile,BufRead *.go set filetype=go
 au BufNewFile,BufRead *.mkd,*.markdown,*.md,*.mdown,*.mkdn   setlocal filetype=markdown autoindent formatoptions=tcroqn2 comments=n:>
 au BufNewFile,BufRead .tmux.conf*,tmux.conf* set filetype=tmux
 au BufNewFile,BufRead .htaccess,httpd.conf set filetype=apache
+au BufNewFile,BufRead *.pcap set filetype=pcap
 if expand("%:p")  =~ 'conf.d'
   au BufNewFile,BufRead *.conf set filetype=apache
 endif
@@ -463,7 +467,6 @@ if has("autocmd")
   autocmd FileType zsh        setlocal sw=4 sts=4 ts=4 et
 endif
 autocmd InsertLeave * set nopaste
-
 "}}}
 
 "----------------------------------------
@@ -782,7 +785,7 @@ NeoBundle 'taichouchou2/vim-unite-giti'
 NeoBundle 'basyura/TweetVim'
 NeoBundle 'basyura/twibill.vim'
 NeoBundle 'basyura/bitly.vim'
-NeoBundle 'tyru/eskk.vim'
+" NeoBundle 'tyru/eskk.vim'
 " NeoBundle 'daisuzu/facebook.vim'
 
 " NeoBundle 'yuratomo/w3m.vim'
@@ -2791,21 +2794,21 @@ nmap gk k
 "------------------------------------
 " "{{{
 " " set imdisable
-let g:eskk#debug = 0
-" let g:eskk#egg_like_newline = 1
-" let g:eskk#revert_henkan_style = "okuri"
-let g:eskk#enable_completion = 1
-let g:eskk#directory = "~/.eskk"
-let g:eskk#dictionary = { 'path': expand( "~/.eskk_jisyo" ), 'sorted': 0, 'encoding': 'utf-8', }
-let g:eskk#large_dictionary = { 'path':  expand("~/.eskk_dict/SKK-JISYO.L"), 'sorted': 1, 'encoding': 'euc-jp', }
-let g:eskk#cursor_color = {
-      \   'ascii': ['#8b8b83', '#bebebe'],
-      \   'hira': ['#8b3e2f', '#ffc0cb'],
-      \   'kata': ['#228b22', '#00ff00'],
-      \   'abbrev': '#4169e1',
-      \   'zenei': '#ffd700',
-      \}
-imap <C-J> <Plug>(eskk:toggle)
+" let g:eskk#debug = 0
+" " let g:eskk#egg_like_newline = 1
+" " let g:eskk#revert_henkan_style = "okuri"
+" let g:eskk#enable_completion = 1
+" let g:eskk#directory = "~/.eskk"
+" let g:eskk#dictionary = { 'path': expand( "~/.eskk_jisyo" ), 'sorted': 0, 'encoding': 'utf-8', }
+" let g:eskk#large_dictionary = { 'path':  expand("~/.eskk_dict/SKK-JISYO.L"), 'sorted': 1, 'encoding': 'euc-jp', }
+" let g:eskk#cursor_color = {
+"       \   'ascii': ['#8b8b83', '#bebebe'],
+"       \   'hira': ['#8b3e2f', '#ffc0cb'],
+"       \   'kata': ['#228b22', '#00ff00'],
+"       \   'abbrev': '#4169e1',
+"       \   'zenei': '#ffd700',
+"       \}
+" imap <C-J> <Plug>(eskk:toggle)
 " "}}}
 "}}}
 
@@ -2894,7 +2897,7 @@ let g:neocomplcache_enable_underbar_completion = 1
 let g:neocomplcache_ctags_program = "ctags"
 
 " default config snippet
-let g:neosnippet#snippets_directory = '~/.vim/snippet,~/.bundle/neosnippet/autoload/neosnippet/snippets'
+let g:neosnippet#snippets_directory = '~/.bundle/neosnippet/autoload/neosnippet/snippets,~/.vim/snippet'
 let g:neocomplcache_snippets_disable_runtime_snippets=1
 " let g:neocomplcache_text_mode_filetypes = { 'markdown' : 1, }
 let g:neocomplcache_ignore_composite_filetype_lists = {
