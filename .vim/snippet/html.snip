@@ -164,7 +164,7 @@ snippet input
 snippet label
     <label for="${2:$1}">${1:name}</label><input type="${3:text/submit/hidden/button}" name="${4:$2}" value="${5}" id="${6:$2}"`Close()`>${7}
 snippet link
-    <link rel="stylesheet" href="${1:css/style.css}" type="text/stylesheet" media="all"/>
+    <link rel="stylesheet" href="${1:css/style.css}" type="text/css" media="all"/>
 snippet mailto
     <a href="mailto:${1:joe@example.com}?subject=${2:feedback}">${3:email me}</a>
 snippet meta
@@ -203,7 +203,8 @@ snippet css3.js
 
 snippet yui
     <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.7.2/build/cssreset/cssreset-min.css">
-
+snippet telephone
+  <meta name="format-detection" content="telephone=no">
 
 snippet   description
     <meta name="description" content="ページの説明" />

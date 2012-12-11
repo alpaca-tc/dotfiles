@@ -67,12 +67,19 @@ nmap ? ?\v
 " nmap P [P
 imap <C-H> <BS>
 
-" 新しいバッファを開くときに、rubyで開く
-function! NewBuffer()
+" 新しいバッファを開くときに、rubyか同じファイルタイプで開く{{{
+function! NewBuffer(type)
+  let old_ft = &ft
   new
-  setl ft=ruby
+  if a:type == "new"
+    setl ft=ruby
+  else
+    exec 'setl ft='.old_ft
+  endif
 endfunction
-nmap <silent><C-W>n :call NewBuffer()<CR>
+nmap <silent><C-W>n :call NewBuffer("new")<CR>
+nmap <silent><C-W><C-N> :call NewBuffer("copy")<CR>
+"}}}
 
 " 括弧を自動補完
 inoremap { {}<LEFT>
@@ -394,29 +401,6 @@ command! Sjis edit ++enc=sjis
 "}}}
 
 "----------------------------------------
-" ファイルタイプ"{{{
-au BufNewFile,BufRead *Helper.js,*Spec.js  setl filetype=jasmine.javascript
-au BufNewFile,BufRead *.coffee   setl filetype=coffee
-au BufNewFile,BufRead *Helper.coffee,*Spec.coffee  setl filetype=jasmine.coffee
-au BufNewFile,BufRead wp-*.php setl ft=wordpress.php noexpandtab
-au FileType wordpress.php au! ProgramFiles
-au BufNewFile,BufRead *.less setf less
-au BufNewFile,BufRead *.dict setf dict
-au BufNewFile,BufRead Gemfile set filetype=Gemfile
-au BufNewFile,BufRead .gitignore setl ft=conf
-au BufNewFile,BufRead *.css set ft=css syntax=css3
-au BufNewFile,BufRead *.json set filetype=json
-au BufNewFile,BufRead *.go set filetype=go
-au BufNewFile,BufRead *.mkd,*.markdown,*.md,*.mdown,*.mkdn   setlocal filetype=markdown autoindent formatoptions=tcroqn2 comments=n:>
-au BufNewFile,BufRead .tmux.conf*,tmux.conf* set filetype=tmux
-au BufNewFile,BufRead .htaccess,httpd.conf set filetype=apache
-au BufNewFile,BufRead *.pcap set filetype=pcap
-if expand("%:p")  =~ 'conf.d'
-  au BufNewFile,BufRead *.conf set filetype=apache
-endif
-"}}}
-
-"----------------------------------------
 "インデント"{{{
 set autoindent
 set smartindent
@@ -637,6 +621,39 @@ autocmd BufReadPost *_spec.rb call RSpecSyntax()
 
 "}}}
 
+"----------------------------------------
+" ファイルタイプ"{{{
+au BufNewFile,BufRead *Helper.js,*Spec.js  setl filetype=jasmine.javascript
+au BufNewFile,BufRead *.coffee   setl filetype=coffee
+au BufNewFile,BufRead *Helper.coffee,*Spec.coffee  setl filetype=jasmine.coffee
+
+au BufNewFile,BufRead *.less setf less
+au BufNewFile,BufRead *.dict setf dict
+au BufNewFile,BufRead Gemfile set filetype=Gemfile
+au BufNewFile,BufRead .gitignore setl ft=conf
+au BufNewFile,BufRead *.css set ft=css syntax=css3
+au BufNewFile,BufRead *.json set filetype=json
+au BufNewFile,BufRead *.go set filetype=go
+au BufNewFile,BufRead *.mkd,*.markdown,*.md,*.mdown,*.mkdn   setlocal filetype=markdown autoindent formatoptions=tcroqn2 comments=n:>
+au BufNewFile,BufRead .tmux.conf*,tmux.conf* set filetype=tmux
+au BufNewFile,BufRead .htaccess,httpd.conf set filetype=apache
+au BufNewFile,BufRead *.pcap set filetype=pcap
+if expand("%:p")  =~ 'conf.d'
+  au BufNewFile,BufRead *.conf set filetype=apache
+endif
+au FileType php.wordpress au! ProgramFiles
+
+" Wordpress の設定"{{{
+function! s:WordpressSetting()
+  if expand("%:p")  =~ 'wp-'
+    setl ft=php.wordpress noexpandtab nolist syntax=wordpress
+  endif
+endfunction
+au FileType php call s:WordpressSetting()
+"}}}
+
+"}}}
+
 " commitメッセージの編集時には余分なプラグインを読み込まない
 if expand("%") =~ "COMMIT_EDITMSG"
   finish
@@ -785,7 +802,7 @@ NeoBundle 'taichouchou2/vim-unite-giti'
 NeoBundle 'basyura/TweetVim'
 NeoBundle 'basyura/twibill.vim'
 NeoBundle 'basyura/bitly.vim'
-" NeoBundle 'tyru/eskk.vim'
+NeoBundle 'tyru/eskk.vim'
 " NeoBundle 'daisuzu/facebook.vim'
 
 " NeoBundle 'yuratomo/w3m.vim'
@@ -868,12 +885,12 @@ NeoBundle 'rhysd/vim-textobj-ruby'
 " ----------------------------------------
 " NeoBundle 'Pydiction'
 " NeoBundle 'yuroyoro/vim-python'
-NeoBundle 'davidhalter/jedi-vim', {
-      \ 'build' : {
-      \     'mac' : 'git submodule update --init',
-      \     'unix' : 'git submodule update --init',
-      \    },
-      \ }
+" NeoBundle 'davidhalter/jedi-vim', {
+"       \ 'build' : {
+"       \     'mac' : 'git submodule update --init',
+"       \     'unix' : 'git submodule update --init',
+"       \    },
+"       \ }
 " NeoBundle 'kevinw/pyflakes-vim'
 
 " scala
@@ -904,26 +921,30 @@ NeoBundle 'thinca/vim-ref'
 " NeoBundle 'ujihisa/ref-hoogle'
 " NeoBundle 'pekepeke/ref-javadoc'
 
-"gitをvim内から操作する
+" gitをvim内から操作する
 NeoBundle 'Shougo/git-vim'
 NeoBundle 'mattn/gist-vim' "gistを利用する
 
-"保存と同時にブラウザをリロードする
+" 保存と同時にブラウザをリロードする
 NeoBundle 'tell-k/vim-browsereload-mac'
 
-"markdownでメモを管理
+" markdownでメモを管理
 NeoBundle 'glidenote/memolist.vim'
 
-"vimでwordpress
+" vimでwordpress
 " NeoBundle 'vim-scripts/VimRepress'
 
-"vモードで選択
+" vモードで選択
 "<Leader>seでsqlを実行
 " NeoBundle 'vim-scripts/dbext.vim'
 
-"tagsを利用したソースコード閲覧・移動補助機能 tagsファイルの自動生成
+" tagsを利用したソースコード閲覧・移動補助機能 tagsファイルの自動生成
 " NeoBundle 'vim-scripts/Source-Explorer-srcexpl.vim'
-NeoBundle 'tsukkee/lingr-vim'
+" NeoBundleLazy 'tsukkee/lingr-vim'
+
+let s:neobundle_filetype_plugins = {}
+let s:neobundle_filetype_plugins.html = []
+
 "}}}
 
 " Installation check.
@@ -2322,12 +2343,14 @@ let g:tweetvim_open_buffer_cmd = 'tabnew'
 let g:sh_indent_case_labels=1
 
 "------------------------------------
-" neocomplcache-snippets
+" neosnippet
 "------------------------------------
+"{{{
 au FileType snippet nmap <buffer><Space>e :e #<CR>
 
 " nmap <C-H><C-H><C-R> :<C-U>CompassCreate<CR>
 " nmap <C-H><C-H><C-B> :<C-U>BourbonInstall<CR>
+"}}}
 
 "------------------------------------
 " sass
@@ -2457,10 +2480,10 @@ if g:smartchr_enable == 1
   " inoremap <expr> = search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '
   "       \ : search('\(*\<bar>!\)\%#', 'bcn') ? '= '
   "       \ : smartchr#one_of(' = ', '=', ' == ')
-  imap <expr> , smartchr#one_of(', ', ',')
+  imap <expr> , smartchr#one_of(',', ', ')
   imap <expr> ? smartchr#one_of('?', '? ')
   " imap <expr> = smartchr#one_of(' = ', '=')
-  
+
   " Smart =.
   " inoremap <expr> = search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '
   "       \ : search('\(*\<bar>!\)\%#', 'bcn') ? '= '
@@ -2468,23 +2491,25 @@ if g:smartchr_enable == 1
   augroup MyAutoCmd
     " Substitute .. into -> .
     autocmd FileType c,cpp inoremap <buffer> <expr> . smartchr#loop('.', '->', '...')
-    autocmd FileType perl,php imap <buffer> <expr> . smartchr#loop('.', '->', ' . ')
+    autocmd FileType perl,php imap <buffer> <expr> . smartchr#loop('.', '->', '..')
     autocmd FileType perl,php imap <buffer> <expr> - smartchr#loop('-', '->')
     autocmd FileType vim imap <buffer> <expr> . smartchr#loop('.', ' . ', '..', '...')
+    autocmd FileType coffee <buffer> <expr> . smartchr#loop('-', '->', '=>')
 
-    autocmd FileType haskell,int-ghci
-          \ inoremap <buffer> <expr> + smartchr#loop('+', ' ++ ')
-          \| inoremap <buffer> <expr> - smartchr#loop('-', ' -> ', ' <- ')
-          \| inoremap <buffer> <expr> $ smartchr#loop(' $ ', '$')
-          \| inoremap <buffer> <expr> \ smartchr#loop('\ ', '\')
-          \| inoremap <buffer> <expr> : smartchr#loop(':', ' :: ', ' : ')
-          \| inoremap <buffer> <expr> . smartchr#loop('.', ' . ', '..')
+    " 使わない
+    " autocmd FileType haskell,int-ghci
+    "       \ inoremap <buffer> <expr> + smartchr#loop('+', ' ++ ')
+    "       \| inoremap <buffer> <expr> - smartchr#loop('-', ' -> ', ' <- ')
+    "       \| inoremap <buffer> <expr> $ smartchr#loop(' $ ', '$')
+    "       \| inoremap <buffer> <expr> \ smartchr#loop('\ ', '\')
+    "       \| inoremap <buffer> <expr> : smartchr#loop(':', ' :: ', ' : ')
+    "       \| inoremap <buffer> <expr> . smartchr#loop('.', ' . ', '..')
 
-    autocmd FileType scala
-          \ inoremap <buffer> <expr> - smartchr#loop('-', ' -> ', ' <- ')
-          \| inoremap <buffer> <expr> = smartchr#loop(' = ', '=', ' => ')
-          \| inoremap <buffer> <expr> : smartchr#loop(': ', ':', ' :: ')
-          \| inoremap <buffer> <expr> . smartchr#loop('.', ' => ')
+    " autocmd FileType scala
+    "       \ inoremap <buffer> <expr> - smartchr#loop('-', ' -> ', ' <- ')
+    "       \| inoremap <buffer> <expr> = smartchr#loop(' = ', '=', ' => ')
+    "       \| inoremap <buffer> <expr> : smartchr#loop(': ', ':', ' :: ')
+    "       \| inoremap <buffer> <expr> . smartchr#loop('.', ' => ')
 
     autocmd FileType eruby
           \ inoremap <buffer> <expr> > smartchr#loop('>', '%>')
@@ -2793,22 +2818,22 @@ nmap gk k
 " eskk.vim
 "------------------------------------
 " "{{{
-" " set imdisable
-" let g:eskk#debug = 0
-" " let g:eskk#egg_like_newline = 1
-" " let g:eskk#revert_henkan_style = "okuri"
-" let g:eskk#enable_completion = 1
-" let g:eskk#directory = "~/.eskk"
-" let g:eskk#dictionary = { 'path': expand( "~/.eskk_jisyo" ), 'sorted': 0, 'encoding': 'utf-8', }
-" let g:eskk#large_dictionary = { 'path':  expand("~/.eskk_dict/SKK-JISYO.L"), 'sorted': 1, 'encoding': 'euc-jp', }
-" let g:eskk#cursor_color = {
-"       \   'ascii': ['#8b8b83', '#bebebe'],
-"       \   'hira': ['#8b3e2f', '#ffc0cb'],
-"       \   'kata': ['#228b22', '#00ff00'],
-"       \   'abbrev': '#4169e1',
-"       \   'zenei': '#ffd700',
-"       \}
-" imap <C-J> <Plug>(eskk:toggle)
+" set imdisable
+let g:eskk#debug = 0
+" let g:eskk#egg_like_newline = 1
+" let g:eskk#revert_henkan_style = "okuri"
+let g:eskk#enable_completion = 1
+let g:eskk#directory = "~/.eskk"
+let g:eskk#dictionary = { 'path': expand( "~/.eskk_jisyo" ), 'sorted': 0, 'encoding': 'utf-8', }
+let g:eskk#large_dictionary = { 'path':  expand("~/.eskk_dict/SKK-JISYO.L"), 'sorted': 1, 'encoding': 'euc-jp', }
+let g:eskk#cursor_color = {
+      \   'ascii': ['#8b8b83', '#bebebe'],
+      \   'hira': ['#8b3e2f', '#ffc0cb'],
+      \   'kata': ['#228b22', '#00ff00'],
+      \   'abbrev': '#4169e1',
+      \   'zenei': '#ffd700',
+      \}
+imap <C-J> <Plug>(eskk:toggle)
 " "}}}
 "}}}
 
