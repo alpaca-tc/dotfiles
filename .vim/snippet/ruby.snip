@@ -177,6 +177,14 @@ snippet dm
 
 #/*}}}*/
 
+# methods
+snippet     method_missing
+  def method_missing(action, *args)
+    if action.to_s =~ ${1:regexp}
+
+    end
+  end
+
 # class etc..
 # /*{{{*/
 snippet     watcher

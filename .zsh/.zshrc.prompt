@@ -18,8 +18,10 @@ case ${UID} in
         GREEN="%{${fg[green]}%}"
         BLUE=$'%{\e[1;35m%}'
         BLUE="%{${fg[blue]}%}"
+        BLUE_BOLD="%{$fg_bold[blue]%}"
         RED="%{${fg[red]}%}"
         CYAN="%{${fg[cyan]}%}"
+        CYAN="%{${fg_bold[cyan]}%}"
         WHITE="%{${fg[white]}%}"
         YELLOW="%{${fg[yellow]}%}"
         PURPLE="%{${fg[purple]}%}"
@@ -29,7 +31,7 @@ case ${UID} in
         #taichou@alp-iMac $
         #PROMPT='${RESET}${GREEN}${WINDOW:+"[$WINDOW]"}${RESET}%{$fg_bold[blue]%}${USER}@%m ${RESET}${WHITE}$ '
         #taichou@alp-iMac ~/.zsh/.zshrc.prompt $
-        PROMPT='${RESET}${GREEN}${WINDOW:+"[$WINDOW]"}${RESET}%{$fg_bold[blue]%}${USER}@%m:${RESET}${WHITE}%~ ${RESET}${WHITE}$ '$'\n'
+        PROMPT='${RESET}${GREEN}${WINDOW:+"[$WINDOW]"}${RESET}%{$BLUE_BOLD%}${USER}@%m:${RESET}${WHITE}%~ ${RESET}${WHITE}$ '$'\n'
         # 23:40:25-taichou@~/Desktop$
         RPROMPT='${RESET}${WHITE}[${WHITE}%(5~,%-2~/.../%2~,%~)% ${WHITE}]${WINDOW:+"[$WINDOW]"} ${RESET}'
 
@@ -38,10 +40,10 @@ case ${UID} in
         function zle-line-init zle-keymap-select {
             case $KEYMAP in
                 vicmd)
-                    PROMPT='${RESET}${GREEN}${WINDOW:+"[$WINDOW]"}${RESET}%{$fg_bold[cyan]%}${USER}@%m:${RESET}${WHITE}%~ ${RESET}${WHITE}$ '$'\n'
+                    PROMPT='${RESET}${GREEN}${WINDOW:+"[$WINDOW]"}${RESET}%{$CYAN_BOLD%}${USER}@%m:${RESET}${WHITE}%~ ${RESET}${WHITE}$ '$'\n'
                     ;;
                 main|viins)
-                    PROMPT='${RESET}${GREEN}${WINDOW:+"[$WINDOW]"}${RESET}%{$fg_bold[blue]%}${USER}@%m:${RESET}${WHITE}%~ ${RESET}${WHITE}$ '$'\n'
+                    PROMPT='${RESET}${GREEN}${WINDOW:+"[$WINDOW]"}${RESET}%{$BLUE_BOLD%}${USER}@%m:${RESET}${WHITE}%~ ${RESET}${WHITE}$ '$'\n'
                     ;;
             esac
             zle reset-prompt

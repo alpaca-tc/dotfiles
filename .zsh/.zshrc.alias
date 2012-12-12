@@ -76,6 +76,8 @@ alias gs='git status'
 alias gst='git stash'
 alias gt='git tr'
 alias gv='git revert'
+alias gdelete='git update-index --assume-unchanged'
+alias gdelete_non='git update-index --no-assume-unchanged'
 
 # hub
 alias hb='hub browse'

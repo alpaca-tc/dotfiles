@@ -68,17 +68,23 @@ nmap ? ?\v
 imap <C-H> <BS>
 
 " 新しいバッファを開くときに、rubyか同じファイルタイプで開く{{{
-function! NewBuffer(type)
+function! NewBuffer(type, tab)
   let old_ft = &ft
-  new
+  if (a:tab == "tab")
+    tabnew
+  else
+    new
+  endif
+
   if a:type == "new"
     setl ft=ruby
   else
     exec 'setl ft='.old_ft
   endif
 endfunction
-nmap <silent><C-W>n :call NewBuffer("new")<CR>
-nmap <silent><C-W><C-N> :call NewBuffer("copy")<CR>
+nmap <silent><C-W>n :call NewBuffer("new", "")<CR>
+nmap <silent><C-W><C-N> :call NewBuffer("copy", "")<CR>
+nmap <silent>tc  :call NewBuffer("copy", "tab")<CR>
 "}}}
 
 " 括弧を自動補完
@@ -110,18 +116,21 @@ inoremap <leader>- ----------------------------------------
 
 "保存時に無駄な文字を消す{{{
 function! s:remove_dust()
-    let cursor = getpos(".")
-    let space_length = &ts > 0? &ts : 2
-    let space  = ""
-    while space_length > 0
-      let space .= " "
-      let space_length -= 1
-    endwhile
+  if &expandtab == 0
+    return
+  endif
+  let cursor = getpos(".")
+  let space_length = &ts > 0? &ts : 2
+  let space  = ""
+  while space_length > 0
+    let space .= " "
+    let space_length -= 1
+  endwhile
 
-    %s/\s\+$//ge
-    exec "%s/\t/".space."/ge"
-    call setpos(".", cursor)
-    unlet cursor
+  %s/\s\+$//ge
+  exec "%s/\t/".space."/ge"
+  call setpos(".", cursor)
+  unlet cursor
 endfunction
 augroup ProgramFiles
   au BufWritePre * call <SID>remove_dust()
@@ -354,7 +363,6 @@ endfunction
 nmap <silent>t  <Nop>
 nmap <silent>tn  :tabn<CR>
 nmap <silent>tp  :tabprevious<CR>
-nmap <silent>tc  :tabnew<CR>
 nmap <silent>tx  :tabclose<CR>
 " nnoremap to  :tabo<CR>
 nmap <silent>te  :execute 'tabnext' 1 + (tabpagenr() + v:count1 - 1) % tabpagenr('$')<CR>
@@ -641,15 +649,6 @@ au BufNewFile,BufRead *.pcap set filetype=pcap
 if expand("%:p")  =~ 'conf.d'
   au BufNewFile,BufRead *.conf set filetype=apache
 endif
-au FileType php.wordpress au! ProgramFiles
-
-" Wordpress の設定"{{{
-function! s:WordpressSetting()
-  if expand("%:p")  =~ 'wp-'
-    setl ft=php.wordpress noexpandtab nolist syntax=wordpress
-  endif
-endfunction
-au FileType php call s:WordpressSetting()
 "}}}
 
 "}}}
@@ -668,6 +667,19 @@ if has('vim_starting')
   call neobundle#rc(expand('~/.bundle/'))
 endif
 
+function! ExtendNeoBundle(arg, ...)
+
+endfunction
+command! -nargs=+ NeoBundleFileType
+        \ call ExtendNeoBundle(
+        \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
+NeoBundleFileType 'hogehoge'
+
+augroup neobundle
+  autocmd!
+  autocmd Syntax  vim syntax keyword vimCommand NeoBundle NeoBundleLazy NeoBundleFileType
+augroup END
+
 "bundle"{{{
 "----------------------------------------
 " "vim基本機能拡張"{{{
@@ -681,37 +693,29 @@ NeoBundle 'Shougo/vimproc', {
 NeoBundle 'Lokaltog/vim-powerline'
 " NeoBundle 'vim-jp/vital.vim'
 NeoBundle 'edsono/vim-matchit'
-NeoBundle 'taichouchou2/surround.vim' " 独自の実装のものを使用、ruby用カスタマイズ、<C-G>のimap削除
+NeoBundle 'taichouchou2/surround.vim' " ruby用カスタマイズ、<C-G>のimap削除
 NeoBundle 'tpope/vim-fugitive'
 " NeoBundle 'yuroyoro/vim-autoclose'                          " 自動閉じタグ
 NeoBundle 'taichouchou2/alpaca'       " 個人的なカラーやフォントなど
 NeoBundle 'kana/vim-arpeggio'         " 同時押しキーマップを使う
 NeoBundle 'rhysd/accelerated-jk'      " jkの移動を高速化
 NeoBundle 'h1mesuke/vim-alignta'
-" NeoBundle 'othree/eregex.vim'         " %S 正規表現を拡張
-" NeoBundle 'vim-scripts/SearchComplete' " /で検索をかけるときでも\tで補完が出来る
-" 遅延読み込み
 "}}}
 
 "----------------------------------------
 " vim拡張"{{{
 NeoBundle 'tomtom/tcomment_vim'
-" NeoBundle 'vim-scripts/tlib' " tcommentで使用
-
 NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'thinca/vim-quickrun' "<Leader>rで簡易コンパイル
 " NeoBundle 'scrooloose/nerdtree' "プロジェクト管理用 tree filer
-" NeoBundle 'grep.vim'
 NeoBundle 'smartword'
 NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler'
-" NeoBundle 'yuroyoro/vimdoc_ja'
 NeoBundle 'camelcasemotion'
 " NeoBundle 'taku-o/vim-toggle' "true<=>false など、逆の意味のキーワードを切り替えられる
 " NeoBundle 'Lokaltog/vim-easymotion'
-
 NeoBundle 'mattn/zencoding-vim' "Zencodingを使う
 NeoBundle 'vim-scripts/sudo.vim' "vimで開いた後にsudoで保存
 NeoBundle 'taichouchou2/vim-endwise.git' "end endifなどを自動で挿入
@@ -848,6 +852,7 @@ NeoBundle 'tpope/vim-markdown'
 " ----------------------------------------
 " NeoBundle 'oppara/vim-unite-cake'
 " NeoBundle 'violetyk/cake.vim' " cakephpを使いやすく
+NeoBundle 'taichouchou2/alpaca_wordpress.vim'
 
 "  binary
 " ----------------------------------------
@@ -875,7 +880,12 @@ NeoBundle 'taichouchou2/unite-reek',
       \{  'depends' : 'Shougo/unite.vim' }
 NeoBundle 'taichouchou2/unite-rails_best_practices',
       \{ 'depends' : 'Shougo/unite.vim' }
-" NeoBundle 'taichouchou2/alpaca_complete'
+NeoBundle 'taichouchou2/alpaca_complete',{
+      \ 'depends' : 'tpope/vim-rails',
+      \ 'build' : {
+      \     'mac' : 'gem install alpaca_complete',
+      \     'unix' : 'gem install alpaca_complete',
+      \  }}
 NeoBundle 'Shougo/neocomplcache-rsense'
 NeoBundle 'rhysd/unite-ruby-require.vim'
 NeoBundle 'rhysd/neco-ruby-keyword-args'
@@ -885,12 +895,14 @@ NeoBundle 'rhysd/vim-textobj-ruby'
 " ----------------------------------------
 " NeoBundle 'Pydiction'
 " NeoBundle 'yuroyoro/vim-python'
-" NeoBundle 'davidhalter/jedi-vim', {
-"       \ 'build' : {
-"       \     'mac' : 'git submodule update --init',
-"       \     'unix' : 'git submodule update --init',
-"       \    },
-"       \ }
+NeoBundle 'heavenshell/vim-quickrun-hook-sphinx'
+NeoBundle 'sontek/rope-vim'
+NeoBundle 'davidhalter/jedi-vim', {
+      \ 'build' : {
+      \     'mac' : 'git submodule update --init',
+      \     'unix' : 'git submodule update --init',
+      \    },
+      \ }
 " NeoBundle 'kevinw/pyflakes-vim'
 
 " scala
@@ -2835,6 +2847,15 @@ let g:eskk#cursor_color = {
       \}
 imap <C-J> <Plug>(eskk:toggle)
 " "}}}
+
+"------------------------------------
+" alpaca_wordpress.vim
+"------------------------------------
+"{{{
+let g:alpaca_wordpress_syntax = 1
+let g:alpaca_wordpress_use_default_setting = 1
+"}}}
+
 "}}}
 
 "----------------------------------------
