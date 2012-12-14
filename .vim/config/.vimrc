@@ -749,8 +749,8 @@ NeoBundle 'kana/vim-arpeggio'         " 同時押しキーマップを使う
 NeoBundle 'rhysd/accelerated-jk'      " jkの移動を高速化
 NeoBundle 'taichouchou2/alpaca'       " 個人的なカラーやフォントなど
 NeoBundle 'taichouchou2/surround.vim' " text-objの拡張
-" NeoBundle 'Lokaltog/vim-powerline'    " StatusLineの拡張
-" NeoBundle 'tpope/vim-fugitive'        " gitを表示
+NeoBundle 'Lokaltog/vim-powerline'    " StatusLineの拡張
+NeoBundle 'tpope/vim-fugitive'        " gitを表示
 "}}}
 
 "----------------------------------------
@@ -910,7 +910,7 @@ command! Vinaris call BundleWithCmd('vinarise vinarise-plugin-peanalysis', 'Vina
 " ----------------------------------------
 " NeoBundle 'astashov/vim-ruby-debugger'
 " NeoBundle 'taichouchou2/neco-rubymf' " gem install methodfinder
-" NeoBundle 'taichouchou2/vim-rsense'
+NeoBundle 'taichouchou2/vim-rsense'
 NeoBundle 'taichouchou2/vim-endwise.git' "end endifなどを自動で挿入
 NeoBundle 'taichouchou2/vim-rails'
 
@@ -918,7 +918,7 @@ NeoBundleLazy 'taichouchou2/unite-rails_best_practices',
       \{ 'depends' : 'Shougo/unite.vim' }
 NeoBundleLazy 'ujihisa/unite-rake'
 NeoBundleLazy 'taichouchou2/alpaca_complete'
-let s:bundle_rails = 'unite-rails_best_practices unite-rake alpaca_complete'
+let s:bundle_rails = 'unite-rails_best_practices unite-rake alpaca_complete vim-rsense'
 aug MyAutoCmd
   au User Rails call BundleLoadDepends(s:bundle_rails)
 aug END
@@ -1658,7 +1658,6 @@ let g:ref_phpmanual_cmd = 'lynx -dump -nonumbers -assume_charset=utf-8 -assume_l
 " nmap <Space>ga :<C-U>Gwrite<CR>
 nmap <silent>gm :<C-U>Gcommit<CR>
 nmap <silent>gM :<C-U>Gcommit --amend<CR>
-
 nmap <silent>gb :<C-U>Gblame<CR>
 nmap <silent>gr :<C-U>Ggrep<Space>
 
@@ -2811,7 +2810,7 @@ set complete+=k,U,kspell,t,d " 補完を充実
 set completeopt=menu,menuone,preview
 set infercase
 
-" FileType毎のOmni補完を設定
+" FileType毎のOmni補完を設定 "{{{
 aug MyAutoCmd
   au FileType css                  setl omnifunc=csscomplete#CompleteCSS
   au FileType html,markdown        setl omnifunc=htmlcomplete#CompleteTags
@@ -2822,6 +2821,7 @@ aug MyAutoCmd
   au FileType php                  setl omnifunc=phpcomplete#CompletePHP
   au FileType c                    setl omnifunc=ccomplete#Complete
 aug END
+"}}}
 
 "----------------------------------------
 " neocomplcache
@@ -2888,10 +2888,10 @@ let g:neocomplcache_force_omni_patterns.python = '[^. \t]\.\w*'
 let g:neocomplcache_keyword_patterns['default'] = '[0-9a-zA-Z:#_]\+'
 let g:neocomplcache_keyword_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 let g:neocomplcache_snippets_dir = '~/.bundle/neosnippet/autoload/neosnippet/snippets,~/.vim/snippet'
-let g:neocomplcache_omni_patterns.php = '[^.*\t]\.\w*\|\h\w*::'
+let g:neocomplcache_omni_patterns.php = '[^. *\t]\.\w*\|\h\w*::'
 let g:neocomplcache_omni_patterns.mail = '^\s*\w\+'
 let g:neocomplcache_omni_patterns.c = '[^.[:digit:]*\t]\%(\.\|->\)'
-" let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
+let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
 " let g:neocomplcache_force_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
 " let g:neocomplcache_source_look_dictionary_path = ''
 "}}}
