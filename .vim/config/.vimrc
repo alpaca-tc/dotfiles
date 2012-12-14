@@ -1,4 +1,6 @@
-au!
+aug MyAutoCmd
+  au!
+aug END
 
 "----------------------------------------
 "基本"{{{
@@ -11,7 +13,9 @@ set clipboard+=autoselect
 set clipboard+=unnamed
 set directory=~/.vim.swapfile
 set formatoptions+=lcoqmM
-au VimEnter * set formatoptions-=ro
+aug MyAutoCmd
+  au VimEnter * set formatoptions-=ro
+aug END
 set helplang=ja,en
 set modelines=0
 set nobackup
@@ -30,7 +34,9 @@ endif
 let PATH='/Users/taichou/.autojump/bin:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin/:/Users/taichou/.rbenv:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin:/Users/taichou/.rbenv:/Users/taichou/.autojump/bin:/Users/taichou/local/bin:/Users/taichou/local/sbin:/usr/local/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:/Applications/XAMPP/xamppfiles/bin:/bin:/sbin:/usr/sbin:/usr/bin:/Applications/XAMPP/xamppfiles/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/bin:/sbin:/usr/sbin:/usr/bin'
 let $PATH='/Users/taichou/.autojump/bin:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin/:/Users/taichou/.rbenv:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin:/Users/taichou/.rbenv:/Users/taichou/.autojump/bin:/Users/taichou/local/bin:/Users/taichou/local/sbin:/usr/local/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:/Applications/XAMPP/xamppfiles/bin:/bin:/sbin:/usr/sbin:/usr/bin:/Applications/XAMPP/xamppfiles/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/bin:/sbin:/usr/sbin:/usr/bin'
 
-autocmd FileType help nnoremap <buffer> q <C-w>c
+aug MyAutoCmd
+  au FileType help nnoremap <buffer> q <C-w>c
+aug END
 nmap <Space>h :<C-u>help<Space><C-r><C-w><CR>
 nmap <Space><Space>s :<C-U>so ~/.vimrc<CR>
 nmap <Space><Space>v :<C-U>e ~/.vim/config/.vimrc<CR>
@@ -50,14 +56,16 @@ set hidden
 set nrformats-=octal
 
 "開いているファイルのディレクトリに自動で移動
-" au BufEnter * execute ":lcd " . expand("%:p:h")
+aug MyAutoCmd
+  au BufEnter * execute ":lcd " . expand("%:p:h")
+aug END
 
 " 便利キーマップ追記
 nmap <silent><Space>w :wq<CR>
 nmap <silent><Space>q :q!<CR>
 nmap <Space>s :w sudo:%<CR>
 nmap re :%s!\v
-xmap re :%s!\v
+xmap re :s!\v
 vmap rep y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<Return>!!g<Left><Left>
 nmap ft :set ft=
 
@@ -88,7 +96,9 @@ inoremap [ []<LEFT>
 inoremap ( ()<LEFT>
 inoremap " ""<LEFT>
 inoremap ' ''<LEFT>
-au FileType ruby,eruby,haml inoremap <buffer>\| \|\|<LEFT>
+aug MyAutoCmd
+  au FileType ruby,eruby,haml inoremap <buffer>\| \|\|<LEFT>
+aug END
 
 " 一括インデント
 xmap < <gv
@@ -124,6 +134,7 @@ function! s:remove_dust()
     call setpos(".", cursor)
     unlet cursor
 endfunction
+
 augroup ProgramFiles
   au BufWritePre * call <SID>remove_dust()
 augroup END
@@ -146,7 +157,10 @@ function! HtmlFunctions()
   xnoremap <silent> <space>e :call <SID>HtmlEscape()<CR>
   xnoremap <silent> <space>ue :call <SID>HtmlUnEscape()<CR>
 endfunction
-au FileType php,eruby,html,haml call HtmlFunctions()
+
+aug MyAutoCmd
+  au FileType php,eruby,html,haml call HtmlFunctions()
+aug END
 " }}}
 
 " 変なマッピングを修正 "{{{
@@ -251,7 +265,10 @@ vmap H <Nop>
 " nmap <silent>; :<C-U>echo "マーク"<CR><ESC>'
 
 " 前回終了したカーソル行に移動
-autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal g`\"" | endif
+
+aug MyAutoCmd
+  autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal g`\"" | endif
+aug END
 nnoremap g: `.zz
 nnoremap g, g;
 nnoremap g; g,
@@ -378,15 +395,20 @@ set fileencodings=utf-8,sjis,shift-jis,euc-jp,utf-16,ascii,ucs-bom,cp932,iso-202
 autocmd FileType cvs  :set fileencoding=euc-jp
 
 function! b:newFileEncoding()
-  autocmd FileType svn    :setl fileencoding=utf-8
-  autocmd FileType js     :setl fileencoding=utf-8
-  autocmd FileType css    :setl fileencoding=utf-8
-  autocmd FileType html   :setl fileencoding=utf-8
-  autocmd FileType xml    :setl fileencoding=utf-8
-  autocmd FileType java   :setl fileencoding=utf-8
-  autocmd FileType scala  :setl fileencoding=utf-8
+  aug MyAutoCmd
+    autocmd FileType svn    :setl fileencoding=utf-8
+    autocmd FileType js     :setl fileencoding=utf-8
+    autocmd FileType css    :setl fileencoding=utf-8
+    autocmd FileType html   :setl fileencoding=utf-8
+    autocmd FileType xml    :setl fileencoding=utf-8
+    autocmd FileType java   :setl fileencoding=utf-8
+    autocmd FileType scala  :setl fileencoding=utf-8
+  aug END
 endfunction
-au BufNewFile * call b:newFileEncoding()
+
+aug MyAutoCmd
+  au BufNewFile * call b:newFileEncoding()
+aug END
 
 " ワイルドカードで表示するときに優先度を低くする拡張子
 set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc
@@ -449,7 +471,10 @@ if has("autocmd")
   autocmd FileType yaml       setlocal sw=2 sts=2 ts=2 et
   autocmd FileType zsh        setlocal sw=4 sts=4 ts=4 et
 endif
-autocmd InsertLeave * set nopaste
+
+aug MyAutoCmd
+  autocmd InsertLeave * set nopaste
+aug END
 "}}}
 
 "----------------------------------------
@@ -608,7 +633,9 @@ function! RSpecSyntax()
   syn keyword rubyRailsTestMethod violated pending expect double mock mock_model stub_model
   syn match rubyRailsTestMethod '\.\@<!\<stub\>!\@!'
 endfunction
-autocmd BufReadPost *_spec.rb call RSpecSyntax()
+aug MyAutoCmd
+  autocmd BufReadPost *_spec.rb call RSpecSyntax()
+aug END
 
 "****************************************
 " tmux
@@ -622,25 +649,27 @@ autocmd BufReadPost *_spec.rb call RSpecSyntax()
 
 "----------------------------------------
 " ファイルタイプ"{{{
-au BufNewFile,BufRead *Helper.js,*Spec.js  setl filetype=jasmine.javascript
-au BufNewFile,BufRead *.coffee   setl filetype=coffee
-au BufNewFile,BufRead *Helper.coffee,*Spec.coffee  setl filetype=jasmine.coffee
-au BufNewFile,BufRead *.snip  setl filetype=snippet
-au BufNewFile,BufRead *.less setf less
-au BufNewFile,BufRead *.dict setf dict
-au BufNewFile,BufRead Gemfile set filetype=Gemfile
-au BufNewFile,BufRead .gitignore setl ft=conf
-au BufNewFile,BufRead *.css set ft=css syntax=css3
-au BufNewFile,BufRead *.json set filetype=json
-au BufNewFile,BufRead *.go set filetype=go
-au BufNewFile,BufRead *.mkd,*.markdown,*.md,*.mdown,*.mkdn   setlocal filetype=markdown autoindent formatoptions=tcroqn2 comments=n:>
-au BufNewFile,BufRead .tmux.conf*,tmux.conf* set filetype=tmux
-au BufNewFile,BufRead .htaccess,httpd.conf set filetype=apache
-au BufNewFile,BufRead *.pcap set filetype=pcap
-if expand("%:p")  =~ 'conf.d'
-  au BufNewFile,BufRead *.conf set filetype=apache
-endif
-au FileType php.wordpress au! ProgramFiles
+aug MyAutoCmd
+  au BufNewFile,BufRead *Helper.js,*Spec.js  setl filetype=jasmine.javascript
+  au BufNewFile,BufRead *.coffee   setl filetype=coffee
+  au BufNewFile,BufRead *Helper.coffee,*Spec.coffee  setl filetype=jasmine.coffee
+  au BufNewFile,BufRead *.snip  setl filetype=snippet
+  au BufNewFile,BufRead *.less setf less
+  au BufNewFile,BufRead *.dict setf dict
+  au BufNewFile,BufRead Gemfile set filetype=Gemfile
+  au BufNewFile,BufRead .gitignore setl ft=conf
+  au BufNewFile,BufRead *.css set ft=css syntax=css3
+  au BufNewFile,BufRead *.json set filetype=json
+  au BufNewFile,BufRead *.go set filetype=go
+  au BufNewFile,BufRead *.mkd,*.markdown,*.md,*.mdown,*.mkdn   setlocal filetype=markdown autoindent formatoptions=tcroqn2 comments=n:>
+  au BufNewFile,BufRead .tmux.conf*,tmux.conf* set filetype=tmux
+  au BufNewFile,BufRead .htaccess,httpd.conf set filetype=apache
+  au BufNewFile,BufRead *.pcap set filetype=pcap
+  if expand("%:p")  =~ 'conf.d'
+    au BufNewFile,BufRead *.conf set filetype=apache
+  endif
+  au FileType php.wordpress au! ProgramFiles
+aug END
 
 " Wordpress の設定"{{{
 function! s:WordpressSetting()
@@ -648,7 +677,10 @@ function! s:WordpressSetting()
     setl ft=php.wordpress noexpandtab nolist syntax=wordpress
   endif
 endfunction
-au FileType php call s:WordpressSetting()
+
+aug MyAutoCmd
+  au FileType php call s:WordpressSetting()
+aug END
 "}}}
 
 "}}}
@@ -672,8 +704,8 @@ if has('vim_starting')
   call neobundle#rc(s:bundle_dir)
 endif
 augroup neobundle
-  autocmd!
-  autocmd Syntax  vim syntax keyword vimCommand NeoBundle NeoBundleLazy NeoBundleSource
+  au!
+  au Syntax vim syntax keyword vimCommand NeoBundle NeoBundleLazy NeoBundleSource
 augroup END
 "}}}
 
@@ -711,14 +743,14 @@ NeoBundle 'Shougo/vimproc', {
       \ }
 " NeoBundle 'vim-jp/vital.vim'
 " NeoBundle 'yuroyoro/vim-autoclose'                          " 自動閉じタグ
-NeoBundle 'Lokaltog/vim-powerline'    " StatusLineの拡張
 NeoBundle 'edsono/vim-matchit'        " %の拡張
 NeoBundle 'h1mesuke/vim-alignta'      " 整形
 NeoBundle 'kana/vim-arpeggio'         " 同時押しキーマップを使う
 NeoBundle 'rhysd/accelerated-jk'      " jkの移動を高速化
 NeoBundle 'taichouchou2/alpaca'       " 個人的なカラーやフォントなど
 NeoBundle 'taichouchou2/surround.vim' " text-objの拡張
-NeoBundle 'tpope/vim-fugitive'        " gitを表示
+" NeoBundle 'Lokaltog/vim-powerline'    " StatusLineの拡張
+" NeoBundle 'tpope/vim-fugitive'        " gitを表示
 "}}}
 
 "----------------------------------------
@@ -771,7 +803,7 @@ NeoBundle 'kana/vim-operator-user'
 NeoBundle 'kana/vim-textobj-indent.git'    " i I インデントをtext-objectに
 NeoBundle 'kana/vim-textobj-user'          " textobject拡張の元
 NeoBundle 'operator-camelize' "operator-camelize : camel-caseへの変換
-NeoBundle 'thinca/vim-textobj-plugins.git' " vim-textobj-plugins : いろんなものをtext-objectにする
+" NeoBundle 'thinca/vim-textobj-plugins.git' " vim-textobj-plugins : いろんなものをtext-objectにする
 
 " NeoBundle 'tyru/operator-html-escape.vim'
 "}}}
@@ -847,6 +879,12 @@ NeoBundle 'taichouchou2/vim-javascript'
 " markdownでの入力をリアルタイムでチェック
 " NeoBundle 'mattn/mkdpreview-vim'
 NeoBundleLazy 'tpope/vim-markdown'
+aug MyAutoCmd
+  au FileType css call BundleLoadDepends('vim-css3-syntax')
+  au FileType html,php,erb call BundleLoadDepends('html5.vim')
+  au FileType haml call BundleLoadDepends('vim-haml')
+  au FileType js,coffee call BundleLoadDepends('vim-coffee-script jasmine.vim vim-javascript')
+aug END
 
 " sassのコンパイル
 " NeoBundle 'AtsushiM/sass-compile.vim'
@@ -862,6 +900,7 @@ NeoBundleLazy 'tpope/vim-markdown'
 " ----------------------------------------
 NeoBundleLazy 'Shougo/vinarise'
 NeoBundleLazy 's-yukikaze/vinarise-plugin-peanalysis'
+command! Vinaris call BundleWithCmd('vinarise vinarise-plugin-peanalysis', 'Vinarise')
 
 " objective-c
 " ----------------------------------------
@@ -880,7 +919,9 @@ NeoBundleLazy 'taichouchou2/unite-rails_best_practices',
 NeoBundleLazy 'ujihisa/unite-rake'
 NeoBundleLazy 'taichouchou2/alpaca_complete'
 let s:bundle_rails = 'unite-rails_best_practices unite-rake alpaca_complete'
-au User Rails call BundleLoadDepends(s:bundle_rails)
+aug MyAutoCmd
+  au User Rails call BundleLoadDepends(s:bundle_rails)
+aug END
 
 NeoBundleLazy 'ruby-matchit'
 NeoBundleLazy 'skalnik/vim-vroom'
@@ -894,6 +935,10 @@ NeoBundleLazy 'Shougo/neocomplcache-rsense'
 NeoBundleLazy 'rhysd/unite-ruby-require.vim'
 NeoBundleLazy 'rhysd/neco-ruby-keyword-args'
 NeoBundleLazy 'rhysd/vim-textobj-ruby'
+let s:bundle_ruby = 'ruby-matchit vim-vroom vim-rspec vim-ref-ri neco-ruby vim-ruby unite-reek neocomplcache-rsense unite-ruby-require.vim neco-ruby-keyword-args vim-textobj-ruby'
+aug MyAutoCmd
+  au FileType ruby call BundleLoadDepends(s:bundle_ruby)
+aug END
 
 " python
 " ----------------------------------------
@@ -906,6 +951,10 @@ NeoBundleLazy 'davidhalter/jedi-vim', {
       \    },
       \ }
 NeoBundleLazy 'kevinw/pyflakes-vim'
+let s:bundle_python = 'vim-python jedi-vim pyflakes-vim'
+aug MyAutoCmd
+  au FileType python call BundleLoadDepends(s:bundle_python)
+aug END
 
 " scala
 " ----------------------------------------
@@ -917,6 +966,9 @@ NeoBundleLazy 'kevinw/pyflakes-vim'
 " sh
 " ----------------------------------------
 NeoBundleLazy 'sh.vim'
+aug MyAutoCmd
+  au FileType sh call BundleLoadDepends('sh.vim')
+aug END
 "}}}
 
 " 他のアプリを呼び出すetc "{{{
@@ -1054,7 +1106,9 @@ function! OpenGrepQF()
   "Enterで開ける
   nmap <CR> :call OpenInQF()<CR>
 endfunction
-autocmd Filetype qf call OpenGrepQF()
+aug MyAutoCmd
+  autocmd Filetype qf call OpenGrepQF()
+aug END
 "}}}
 
 "------------------------------------
@@ -1181,7 +1235,10 @@ function! s:unite_my_settings()"{{{
   " hi CursorLine                    guibg=#3E3D32
   " hi CursorColumn                  guibg=#3E3D32
 endfunction
-autocmd FileType unite call s:unite_my_settings()
+
+aug MyAutoCmd
+  au FileType unite call s:unite_my_settings()
+aug END
 "}}}
 
 function! UniteSetting()"{{{
@@ -1198,7 +1255,9 @@ function! UniteSetting()"{{{
   " inoremap <silent><buffer><expr><C-E> unite#do_action('split')
   nnoremap <silent> <buffer> <ESC><ESC> :q<CR>
 endfunction
-au FileType unite call UniteSetting()
+aug MyAutoCmd
+  au FileType unite call UniteSetting()
+aug END
 "}}}
 
 "}}}
@@ -1225,10 +1284,13 @@ let g:unite_source_grep_recursive_opt = "-R"
 " Unite-tag.vim
 "------------------------------------
 "{{{
-autocmd BufEnter *
-      \   if empty(&buftype)
-      \|     noremap <silent> [unite]<C-K> :<C-u>UniteWithCursorWord -immediately tag<CR>
-      \|  endif
+aug MyAutoCmd
+  au BufEnter *
+        \   if empty(&buftype)
+        \|     noremap <silent> [unite]<C-K> :<C-u>UniteWithCursorWord -immediately tag<CR>
+        \|  endif
+aug END
+
 "}}}
 
 "------------------------------------
@@ -1253,7 +1315,9 @@ function! UniteRailsSetting()
   nmap <buffer><C-H>ds          :<C-U>Unite rails/destroy<CR>
   nmap <buffer><C-H>h           :<C-U>Unite rails/heroku<CR>
 endfunction
-au User Rails call UniteRailsSetting()
+aug MyAutoCmd
+  au User Rails call UniteRailsSetting()
+aug END
 "}}}
 
 "------------------------------------
@@ -1262,9 +1326,9 @@ au User Rails call UniteRailsSetting()
 "{{{
 " 起動コマンド
 " default <leader><leader>
-nnoremap <Leader><leader> :VimFilerBufferDir<CR>
+nmap <Leader><leader> :VimFilerBufferDir<CR>
 " nnoremap <C-H><C-F> :VimFilerExplorer<CR>
-nnoremap <C-H><C-F> :call VimFilerExplorerGit()<CR>
+nmap <C-H><C-F> :call VimFilerExplorerGit()<CR>
 
 " lean more [ utf8 glyph ]( http://sheet.shiar.nl/unicode )
 let g:vimfiler_safe_mode_by_default = 0
@@ -1286,7 +1350,7 @@ let g:vimfiler_marked_file_icon = "✓"
 "VimFilerKeyMapping{{{
 aug VimFilerKeyMapping
   au!
-  autocmd FileType vimfiler call s:vimfiler_local()
+  au FileType vimfiler call s:vimfiler_local()
 
   function! s:vimfiler_local()
     if has('unix')
@@ -1330,10 +1394,11 @@ function! VimFilerExplorerGit()"{{{
 
   let s:vimfiler_enable = 1
 
-  autocmd BufWinLeave <buffer> let s:vimfiler_enable = 0
-
-  " vimfilerが最後のbufferならばvimを終了
-  autocmd BufEnter <buffer> if (winnr('$') == 1 && &filetype ==# 'vimfiler' && s:vimfiler_enable == 1) | q | endif
+  aug MyAutoCmd
+    au BufWinLeave <buffer> let s:vimfiler_enable = 0
+    " vimfilerが最後のbufferならばvimを終了
+    au BufEnter <buffer> if (winnr('$') == 1 && &filetype ==# 'vimfiler' && s:vimfiler_enable == 1) | q | endif
+  aug END
 
   exe cmd
 endfunction"}}}
@@ -1412,12 +1477,18 @@ function! RSpecQuickrun()
   setl ft=ruby.rspec
   nnoremap <expr><silent><buffer><Leader>lr "<Esc>:QuickRun ruby.rspec -cmdopt \"-l" .  line('.') . "\"<CR>"
 endfunction
-au BufReadPost *_spec.rb call RSpecQuickrun()
+aug MyAutoCmd
+  au BufReadPost *_spec.rb call RSpecQuickrun()
+aug END
 
 function! s:quickrun_auto_close()
-  autocmd WinEnter,BufRead <buffer> if (winnr('$') == 1) | q | endif
+  aug MyAutoCmd
+    au WinEnter,BufRead <buffer> if (winnr('$') == 1) | q | endif
+  aug END
 endfunction
-autocmd FileType quickrun call s:quickrun_auto_close()
+aug MyAutoCmd
+  au FileType quickrun call s:quickrun_auto_close()
+aug END
 
 "javascriptの実行をnode.jsで
 let $JS_CMD='node'
@@ -1529,8 +1600,11 @@ let g:ref_ri_cmd                  = expand('~/.rbenv/versions/1.9.3-p125/bin/ri'
 
 nmap <C-K> :<C-U>Ref alc <Space><C-R><C-W><CR>
 vmap <C-K> :<C-U>Ref alc <Space><C-R><C-W><CR>
-autocmd FileType ruby,eruby,ruby.rspec nmap <silent><buffer>KK :<C-u>Unite -no-start-insert ref/ri -input=<C-R><C-W><CR>
-autocmd FileType ruby,eruby,ruby.rspec nmap <silent><buffer>K :<C-u>Unite -no-start-insert ref/refe -input=<C-R><C-W><CR>
+
+aug MyAutoCmd
+  au FileType ruby,eruby,ruby.rspec nmap <silent><buffer>KK :<C-u>Unite -no-start-insert ref/ri -input=<C-R><C-W><CR>
+  au FileType ruby,eruby,ruby.rspec nmap <silent><buffer>K :<C-u>Unite -no-start-insert ref/refe -input=<C-R><C-W><CR>
+aug END
 
 " refビューワー内の設定
 " vim-ref内の移動を楽に
@@ -1542,7 +1616,9 @@ function! s:initialize_ref_viewer()
   nmap <buffer>q :q!<CR>
   setlocal nonumber
 endfunction
-autocmd FileType ref call s:initialize_ref_viewer()
+aug MyAutoCmd
+  autocmd FileType ref call s:initialize_ref_viewer()
+aug END
 
 "alc
 nmap ra :<C-U>Ref alc<Space>
@@ -1585,7 +1661,10 @@ nmap <silent>gM :<C-U>Gcommit --amend<CR>
 
 nmap <silent>gb :<C-U>Gblame<CR>
 nmap <silent>gr :<C-U>Ggrep<Space>
-au FileType fugitiveblame vertical res 25
+
+aug MyAutoCmd
+  au FileType fugitiveblame vertical res 25
+aug END
 "}}}
 
 "----------------------------------------
@@ -1596,7 +1675,10 @@ au FileType fugitiveblame vertical res 25
 let g:git_no_default_mappings = 1
 let g:git_use_vimproc = 1
 let g:git_command_edit = 'rightbelow vnew'
-au FileType git-diff nmap<buffer>q :q<CR>
+
+aug MyAutoCmd
+  au FileType git-diff nmap<buffer>q :q<CR>
+aug END
 " nmap <silent><Space>gb :GitBlame<CR>
 " nmap <silent><Space>gB :Gitblanch
 " nmap <silent><Space>gp :GitPush<CR>
@@ -1723,179 +1805,6 @@ let b:match_ignorecase = 1
 set guifontwide=Ricty:h10
 let g:Powerline_colorscheme='molokai'
 let g:Powerline_symbols = 'fancy'
-
-"{{{
-call Pl#Hi#Allocate({
-    \ 'black'          : 16,
-    \ 'white'          : 231,
-    \
-    \ 'darkestgreen'   : 22,
-    \ 'darkgreen'      : 28,
-    \ 'mediumgreen'    : 70,
-    \ 'brightgreen'    : 148,
-    \
-    \ 'darkestcyan'    : 23,
-    \ 'mediumcyan'     : 117,
-    \
-    \ 'darkestblue'    : 24,
-    \ 'darkblue'       : 31,
-    \
-    \ 'darkestred'     : 52,
-    \ 'darkred'        : 88,
-    \ 'mediumred'      : 124,
-    \ 'brightred'      : 160,
-    \ 'brightestred'   : 196,
-    \
-    \ 'darkestpurple'  : 55,
-    \ 'mediumpurple'   : 98,
-    \ 'brightpurple'   : 189,
-    \
-    \ 'brightorange'   : 208,
-    \ 'brightestorange': 214,
-    \
-    \ 'gray0'          : 233,
-    \ 'gray1'          : 235,
-    \ 'gray2'          : 236,
-    \ 'gray3'          : 239,
-    \ 'gray4'          : 240,
-    \ 'gray5'          : 241,
-    \ 'gray6'          : 244,
-    \ 'gray7'          : 245,
-    \ 'gray8'          : 247,
-    \ 'gray9'          : 250,
-    \ 'gray10'         : 252,
-\ })
-"}}}
-
-" {{{
-let g:Powerline#Colorschemes#molokai#colorscheme = Pl#Colorscheme#Init([
-      \ Pl#Hi#Segments(['SPLIT'], {
-      \ 'n': ['white', 'gray2'],
-      \ 'N': ['white', 'gray0'],
-      \ 'i': ['white', 'darkestblue'],
-      \ }),
-      \
-      \ Pl#Hi#Segments(['mode_indicator'], {
-      \ 'n': ['darkestgreen', 'brightgreen', ['bold']],
-      \ 'i': ['darkestcyan', 'white', ['bold']],
-      \ 'v': ['darkred', 'brightorange', ['bold']],
-      \ 'r': ['white', 'brightred', ['bold']],
-      \ 's': ['white', 'gray5', ['bold']],
-      \ }),
-      \
-      \ Pl#Hi#Segments(['branch', 'scrollpercent', 'raw', 'filesize'], {
-      \ 'n': ['gray9', 'gray4'],
-      \ 'N': ['gray4', 'gray1'],
-      \ 'i': ['mediumcyan', 'darkblue'],
-      \ }),
-      \
-      \ Pl#Hi#Segments(['fileinfo', 'filename'], {
-      \ 'n': ['white', 'gray4', ['bold']],
-      \ 'N': ['gray7', 'gray0', ['bold']],
-      \ 'i': ['white', 'darkblue', ['bold']],
-      \ }),
-      \
-      \ Pl#Hi#Segments(['fileinfo.filepath'], {
-      \ 'n': ['gray10'],
-      \ 'N': ['gray5'],
-      \ 'i': ['mediumcyan'],
-      \ }),
-      \
-      \ Pl#Hi#Segments(['static_str'], {
-      \ 'n': ['white', 'gray4'],
-      \ 'N': ['gray7', 'gray1'],
-      \ 'i': ['white', 'darkblue'],
-      \ }),
-      \
-      \ Pl#Hi#Segments(['fileinfo.flags'], {
-      \ 'n': ['brightestred', ['bold']],
-      \ 'N': ['darkred'],
-      \ 'i': ['brightestred', ['bold']],
-      \ }),
-      \
-      \ Pl#Hi#Segments(['currenttag', 'fullcurrenttag', 'fileformat', 'fileencoding', 'pwd', 'filetype', 'rvm:string', 'rvm:statusline', 'virtualenv:statusline', 'charcode', 'currhigroup'], {
-      \ 'n': ['gray8', 'gray2'],
-      \ 'i': ['mediumcyan', 'darkestblue'],
-      \ }),
-      \
-      \ Pl#Hi#Segments(['lineinfo'], {
-      \ 'n': ['gray2', 'gray10', ['bold']],
-      \ 'N': ['gray7', 'gray1', ['bold']],
-      \ 'i': ['darkestcyan', 'mediumcyan', ['bold']],
-      \ }),
-      \
-      \ Pl#Hi#Segments(['errors'], {
-      \ 'n': ['brightestorange', 'gray2', ['bold']],
-      \ 'i': ['brightestorange', 'darkestblue', ['bold']],
-      \ }),
-      \
-      \ Pl#Hi#Segments(['lineinfo.line.tot'], {
-      \ 'n': ['gray6'],
-      \ 'N': ['gray5'],
-      \ 'i': ['darkestcyan'],
-      \ }),
-      \
-      \ Pl#Hi#Segments(['paste_indicator', 'ws_marker'], {
-      \ 'n': ['white', 'brightred', ['bold']],
-      \ }),
-      \
-      \ Pl#Hi#Segments(['gundo:static_str.name', 'command_t:static_str.name'], {
-      \ 'n': ['white', 'mediumred', ['bold']],
-      \ 'N': ['brightred', 'darkestred', ['bold']],
-      \ }),
-      \
-      \ Pl#Hi#Segments(['gundo:static_str.buffer', 'command_t:raw.line'], {
-      \ 'n': ['white', 'darkred'],
-      \ 'N': ['brightred', 'darkestred'],
-      \ }),
-      \
-      \ Pl#Hi#Segments(['gundo:SPLIT', 'command_t:SPLIT'], {
-      \ 'n': ['white', 'darkred'],
-      \ 'N': ['white', 'darkestred'],
-      \ }),
-      \
-      \ Pl#Hi#Segments(['lustyexplorer:static_str.name', 'minibufexplorer:static_str.name', 'nerdtree:raw.name', 'tagbar:static_str.name'], {
-      \ 'n': ['white', 'mediumgreen', ['bold']],
-      \ 'N': ['mediumgreen', 'darkestgreen', ['bold']],
-      \ }),
-      \
-      \ Pl#Hi#Segments(['lustyexplorer:static_str.buffer', 'tagbar:static_str.buffer'], {
-      \ 'n': ['brightgreen', 'darkgreen'],
-      \ 'N': ['mediumgreen', 'darkestgreen'],
-      \ }),
-      \
-      \ Pl#Hi#Segments(['lustyexplorer:SPLIT', 'minibufexplorer:SPLIT', 'nerdtree:SPLIT', 'tagbar:SPLIT'], {
-      \ 'n': ['white', 'darkgreen'],
-      \ 'N': ['white', 'darkestgreen'],
-      \ }),
-      \
-      \ Pl#Hi#Segments(['ctrlp:focus', 'ctrlp:byfname'], {
-      \ 'n': ['brightpurple', 'darkestpurple'],
-      \ }),
-      \
-      \ Pl#Hi#Segments(['ctrlp:prev', 'ctrlp:next', 'ctrlp:pwd'], {
-      \ 'n': ['white', 'mediumpurple'],
-      \ }),
-      \
-      \ Pl#Hi#Segments(['ctrlp:item'], {
-      \ 'n': ['darkestpurple', 'white', ['bold']],
-      \ }),
-      \
-      \ Pl#Hi#Segments(['ctrlp:marked'], {
-      \ 'n': ['brightestred', 'darkestpurple', ['bold']],
-      \ }),
-      \
-      \ Pl#Hi#Segments(['ctrlp:count'], {
-      \ 'n': ['darkestpurple', 'white'],
-      \ }),
-      \
-      \ Pl#Hi#Segments(['ctrlp:SPLIT'], {
-      \ 'n': ['white', 'darkestpurple'],
-      \ }),
-\ ])
-" }}}
-
-"let g:Powerline_symbols = 'compatible'
 "}}}
 
 "------------------------------------
@@ -2019,7 +1928,10 @@ function! s:vimshell_settings() "{{{
 
 
 endfunction "}}}
-autocmd FileType vimshell call s:vimshell_settings()
+
+aug MyAutoCmd
+  au FileType vimshell call s:vimshell_settings()
+aug END
 
 nmap <Leader>v :VimShell<CR>
 "}}}
@@ -2052,9 +1964,11 @@ map <Space>mg  :MemoGrep<CR>
 "{{{
 " 保存するたびに、コンパイル
 function! AutoCoffeeCompile()
-  autocmd BufWritePost *.coffee silent CoffeeMake! -cb | cwindow | redraw!
+  aug MyAutoCmd
+    autocmd BufWritePost *.coffee silent CoffeeMake! -cb | cwindow | redraw!
+  aug END
 endfunction
-nnoremap <Leader>w :CoffeeCompile watch vert<CR>
+nmap <Leader>w :CoffeeCompile watch vert<CR>
 "}}}
 
 "------------------------------------
@@ -2144,11 +2058,12 @@ function! SetRubyMapping()
 endfunction
 "}}}
 
-au FileType eruby call SetErubyMapping2()
-au FileType ruby,ruby.rspec call SetRubyMapping()
-au FileType php nmap <buffer><C-_>c :TCommentAs php_surround<CR><Right><Right><Right>
-au FileType php vmap <buffer><C-_>c :TCommentAs php_surround<CR><Right><Right><Right>
-
+aug MyAutoCmd
+  au FileType eruby call SetErubyMapping2()
+  au FileType ruby,ruby.rspec call SetRubyMapping()
+  au FileType php nmap <buffer><C-_>c :TCommentAs php_surround<CR><Right><Right><Right>
+  au FileType php vmap <buffer><C-_>c :TCommentAs php_surround<CR><Right><Right><Right>
+aug END
 "}}}
 
 "------------------------------------
@@ -2200,7 +2115,9 @@ function! s:vimRuby()
   let g:rubycomplete_classes_in_global = 0
   let g:rubycomplete_rails = 0
 endfunction
-au FileType ruby,eruby,ruby.rspec call s:vimRuby()
+aug MyAutoCmd
+  au FileType ruby,eruby,ruby.rspec call s:vimRuby()
+aug END
 "}}}
 
 "------------------------------------
@@ -2237,7 +2154,9 @@ function! SetUpRailsSetting()
   " nmap <buffer><Space>s :Rgen scaffold<Space>
   nmap <buffer><Space>p :Rpreview<CR>
 endfunction
-autocmd User Rails call SetUpRailsSetting()
+aug MyAutoCmd
+  au User Rails call SetUpRailsSetting()
+aug END
 "}}}
 
 "------------------------------------
@@ -2255,7 +2174,9 @@ function! SetUpRubySetting()
   nmap <buffer>rw :RSenseWhereIs<CR>
   nmap <buffer>rt :RSenseTypeHelp<CR>
 endfunction
-autocmd FileType ruby,eruby,ruby.rspec call SetUpRubySetting()
+aug MyAutoCmd
+  au FileType ruby,eruby,ruby.rspec call SetUpRubySetting()
+aug END
 "}}}
 
 "------------------------------------
@@ -2279,8 +2200,8 @@ nnoremap <C-H>gl :Gist -l<CR>
 " twitvim
 "------------------------------------
 "{{{
-nnoremap <silent><C-H><C-N>  :call BundleCmdDepends('TweetVim bitly.vim twibill.vim', 'Unite tweetvim')<CR>
-nnoremap <silent><C-H><C-M>  :call BundleCmdDepends('TweetVim bitly.vim twibill.vim', 'TweetVimSay')
+nnoremap <silent><C-H><C-N>  :call BundleWithCmd('TweetVim bitly.vim twibill.vim', 'Unite tweetvim')<CR>
+nnoremap <silent><C-H><C-M>  :call BundleWithCmd('TweetVim bitly.vim twibill.vim', 'TweetVimSay')<CR>
 
 let g:tweetvim_display_source = 1
 let g:tweetvim_display_time = 1
@@ -2322,16 +2243,6 @@ let g:tweetvim_open_buffer_cmd = 'tabnew'
 let g:sh_indent_case_labels=1
 
 "------------------------------------
-" neosnippet
-"------------------------------------
-"{{{
-au FileType snippet nmap <buffer><Space>e :e #<CR>
-
-" nmap <C-H><C-H><C-R> :<C-U>CompassCreate<CR>
-" nmap <C-H><C-H><C-B> :<C-U>BourbonInstall<CR>
-"}}}
-
-"------------------------------------
 " sass
 "------------------------------------
 ""{{{
@@ -2365,7 +2276,9 @@ function! JasmineSetting()
   command! JasmineRedGreen :call jasmine#redgreen()
   command! JasmineMake :call jasmine#make()
 endfunction
-au BufRead,BufNewFile,BufReadPre *Helper.coffee,*Spec.coffee  call JasmineSetting()
+aug MyAutoCmd
+  au BufRead,BufNewFile,BufReadPre *Helper.coffee,*Spec.coffee  call JasmineSetting()
+aug END
 "}}}
 
 "------------------------------------
@@ -2520,12 +2433,17 @@ nmap <C-H><C-E> :SrcExplToggle<CR>
 function! NerdSetting()
   nmap <buffer>l o
   nmap <buffer>h x
+
+  aug MyAutoCmd
+    "画面が残り一つになったら自動で閉じる
+    au bufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+  aug END
   " autocmd WinLeave * NERDTreeClose " nerdtreeから離れたら閉じる
 
-  "画面が残り一つになったら自動で閉じる
-  autocmd bufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 endfunction
-au FileType nerdtree call NerdSetting()
+aug MyAutoCmd
+  au FileType nerdtree call NerdSetting()
+aug END
 
 "}}}
 
@@ -2614,7 +2532,10 @@ function! W3mSetting()
   nmap <buffer>#           #<Plug>(w3m-search-end)
   nmap <buffer>a           <Plug>(w3m-address-bar)
 endfunction
-au FileType w3m call W3mSetting()
+
+aug MyAutoCmd
+  au FileType w3m call W3mSetting()
+aug END
 "}}}
 
 "------------------------------------
@@ -2658,7 +2579,9 @@ let g:indent_guides_space_guides = 1
 hi IndentGuidesOdd  ctermbg=235
 " hi IndentGuidesEven ctermbg=237
 hi IndentGuidesEven ctermbg=233
-au FileType html,php,haml,scss,sass,less,coffee,ruby,javascript,python IndentGuidesEnable
+aug MyAutoCmd
+  au FileType html,php,haml,scss,sass,less,coffee,ruby,javascript,python IndentGuidesEnable
+aug END
 nmap <silent><Leader>ig <Plug>IndentGuidesToggle
 "}}}
 
@@ -2754,9 +2677,11 @@ let g:jedi#related_names_command = "<leader>n"
 let g:jedi#rename_command = "<leader>R"
 let g:jedi#use_tabs_not_buffers = 0
 let g:vinarise_objdump_command='gobjdump' " homebrew
-autocmd FileType python let b:did_ftplugin = 1
-autocmd MyAutoCmd FileType python*
-      \ NeoBundleSource jedi-vim | let b:did_ftplugin = 1
+aug MyAutoCmd
+  au FileType python let b:did_ftplugin = 1
+  au MyAutoCmd FileType python*
+        \ NeoBundleSource jedi-vim | let b:did_ftplugin = 1
+aug END
 "}}}
 
 "------------------------------------
@@ -2809,15 +2734,18 @@ imap <C-J> <Plug>(eskk:toggle)
 
 "----------------------------------------
 " 辞書:dict "{{{
-au FileType ruby.rspec           setl dict+=~/.vim/dict/rspec.dict
-au FileType jasmine.coffee,jasmine.js setl dict+=~/.vim/dict/js.jasmine.dict
-au FileType coffee,javascript    setl dict+=~/.vim/dict/jquery.dict
-au FileType coffee               setl dict+=~/.vim/dict/coffee.dict,~/.vim/dict/javascript.dict
-au FileType html,php,eruby       setl dict+=~/.vim/dict/html.dict
+augroup DictSetting
+  au!
+  au FileType ruby.rspec           setl dict+=~/.vim/dict/rspec.dict
+  au FileType jasmine.coffee,jasmine.js setl dict+=~/.vim/dict/js.jasmine.dict
+  au FileType coffee,javascript    setl dict+=~/.vim/dict/jquery.dict
+  au FileType coffee               setl dict+=~/.vim/dict/coffee.dict,~/.vim/dict/javascript.dict
+  au FileType html,php,eruby       setl dict+=~/.vim/dict/html.dict
 
-au FileType * nmap <buffer><expr><Space>d ':<C-U>e ~/.vim/dict/' . &filetype . '.dict<CR>'
-au FileType dict nmap <buffer><Space>d :<C-U>e #<CR>
-au FileType dict nmap <buffer><Space>e :e #<CR>
+  au FileType * nmap <buffer><expr><Space>d ':<C-U>e ~/.vim/dict/' . &filetype . '.dict<CR>'
+  au FileType dict nmap <buffer><Space>d :<C-U>e #<CR>
+  au FileType dict nmap <buffer><Space>e :e #<CR>
+augroup END
 
 " 読み込む辞書をファイルによって変更
 function! s:railsSetting()
@@ -2836,11 +2764,24 @@ function! s:railsSetting()
     nmap <buffer><Space>d :<C-U>e ~/.vim/dict/rails.dict
   endif
 endfunction
-au User BufEnterRails call s:railsSetting()
-autocmd User Rails.controller*
-autocmd User Rails.view.erb*
-autocmd User Rails/**/foo_bar.rb
-autocmd User Rails/config/environment.rb
+
+let s:loaded_rails_au = -1
+function! RailsDictionarySetting()
+  if s:loaded_rails_au | return -1 |endif
+  augroup RailsSetting
+    au!
+    au User BufEnterRails call s:railsSetting()
+    au User Rails.controller*
+    au User Rails.view.erb*
+    au User Rails/**/foo_bar.rb
+    au User Rails/config/environment.rb
+  augroup END
+  let s:loaded_rails_au = 1
+endfunction
+aug MyAutoCmd
+  au VimEnter * call RailsDictionarySetting()
+aug END
+
 
 " カスタムファイルタイプでも、自動でdictを読み込む
 " そして、編集画面までさくっと移動。
@@ -2853,7 +2794,9 @@ func! s:auto_dict_setting()
   exe  "setl dict+=~/.vim/dict/".&ft.".dict"
   nmap <buffer><expr><Space>dd ":e ~/.vim/dict/" . &ft .".dict<CR>"
 endfunc
-au FileType * call s:auto_dict_setting()
+aug MyAutoCmd
+  au FileType * call s:auto_dict_setting()
+aug END
 
 
 "}}}
@@ -2869,14 +2812,16 @@ set completeopt=menu,menuone,preview
 set infercase
 
 " FileType毎のOmni補完を設定
-au FileType css                  setl omnifunc=csscomplete#CompleteCSS
-au FileType html,markdown        setl omnifunc=htmlcomplete#CompleteTags
-au FileType javascript           setl omnifunc=javascriptcomplete#CompleteJS
-au FileType sql                  setl omnifunc=sqlcomplete#Complete
-au FileType python               setl omnifunc=pythoncomplete#Complete
-au FileType xml                  setl omnifunc=xmlcomplete#CompleteTags
-au FileType php                  setl omnifunc=phpcomplete#CompletePHP
-au FileType c                    setl omnifunc=ccomplete#Complete
+aug MyAutoCmd
+  au FileType css                  setl omnifunc=csscomplete#CompleteCSS
+  au FileType html,markdown        setl omnifunc=htmlcomplete#CompleteTags
+  au FileType javascript           setl omnifunc=javascriptcomplete#CompleteJS
+  au FileType sql                  setl omnifunc=sqlcomplete#Complete
+  au FileType python               setl omnifunc=pythoncomplete#Complete
+  au FileType xml                  setl omnifunc=xmlcomplete#CompleteTags
+  au FileType php                  setl omnifunc=phpcomplete#CompletePHP
+  au FileType c                    setl omnifunc=ccomplete#Complete
+aug END
 
 "----------------------------------------
 " neocomplcache
@@ -3007,6 +2952,9 @@ imap <silent><expr><TAB>  pumvisible() ? "\<C-N>" : "\<TAB>"
 "----------------------------------------
 " neosnippet"{{{
 let g:neosnippet#snippets_directory = g:neocomplcache_snippets_dir
+aug MyAutoCmd
+  au FileType snippet nmap <buffer><Space>e :e #<CR>
+aug END
 imap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
 smap <silent><C-F>         <Plug>(neosnippet_expand_or_jump)
 imap <silent><C-U>     <Plug>(neosnippet_start_unite_snippet)
@@ -3035,9 +2983,11 @@ function! SetTags()
     execute 'set tags+='.tags
   endif
 endfunction
-au BufReadPost * call SetTags()
+aug MyAutoCmd
+  au BufReadPost * call SetTags()
+  au FileType ruby,eruby,haml setl tags+=~/gtags
+aug END
 
-au FileType ruby,eruby,haml setl tags+=~/gtags
 
 "tags_jumpを使い易くする
 nnoremap tt  <C-]>
@@ -3055,7 +3005,9 @@ nnoremap tk  :<C-u>tags<CR>
 "----------------------------------------
 " phptohtml
 "----------------------------------------
-au Filetype php nmap <Leader>R :! phptohtml<CR>
+aug MyAutoCmd
+  au Filetype php nmap <Leader>R :! phptohtml<CR>
+aug END
 
 "----------------------------------------
 " 独自関数
@@ -3092,7 +3044,9 @@ nnoremap <silent><C-w><Space> :<C-u>SmartSplit<CR>
 if executable('pdftotext')
   command! -complete=file -nargs=1 Pdf :r !pdftotext -nopgbrk -layout <q-args> -
 endif
-au BufRead *.pdf call Pdf
+aug MyAutoCmd
+  au BufRead *.pdf call Pdf
+aug END
 "}}}
 
 " ----------------------------------------
@@ -3118,7 +3072,9 @@ command!
 nmap <Space>y :<C-U>OpenYard <C-R><C-W><CR>
 
 " 指定したgemを開く
-au User Rails nmap <buffer><C-J><C-B> :!bundle open<Space>
+aug RailsSetting
+  au User Rails nmap <buffer><C-J><C-B> :!bundle open<Space>
+aug END
 "}}}
 
 " ----------------------------------------
@@ -3157,13 +3113,17 @@ endfunction
 
 function! HamlSetting()
   nmap <buffer><Leader>R :<C-U>call ConvertHamlToHtml("haml")<CR>
-  au BufWritePost *.haml silent call ConvertHamlToHtml("haml")
+  aug MyAutoCmd
+    au BufWritePost *.haml silent call ConvertHamlToHtml("haml")
+  aug END
 endfunction
 " au Filetype haml call HamlSetting()
 
 function! ErubySetting()
   nmap <buffer><Leader>R :<C-U>call ConvertHamlToHtml("eruby")<CR>
-  au BufWritePost *.erb silent call ConvertHamlToHtml("eruby")
+  aug MyAutoCmd
+    au BufWritePost *.erb silent call ConvertHamlToHtml("eruby")
+  aug END
 endfunction
 " au Filetype eruby call ErubySetting()
 "}}}
@@ -3177,7 +3137,9 @@ function! ScssAsyncCompile()
   let cmd = 'compass compile '. expand("%:p:h")
   call vimproc#system_bg('apachectl stop')
 endfunction
-au BufWritePost *.scss call ScssAsyncCompile()
+aug MyAutoCmd
+  au BufWritePost *.scss call ScssAsyncCompile()
+aug END
 
 
 " Mac の辞書.appで開く {{{
@@ -3290,7 +3252,9 @@ else
       endif
 
       " For prevent bug.
-      autocmd MyAutoCmd VimLeave * set term=screen
+      aug MyAutoCmd
+        au MyAutoCmd VimLeave * set term=screen
+      aug END
       "}}}
     endif
 
@@ -3311,8 +3275,10 @@ else
       " Use guicolorscheme.vim
       NeoBundleSource guicolorscheme.vim
 
-      autocmd MyAutoCmd VimEnter,BufAdd *
-            \ if !exists('g:colors_name') | GuiColorScheme candy
+      aug MyAutoCmd
+        autocmd MyAutoCmd VimEnter,BufAdd *
+              \ if !exists('g:colors_name') | GuiColorScheme candy
+      aug END
 
       " Disable error messages.
       let g:CSApprox_verbose_level = 0
