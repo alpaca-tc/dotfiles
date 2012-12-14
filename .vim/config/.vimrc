@@ -873,19 +873,23 @@ NeoBundleLazy 's-yukikaze/vinarise-plugin-peanalysis'
 " NeoBundle 'taichouchou2/neco-rubymf' " gem install methodfinder
 " NeoBundle 'taichouchou2/vim-rsense'
 NeoBundle 'taichouchou2/vim-endwise.git' "end endifなどを自動で挿入
+NeoBundle 'taichouchou2/vim-rails'
+
+NeoBundleLazy 'taichouchou2/unite-rails_best_practices',
+      \{ 'depends' : 'Shougo/unite.vim' }
+NeoBundleLazy 'ujihisa/unite-rake'
+NeoBundleLazy 'taichouchou2/alpaca_complete'
+let s:bundle_rails = 'unite-rails_best_practices unite-rake alpaca_complete'
+au User Rails call BundleLoadDepends(s:bundle_rails)
+
 NeoBundleLazy 'ruby-matchit'
 NeoBundleLazy 'skalnik/vim-vroom'
 NeoBundleLazy 'skwp/vim-rspec'
-NeoBundleLazy 'taichouchou2/vim-rails'
 NeoBundleLazy 'taka84u9/vim-ref-ri'
 NeoBundleLazy 'ujihisa/neco-ruby'
-NeoBundleLazy 'ujihisa/unite-rake'
 NeoBundleLazy 'vim-ruby/vim-ruby'
 NeoBundleLazy 'taichouchou2/unite-reek',
       \{  'depends' : 'Shougo/unite.vim' }
-NeoBundleLazy 'taichouchou2/unite-rails_best_practices',
-      \{ 'depends' : 'Shougo/unite.vim' }
-NeoBundleLazy 'taichouchou2/alpaca_complete'
 NeoBundleLazy 'Shougo/neocomplcache-rsense'
 NeoBundleLazy 'rhysd/unite-ruby-require.vim'
 NeoBundleLazy 'rhysd/neco-ruby-keyword-args'
@@ -2338,17 +2342,6 @@ let g:sass_compile_cdloop = 1
 let g:sass_compile_cssdir = ['css', 'stylesheet']
 let g:sass_compile_file = ['scss', 'sass']
 let g:sass_started_dirs = []
-" function! Sass_start()
-"   let current_dir = expand('%:p:h')
-"   if match(g:sass_started_dirs, '^'.current_dir.'$') == -1
-"     call add(g:sass_started_dirs, current_dir)
-"     call system('sass --watch ' . current_dir . ' &')
-"   endif
-" endfunction
-" au! BufRead *.scss,*sass call Sass_start()
-" au! Filetype scss,sass call Sass_start()
-
-" au! BufWritePost sass,scss SassCompile
 "}}}
 
 "------------------------------------
@@ -2821,6 +2814,7 @@ au FileType jasmine.coffee,jasmine.js setl dict+=~/.vim/dict/js.jasmine.dict
 au FileType coffee,javascript    setl dict+=~/.vim/dict/jquery.dict
 au FileType coffee               setl dict+=~/.vim/dict/coffee.dict,~/.vim/dict/javascript.dict
 au FileType html,php,eruby       setl dict+=~/.vim/dict/html.dict
+
 au FileType * nmap <buffer><expr><Space>d ':<C-U>e ~/.vim/dict/' . &filetype . '.dict<CR>'
 au FileType dict nmap <buffer><Space>d :<C-U>e #<CR>
 au FileType dict nmap <buffer><Space>e :e #<CR>
@@ -2843,6 +2837,10 @@ function! s:railsSetting()
   endif
 endfunction
 au User BufEnterRails call s:railsSetting()
+autocmd User Rails.controller*
+autocmd User Rails.view.erb*
+autocmd User Rails/**/foo_bar.rb
+autocmd User Rails/config/environment.rb
 
 " カスタムファイルタイプでも、自動でdictを読み込む
 " そして、編集画面までさくっと移動。
@@ -2923,7 +2921,7 @@ endif
 "}}}
 
 " For auto select.
-let g:neocomplcache_enable_auto_select = 1
+" let g:neocomplcache_enable_auto_select = 1
 let g:neocomplcache_enable_auto_delimiter = 1
 " let g:neocomplcache_disable_caching_buffer_name_pattern = '[\[*]\%(unite\)[\]*]'
 let g:neocomplcache_disable_auto_select_buffer_name_pattern = '\[Command Line\]'
@@ -2945,9 +2943,9 @@ let g:neocomplcache_force_omni_patterns.python = '[^. \t]\.\w*'
 let g:neocomplcache_keyword_patterns['default'] = '[0-9a-zA-Z:#_]\+'
 let g:neocomplcache_keyword_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 let g:neocomplcache_snippets_dir = '~/.bundle/neosnippet/autoload/neosnippet/snippets,~/.vim/snippet'
-let g:neocomplcache_omni_patterns.php = '[^. *\t]\.\w*\|\h\w*::'
+let g:neocomplcache_omni_patterns.php = '[^.*\t]\.\w*\|\h\w*::'
 let g:neocomplcache_omni_patterns.mail = '^\s*\w\+'
-let g:neocomplcache_omni_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+let g:neocomplcache_omni_patterns.c = '[^.[:digit:]*\t]\%(\.\|->\)'
 " let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
 " let g:neocomplcache_force_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
 " let g:neocomplcache_source_look_dictionary_path = ''
@@ -2992,14 +2990,6 @@ let g:neocomplcache_dictionary_filetype_lists = {
       \ 'jasmine'    : $HOME.'/.vim/dict/js.jasmine.dict',
       \ 'timobile'   : $HOME.'/.vim/dict/timobile.dict',
       \ }
-
-" function! SetUpMarkDownSetting()
-"   let g:source_look_length = 3
-"   let g:source_look_rank = 400
-" endfunction
-" let g:source_look_length = 4
-" let g:source_look_rank = 5
-" au FileType markdown,text call SetUpMarkDownSetting()
 "}}}
 
 " keymap " {{{
@@ -3027,33 +3017,27 @@ xmap <silent>o         <Plug>(neosnippet_register_oneshot_snippet)
 "}}}
 
 "----------------------------------------
-"Tags関連 cTags使う場合は有効化"{{{
+"Tags関連 cTags使う場合は有効化 "{{{
 " http://vim-users.jp/2010/06/hack154/
 
-let current_dir = expand("%:p:h")
 set tags& tags-=tags tags+=./tags;
+set tags+=./**/tags
 
 function! SetTags()
-  if has('path_extra')
-    set tags=./**/tags
-    setl tags+=./../tags
-    setl tags+=./../../tags
-    setl tags+=./../../../tags
-    setl tags+=./../../../../tags
-    setl tags+=./../../../../../tags
-    setl tags+=./../../../../../../tags
-    setl tags+=./../../../../../../../tags
+  let g:current_git_root = system('git rev-parse --show-cdup')
+  let g:current_dir = expand("%:p:h")
+  if filereadable(g:current_dir.'/tags')
+    let tags = expand(g:current_dir.'/tags')
+    execute 'set tags+='.tags
+  endif
+  if filereadable(g:current_git_root.'/tags')
+    let tags = expand(g:current_git_root.'/tags')
+    execute 'set tags+='.tags
   endif
 endfunction
 au BufReadPost * call SetTags()
 
-" rtagsは独自shコマンドrtags -Rで作成
-" if filereadable(expand('~/tags'))
-au FileType ruby,eruby setl tags+=~/gtags
-" else
-  " let res = system('ctags', '-R --langmap=Ruby:.rb --ruby-typescfFm =~/.rvm/rubies/default -f ~/rtags')
-"   au FileType ruby,eruby setl tags+=~/rtags
-" endif
+au FileType ruby,eruby,haml setl tags+=~/gtags
 
 "tags_jumpを使い易くする
 nnoremap tt  <C-]>
