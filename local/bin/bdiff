@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# diff <`od -x $1` <`od -x $2`
+# a=(od -x $1)
+# b=(od -x $2)
+a=(echo "aaa")
+b=(echo "aaa")
+diff $a $b

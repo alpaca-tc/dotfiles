@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+# coding: utf-8
+
+require 'haml'
+
+File.open(ARGV[0]) do |f|
+  puts Haml::Engine.new(f.read).render(Object.new)
+end
