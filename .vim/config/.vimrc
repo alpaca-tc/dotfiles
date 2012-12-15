@@ -2859,19 +2859,6 @@ inoremap <C-D><C-D> <C-R>=Today()<CR>
 "}}}
 
 " ----------------------------------------
-" open window
-" 画面分割を抽象的に行う
-" ----------------------------------------
-"{{{
-if executable('pdftotext')
-  command! -complete=file -nargs=1 Pdf :r !pdftotext -nopgbrk -layout <q-args> -
-endif
-aug MyAutoCmd
-  au BufRead *.pdf call Pdf
-aug END
-"}}}
-
-" ----------------------------------------
 " open yard
 " ----------------------------------------
 " カーソル下のgemのrdocを開く
@@ -2903,50 +2890,50 @@ aug END
 " haml2html
 " ----------------------------------------
 "{{{
-function! ConvertHamlToHtml(fileType)
-  " 同じディレクトリに、pathというファイルを作り
-  " `cat path` -> `../`
-  " となっていれば、その相対パスディレクトリに保存する
-
-  " 設定ファイルを読み込む
-  let dir_name = expand("%:p:h")
-  let save_path = ''
-  if filereadable(dir_name . '/path')
-    let save_path = readfile("path")[0]
-  endif
-
-  " 2html
-  let current_file = expand("%")
-  let target_file  = substitute(current_file, '.html', '', 'g')
-  let target_file  = dir_name.'/'.save_path.substitute(target_file, '.'.expand("%:e").'$', '.html', 'g')
-
-  " コマンドの分岐
-  if a:fileType == 'eruby'
-    " exec ":call vimproc#system('rm " .target_file"')"
-    let convert_cmd  = 'erb ' . current_file . ' > ' . target_file
-  elseif a:fileType == 'haml'
-    " let convert_cmd  = 'haml_with_ruby2html ' . current_file . ' > ' . target_file
-    let convert_cmd  = 'haml --format html4 ' . current_file . ' > ' . target_file
-  endif
-
-  echo "convert " . a:fileType . ' to ' . target_file
-  exec ":call vimproc#system('" . convert_cmd . "')"
-endfunction
-
-function! HamlSetting()
-  nmap <buffer><Leader>R :<C-U>call ConvertHamlToHtml("haml")<CR>
-  aug MyAutoCmd
-    au BufWritePost *.haml silent call ConvertHamlToHtml("haml")
-  aug END
-endfunction
-" au Filetype haml call HamlSetting()
-
-function! ErubySetting()
-  nmap <buffer><Leader>R :<C-U>call ConvertHamlToHtml("eruby")<CR>
-  aug MyAutoCmd
-    au BufWritePost *.erb silent call ConvertHamlToHtml("eruby")
-  aug END
-endfunction
+" function! ConvertHamlToHtml(fileType)
+"   " 同じディレクトリに、pathというファイルを作り
+"   " `cat path` -> `../`
+"   " となっていれば、その相対パスディレクトリに保存する
+"
+"   " 設定ファイルを読み込む
+"   let dir_name = expand("%:p:h")
+"   let save_path = ''
+"   if filereadable(dir_name . '/path')
+"     let save_path = readfile("path")[0]
+"   endif
+"
+"   " 2html
+"   let current_file = expand("%")
+"   let target_file  = substitute(current_file, '.html', '', 'g')
+"   let target_file  = dir_name.'/'.save_path.substitute(target_file, '.'.expand("%:e").'$', '.html', 'g')
+"
+"   " コマンドの分岐
+"   if a:fileType == 'eruby'
+"     " exec ":call vimproc#system('rm " .target_file"')"
+"     let convert_cmd  = 'erb ' . current_file . ' > ' . target_file
+"   elseif a:fileType == 'haml'
+"     " let convert_cmd  = 'haml_with_ruby2html ' . current_file . ' > ' . target_file
+"     let convert_cmd  = 'haml --format html4 ' . current_file . ' > ' . target_file
+"   endif
+"
+"   echo "convert " . a:fileType . ' to ' . target_file
+"   exec ":call vimproc#system('" . convert_cmd . "')"
+" endfunction
+"
+" function! HamlSetting()
+"   nmap <buffer><Leader>R :<C-U>call ConvertHamlToHtml("haml")<CR>
+"   aug MyAutoCmd
+"     au BufWritePost *.haml silent call ConvertHamlToHtml("haml")
+"   aug END
+" endfunction
+" " au Filetype haml call HamlSetting()
+"
+" function! ErubySetting()
+"   nmap <buffer><Leader>R :<C-U>call ConvertHamlToHtml("eruby")<CR>
+"   aug MyAutoCmd
+"     au BufWritePost *.erb silent call ConvertHamlToHtml("eruby")
+"   aug END
+" endfunction
 " au Filetype eruby call ErubySetting()
 "}}}
 " au Filetype eruby call ErubySetting()
@@ -2955,32 +2942,31 @@ endfunction
 " sass async compile
 " ----------------------------------------
 
-function! ScssAsyncCompile()
-  let cmd = 'compass compile '. expand("%:p:h")
-  call vimproc#system_bg('apachectl stop')
-endfunction
-aug MyAutoCmd
-  au BufWritePost *.scss call ScssAsyncCompile()
-aug END
+" function! ScssAsyncCompile()
+"   let cmd = 'compass compile '. expand("%:p:h")
+"   call vimproc#system_bg('apachectl stop')
+" endfunction
+" aug MyAutoCmd
+"   au BufWritePost *.scss call ScssAsyncCompile()
+" aug END
 
 
 " Mac の辞書.appで開く {{{
 if has('mac')
-    " 引数に渡したワードを検索
-    command! -nargs=1 MacDict      call system('open '.shellescape('dict://'.<q-args>))
-    " カーソル下のワードを検索
-    command! -nargs=0 MacDictCWord call system('open '.shellescape('dict://'.shellescape(expand('<cword>'))))
-    " 辞書.app を閉じる
-    command! -nargs=0 MacDictClose call system("osascript -e 'tell application \"Dictionary\" to quit'")
-    " 辞書にフォーカスを当てる
-    command! -nargs=0 MacDictFocus call system("osascript -e 'tell application \"Dictionary\" to activate'")
-    " キーマッピング
+  " 引数に渡したワードを検索
+  command! -nargs=1 MacDict      call system('open '.shellescape('dict://'.<q-args>))
+  " カーソル下のワードを検索
+  command! -nargs=0 MacDictCWord call system('open '.shellescape('dict://'.shellescape(expand('<cword>'))))
+  " 辞書.app を閉じる
+  command! -nargs=0 MacDictClose call system("osascript -e 'tell application \"Dictionary\" to quit'")
+  " 辞書にフォーカスを当てる
+  command! -nargs=0 MacDictFocus call system("osascript -e 'tell application \"Dictionary\" to activate'")
+  " キーマッピング
 
-    nnoremap <silent>mm :<C-u>MacDictCWord<CR>
-    nnoremap <silent>mo :<C-u>MacDictCWord<CR>
-    vnoremap <silent>mm y:<C-u>MacDict<Space><C-r>*<CR>
-    nnoremap <silent>mc :<C-u>MacDictClose<CR>
-    nnoremap <silent>mf :<C-u>MacDictFocus<CR>
+  nnoremap <silent>mo :<C-u>MacDictCWord<CR>
+  vnoremap <silent>mm y:<C-u>MacDict<Space><C-r>*<CR>
+  nnoremap <silent>mc :<C-u>MacDictClose<CR>
+  nnoremap <silent>mf :<C-u>MacDictFocus<CR>
 endif
 "}}}
 
