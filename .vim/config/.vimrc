@@ -212,7 +212,6 @@ endif
 "     call setline('.', new_line)
 "   endif
 " endfunction "}}}
-
 "}}}
 
 "----------------------------------------
@@ -273,8 +272,7 @@ aug END
 " windowの操作
 " ****************
 " 画面の移動
-" nmap <C-L> <C-W><C-W>
-nmap <C-L> <C-I>
+nmap <C-L> <C-T>
 nmap <C-W><C-J><C-h> <C-W>j<C-W>h
 nmap <C-W><C-H><C-j> <C-W>h<C-W>j
 nmap <C-W><C-H><C-k> <C-W>h<C-W>k
@@ -294,6 +292,7 @@ nmap <C-W>v :<C-U>vsplit<CR><C-W>=
 nmap <silent> <Tab> :call <SID>NextWindowOrTab()<CR>
 nmap <silent> <S-Tab> :call <SID>PreviousWindowOrTab()<CR>
 nmap <C-W>] :call PreviewWord()<CR>
+" nmap <C-W><C-] :call PreviewWord()<CR>
 nmap <silent><C-w><Space> :<C-u>SmartSplit<CR>
 func! PreviewWord() "{{{
   if &previewwindow      " プレビューウィンドウ内では実行しない
@@ -324,7 +323,7 @@ func! PreviewWord() "{{{
       let w = substitute(w, '\\', '\\\\', "")
       call search('\<\V' . w . '\>')  " カーソルをマッチしたところへ
       " ここで単語にハイライトをつける
-      exe 'match previewWord "\%' . line(".") . 'l\%' . col(".") . 'c\k*"'
+      " exe 'match previewWord "\%' . line(".") . 'l\%' . col(".") . 'c\k*"'
       wincmd p      " もとのウィンドウへ戻る
     endif
   endif
@@ -837,7 +836,7 @@ NeoBundleLazy 'tpope/vim-haml'
 
 "  js / coffee
 " ----------------------------------------
-NeoBundleLazy 'kchmck/vim-coffee-script'
+NeoBundle 'kchmck/vim-coffee-script'
 NeoBundleLazy 'claco/jasmine.vim'
 NeoBundle 'taichouchou2/vim-javascript'
 " NeoBundle 'hallettj/jslint.vim'
@@ -861,7 +860,7 @@ aug MyAutoCmd
 aug END
 
 " sassのコンパイル
-" NeoBundle 'AtsushiM/sass-compile.vim'
+NeoBundle 'AtsushiM/sass-compile.vim'
 " NeoBundle 'taichouchou2/sass-compile.vim'
 " NeoBundle 'taichouchou2/sass-async-compile.vim'
 
@@ -1824,8 +1823,8 @@ function! s:vimshell_settings() "{{{
     " Unmap [i] -buffer <C-k>
     " Map [i] -buffer -force <C-l> <Space><Bar><Space>
 
-    nmap <C-L> <C-W><C-W>
-    imap <C-L> <Nop>
+    nmap <buffer><C-L> <C-W><C-W>
+    imap <buffer><C-L> <Nop>
     " Unmap [i] -buffer <Tab>
     " Map [i] -remap -buffer -force <Tab><Tab> <Plug>(vimshell_command_complete)
 
@@ -2180,9 +2179,17 @@ let g:sass_compile_aftercmd = ""
 let g:sass_compile_auto = 1
 let g:sass_compile_beforecmd = ""
 let g:sass_compile_cdloop = 1
+" let g:sass_compile_cdloop = 5
 let g:sass_compile_cssdir = ['css', 'stylesheet']
 let g:sass_compile_file = ['scss', 'sass']
 let g:sass_started_dirs = []
+function! AutoSassCompile()
+  aug MyAutoCmd
+    au BufWritePost <buffer> SassCompile
+  aug END
+endfunction
+au BufWritePost * SassCompile
+au FileType less,sass,scss  setlocal sw=2 sts=2 ts=2 et syntax=scss
 "}}}
 
 "------------------------------------
@@ -2305,7 +2312,7 @@ if g:smartchr_enable == 1
     au FileType perl,php imap <buffer><expr> . smartchr#loop('.', '->', '..')
     au FileType perl,php imap <buffer><expr> - smartchr#loop('-', '->')
     au FileType vim      imap <buffer><expr> . smartchr#loop('.', ' . ', '..', '...')
-    au FileType coffee   imap <buffer><expr> . smartchr#loop('-', '->', '=>')
+    au FileType coffee   imap <buffer><expr> - smartchr#loop('-', '->', '=>')
 
     " 使わない
     " autocmd FileType haskell,int-ghci
@@ -2717,11 +2724,11 @@ let g:neocomplcache_enable_cursor_hold_i = 0
 let g:neocomplcache_enable_fuzzy_completion = 0
 let g:neocomplcache_enable_insert_char_pre = 0
 let g:neocomplcache_enable_prefetch = 0
-let g:neocomplcache_enable_smart_case = 0
+let g:neocomplcache_enable_smart_case = 1
 let g:neocomplcache_enable_underbar_completion = 1
 let g:neocomplcache_manual_completion_start_length = 0
-let g:neocomplcache_min_keyword_length = 3
-let g:neocomplcache_min_syntax_length = 3
+let g:neocomplcache_min_keyword_length = 1
+let g:neocomplcache_min_syntax_length = 2
 let g:neocomplcache_skip_auto_completion_time = '0.3'
 let g:neocomplcache_caching_limit_file_size = 500000
 let g:neocomplcache#sources#rsense#home_directory = expand("~/.vim/ref/rsense-0.3")
@@ -2768,8 +2775,11 @@ let g:neocomplcache_force_omni_patterns.python = '[^. \t]\.\w*'
 " let g:clang_use_library   = 1
 
 " Define keyword pattern. "{{{
-let g:neocomplcache_keyword_patterns.default = '[0-9a-zA-Z:#_]\+'
-let g:neocomplcache_keyword_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+let g:neocomplcache_keyword_patterns.default = '[0-9a-zA-Z:#_-]\+'
+" let g:neocomplcache_keyword_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+" let g:neocomplcache_keyword_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+" let g:neocomplcache_omni_patterns.filename = '\%([a-zA-Z0-9_-]\+:[/\\]\)\?\%([\\/[a-zA-Z0-9_-]()$+_\~.\x80-\xff-]\|[^[:print:]]\)\+'
+" let g:neocomplcache_omni_patterns.filename = '[0-9a-zA-Z:#_-]\+'
 let g:neocomplcache_snippets_dir = '~/.bundle/neosnippet/autoload/neosnippet/snippets,~/.vim/snippet'
 let g:neocomplcache_omni_patterns.php = '[^. *\t]\.\w*\|\h\w*::'
 let g:neocomplcache_omni_patterns.mail = '^\s*\w\+'
@@ -2779,16 +2789,16 @@ let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
 " let g:neocomplcache_source_look_dictionary_path = ''
 "}}}
 
+      " \ 'VimShellExecute' :
+      " \      'vimshell#vimshell_execute_complete',
+      " \ 'VimShellInteractive' :
+      " \      'vimshell#vimshell_execute_complete',
+      " \ 'VimShellTerminal' :
+      " \      'vimshell#vimshell_execute_complete',
+      " \ 'VimShell' : 'vimshell#complete',
 let g:neocomplcache_vim_completefuncs = {
       \ 'Ref' : 'ref#complete',
       \ 'Unite' : 'unite#complete_source',
-      \ 'VimShellExecute' :
-      \      'vimshell#vimshell_execute_complete',
-      \ 'VimShellInteractive' :
-      \      'vimshell#vimshell_execute_complete',
-      \ 'VimShellTerminal' :
-      \      'vimshell#vimshell_execute_complete',
-      \ 'VimShell' : 'vimshell#complete',
       \ 'VimFiler' : 'vimfiler#complete',
       \ 'Vinarise' : 'vinarise#complete',
       \}
