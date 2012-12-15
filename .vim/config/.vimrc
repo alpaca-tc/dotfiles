@@ -715,13 +715,13 @@ NeoBundle 'Shougo/vimproc', {
 " NeoBundle 'vim-jp/vital.vim'
 " NeoBundle 'yuroyoro/vim-autoclose'                          " 自動閉じタグ
 NeoBundle 'edsono/vim-matchit'        " %の拡張
-NeoBundle 'h1mesuke/vim-alignta'      " 整形
 NeoBundle 'kana/vim-arpeggio'         " 同時押しキーマップを使う
 NeoBundle 'rhysd/accelerated-jk'      " jkの移動を高速化
 NeoBundle 'taichouchou2/alpaca'       " 個人的なカラーやフォントなど
 NeoBundle 'taichouchou2/surround.vim' " text-objの拡張
 NeoBundle 'Lokaltog/vim-powerline'    " StatusLineの拡張
 NeoBundle 'tpope/vim-fugitive'        " gitを表示
+NeoBundle 'h1mesuke/vim-alignta'      " 整形
 "}}}
 
 "----------------------------------------
@@ -739,24 +739,24 @@ NeoBundle 'tpope/vim-fugitive'        " gitを表示
 " NeoBundle 'vim-scripts/AnsiEsc.vim' " Ascii color code対応
 " NeoBundle 'vim-scripts/SearchComplete' " /で検索をかけるときでも\tで補完が出来る
 " NeoBundle 'sjl/gundo.vim'                   " undo履歴をツリー表示
+NeoBundle 'Shougo/git-vim'
 NeoBundle 'Shougo/neocomplcache'            " 補完
 NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/vimfiler'
-NeoBundle 'Shougo/vimshell'
 NeoBundle 'camelcasemotion'
 NeoBundle 'majutsushi/tagbar'
-NeoBundle 'open-browser.vim'
-NeoBundle 'thinca/vim-ref'
-NeoBundle 'Shougo/git-vim'
-NeoBundle 'mattn/gist-vim' "gistを利用する
 NeoBundle 'mattn/zencoding-vim'             " Zencodingを使う
 NeoBundle 'nathanaelkane/vim-indent-guides' " indentに色づけ
-NeoBundle 't9md/vim-textmanip'              " visualモードで、文字列を直感的に移動
+NeoBundle 'open-browser.vim'
 NeoBundle 'smartword'
-NeoBundle 'thinca/vim-quickrun'             " <Leader>rで簡易コンパイル
+NeoBundle 't9md/vim-textmanip'              " visualモードで、文字列を直感的に移動
+NeoBundle 'thinca/vim-ref'
 NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'vim-scripts/sudo.vim'            " vimで開いた後にsudoで保存
+NeoBundle 'Shougo/vimfiler'
+NeoBundleLazy 'Shougo/vimshell'
+NeoBundleLazy 'mattn/gist-vim' "gistを利用する
+NeoBundleLazy 'thinca/vim-quickrun'             " <Leader>rで簡易コンパイル
 
 "----------------------------------------
 " text-object拡張"{{{
@@ -803,12 +803,10 @@ NeoBundle 'taichouchou2/alpaca-look'
 " NeoBundle 'ujihisa/unite-colorscheme'
 " NeoBundle 'ujihisa/unite-gem'
 NeoBundle 'Shougo/unite-ssh'
-NeoBundle 'basyura/unite-rails'
-NeoBundle 'fsouza/go.vim'
-NeoBundle 'glidenote/memolist.vim'
 NeoBundle 'taichouchou2/vim-unite-giti'
 NeoBundle 'thinca/vim-unite-history'
-NeoBundle 'ujihisa/vimshell-ssh'
+NeoBundleLazy 'ujihisa/vimshell-ssh'
+NeoBundleLazy 'glidenote/memolist.vim'
 
 " NeoBundle 'TeTrIs.vim'
 " NeoBundle 'benmills/vimux'
@@ -819,7 +817,7 @@ NeoBundle 'ujihisa/vimshell-ssh'
 NeoBundleLazy 'basyura/TweetVim'
 NeoBundleLazy 'basyura/bitly.vim'
 NeoBundleLazy 'basyura/twibill.vim'
-NeoBundle 'tyru/eskk.vim'
+NeoBundleLazy 'tyru/eskk.vim'
 "}}}
 
 " bundle.lang"{{{
@@ -845,6 +843,10 @@ NeoBundle 'taichouchou2/vim-javascript'
 " NeoBundle 'hallettj/jslint.vim'
 " NeoBundle 'pekepeke/titanium-vim' " Titaniumを使うときに
 
+"  go
+" ----------------------------------------
+NeoBundleLazy 'fsouza/go.vim'
+
 "  markdown
 " ----------------------------------------
 " markdownでの入力をリアルタイムでチェック
@@ -854,6 +856,7 @@ aug MyAutoCmd
   au FileType css call BundleLoadDepends('vim-css3-syntax')
   au FileType html,php,erb call BundleLoadDepends('html5.vim')
   au FileType haml call BundleLoadDepends('vim-haml')
+  au FileType go call BundleLoadDepends('go.vim')
   au FileType js,coffee call BundleLoadDepends('vim-coffee-script jasmine.vim vim-javascript')
 aug END
 
@@ -971,7 +974,7 @@ call arpeggio#map('v', '', 0, 'jk', '<C-[>:noh<CR>:echo ""<CR>')
 " call arpeggio#map('n', '', 0, 'jk', '<Esc>:noh<CR>')
 
 "------------------------------------
-" Align / alignta
+" vim-alignta
 "------------------------------------
 "{{{
 " Alignを日本語環境で使用するための設定
@@ -1267,9 +1270,8 @@ nmap <silent> [unite]<C-R><C-R> :<C-u>Unite -no-quit rails_best_practices<CR>
 "{{{
 " 起動コマンド
 " default <leader><leader>
-nmap <Leader><leader> :VimFilerBufferDir<CR>
-" nnoremap <C-H><C-F> :VimFilerExplorer<CR>
-nmap <C-H><C-F> :call VimFilerExplorerGit()<CR>
+nmap <silent><C-H><C-F>  :call VimFilerExplorerGit()<CR>
+nmap <silent><Leader><Leader>  :VimFilerBufferDir<CR>
 
 " lean more [ utf8 glyph ]( http://sheet.shiar.nl/unicode )
 let g:vimfiler_safe_mode_by_default = 0
@@ -1352,7 +1354,7 @@ command!
 let g:quickrun_config = {}
 let g:quickrun_config._ = {'runner' : 'vimproc'}
 let g:quickrun_no_default_key_mappings = 1
-nmap <Leader>r <Plug>(quickrun)
+nmap <silent><Leader>r :call BundleWithCmd('vim-quickrun', 'QuickRun')<CR>
 
 " lisp
 let g:quickrun_config['lisp'] = {
@@ -1383,14 +1385,14 @@ let g:quickrun_config['ruby.rspec'] = {
       \}
 
 " ファイル名が_spec.rbで終わるファイルを読み込んだ時に上記の設定を自動で読み込む
-function! RSpecQuickrun()
-  let b:quickrun_config = {'type' : 'ruby.rspec'}
-  setl ft=ruby.rspec
-  nmap <expr><silent><buffer><Leader>lr "<Esc>:QuickRun ruby.rspec -cmdopt \"-l" .  line('.') . "\"<CR>"
-endfunction
-aug MyAutoCmd
-  au BufReadPost *_spec.rb call RSpecQuickrun()
-aug END
+" function! RSpecQuickrun()
+"   let b:quickrun_config = {'type' : 'ruby.rspec'}
+"   setl ft=ruby.rspec
+"   nmap <expr><silent><buffer><Leader>lr "<Esc>:QuickRun ruby.rspec -cmdopt \"-l" .  line('.') . "\"<CR>"
+" endfunction
+" aug MyAutoCmd
+"   au BufReadPost *_spec.rb call RSpecQuickrun()
+" aug END
 
 function! s:quickrun_auto_close()
   aug MyAutoCmd
@@ -1821,6 +1823,7 @@ function! s:vimshell_settings() "{{{
     " Unmap [n] -buffer <C-p>
     " Unmap [i] -buffer <C-k>
     " Map [i] -buffer -force <C-l> <Space><Bar><Space>
+
     nmap <C-L> <C-W><C-W>
     imap <C-L> <Nop>
     " Unmap [i] -buffer <Tab>
@@ -1844,6 +1847,7 @@ aug MyAutoCmd
 aug END
 
 nmap <Leader>v :VimShell<CR>
+nmap <silent><Leader>v  :call BundleWithCmd('vimshell', 'VimShell')<CR>
 "}}}
 
 "------------------------------------
@@ -1862,10 +1866,9 @@ let g:memolist_vimfiler = 1
 let g:memolist_template_dir_path = "$HOME/.memolist"
 
 " mapping
-map <Space>mn  :MemoNew<CR>
-" map <Space>ml  :MemoList<CR>
-nmap <silent> <Space>ml :Unite file:<C-r>=g:memolist_path."/"<CR><CR>
-map <Space>mg  :MemoGrep<CR>
+nmap <silent><Space>mn  :call BundleWithCmd('memolist.vim', 'MemoNew')<CR>
+nmap <silent><Space>ml  :call BundleWithCmd('unite.vim', 'Unite file:~/.memolist/')<CR>
+nmap <silent><Space>mg  :call BundleWithCmd('memolist.vim', 'MemoGrep')<CR>
 "}}}
 
 "------------------------------------
@@ -2117,21 +2120,18 @@ let g:gist_clip_command = 'pbcopy'
 let g:gist_detect_filetype = 1
 let g:gist_open_browser_after_post = 1
 let g:gist_browser_command = 'w3m %URL%'
-let g:github_user = 'taichouchou'
+let g:github_user = 'taichouchou2'
 
-nnoremap <C-H>g :Gist<CR>
-nnoremap <C-H>gp :Gist -p<CR>
-nnoremap <C-H>ge :Gist -e<CR>
-nnoremap <C-H>gd :Gist -d<CR>
-nnoremap <C-H>gl :Gist -l<CR>
+nmap <silent><C-H>g :call BundleWithCmd('gist-vim', 'Gist')<CR>
+nmap <silent><C-H>gl :call BundleWithCmd('gist-vim', 'Gist -l')<CR>
 "}}}
 
 "------------------------------------
 " twitvim
 "------------------------------------
 "{{{
-nnoremap <silent><C-H><C-N>  :call BundleWithCmd('TweetVim bitly.vim twibill.vim', 'Unite tweetvim')<CR>
-nnoremap <silent><C-H><C-M>  :call BundleWithCmd('TweetVim bitly.vim twibill.vim', 'TweetVimSay')<CR>
+nmap <silent><C-H><C-N>  :call BundleWithCmd('TweetVim bitly.vim twibill.vim', 'Unite tweetvim')<CR>
+nmap <silent><C-H><C-M>  :call BundleWithCmd('TweetVim bitly.vim twibill.vim', 'TweetVimSay')<CR>
 
 let g:tweetvim_display_source = 1
 let g:tweetvim_display_time = 1

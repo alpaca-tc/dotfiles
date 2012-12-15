@@ -1,9 +1,6 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =7
-let g:netrw_dirhist_1='/Users/taichou'
-let g:netrw_dirhist_2='/Users/taichou/node_modules'
-let g:netrw_dirhist_3='/Users/taichou'
-let g:netrw_dirhist_4='/Users/taichou/.vim.swapfile'
-let g:netrw_dirhist_5='/Users/taichou'
-let g:netrw_dirhist_6='/Users/taichou/project/fhx.jp_hp/app'
-let g:netrw_dirhist_7='/Users/taichou/project/fhx.jp_hp/spec/requests'
+let g:netrw_dirhist_cnt =4
+let g:netrw_dirhist_1='/Users/taichou/.bundle/vim-alignta'
+let g:netrw_dirhist_2='/Users/taichou/.bundle/vim-alignta/plugin'
+let g:netrw_dirhist_3='/Users/taichou/.bundle/vimfiler'
+let g:netrw_dirhist_4='/Users/taichou/.bundle/vimfiler/plugin'
