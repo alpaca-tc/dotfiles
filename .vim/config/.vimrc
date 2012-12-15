@@ -644,7 +644,6 @@ function! SetTags()
 endfunction
 aug MyAutoCmd
   au BufReadPost * call SetTags()
-  au FileType ruby,eruby,haml setl tags+=~/gtags
 aug END
 
 "tags_jumpを使い易くする
@@ -910,7 +909,7 @@ NeoBundleLazy 'rhysd/neco-ruby-keyword-args'
 NeoBundleLazy 'rhysd/vim-textobj-ruby'
 let s:bundle_ruby = 'ruby-matchit vim-vroom vim-rspec vim-ref-ri neco-ruby vim-ruby unite-reek neocomplcache-rsense unite-ruby-require.vim neco-ruby-keyword-args vim-textobj-ruby'
 aug MyAutoCmd
-  au FileType ruby call BundleLoadDepends(s:bundle_ruby)
+  au FileType ruby,Gemfile,haml,eruby call BundleLoadDepends(s:bundle_ruby)
 aug END
 
 " python
@@ -2067,7 +2066,27 @@ function! SetUpRailsSetting()
 endfunction
 aug MyAutoCmd
   au User Rails call SetUpRailsSetting()
+
 aug END
+
+aug RailsDictSetting
+  au!
+  " 別の関数に移そうか..
+  au User Rails.controller*           setl ft=ruby.rails.controller   syntax=ruby
+  au User Rails.view*                 setl ft=ruby.rails.view         syntax=ruby
+  au User Rails.model*                setl ft=ruby.rails.model        syntax=ruby
+  au User Rails/db/migrate/*          setl ft=ruby.rails.migrate      syntax=ruby
+  au User Rails/config/environment.rb setl ft=ruby.rails.environment  syntax=ruby
+  au User Rails/config/routes.rb      setl ft=ruby.rails.routes       syntax=ruby
+  au User Rails/config/database.rb    setl ft=ruby.rails.database     syntax=ruby
+  au User Rails/config/boot.rb        setl ft=ruby.rails.boot         syntax=ruby
+  au User Rails/config/locales/*      setl ft=ruby.rails.locales      syntax=ruby
+  au User Rails/config/initializes    setl ft=ruby.rails.initializes  syntax=ruby
+  au User Rails/config/environments/* setl ft=ruby.rails.environments syntax=ruby
+  au User Rails set dict+=~/.vim/dict/ruby.rails.dict syntax=ruby | nmap <buffer><Space>dd  :<C-U>SmartSplit e ~/.vim/dict/ruby.rails.dict<CR>
+aug END
+
+
 "}}}
 
 "------------------------------------
@@ -2282,11 +2301,11 @@ if g:smartchr_enable == 1
   "       \ : smartchr#one_of(' = ', '=', ' == ')
   augroup MyAutoCmd
     " Substitute .. into -> .
-    autocmd FileType c,cpp inoremap <buffer> <expr> . smartchr#loop('.', '->', '...')
-    autocmd FileType perl,php imap <buffer> <expr> . smartchr#loop('.', '->', '..')
-    autocmd FileType perl,php imap <buffer> <expr> - smartchr#loop('-', '->')
-    autocmd FileType vim imap <buffer> <expr> . smartchr#loop('.', ' . ', '..', '...')
-    autocmd FileType coffee <buffer> <expr> . smartchr#loop('-', '->', '=>')
+    au FileType c,cpp    imap <buffer><expr> . smartchr#loop('.', '->', '...')
+    au FileType perl,php imap <buffer><expr> . smartchr#loop('.', '->', '..')
+    au FileType perl,php imap <buffer><expr> - smartchr#loop('-', '->')
+    au FileType vim      imap <buffer><expr> . smartchr#loop('.', ' . ', '..', '...')
+    au FileType coffee   imap <buffer><expr> . smartchr#loop('-', '->', '=>')
 
     " 使わない
     " autocmd FileType haskell,int-ghci
@@ -2656,26 +2675,8 @@ augroup DictSetting
   au!
   au FileType ruby.rspec           setl dict+=~/.vim/dict/rspec.dict
   au FileType coffee.jasmine,javascript.jasmine setl dict+=~/.vim/dict/js.jasmine.dict
-  au FileType coffee,javascript    setl dict+=~/.vim/dict/jquery.dict
-  au FileType coffee               setl dict+=~/.vim/dict/coffee.dict,~/.vim/dict/javascript.dict
   au FileType html,php,eruby       setl dict+=~/.vim/dict/html.dict
 augroup END
-
-aug MyAutoCmd
-  " 別の関数に移そうか..
-  au User Rails.controller*           setl ft=ruby.rails.controller   syntax=ruby
-  au User Rails.view*                 setl ft=ruby.rails.view         syntax=ruby
-  au User Rails.model*                setl ft=ruby.rails.model        syntax=ruby
-  au User Rails/db/migrate/*          setl ft=ruby.rails.migrate      syntax=ruby
-  au User Rails/config/environment.rb setl ft=ruby.rails.environment  syntax=ruby
-  au User Rails/config/routes.rb      setl ft=ruby.rails.routes       syntax=ruby
-  au User Rails/config/database.rb    setl ft=ruby.rails.database     syntax=ruby
-  au User Rails/config/boot.rb        setl ft=ruby.rails.boot         syntax=ruby
-  au User Rails/config/locales/*      setl ft=ruby.rails.locales      syntax=ruby
-  au User Rails/config/initializes    setl ft=ruby.rails.initializes  syntax=ruby
-  au User Rails/config/environments/* setl ft=ruby.rails.environments syntax=ruby
-  au User Rails set dict+=~/.vim/dict/ruby.rails.dict syntax=ruby | nmap <buffer><Space>dd  :<C-U>SmartSplit e ~/.vim/dict/ruby.rails.dict<CR>
-aug END
 
 " カスタムファイルタイプでも、自動でdictを読み込む
 " そして、編集画面までさくっと移動。
@@ -2704,19 +2705,6 @@ set history=1000             " コマンド・検索パターンの履歴数
 set complete+=k,U,kspell,t,d " 補完を充実
 set completeopt=menu,menuone,preview
 set infercase
-
-" FileType毎のOmni補完を設定 "{{{
-aug MyAutoCmd
-  au FileType css                  setl omnifunc=csscomplete#CompleteCSS
-  au FileType html,markdown        setl omnifunc=htmlcomplete#CompleteTags
-  au FileType javascript           setl omnifunc=javascriptcomplete#CompleteJS
-  au FileType sql                  setl omnifunc=sqlcomplete#Complete
-  au FileType python               setl omnifunc=pythoncomplete#Complete
-  au FileType xml                  setl omnifunc=xmlcomplete#CompleteTags
-  au FileType php                  setl omnifunc=phpcomplete#CompletePHP
-  au FileType c                    setl omnifunc=ccomplete#Complete
-aug END
-"}}}
 
 "----------------------------------------
 " neocomplcache
@@ -2815,20 +2803,6 @@ endif
 " ファイルタイプ毎の辞書ファイルの場所"{{{
 let g:neocomplcache_dictionary_filetype_lists = {
       \ 'default'    : '',
-      \ 'java'       : $HOME.'/.vim/dict/java.dict',
-      \ 'ruby'       : $HOME.'/.vim/dict/ruby.dict',
-      \ 'ruby.rails' : $HOME.'/.vim/dict/ruby.rails.dict',
-      \ 'eruby'      : $HOME.'/.vim/dict/ruby.dict',
-      \ 'javascript' : $HOME.'/.vim/dict/javascript.dict',
-      \ 'coffee'     : $HOME.'/.vim/dict/javascript.dict',
-      \ 'lua'        : $HOME.'/.vim/dict/lua.dict',
-      \ 'ocaml'      : $HOME.'/.vim/dict/ocaml.dict',
-      \ 'perl'       : $HOME.'/.vim/dict/perl.dict',
-      \ 'c'          : $HOME.'/.vim/dict/c.dict',
-      \ 'php'        : $HOME.'/.vim/dict/php.dict',
-      \ 'scheme'     : $HOME.'/.vim/dict/scheme.dict',
-      \ 'vim'        : $HOME.'/.vim/dict/vim.dict',
-      \ 'jasmine'    : $HOME.'/.vim/dict/js.jasmine.dict',
       \ 'timobile'   : $HOME.'/.vim/dict/timobile.dict',
       \ }
 "}}}
@@ -2854,13 +2828,13 @@ aug END
 imap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
 imap <silent><C-U>     <Plug>(neosnippet_start_unite_snippet)
 nmap <silent><Space>e  :<C-U>NeoSnippetEdit -split<CR>
+nmap <silent><expr><Space>ee  ':NeoSnippetEdit -split'.split(&ft, '.')[0].'<CR>'
 smap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
 xmap <silent><C-F>     <Plug>(neosnippet_start_unite_snippet_target)
 " xmap <silent>U         <Plug>(neosnippet_expand_target)
 xmap <silent>o         <Plug>(neosnippet_register_oneshot_snippet)
 "}}}
 
-finish
 "----------------------------------------
 " コマンドの実行"{{{
 

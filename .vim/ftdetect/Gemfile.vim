@@ -1,1 +1,1 @@
-au BufNewFile,BufRead Gemfile set filetype=Gemfile
+au BufNewFile,BufRead Gemfile setl filetype=Gemfile
