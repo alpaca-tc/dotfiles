@@ -12,10 +12,10 @@ set browsedir=buffer
 set clipboard+=autoselect
 set clipboard+=unnamed
 set directory=~/.vim.swapfile
-set formatoptions+=lcoqmM
-aug MyAutoCmd
-  au VimEnter * set formatoptions-=ro
-aug END
+set formatoptions=lcqmM
+" aug MyAutoCmd
+"   au VimEnter * set formatoptions-=ro
+" aug END
 set helplang=ja,en
 set modelines=0
 set nobackup
@@ -31,8 +31,8 @@ if v:version >= 703
   let &undodir=&directory
 endif
 
-let PATH='/Users/taichou/.autojump/bin:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin/:/Users/taichou/.rbenv:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin:/Users/taichou/.rbenv:/Users/taichou/.autojump/bin:/Users/taichou/local/bin:/Users/taichou/local/sbin:/usr/local/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:/Applications/XAMPP/xamppfiles/bin:/bin:/sbin:/usr/sbin:/usr/bin:/Applications/XAMPP/xamppfiles/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/bin:/sbin:/usr/sbin:/usr/bin'
-let $PATH='/Users/taichou/.autojump/bin:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin/:/Users/taichou/.rbenv:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin:/Users/taichou/.rbenv:/Users/taichou/.autojump/bin:/Users/taichou/local/bin:/Users/taichou/local/sbin:/usr/local/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:/Applications/XAMPP/xamppfiles/bin:/bin:/sbin:/usr/sbin:/usr/bin:/Applications/XAMPP/xamppfiles/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/bin:/sbin:/usr/sbin:/usr/bin'
+" let PATH='/Users/taichou/.autojump/bin:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin/:/Users/taichou/.rbenv:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin:/Users/taichou/.rbenv:/Users/taichou/.autojump/bin:/Users/taichou/local/bin:/Users/taichou/local/sbin:/usr/local/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:/Applications/XAMPP/xamppfiles/bin:/bin:/sbin:/usr/sbin:/usr/bin:/Applications/XAMPP/xamppfiles/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/bin:/sbin:/usr/sbin:/usr/bin'
+" let $PATH='/Users/taichou/.autojump/bin:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin/:/Users/taichou/.rbenv:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin:/Users/taichou/.rbenv:/Users/taichou/.autojump/bin:/Users/taichou/local/bin:/Users/taichou/local/sbin:/usr/local/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:/Applications/XAMPP/xamppfiles/bin:/bin:/sbin:/usr/sbin:/usr/bin:/Applications/XAMPP/xamppfiles/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/bin:/sbin:/usr/sbin:/usr/bin'
 
 aug MyAutoCmd
   au FileType help nnoremap <buffer> q <C-w>c
@@ -72,9 +72,6 @@ nmap ft :set ft=
 " デフォルトキーマップの変更
 nmap / /\v
 nmap ? ?\v
-" nmap p [p
-" nmap P [P
-imap <C-H> <BS>
 
 " 新しいバッファを開くときに、rubyか同じファイルタイプで開く{{{
 function! NewBuffer(type)
@@ -141,26 +138,26 @@ augroup END
 "}}}
 
 " html {{{
-function! s:HtmlEscape()
-  silent s/&/\&amp;/eg
-  silent s/</\&lt;/eg
-  silent s/>/\&gt;/eg
-endfunction
-function! s:HtmlUnEscape()
-  silent s/&lt;/</eg
-  silent s/&gt;/>/eg
-  silent s/&amp;/\&/eg
-endfunction
+" function! s:HtmlEscape()
+"   silent s/&/\&amp;/eg
+"   silent s/</\&lt;/eg
+"   silent s/>/\&gt;/eg
+" endfunction
+" function! s:HtmlUnEscape()
+"   silent s/&lt;/</eg
+"   silent s/&gt;/>/eg
+"   silent s/&amp;/\&/eg
+" endfunction
 
-function! HtmlFunctions()
-  inoremap <leader>h <!--/--><left><left><left>
-  xnoremap <silent> <space>e :call <SID>HtmlEscape()<CR>
-  xnoremap <silent> <space>ue :call <SID>HtmlUnEscape()<CR>
-endfunction
-
-aug MyAutoCmd
-  au FileType php,eruby,html,haml call HtmlFunctions()
-aug END
+inoremap <leader>h <!--/--><left><left><left>
+" function! HtmlFunctions()
+"   xnoremap <silent> <space>e :call <SID>HtmlEscape()<CR>
+"   xnoremap <silent> <space>ue :call <SID>HtmlUnEscape()<CR>
+" endfunction
+"
+" aug MyAutoCmd
+"   au FileType php,eruby,html,haml call HtmlFunctions()
+" aug END
 " }}}
 
 " 変なマッピングを修正 "{{{
@@ -175,46 +172,46 @@ endif
 
 " Improved visual selection.{{{
 " http://labs.timedia.co.jp/2012/10/vim-more-useful-blockwise-insertion.html
-xnoremap <expr> I  <SID>force_blockwise_visual('I')
-xnoremap <expr> A  <SID>force_blockwise_visual('A')
-
-function! s:force_blockwise_visual(next_key)
-  if mode() ==# 'v'
-    return "\<C-v>" . a:next_key
-  elseif mode() ==# 'V'
-    return "\<C-v>0o$" . a:next_key
-  else  " mode() ==# "\<C-v>"
-    return a:next_key
-  endif
-endfunction
+" xnoremap <expr> I  <SID>force_blockwise_visual('I')
+" xnoremap <expr> A  <SID>force_blockwise_visual('A')
+"
+" function! s:force_blockwise_visual(next_key)
+"   if mode() ==# 'v'
+"     return "\<C-v>" . a:next_key
+"   elseif mode() ==# 'V'
+"     return "\<C-v>0o$" . a:next_key
+"   else  " mode() ==# "\<C-v>"
+"     return a:next_key
+"   endif
+" endfunction
 "}}}
 
 " Improved increment.{{{
-nmap <C-a> <SID>(increment)
-nmap <C-x> <SID>(decrement)
-nnoremap <silent> <SID>(increment)    :AddNumbers 1<CR>
-nnoremap <silent> <SID>(decrement)   :AddNumbers -1<CR>
-command! -range -nargs=1 AddNumbers
-      \ call s:add_numbers((<line2>-<line1>+1) * eval(<args>))
-function! s:add_numbers(num)
-  let prev_line = getline('.')[: col('.')-1]
-  let next_line = getline('.')[col('.') :]
-  let prev_num = matchstr(prev_line, '\d\+$')
-  if prev_num != ''
-    let next_num = matchstr(next_line, '^\d\+')
-    let new_line = prev_line[: -len(prev_num)-1] .
-          \ printf('%0'.len(prev_num).'d',
-          \    max([0, prev_num . next_num + a:num])) . next_line[len(next_num):]
-  else
-    let new_line = prev_line . substitute(next_line, '\d\+',
-          \ "\\=printf('%0'.len(submatch(0)).'d',
-          \         max([0, submatch(0) + a:num]))", '')
-  endif
-
-  if getline('.') !=# new_line
-    call setline('.', new_line)
-  endif
-endfunction "}}}
+" nmap <C-a> <SID>(increment)
+" nmap <C-x> <SID>(decrement)
+" nnoremap <silent> <SID>(increment)    :AddNumbers 1<CR>
+" nnoremap <silent> <SID>(decrement)   :AddNumbers -1<CR>
+" command! -range -nargs=1 AddNumbers
+"       \ call s:add_numbers((<line2>-<line1>+1) * eval(<args>))
+" function! s:add_numbers(num)
+"   let prev_line = getline('.')[: col('.')-1]
+"   let next_line = getline('.')[col('.') :]
+"   let prev_num = matchstr(prev_line, '\d\+$')
+"   if prev_num != ''
+"     let next_num = matchstr(next_line, '^\d\+')
+"     let new_line = prev_line[: -len(prev_num)-1] .
+"           \ printf('%0'.len(prev_num).'d',
+"           \    max([0, prev_num . next_num + a:num])) . next_line[len(next_num):]
+"   else
+"     let new_line = prev_line . substitute(next_line, '\d\+',
+"           \ "\\=printf('%0'.len(submatch(0)).'d',
+"           \         max([0, submatch(0) + a:num]))", '')
+"   endif
+"
+"   if getline('.') !=# new_line
+"     call setline('.', new_line)
+"   endif
+" endfunction "}}}
 
 "}}}
 
@@ -265,19 +262,19 @@ vmap H <Nop>
 " nmap <silent>; :<C-U>echo "マーク"<CR><ESC>'
 
 " 前回終了したカーソル行に移動
-
 aug MyAutoCmd
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal g`\"" | endif
 aug END
-nnoremap g: `.zz
-nnoremap g, g;
-nnoremap g; g,
+
+" nnoremap g: `.zz
+" nnoremap g, g;
+" nnoremap g; g,
 
 " windowの操作
 " ****************
 " 画面の移動
-nmap <C-L> <C-W><C-W>
-" nmap <C-W><C-H> <C-W>h
+" nmap <C-L> <C-W><C-W>
+nmap <C-L> <C-I>
 nmap <C-W><C-J><C-h> <C-W>j<C-W>h
 nmap <C-W><C-H><C-j> <C-W>h<C-W>j
 nmap <C-W><C-H><C-k> <C-W>h<C-W>k
@@ -294,11 +291,46 @@ nmap <C-W>H <C-W>H<C-W>=
 nmap <C-W>s :<C-U>split<CR><C-W>=
 nmap <C-W>v :<C-U>vsplit<CR><C-W>=
 
-" A .vimrc snippet that allows you to move around windows beyond tabs
-nnoremap <silent> <Tab> :call <SID>NextWindow()<CR>
-nnoremap <silent> <S-Tab> :call <SID>PreviousWindowOrTab()<CR>
+nmap <silent> <Tab> :call <SID>NextWindowOrTab()<CR>
+nmap <silent> <S-Tab> :call <SID>PreviousWindowOrTab()<CR>
+nmap <C-W>] :call PreviewWord()<CR>
+nmap <silent><C-w><Space> :<C-u>SmartSplit<CR>
+func! PreviewWord() "{{{
+  if &previewwindow      " プレビューウィンドウ内では実行しない
+    return
+  endif
+  let w = expand("<cword>")    " カーソル下の単語を得る
+  if w =~ '\a'      " その単語が文字を含んでいるなら
+    " 別のタグを表示させる前にすでに存在するハイライトを消去する
+    silent! wincmd P      " プレビューウィンドウにジャンプ
+    if &previewwindow      " すでにそこにいるなら
+      match none      " 存在するハイライトを消去する
+      wincmd p      " もとのウィンドウに戻る
+    endif
 
-"{{{
+    " カーソル下の単語にマッチするタグを表示してみる
+    try
+      exe "ptag " . w
+    catch
+      return
+    endtry
+
+    silent! wincmd P      " プレビューウィンドウにジャンプ
+    if &previewwindow    " すでにそこにいるなら
+      if has("folding")
+        silent! .foldopen    " 閉じた折り畳みを開く
+      endif
+      call search("$", "b")    " 前の行の最後へ
+      let w = substitute(w, '\\', '\\\\', "")
+      call search('\<\V' . w . '\>')  " カーソルをマッチしたところへ
+      " ここで単語にハイライトをつける
+      exe 'match previewWord "\%' . line(".") . 'l\%' . col(".") . 'c\k*"'
+      wincmd p      " もとのウィンドウへ戻る
+    endif
+  endif
+endfun "}}}
+
+" smart split window {{{
 function! s:smart_close()
   if winnr('$') != 1
     close
@@ -364,6 +396,19 @@ function! s:split_nicely()
   endif
   wincmd p
 endfunction
+
+function! s:smart_split(cmd)
+  if winwidth(0) > winheight(0) * 2
+    vsplit
+  else
+    split
+  endif
+
+  if !empty(a:cmd)
+    execute a:cmd
+  endif
+endfunction
+command! -nargs=? -complete=command SmartSplit call <SID>smart_split(<q-args>)
 "}}}
 
 " tabを使い易く{{{
@@ -392,24 +437,6 @@ set fileformats=unix,dos,mac
 set encoding=utf-8
 set fileencodings=utf-8,sjis,shift-jis,euc-jp,utf-16,ascii,ucs-bom,cp932,iso-2022-jp
 
-autocmd FileType cvs  :set fileencoding=euc-jp
-
-function! b:newFileEncoding()
-  aug MyAutoCmd
-    autocmd FileType svn    :setl fileencoding=utf-8
-    autocmd FileType js     :setl fileencoding=utf-8
-    autocmd FileType css    :setl fileencoding=utf-8
-    autocmd FileType html   :setl fileencoding=utf-8
-    autocmd FileType xml    :setl fileencoding=utf-8
-    autocmd FileType java   :setl fileencoding=utf-8
-    autocmd FileType scala  :setl fileencoding=utf-8
-  aug END
-endfunction
-
-aug MyAutoCmd
-  au BufNewFile * call b:newFileEncoding()
-aug END
-
 " ワイルドカードで表示するときに優先度を低くする拡張子
 set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc
 
@@ -429,48 +456,7 @@ set expandtab
 set tabstop=2
 set softtabstop=2
 set shiftwidth=2
-if has("autocmd")
-  filetype indent on
-  " 無効にしたい場合
-  " autocmd FileType html filetype indent off
-
-  autocmd FileType apache     setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType aspvbs     setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType c          setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType coffee     setlocal sw=2 sts=2 ts=2 et
-  autocmd FileType conf       setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType cpp        setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType cs         setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType css        setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType diff       setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType eruby      setlocal sw=2 sts=2 ts=2 et
-  autocmd FileType haml       setlocal sw=2 sts=2 ts=2 et
-  autocmd FileType html       setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType java       setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType javascript setlocal sw=2 sts=2 ts=2 et
-  autocmd FileType less,sass  setlocal sw=2 sts=2 ts=2 et
-  autocmd FileType lisp       setlocal sw=2 sts=2 ts=2 et
-  autocmd FileType markdown   setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType perl       setlocal sw=4 sts=4 ts=4 et
-  " autocmd FileType php        setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType php        setlocal sw=2 sts=2 ts=2 et
-  autocmd FileType python     setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType ruby       setlocal sw=2 sts=2 ts=2 et
-  autocmd FileType gitcommit  setlocal sw=2 sts=2 ts=2 et
-  autocmd FileType gitconfig  setlocal sw=2 sts=2 ts=2 et
-  autocmd FileType scala      setlocal sw=2 sts=2 ts=2 et
-  autocmd FileType scss       setlocal sw=2 sts=2 ts=2 et
-  autocmd FileType sh         setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType snippet    setlocal sw=2 sts=2 ts=2 et
-  autocmd FileType sql        setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType vb         setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType vim        setlocal sw=2 sts=2 ts=2 et
-  autocmd FileType wsh        setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType xhtml      setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType xml        setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType yaml       setlocal sw=2 sts=2 ts=2 et
-  autocmd FileType zsh        setlocal sw=4 sts=4 ts=4 et
-endif
+filetype indent on
 
 aug MyAutoCmd
   autocmd InsertLeave * set nopaste
@@ -582,8 +568,8 @@ nmap <Space><Space>f :<C-U>call ChangeFoldMethod()<CR>
 if !has('gui_running') && $TMUX !=# ''
   augroup Tmux
     autocmd!
-    au VimEnter,FocusGained * silent !tmux set status off
-    au VimLeave,FocusLost * silent !tmux set status on
+    " au VimEnter,FocusGained * silent !tmux set status off
+    " au VimLeave,FocusLost * silent !tmux set status on
   augroup END
 endif
 
@@ -600,17 +586,7 @@ function! TitaniumSyn()
   hi def link titanium Define
   syn match titanium '\s*\(Ti\|Titanium\)\.[a-zA-Z0-9_\.]\+'
 endfunction
-au FileType javascript,javascript.titanium call TitaniumSyn()
-
-"****************************************
-"zend用のsyntax
-"****************************************
-function! ZendSyn()
-  hi def link zend Define
-"  syn match zend '\s*Zend_[a-zA-Z0-9_\.]\+'
-  syn match zend '\s*Zend'
-endfunction
-au FileType php call ZendSyn()
+au FileType coffee,javascript,javascript.titanium call TitaniumSyn()
 
 "****************************************
 " コマンドラインの色を修正する
@@ -648,41 +624,37 @@ aug END
 "}}}
 
 "----------------------------------------
-" ファイルタイプ"{{{
-aug MyAutoCmd
-  au BufNewFile,BufRead *Helper.js,*Spec.js  setl filetype=jasmine.javascript
-  au BufNewFile,BufRead *.coffee   setl filetype=coffee
-  au BufNewFile,BufRead *Helper.coffee,*Spec.coffee  setl filetype=jasmine.coffee
-  au BufNewFile,BufRead *.snip  setl filetype=snippet
-  au BufNewFile,BufRead *.less setf less
-  au BufNewFile,BufRead *.dict setf dict
-  au BufNewFile,BufRead Gemfile set filetype=Gemfile
-  au BufNewFile,BufRead .gitignore setl ft=conf
-  au BufNewFile,BufRead *.css set ft=css syntax=css3
-  au BufNewFile,BufRead *.json set filetype=json
-  au BufNewFile,BufRead *.go set filetype=go
-  au BufNewFile,BufRead *.mkd,*.markdown,*.md,*.mdown,*.mkdn   setlocal filetype=markdown autoindent formatoptions=tcroqn2 comments=n:>
-  au BufNewFile,BufRead .tmux.conf*,tmux.conf* set filetype=tmux
-  au BufNewFile,BufRead .htaccess,httpd.conf set filetype=apache
-  au BufNewFile,BufRead *.pcap set filetype=pcap
-  if expand("%:p")  =~ 'conf.d'
-    au BufNewFile,BufRead *.conf set filetype=apache
-  endif
-  au FileType php.wordpress au! ProgramFiles
-aug END
+"Tags関連 cTags使う場合は有効化 "{{{
+" http://vim-users.jp/2010/06/hack154/
 
-" Wordpress の設定"{{{
-function! s:WordpressSetting()
-  if expand("%:p")  =~ 'wp-'
-    setl ft=php.wordpress noexpandtab nolist syntax=wordpress
+set tags& tags-=tags tags+=./tags;
+set tags+=./**/tags
+
+function! SetTags()
+  let g:current_git_root = system('git rev-parse --show-cdup')
+  let g:current_dir = expand("%:p:h")
+  if filereadable(g:current_dir.'/tags')
+    let tags = expand(g:current_dir.'/tags')
+    execute 'set tags+='.tags
+  endif
+  if filereadable(g:current_git_root.'/tags')
+    let tags = expand(g:current_git_root.'/tags')
+    execute 'set tags+='.tags
   endif
 endfunction
-
 aug MyAutoCmd
-  au FileType php call s:WordpressSetting()
+  au BufReadPost * call SetTags()
+  au FileType ruby,eruby,haml setl tags+=~/gtags
 aug END
-"}}}
 
+"tags_jumpを使い易くする
+nnoremap tt  <C-]>
+nnoremap tl  :<C-u>tag<CR>
+nnoremap tk  :<C-u>tn<CR>
+nnoremap tj  :<C-u>tp<CR>
+nnoremap th  :<C-u>pop<CR>
+nnoremap ts  :<C-u>ts<CR>
+nnoremap tk  :<C-u>tags<CR>
 "}}}
 
 " commitメッセージの編集時には余分なプラグインを読み込まない
@@ -895,6 +867,7 @@ aug END
 " ----------------------------------------
 " NeoBundle 'oppara/vim-unite-cake'
 " NeoBundle 'violetyk/cake.vim' " cakephpを使いやすく
+NeoBundle 'taichouchou2/alpaca_wordpress.vim' " cakephpを使いやすく
 
 "  binary
 " ----------------------------------------
@@ -980,22 +953,23 @@ NeoBundle 'vim-scripts/yanktmp.vim'
 "}}}
 
 " Installation check.
-if neobundle#exists_not_installed_bundles()
-  echomsg 'Not installed bundles : ' .
-        \ string(neobundle#get_not_installed_bundle_names())
-  echomsg 'Please execute ":NeoBundleInstall" command.'
-  " finish
-endif
+" if neobundle#exists_not_installed_bundles()
+"   echomsg 'Not installed bundles : ' .
+"         \ string(neobundle#get_not_installed_bundle_names())
+"   echomsg 'Please execute ":NeoBundleInstall" command.'
+"   " finish
+" endif
 
 filetype plugin indent on
 "}}}
 
 "----------------------------------------
-"個別のプラグイン"{{{
+"個別のプラグイン " {{{
 " jk同時押しで<ESC>
-call arpeggio#map('i', '', 0, 'jk', '<Esc>:noh<CR>')
+" nofの表示を無くして、カーソル移動も無くしたかったので、大分ださい
+call arpeggio#map('i', '', 0, 'jk', '<Esc>:noh<CR>:echo ""<CR>')
+call arpeggio#map('v', '', 0, 'jk', '<C-[>:noh<CR>:echo ""<CR>')
 " call arpeggio#map('n', '', 0, 'jk', '<Esc>:noh<CR>')
-call arpeggio#map('v', '', 0, 'jk', '<Esc>:noh<CR>')
 
 "------------------------------------
 " Align / alignta
@@ -1003,8 +977,6 @@ call arpeggio#map('v', '', 0, 'jk', '<Esc>:noh<CR>')
 "{{{
 " Alignを日本語環境で使用するための設定
 let g:Align_xstrlen = 3
-" let g:alignta_default_options="=<<<1:1"
-" let g:alignta_default_arguments="="
 vmap <C-N> :Align<Space>
 vmap <C-N><C-N> :Align =<CR>
 "}}}
@@ -1115,17 +1087,17 @@ aug END
 " taglist.Vim
 "------------------------------------
 "{{{
-let Tlist_Ctags_Cmd = '~/local/bin/jctags' " ctagsのパス
-let Tlist_Show_One_File = 1               " 現在編集中のソースのタグしか表示しない
-let Tlist_Exit_OnlyWindow = 1             " taglistのウィンドーが最後のwindowならばVimを閉じる
-let Tlist_Use_Right_Window = 1            " 右側でtaglistのウィンドーを表示
-let Tlist_Enable_Fold_Column = 1          " 折りたたみ
-let Tlist_Auto_Open = 0                   " 自動表示
-let Tlist_Auto_Update = 1
-let Tlist_WinWidth = 20
-let g:tlist_javascript_settings = 'javascript;c:class;m:method;f:function'
-let tlist_objc_settings='objc;P:protocols;i:interfaces;I:implementations;M:instance methods;C:implementation methods;Z:protocol methods'
-let g:tlist_coffee_settings = 'coffee;f:function;v:variable'
+" let Tlist_Ctags_Cmd = '~/local/bin/jctags' " ctagsのパス
+" let Tlist_Show_One_File = 1               " 現在編集中のソースのタグしか表示しない
+" let Tlist_Exit_OnlyWindow = 1             " taglistのウィンドーが最後のwindowならばVimを閉じる
+" let Tlist_Use_Right_Window = 1            " 右側でtaglistのウィンドーを表示
+" let Tlist_Enable_Fold_Column = 1          " 折りたたみ
+" let Tlist_Auto_Open = 0                   " 自動表示
+" let Tlist_Auto_Update = 1
+" let Tlist_WinWidth = 20
+" let g:tlist_javascript_settings = 'javascript;c:class;m:method;f:function'
+" let tlist_objc_settings='objc;P:protocols;i:interfaces;I:implementations;M:instance methods;C:implementation methods;Z:protocol methods'
+" let g:tlist_coffee_settings = 'coffee;f:function;v:variable'
 " nmap <Space>t :Tlist<CR>
 "}}}
 
@@ -1188,7 +1160,6 @@ let g:tagbar_type_ruby = {
 " カーソル下のURLをブラウザで開く
 nmap <Leader>o <Plug>(openbrowser-open)
 vmap <Leader>o <Plug>(openbrowser-open)
-" ググる
 nnoremap <Leader>g :<C-u>OpenBrowserSearch<Space><C-r><C-w><Enter>
 "}}}
 
@@ -1199,77 +1170,46 @@ nnoremap <Leader>g :<C-u>OpenBrowserSearch<Space><C-r><C-w><Enter>
 " 入力モードで開始する
 let g:unite_enable_split_vertically=1
 let g:unite_enable_start_insert=1
-let g:unite_source_file_mru_filename_format = ''
-let g:unite_source_file_mru_limit = 400     "最大数
-let g:unite_source_file_rec_min_cache_files = 300
-let g:unite_source_history_yank_enable = 1
 let g:unite_winheight = 20
 
 "unite prefix key.
-nnoremap [unite] <Nop>
+nmap [unite] <Nop>
 nmap <C-J> [unite]
 
-nnoremap <silent> [unite]<C-U> :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
-" nnoremap <silent> [unite]<C-R> :<C-u>Unite -buffer-name=register register<CR>
-nnoremap <silent> [unite]<C-R> :<C-u>Unite -no-quit reek<CR>
-nnoremap <silent> [unite]<C-R><C-R> :<C-u>Unite -no-quit rails_best_practices<CR>
-nnoremap <silent> [unite]<C-J> :<C-u>Unite file_mru<CR>
-nnoremap <silent> [unite]<C-B> :<C-u>Unite bookmark<CR>
-nnoremap <silent> <Space>b :<C-u>UniteBookmarkAdd<CR>
+nmap <silent> [unite]<C-U> :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
+" nmap <silent> [unite]<C-R> :<C-u>Unite -buffer-name=register register<CR>
+nmap <silent> [unite]<C-J> :<C-u>Unite file_mru<CR>
+nmap <silent> [unite]<C-B> :<C-u>Unite bookmark<CR>
+nmap <silent> <Space>b :<C-u>UniteBookmarkAdd<CR>
 let g:unite_quick_match_table = {
-      \'a' : 1, 's' : 2, 'd' : 3, 'f' : 4, 'g' : 5, 'h' : 6, 'j' : 7, 'k' : 8, 'l' : 9, ':' : 10,
+      \'a' : 1, 's' : 2, 'd' : 3, 'f' : 4, 'g' : 5, 'h' : 6, 'j' : 7, 'k' : 8, 'l' : 9, ';' : 10,
       \'q' : 11, 'w' : 12, 'e' : 13, 'r' : 14, 't' : 15, 'y' : 16, 'u' : 17, 'i' : 18, 'o' : 19, 'p' : 20,
       \'1' : 21, '2' : 22, '3' : 23, '4' : 24, '5' : 25, '6' : 26, '7' : 27, '8' : 28, '9' : 29, '0' : 30,
       \}
-
-function! s:unite_my_settings()"{{{
-  " nmap <buffer> <ESC> <Plug>(unite_exit)
-  " imap <buffer> jj <Plug>(unite_insert_leave)
-  imap <buffer><C-w> <Plug>(unite_delete_backward_path)
-
-  nmap <buffer><C-L> <C-W><C-W>
-  " nnoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
-  " nnoremap <silent> <buffer> <expr> <C-l> unite#do_action('vsplit')
-  " nnoremap <silent> <buffer> <expr> <C-o> unite#do_action('open')
-  call unite#custom_default_action('ref', 'split')
-  " hi CursorLine                    guibg=#3E3D32
-  " hi CursorColumn                  guibg=#3E3D32
-endfunction
-
-aug MyAutoCmd
-  au FileType unite call s:unite_my_settings()
-aug END
 "}}}
 
 function! UniteSetting()"{{{
   " 動き
   imap <buffer><C-K> <Up>
-  imap <buffer><C-L> <Left>
-  imap <buffer><C-H> <Right>
   imap <buffer><C-J> <Down>
   " 開き方
-  nnoremap <silent><buffer><expr><C-W>s unite#do_action('split')
-  nnoremap <silent><buffer><expr><C-W>v unite#do_action('vsplit')
-  " nnoremap <silent><buffer><expr><C-L> unite#do_action('vsplit')
-  " inoremap <silent><buffer><expr><C-V> unite#do_action('vsplit')
-  " inoremap <silent><buffer><expr><C-E> unite#do_action('split')
-  nnoremap <silent> <buffer> <ESC><ESC> :q<CR>
+  nmap <silent><buffer><expr><C-W>s unite#do_action('split')
+  nmap <silent><buffer><expr><C-W>v unite#do_action('vsplit')
+  nmap <silent><buffer> <ESC><ESC> :q<CR>
 endfunction
 aug MyAutoCmd
   au FileType unite call UniteSetting()
 aug END
 "}}}
 
-"}}}
-
 "------------------------------------
 " Unite-mark.vim
 "------------------------------------
 "{{{
-let g:unite_source_mark_marks =
-      \   "abcdefghijklmnopqrstuvwxyz"
-      \ . "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-      \ . "0123456789.'`^<>[]{}()\""
+" let g:unite_source_mark_marks =
+"       \   "abcdefghijklmnopqrstuvwxyz"
+"       \ . "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+"       \ . "0123456789.'`^<>[]{}()\""
 "}}}
 
 "------------------------------------
@@ -1284,13 +1224,12 @@ let g:unite_source_grep_recursive_opt = "-R"
 " Unite-tag.vim
 "------------------------------------
 "{{{
-aug MyAutoCmd
-  au BufEnter *
-        \   if empty(&buftype)
-        \|     noremap <silent> [unite]<C-K> :<C-u>UniteWithCursorWord -immediately tag<CR>
-        \|  endif
-aug END
-
+" aug MyAutoCmd
+"   au BufEnter *
+"         \   if empty(&buftype)
+"         \|     noremap <silent> [unite]<C-K> :<C-u>UniteWithCursorWord -immediately tag<CR>
+"         \|  endif
+" aug END
 "}}}
 
 "------------------------------------
@@ -1298,27 +1237,30 @@ aug END
 "------------------------------------
 "{{{
 function! UniteRailsSetting()
-  nmap <buffer><C-H>m           :<C-U>Unite rails/model<CR>
-  nmap <buffer><C-H><C-H><C-H>  :<C-U>Unite rails/model<CR>
-  nmap <buffer><C-H>v           :<C-U>Unite rails/view<CR>
-  nmap <buffer><C-H><C-H>       :<C-U>Unite rails/view<CR>
-  nmap <buffer><C-H>c           :<C-U>Unite rails/controller<CR>
+  nmap <buffer><C-H><C-H><C-H>  :<C-U>Unite rails/view<CR>
+  nmap <buffer><C-H><C-H>       :<C-U>Unite rails/model<CR>
   nmap <buffer><C-H>            :<C-U>Unite rails/controller<CR>
-  nmap <buffer><C-H>f           :<C-U>Unite rails/config<CR>
-  nmap <buffer><C-H>sp           :<C-U>Unite rails/spec<CR>
-  nmap <buffer><C-H>d           :<C-U>Unite rails/db<CR>
-  nmap <buffer><expr><C-H>g     '<Esc>:e ' . RailsRoot() . '/Gemfile<CR>'
-  nmap <buffer><expr><C-H>lo    '<Esc>:e ' . RailsRoot() . '/config/locales<CR>'
-  nmap <buffer><expr><C-H>ro    '<Esc>:e ' . RailsRoot() . '/config/routes.rb<CR>'
-  nmap <buffer><expr><C-H>se    '<Esc>:e ' . RailsRoot() . '/db/seeds.rb<CR>'
+
+  nmap <buffer><C-H>c           :<C-U>Unite rails/config<CR>
+  nmap <buffer><C-H>s           :<C-U>Unite rails/spec<CR>
+  nmap <buffer><C-H>m           :<C-U>Unite rails/db -input=migrate<CR>
+  nmap <buffer><C-H>l           :<C-U>Unite rails/lib<CR>
+  nmap <buffer><expr><C-H>g     ':e '.b:rails_root.'/Gemfile<CR>'
+  nmap <buffer><expr><C-H>r     ':e '.b:rails_root.'/config/routes.rb<CR>'
+  nmap <buffer><expr><C-H>se    ':e '.b:rails_root.'/db/seeds.rb<CR>'
   nmap <buffer><C-H>ra          :<C-U>Unite rails/rake<CR>
-  nmap <buffer><C-H>ds          :<C-U>Unite rails/destroy<CR>
   nmap <buffer><C-H>h           :<C-U>Unite rails/heroku<CR>
 endfunction
 aug MyAutoCmd
   au User Rails call UniteRailsSetting()
 aug END
 "}}}
+
+"------------------------------------
+" Unite-reek, Unite-rails_best_practices
+"------------------------------------
+nmap <silent> [unite]<C-R> :<C-u>Unite -no-quit reek<CR>
+nmap <silent> [unite]<C-R><C-R> :<C-u>Unite -no-quit rails_best_practices<CR>
 
 "------------------------------------
 " VimFiler
@@ -1334,10 +1276,7 @@ nmap <C-H><C-F> :call VimFilerExplorerGit()<CR>
 let g:vimfiler_safe_mode_by_default = 0
 let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_sort_type = "filename"
-" let g:vimfiler_split_action = "right"
-" let g:vimfiler_edit_action = "open"
 let g:vimfiler_preview_action = ""
-let g:vimfiler_max_directories_history = 100
 let g:vimfiler_enable_auto_cd= 1
 let g:vimfiler_file_icon = "-"
 " let g:vimfiler_readonly_file_icon = "𐄂"
@@ -1363,13 +1302,10 @@ aug VimFilerKeyMapping
     " Unite bookmark連携
     nmap <buffer>B :<C-U>Unite bookmark<CR>
     nmap <buffer>b :<C-U>UniteBookmarkAdd<CR>
-    nmap <buffer><C-L> <C-W><C-W>
     nmap <buffer><CR> <Plug>(vimfiler_edit_file)
     nmap <buffer>v <Plug>(vimfiler_view_file)
-    " nmap <buffer><silent><C-J>
-    nmap <buffer><silent><C-J><C-J> :<C-U>Unite file_mru<CR>
-    " nmap <buffer><silent><C-J><C-U> :<C-U>Unite file<CR>
-    nmap <buffer><silent><C-J><C-U> :<C-U>UniteWithBufferDir -buffer-name=files file<CR>
+    nmap <buffer><silent>[unite]<C-J> :<C-U>Unite file_mru<CR>
+    nmap <buffer><silent>[unite]<C-U> :<C-U>UniteWithBufferDir -buffer-name=files file<CR>
 
     " Unite bookmarkのアクションをVimFilerに
     call unite#custom_default_action('source/bookmark/directory' , 'vimfiler')
@@ -1379,8 +1315,6 @@ aug END
 
 " VimFilerExplorerを自動起動
 " gitの場合はgit_rootかつ、バッファの有無でフォーカス変える
-" XXX 関数内でsystemを呼ぶと、なぜか^]];95;cという文字が出る。。。今は外に出し
-" 原因不明
 function! VimFilerExplorerGit()"{{{
   let cmd = bufname("%") != "" ? "2wincmd w" : ""
   let s:git_root = system('git rev-parse --show-cdup')
@@ -1401,7 +1335,7 @@ function! VimFilerExplorerGit()"{{{
   aug END
 
   exe cmd
-endfunction"}}}
+endfunction "}}}
 
 command!
 \   VimFilerExplorerGit
@@ -1432,14 +1366,6 @@ let g:quickrun_config['coffee_compile'] = {
       \'exec' : ['%c -cbp %s']
       \}
 
-" should gem install bluecloth
-" let markdownCss = '<link href="http://kevinburke.bitbucket.org/markdowncss/markdown.css" rel="stylesheet"></link>'
-" let markdownHead = '<!DOCTYPE HTML> <html lang=\"ja\"> <head> <meta charset=\"UTF-8\">'.markdownCss.'</head><body>'
-" let markdownFoot = "</body> </html>"
-"       " \ 'command'   : 'bluecloth',
-" let g:quickrun_config['markdown'] = {
-"       \ 'exec'      : ["echo \'" . markdownHead. "'", '%c  %s', "echo \'" . markdownFoot. "'"],
-"       \ }
 let g:quickrun_config['markdown'] = {
       \ 'outputter': 'browser',
       \ 'cmdopt': '-s'
@@ -1456,26 +1382,12 @@ let g:quickrun_config['ruby.rspec'] = {
       \ 'command': 'rspec',
       \ 'exec': 'bundle exec %c %o %s',
       \}
-      " \ 'outputter' : 'rspec_outputter'
-      " \ 'exec': 'bundle exec %c --color --tty %o %s',
-      " \ 'outputter' : 'ansi_buffer'
-
-let ansi_buffer = quickrun#outputter#buffer#new()
-function! ansi_buffer.init(session)
-  call call(quickrun#outputter#buffer#new().init,  [a:session],  self)
-endfunction
-
-function! ansi_buffer.finish(session)
-  AnsiEsc
-  call call(quickrun#outputter#buffer#new().finish,  [a:session], self)
-endfunction
-call quickrun#register_outputter("ansi_buffer", ansi_buffer)
 
 " ファイル名が_spec.rbで終わるファイルを読み込んだ時に上記の設定を自動で読み込む
 function! RSpecQuickrun()
   let b:quickrun_config = {'type' : 'ruby.rspec'}
   setl ft=ruby.rspec
-  nnoremap <expr><silent><buffer><Leader>lr "<Esc>:QuickRun ruby.rspec -cmdopt \"-l" .  line('.') . "\"<CR>"
+  nmap <expr><silent><buffer><Leader>lr "<Esc>:QuickRun ruby.rspec -cmdopt \"-l" .  line('.') . "\"<CR>"
 endfunction
 aug MyAutoCmd
   au BufReadPost *_spec.rb call RSpecQuickrun()
@@ -2620,7 +2532,7 @@ nmap <silent><Leader>ig <Plug>IndentGuidesToggle
 " qiita
 "------------------------------------
 "{{{
-nmap <C-H><C-Q> :unite qiita<CR>
+" nmap <C-H><C-Q> :unite qiita<CR>
 "}}}
 
 "------------------------------------
@@ -2632,30 +2544,30 @@ nmap <C-H><C-Q> :unite qiita<CR>
 " SQLUtils
 "------------------------------------
 "{{{
-" let g:sqlutil_syntax_elements = 'Constant,sqlString'
-let g:sqlutil_default_menu_mode = 3
-let g:sqlutil_menu_priority = 30
-" let g:sqlutil_menu_root = 'MyPlugin.&SQLUtil'
-let g:sqlutil_use_syntax_support = 1
-" let g:sqlutil_<tab> to cycle through the various option names.
-" let g:sqlutil_cmd_terminator = "\ngo"
-" let g:sqlutil_cmd_terminator = "\ngo\n"
-" let g:sqlutil_cmd_terminator = ';'
-let g:sqlutil_load_default_maps = 0
-" let g:sqlutil_stmt_keywords = 'select,insert,update,delete,with,merge'
-let g:sqlutil_use_tbl_alias = 'd|a|n'
-
-let g:sqlutil_align_where = 1
-let g:sqlutil_keyword_case = '\U'
-let g:sqlutil_align_keyword_right = 0
-let g:sqlutil_align_first_word = 1
-let g:sqlutil_align_comma = 1
-" vmap <leader>sf    <Plug>SQLU_Formatter<CR>
-" nmap <leader>scl   <Plug>SQLU_CreateColumnList<CR>
-" nmap <leader>scd   <Plug>SQLU_GetColumnDef<CR>
-" nmap <leader>scdt  <Plug>SQLU_GetColumnDataType<CR>
-" nmap <leader>scp   <Plug>SQLU_CreateProcedure<CR>
-vmap sf :SQLUFormatter<CR>
+" " let g:sqlutil_syntax_elements = 'Constant,sqlString'
+" let g:sqlutil_default_menu_mode = 3
+" let g:sqlutil_menu_priority = 30
+" " let g:sqlutil_menu_root = 'MyPlugin.&SQLUtil'
+" let g:sqlutil_use_syntax_support = 1
+" " let g:sqlutil_<tab> to cycle through the various option names.
+" " let g:sqlutil_cmd_terminator = "\ngo"
+" " let g:sqlutil_cmd_terminator = "\ngo\n"
+" " let g:sqlutil_cmd_terminator = ';'
+" let g:sqlutil_load_default_maps = 0
+" " let g:sqlutil_stmt_keywords = 'select,insert,update,delete,with,merge'
+" let g:sqlutil_use_tbl_alias = 'd|a|n'
+"
+" let g:sqlutil_align_where = 1
+" let g:sqlutil_keyword_case = '\U'
+" let g:sqlutil_align_keyword_right = 0
+" let g:sqlutil_align_first_word = 1
+" let g:sqlutil_align_comma = 1
+" " vmap <leader>sf    <Plug>SQLU_Formatter<CR>
+" " nmap <leader>scl   <Plug>SQLU_CreateColumnList<CR>
+" " nmap <leader>scd   <Plug>SQLU_GetColumnDef<CR>
+" " nmap <leader>scdt  <Plug>SQLU_GetColumnDataType<CR>
+" " nmap <leader>scp   <Plug>SQLU_CreateProcedure<CR>
+" vmap sf :SQLUFormatter<CR>
 "}}}
 
 "------------------------------------
@@ -2720,15 +2632,22 @@ let g:eskk#enable_completion = 1
 let g:eskk#directory = "~/.eskk"
 let g:eskk#dictionary = { 'path': expand( "~/.eskk_jisyo" ), 'sorted': 0, 'encoding': 'utf-8', }
 let g:eskk#large_dictionary = { 'path':  expand("~/.eskk_dict/SKK-JISYO.L"), 'sorted': 1, 'encoding': 'euc-jp', }
-let g:eskk#cursor_color = {
-      \   'ascii': ['#8b8b83', '#bebebe'],
-      \   'hira': ['#8b3e2f', '#ffc0cb'],
-      \   'kata': ['#228b22', '#00ff00'],
-      \   'abbrev': '#4169e1',
-      \   'zenei': '#ffd700',
-      \}
+" let g:eskk#cursor_color = {
+"       \   'ascii': ['#8b8b83', '#bebebe'],
+"       \   'hira': ['#8b3e2f', '#ffc0cb'],
+"       \   'kata': ['#228b22', '#00ff00'],
+"       \   'abbrev': '#4169e1',
+"       \   'zenei': '#ffd700',
+"       \}
 imap <C-J> <Plug>(eskk:toggle)
 " "}}}
+
+"------------------------------------
+" alpaca_wordpress.vim
+"------------------------------------
+let g:alpaca_wordpress_syntax = 1
+let g:alpaca_wordpress_use_default_setting = 1
+
 "}}}
 
 "----------------------------------------
@@ -2736,51 +2655,27 @@ imap <C-J> <Plug>(eskk:toggle)
 augroup DictSetting
   au!
   au FileType ruby.rspec           setl dict+=~/.vim/dict/rspec.dict
-  au FileType jasmine.coffee,jasmine.js setl dict+=~/.vim/dict/js.jasmine.dict
+  au FileType coffee.jasmine,javascript.jasmine setl dict+=~/.vim/dict/js.jasmine.dict
   au FileType coffee,javascript    setl dict+=~/.vim/dict/jquery.dict
   au FileType coffee               setl dict+=~/.vim/dict/coffee.dict,~/.vim/dict/javascript.dict
   au FileType html,php,eruby       setl dict+=~/.vim/dict/html.dict
-
-  au FileType * nmap <buffer><expr><Space>d ':<C-U>e ~/.vim/dict/' . &filetype . '.dict<CR>'
-  au FileType dict nmap <buffer><Space>d :<C-U>e #<CR>
-  au FileType dict nmap <buffer><Space>e :e #<CR>
 augroup END
 
-" 読み込む辞書をファイルによって変更
-function! s:railsSetting()
-  setl dict+=~/.vim/dict/rails.dict
-
-  let filepath = expand("%:p")
-  if filepath =~ 'app\/models/[/a-zA-Z_]\+.rb$'
-    setl dict+=~/.vim/dict/rails.models.dict
-  elseif filepath =~ 'app\/views\/[/a-zA-Z_.]\+.erb$'
-    setl dict+=~/.vim/dict/rails.views.dict
-  elseif filepath =~ 'app\/controllers\/[/a-zA-Z_]\+.rb$'
-    setl dict+=~/.vim/dict/rails.controllers.dict
-  elseif filepath =~ 'db\/migrate\/[/0-9a-zA-Z_]\+.rb$'
-    setl dict+=~/.vim/dict/rails.migrate.dict
-  else
-    nmap <buffer><Space>d :<C-U>e ~/.vim/dict/rails.dict
-  endif
-endfunction
-
-let s:loaded_rails_au = -1
-function! RailsDictionarySetting()
-  if s:loaded_rails_au | return -1 |endif
-  augroup RailsSetting
-    au!
-    au User BufEnterRails call s:railsSetting()
-    au User Rails.controller*
-    au User Rails.view.erb*
-    au User Rails/**/foo_bar.rb
-    au User Rails/config/environment.rb
-  augroup END
-  let s:loaded_rails_au = 1
-endfunction
 aug MyAutoCmd
-  au VimEnter * call RailsDictionarySetting()
+  " 別の関数に移そうか..
+  au User Rails.controller*           setl ft=ruby.rails.controller   syntax=ruby
+  au User Rails.view*                 setl ft=ruby.rails.view         syntax=ruby
+  au User Rails.model*                setl ft=ruby.rails.model        syntax=ruby
+  au User Rails/db/migrate/*          setl ft=ruby.rails.migrate      syntax=ruby
+  au User Rails/config/environment.rb setl ft=ruby.rails.environment  syntax=ruby
+  au User Rails/config/routes.rb      setl ft=ruby.rails.routes       syntax=ruby
+  au User Rails/config/database.rb    setl ft=ruby.rails.database     syntax=ruby
+  au User Rails/config/boot.rb        setl ft=ruby.rails.boot         syntax=ruby
+  au User Rails/config/locales/*      setl ft=ruby.rails.locales      syntax=ruby
+  au User Rails/config/initializes    setl ft=ruby.rails.initializes  syntax=ruby
+  au User Rails/config/environments/* setl ft=ruby.rails.environments syntax=ruby
+  au User Rails set dict+=~/.vim/dict/ruby.rails.dict syntax=ruby | nmap <buffer><Space>dd  :<C-U>SmartSplit e ~/.vim/dict/ruby.rails.dict<CR>
 aug END
-
 
 " カスタムファイルタイプでも、自動でdictを読み込む
 " そして、編集画面までさくっと移動。
@@ -2790,14 +2685,14 @@ func! s:auto_dict_setting()
     exe  "setl dict+=~/.vim/dict/".dict_name[0].".dict"
   endif
 
-  exe  "setl dict+=~/.vim/dict/".&ft.".dict"
-  nmap <buffer><expr><Space>dd ":e ~/.vim/dict/" . &ft .".dict<CR>"
+  let b:dict_path = expand('~/.vim/dict/'.&ft.'.dict')
+  exe  "setl dict+=".b:dict_path
+  nmap <buffer><expr><Space>d ':<C-U>SmartSplit e '.b:dict_path.'<CR>'
 endfunc
+
 aug MyAutoCmd
   au FileType * call s:auto_dict_setting()
 aug END
-
-
 "}}}
 
 "----------------------------------------
@@ -2849,16 +2744,16 @@ if !exists('g:neocomplcache_wildcard_characters')
 endif
 let g:neocomplcache_wildcard_characters._ = '-'
 if $USER ==# 'root'
-  let g:neocomplcache_temporary_dir = expand( '~/.neocon' )
+  let g:neocomplcache_temporary_dir       = expand( '~/.neocon' )
 endif
 if !exists('g:neocomplcache_omni_patterns')
-  let g:neocomplcache_omni_patterns = {}
+  let g:neocomplcache_omni_patterns       = {}
 endif
 if !exists('g:neocomplcache_force_omni_patterns')
   let g:neocomplcache_force_omni_patterns = {}
 endif
 if !exists('g:neocomplcache_keyword_patterns')
-  let g:neocomplcache_keyword_patterns = {}
+  let g:neocomplcache_keyword_patterns    = {}
 endif
 if !exists('g:neocomplcache_same_filetype_lists')
   let g:neocomplcache_same_filetype_lists = {}
@@ -2885,7 +2780,7 @@ let g:neocomplcache_force_omni_patterns.python = '[^. \t]\.\w*'
 " let g:clang_use_library   = 1
 
 " Define keyword pattern. "{{{
-let g:neocomplcache_keyword_patterns['default'] = '[0-9a-zA-Z:#_]\+'
+let g:neocomplcache_keyword_patterns.default = '[0-9a-zA-Z:#_]\+'
 let g:neocomplcache_keyword_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 let g:neocomplcache_snippets_dir = '~/.bundle/neosnippet/autoload/neosnippet/snippets,~/.vim/snippet'
 let g:neocomplcache_omni_patterns.php = '[^. *\t]\.\w*\|\h\w*::'
@@ -2909,9 +2804,10 @@ let g:neocomplcache_vim_completefuncs = {
       \ 'VimFiler' : 'vimfiler#complete',
       \ 'Vinarise' : 'vinarise#complete',
       \}
+
 if !exists('g:neocomplcache_source_completion_length')
   let g:neocomplcache_source_completion_length = {
-        \ 'look' : 4,
+        \ 'look' : 3,
         \ }
 endif
 "}}}
@@ -2921,7 +2817,7 @@ let g:neocomplcache_dictionary_filetype_lists = {
       \ 'default'    : '',
       \ 'java'       : $HOME.'/.vim/dict/java.dict',
       \ 'ruby'       : $HOME.'/.vim/dict/ruby.dict',
-      \ 'ruby.rails' : $HOME.'/.vim/dict/rails.dict',
+      \ 'ruby.rails' : $HOME.'/.vim/dict/ruby.rails.dict',
       \ 'eruby'      : $HOME.'/.vim/dict/ruby.dict',
       \ 'javascript' : $HOME.'/.vim/dict/javascript.dict',
       \ 'coffee'     : $HOME.'/.vim/dict/javascript.dict',
@@ -2941,7 +2837,7 @@ let g:neocomplcache_dictionary_filetype_lists = {
 " Plugin key-mappings.
 imap <expr><C-g>     neocomplcache#undo_completion()
 imap <expr><C-g>     neocomplcache#undo_completion()
-imap <expr><C-l>     neocomplcache#complete_common_string()
+" imap <expr><C-l>     neocomplcache#complete_common_string()
 imap <expr><CR> neocomplcache#smart_close_popup() . "<CR>" . "<Plug>DiscretionaryEnd"
 " imap <silent><expr><BS>   neocomplcache#smart_close_popup()."\<C-h>"
 imap <silent><expr><S-TAB> pumvisible() ? "\<C-P>" : "\<S-TAB>"
@@ -2956,49 +2852,15 @@ aug MyAutoCmd
   au FileType snippet nmap <buffer><Space>e :e #<CR>
 aug END
 imap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
-smap <silent><C-F>         <Plug>(neosnippet_expand_or_jump)
 imap <silent><C-U>     <Plug>(neosnippet_start_unite_snippet)
-nmap <Space>e      :<C-U>NeoSnippetEdit -split<CR>
+nmap <silent><Space>e  :<C-U>NeoSnippetEdit -split<CR>
+smap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
 xmap <silent><C-F>     <Plug>(neosnippet_start_unite_snippet_target)
 " xmap <silent>U         <Plug>(neosnippet_expand_target)
 xmap <silent>o         <Plug>(neosnippet_register_oneshot_snippet)
 "}}}
 
-"----------------------------------------
-"Tags関連 cTags使う場合は有効化 "{{{
-" http://vim-users.jp/2010/06/hack154/
-
-set tags& tags-=tags tags+=./tags;
-set tags+=./**/tags
-
-function! SetTags()
-  let g:current_git_root = system('git rev-parse --show-cdup')
-  let g:current_dir = expand("%:p:h")
-  if filereadable(g:current_dir.'/tags')
-    let tags = expand(g:current_dir.'/tags')
-    execute 'set tags+='.tags
-  endif
-  if filereadable(g:current_git_root.'/tags')
-    let tags = expand(g:current_git_root.'/tags')
-    execute 'set tags+='.tags
-  endif
-endfunction
-aug MyAutoCmd
-  au BufReadPost * call SetTags()
-  au FileType ruby,eruby,haml setl tags+=~/gtags
-aug END
-
-
-"tags_jumpを使い易くする
-nnoremap tt  <C-]>
-nnoremap tl  :<C-u>tag<CR>
-nnoremap tk  :<C-u>tn<CR>
-nnoremap tj  :<C-u>tp<CR>
-nnoremap th  :<C-u>pop<CR>
-nnoremap ts  :<C-u>ts<CR>
-nnoremap tk  :<C-u>tags<CR>
-"}}}
-
+finish
 "----------------------------------------
 " コマンドの実行"{{{
 
@@ -3027,20 +2889,6 @@ inoremap <C-D><C-D> <C-R>=Today()<CR>
 " 画面分割を抽象的に行う
 " ----------------------------------------
 "{{{
-function! s:smart_split(cmd)
-  if winwidth(0) > winheight(0) * 2
-    vsplit
-  else
-    split
-  endif
-
-  if !empty(a:cmd)
-    execute a:cmd
-  endif
-endfunction
-command! -nargs=? -complete=command SmartSplit call <SID>smart_split(<q-args>)
-nnoremap <silent><C-w><Space> :<C-u>SmartSplit<CR>
-
 if executable('pdftotext')
   command! -complete=file -nargs=1 Pdf :r !pdftotext -nopgbrk -layout <q-args> -
 endif
@@ -3174,127 +3022,6 @@ command! DiffOrig vert new | setlocal bt=nofile | r # | 0d_ | diffthis | wincmd 
 command! -nargs=0 Undiff setlocal nodiff noscrollbind wrap
 "}}}
 
-" ----------------------------------------
-" プラットフォーム依存
-" ----------------------------------------
-" "{{{
-"
-if exists( 's:is_windows' )
-  " For Windows"{{{
-
-  " In Windows, can't find exe, when $PATH isn't contained $VIM.
-  if $PATH !~? '\(^\|;\)' . escape($VIM, '\\') . '\(;\|$\)'
-    let $PATH = $VIM . ';' . $PATH
-  endif
-
-  " Shell settings.
-  " Use NYAOS.
-  "set shell=nyaos.exe
-  "set shellcmdflag=-e
-  "set shellpipe=\|&\ tee
-  "set shellredir=>%s\ 2>&1
-  "set shellxquote=\"
-
-  " Use bash.
-  "set shell=bash.exe
-  "set shellcmdflag=-c
-  "set shellpipe=2>&1\|\ tee
-  "set shellredir=>%s\ 2>&1
-  "set shellxquote=\"
-
-  " Change colorscheme.
-  " Don't override colorscheme.
-  if !exists('g:colors_name') && !has('gui_running')
-    colorscheme darkblue
-  endif
-  " Disable error messages.
-  let g:CSApprox_verbose_level = 0
-
-  " Popup color.
-  hi Pmenu ctermbg=8
-  hi PmenuSel ctermbg=1
-  hi PmenuSbar ctermbg=0
-  "}}}
-else
-  " For Linux"{{{
-  if exists('$WINDIR')
-    " Cygwin.
-
-    " Use bash.
-    set shell=bash
-  else
-    " Use zsh.
-    set shell=zsh
-  endif
-
-  " Set path.
-  let $PATH = expand('~/bin').':/usr/local/bin/:'.$PATH
-
-  " For non GVim.
-  if !has('gui_running')
-    " Enable 256 color terminal.
-    if !exists('$TMUX')
-      set t_Co=256
-
-      " For screen."{{{
-      if &term =~ '^screen'
-        augroup MyAutoCmd
-          " Show filename on screen statusline.
-          " But invalid 'another' screen buffer.
-          autocmd BufEnter * if $WINDOW != 0 &&  bufname("") !~ "[A-Za-z0-9\]*://"
-                \ | silent! exe '!echo -n "kv:%:t\\"' | endif
-          " When 'mouse' isn't empty, Vim will freeze. Why?
-          autocmd VimLeave * :set mouse=
-        augroup END
-
-        " For Vim inside screen.
-        set ttymouse=xterm2
-      endif
-
-      " For prevent bug.
-      aug MyAutoCmd
-        au MyAutoCmd VimLeave * set term=screen
-      aug END
-      "}}}
-    endif
-
-    if has('gui')
-      " Use CSApprox.vim
-      NeoBundleSource CSApprox
-
-      " Convert colorscheme in Konsole.
-      let g:CSApprox_konsole = 1
-      let g:CSApprox_attr_map = {
-            \ 'bold' : 'bold',
-            \ 'italic' : '', 'sp' : ''
-            \ }
-      if !exists('g:colors_name')
-        colorscheme candy
-      endif
-    else
-      " Use guicolorscheme.vim
-      NeoBundleSource guicolorscheme.vim
-
-      aug MyAutoCmd
-        autocmd MyAutoCmd VimEnter,BufAdd *
-              \ if !exists('g:colors_name') | GuiColorScheme candy
-      aug END
-
-      " Disable error messages.
-      let g:CSApprox_verbose_level = 0
-    endif
-
-    " Change cursor shape.
-    if &term =~ "xterm"
-      let &t_SI = "\<Esc>]12;lightgreen\x7"
-      let &t_EI = "\<Esc>]12;white\x7"
-    endif
-  endif
-
-  "}}}
-endif
-
-"}}}
 "}}}
 
 set secure

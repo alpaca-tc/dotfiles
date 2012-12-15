@@ -13,7 +13,7 @@
 "
 "   This script also introduces indentation for:
 "
-"           case blocks 
+"           case blocks
 "           paren blocks
 "           '[[' blocks
 "           line continuation
@@ -103,7 +103,7 @@ function! SuperShIndent()
     " Find non-blank lines above the current line.
     let lastlnum = prevnonblank(v:lnum - 1)
     let prevlnum = prevnonblank(lastlnum - 1)
-    if lastlnum != 0 
+    if lastlnum != 0
         let lastline = getline(lastlnum)
     endif
     if prevlnum != 0
@@ -190,7 +190,7 @@ function! GetPairIndent(CurrLine, LastLine, LastLNum, Head, Mid, Tail)
         " If the line starts with an open, The close shouldn't be counted as
         " such, because we're looking for closes that didn't start on this
         " line.
-        if a:LastLine =~ '^\s*' . a:Head || 
+        if a:LastLine =~ '^\s*' . a:Head ||
                     \ (a:Mid != '' && a:LastLine =~ '^\s*' . a:Mid)
             let levels = 1
         endif
@@ -213,7 +213,7 @@ function! GetPairIndent(CurrLine, LastLine, LastLNum, Head, Mid, Tail)
         if a:LastLine =~ a:Tail
             while 1
                 let pairend = searchpair(a:Head, a:Mid, a:Tail, 'W')
-                if pairend == 0 || a:LastLNum != pairend 
+                if pairend == 0 || a:LastLNum != pairend
                     break
                 endif
                 let syn = synIDattr(synID(line("."), col("."), 1), "name")
@@ -228,7 +228,7 @@ function! GetPairIndent(CurrLine, LastLine, LastLNum, Head, Mid, Tail)
     " If the current line starts with a close, count it.  It won't effect the
     " indentation of the next line because it is the first thing on the line
     " and won't be counted as a "close on the last line".
-    if a:CurrLine =~ '^\s*' . a:Tail 
+    if a:CurrLine =~ '^\s*' . a:Tail
                 \ || (a:Mid != '' && a:CurrLine =~ '^\s*' . a:Mid)
         let levels = levels - 1
     endif
@@ -238,7 +238,7 @@ function! GetPairIndent(CurrLine, LastLine, LastLNum, Head, Mid, Tail)
 
     let adj = &sw*levels
     if adj != 0 && b:super_sh_indent_echo
-        let g:lastindent = g:lastindent . 
+        let g:lastindent = g:lastindent .
                     \ "GetPairIndent(" . a:Head . "):" . adj . " "
     endif
 
@@ -312,19 +312,19 @@ function! GetContIndent(Pattern, CurrLine, LastLine, LastLNum, PrevLNum)
     endif
 
     " Figure out the last and previous continuation status
-    if lastmatchlnum && lastmatchlnum == a:LastLNum 
+    if lastmatchlnum && lastmatchlnum == a:LastLNum
         let lastcont = 1
     endif
-    if ( lastmatchlnum && lastmatchlnum == a:PrevLNum ) 
+    if ( lastmatchlnum && lastmatchlnum == a:PrevLNum )
                 \ || ( prevmatchlnum && prevmatchlnum == a:PrevLNum )
         let prevcont = 1
     endif
 
-    "echom "lastcont: " . lastcont . 
-    "            \ ", prevcont: " . prevcont . 
+    "echom "lastcont: " . lastcont .
+    "            \ ", prevcont: " . prevcont .
     "            \ ", lastmatchlnum: " . lastmatchlnum .
     "            \ ", prevmatchlnum: " . prevmatchlnum .
-    "            \ ", lastlnum: " . a:LastLNum . 
+    "            \ ", lastlnum: " . a:LastLNum .
     "            \ ", PrevLNum: " . a:PrevLNum
 
     if lastcont && !prevcont && a:CurrLine !~ '^\s*{'
@@ -336,7 +336,7 @@ function! GetContIndent(Pattern, CurrLine, LastLine, LastLNum, PrevLNum)
     call cursor(origline, origcol)
 
     if adj != 0 && b:super_sh_indent_echo
-        let g:lastindent = g:lastindent . 
+        let g:lastindent = g:lastindent .
                     \ "GetContIndent('" . a:Pattern . "'):" . adj . " "
     endif
     return adj
@@ -415,7 +415,7 @@ function! GetSimpleContIndent(LastLine, LastLNum)
     endif
 
     if adj != 0 && b:super_sh_indent_echo
-        let g:lastindent = g:lastindent . 
+        let g:lastindent = g:lastindent .
                     \ "GetSimpleContIndent():" . adj . " "
     endif
     return adj
@@ -479,7 +479,7 @@ function! GetPairIndent(CurrLine, LastLine, LastLNum, Head, Mid, Tail)
         " If the line starts with an open, The close shouldn't be counted as
         " such, because we're looking for closes that didn't start on this
         " line.
-        if a:LastLine =~ '^\s*' . a:Head || 
+        if a:LastLine =~ '^\s*' . a:Head ||
                     \ (a:Mid != '' && a:LastLine =~ '^\s*' . a:Mid)
             let levels = 1
         endif
@@ -498,7 +498,7 @@ function! GetPairIndent(CurrLine, LastLine, LastLNum, Head, Mid, Tail)
         if a:LastLine =~ a:Tail
             while 1
                 let pairend = searchpair(a:Head, a:Mid, a:Tail, 'W')
-                if pairend == 0 || a:LastLNum != pairend 
+                if pairend == 0 || a:LastLNum != pairend
                     break
                 endif
                 let syn = synIDattr(synID(line("."), col("."), 1), "name")
@@ -513,7 +513,7 @@ function! GetPairIndent(CurrLine, LastLine, LastLNum, Head, Mid, Tail)
     " If the current line starts with a close, count it.  It won't effect the
     " indentation of the next line because it is the first thing on the line
     " and won't be counted as a "close on the last line".
-    if a:CurrLine =~ '^\s*' . a:Tail 
+    if a:CurrLine =~ '^\s*' . a:Tail
                 \ || (a:Mid != '' && a:CurrLine =~ '^\s*' . a:Mid)
         let levels = levels - 1
     endif
@@ -523,10 +523,12 @@ function! GetPairIndent(CurrLine, LastLine, LastLNum, Head, Mid, Tail)
 
     let adj = &sw*levels
     if adj != 0 && b:super_sh_indent_echo
-        let g:lastindent = g:lastindent . 
+        let g:lastindent = g:lastindent .
                     \ "GetPairIndent(" . a:Head . "):" . adj . " "
     endif
 
     return adj
 
 endfunction
+
+setl sw=4 sts=4 ts=4 et

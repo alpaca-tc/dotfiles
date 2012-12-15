@@ -1,0 +1,1 @@
+setl fileencoding=euc-jp

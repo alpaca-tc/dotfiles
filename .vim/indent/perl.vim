@@ -11,9 +11,9 @@
 " TODO things that are not or not properly indented (yet) :
 " - Continued statements
 "     print "foo",
-"	"bar";
+"  "bar";
 "     print "foo"
-"	if bar();
+"  if bar();
 " - Multiline regular expressions (m//x)
 " (The following probably needs modifying the perl syntax file)
 " - qw() lists
@@ -174,6 +174,7 @@ function GetPerlIndent()
 
 endfunction
 
+setl sw=4 sts=4 ts=4 et
 let &cpo = s:cpo_save
 unlet s:cpo_save
 

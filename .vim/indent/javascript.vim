@@ -1,6 +1,6 @@
 " Vim indent file
 " Language:    JavaScript
-" Author:     Preston Koprivica (pkopriv2@gmail.com)  
+" Author:     Preston Koprivica (pkopriv2@gmail.com)
 " URL:
 " Last Change:   April 30, 2010
 
@@ -33,7 +33,7 @@ let s:js_object_beg = '[{\[]\s*'
 let s:js_object_end = '^[^][{}]*[}\]][;,]\=\s*'
 
 " Simple control blocks (those not beginngin with "{")
-let s:js_s_cntrl_beg = '^\s*\(\(\(if\|for\|with\|while\)\s*(.*)\)\|\(try\|do\)\)\s*'     
+let s:js_s_cntrl_beg = '^\s*\(\(\(if\|for\|with\|while\)\s*(.*)\)\|\(try\|do\)\)\s*'
 let s:js_s_cntrl_mid = '^\s*\(\(\(else\s*if\|catch\)\s*(.*)\)\|\(finally\|else\)\)\s*'
 
 " Multi line control blocks (those beginning with "{")
@@ -51,7 +51,7 @@ let s:js_multi_invok_beg = s:js_multi_beg
 let s:js_multi_invok_end = s:js_s_multi_end . '[;,]\{1}\s*'
 
 " Special switch control
-let s:js_s_switch_beg = 'switch\s*(.*)\s*' "Actually not allowed. 
+let s:js_s_switch_beg = 'switch\s*(.*)\s*' "Actually not allowed.
 let s:js_m_switch_beg = s:js_s_switch_beg . '\s*{\s*'
 let s:js_switch_mid = '^.*\(case.*\|default\)\s*:\s*'
 
@@ -84,15 +84,15 @@ endfunction
 " = Method: IsInComment
 "
 " Determines whether the specified position is contained in a comment. "Note:
-" This depends on a 
-function! s:IsInComment(lnum, cnum) 
+" This depends on a
+function! s:IsInComment(lnum, cnum)
   return synIDattr(synID(a:lnum, a:cnum, 1), 'name') =~? s:syn_comment
 endfunction
 
 
 
 " = Method: IsComment
-" 
+"
 " Determines whether a line is a comment or not.
 function! s:IsComment(lnum)
   let line = getline(a:lnum)
@@ -111,6 +111,7 @@ function! s:Log(msg)
   endif
 endfunction
 
+setl sw=2 sts=2 ts=2 et
 
 
 " 3. Indenter
@@ -146,7 +147,7 @@ function! GetJsIndent(lnum)
     if line !~ s:js_multi_invok_end
       call s:Log("Pline matched multi invoke/declare")
       return ind + &sw
-    endif 
+    endif
   endif
 
   if pline =~ s:js_s_multi_end . s:js_line_comment . '$'
@@ -156,7 +157,7 @@ function! GetJsIndent(lnum)
       return ind - &sw
     else
       call s:Log("line didn't match object beginning")
-      return ind 
+      return ind
     endif
   endif
 
@@ -184,10 +185,10 @@ function! GetJsIndent(lnum)
     if line =~ s:js_multi_invok_end . s:js_line_comment . '$'
       call s:Log("Pline matched multi line invoke end")
       return ind
-    else 
+    else
       call s:Log("Pline didn't match multi line invoke end")
       return ind + &sw
-    endif 
+    endif
   endif
 
   if line =~ s:js_multi_invok_end . s:js_line_comment . '$'
@@ -211,7 +212,7 @@ function! GetJsIndent(lnum)
     else
       call s:Log("Line didnt match a cntrl mid")
       return ind + &sw
-    endif 
+    endif
   endif
 
   if line =~ s:js_switch_mid " Doesn't need end anchor
@@ -234,7 +235,7 @@ function! GetJsIndent(lnum)
 
   if pline =~ s:js_s_cntrl_mid . s:js_line_comment . '$'
     call s:Log("Pline matched single line control mid")
-    if line =~ s:js_s_cntrl_mid . s:js_line_comment . '$' || line =~ s:js_object_beg . s:js_line_comment . '$' 
+    if line =~ s:js_s_cntrl_mid . s:js_line_comment . '$' || line =~ s:js_object_beg . s:js_line_comment . '$'
       call s:Log("Line matched single line control mid")
       return ind
     else
@@ -274,7 +275,7 @@ function! GetJsIndent(lnum)
     call setpos(".", [0, a:lnum, 1, 0])
 
     " Search for the opening tag
-    let mnum = searchpair('{', '', '}', 'bW', 
+    let mnum = searchpair('{', '', '}', 'bW',
           \ 'synIDattr(synID(line("."), col("."), 0), "name") =~? s:syn_comment' )
 
     "Restore the cursor position
@@ -311,7 +312,7 @@ function! GetJsIndent(lnum)
     call setpos(".", [0, a:lnum, 1, 0])
 
     " Search for the opening tag
-    let mnum = searchpair('\[', '', '\]', 'bW', 
+    let mnum = searchpair('\[', '', '\]', 'bW',
           \ 'synIDattr(synID(line("."), col("."), 0), "name") =~? s:syn_comment' )
 
     "Restore the cursor position

@@ -28,6 +28,7 @@ alias vza="vim ~/.zsh/.zshrc.alias"
 alias vzo="vim ~/.zsh/.zshrc.osx"
 alias vzp="vim ~/.zsh/.zshrc.prompt"
 alias vzb="vim ~/.zsh/.zshrc.basic"
+alias vimprofile='vim --cmd "profile start profile.txt" --cmd "profile file $HOME/.vim/config/.vimrc" +q && vim profile.txt'
 alias em="emacs"
 alias e="emacs"
 alias ee="emacs ~/.emacs.el"
