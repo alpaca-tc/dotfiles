@@ -254,7 +254,7 @@ vmap v G
 imap jj <Esc>
 
 "よくミスキータッチするから削除
-nmap H <Nop>
+" nmap H <Nop>
 vmap H <Nop>
 
 " マークを使い易くする
@@ -281,16 +281,8 @@ nmap <C-W><C-K><C-L> <C-W>k<C-W>l
 nmap <C-W><C-l><C-j> <C-W>l<C-W>j
 nmap <C-W><C-l><C-k> <C-W>l<C-W>k
 
-" 画面のサイズ変更とともに均等化
-nmap <C-W>K <C-W>K<C-W>=
-nmap <C-W>L <C-W>L<C-W>=
-nmap <C-W>J <C-W>J<C-W>=
-nmap <C-W>H <C-W>H<C-W>=
-nmap <C-W>s :<C-U>split<CR><C-W>=
-nmap <C-W>v :<C-U>vsplit<CR><C-W>=
-
-nmap <silent> <Tab> :call <SID>NextWindowOrTab()<CR>
-nmap <silent> <S-Tab> :call <SID>PreviousWindowOrTab()<CR>
+nmap <silent>H :call <SID>NextWindowOrTab()<CR>
+nmap <silent>L :call <SID>PreviousWindowOrTab()<CR>
 nmap <C-W>] :call PreviewWord()<CR>
 " nmap <C-W><C-] :call PreviewWord()<CR>
 nmap <silent><C-w><Space> :<C-u>SmartSplit<CR>
@@ -469,21 +461,20 @@ set titlelen=95
 set linebreak
 set showfulltag
 set spelllang=en_us
+set foldlevelstart=0
 " set showbreak=>\
 set breakat=\\;:,!?
 set showmatch         " 括弧の対応をハイライトa
 set number            " 行番号表示
-set noequalalways     " 画面の自動サイズ調整解除
+" set noequalalways     " 画面の自動サイズ調整解除
+set equalalways     " 画面の自動サイズ調整解除
 " set relativenumber    " 相対表示
 set list              " 不可視文字表示
-"set listchars=tab:,trail:,extends:,precedes:  " 不可視文字の表示形式
-" set listchars=tab:>.,trail:_,extends:>,precedes:< " 不可視文字の表示形式
-set listchars=tab:␣.,trail:_,extends:>,precedes:< " 不可視文字の表示形式
-" set listchars=tab:✃.,trail:_,extends:>,precedes:< " 不可視文字の表示形式
+set listchars=tab:␣.,trail:_,extends:>,precedes:<
 set scrolloff=5
 " set scrolljump=-50
 set showcmd
-au FileType haml,coffee,ruby,eruby,php,javascript,javascript.jasmine,ruby.spec,ruby.rails,ruby.rails.model,ruby.rails.controller,ruby.rspec,c,json,vim set colorcolumn=80
+au FileType coffee,ruby,eruby,php,javascript,c,json,vim set colorcolumn=80
 
 "set display=uhex      " 印字不可能文字を16進数で表示
 set t_Co=256          " 確かカラーコード
@@ -495,7 +486,7 @@ set cdpath+=~
 set cursorline
 " set scrolloff=999     " 常にカーソルを真ん中に
 
-if has('gui_macvim')
+if has('gui_macvim') "{{{
   " set transparency=10
   " set guifont=Recty:h12
   " set lines=90 columns=200
@@ -524,7 +515,7 @@ if has('gui_macvim')
   nmap <silent>_ :exec g:visible == 0 ? ":call SetVisible()" : ":call SetShow()"<CR>
   " au CursorHold * call SetVisible()
   " au CursorMoved,CursorMovedI,WinLeave * call SetShow()
-endif
+endif "}}}
 
 syntax on
 
@@ -532,7 +523,6 @@ syntax on
 highlight ZenkakuSpace cterm=underline ctermfg=lightblue guibg=darkgray
 match ZenkakuSpace /　/
 "au BufRead,BufNew * match JpSpace /　/
-
 
 " カレントウィンドウにのみ罫線を引く
 augroup cch
@@ -542,84 +532,27 @@ augroup cch
 augroup END
 
 "折り畳み
-function! ChangeFoldMethod()
-  if g:foldMethodCount == 0
-    set foldmethod=marker "{{ { という感じの文字が入る
-    echo "foldmethod is marker"
-  elseif g:foldMethodCount == 1
-    set foldmethod=manual "手動
-    echo "foldmethod is manual"
-  elseif g:foldMethodCount == 2
-    set foldmethod=indent "indent
-    echo "foldmethod is indent"
-  endif
-  let g:foldMethodCount = ( g:foldMethodCount + 1 ) % 3
-endfunction
-
 let g:foldMethodCount = 0
+
 set foldcolumn=1
 set foldenable
 set commentstring=%s
 set foldmethod=marker
-nmap <Space><Space>f :<C-U>call ChangeFoldMethod()<CR>
 
-" vimを使っているときはtmuxのステータスラインを隠す
+" vimを使っているときはtmuxのステータスラインを隠す"{{{
 if !has('gui_running') && $TMUX !=# ''
   augroup Tmux
     autocmd!
     " au VimEnter,FocusGained * silent !tmux set status off
     " au VimLeave,FocusLost * silent !tmux set status on
   augroup END
-endif
+endif "}}}
 
 " 設定を上書きしない為に、最後に書く
 " colorscheme darkblue
 " colorscheme pyte
 " colorscheme solarized
 colorscheme molokai
-
-"****************************************
-"titanium用のsyntax
-"****************************************
-function! TitaniumSyn()
-  hi def link titanium Define
-  syn match titanium '\s*\(Ti\|Titanium\)\.[a-zA-Z0-9_\.]\+'
-endfunction
-au FileType coffee,javascript,javascript.titanium call TitaniumSyn()
-
-"****************************************
-" コマンドラインの色を修正する
-"****************************************
-" function! RefrashCmdColor()
-"   hi Pmenu ctermbg=0
-"   hi PmenuSel ctermbg=4
-"   hi PmenuSbar ctermbg=2
-"   hi PmenuThumb ctermfg=3
-" endfunction
-" au FileType * call RefrashCmdColor()
-
-"****************************************
-" Rspec
-"****************************************
-function! RSpecSyntax()
-  hi def link rubyRailsTestMethod Function
-  syn keyword rubyRailsTestMethod describe context it its specify shared_examples_for it_should_behave_like before after around subject fixtures controller_name helper_name
-  syn match rubyRailsTestMethod '\<let\>!\='
-  syn keyword rubyRailsTestMethod violated pending expect double mock mock_model stub_model
-  syn match rubyRailsTestMethod '\.\@<!\<stub\>!\@!'
-endfunction
-aug MyAutoCmd
-  autocmd BufReadPost *_spec.rb call RSpecSyntax()
-aug END
-
-"****************************************
-" tmux
-"****************************************
-" augroup filetypedetect
-"   au BufNewFile,BufRead  *.tmux.conf setl ft = tmux
-" augroup END
-
-
 "}}}
 
 "----------------------------------------
@@ -887,12 +820,12 @@ command! Vinaris call BundleWithCmd('vinarise vinarise-plugin-peanalysis', 'Vina
 NeoBundle 'taichouchou2/vim-rsense'
 NeoBundle 'taichouchou2/vim-endwise.git' "end endifなどを自動で挿入
 NeoBundle 'taichouchou2/vim-rails'
-
+NeoBundleLazy 'basyura/unite-rails'
 NeoBundleLazy 'taichouchou2/unite-rails_best_practices',
       \{ 'depends' : 'Shougo/unite.vim' }
 NeoBundleLazy 'ujihisa/unite-rake'
 NeoBundleLazy 'taichouchou2/alpaca_complete'
-let s:bundle_rails = 'unite-rails_best_practices unite-rake alpaca_complete vim-rsense'
+let s:bundle_rails = 'unite-rails unite-rails_best_practices unite-rake alpaca_complete vim-rsense'
 aug MyAutoCmd
   au User Rails call BundleLoadDepends(s:bundle_rails)
 aug END
