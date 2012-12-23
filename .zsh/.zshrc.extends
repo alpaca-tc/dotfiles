@@ -43,5 +43,14 @@ w3m http://www.google.co.jp/$opt
 # }
 # _Z_CMD=z
 
+DIRSTACKSIZE=100
+setopt AUTO_PUSHD
+
+autoload -Uz compinit && compinit
+
+zstyle ':completion:*' menu select
+zstyle ':completion:*:cd:*' ignore-parents parent pwd
+# zstyle ':completion:*:descriptions' format '%BCompleting%b %U%d%u'
+
 # tmuxinator
 [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator

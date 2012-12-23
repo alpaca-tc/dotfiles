@@ -73,6 +73,10 @@ nmap ft :set ft=
 nmap / /\v
 nmap ? ?\v
 
+" よくミスタイプするので打ちにくくする
+nmap . <Nop>
+nmap .. .
+
 " 新しいバッファを開くときに、rubyか同じファイルタイプで開く{{{
 function! NewBuffer(type)
   let old_ft = &ft
@@ -149,7 +153,7 @@ augroup END
 "   silent s/&amp;/\&/eg
 " endfunction
 
-inoremap <leader>h <!--/--><left><left><left>
+inoremap <leader>h <!-- / --><left><left><left><left>
 " function! HtmlFunctions()
 "   xnoremap <silent> <space>e :call <SID>HtmlEscape()<CR>
 "   xnoremap <silent> <space>ue :call <SID>HtmlUnEscape()<CR>
@@ -281,9 +285,9 @@ nmap <C-W><C-K><C-L> <C-W>k<C-W>l
 nmap <C-W><C-l><C-j> <C-W>l<C-W>j
 nmap <C-W><C-l><C-k> <C-W>l<C-W>k
 
-nmap <silent>H :call <SID>NextWindowOrTab()<CR>
-nmap <silent>L :call <SID>PreviousWindowOrTab()<CR>
-nmap <C-W>] :call PreviewWord()<CR>
+nmap <silent>L :call <SID>NextWindowOrTab()<CR>
+nmap <silent>H :call <SID>PreviousWindowOrTab()<CR>
+nmap <silent><C-W>] :call PreviewWord()<CR>
 " nmap <C-W><C-] :call PreviewWord()<CR>
 nmap <silent><C-w><Space> :<C-u>SmartSplit<CR>
 func! PreviewWord() "{{{
@@ -408,6 +412,8 @@ nmap <silent>tn  :tabn<CR>
 nmap <silent>tp  :tabprevious<CR>
 nmap <silent>tc  :tabnew<CR>
 nmap <silent>tx  :tabclose<CR>
+nmap <silent>to  :call OpenWindowWithTab()<CR>
+nmap <silent>tw  :call CloseTabAndOpenWith()<CR>
 " nnoremap to  :tabo<CR>
 nmap <silent>te  :execute 'tabnext' 1 + (tabpagenr() + v:count1 - 1) % tabpagenr('$')<CR>
 "tabを次のtabへ移動
@@ -420,6 +426,29 @@ nmap <silent>t4  :tabnext 4<CR>
 nmap <silent>t5  :tabnext 5<CR>
 nmap <silent>t6  :tabnext 6<CR>
 "}}}
+
+" 現在開いているバッファをタブで開く
+function! OpenWindowWithTab()
+  let buffer = bufnr('%')
+  if (winnr("$") != 1)
+    q
+  endif
+  tabnew
+  exec 'buffer '.buffer
+endfunction
+
+" 現在開いているタブとバッファを閉じて
+" 一つ前のタブと統合する
+function! CloseTabAndOpenWith()
+  let buffer = bufnr('%')
+  if ( tabpagenr("$") != 1)
+    q
+  endif
+
+  tablast
+  vsplit
+  exec 'buffer '.buffer
+endfunction
 "}}}
 
 "----------------------------------------
@@ -449,9 +478,9 @@ set softtabstop=2
 set shiftwidth=2
 filetype indent on
 
-aug MyAutoCmd
-  autocmd InsertLeave * set nopaste
-aug END
+" aug MyAutoCmd
+"   autocmd InsertLeave * set nopaste
+" aug END
 "}}}
 
 "----------------------------------------
@@ -660,7 +689,7 @@ NeoBundle 'h1mesuke/vim-alignta'      " 整形
 " vim拡張"{{{
 " NeoBundle 'Lokaltog/vim-easymotion'
 " NeoBundle 'grep.vim'
-" NeoBundle 'kien/ctrlp.vim' "ファイルを絞る
+NeoBundle 'kien/ctrlp.vim' "ファイルを絞る
 " NeoBundle 'scrooloose/nerdtree' "プロジェクト管理用 tree filer
 " NeoBundle 'taglist.vim' "関数、変数を画面横にリストで表示する
 " NeoBundle 'taku-o/vim-toggle' "true<=>false など、逆の意味のキーワードを切り替えられる
@@ -717,7 +746,7 @@ NeoBundle 'operator-camelize' "operator-camelize : camel-caseへの変換
 " NeoBundle 'cecutil' "cecutil.vim : 他のpluginのためのutillity1
 " NeoBundle 'thinca/vim-template' " templeteを作れる
 " NeoBundle 'tyru/urilib.vim' "urilib.vim : vim scriptからURLを扱うライブラリ
-NeoBundle 'kana/vim-smartchr' "smartchr.vim : ==()などの前後を整形
+" NeoBundle 'kana/vim-smartchr' "smartchr.vim : ==()などの前後を整形
 NeoBundle 'mattn/webapi-vim' "vim Interface to Web API
 NeoBundle 'scrooloose/syntastic'
 NeoBundle 'taichouchou2/alpaca-look'
@@ -887,12 +916,12 @@ NeoBundle 'vim-scripts/yanktmp.vim'
 "}}}
 
 " Installation check.
-" if neobundle#exists_not_installed_bundles()
-"   echomsg 'Not installed bundles : ' .
-"         \ string(neobundle#get_not_installed_bundle_names())
-"   echomsg 'Please execute ":NeoBundleInstall" command.'
-"   " finish
-" endif
+if neobundle#exists_not_installed_bundles()
+  echomsg 'Not installed bundles : ' .
+        \ string(neobundle#get_not_installed_bundle_names())
+  echomsg 'Please execute ":NeoBundleInstall" command.'
+  " finish
+endif
 
 filetype plugin indent on
 "}}}
@@ -1058,15 +1087,15 @@ if executable('coffeetags')
         \ }
         \ }
 endif
-" let g:tagbar_type_javascript = {
-"     \'ctagstype' : 'JavaScript',
-"     \'kinds'     : [
-"     \   'o:objects',
-"     \   'f:functions',
-"     \   'a:arrays',
-"     \   's:strings'
-"   \]
-" \}
+let g:tagbar_type_javascript = {
+    \'ctagstype' : 'JavaScript',
+    \'kinds'     : [
+    \   'o:objects',
+    \   'f:functions',
+    \   'a:arrays',
+    \   's:strings'
+  \]
+\}
 " let g:tagbar_type_markdown = {
 "   \ 'ctagstype' : 'markdown',
 "   \ 'kinds' : [
@@ -1915,54 +1944,58 @@ aug END
 " ctrlp
 "------------------------------------
 " " ctrlp"{{{
-" let g:ctrlp_map = '<Nul>'
-" let g:ctrlp_regexp = 1
+let g:ctrlp_map = '<Nul>'
+let g:ctrlp_regexp = 1
 " let g:ctrlp_tabpage_position = 'al'
-" let g:ctrlp_clear_cache_on_exit = 0
-" let g:ctrlp_custom_ignore = {
-"       \ 'dir':  '\.\(hg\|git\|sass-cache\|svn\)$',
-"       \ 'file': '\.\(dll\|exe\|gif\|jpg\|png\|psd\|so\|woff\)$' }
-" let g:ctrlp_open_new_file = 't'
+" let g:ctrlp_clear_cache_on_exit = 1
+let g:ctrlp_use_caching = 1
+" let g:ctrlp_clear_cache_on_exit = 1
+let g:ctrlp_cache_dir = $HOME.'/.Trashes/.cache/ctrlp'
+let g:ctrlp_show_hidden = 1
+let g:ctrlp_custom_ignore = {
+      \ 'dir':  '\.\(hg\|git\|sass-cache\|svn\)$',
+      \ 'file': '\.\(dll\|exe\|gif\|jpg\|png\|psd\|so\|woff\)$' }
+let g:ctrlp_open_new_file = 't'
 " let g:ctrlp_open_multiple_files = 'tj'
 " let g:ctrlp_lazy_update = 1
 "
 " let g:ctrlp_mruf_max = 1000
-" let g:ctrlp_mruf_exclude = '\(\\\|/\)\(Temp\|Downloads\)\(\\\|/\)\|\(\\\|/\)\.\(hg\|git\|svn\|sass-cache\)'
+let g:ctrlp_mruf_exclude = '\(\\\|/\)\(Temp\|Downloads\)\(\\\|/\)\|\(\\\|/\)\.\(hg\|git\|svn\|sass-cache\)'
 " let g:ctrlp_mruf_case_sensitive = 0
-" let g:ctrlp_prompt_mappings = {
-"       \ 'AcceptSelection("t")': ['<c-n>'],
-"       \ }
+let g:ctrlp_prompt_mappings = {
+      \ 'AcceptSelection("t")': ['<c-n>'],
+      \ }
 "
-" hi link CtrlPLinePre NonText
-" hi link CtrlPMatch IncSearch
-"
-" function! s:CallCtrlPBasedOnGitStatus()
-"   let s:git_status = system('git status')
-"
-"   if v:shell_error == 128
-"     execute 'CtrlPCurFile'
-"   else
-"     execute 'CtrlP'
-"   endif
-" endfunction
-"
-" nnoremap <C-H><C-B> :CtrlPBuffer<Return>
-" nnoremap <C-H><C-D> :CtrlPClearCache<Return>:CtrlP ~/Dropbox/Drafts<Return>
-" nnoremap <C-H><C-G> :CtrlPClearCache<Return>:call <SID>CallCtrlPBasedOnGitStatus()<Return>
+hi link CtrlPLinePre NonText
+hi link CtrlPMatch IncSearch
+
+function! s:CallCtrlPBasedOnGitStatus()
+  let s:git_status = system('git status')
+
+  if v:shell_error == 128
+    execute 'CtrlPCurFile'
+  else
+    execute 'CtrlP'
+  endif
+endfunction
+
+nmap <silent><C-H><C-B> :CtrlPBuffer<CR>
+nmap <silent><C-H><C-D> :CtrlPDir<CR>
+nmap <silent><C-H><C-G> :CtrlPClearCache<Return>:call <SID>CallCtrlPBasedOnGitStatus()<Return>
 " "}}}
 
 "------------------------------------
 " vim-ruby
 "------------------------------------
 "{{{
-function! s:vimRuby()
-  let g:rubycomplete_buffer_loading = 0
-  let g:rubycomplete_classes_in_global = 0
-  let g:rubycomplete_rails = 0
-endfunction
-aug MyAutoCmd
-  au FileType ruby,eruby,ruby.rspec call s:vimRuby()
-aug END
+" function! s:vimRuby()
+"   let g:rubycomplete_buffer_loading = 0
+"   let g:rubycomplete_classes_in_global = 0
+"   let g:rubycomplete_rails = 0
+" endfunction
+" aug MyAutoCmd
+"   au FileType ruby,eruby,ruby.rspec call s:vimRuby()
+" aug END
 "}}}
 
 "------------------------------------
@@ -1984,10 +2017,6 @@ let g:rails_gnu_screen=1
 " let g:rails_ctags_arguments='--languages=-javascript'
 " let g:rails_ctags_arguments = ''
 function! SetUpRailsSetting()
-  nmap <buffer><C-C> <Nop>
-  imap <buffer><C-C> <Nop>
-  map <buffer><C-_><C-C> <Nop>
-
   nmap <buffer><Space>r :R<CR>
   nmap <buffer><Space>a :A<CR>
   nmap <buffer><Space>m :Rmodel<Space>
@@ -2007,17 +2036,18 @@ aug END
 aug RailsDictSetting
   au!
   " 別の関数に移そうか..
-  au User Rails.controller*           setl ft=ruby.rails.controller   syntax=ruby
-  au User Rails.view*                 setl ft=ruby.rails.view         syntax=ruby
-  au User Rails.model*                setl ft=ruby.rails.model        syntax=ruby
-  au User Rails/db/migrate/*          setl ft=ruby.rails.migrate      syntax=ruby
-  au User Rails/config/environment.rb setl ft=ruby.rails.environment  syntax=ruby
-  au User Rails/config/routes.rb      setl ft=ruby.rails.routes       syntax=ruby
-  au User Rails/config/database.rb    setl ft=ruby.rails.database     syntax=ruby
-  au User Rails/config/boot.rb        setl ft=ruby.rails.boot         syntax=ruby
-  au User Rails/config/locales/*      setl ft=ruby.rails.locales      syntax=ruby
-  au User Rails/config/initializes    setl ft=ruby.rails.initializes  syntax=ruby
-  au User Rails/config/environments/* setl ft=ruby.rails.environments syntax=ruby
+  au User Rails.controller*           let b:file_type_name="rails.controller.ruby"
+  au User Rails.view*erb              let b:file_type_name="rails.view.ruby"
+  au User Rails.view*haml             let b:file_type_name="rails.view.haml"
+  au User Rails.model*                let b:file_type_name="rails.model.ruby"
+  au User Rails/db/migrate/*          let b:file_type_name="rails.migrate.ruby"
+  au User Rails/config/environment.rb let b:file_type_name="rails.environment.ruby"
+  au User Rails/config/routes.rb      let b:file_type_name="rails.routes.ruby"
+  au User Rails/config/database.rb    let b:file_type_name="rails.database.ruby"
+  au User Rails/config/boot.rb        let b:file_type_name="rails.boot.ruby"
+  au User Rails/config/locales/*      let b:file_type_name="rails.locales.ruby"
+  au User Rails/config/initializes    let b:file_type_name="rails.initializes.ruby"
+  au User Rails/config/environments/* let b:file_type_name="rails.environments.ruby"
   au User Rails set dict+=~/.vim/dict/ruby.rails.dict syntax=ruby | nmap <buffer><Space>dd  :<C-U>SmartSplit e ~/.vim/dict/ruby.rails.dict<CR>
 aug END
 
@@ -2121,7 +2151,6 @@ function! AutoSassCompile()
     au BufWritePost <buffer> SassCompile
   aug END
 endfunction
-au BufWritePost * SassCompile
 au FileType less,sass,scss  setlocal sw=2 sts=2 ts=2 et syntax=scss
 "}}}
 
@@ -2139,15 +2168,16 @@ au FileType less,sass,scss  setlocal sw=2 sts=2 ts=2 et syntax=scss
 " jasmine.vim
 "------------------------------------
 "{{{
-function! JasmineSetting()
-  let b:quickrun_config = {'type' : 'coffee'}
-  nmap <buffer> <leader>m :JasmineRedGreen<CR>
-  call jasmine#load_snippets()
-  command! JasmineRedGreen :call jasmine#redgreen()
-  command! JasmineMake :call jasmine#make()
-endfunction
+" function! JasmineSetting()
+"
+"   nmap <buffer> <leader>m :JasmineRedGreen<CR>
+"   call jasmine#load_snippets()
+"   command! JasmineRedGreen :call jasmine#redgreen()
+"   command! JasmineMake :call jasmine#make()
+" endfunction
 aug MyAutoCmd
-  au BufRead,BufNewFile,BufReadPre *Helper.coffee,*Spec.coffee  call JasmineSetting()
+  " au BufRead,BufNewFile,BufReadPre *Helper.coffee,*Spec.coffee  call JasmineSetting()
+  au BufRead,BufNewFile,BufReadPre *Helper.coffee,*Spec.coffee let b:quickrun_config = {'type' : 'coffee'}
 aug END
 "}}}
 
@@ -2222,52 +2252,52 @@ map <Leader>U <Plug>(operator-decamelize)
 "------------------------------------
 " smartchr.vim
 "------------------------------------
-"{{{
-let g:smartchr_enable = 1
-
-" Smart =.
-
-if g:smartchr_enable == 1
-  " inoremap <expr> = search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '
-  "       \ : search('\(*\<bar>!\)\%#', 'bcn') ? '= '
-  "       \ : smartchr#one_of(' = ', '=', ' == ')
-  imap <expr> , smartchr#one_of(',', ', ')
-  imap <expr> ? smartchr#one_of('?', '? ')
-  " imap <expr> = smartchr#one_of(' = ', '=')
-
-  " Smart =.
-  " inoremap <expr> = search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '
-  "       \ : search('\(*\<bar>!\)\%#', 'bcn') ? '= '
-  "       \ : smartchr#one_of(' = ', '=', ' == ')
-  augroup MyAutoCmd
-    " Substitute .. into -> .
-    au FileType c,cpp    imap <buffer><expr> . smartchr#loop('.', '->', '...')
-    au FileType perl,php imap <buffer><expr> . smartchr#loop('.', '->', '..')
-    au FileType perl,php imap <buffer><expr> - smartchr#loop('-', '->')
-    au FileType vim      imap <buffer><expr> . smartchr#loop('.', ' . ', '..', '...')
-    au FileType coffee   imap <buffer><expr> - smartchr#loop('-', '->', '=>')
-
-    " 使わない
-    " autocmd FileType haskell,int-ghci
-    "       \ inoremap <buffer> <expr> + smartchr#loop('+', ' ++ ')
-    "       \| inoremap <buffer> <expr> - smartchr#loop('-', ' -> ', ' <- ')
-    "       \| inoremap <buffer> <expr> $ smartchr#loop(' $ ', '$')
-    "       \| inoremap <buffer> <expr> \ smartchr#loop('\ ', '\')
-    "       \| inoremap <buffer> <expr> : smartchr#loop(':', ' :: ', ' : ')
-    "       \| inoremap <buffer> <expr> . smartchr#loop('.', ' . ', '..')
-
-    " autocmd FileType scala
-    "       \ inoremap <buffer> <expr> - smartchr#loop('-', ' -> ', ' <- ')
-    "       \| inoremap <buffer> <expr> = smartchr#loop(' = ', '=', ' => ')
-    "       \| inoremap <buffer> <expr> : smartchr#loop(': ', ':', ' :: ')
-    "       \| inoremap <buffer> <expr> . smartchr#loop('.', ' => ')
-
-    autocmd FileType eruby
-          \ inoremap <buffer> <expr> > smartchr#loop('>', '%>')
-          \| inoremap <buffer> <expr> < smartchr#loop('<', '<%', '<%=')
-  augroup END
-endif
-"}}}
+" "{{{
+" let g:smartchr_enable = 1
+"
+" " Smart =.
+"
+" if g:smartchr_enable == 1
+"   " inoremap <expr> = search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '
+"   "       \ : search('\(*\<bar>!\)\%#', 'bcn') ? '= '
+"   "       \ : smartchr#one_of(' = ', '=', ' == ')
+"   imap <expr> , smartchr#one_of(',', ', ')
+"   imap <expr> ? smartchr#one_of('?', '? ')
+"   " imap <expr> = smartchr#one_of(' = ', '=')
+"
+"   " Smart =.
+"   " inoremap <expr> = search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '
+"   "       \ : search('\(*\<bar>!\)\%#', 'bcn') ? '= '
+"   "       \ : smartchr#one_of(' = ', '=', ' == ')
+"   augroup MyAutoCmd
+"     " Substitute .. into -> .
+"     au FileType c,cpp    imap <buffer><expr> . smartchr#loop('.', '->', '...')
+"     au FileType perl,php imap <buffer><expr> . smartchr#loop('.', '->', '..')
+"     au FileType perl,php imap <buffer><expr> - smartchr#loop('-', '->')
+"     au FileType vim      imap <buffer><expr> . smartchr#loop('.', ' . ', '..', '...')
+"     au FileType coffee   imap <buffer><expr> - smartchr#loop('-', '->', '=>')
+"
+"     " 使わない
+"     " autocmd FileType haskell,int-ghci
+"     "       \ inoremap <buffer> <expr> + smartchr#loop('+', ' ++ ')
+"     "       \| inoremap <buffer> <expr> - smartchr#loop('-', ' -> ', ' <- ')
+"     "       \| inoremap <buffer> <expr> $ smartchr#loop(' $ ', '$')
+"     "       \| inoremap <buffer> <expr> \ smartchr#loop('\ ', '\')
+"     "       \| inoremap <buffer> <expr> : smartchr#loop(':', ' :: ', ' : ')
+"     "       \| inoremap <buffer> <expr> . smartchr#loop('.', ' . ', '..')
+"
+"     " autocmd FileType scala
+"     "       \ inoremap <buffer> <expr> - smartchr#loop('-', ' -> ', ' <- ')
+"     "       \| inoremap <buffer> <expr> = smartchr#loop(' = ', '=', ' => ')
+"     "       \| inoremap <buffer> <expr> : smartchr#loop(': ', ':', ' :: ')
+"     "       \| inoremap <buffer> <expr> . smartchr#loop('.', ' => ')
+"
+"     autocmd FileType eruby
+"           \ inoremap <buffer> <expr> > smartchr#loop('>', '%>')
+"           \| inoremap <buffer> <expr> < smartchr#loop('<', '<%', '<%=')
+"   augroup END
+" endif
+" "}}}
 
 "------------------------------------
 " Srcexp
@@ -2300,20 +2330,20 @@ nmap <C-H><C-E> :SrcExplToggle<CR>
 "閉じる<->開くのキーマップ
 " nmap <C-H><C-F> :NERDTreeToggle<CR>
 
-function! NerdSetting()
-  nmap <buffer>l o
-  nmap <buffer>h x
-
-  aug MyAutoCmd
-    "画面が残り一つになったら自動で閉じる
-    au bufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
-  aug END
-  " autocmd WinLeave * NERDTreeClose " nerdtreeから離れたら閉じる
-
-endfunction
-aug MyAutoCmd
-  au FileType nerdtree call NerdSetting()
-aug END
+" function! NerdSetting()
+"   nmap <buffer>l o
+"   nmap <buffer>h x
+"
+"   aug MyAutoCmd
+"     "画面が残り一つになったら自動で閉じる
+"     au bufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+"   aug END
+"   " autocmd WinLeave * NERDTreeClose " nerdtreeから離れたら閉じる
+"
+" endfunction
+" aug MyAutoCmd
+"   au FileType nerdtree call NerdSetting()
+" aug END
 
 "}}}
 
@@ -2613,20 +2643,25 @@ let g:alpaca_wordpress_use_default_setting = 1
 " 辞書:dict "{{{
 augroup DictSetting
   au!
-  au FileType ruby.rspec           setl dict+=~/.vim/dict/rspec.dict
-  au FileType coffee.jasmine,javascript.jasmine setl dict+=~/.vim/dict/js.jasmine.dict
+  " au FileType ruby.rspec           setl dict+=~/.vim/dict/rspec.dict
+  " au FileType coffee.jasmine,javascript.jasmine setl dict+=~/.vim/dict/js.jasmine.dict
   au FileType html,php,eruby       setl dict+=~/.vim/dict/html.dict
 augroup END
 
 " カスタムファイルタイプでも、自動でdictを読み込む
 " そして、編集画面までさくっと移動。
 func! s:auto_dict_setting()
-  let dict_name = split( &ft, '.' )
+  let file_type_name = &ft
+  if exists('b:file_type_name')
+    let file_type_name = b:file_type_name
+  endif
+
+  let dict_name = split( file_type_name, '.' )
   if !empty( dict_name )
     exe  "setl dict+=~/.vim/dict/".dict_name[0].".dict"
   endif
 
-  let b:dict_path = expand('~/.vim/dict/'.&ft.'.dict')
+  let b:dict_path = expand('~/.vim/dict/'.file_type_name.'.dict')
   exe  "setl dict+=".b:dict_path
   nmap <buffer><expr><Space>d ':<C-U>SmartSplit e '.b:dict_path.'<CR>'
 endfunc
@@ -2772,8 +2807,8 @@ imap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
 imap <silent><C-U>     <Plug>(neosnippet_start_unite_snippet)
 nmap <silent><Space>e  :<C-U>NeoSnippetEdit -split<CR>
 nmap <silent><expr><Space>ee  ':NeoSnippetEdit -split'.split(&ft, '.')[0].'<CR>'
-smap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
-xmap <silent><C-F>     <Plug>(neosnippet_start_unite_snippet_target)
+" smap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
+" xmap <silent><C-F>     <Plug>(neosnippet_start_unite_snippet_target)
 " xmap <silent>U         <Plug>(neosnippet_expand_target)
 xmap <silent>o         <Plug>(neosnippet_register_oneshot_snippet)
 "}}}
