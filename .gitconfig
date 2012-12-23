@@ -1,10 +1,13 @@
 [user]
-	email = alprhcp666@gmail.com
-	name = Hiroyuki Ishii
+  email = alprhcp666@gmail.com
+  name = Hiroyuki Ishii
 
 [core]
   editor       = /Applications/MacVim.app/Contents/MacOS/Vim
-	excludesfile = /Users/taichou/.gitignore_global
+  excludesfile = /Users/taichou/.gitignore_global
+  autocrlf     = input
+  trailing-space = false
+  space-before-tab = false
 
 [color]
   ui = true
@@ -22,12 +25,12 @@
   default = tracking
 
 [difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
+  cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+  path =
 
 [mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
+  cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+  trustExitCode = true
 [rerere]
   enabled = 1
 [help]

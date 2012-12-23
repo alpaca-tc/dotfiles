@@ -39,12 +39,6 @@ export MANPATH=$PATH:/usr/share/man
 
 # node
 
-# XAMPP
-export PATH=/Applications/XAMPP/xamppfiles/bin:$PATH
-
-# XAMPP
-export PATH=$PATH:/Applications/XAMPP/xamppfiles/bin
-
 # java 1.7.0
 export PATH=/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:$PATH
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home
@@ -78,6 +72,7 @@ export PATH=$PATH:/bin:/sbin
 export PATH=$PATH:/usr/sbin:/usr/bin
 export MANPATH=$PATH:/usr/share/man
 
+
 export PATH=$PATH:$HOME/dotfiles/android-sdk-macosx/tools
 # rvm
 # export PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
@@ -88,6 +83,9 @@ export PATH=$PATH:$HOME/dotfiles/android-sdk-macosx/tools
 # rbenv
 export PATH="$HOME/.rbenv/bin:$HOME/.rbenv:$PATH"
 eval "$(rbenv init -)"
+
+# XAMPP
+export PATH=/Applications/XAMPP/xamppfiles/bin:$PATH
 
 # git
 export GITHUB_HOST='github.com'

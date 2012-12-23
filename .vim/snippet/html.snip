@@ -192,9 +192,9 @@ snippet jq18
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js" charset="utf-8"></script>
 
 snippet html5.js
-    <!--[if lt IE 9]>
-    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+  <!--[if lte IE 8]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
 
 snippet css3.js
     <!--[if lt IE 9]>
@@ -217,3 +217,6 @@ snippet     google_map_link
 
 snippet     google_map_iframe
   <iframe width="420" height="420" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="${1:url}"></ifram
+
+snippet     h
+  <!-- /${1:comment} -->

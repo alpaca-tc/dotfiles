@@ -138,23 +138,22 @@ augroup END
 "}}}
 
 " html {{{
-" function! s:HtmlEscape()
-"   silent s/&/\&amp;/eg
-"   silent s/</\&lt;/eg
-"   silent s/>/\&gt;/eg
-" endfunction
-" function! s:HtmlUnEscape()
-"   silent s/&lt;/</eg
-"   silent s/&gt;/>/eg
-"   silent s/&amp;/\&/eg
-" endfunction
+function! s:HtmlEscape()
+  silent s/&/\&amp;/eg
+  silent s/</\&lt;/eg
+  silent s/>/\&gt;/eg
+endfunction
+function! s:HtmlUnEscape()
+  silent s/&lt;/</eg
+  silent s/&gt;/>/eg
+  silent s/&amp;/\&/eg
+endfunction
 
-inoremap <leader>h <!--/--><left><left><left>
-" function! HtmlFunctions()
-"   xnoremap <silent> <space>e :call <SID>HtmlEscape()<CR>
-"   xnoremap <silent> <space>ue :call <SID>HtmlUnEscape()<CR>
-" endfunction
-"
+inoremap <leader>h <!-- / --><left><left><left><Left>
+function! HtmlFunctions()
+  xnoremap <silent> es :call <SID>HtmlEscape()<CR>
+  xnoremap <silent> ues :call <SID>HtmlUnEscape()<CR>
+endfunction
 " aug MyAutoCmd
 "   au FileType php,eruby,html,haml call HtmlFunctions()
 " aug END
@@ -917,18 +916,18 @@ aug END
 " python
 " ----------------------------------------
 " NeoBundle 'Pydiction'
-NeoBundleLazy 'yuroyoro/vim-python'
-NeoBundleLazy 'davidhalter/jedi-vim', {
+NeoBundle 'yuroyoro/vim-python'
+NeoBundle 'davidhalter/jedi-vim', {
       \ 'build' : {
       \     'mac' : 'git submodule update --init',
       \     'unix' : 'git submodule update --init',
       \    },
       \ }
-NeoBundleLazy 'kevinw/pyflakes-vim'
-let s:bundle_python = 'vim-python jedi-vim pyflakes-vim'
-aug MyAutoCmd
-  au FileType python call BundleLoadDepends(s:bundle_python)
-aug END
+" NeoBundleLazy 'kevinw/pyflakes-vim'
+" let s:bundle_python = 'vim-python jedi-vim pyflakes-vim'
+" aug MyAutoCmd
+"   au FileType python call BundleLoadDepends(s:bundle_python)
+" aug END
 
 " scala
 " ----------------------------------------
@@ -1181,6 +1180,7 @@ nmap <silent> [unite]<C-U> :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
 " nmap <silent> [unite]<C-R> :<C-u>Unite -buffer-name=register register<CR>
 nmap <silent> [unite]<C-J> :<C-u>Unite file_mru<CR>
 nmap <silent> [unite]<C-B> :<C-u>Unite bookmark<CR>
+nmap <silent> [unite]b :<C-u>Unite buffer<CR>
 nmap <silent> <Space>b :<C-u>UniteBookmarkAdd<CR>
 let g:unite_quick_match_table = {
       \'a' : 1, 's' : 2, 'd' : 3, 'f' : 4, 'g' : 5, 'h' : 6, 'j' : 7, 'k' : 8, 'l' : 9, ';' : 10,
@@ -1823,8 +1823,8 @@ function! s:vimshell_settings() "{{{
     " Unmap [i] -buffer <C-k>
     " Map [i] -buffer -force <C-l> <Space><Bar><Space>
 
-    nmap <buffer><C-L> <C-W><C-W>
-    imap <buffer><C-L> <Nop>
+    " nmap <buffer><C-L> <C-W><C-W>
+    " imap <buffer><C-L> <Nop>
     " Unmap [i] -buffer <Tab>
     " Map [i] -remap -buffer -force <Tab><Tab> <Plug>(vimshell_command_complete)
 
@@ -2309,7 +2309,6 @@ if g:smartchr_enable == 1
   augroup MyAutoCmd
     " Substitute .. into -> .
     au FileType c,cpp    imap <buffer><expr> . smartchr#loop('.', '->', '...')
-    au FileType perl,php imap <buffer><expr> . smartchr#loop('.', '->', '..')
     au FileType perl,php imap <buffer><expr> - smartchr#loop('-', '->')
     au FileType vim      imap <buffer><expr> . smartchr#loop('.', ' . ', '..', '...')
     au FileType coffee   imap <buffer><expr> - smartchr#loop('-', '->', '=>')
@@ -2839,8 +2838,8 @@ imap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
 imap <silent><C-U>     <Plug>(neosnippet_start_unite_snippet)
 nmap <silent><Space>e  :<C-U>NeoSnippetEdit -split<CR>
 nmap <silent><expr><Space>ee  ':NeoSnippetEdit -split'.split(&ft, '.')[0].'<CR>'
-smap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
-xmap <silent><C-F>     <Plug>(neosnippet_start_unite_snippet_target)
+" smap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
+" xmap <silent><C-F>     <Plug>(neosnippet_start_unite_snippet_target)
 " xmap <silent>U         <Plug>(neosnippet_expand_target)
 xmap <silent>o         <Plug>(neosnippet_register_oneshot_snippet)
 "}}}
