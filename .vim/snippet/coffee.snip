@@ -1,5 +1,5 @@
 # 基礎
-# js
+# js#{{{
 snippet     js
     JSON.stringify(${1})
 
@@ -9,18 +9,20 @@ snippet     jp
 snippet     con
     constructor : (${1})->
       ${2}
+#}}}
 
-# coffee
+# coffee#{{{
 snippet     debug
-    console.debug ${1}
+    console?.debug ${1}
 
 snippet     log
-    console.log ${1}
+    console?.log ${1}
 
 snippet     warn
-    console.warn ${1}
+    console?.warn ${1}
+#}}}
 
-# jquery
+# jquery#{{{
 snippet     ajax
     $.ajax({
       url: ${1:http://..}
@@ -44,8 +46,14 @@ snippet     ready
 snippet     ex
     extends ${1}
 
+snippet     form_value_by_name
+  $("${1:selector} [name=${2:name}]").val()
+
+
+#}}}
+
 ###
-# 便利な関数
+# 便利な関数#{{{
 ###
 snippet ffillBlank
     _fillBlank = (target, length, word="0")->
@@ -107,3 +115,21 @@ snippet  cMixin
     class Mixin
       include: (t) ->
         (t[n] = m unless n == 'augment' or !this[n].prototype?) for n, m of this
+
+snippet     random_int
+  randnum = Math.floor( Math.random() * 100000000 )
+
+snippet     random_str
+  randobet = (length, extendStr = "") ->
+    strList = 'abcdefghijklmnopqrstuvwxyz' + 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' + '0123456789' + extendStr
+
+    strListArray = strList.split('')
+
+    result = ''
+
+    for int in [length...0]
+      random = Math.floor(Math.random() * strListArray.length)
+      result += strListArray[random]
+
+    result
+#}}}

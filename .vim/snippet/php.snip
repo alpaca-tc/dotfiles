@@ -518,3 +518,18 @@ snippet mailto
 
 snippet     dump
   var_dump(${1:variable})
+
+snippet     Setting
+  class Setting {/*{{{*/
+  protected $_data;
+  public function __construct() {
+    $this->_data = array();
+  }
+  public function get($name) {
+    return $this->_data[$name];
+  }
+  public function set($name, $value) {
+    $this->_data[$name] = $value;
+    return $this;
+  }
+  }/*}}}*/

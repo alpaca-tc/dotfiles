@@ -375,6 +375,22 @@ snippet     ActiveRecord_setting
 
 #}}}
 
+#fsimpleActiveRecord{{{
+snippet     fsimpleActiveRecord
+  require 'rubygems'
+  require 'active_record'
+  require 'pry'
+
+  ActiveRecord::Base.establish_connection adapter: "mysql2", database: "${1:db_name}"
+
+  tables = %w[${2:table_name}]
+  tables.each do |table|
+    table_name = table.pluralize
+    eval( "class #{table_name} < ActiveRecord::Base; end ")
+  end
+
+  binding.pry
+#}}}
 # rails shortcut
 
 # migration#{{{
@@ -409,6 +425,10 @@ snippet     con_rescue_exceptions
       end
     end# }}}
 #}}}
+
+# basic authenticate
+snippet basic_auth
+  http_basic_authenticate_with name: ${1:user_name}, password: ${2:password} if Rails.env.production?
 
 
 # routes

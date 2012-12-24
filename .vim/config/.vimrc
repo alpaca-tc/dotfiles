@@ -70,12 +70,12 @@ vmap rep y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<Return>!!g<Left><Left>
 nmap ft :set ft=
 
 " デフォルトキーマップの変更
-nmap / /\v
-nmap ? ?\v
-
-" よくミスタイプするので打ちにくくする
-nmap . <Nop>
-nmap .. .
+" nmap / /\v
+" nmap ? ?\v
+"
+" " よくミスタイプするので打ちにくくする
+" nmap . <Nop>
+" nmap .. .
 
 " 新しいバッファを開くときに、rubyか同じファイルタイプで開く{{{
 function! NewBuffer(type)
@@ -154,10 +154,8 @@ function! s:HtmlUnEscape()
 endfunction
 
 inoremap <leader>h <!-- / --><left><left><left><Left>
-function! HtmlFunctions()
-  xnoremap <silent> es :call <SID>HtmlEscape()<CR>
-  xnoremap <silent> ues :call <SID>HtmlUnEscape()<CR>
-endfunction
+xnoremap <silent> eh :call <SID>HtmlEscape()<CR>
+xnoremap <silent> dh :call <SID>HtmlUnEscape()<CR>
 
 " aug MyAutoCmd
 "   au FileType php,eruby,html,haml call HtmlFunctions()
@@ -1233,7 +1231,9 @@ nmap <silent> [unite]<C-R><C-R> :<C-u>Unite -no-quit rails_best_practices<CR>
 " 起動コマンド
 " default <leader><leader>
 nmap <silent><C-H><C-F>  :call VimFilerExplorerGit()<CR>
-nmap <silent><Leader><Leader>  :VimFilerBufferDir<CR>
+" nmap <silent><Leader><Leader>  :VimFilerBufferDir<CR>
+
+nmap <silent><Leader><Leader>  :VimFilerCreate<CR>
 
 " lean more [ utf8 glyph ]( http://sheet.shiar.nl/unicode )
 let g:vimfiler_safe_mode_by_default = 0

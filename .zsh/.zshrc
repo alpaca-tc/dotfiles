@@ -15,8 +15,9 @@ export BROWSER=w3m
 
 # 各種の設定 古いgccを使う場合
 # export CC='/usr/local/bin/gcc-4.2'
-# export CC='/usr/bin/gcc-4.2'
-# alias gcc='/usr/bin/gcc-4.2'
+export CC='/usr/bin/gcc'
+# export CC='/usr/local/bin/gcc-4.5'
+# alias gcc='/usr/local/bin/gcc-4.5'
 
 # alias gcc='/usr/local/bin/gcc-4.2'
 export ARCHFLAGS="-arch x86_64"
