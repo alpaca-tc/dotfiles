@@ -2,7 +2,7 @@
 
 # define name and password
 name=$1
-password=$(mkpasswd -l 10 -s 0)
+password=$(mkpasswd -l 32 -s 0)
 
 # 作成するディレクトリ
 user_dir="/home/${name}"
