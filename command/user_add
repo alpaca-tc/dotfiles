@@ -6,7 +6,7 @@ password=$(mkpasswd -l 10 -s 0)
 
 # 作成するディレクトリ
 user_dir="/home/${name}"
-git_dir="${user_dir}/${name}.git"
+git_dir="${user_dir}/git.git"
 www_dir="${user_dir}/www"
 ssh_dir="${user_dir}/.ssh"
 
@@ -46,5 +46,4 @@ if [ $yn = "y" -o $yn = "Y" ]; then
     chmod 644 ${ssh_dir}/authorized_keys
 
     echo $password | passwd --stdin $name
-
 fi
