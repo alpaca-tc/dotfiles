@@ -8,3 +8,33 @@ snippet     dir
     <Directory ${1:/}>
         ${2}
     </Directory>
+
+snippet     deny_htaccess
+  <Files ~ "^.*\.([Hh][Tt][Aa])">
+   order allow,deny
+   deny from all
+   satisfy all
+  </Files>
+
+snippet     rewrite_maintenance
+  <IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteCond %{REQUEST_URI} !/maintenance.html$
+    RewriteCond %{REMOTE_ADDR} !^123\.456\.789\.000
+    RewriteRule $ /maintenance.html [R=302,L]
+  </IfModule>
+
+snippet     caching
+  <IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access 1 year"
+    ExpiresByType image/jpeg "access 1 year"
+    ExpiresByType image/gif "access 1 year"
+    ExpiresByType image/png "access 1 year"
+    ExpiresByType text/css "access 1 month"
+    ExpiresByType application/pdf "access 1 month"
+    ExpiresByType text/x-javascript "access 1 month"
+    ExpiresByType application/x-shockwave-flash "access 1 month"
+    ExpiresByType image/x-icon "access 1 year"
+    ExpiresDefault "access 2 days"
+  </IfModule>

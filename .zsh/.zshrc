@@ -99,3 +99,4 @@ source ~/.zsh/.zshrc.alias
 source ~/.zsh/.zshrc.tmuxauto
 # source ~/.zsh/.zshrc.command
 
+export PROMPT="$PROMPT"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'

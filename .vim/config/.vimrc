@@ -844,15 +844,15 @@ command! Vinaris call BundleWithCmd('vinarise vinarise-plugin-peanalysis', 'Vina
 " ----------------------------------------
 " NeoBundle 'astashov/vim-ruby-debugger'
 " NeoBundle 'taichouchou2/neco-rubymf' " gem install methodfinder
-NeoBundle 'taichouchou2/vim-rsense'
 NeoBundle 'taichouchou2/vim-endwise.git' "end endifなどを自動で挿入
 NeoBundle 'taichouchou2/vim-rails'
+" NeoBundle 'taichouchou2/vim-rsense'
 NeoBundleLazy 'basyura/unite-rails'
 NeoBundleLazy 'taichouchou2/unite-rails_best_practices',
       \{ 'depends' : 'Shougo/unite.vim' }
 NeoBundleLazy 'ujihisa/unite-rake'
 NeoBundleLazy 'taichouchou2/alpaca_complete'
-let s:bundle_rails = 'unite-rails unite-rails_best_practices unite-rake alpaca_complete vim-rsense'
+let s:bundle_rails = 'unite-rails unite-rails_best_practices unite-rake alpaca_complete'
 aug MyAutoCmd
   au User Rails call BundleLoadDepends(s:bundle_rails)
 aug END
@@ -865,7 +865,7 @@ NeoBundleLazy 'ujihisa/neco-ruby'
 NeoBundleLazy 'vim-ruby/vim-ruby'
 NeoBundleLazy 'taichouchou2/unite-reek',
       \{  'depends' : 'Shougo/unite.vim' }
-NeoBundleLazy 'Shougo/neocomplcache-rsense'
+NeoBundle 'Shougo/neocomplcache-rsense'
 NeoBundleLazy 'rhysd/unite-ruby-require.vim'
 NeoBundleLazy 'rhysd/neco-ruby-keyword-args'
 NeoBundleLazy 'rhysd/vim-textobj-ruby'
@@ -1066,8 +1066,13 @@ aug END
 " tagbar.vim
 "------------------------------------
 "{{{
-nnoremap <Space>t :TagbarToggle<CR>
+nmap <Space>t :TagbarToggle<CR>
 let g:tagbar_ctags_bin="/Applications/MacVim.app/Contents/MacOS/ctags"
+let g:tagbar_compact    = 1
+let g:tagbar_autofocus  = 1
+let g:tagbar_autoshowtag= 1
+let g:tagbar_iconchars  =  ['▸', '▾']
+
 
 " gem ins coffeetags
 if executable('coffeetags')
@@ -1075,16 +1080,17 @@ if executable('coffeetags')
         \ 'ctagsbin' : 'coffeetags',
         \ 'ctagsargs' : '',
         \ 'kinds' : [
-        \ 'f:functions',
-        \ 'o:object',
+        \   'f:functions',
+        \   'o:object',
         \ ],
         \ 'sro' : ".",
         \ 'kind2scope' : {
-        \ 'f' : 'object',
-        \ 'o' : 'object',
+        \   'f' : 'object',
+        \   'o' : 'object',
         \ }
         \ }
 endif
+
 let g:tagbar_type_javascript = {
     \'ctagstype' : 'JavaScript',
     \'kinds'     : [
@@ -1094,6 +1100,13 @@ let g:tagbar_type_javascript = {
     \   's:strings'
   \]
 \}
+let g:tagbar_type_php = {
+   \ 'kinds' : [
+      \ 'c:classes',
+      \ 'f:functions',
+      \ 'v:variables:1'
+   \ ]
+\ }
 " let g:tagbar_type_markdown = {
 "   \ 'ctagstype' : 'markdown',
 "   \ 'kinds' : [
@@ -1112,6 +1125,23 @@ let g:tagbar_type_ruby = {
         \ 'F:singleton methods'
     \ ]
 \ }
+
+let g:tagbar_type_html = {
+    \ 'ctagstype' : 'html',
+    \ 'kinds' : [
+    \ 'h:Headers',
+    \ 'o:Objects(ID)',
+    \ 'c:Classes'
+    \ ]
+    \ }
+let g:tagbar_type_css = {
+    \ 'ctagstype' : 'css',
+    \ 'kinds' : [
+    \ 't:Tags(Elements)',
+    \ 'o:Objects(ID)',
+    \ 'c:Classes'
+    \ ]
+    \ }
 "}}}
 
 "------------------------------------
@@ -1221,8 +1251,10 @@ aug END
 "------------------------------------
 " Unite-reek, Unite-rails_best_practices
 "------------------------------------
+" {{{
 nmap <silent> [unite]<C-R> :<C-u>Unite -no-quit reek<CR>
 nmap <silent> [unite]<C-R><C-R> :<C-u>Unite -no-quit rails_best_practices<CR>
+" }}}
 
 "------------------------------------
 " VimFiler
@@ -1267,6 +1299,7 @@ aug VimFilerKeyMapping
     nmap <buffer>b :<C-U>UniteBookmarkAdd<CR>
     nmap <buffer><CR> <Plug>(vimfiler_edit_file)
     nmap <buffer>v <Plug>(vimfiler_view_file)
+    nmap <buffer><C-J> [unite]
     nmap <buffer><silent>[unite]<C-J> :<C-U>Unite file_mru<CR>
     nmap <buffer><silent>[unite]<C-U> :<C-U>UniteWithBufferDir -buffer-name=files file<CR>
 
@@ -1318,12 +1351,10 @@ let g:quickrun_config._ = {'runner' : 'vimproc'}
 let g:quickrun_no_default_key_mappings = 1
 nmap <silent><Leader>r :call BundleWithCmd('vim-quickrun', 'QuickRun')<CR>
 
-" lisp
 let g:quickrun_config['lisp'] = {
       \   'command': 'clisp'
       \ }
 
-" coffee
 let g:quickrun_config['coffee_compile'] = {
       \'command' : 'coffee',
       \'exec' : ['%c -cbp %s']
@@ -1334,12 +1365,12 @@ let g:quickrun_config['markdown'] = {
       \ 'cmdopt': '-s'
       \ }
 
-" ruby
 let g:quickrun_config['ruby'] = {
       \   'command': 'ruby'
       \ }
 
-" Rspec
+let g:quickrun_config.applescript = {'command' : 'osascript' , 'output' : '_'}
+
 let g:quickrun_config['ruby.rspec'] = {
       \ 'type' : 'ruby.rspec',
       \ 'command': 'rspec',
@@ -1677,7 +1708,7 @@ let b:match_ignorecase = 1
 ">の形をを許可する
 "ちゃんと/.vim/fontsのfontを入れていないと動かないよ
 set guifontwide=Ricty:h10
-let g:Powerline_colorscheme='molokai'
+" let g:Powerline_colorscheme='molokai'
 let g:Powerline_symbols = 'fancy'
 "}}}
 

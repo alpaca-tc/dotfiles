@@ -1,11 +1,15 @@
+set_tmux_pwd () {
+    PROMPT="$PROMPT"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
+}
+
 ## Default shell configuration
 autoload colors
 colors
 case ${UID} in
     0)
-        PROMPT="%B%{${fg[red]}%}%/#%{${reset_color}%}%b "
-        PROMPT2="%B%{${fg[red]}%}%_#%{${reset_color}%}%b "
-        SPROMPT="%B%{${fg[red]}%}%r is correct? [n,y,a,e]:%{${reset_color}%}%b "
+        # PROMPT="%B%{${fg[red]}%}%/#%{${reset_color}%}%b "
+        # PROMPT2="%B%{${fg[red]}%}%_#%{${reset_color}%}%b "
+        # SPROMPT="%B%{${fg[red]}%}%r is correct? [n,y,a,e]:%{${reset_color}%}%b "
         [ -n "${REMOTEHOST}${SSH_CONNECTION}" ] &&
             PROMPT="%{${fg[cyan]}%}$(echo ${HOST%%.*} | tr '[a-z]' '[A-Z]') ${PROMPT}"
         ;;
@@ -32,8 +36,9 @@ case ${UID} in
         #PROMPT='${RESET}${GREEN}${WINDOW:+"[$WINDOW]"}${RESET}%{$fg_bold[blue]%}${USER}@%m ${RESET}${WHITE}$ '
         #taichou@alp-iMac ~/.zsh/.zshrc.prompt $
         PROMPT='${RESET}${GREEN}${WINDOW:+"[$WINDOW]"}${RESET}%{$BLUE_BOLD%}${USER}@%m:${RESET}${WHITE}%~ ${RESET}${WHITE}$ '$'\n'
+        set_tmux_pwd
         # 23:40:25-taichou@~/Desktop$
-        RPROMPT='${RESET}${WHITE}[${WHITE}%(5~,%-2~/.../%2~,%~)% ${WHITE}]${WINDOW:+"[$WINDOW]"} ${RESET}'
+        # RPROMPT='${RESET}${WHITE}[${WHITE}%(5~,%-2~/.../%2~,%~)% ${WHITE}]${WINDOW:+"[$WINDOW]"} ${RESET}'
 
         # Vi入力モードでPROMPTの色を変える
         # http://memo.officebrook.net/20090226.html
@@ -41,13 +46,15 @@ case ${UID} in
             case $KEYMAP in
                 vicmd)
                     PROMPT='${RESET}${GREEN}${WINDOW:+"[$WINDOW]"}${RESET}%{$CYAN_BOLD%}${USER}@%m:${RESET}${WHITE}%~ ${RESET}${WHITE}$ '$'\n'
+                    set_tmux_pwd
                     ;;
                 main|viins)
-                    PROMPT='${RESET}${GREEN}${WINDOW:+"[$WINDOW]"}${RESET}%{$BLUE_BOLD%}${USER}@%m:${RESET}${WHITE}%~ ${RESET}${WHITE}$ '$'\n'
+                    # PROMPT='${RESET}${GREEN}${WINDOW:+"[$WINDOW]"}${RESET}%{$BLUE_BOLD%}${USER}@%m:${RESET}${WHITE}%~ ${RESET}${WHITE}$ '$'\n'
                     ;;
             esac
             zle reset-prompt
         }
+
         zle -N zle-line-init
         zle -N zle-keymap-select
 
@@ -150,3 +157,4 @@ bindkey "^J"  accept-line # no magic
 bindkey " "   magic-abbrev-expand-and-insert
 bindkey "."   magic-abbrev-expand-and-insert
 bindkey "^x " no-magic-abbrev-expand
+

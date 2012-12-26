@@ -9,11 +9,6 @@ alias ll="ls -l"
 
 # ディレクトリ登録
 alias cdh="cd /Applications/XAMPP/htdocs/"
-alias cd.="cd ../"
-alias cd..="cd ../../"
-alias cd...="cd ../../../"
-alias cd....="cd ../../../../"
-alias cd.....="cd ../../../../../"
 alias cdd="cd ~/Dropbox/test/"
 alias cdd="cd cd ~/Documents/Titanium\ Studio\ Workspace/"
 

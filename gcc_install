@@ -1,0 +1,7 @@
+#!/bin/sh
+
+brew tap homebrew/dupes
+brew install gcc --use-llvm
+
+brew tap homebrew/versions
+brew install gcc45
