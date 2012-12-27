@@ -56,6 +56,12 @@ abbr        def initialize end
       ${2}
     end
 
+snippet     lam
+abbr        lambda do end
+    lambda do ${1}
+      ${2}
+    end
+
 snippet def
     def ${1:method_name}
         ${2}
@@ -435,4 +441,67 @@ snippet basic_auth
 snippet     match_not_found
   match '*not_found', to: 'errors#error_404'
 
+# Gof
+snippet     gof_strategy_1
+abbr        別々のオブジェクトにアルゴリズムを引き出す
+  # Strategy pattern
+  # pattern1
+  # 別々のオブジェクトにアルゴリズムを引き出す
+  class Report
+    attr_reader :title, :text
+    attr_accessor :formatter
 
+    def initialize(formatter)
+      @title = '月次報告'
+      @text = [ '順調', '最高の調子']
+      @formatter = formatter
+    end
+
+    def output_report
+      @formatter.output_report @title, @text
+    end
+  end
+
+  report = Report.new(HTMLFormatter.new)
+  report.output_report
+
+# Gof
+snippet     gof_strategy_2
+abbr        別々のオブジェクトにアルゴリズムを引き出す
+  # Strategy pattern
+  # pattern2
+  # 別々のオブジェクトにアルゴリズムを引き出す
+  # use Proc
+  class Report
+    attr_reader :title, :text
+    attr_accessor :formatter
+
+    def initialize( &formatter )
+      @title = '月次報告'
+      @text = [ '順調', '最高の調子']
+      @formatter = formatter
+    end
+
+    def output_report
+      @formatter.call self
+    end
+  end
+  HTML_FORMATTER = lambda do |context|
+    body = ""
+    context.text.each do |line|
+      body += line
+    end
+
+    puts <<-HTML
+    <!DOCTYPE HTML>
+    <html lang="ja">
+    <head>
+     <meta charset="UTF-8">
+     <title>#{context.title}</title>
+    </head>
+    <body>
+      #{body}
+    </body>
+    </html>
+    HTML
+  end
