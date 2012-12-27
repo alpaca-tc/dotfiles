@@ -20,6 +20,13 @@ run_segment() {
   fi
   if [[ -n "$stats" && $stats -gt 0 ]]; then
     echo "${mod_symbol}${stats}"
+  else
+    git_dir=$(git rev-parse --git-dir 2> /dev/null)
+    if [ $git_dir != 0 ]; then
+      echo "${mod_symbol}0"
+    else
+      echo ""
+    fi
   fi
 }
 

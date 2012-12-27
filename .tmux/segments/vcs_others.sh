@@ -21,7 +21,14 @@ run_segment() {
   return 1
 
   if [[ -n "$stats" && $stats -gt 0 ]]; then
-    echo "${other_symbol}${stats}"
+      echo "${other_symbol}${stats}"
+  else
+      git_dir=$(git rev-parse --git-dir 2> /dev/null)
+      if [ $git_dir != 0 ]; then
+          echo "${other_symbol}"
+      else
+          echo ""
+      fi
   fi
   return 0
 }

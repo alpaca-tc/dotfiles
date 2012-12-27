@@ -24,6 +24,12 @@ run_segment() {
     echo "${staged_symbol}${stats}${staged_symbol}"
     return 1
   else
+    git_dir=$(git rev-parse --git-dir 2> /dev/null)
+    if [ $git_dir != 0 ]; then
+      echo "${staged_symbol}0${staged_symbol}"
+    else
+      echo ""
+    fi
     return 0
   fi
 
