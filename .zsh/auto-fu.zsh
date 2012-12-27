@@ -221,8 +221,6 @@
 afu_zles=( \
   # Zle widgets should be rebinded in the afu keymap. `auto-fu-maybe' to be
   # called after it's invocation, see `afu-initialize-zle-afu'.
-  self-insert backward-delete-char backward-kill-word kill-line \
-  kill-whole-line kill-word magic-space yank \
 )
 
 autoload +X keymap+widget
@@ -230,12 +228,14 @@ autoload +X keymap+widget
 () {
   setopt localoptions extendedglob no_shwordsplit
   local code=${(S)${functions[keymap+widget]/for w in *
-	do
+    do
 /for w in $afu_zles
   do
   }/(#b)(\$w-by-keymap \(\) \{*\})/
   eval \${\${\${\"\$(echo \'$match\')\"}/\\\$w/\$w}//\\\$WIDGET/\$w}
   }
+  echo $code
+  echo $afu_zles
   eval "function afu-keymap+widget () { $code }"
 }
 

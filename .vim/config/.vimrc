@@ -567,13 +567,13 @@ set commentstring=%s
 set foldmethod=marker
 
 " vimを使っているときはtmuxのステータスラインを隠す"{{{
-if !has('gui_running') && $TMUX !=# ''
-  augroup Tmux
-    autocmd!
-    " au VimEnter,FocusGained * silent !tmux set status off
-    " au VimLeave,FocusLost * silent !tmux set status on
-  augroup END
-endif "}}}
+" if !has('gui_running') && $TMUX !=# ''
+"   augroup Tmux
+"     autocmd!
+"     " au VimEnter,FocusGained * silent !tmux set status off
+"     " au VimLeave,FocusLost * silent !tmux set status on
+"   augroup END
+" endif "}}}
 
 " 設定を上書きしない為に、最後に書く
 " colorscheme darkblue
@@ -911,6 +911,7 @@ aug END
 " NeoBundle 'vim-scripts/dbext.vim' "<Leader>seでsqlを実行
 " NeoBundleLazy 'tsukkee/lingr-vim'
 NeoBundle 'vim-scripts/yanktmp.vim'
+NeoBundleLazy 'mattn/googletranslate-vim'
 "}}}
 
 " Installation check.
@@ -2665,9 +2666,17 @@ imap <C-J> <Plug>(eskk:toggle)
 "------------------------------------
 " alpaca_wordpress.vim
 "------------------------------------
+"{{{
 let g:alpaca_wordpress_syntax = 1
 let g:alpaca_wordpress_use_default_setting = 1
+"}}}
 
+"------------------------------------
+" googletranslate-vim
+"------------------------------------
+
+let g:googletranslate_userip="219.106.94.218"
+nmap <silent><C-J><C-H>  :call BundleWithCmd('googletranslate-vim', 'GoogleTranslate')<CR>
 "}}}
 
 "----------------------------------------
