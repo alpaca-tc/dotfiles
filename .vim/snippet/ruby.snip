@@ -52,7 +52,7 @@ prev_word   '^'
 #/*{{{*/
 snippet     ini
 abbr        def initialize end
-    def initialize( ${1} )
+    def initialize${1}
       ${2}
     end
 
@@ -183,6 +183,17 @@ snippet dm
 
 
 #/*}}}*/
+
+# ruby2
+# Enumerable {{{
+snippet     enu
+abbr include Enumerable
+  include Enumerable
+
+  def each(&block)
+    ${1}
+  end
+#}}}
 
 # validates
 #{{{
@@ -442,6 +453,7 @@ snippet     match_not_found
   match '*not_found', to: 'errors#error_404'
 
 # Gof
+# Strategy#{{{
 snippet     gof_strategy_1
 abbr        別々のオブジェクトにアルゴリズムを引き出す
   # Strategy pattern
@@ -505,3 +517,152 @@ abbr        別々のオブジェクトにアルゴリズムを引き出す
     </html>
     HTML
   end
+##}}}
+
+# Observer {{{
+snippet     gof_observer_1
+abbr        オブジェクトの変更を通知する
+  module Subject
+    def initialize
+      @observers = []
+    end
+
+    def add_observer(&observer)
+      @observers << observer
+    end
+
+    def delete_observer(observer)
+      @observers.delete(observer)
+    end
+
+    def notify_observers
+      @observers.each do |observer|
+        observer.call(self)
+      end
+    end
+  end
+
+  class Employee
+    include Subject
+
+    attr_accessor :name, :title, :salary
+
+    def initialize( name, title, salary )
+      super()
+      @name = name
+      @title = title
+      @salary = salary
+    end
+
+    def salary= (new_salary)
+      @salary = new_salary
+      notify_observers
+    end
+  end
+
+  fred = Employee.new('Fred', 'Crane Operator', 3000)
+  fred.add_observer do |changed_employee|
+    puts("Cut a new check for#{changed_employee.name}")
+    puts("His salary is now #{changed_employee.salary}")
+  end
+
+snippet     gof_observer_2
+abbr        オブジェクトの変更を通知する
+  require 'observer'
+  class AObservable
+    include Observable
+
+    def value= (v)
+      @value = v
+      changed
+      notify_observers v
+    end
+  end
+  class AObserver
+    def update(value)
+      puts("update value : #{value}")
+    end
+  end
+
+# オブジェクトを生成
+  obj = AObservable.new
+
+# オブザーバーを追加
+  observer = AObserver.new
+  obj.add_observer(observer)
+
+  obj.value = "hoge"
+#}}}
+
+# Composite {{{
+snippet     gof_composite_1
+abbr        部分から全体を組み立てる
+  class Task
+    attr_accessor :name, :parent
+
+    def initialize(name)
+      @name = name
+      @parent = nil
+    end
+
+    def get_time_required
+      0.0
+    end
+  end
+
+  class CompositeTask < Task
+    def initialize(name)
+      super(name)
+      @sub_tasks = []
+    end
+
+    def add_sub_task(task)
+      @sub_tasks << task
+      task.parent = self
+    end
+
+    def remove_sub_task(task)
+      @sub_tasks.delete(task)
+      task.parent = nil
+    end
+
+    def get_time_required
+      time = 0.0
+      @sub_tasks.each { |task| time += task.get_time_required }
+      time
+    end
+  end
+# }}}
+
+# Iterator#{{{
+snippet     gof_iterator_1
+abbr 集約オブジェクトの内部を隠蔽しながら、要素にアクセスする
+  class Account
+    attr_accessor :name, :balance
+
+    def initialize(name, balance)
+      @name = name
+      @balance = balance
+    end
+
+    def <=>(other)
+      blance <=> other.balance
+    end
+  end
+
+  class Portfolio
+    include Enumerable
+    def initialize
+      @accounts = []
+    end
+
+    def each(&block)
+      @accounts.each(&block)
+    end
+
+    def add_account(account)
+      @accounts << account
+    end
+  end
+##}}}
+

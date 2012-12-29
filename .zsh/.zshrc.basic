@@ -166,6 +166,9 @@ autoload predict-on
 ## Command Line Stack [Esc]-[q]
 bindkey -a 'q' push-line
 
+# vimモード
+bindkey -v
+
 
 # C-M-h でチートシートを表示する
 cheat-sheet () { zle -M "`cat ~/dotfiles/.zsh/cheat-sheet`" }
@@ -188,4 +191,6 @@ add-zsh-hook chpwd chpwd_recent_dirs
 zstyle ':chpwd:*' recent-dirs-max 5000
 zstyle ':chpwd:*' recent-dirs-default yes
 zstyle ':completion:*' recent-dirs-insert both
+zstyle ':completion:*' ignore-parents parent pwd
+zstyle ':completion:*' ignore-parents parent pwd ..
 
