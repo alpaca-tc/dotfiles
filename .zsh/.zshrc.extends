@@ -48,10 +48,10 @@ zstyle ':completion:*:cd:*' ignore-parents parent pwd
 
 # auto-fu.zsh
 source ~/.zsh/auto-fu.zsh
-# function zle-line-init () {
-#   auto-fu-init
-# }
-# zle -N zle-line-init
+function zle-line-init () {
+  auto-fu-init
+}
+zle -N zle-line-init
 
 # tmuxinator
 [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
