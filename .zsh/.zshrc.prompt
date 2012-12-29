@@ -1,5 +1,5 @@
 set_tmux_pwd () {
-    PROMPT="$PROMPT"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
+  PROMPT="$PROMPT"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
 }
 
 ## Default shell configuration
@@ -7,14 +7,14 @@ autoload colors
 colors
 
 case ${UID} in
-    0)
-        # PROMPT="%B%{${fg[red]}%}%/#%{${reset_color}%}%b "
-        # PROMPT2="%B%{${fg[red]}%}%_#%{${reset_color}%}%b "
-        # SPROMPT="%B%{${fg[red]}%}%r is correct? [n,y,a,e]:%{${reset_color}%}%b "
-        [ -n "${REMOTEHOST}${SSH_CONNECTION}" ] &&
-            PROMPT="%{${fg[cyan]}%}$(echo ${HOST%%.*} | tr '[a-z]' '[A-Z]') ${PROMPT}"
-        ;;
-    *)
+  0)
+# PROMPT="%B%{${fg[red]}%}%/#%{${reset_color}%}%b "
+# PROMPT2="%B%{${fg[red]}%}%_#%{${reset_color}%}%b "
+# SPROMPT="%B%{${fg[red]}%}%r is correct? [n,y,a,e]:%{${reset_color}%}%b "
+[ -n "${REMOTEHOST}${SSH_CONNECTION}" ] &&
+  PROMPT="%{${fg[cyan]}%}$(echo ${HOST%%.*} | tr '[a-z]' '[A-Z]') ${PROMPT}"
+;;
+*)
 
         # Color
         DEFAULT=$'%{\e[1;0m%}'
@@ -44,118 +44,118 @@ case ${UID} in
         # Vi入力モードでPROMPTの色を変える
         # http://memo.officebrook.net/20090226.html
         function zle-line-init zle-keymap-select {
-            case $KEYMAP in
-                vicmd)
-                    PROMPT='${RESET}${GREEN}${WINDOW:+"[$WINDOW]"}${RESET}%{$CYAN_BOLD%}${USER}@%m:${RESET}${WHITE}%~ ${RESET}${WHITE}$ '$'\n'
-                    set_tmux_pwd
-                    ;;
-                main|viins)
-                    # PROMPT='${RESET}${GREEN}${WINDOW:+"[$WINDOW]"}${RESET}%{$BLUE_BOLD%}${USER}@%m:${RESET}${WHITE}%~ ${RESET}${WHITE}$ '$'\n'
-                    ;;
-            esac
-            zle reset-prompt
-        }
+          case $KEYMAP in
+            vicmd)
+          PROMPT='${RESET}${GREEN}${WINDOW:+"[$WINDOW]"}${RESET}%{$CYAN_BOLD%}${USER}@%m:${RESET}${WHITE}%~ ${RESET}${WHITE}$ '$'\n'
+          set_tmux_pwd
+          ;;
+          main|viins)
+        # PROMPT='${RESET}${GREEN}${WINDOW:+"[$WINDOW]"}${RESET}%{$BLUE_BOLD%}${USER}@%m:${RESET}${WHITE}%~ ${RESET}${WHITE}$ '$'\n'
+        ;;
+      esac
+      zle reset-prompt
+    }
 
-        zle -N zle-line-init
-        zle -N zle-keymap-select
+    zle -N zle-line-init
+    zle -N zle-keymap-select
 
-        # 直前のコマンドの終了ステータスが0以外のときは赤くする。
-        # ${MY_MY_PROMPT_COLOR}はprecmdで変化させている数値。
-        local MY_COLOR="$ESCX"'%(0?.${MY_PROMPT_COLOR}.31)'m
-        local NORMAL_COLOR="$ESCX"m
+    # 直前のコマンドの終了ステータスが0以外のときは赤くする。
+    # ${MY_MY_PROMPT_COLOR}はprecmdで変化させている数値。
+    local MY_COLOR="$ESCX"'%(0?.${MY_PROMPT_COLOR}.31)'m
+    local NORMAL_COLOR="$ESCX"m
 
-        # Show git branch when you are in git repository
-        # http://d.hatena.ne.jp/mollifier/20100906/p1
-        autoload -Uz add-zsh-hook
-        autoload -Uz vcs_info
+    # Show git branch when you are in git repository
+    # http://d.hatena.ne.jp/mollifier/20100906/p1
+    autoload -Uz add-zsh-hook
+    autoload -Uz vcs_info
 
-        zstyle ':vcs_info:*' enable git svn hg bzr
-        zstyle ':vcs_info:*' formats '(%s)-[%b]'
-        zstyle ':vcs_info:*' actionformats '(%s)-[%b|%a]'
-        zstyle ':vcs_info:(svn|bzr):*' branchformat '%b:r%r'
-        zstyle ':vcs_info:bzr:*' use-simple true
+    zstyle ':vcs_info:*' enable git svn hg bzr
+    zstyle ':vcs_info:*' formats '(%s)-[%b]'
+    zstyle ':vcs_info:*' actionformats '(%s)-[%b|%a]'
+    zstyle ':vcs_info:(svn|bzr):*' branchformat '%b:r%r'
+    zstyle ':vcs_info:bzr:*' use-simple true
 
-        autoload -Uz is-at-least
-        if is-at-least 4.3.10; then
-            # この check-for-changes が今回の設定するところ
-            zstyle ':vcs_info:git:*' check-for-changes true
-            zstyle ':vcs_info:git:*' stagedstr "+"    # 適当な文字列に変更する
-            zstyle ':vcs_info:git:*' unstagedstr "-"  # 適当の文字列に変更する
-            zstyle ':vcs_info:git:*' formats '(%s)-[%c%u%b]'
-            zstyle ':vcs_info:git:*' actionformats '(%s)-[%c%u%b|%a]'
-        fi
+    autoload -Uz is-at-least
+    if is-at-least 4.3.10; then
+      # この check-for-changes が今回の設定するところ
+      zstyle ':vcs_info:git:*' check-for-changes true
+      zstyle ':vcs_info:git:*' stagedstr "+"    # 適当な文字列に変更する
+      zstyle ':vcs_info:git:*' unstagedstr "-"  # 適当の文字列に変更する
+      zstyle ':vcs_info:git:*' formats '(%s)-[%c%u%b]'
+      zstyle ':vcs_info:git:*' actionformats '(%s)-[%c%u%b|%a]'
+    fi
 
-        function _update_vcs_info_msg() {
-            psvar=()
-            LANG=en_US.UTF-8 vcs_info
-            psvar[2]=$(_git_not_pushed)
-            [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
-        }
-        add-zsh-hook precmd _update_vcs_info_msg
+    function _update_vcs_info_msg() {
+      psvar=()
+      LANG=en_US.UTF-8 vcs_info
+      psvar[2]=$(_git_not_pushed)
+      [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
+    }
+    add-zsh-hook precmd _update_vcs_info_msg
 
-        function _git_not_pushed()
-        {
-            if [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = "true" ]; then
-                head="$(git rev-parse HEAD)"
-                for x in $(git rev-parse --remotes)
-                do
-                    if [ "$head" = "$x" ]; then
-                        return 0
-                    fi
-                done
-                echo "{?}"
-            fi
+    function _git_not_pushed()
+    {
+      if [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = "true" ]; then
+        head="$(git rev-parse HEAD)"
+        for x in $(git rev-parse --remotes)
+        do
+          if [ "$head" = "$x" ]; then
             return 0
-        }
+          fi
+        done
+        echo "{?}"
+      fi
+      return 0
+    }
 
-        RPROMPT="%1(v|%F${CYAN}%1v%2v%f|)${vcs_info_git_pushed}${RESET}${WHITE}[${BLUE}%(5~,%-2~/.../%2~,%~)% ${WHITE}]${WINDOW:+"[$WINDOW]"} ${RESET}"
-        RPROMPT="%1(v|%F${CYAN}%1v%2v%f|)${vcs_info_git_pushed}${RESET}${WHITE}[${WHITE}%(5~,%-2~/.../%2~,%~)% ${WHITE}]${WINDOW:+"[$WINDOW]"} ${RESET}"
-        RPROMPT="%1(v|%F${CYAN}%1v%2v%f|)${vcs_info_git_pushed}${RESET}${WHITE}"
+    RPROMPT="%1(v|%F${CYAN}%1v%2v%f|)${vcs_info_git_pushed}${RESET}${WHITE}[${BLUE}%(5~,%-2~/.../%2~,%~)% ${WHITE}]${WINDOW:+"[$WINDOW]"} ${RESET}"
+    RPROMPT="%1(v|%F${CYAN}%1v%2v%f|)${vcs_info_git_pushed}${RESET}${WHITE}[${WHITE}%(5~,%-2~/.../%2~,%~)% ${WHITE}]${WINDOW:+"[$WINDOW]"} ${RESET}"
+    RPROMPT="%1(v|%F${CYAN}%1v%2v%f|)${vcs_info_git_pushed}${RESET}${WHITE}"
 
     ;;
-esac
+  esac
 
-# zsh の exntended_glob と HEAD^^^ を共存させる。
-# http://subtech.g.hatena.ne.jp/cho45/20080617/1213629154
-typeset -A abbreviations
-abbreviations=(
+  # zsh の exntended_glob と HEAD^^^ を共存させる。
+  # http://subtech.g.hatena.ne.jp/cho45/20080617/1213629154
+  typeset -A abbreviations
+  abbreviations=(
     "HEAD^"     "HEAD\\^"
     "HEAD^^"    "HEAD\\^\\^"
     "HEAD^^^"   "HEAD\\^\\^\\^"
     "HEAD^^^^"  "HEAD\\^\\^\\^\\^\\^"
     "HEAD^^^^^" "HEAD\\^\\^\\^\\^\\^"
-)
+  )
 
-#     "L"    "| $PAGER"
-#     "G"    "| grep"
+  #     "L"    "| $PAGER"
+  #     "G"    "| grep"
 
-magic-abbrev-expand () {
+  magic-abbrev-expand () {
     local MATCH
     LBUFFER=${LBUFFER%%(#m)[-_a-zA-Z0-9^]#}
     LBUFFER+=${abbreviations[$MATCH]:-$MATCH}
-}
+  }
 
-magic-abbrev-expand-and-insert () {
+  magic-abbrev-expand-and-insert () {
     magic-abbrev-expand
     zle self-insert
-}
+  }
 
-magic-abbrev-expand-and-accept () {
+  magic-abbrev-expand-and-accept () {
     magic-abbrev-expand
     zle accept-line
-}
+  }
 
-no-magic-abbrev-expand () {
+  no-magic-abbrev-expand () {
     LBUFFER+=' '
-}
+  }
 
-zle -N magic-abbrev-expand
-zle -N magic-abbrev-expand-and-insert
-zle -N magic-abbrev-expand-and-accept
-zle -N no-magic-abbrev-expand
-bindkey "\r"  magic-abbrev-expand-and-accept # M-x RET はできなくなる
-bindkey "^J"  accept-line # no magic
-bindkey " "   magic-abbrev-expand-and-insert
-bindkey "."   magic-abbrev-expand-and-insert
-bindkey "^x " no-magic-abbrev-expand
+  zle -N magic-abbrev-expand
+  zle -N magic-abbrev-expand-and-insert
+  zle -N magic-abbrev-expand-and-accept
+  zle -N no-magic-abbrev-expand
+  bindkey "\r"  magic-abbrev-expand-and-accept # M-x RET はできなくなる
+  bindkey "^J"  accept-line # no magic
+  bindkey " "   magic-abbrev-expand-and-insert
+  bindkey "."   magic-abbrev-expand-and-insert
+  bindkey "^x " no-magic-abbrev-expand
 

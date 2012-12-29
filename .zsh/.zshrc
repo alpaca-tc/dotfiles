@@ -1,49 +1,32 @@
+# 環境変数
+# # {{{
 export EDITOR=vim
 export LANG=ja_JP.UTF-8
 # export SHELL=/usr/local/bin/zsh
 export DOTFILES_DIR=$HOME/dotfiles_serclet
 export BROWSER=w3m
-
-# export LESS='-RQM' # R = そのままの制御文字を出力 + 可能なら表示を正しく維持
-                   # Q = 完全に quite
-                   # M = 詳細なパーセント表示のプロンプト
-# ruby
-# export RUBYOPT=-Ke
-
-# centOS
-# eval $(dircolors -b ~/.dir_colors)
+export ARCHFLAGS="-arch x86_64"
+export APXS2=/usr/sbin/apxs
+export GITHUB_HOST='github.com'
 
 # 各種の設定 古いgccを使う場合
 # export CC='/usr/local/bin/gcc-4.2'
-# export CC='/usr/bin/gcc'
-# export CC='/usr/local/bin/gcc-4.5'
 # alias gcc='/usr/local/bin/gcc-4.5'
+# }}}
 
-# alias gcc='/usr/local/bin/gcc-4.2'
-export ARCHFLAGS="-arch x86_64"
-export APXS2=/usr/sbin/apxs
-
+# PATH
+# {{{
 export PATH=''
+export MANPATH=''
+export MANPATH=$MANPATH:/usr/share/man
 export PATH=/bin:/sbin:/usr/sbin:/usr/bin
-export PATH=$PATH:$HOME/Downloads/android-sdk-macosx/platform-tools
-export MANPATH=$PATH:/usr/share/man
 
-# rvm
-# export PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-# source "$HOME/.rvm/scripts/rvm"
-# fpath=(~/.zsh/Completion $fpath)
-# export PATH=$PATH:$GEM_PATH/bin
+# zsh関連
+export PATH=$HOME/.autojump/bin:$PATH
 
-# pythonz
-# [[ -s $HOME/.pythonz/etc/bashrc ]] && source $HOME/.pythonz/etc/bashrc
-# export PATH=$HOME/.pythonz/pythons/CPython-3.2/bin:$PATH
-
-# node
-
-# java 1.7.0
-export PATH=/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:$PATH
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home
-# export CLASSPATH=$JAVA_HOME'/lib/ext'
+# vim関連
+export PATH=$PATH:$HOME/local/bin:$HOME/local/sbin
+export MANPATH=$HOME/local/man:$MANPATH
 
 # rsense
 export PATH=$HOME/.vim/ref/rsense-0.3/bin:$PATH
@@ -58,44 +41,25 @@ export PATH=/usr/local/mysql/bin:/usr/local/share/npm/bin:$PATH
 export PATH=/usr/local/bin:$PATH
 export MANPATH=/usr/local/share/man:$MANPATH
 
-# vim関連
-export PATH=$PATH:$HOME/local/bin:$HOME/local/sbin
-export MANPATH=$HOME/local/man:$MANPATH
-
-# zsh関連
-export PATH=$HOME/.autojump/bin:$PATH
+# java 1.7.0
+# export PATH=/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:$PATH
+# export JAVA_HOME=/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home
+# export CLASSPATH=$JAVA_HOME'/lib/ext'
 
 # rbenv
 export PATH=$HOME/.rbenv/bin:$HOME/.rbenv:$PATH
 eval "$(rbenv init -)"
-# 基本
-export PATH=$PATH:/bin:/sbin
-export PATH=$PATH:/usr/sbin:/usr/bin
-export MANPATH=$PATH:/usr/share/man
-
-
-export PATH=$PATH:$HOME/dotfiles/android-sdk-macosx/tools
-# rvm
-# export PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-# source "$HOME/.rvm/scripts/rvm"
-# fpath=(~/.zsh/Completion $fpath)
-# export PATH=$PATH:$GEM_PATH/bin
-
-# rbenv
-export PATH="$HOME/.rbenv/bin:$HOME/.rbenv:$PATH"
-eval "$(rbenv init -)"
 
 # XAMPP
 export PATH=/Applications/XAMPP/xamppfiles/bin:$PATH
+# }}}
 
-# git
-export GITHUB_HOST='github.com'
-
-## alias設定
+# 各種読み込み
+# {{{
 source ~/.zsh/.zshrc.basic
 source ~/.zsh/.zshrc.prompt
 source ~/.zsh/.zshrc.extends
 source ~/.zsh/.zshrc.alias
 source ~/.zsh/.zshrc.tmuxauto
 # source ~/.zsh/.zshrc.command
-
+# }}}

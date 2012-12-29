@@ -1711,6 +1711,8 @@ let b:match_ignorecase = 1
 set guifontwide=Ricty:h10
 " let g:Powerline_colorscheme='molokai'
 let g:Powerline_symbols = 'fancy'
+let g:Powerline_cache_enabled = 0
+let g:Powerline_cache_file = expand('/tmp/Powerline.cache')
 "}}}
 
 "------------------------------------
