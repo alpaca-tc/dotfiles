@@ -1,4 +1,4 @@
-#!/bin/bash
+#!bash
 #
 # bash/zsh completion support for core Git.
 #
@@ -100,11 +100,11 @@ __gitcomp_1 ()
 # This function can be used to access a tokenized list of words
 # on the command line:
 #
-#   __git_reassemble_comp_words_by_ref '=:'
-#   if test "${words_[cword_-1]}" = -w
-#   then
-#       ...
-#   fi
+#    __git_reassemble_comp_words_by_ref '=:'
+#    if test "${words_[cword_-1]}" = -w
+#    then
+#        ...
+#    fi
 #
 # The argument should be a collection of characters from the list of
 # word completion separators (COMP_WORDBREAKS) to treat as ordinary
@@ -321,7 +321,7 @@ __git_refs ()
                 if [[ "$ref" == "$cur"* ]]; then
                     echo "$ref"
                 fi
-            done | uniq -u
+            done | sort | uniq -u
         fi
         return
     fi
@@ -383,7 +383,7 @@ __git_list_merge_strategies ()
     sed -n -e '/[Aa]vailable strategies are: /,/^$/{
         s/\.$//
         s/.*://
-        s/^[    ]*//
+        s/^[     ]*//
         s/[     ]*$//
         p
     }'
@@ -715,7 +715,7 @@ __git_aliased_command ()
             return
             ;;
         \!*)    : shell command alias ;;
-        -*) : option ;;
+        -*)    : option ;;
         *=*)    : setting env ;;
         git)    : git itself ;;
         *)
@@ -868,18 +868,22 @@ _git_branch ()
     while [ $c -lt $cword ]; do
         i="${words[c]}"
         case "$i" in
-        -d|-m)  only_local_ref="y" ;;
-        -r) has_r="y" ;;
+        -d|-m)    only_local_ref="y" ;;
+        -r)    has_r="y" ;;
         esac
         ((c++))
     done
 
     case "$cur" in
+    --set-upstream-to=*)
+        __gitcomp "$(__git_refs)" "" "${cur##--set-upstream-to=}"
+        ;;
     --*)
         __gitcomp "
             --color --no-color --verbose --abbrev= --no-abbrev
             --track --no-track --contains --merged --no-merged
-            --set-upstream --edit-description --list
+            --set-upstream-to= --edit-description --list
+            --unset-upstream
             "
         ;;
     *)
@@ -985,6 +989,8 @@ _git_clone ()
             --upload-pack
             --template=
             --depth
+            --single-branch
+            --branch
             "
         return
         ;;
@@ -1014,7 +1020,8 @@ _git_commit ()
     --*)
         __gitcomp "
             --all --author= --signoff --verify --no-verify
-            --edit --amend --include --only --interactive
+            --edit --no-edit
+            --amend --include --only --interactive
             --dry-run --reuse-message= --reedit-message=
             --reset-author --file= --message= --template=
             --cleanup= --untracked-files --untracked-files=
@@ -1071,7 +1078,7 @@ _git_diff ()
 }
 
 __git_mergetools_common="diffuse ecmerge emerge kdiff3 meld opendiff
-            tkdiff vimdiff gvimdiff xxdiff araxis p4merge bc3
+            tkdiff vimdiff gvimdiff xxdiff araxis p4merge bc3 codecompare
 "
 
 _git_difftool ()
@@ -2032,7 +2039,7 @@ _git_config ()
 
 _git_remote ()
 {
-    local subcommands="add rename rm set-head set-branches set-url show prune update"
+    local subcommands="add rename remove set-head set-branches set-url show prune update"
     local subcommand="$(__git_find_on_cmdline "$subcommands")"
     if [ -z "$subcommand" ]; then
         __gitcomp "$subcommands"
@@ -2040,7 +2047,7 @@ _git_remote ()
     fi
 
     case "$subcommand" in
-    rename|rm|set-url|show|prune)
+    rename|remove|set-url|show|prune)
         __gitcomp_nl "$(__git_remotes)"
         ;;
     set-head|set-branches)

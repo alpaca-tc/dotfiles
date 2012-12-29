@@ -16,7 +16,7 @@ export BROWSER=w3m
 # 各種の設定 古いgccを使う場合
 # export CC='/usr/local/bin/gcc-4.2'
 # export CC='/usr/bin/gcc'
-export CC='/usr/local/bin/gcc-4.5'
+# export CC='/usr/local/bin/gcc-4.5'
 # alias gcc='/usr/local/bin/gcc-4.5'
 
 # alias gcc='/usr/local/bin/gcc-4.2'
@@ -59,7 +59,7 @@ export PATH=/usr/local/bin:$PATH
 export MANPATH=/usr/local/share/man:$MANPATH
 
 # vim関連
-export PATH=$HOME/local/bin:$HOME/local/sbin:$PATH:
+export PATH=$PATH:$HOME/local/bin:$HOME/local/sbin
 export MANPATH=$HOME/local/man:$MANPATH
 
 # zsh関連
