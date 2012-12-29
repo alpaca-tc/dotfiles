@@ -47,7 +47,7 @@ zstyle ':completion:*:cd:*' ignore-parents parent pwd
 # zstyle ':completion:*:descriptions' format '%BCompleting%b %U%d%u'
 
 # auto-fu.zsh
-# source ~/.zsh/auto-fu.zsh
+source ~/.zsh/auto-fu.zsh
 # function zle-line-init () {
 #   auto-fu-init
 # }

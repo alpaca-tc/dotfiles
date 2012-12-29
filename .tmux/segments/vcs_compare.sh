@@ -22,6 +22,7 @@ run_segment() {
     echo "${stats}"
     return 1
   else
+    return
     git_dir=$(git rev-parse --git-dir 2> /dev/null)
     if [ $git_dir != 0 ]; then
       echo "${flat_symbol}0"

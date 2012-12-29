@@ -27,7 +27,7 @@ run_segment() {
 
   case "$TMUX_POWERLINE_SEG_BATTERY_TYPE" in
     "percentage")
-      output="${HEART_FULL} ${battery_status}%"
+      output="${HEART_FULL}${battery_status}%"
       ;;
     "cute")
       output=$(__cutinate $battery_status)
