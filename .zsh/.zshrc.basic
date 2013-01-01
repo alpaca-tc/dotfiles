@@ -121,7 +121,7 @@ zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/s
 setopt multios
 
 # 最後がディレクトリ名で終わっている場合末尾の / を自動的に取り除かない
-setopt noautoremoveslash
+# setopt noautoremoveslash
 
 # ファイル名の展開でディレクトリにマッチした場合末尾に / を付加する
 setopt mark_dirs

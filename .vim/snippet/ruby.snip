@@ -384,6 +384,22 @@ snippet     method_missing
     end
   end
 
+snippet     f_randobet
+abbr ランダムな文字列を生成
+  def randobet(length, extendStr = "")
+    strList = 'abcdefghijklmnopqrstuvwxyz' + 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' + '0123456789' + extendStr
+
+    strListArray = strList.split('')
+
+    result = ''
+
+    0.upto(length) do |int|
+      rand_value = (Random.rand * strListArray.length).floor
+      result += strListArray[rand_value]
+    end
+
+    result
+  end
 #}}}
 
 # gem etc.. shortcut#{{{
@@ -665,4 +681,61 @@ abbr 集約オブジェクトの内部を隠蔽しながら、要素にアクセ
     end
   end
 ##}}}
+
+# Command#{{{
+snippet     gof_command_1
+abbr 何を行うかの決定と、その実行を分離する
+  # アプリケーションのアクションをパッケージにする
+  class Button
+    attr_accessor :command
+
+    def initialize (cmd_object)
+      @description = cmd_object.description
+      @command = cmd_object.command
+    end
+
+    def click
+      @command.execute if @command
+    end
+  end
+
+  class Cmd
+    def execute; end
+    def unexecute; end
+    def description; end
+  end
+
+  class PutData
+    attr_accessor :name
+    def initialize name
+      @name = name
+    end
+
+    def execute
+      puts "#{@name}を実行しました"
+    end
+
+    def unexecute
+      puts "#{@name}をキャンセルしました"
+    end
+  end
+#}}}
+
+# Singleton
+snippet     gof_singleton_1
+  require 'singleton'
+  class RandomSolt
+    include Singleton
+
+    def initialize
+      @@rand = Random.rand
+    end
+
+    def solt
+      @@rand
+    end
+  end
+
+  solt_maneger =  RandomSolt.instance
+  p solt_maneger.solt
 

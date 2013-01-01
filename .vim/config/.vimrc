@@ -43,9 +43,9 @@ nmap <Space><Space>v :<C-U>e ~/.vim/config/.vimrc<CR>
 "}}}
 
 "----------------------------------------
-"StatusLine"{{{
+"StatusLine" {{{
 " source ~/.vim/config/.vimrc.statusline
-"}}}
+" }}}
 
 "----------------------------------------
 "編集"{{{
@@ -67,7 +67,8 @@ nmap <Space>s :w sudo:%<CR>
 nmap re :%s!\v
 xmap re :s!\v
 vmap rep y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<Return>!!g<Left><Left>
-nmap ft :set ft=
+" nmap ft :set ft=
+nmap <Leader>ft :set ft=
 
 " デフォルトキーマップの変更
 " nmap / /\v
@@ -122,18 +123,18 @@ inoremap <leader>- ----------------------------------------
 
 "保存時に無駄な文字を消す{{{
 function! s:remove_dust()
-    let cursor = getpos(".")
-    let space_length = &ts > 0? &ts : 2
-    let space  = ""
-    while space_length > 0
-      let space .= " "
-      let space_length -= 1
-    endwhile
+  let cursor = getpos(".")
+  let space_length = &ts > 0? &ts : 2
+  let space  = ""
+  while space_length > 0
+    let space .= " "
+    let space_length -= 1
+  endwhile
 
-    %s/\s\+$//ge
-    exec "%s/\t/".space."/ge"
-    call setpos(".", cursor)
-    unlet cursor
+  %s/\s\+$//ge
+  exec "%s/\t/".space."/ge"
+  call setpos(".", cursor)
+  unlet cursor
 endfunction
 
 augroup ProgramFiles
@@ -172,48 +173,32 @@ if has('gui_macvim')
 endif
 "}}}
 
-" Improved visual selection.{{{
-" http://labs.timedia.co.jp/2012/10/vim-more-useful-blockwise-insertion.html
-" xnoremap <expr> I  <SID>force_blockwise_visual('I')
-" xnoremap <expr> A  <SID>force_blockwise_visual('A')
-"
-" function! s:force_blockwise_visual(next_key)
-"   if mode() ==# 'v'
-"     return "\<C-v>" . a:next_key
-"   elseif mode() ==# 'V'
-"     return "\<C-v>0o$" . a:next_key
-"   else  " mode() ==# "\<C-v>"
-"     return a:next_key
-"   endif
-" endfunction
-"}}}
-
 " Improved increment.{{{
-" nmap <C-a> <SID>(increment)
-" nmap <C-x> <SID>(decrement)
-" nnoremap <silent> <SID>(increment)    :AddNumbers 1<CR>
-" nnoremap <silent> <SID>(decrement)   :AddNumbers -1<CR>
-" command! -range -nargs=1 AddNumbers
-"       \ call s:add_numbers((<line2>-<line1>+1) * eval(<args>))
-" function! s:add_numbers(num)
-"   let prev_line = getline('.')[: col('.')-1]
-"   let next_line = getline('.')[col('.') :]
-"   let prev_num = matchstr(prev_line, '\d\+$')
-"   if prev_num != ''
-"     let next_num = matchstr(next_line, '^\d\+')
-"     let new_line = prev_line[: -len(prev_num)-1] .
-"           \ printf('%0'.len(prev_num).'d',
-"           \    max([0, prev_num . next_num + a:num])) . next_line[len(next_num):]
-"   else
-"     let new_line = prev_line . substitute(next_line, '\d\+',
-"           \ "\\=printf('%0'.len(submatch(0)).'d',
-"           \         max([0, submatch(0) + a:num]))", '')
-"   endif
-"
-"   if getline('.') !=# new_line
-"     call setline('.', new_line)
-"   endif
-" endfunction "}}}
+nmap <C-A> <SID>(increment)
+nmap <C-X> <SID>(decrement)
+nnoremap <silent> <SID>(increment)    :AddNumbers 1<CR>
+nnoremap <silent> <SID>(decrement)   :AddNumbers -1<CR>
+command! -range -nargs=1 AddNumbers
+      \ call s:add_numbers((<line2>-<line1>+1) * eval(<args>))
+function! s:add_numbers(num)
+  let prev_line = getline('.')[: col('.')-1]
+  let next_line = getline('.')[col('.') :]
+  let prev_num = matchstr(prev_line, '\d\+$')
+  if prev_num != ''
+    let next_num = matchstr(next_line, '^\d\+')
+    let new_line = prev_line[: -len(prev_num)-1] .
+          \ printf('%0'.len(prev_num).'d',
+          \    max([0, prev_num . next_num + a:num])) . next_line[len(next_num):]
+  else
+    let new_line = prev_line . substitute(next_line, '\d\+',
+          \ "\\=printf('%0'.len(submatch(0)).'d',
+          \         max([0, submatch(0) + a:num]))", '')
+  endif
+
+  if getline('.') !=# new_line
+    call setline('.', new_line)
+  endif
+endfunction "}}}
 "}}}
 
 "----------------------------------------
@@ -286,8 +271,7 @@ nmap <C-W><C-l><C-k> <C-W>l<C-W>k
 nmap <silent>L :call <SID>NextWindowOrTab()<CR>
 nmap <silent>H :call <SID>PreviousWindowOrTab()<CR>
 nmap <silent><C-W>] :call PreviewWord()<CR>
-" nmap <C-W><C-] :call PreviewWord()<CR>
-nmap <silent><C-w><Space> :<C-u>SmartSplit<CR>
+nmap <silent><C-W><Space> :<C-u>SmartSplit<CR>
 func! PreviewWord() "{{{
   if &previewwindow      " プレビューウィンドウ内では実行しない
     return
@@ -330,14 +314,6 @@ function! s:smart_close()
   endif
 endfunction
 
-function! s:NextWindow()
-  if winnr('$') == 1
-    silent! normal! ``z.
-  else
-    wincmd w
-  endif
-endfunction
-
 function! s:NextWindowOrTab()
   if tabpagenr('$') == 1 && winnr('$') == 1
     call s:split_nicely()
@@ -358,38 +334,6 @@ function! s:PreviousWindowOrTab()
   endif
 endfunction
 
-nnoremap <silent> [Window]<Space>  :<C-u>call <SID>ToggleSplit()<CR>
-
-function! s:MovePreviousWindow()
-  let prev_name = winnr()
-  silent! wincmd p
-  if prev_name == winnr()
-    silent! wincmd w
-  endif
-endfunction
-
-" If window isn't splited, split buffer.
-function! s:ToggleSplit()
-  let prev_name = winnr()
-  silent! wincmd w
-  if prev_name == winnr()
-    split
-  else
-    call s:smart_close()
-  endif
-endfunction
-
-command! SplitNicely call s:split_nicely()
-function! s:split_nicely()
-  " Split nicely.
-  if winwidth(0) > 2 * &winwidth
-    vsplit
-  else
-    split
-  endif
-  wincmd p
-endfunction
-
 function! s:smart_split(cmd)
   if winwidth(0) > winheight(0) * 2
     vsplit
@@ -405,17 +349,14 @@ command! -nargs=? -complete=command SmartSplit call <SID>smart_split(<q-args>)
 "}}}
 
 " tabを使い易く{{{
-nmap <silent>t  <Nop>
+" nmap <silent>t  <Nop>
 nmap <silent>tn  :tabn<CR>
 nmap <silent>tp  :tabprevious<CR>
 nmap <silent>tc  :tabnew<CR>
 nmap <silent>tx  :tabclose<CR>
-nmap <silent>to  :call OpenWindowWithTab()<CR>
-nmap <silent>tw  :call CloseTabAndOpenWith()<CR>
-" nnoremap to  :tabo<CR>
+nmap <silent>to  :call <SID>OpenWindowWithTab()<CR>
+nmap <silent>tw  :call <SID>CloseTabAndOpenBufferIntoPreviousWindow()<CR>
 nmap <silent>te  :execute 'tabnext' 1 + (tabpagenr() + v:count1 - 1) % tabpagenr('$')<CR>
-"tabを次のtabへ移動
-nmap tg  gT
 
 nmap <silent>t1  :tabnext 1<CR>
 nmap <silent>t2  :tabnext 2<CR>
@@ -423,10 +364,10 @@ nmap <silent>t3  :tabnext 3<CR>
 nmap <silent>t4  :tabnext 4<CR>
 nmap <silent>t5  :tabnext 5<CR>
 nmap <silent>t6  :tabnext 6<CR>
-"}}}
+" }}}
 
 " 現在開いているバッファをタブで開く
-function! OpenWindowWithTab()
+function! s:OpenWindowWithTab()
   let buffer = bufnr('%')
   if (winnr("$") != 1)
     q
@@ -437,7 +378,7 @@ endfunction
 
 " 現在開いているタブとバッファを閉じて
 " 一つ前のタブと統合する
-function! CloseTabAndOpenWith()
+function! s:CloseTabAndOpenBufferIntoPreviousWindow()
   let buffer = bufnr('%')
   if ( tabpagenr("$") != 1)
     q
@@ -475,42 +416,35 @@ set tabstop=2
 set softtabstop=2
 set shiftwidth=2
 filetype indent on
-
-" aug MyAutoCmd
-"   autocmd InsertLeave * set nopaste
-" aug END
 "}}}
 
 "----------------------------------------
 "表示"{{{
-set title
-set titlelen=95
-set linebreak
-set showfulltag
-set spelllang=en_us
-set foldlevelstart=0
-" set showbreak=>\
-set breakat=\\;:,!?
-set showmatch         " 括弧の対応をハイライトa
-set number            " 行番号表示
 " set noequalalways     " 画面の自動サイズ調整解除
-set equalalways     " 画面の自動サイズ調整解除
 " set relativenumber    " 相対表示
+" set scrolljump=-50
+set breakat=\\;:,!?
+set equalalways     " 画面の自動サイズ調整解除
+set linebreak
 set list              " 不可視文字表示
 set listchars=tab:␣.,trail:_,extends:>,precedes:<
+set number            " 行番号表示
 set scrolloff=5
-" set scrolljump=-50
 set showcmd
+set showfulltag
+set showmatch         " 括弧の対応をハイライトa
+set spelllang=en_us
+set title
+set titlelen=95
 au FileType coffee,ruby,eruby,php,javascript,c,json,vim set colorcolumn=80
 
 "set display=uhex      " 印字不可能文字を16進数で表示
-set t_Co=256          " 確かカラーコード
-set lazyredraw        " コマンド実行中は再描画しない
-set ttyfast           " 高速ターミナル接続を行う
-set matchpairs+=<:>
 set cdpath+=~
-" カーソル行をハイライト
 set cursorline
+set lazyredraw        " コマンド実行中は再描画しない
+set matchpairs+=<:>
+set t_Co=256          " 確かカラーコード
+set ttyfast           " 高速ターミナル接続を行う
 " set scrolloff=999     " 常にカーソルを真ん中に
 
 if has('gui_macvim') "{{{
@@ -561,10 +495,15 @@ augroup END
 "折り畳み
 let g:foldMethodCount = 0
 
+" set commentstring=%s
 set foldcolumn=1
 set foldenable
-set commentstring=%s
+" set foldlevelstart=1
 set foldmethod=marker
+set foldminlines=3
+set foldnestmax=5
+" set foldopen=all
+" set showbreak=>\
 
 " vimを使っているときはtmuxのステータスラインを隠す"{{{
 " if !has('gui_running') && $TMUX !=# ''
@@ -576,11 +515,13 @@ set foldmethod=marker
 " endif "}}}
 
 " 設定を上書きしない為に、最後に書く
-" colorscheme darkblue
-" colorscheme pyte
-" colorscheme solarized
 colorscheme molokai
 "}}}
+
+" commitメッセージの編集時には余分なプラグインを読み込まない
+if expand("%") =~ "COMMIT_EDITMSG"
+  finish
+endif
 
 "----------------------------------------
 "Tags関連 cTags使う場合は有効化 "{{{
@@ -614,11 +555,6 @@ nnoremap th  :<C-u>pop<CR>
 nnoremap ts  :<C-u>ts<CR>
 nnoremap tk  :<C-u>tags<CR>
 "}}}
-
-" commitメッセージの編集時には余分なプラグインを読み込まない
-if expand("%") =~ "COMMIT_EDITMSG"
-  finish
-endif
 
 "----------------------------------------
 " neobundle"{{{
@@ -732,9 +668,8 @@ NeoBundle 'kana/vim-operator-user'
 " NeoBundle 'kana/vim-textobj-function.git'  " f 関数をtext-objectに
 NeoBundle 'kana/vim-textobj-indent.git'    " i I インデントをtext-objectに
 NeoBundle 'kana/vim-textobj-user'          " textobject拡張の元
-NeoBundle 'operator-camelize' "operator-camelize : camel-caseへの変換
+" NeoBundle 'operator-camelize' "operator-camelize : camel-caseへの変換
 " NeoBundle 'thinca/vim-textobj-plugins.git' " vim-textobj-plugins : いろんなものをtext-objectにする
-
 " NeoBundle 'tyru/operator-html-escape.vim'
 "}}}
 "}}}
@@ -748,6 +683,7 @@ NeoBundle 'operator-camelize' "operator-camelize : camel-caseへの変換
 NeoBundle 'mattn/webapi-vim' "vim Interface to Web API
 NeoBundle 'scrooloose/syntastic'
 NeoBundle 'taichouchou2/alpaca-look'
+NeoBundle 'rhysd/clever-f.vim'
 
 " unite.vim : - すべてを破壊し、すべてを繋げ - vim scriptで実装されたanythingプラグイン
 " NeoBundle 'choplin/unite-vim_hacks'
@@ -760,7 +696,7 @@ NeoBundle 'taichouchou2/alpaca-look'
 " NeoBundle 'tsukkee/unite-help'
 " NeoBundle 'tsukkee/unite-tag'
 " NeoBundle 'ujihisa/unite-colorscheme'
-" NeoBundle 'ujihisa/unite-gem'
+NeoBundle 'ujihisa/unite-gem'
 NeoBundle 'Shougo/unite-ssh'
 NeoBundle 'taichouchou2/vim-unite-giti'
 NeoBundle 'thinca/vim-unite-history'
@@ -776,8 +712,8 @@ NeoBundleLazy 'glidenote/memolist.vim'
 NeoBundleLazy 'basyura/TweetVim'
 NeoBundleLazy 'basyura/bitly.vim'
 NeoBundleLazy 'basyura/twibill.vim'
-NeoBundleLazy 'tyru/eskk.vim'
-"}}}
+NeoBundle 'tyru/eskk.vim'
+" }}}
 
 " bundle.lang"{{{
 
@@ -2653,6 +2589,7 @@ let g:eskk#debug = 0
 " let g:eskk#revert_henkan_style = "okuri"
 let g:eskk#enable_completion = 1
 let g:eskk#directory = "~/.eskk"
+let g:eskk#dont_map_default_if_already_mapped=1
 let g:eskk#dictionary = { 'path': expand( "~/.eskk_jisyo" ), 'sorted': 0, 'encoding': 'utf-8', }
 let g:eskk#large_dictionary = { 'path':  expand("~/.eskk_dict/SKK-JISYO.L"), 'sorted': 1, 'encoding': 'euc-jp', }
 " let g:eskk#cursor_color = {

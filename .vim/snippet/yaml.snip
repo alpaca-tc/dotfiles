@@ -5,3 +5,14 @@ prev_word      '^'
         ${2}
     <<: *${3:name}
 
+snippet     socket
+abbr database.ymlのsocketをすべての環境に対応する
+  <%
+  socket = ["/tmp/mysqld.sock",
+            "/tmp/mysql.sock",
+            "/var/run/mysqld/mysqld.sock",
+            "/var/lib/mysql/mysql.sock",
+            "/opt/local/var/run/mysql5/mysqld.sock"
+            ].detect{|socket| File.exist?(socket)}
+  %>
+
