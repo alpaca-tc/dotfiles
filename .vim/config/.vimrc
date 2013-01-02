@@ -87,7 +87,6 @@ endfunction
 "}}}
 nmap <silent><C-W>n :call NewBuffer("new")<CR>
 nmap <silent><C-W><C-N> :call NewBuffer("copy")<CR>
-"}}}
 
 " 括弧を自動補完
 inoremap { {}<LEFT>
@@ -779,7 +778,6 @@ command! Vinaris call BundleWithCmd('vinarise vinarise-plugin-peanalysis', 'Vina
 " NeoBundle 'taichouchou2/neco-rubymf' " gem install methodfinder
 NeoBundle 'taichouchou2/vim-endwise.git' "end endifなどを自動で挿入
 NeoBundle 'tpope/vim-rails'
-" NeoBundle 'taichouchou2/vim-rsense'
 NeoBundleLazy 'basyura/unite-rails'
 NeoBundleLazy 'taichouchou2/unite-rails_best_practices', {
       \ 'depends' : 'Shougo/unite.vim',
@@ -803,11 +801,12 @@ NeoBundleLazy 'ujihisa/neco-ruby'
 NeoBundleLazy 'vim-ruby/vim-ruby'
 NeoBundleLazy 'taichouchou2/unite-reek',
       \{  'depends' : 'Shougo/unite.vim' }
-NeoBundle 'Shougo/neocomplcache-rsense'
+" NeoBundle 'Shougo/neocomplcache-rsense'
 NeoBundleLazy 'rhysd/unite-ruby-require.vim'
 NeoBundleLazy 'rhysd/neco-ruby-keyword-args'
 NeoBundleLazy 'rhysd/vim-textobj-ruby'
-let s:bundle_ruby = 'ruby-matchit vim-vroom vim-rspec vim-ref-ri neco-ruby vim-ruby unite-reek neocomplcache-rsense unite-ruby-require.vim neco-ruby-keyword-args vim-textobj-ruby'
+NeoBundleLazy 'taichouchou2/vim-rsense', 'v2.0'
+let s:bundle_ruby = 'ruby-matchit vim-vroom vim-rspec vim-ref-ri neco-ruby vim-ruby unite-reek unite-ruby-require.vim neco-ruby-keyword-args vim-textobj-ruby vim-rsense'
 aug MyAutoCmd
   au FileType ruby,Gemfile,haml,eruby call BundleLoadDepends(s:bundle_ruby)
 aug END
@@ -2034,19 +2033,10 @@ aug END
 "------------------------------------
 "{{{
 " Rsense
-" let g:rsenseUseOmniFunc = 1
 let g:rsenseUseOmniFunc = 1
 let g:rsenseHome = expand('~/.vim/ref/rsense-0.3')
-" let g:rsenseMatchFunc = "[a-zA-Z_?]"
-
-function! SetUpRubySetting()
-  nmap <buffer>rj :RSenseJumpToDefinition<CR>
-  nmap <buffer>rw :RSenseWhereIs<CR>
-  nmap <buffer>rt :RSenseTypeHelp<CR>
-endfunction
-aug MyAutoCmd
-  au FileType ruby,eruby,ruby.rspec call SetUpRubySetting()
-aug END
+let g:rsense_use_omni_func = 0
+let g:rsense_neobundle_name="vim-rsense_v2.0"
 "}}}
 
 "------------------------------------
