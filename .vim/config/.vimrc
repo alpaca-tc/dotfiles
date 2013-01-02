@@ -20,19 +20,15 @@ set helplang=ja,en
 set modelines=0
 set nobackup
 set showmode
-set timeout timeoutlen=400 ttimeoutlen=100
+set timeout timeoutlen=300 ttimeoutlen=100
 set vb t_vb=
 set viminfo='100,<800,s300,\"300
 set updatetime=4000 " swpを作るまでの時間(au CursorHoldの時間)
 set norestorescreen=off
 if v:version >= 703
-  " Set undofile.
   set undofile
   let &undodir=&directory
 endif
-
-" let PATH='/Users/taichou/.autojump/bin:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin/:/Users/taichou/.rbenv:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin:/Users/taichou/.rbenv:/Users/taichou/.autojump/bin:/Users/taichou/local/bin:/Users/taichou/local/sbin:/usr/local/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:/Applications/XAMPP/xamppfiles/bin:/bin:/sbin:/usr/sbin:/usr/bin:/Applications/XAMPP/xamppfiles/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/bin:/sbin:/usr/sbin:/usr/bin'
-" let $PATH='/Users/taichou/.autojump/bin:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin/:/Users/taichou/.rbenv:/Users/taichou/.rbenv/shims:/Users/taichou/.rbenv/bin:/Users/taichou/.rbenv:/Users/taichou/.autojump/bin:/Users/taichou/local/bin:/Users/taichou/local/sbin:/usr/local/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:/Applications/XAMPP/xamppfiles/bin:/bin:/sbin:/usr/sbin:/usr/bin:/Applications/XAMPP/xamppfiles/bin:/Users/taichou/.vim/ref/rsense-0.3/bin:/bin:/sbin:/usr/sbin:/usr/bin'
 
 aug MyAutoCmd
   au FileType help nnoremap <buffer> q <C-w>c
@@ -67,27 +63,28 @@ nmap <Space>s :w sudo:%<CR>
 nmap re :%s!\v
 xmap re :s!\v
 vmap rep y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<Return>!!g<Left><Left>
-" nmap ft :set ft=
-nmap <Leader>ft :set ft=
-
-" デフォルトキーマップの変更
-" nmap / /\v
-" nmap ? ?\v
-"
-" " よくミスタイプするので打ちにくくする
-" nmap . <Nop>
-" nmap .. .
+nmap <Leader>f :setl ft=
 
 " 新しいバッファを開くときに、rubyか同じファイルタイプで開く{{{
 function! NewBuffer(type)
   let old_ft = &ft
-  new
-  if a:type == "new"
-    setl ft=ruby
+
+  " 分割
+  if winwidth(0) > winheight(0) * 2
+    vnew
   else
-    exec 'setl ft='.old_ft
+    new
   endif
+
+  if a:type == "new"
+    let cmd = "setl ft=ruby"
+  else
+    let cmd = 'setl ft='.old_ft
+  endif
+
+  exec cmd
 endfunction
+"}}}
 nmap <silent><C-W>n :call NewBuffer("new")<CR>
 nmap <silent><C-W><C-N> :call NewBuffer("copy")<CR>
 "}}}
@@ -316,7 +313,7 @@ endfunction
 
 function! s:NextWindowOrTab()
   if tabpagenr('$') == 1 && winnr('$') == 1
-    call s:split_nicely()
+    call s:smart_split()
   elseif winnr() < winnr("$")
     wincmd w
   else
@@ -334,15 +331,15 @@ function! s:PreviousWindowOrTab()
   endif
 endfunction
 
-function! s:smart_split(cmd)
+function! s:smart_split(...)
   if winwidth(0) > winheight(0) * 2
     vsplit
   else
     split
   endif
 
-  if !empty(a:cmd)
-    execute a:cmd
+ if a:0 > 0
+   execute a:1
   endif
 endfunction
 command! -nargs=? -complete=command SmartSplit call <SID>smart_split(<q-args>)
@@ -421,10 +418,10 @@ filetype indent on
 "----------------------------------------
 "表示"{{{
 " set noequalalways     " 画面の自動サイズ調整解除
+set equalalways       " 画面の自動サイズ調整
 " set relativenumber    " 相対表示
 " set scrolljump=-50
 set breakat=\\;:,!?
-set equalalways     " 画面の自動サイズ調整解除
 set linebreak
 set list              " 不可視文字表示
 set listchars=tab:␣.,trail:_,extends:>,precedes:<
@@ -613,8 +610,8 @@ NeoBundle 'edsono/vim-matchit'        " %の拡張
 NeoBundle 'kana/vim-arpeggio'         " 同時押しキーマップを使う
 NeoBundle 'rhysd/accelerated-jk'      " jkの移動を高速化
 NeoBundle 'taichouchou2/alpaca'       " 個人的なカラーやフォントなど
-NeoBundle 'taichouchou2/surround.vim' " text-objの拡張
 NeoBundle 'Lokaltog/vim-powerline'    " StatusLineの拡張
+NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-fugitive'        " gitを表示
 NeoBundle 'h1mesuke/vim-alignta'      " 整形
 "}}}
@@ -781,11 +778,16 @@ command! Vinaris call BundleWithCmd('vinarise vinarise-plugin-peanalysis', 'Vina
 " NeoBundle 'astashov/vim-ruby-debugger'
 " NeoBundle 'taichouchou2/neco-rubymf' " gem install methodfinder
 NeoBundle 'taichouchou2/vim-endwise.git' "end endifなどを自動で挿入
-NeoBundle 'taichouchou2/vim-rails'
+NeoBundle 'tpope/vim-rails'
 " NeoBundle 'taichouchou2/vim-rsense'
 NeoBundleLazy 'basyura/unite-rails'
-NeoBundleLazy 'taichouchou2/unite-rails_best_practices',
-      \{ 'depends' : 'Shougo/unite.vim' }
+NeoBundleLazy 'taichouchou2/unite-rails_best_practices', {
+      \ 'depends' : 'Shougo/unite.vim',
+      \ 'build' : {
+      \    'mac': 'gem install rails_best_practices',
+      \    'unix': 'gem install rails_best_practices',
+      \   }
+      \ }
 NeoBundleLazy 'ujihisa/unite-rake'
 NeoBundleLazy 'taichouchou2/alpaca_complete'
 let s:bundle_rails = 'unite-rails unite-rails_best_practices unite-rake alpaca_complete'
@@ -880,18 +882,20 @@ vmap <C-N><C-N> :Align =<CR>
 "}}}
 
 "------------------------------------
-" surround.vim
+" vim-surround
 "------------------------------------
-function! SetSurroundMapping()"{{{
-  nmap ,( csw(
-  nmap ,) csw)
-  nmap ,{ csw{
-  nmap ,} csw}
-  nmap ,[ csw[
-  nmap ,] csw]
-  nmap ,' csw'
-  nmap ," csw"
-endfunction
+" {{{
+nmap ds  <Plug>Dsurround
+nmap cs  <Plug>Csurround
+nmap ys  <Plug>Ysurround
+nmap yS  <Plug>YSurround
+nmap yss <Plug>Yssurround
+nmap ySs <Plug>YSsurround
+nmap ySS <Plug>YSsurround
+xmap S   <Plug>VSurround
+xmap gS  <Plug>VgSurround
+vmap s   <Plug>VSurround
+
 " surround_custom_mappings.vim"{{{
 let g:surround_custom_mapping = {}
 let g:surround_custom_mapping._ = {
