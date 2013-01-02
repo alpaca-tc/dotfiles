@@ -26,3 +26,9 @@ snippet     mit
   "     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   " }}}
   "=============================================================================
+
+snippet   neobundle#get
+  let bundle = neobundle#get('${1}')
+  function! bundle.hooks.on_source(bundle)
+
+  endfunction
