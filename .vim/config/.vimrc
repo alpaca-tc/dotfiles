@@ -620,6 +620,7 @@ NeoBundle 'h1mesuke/vim-alignta'      " 整形
 " NeoBundle 'Lokaltog/vim-easymotion'
 " NeoBundle 'grep.vim'
 NeoBundle 'kien/ctrlp.vim' "ファイルを絞る
+NeoBundle 'taichouchou2/ctrlp-git-log'
 " NeoBundle 'scrooloose/nerdtree' "プロジェクト管理用 tree filer
 " NeoBundle 'taglist.vim' "関数、変数を画面横にリストで表示する
 " NeoBundle 'taku-o/vim-toggle' "true<=>false など、逆の意味のキーワードを切り替えられる
@@ -806,7 +807,8 @@ NeoBundleLazy 'rhysd/unite-ruby-require.vim'
 NeoBundleLazy 'rhysd/neco-ruby-keyword-args'
 NeoBundleLazy 'rhysd/vim-textobj-ruby'
 NeoBundleLazy 'taichouchou2/vim-rsense', 'v2.0'
-let s:bundle_ruby = 'ruby-matchit vim-vroom vim-rspec vim-ref-ri neco-ruby vim-ruby unite-reek unite-ruby-require.vim neco-ruby-keyword-args vim-textobj-ruby vim-rsense'
+NeoBundleLazy 'deris/vim-textobj-enclosedsyntax'
+let s:bundle_ruby = 'ruby-matchit vim-vroom vim-rspec vim-ref-ri neco-ruby vim-ruby unite-reek unite-ruby-require.vim neco-ruby-keyword-args vim-textobj-ruby vim-rsense vim-textobj-enclosedsyntax'
 aug MyAutoCmd
   au FileType ruby,Gemfile,haml,eruby call BundleLoadDepends(s:bundle_ruby)
 aug END
@@ -848,14 +850,16 @@ aug END
 " NeoBundle 'vim-scripts/dbext.vim' "<Leader>seでsqlを実行
 " NeoBundleLazy 'tsukkee/lingr-vim'
 NeoBundle 'vim-scripts/yanktmp.vim'
-NeoBundleLazy 'mattn/googletranslate-vim'
+NeoBundle 'mattn/excitetranslate-vim', {'depends': 'mattn/webapi-vim'}
+" NeoBundle 'qtmplsel.vim'
 "}}}
 
 " Installation check.
 if neobundle#exists_not_installed_bundles()
   echomsg 'Not installed bundles : ' .
         \ string(neobundle#get_not_installed_bundle_names())
-  echomsg 'Please execute ":NeoBundleInstall" command.'
+  echomsg 'Install Plugins'
+  NeoBundleInstall
   " finish
 endif
 
@@ -1110,8 +1114,8 @@ nmap <C-J> [unite]
 nmap <silent> [unite]<C-U> :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
 " nmap <silent> [unite]<C-R> :<C-u>Unite -buffer-name=register register<CR>
 nmap <silent> [unite]<C-J> :<C-u>Unite file_mru<CR>
-nmap <silent> [unite]<C-B> :<C-u>Unite bookmark<CR>
-nmap <silent> [unite]b :<C-u>Unite buffer<CR>
+nmap <silent> [unite]b :<C-u>Unite bookmark<CR>
+nmap <silent> [unite]<C-B> :<C-u>Unite buffer<CR>
 nmap <silent> <Space>b :<C-u>UniteBookmarkAdd<CR>
 let g:unite_quick_match_table = {
       \'a' : 1, 's' : 2, 'd' : 3, 'f' : 4, 'g' : 5, 'h' : 6, 'j' : 7, 'k' : 8, 'l' : 9, ';' : 10,
@@ -2605,11 +2609,30 @@ let g:alpaca_wordpress_use_default_setting = 1
 "}}}
 
 "------------------------------------
-" googletranslate-vim
+" vim-textobj-enclosedsyntax
 "------------------------------------
+"{{{
+let g:textobj_enclosedsyntax_no_default_key_mappings = 1
 
-let g:googletranslate_userip="219.106.94.218"
-nmap <silent><C-J><C-H>  :call BundleWithCmd('googletranslate-vim', 'GoogleTranslate')<CR>
+" ax、ixにマッピングしたい場合
+omap ax <Plug>(textobj-enclosedsyntax-a)
+vmap ax <Plug>(textobj-enclosedsyntax-a)
+omap ix <Plug>(textobj-enclosedsyntax-i)
+vmap ix <Plug>(textobj-enclosedsyntax-i)
+"}}}
+
+"------------------------------------
+" excitetranslate
+"------------------------------------
+" {{{
+vmap e :ExciteTranslate<CR>
+" }}}
+
+"------------------------------------
+" qtmplsel.vim
+"------------------------------------
+" let g:qts_templatedir=expand( '~/.vim/template' )
+
 "}}}
 
 "----------------------------------------
