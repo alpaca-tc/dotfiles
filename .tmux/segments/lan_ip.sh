@@ -1,7 +1,6 @@
 # Prints the local network IP address for a staticly defined NIC or search for an IP address on all active NICs.
 
 run_segment() {
-  # TODO fix the mac part so it also can search for interfaces like the Linux one can.
   if shell_is_osx; then
     nic0="en0"
     nic1="en1"
@@ -28,7 +27,7 @@ run_segment() {
   fi
 
   if [ -n "$lan_ip" ]; then
-    echo "ⓛ ${lan_ip}"
+    echo "⊙${lan_ip}"
     return 0
   else
     return 1

@@ -1,0 +1,5 @@
+project_name: default
+project_root: ~/
+tabs:
+  - editor: vim
+  - vmail: vmail

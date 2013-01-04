@@ -59,8 +59,8 @@ aug END
 nmap <silent><Space>w :wq<CR>
 nmap <silent><Space>q :q!<CR>
 nmap <Space>s :w sudo:%<CR>
-nmap re :%s!\v
-xmap re :s!\v
+nmap re :%s!
+xmap re :s!
 vmap rep y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<Return>!!g<Left><Left>
 nmap <Leader>f :setl ft=
 
@@ -93,6 +93,7 @@ inoremap [ []<LEFT>
 inoremap ( ()<LEFT>
 inoremap " ""<LEFT>
 inoremap ' ''<LEFT>
+
 aug MyAutoCmd
   au FileType ruby,eruby,haml inoremap <buffer>\| \|\|<LEFT>
 aug END
@@ -166,6 +167,9 @@ if has('gui_macvim')
   cmap ¥ \
   smap ¥ \
 endif
+
+nmap ; :
+
 "}}}
 
 " Improved increment.{{{
@@ -619,7 +623,6 @@ NeoBundle 'h1mesuke/vim-alignta'      " 整形
 " NeoBundle 'Lokaltog/vim-easymotion'
 " NeoBundle 'grep.vim'
 NeoBundle 'kien/ctrlp.vim' "ファイルを絞る
-NeoBundle 'taichouchou2/ctrlp-git-log'
 " NeoBundle 'scrooloose/nerdtree' "プロジェクト管理用 tree filer
 " NeoBundle 'taglist.vim' "関数、変数を画面横にリストで表示する
 " NeoBundle 'taku-o/vim-toggle' "true<=>false など、逆の意味のキーワードを切り替えられる
@@ -971,7 +974,7 @@ function! OpenGrepQF()
 
   " cw
   set nowrap "折り返ししない
-  set modifiable "編修可
+  " set modifiable "編修可
 
   " gfで開くときに、新しいTabで開く
   nmap <buffer>gf <C-W>gf
