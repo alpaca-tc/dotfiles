@@ -1,7 +1,6 @@
 aug MyAutoCmd
   au!
 aug END
-
 "----------------------------------------
 "基本"{{{
 " let $SHELL="/usr/local/bin/zsh"
@@ -496,7 +495,7 @@ set foldcolumn=1
 set foldenable
 " set foldlevelstart=1
 set foldmethod=marker
-set foldminlines=3
+" set foldminlines=3
 set foldnestmax=5
 " set foldopen=all
 " set showbreak=>\
@@ -630,7 +629,7 @@ NeoBundle 'taichouchou2/ctrlp-git-log'
 " NeoBundle 'kana/vim-altr' " 関連するファイルを切り替えれる
 " NeoBundle 'vim-scripts/AnsiEsc.vim' " Ascii color code対応
 " NeoBundle 'vim-scripts/SearchComplete' " /で検索をかけるときでも\tで補完が出来る
-" NeoBundle 'sjl/gundo.vim'                   " undo履歴をツリー表示
+NeoBundleLazy 'sjl/gundo.vim', { 'autoload' : { 'commands': ["GundoToggle"] }}                   " undo履歴をツリー表示
 NeoBundle 'Shougo/git-vim'
 NeoBundle 'Shougo/neocomplcache'            " 補完
 NeoBundle 'Shougo/neosnippet'
@@ -665,7 +664,7 @@ NeoBundle 'kana/vim-operator-user'
 " NeoBundle 'kana/vim-textobj-function.git'  " f 関数をtext-objectに
 NeoBundle 'kana/vim-textobj-indent.git'    " i I インデントをtext-objectに
 NeoBundle 'kana/vim-textobj-user'          " textobject拡張の元
-" NeoBundle 'operator-camelize' "operator-camelize : camel-caseへの変換
+NeoBundle 'operator-camelize' "operator-camelize : camel-caseへの変換
 " NeoBundle 'thinca/vim-textobj-plugins.git' " vim-textobj-plugins : いろんなものをtext-objectにする
 " NeoBundle 'tyru/operator-html-escape.vim'
 "}}}
@@ -2038,9 +2037,11 @@ aug END
 "{{{
 " Rsense
 let g:rsenseUseOmniFunc = 1
-let g:rsenseHome = expand('~/.vim/ref/rsense-0.3')
-let g:rsense_use_omni_func = 0
-let g:rsense_neobundle_name="vim-rsense_v2.0"
+" let g:rsenseHome = expand('~/.vim/ref/rsense-0.3')
+let g:rsenseHome = expand('~/.bundle/vim-rsense_v2.0/rsense-0.3')
+let g:rsense_use_omnifunc = 1
+let g:rsense_home = expand('~/.bundle/vim-rsense_v2.0/rsense-0.3')
+let g:rsense_neobundle_name="vim-rsense_v2.0/rsense-0.3"
 "}}}
 
 "------------------------------------
@@ -2200,8 +2201,8 @@ let  g:yankring_default_menu_mode = 0
 " operator-camelize.vim
 "------------------------------------
 " camel-caseへの変換
-map <Leader>u <Plug>(operator-camelize)
-map <Leader>U <Plug>(operator-decamelize)
+xmap <Leader>u <Plug>(operator-camelize)
+xmap <Leader>U <Plug>(operator-decamelize)
 
 "------------------------------------
 " operator-replace.vim
@@ -2565,7 +2566,7 @@ xmap <C-l> <Plug>(textmanip-move-right)
 "------------------------------------
 " Gundo.vim
 "------------------------------------
-nnoremap U      :<C-u>GundoToggle<CR>
+nmap U      :<C-u>GundoToggle<CR>
 
 "------------------------------------
 " accelerated-jk
@@ -2739,7 +2740,7 @@ let g:neocomplcache_force_omni_patterns.python = '[^. \t]\.\w*'
 " let g:clang_use_library   = 1
 
 " Define keyword pattern. "{{{
-let g:neocomplcache_keyword_patterns.default = '[0-9a-zA-Z:#_-]\+'
+" let g:neocomplcache_keyword_patterns.default = '[0-9a-zA-Z:#_-]\+'
 " let g:neocomplcache_keyword_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 " let g:neocomplcache_keyword_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 " let g:neocomplcache_omni_patterns.filename = '\%([a-zA-Z0-9_-]\+:[/\\]\)\?\%([\\/[a-zA-Z0-9_-]()$+_\~.\x80-\xff-]\|[^[:print:]]\)\+'
