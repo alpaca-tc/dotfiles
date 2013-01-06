@@ -801,11 +801,10 @@ NeoBundleLazy 'ujihisa/neco-ruby'
 NeoBundleLazy 'vim-ruby/vim-ruby'
 NeoBundleLazy 'taichouchou2/unite-reek',
       \{  'depends' : 'Shougo/unite.vim' }
-NeoBundle 'Shougo/neocomplcache-rsense'
+NeoBundleLazy 'Shougo/neocomplcache-rsense'
 NeoBundleLazy 'rhysd/unite-ruby-require.vim'
 NeoBundleLazy 'rhysd/neco-ruby-keyword-args'
 NeoBundleLazy 'rhysd/vim-textobj-ruby'
-" NeoBundleLazy 'taichouchou2/vim-rsense', 'v2.0'
 NeoBundleLazy 'deris/vim-textobj-enclosedsyntax'
 let s:bundle_ruby = 'ruby-matchit vim-vroom vim-rspec vim-ref-ri neco-ruby vim-ruby unite-reek unite-ruby-require.vim neco-ruby-keyword-args vim-textobj-ruby vim-rsense vim-textobj-enclosedsyntax'
 aug MyAutoCmd
@@ -2037,11 +2036,11 @@ aug END
 "{{{
 " Rsense
 let g:rsenseUseOmniFunc = 1
-" let g:rsenseHome = expand('~/.vim/ref/rsense-0.3')
-let g:rsenseHome = expand('~/.bundle/vim-rsense_v2.0/rsense-0.3')
-let g:rsense_use_omnifunc = 1
-let g:rsense_home = expand('~/.bundle/vim-rsense_v2.0/rsense-0.3')
-let g:rsense_neobundle_name="vim-rsense_v2.0/rsense-0.3"
+" let g:rsenseHome = expand('~/.bundle/vim-rsense_v2.0/rsense-0.3')
+let g:rsenseHome = expand('~/.vim/ref/rsense-0.3')
+" let g:rsense_use_omnifunc = 1
+" let g:rsense_home = expand('~/.bundle/vim-rsense_v2.0/rsense-0.3')
+" let g:rsense_neobundle_name="vim-rsense_v2.0/rsense-0.3"
 "}}}
 
 "------------------------------------
