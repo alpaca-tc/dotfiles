@@ -801,11 +801,11 @@ NeoBundleLazy 'ujihisa/neco-ruby'
 NeoBundleLazy 'vim-ruby/vim-ruby'
 NeoBundleLazy 'taichouchou2/unite-reek',
       \{  'depends' : 'Shougo/unite.vim' }
-" NeoBundle 'Shougo/neocomplcache-rsense'
+NeoBundle 'Shougo/neocomplcache-rsense'
 NeoBundleLazy 'rhysd/unite-ruby-require.vim'
 NeoBundleLazy 'rhysd/neco-ruby-keyword-args'
 NeoBundleLazy 'rhysd/vim-textobj-ruby'
-NeoBundleLazy 'taichouchou2/vim-rsense', 'v2.0'
+" NeoBundleLazy 'taichouchou2/vim-rsense', 'v2.0'
 NeoBundleLazy 'deris/vim-textobj-enclosedsyntax'
 let s:bundle_ruby = 'ruby-matchit vim-vroom vim-rspec vim-ref-ri neco-ruby vim-ruby unite-reek unite-ruby-require.vim neco-ruby-keyword-args vim-textobj-ruby vim-rsense vim-textobj-enclosedsyntax'
 aug MyAutoCmd
@@ -2680,22 +2680,30 @@ set infercase
 
 "----------------------------------------
 " neocomplcache
+let g:neocomplcache_enable_at_startup = 1
+
 " default config"{{{
 let g:neocomplcache_auto_completion_start_length = 2
+" let g:neocomplcache_enable_insert_char_pre = 1 " rsenseが使えなくなる
 let g:neocomplcache_cursor_hold_i_time = 300
-let g:neocomplcache_enable_at_startup = 1
 let g:neocomplcache_enable_camel_case_completion = 1
 let g:neocomplcache_enable_cursor_hold_i = 0
-let g:neocomplcache_enable_fuzzy_completion = 0
-let g:neocomplcache_enable_insert_char_pre = 0
-let g:neocomplcache_enable_prefetch = 0
+let g:neocomplcache_enable_fuzzy_completion = 1
+let g:neocomplcache_enable_prefetch = 1
 let g:neocomplcache_enable_smart_case = 1
 let g:neocomplcache_enable_underbar_completion = 1
 let g:neocomplcache_manual_completion_start_length = 0
 let g:neocomplcache_min_keyword_length = 1
-let g:neocomplcache_min_syntax_length = 2
+let g:neocomplcache_min_syntax_length = 1
+let g:neocomplcache_enable_auto_select = 1
+let g:neocomplcache_enable_auto_delimiter = 1
+let g:neocomplcache_disable_caching_buffer_name_pattern = '[\[*]\%(unite\)[\]*]'
+let g:neocomplcache_disable_auto_select_buffer_name_pattern = '\[Command Line\]'
+let g:neocomplcache_lock_buffer_name_pattern = '\.txt'
+let g:neocomplcache_max_list = 120
+let g:neocomplcache_force_overwrite_completefunc = 1
 let g:neocomplcache_skip_auto_completion_time = '0.3'
-let g:neocomplcache_caching_limit_file_size = 500000
+let g:neocomplcache_caching_limit_file_size = 1000000
 let g:neocomplcache#sources#rsense#home_directory = expand("~/.vim/ref/rsense-0.3")
 
 " initialize "{{{
@@ -2721,14 +2729,7 @@ endif
 "}}}
 
 " For auto select.
-" let g:neocomplcache_enable_auto_select = 1
-let g:neocomplcache_enable_auto_delimiter = 1
-" let g:neocomplcache_disable_caching_buffer_name_pattern = '[\[*]\%(unite\)[\]*]'
-let g:neocomplcache_disable_auto_select_buffer_name_pattern = '\[Command Line\]'
-" let g:neocomplcache_lock_buffer_name_pattern = '\.txt'
-let g:neocomplcache_max_list = 100
-let g:neocomplcache_force_overwrite_completefunc = 1
-let g:neocomplcache_force_overwrite_completefunc = 1
+
 let g:neocomplcache_force_omni_patterns.c =
       \ '[^.[:digit:] *\t]\%(\.\|->\)'
 let g:neocomplcache_force_omni_patterns.cpp =
@@ -2746,10 +2747,10 @@ let g:neocomplcache_force_omni_patterns.python = '[^. \t]\.\w*'
 " let g:neocomplcache_omni_patterns.filename = '\%([a-zA-Z0-9_-]\+:[/\\]\)\?\%([\\/[a-zA-Z0-9_-]()$+_\~.\x80-\xff-]\|[^[:print:]]\)\+'
 " let g:neocomplcache_omni_patterns.filename = '[0-9a-zA-Z:#_-]\+'
 let g:neocomplcache_snippets_dir = '~/.bundle/neosnippet/autoload/neosnippet/snippets,~/.vim/snippet'
-let g:neocomplcache_omni_patterns.php = '[^. *\t]\.\w*\|\h\w*::'
-let g:neocomplcache_omni_patterns.mail = '^\s*\w\+'
+" let g:neocomplcache_omni_patterns.php = '[^. *\t]\.\w*\|\h\w*::'
+" let g:neocomplcache_omni_patterns.mail = '^\s*\w\+'
 let g:neocomplcache_omni_patterns.c = '[^.[:digit:]*\t]\%(\.\|->\)'
-let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
+" let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
 " let g:neocomplcache_force_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
 " let g:neocomplcache_source_look_dictionary_path = ''
 "}}}
@@ -2768,11 +2769,11 @@ let g:neocomplcache_vim_completefuncs = {
       \ 'Vinarise' : 'vinarise#complete',
       \}
 
-if !exists('g:neocomplcache_source_completion_length')
-  let g:neocomplcache_source_completion_length = {
-        \ 'look' : 3,
-        \ }
-endif
+" if !exists('g:neocomplcache_source_completion_length')
+"   let g:neocomplcache_source_completion_length = {
+"         \ 'look' : 3,
+"         \ }
+" endif
 "}}}
 
 " ファイルタイプ毎の辞書ファイルの場所"{{{
