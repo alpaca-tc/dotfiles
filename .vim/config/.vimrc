@@ -112,11 +112,11 @@ augroup MyXML
   autocmd Filetype eruby inoremap <buffer> </ </<C-x><C-o>
 augroup END
 
-"コメントを書くときに便利
+" コメントを書くときに便利
 inoremap <leader>* ****************************************
 inoremap <leader>- ----------------------------------------
 
-"保存時に無駄な文字を消す{{{
+" 保存時に無駄な文字を消す{{{
 function! s:remove_dust()
   let cursor = getpos(".")
   let space_length = &ts > 0? &ts : 2
@@ -678,6 +678,7 @@ NeoBundle 'operator-camelize' "operator-camelize : camel-caseへの変換
 " NeoBundle 'kana/vim-smartchr' "smartchr.vim : ==()などの前後を整形
 NeoBundle 'mattn/webapi-vim' "vim Interface to Web API
 NeoBundle 'scrooloose/syntastic'
+NeoBundle 'taichouchou2/alpaca_look'
 NeoBundle 'rhysd/clever-f.vim'
 
 " unite.vim : - すべてを破壊し、すべてを繋げ - vim scriptで実装されたanythingプラグイン
@@ -793,19 +794,22 @@ aug MyAutoCmd
 aug END
 
 NeoBundleLazy 'ruby-matchit'
-NeoBundleLazy 'skalnik/vim-vroom'
+" NeoBundleLazy 'skalnik/vim-vroom'
 NeoBundleLazy 'skwp/vim-rspec'
 NeoBundleLazy 'taka84u9/vim-ref-ri'
-NeoBundleLazy 'ujihisa/neco-ruby'
 NeoBundleLazy 'vim-ruby/vim-ruby'
-NeoBundleLazy 'taichouchou2/unite-reek',
-      \{  'depends' : 'Shougo/unite.vim' }
+NeoBundleLazy 'taichouchou2/unite-reek', {
+      \ 'build' : {
+      \    'mac': 'gem install reek',
+      \    'unix': 'gem install reek',
+      \ },
+      \ 'depends' : 'Shougo/unite.vim' }
 NeoBundle 'Shougo/neocomplcache-rsense'
 NeoBundleLazy 'rhysd/unite-ruby-require.vim'
 NeoBundleLazy 'rhysd/neco-ruby-keyword-args'
 NeoBundleLazy 'rhysd/vim-textobj-ruby'
 NeoBundleLazy 'deris/vim-textobj-enclosedsyntax'
-let s:bundle_ruby = 'ruby-matchit vim-vroom vim-rspec vim-ref-ri neco-ruby vim-ruby unite-reek unite-ruby-require.vim neco-ruby-keyword-args vim-textobj-ruby vim-rsense vim-textobj-enclosedsyntax'
+let s:bundle_ruby = 'ruby-matchit vim-rspec vim-ref-ri vim-ruby unite-reek unite-ruby-require.vim neco-ruby-keyword-args vim-textobj-ruby vim-rsense vim-textobj-enclosedsyntax'
 aug MyAutoCmd
   au FileType ruby,Gemfile,haml,eruby call BundleLoadDepends(s:bundle_ruby)
 aug END
@@ -2674,7 +2678,7 @@ set wildmode=longest:full,full
 set history=1000             " コマンド・検索パターンの履歴数
 set complete+=k,U,kspell,t,d " 補完を充実
 set completeopt=menu,menuone,preview
-set infercase
+" set infercase
 
 "----------------------------------------
 " neocomplcache
@@ -2682,19 +2686,17 @@ let g:neocomplcache_enable_at_startup = 1
 
 " default config"{{{
 let g:neocomplcache_auto_completion_start_length = 2
-" let g:neocomplcache_enable_insert_char_pre = 1 " rsenseが使えなくなる
-let g:neocomplcache_cursor_hold_i_time = 300
 let g:neocomplcache_enable_camel_case_completion = 1
-let g:neocomplcache_enable_cursor_hold_i = 0
-let g:neocomplcache_enable_fuzzy_completion = 1
-let g:neocomplcache_enable_prefetch = 1
-let g:neocomplcache_enable_smart_case = 1
+" let g:neocomplcache_enable_fuzzy_completion = 1
+" let g:neocomplcache_enable_prefetch = 1
+
+" infercaseに従う
+" let g:neocomplcache_enable_smart_case = 1
 let g:neocomplcache_enable_underbar_completion = 1
-let g:neocomplcache_manual_completion_start_length = 0
+" let g:neocomplcache_manual_completion_start_length = 0
 let g:neocomplcache_min_keyword_length = 1
 let g:neocomplcache_min_syntax_length = 1
-let g:neocomplcache_enable_auto_select = 1
-let g:neocomplcache_enable_auto_delimiter = 1
+" let g:neocomplcache_enable_auto_select = 1
 let g:neocomplcache_disable_caching_buffer_name_pattern = '[\[*]\%(unite\)[\]*]'
 let g:neocomplcache_disable_auto_select_buffer_name_pattern = '\[Command Line\]'
 let g:neocomplcache_lock_buffer_name_pattern = '\.txt'
@@ -2705,10 +2707,10 @@ let g:neocomplcache_caching_limit_file_size = 1000000
 let g:neocomplcache#sources#rsense#home_directory = expand("~/.vim/ref/rsense-0.3")
 
 " initialize "{{{
-if !exists('g:neocomplcache_wildcard_characters')
-  let g:neocomplcache_wildcard_characters = {}
-endif
-let g:neocomplcache_wildcard_characters._ = '-'
+" if !exists('g:neocomplcache_wildcard_characters')
+"   let g:neocomplcache_wildcard_characters = {}
+" endif
+" let g:neocomplcache_wildcard_characters._ = '*'
 if $USER ==# 'root'
   let g:neocomplcache_temporary_dir       = expand( '~/.neocon' )
 endif
@@ -2742,36 +2744,31 @@ let g:neocomplcache_force_omni_patterns.python = '[^. \t]\.\w*'
 " let g:neocomplcache_keyword_patterns.default = '[0-9a-zA-Z:#_-]\+'
 " let g:neocomplcache_keyword_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 " let g:neocomplcache_keyword_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-" let g:neocomplcache_omni_patterns.filename = '\%([a-zA-Z0-9_-]\+:[/\\]\)\?\%([\\/[a-zA-Z0-9_-]()$+_\~.\x80-\xff-]\|[^[:print:]]\)\+'
-" let g:neocomplcache_omni_patterns.filename = '[0-9a-zA-Z:#_-]\+'
+let g:neocomplcache_keyword_patterns.filename = '\%(\\.\|[/\[\][:alnum:]()$+_\~.-]\|[^[:print:]]\)\+'
 let g:neocomplcache_snippets_dir = '~/.bundle/neosnippet/autoload/neosnippet/snippets,~/.vim/snippet'
 " let g:neocomplcache_omni_patterns.php = '[^. *\t]\.\w*\|\h\w*::'
 " let g:neocomplcache_omni_patterns.mail = '^\s*\w\+'
 let g:neocomplcache_omni_patterns.c = '[^.[:digit:]*\t]\%(\.\|->\)'
-" let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-" let g:neocomplcache_force_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-" let g:neocomplcache_source_look_dictionary_path = ''
+let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
 "}}}
 
-      " \ 'VimShellExecute' :
-      " \      'vimshell#vimshell_execute_complete',
-      " \ 'VimShellInteractive' :
-      " \      'vimshell#vimshell_execute_complete',
-      " \ 'VimShellTerminal' :
-      " \      'vimshell#vimshell_execute_complete',
-      " \ 'VimShell' : 'vimshell#complete',
+
 let g:neocomplcache_vim_completefuncs = {
       \ 'Ref' : 'ref#complete',
       \ 'Unite' : 'unite#complete_source',
       \ 'VimFiler' : 'vimfiler#complete',
+      \ 'VimShell' : 'vimshell#complete',
+      \ 'VimShellExecute' : 'vimshell#vimshell_execute_complete',
+      \ 'VimShellInteractive' : 'vimshell#vimshell_execute_complete',
+      \ 'VimShellTerminal' : 'vimshell#vimshell_execute_complete',
       \ 'Vinarise' : 'vinarise#complete',
       \}
 
-" if !exists('g:neocomplcache_source_completion_length')
-"   let g:neocomplcache_source_completion_length = {
-"         \ 'look' : 3,
-"         \ }
-" endif
+if !exists('g:neocomplcache_source_completion_length')
+  let g:neocomplcache_source_completion_length = {
+        \ 'alpaca_look' : 4,
+        \ }
+endif
 "}}}
 
 " ファイルタイプ毎の辞書ファイルの場所"{{{
