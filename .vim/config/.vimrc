@@ -34,7 +34,7 @@ aug MyAutoCmd
 aug END
 nmap <Space>h :<C-u>help<Space><C-r><C-w><CR>
 nmap <Space><Space>s :<C-U>so ~/.vimrc<CR>
-nmap <Space><Space>v :<C-U>e ~/.vim/config/.vimrc<CR>
+nmap <Space><Space>v :<C-U>tabnew ~/.vim/config/.vimrc<CR>
 "}}}
 
 "----------------------------------------
@@ -168,7 +168,11 @@ if has('gui_macvim')
   smap ¥ \
 endif
 
-nmap ; :
+let g:vim_keybind_type = 'us'
+if g:vim_keybind_type == 'us'
+  nmap ; :
+  vmap ; :
+endif
 
 "}}}
 
@@ -611,7 +615,7 @@ NeoBundle 'Shougo/vimproc', {
 NeoBundle 'edsono/vim-matchit'        " %の拡張
 NeoBundle 'kana/vim-arpeggio'         " 同時押しキーマップを使う
 NeoBundle 'rhysd/accelerated-jk'      " jkの移動を高速化
-NeoBundle 'taichouchou2/alpaca'       " 個人的なカラーやフォントなど
+NeoBundleLazy 'taichouchou2/alpaca'   " 個人的なカラーやフォントなど
 NeoBundle 'Lokaltog/vim-powerline'    " StatusLineの拡張
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-fugitive'        " gitを表示
@@ -695,10 +699,9 @@ NeoBundle 'rhysd/clever-f.vim'
 " NeoBundle 'tsukkee/unite-help'
 " NeoBundle 'tsukkee/unite-tag'
 " NeoBundle 'ujihisa/unite-colorscheme'
-NeoBundle 'ujihisa/unite-gem'
-NeoBundle 'Shougo/unite-ssh'
+NeoBundleLazy 'Shougo/unite-ssh'
 NeoBundle 'taichouchou2/vim-unite-giti'
-NeoBundle 'thinca/vim-unite-history'
+NeoBundleLazy 'thinca/vim-unite-history'
 NeoBundleLazy 'ujihisa/vimshell-ssh'
 NeoBundleLazy 'glidenote/memolist.vim'
 
@@ -770,6 +773,8 @@ NeoBundleLazy 'Shougo/vinarise', {
 " ----------------------------------------
 NeoBundle 'taichouchou2/vim-endwise.git' "end endifなどを自動で挿入
 NeoBundle 'tpope/vim-rails'
+
+" rails
 NeoBundleLazy 'basyura/unite-rails'
 NeoBundleLazy 'taichouchou2/unite-rails_best_practices', {
       \ 'depends' : 'Shougo/unite.vim',
@@ -785,6 +790,7 @@ aug MyAutoCmd
   au User Rails call BundleLoadDepends(s:bundle_rails)
 aug END
 
+" ruby全般
 NeoBundleLazy 'ruby-matchit'
 " NeoBundleLazy 'skalnik/vim-vroom'
 NeoBundleLazy 'skwp/vim-rspec'
@@ -798,13 +804,15 @@ NeoBundleLazy 'taichouchou2/unite-reek', {
       \ 'depends' : 'Shougo/unite.vim' }
 NeoBundleLazy 'Shougo/neocomplcache-rsense'
 NeoBundleLazy 'rhysd/unite-ruby-require.vim'
-NeoBundleLazy 'rhysd/neco-ruby-keyword-args'
 NeoBundleLazy 'rhysd/vim-textobj-ruby'
 NeoBundleLazy 'deris/vim-textobj-enclosedsyntax'
 let s:bundle_ruby = 'ruby-matchit vim-rspec vim-ref-ri vim-ruby unite-reek unite-ruby-require.vim neco-ruby-keyword-args vim-textobj-ruby neocomplcache-rsense vim-textobj-enclosedsyntax'
 aug MyAutoCmd
   au FileType ruby,Gemfile,haml,eruby call BundleLoadDepends(s:bundle_ruby)
 aug END
+
+NeoBundleLazy 'ujihisa/unite-gem'
+NeoBundleLazy 'rhysd/neco-ruby-keyword-args'
 
 " python
 " ----------------------------------------
@@ -2592,6 +2600,10 @@ let g:eskk#large_dictionary = { 'path':  expand("~/.eskk_dict/SKK-JISYO.L"), 'so
 "       \   'abbrev': '#4169e1',
 "       \   'zenei': '#ffd700',
 "       \}
+let g:eskk#marker_henkan="~"
+let g:eskk#marker_okuri='*'
+let g:eskk#marker_henkan_select="`"
+let g:eskk#marker_jisyo_touroku="?"
 imap <C-J> <Plug>(eskk:toggle)
 " "}}}
 
