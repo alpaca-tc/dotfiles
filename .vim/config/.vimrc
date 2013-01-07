@@ -678,7 +678,6 @@ NeoBundle 'operator-camelize' "operator-camelize : camel-caseへの変換
 " NeoBundle 'kana/vim-smartchr' "smartchr.vim : ==()などの前後を整形
 NeoBundle 'mattn/webapi-vim' "vim Interface to Web API
 NeoBundle 'scrooloose/syntastic'
-NeoBundle 'taichouchou2/alpaca-look'
 NeoBundle 'rhysd/clever-f.vim'
 
 " unite.vim : - すべてを破壊し、すべてを繋げ - vim scriptで実装されたanythingプラグイン
@@ -801,7 +800,7 @@ NeoBundleLazy 'ujihisa/neco-ruby'
 NeoBundleLazy 'vim-ruby/vim-ruby'
 NeoBundleLazy 'taichouchou2/unite-reek',
       \{  'depends' : 'Shougo/unite.vim' }
-NeoBundleLazy 'Shougo/neocomplcache-rsense'
+NeoBundle 'Shougo/neocomplcache-rsense'
 NeoBundleLazy 'rhysd/unite-ruby-require.vim'
 NeoBundleLazy 'rhysd/neco-ruby-keyword-args'
 NeoBundleLazy 'rhysd/vim-textobj-ruby'
