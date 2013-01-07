@@ -5,16 +5,16 @@
 " License: This file is placed in the public domain.
 
 if version < 600
-	syntax clear
+  syntax clear
 elseif exists("b:current_syntax")
-	finish
+  finish
 endif
 
 setlocal iskeyword+=-
 syntax case match
 
-syn keyword tmuxAction	any current none
-syn keyword tmuxBoolean	off on
+syn keyword tmuxAction  any current none
+syn keyword tmuxBoolean  off on
 
 syn keyword tmuxCmds detach[-client] ls list-sessions neww new-window
 syn keyword tmuxCmds bind[-key] unbind[-key] prev[ious-window] last[-window]
@@ -58,6 +58,7 @@ syn keyword tmuxOptsSet status-right-fg update-environment base-index
 syn keyword tmuxOptsSet display-panes-colour display-panes-time default-shell
 syn keyword tmuxOptsSet set-titles-string lock-command lock-server
 syn keyword tmuxOptsSet mouse-select-pane message-limit quiet escape-time
+syn keyword tmuxOptsSet status-position
 
 syn keyword tmuxOptsSetw monitor-activity aggressive-resize force-width
 syn keyword tmuxOptsSetw force-height remain-on-exit uft8 mode-fg mode-bg
@@ -71,28 +72,28 @@ syn keyword tmuxOptsSetw window-status-format window-status-current-format
 
 syn keyword tmuxTodo FIXME NOTE TODO XXX contained
 
-syn match tmuxKey		/\(C-\|M-\|\^\)\p/	display
-syn match tmuxNumber 		/\d\+/			display
-syn match tmuxOptions		/\s-\a/			display
-syn match tmuxVariable		/\w\+=/			display
-syn match tmuxVariableExpansion	/\${\=\w\+}\=/		display
+syn match tmuxKey    /\(C-\|M-\|\^\)\p/  display
+syn match tmuxNumber     /\d\+/      display
+syn match tmuxOptions    /\s-\a/      display
+syn match tmuxVariable    /\w\+=/      display
+syn match tmuxVariableExpansion  /\${\=\w\+}\=/    display
 
-syn region tmuxComment	start=/#/ end=/$/ contains=tmuxTodo display oneline
-syn region tmuxString	start=/"/ end=/"/ display oneline
-syn region tmuxString	start=/'/ end=/'/ display oneline
+syn region tmuxComment  start=/#/ end=/$/ contains=tmuxTodo display oneline
+syn region tmuxString  start=/"/ end=/"/ display oneline
+syn region tmuxString  start=/'/ end=/'/ display oneline
 
-hi def link tmuxAction			Boolean
-hi def link tmuxBoolean			Boolean
-hi def link tmuxCmds			Keyword
-hi def link tmuxComment			Comment
-hi def link tmuxKey			Special
-hi def link tmuxNumber			Number
-hi def link tmuxOptions			Identifier
-hi def link tmuxOptsSet			Function
-hi def link tmuxOptsSetw		Function
-hi def link tmuxString			String
-hi def link tmuxTodo			Todo
-hi def link tmuxVariable		Constant
-hi def link tmuxVariableExpansion	Constant
+hi def link tmuxAction      Boolean
+hi def link tmuxBoolean      Boolean
+hi def link tmuxCmds      Keyword
+hi def link tmuxComment      Comment
+hi def link tmuxKey      Special
+hi def link tmuxNumber      Number
+hi def link tmuxOptions      Identifier
+hi def link tmuxOptsSet      Function
+hi def link tmuxOptsSetw    Function
+hi def link tmuxString      String
+hi def link tmuxTodo      Todo
+hi def link tmuxVariable    Constant
+hi def link tmuxVariableExpansion  Constant
 
 let b:current_syntax = "tmux"
