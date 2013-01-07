@@ -802,7 +802,7 @@ NeoBundleLazy 'taichouchou2/unite-reek', {
       \    'unix': 'gem install reek',
       \ },
       \ 'depends' : 'Shougo/unite.vim' }
-NeoBundleLazy 'Shougo/neocomplcache-rsense'
+NeoBundle 'Shougo/neocomplcache-rsense'
 NeoBundleLazy 'rhysd/unite-ruby-require.vim'
 NeoBundleLazy 'rhysd/vim-textobj-ruby'
 NeoBundleLazy 'deris/vim-textobj-enclosedsyntax'
