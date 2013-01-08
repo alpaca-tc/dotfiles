@@ -1,7 +1,6 @@
 aug MyAutoCmd
   au!
-aug END
-"----------------------------------------
+
 "基本"{{{
 " let $SHELL="/usr/local/bin/zsh"
 " set shell=/usr/local/bin/zsh
@@ -11,10 +10,7 @@ set browsedir=buffer
 set clipboard+=autoselect
 set clipboard+=unnamed
 set directory=~/.vim.swapfile
-set formatoptions=lcqmM
-" aug MyAutoCmd
-"   au VimEnter * set formatoptions-=ro
-" aug END
+set formatoptions+=lcqmM formatoptions-=ro
 set helplang=ja,en
 set modelines=0
 set nobackup
@@ -24,10 +20,10 @@ set vb t_vb=
 set viminfo='100,<800,s300,\"300
 set updatetime=4000 " swpを作るまでの時間(au CursorHoldの時間)
 set norestorescreen=off
-" if v:version >= 703
-"   set undofile
-"   let &undodir=&directory
-" endif
+if v:version >= 703
+  set undofile
+  let &undodir=&directory
+endif
 
 aug MyAutoCmd
   au FileType help nnoremap <buffer> q <C-w>c
@@ -144,7 +140,7 @@ augroup ProgramFiles
 augroup END
 "}}}
 
-" html {{{
+" htmlを変換 {{{
 function! s:HtmlEscape()
   silent s/&/\&amp;/eg
   silent s/</\&lt;/eg
@@ -185,10 +181,9 @@ endif
 " Improved increment.{{{
 nmap <C-A> <SID>(increment)
 nmap <C-X> <SID>(decrement)
-nmap <silent> <SID>(increment)    :AddNumbers 1<CR>
-nmap <silent> <SID>(decrement)   :AddNumbers -1<CR>
-command! -range -nargs=1 AddNumbers
-      \ call s:add_numbers((<line2>-<line1>+1) * eval(<args>))
+nmap <silent> <SID>(increment) :AddNumbers 1<CR>
+nmap <silent> <SID>(decrement) :AddNumbers -1<CR>
+
 function! s:add_numbers(num)
   let prev_line = getline('.')[: col('.')-1]
   let next_line = getline('.')[col('.') :]
@@ -207,7 +202,10 @@ function! s:add_numbers(num)
   if getline('.') !=# new_line
     call setline('.', new_line)
   endif
-endfunction "}}}
+endfunction
+command! -range -nargs=1 AddNumbers
+      \ call s:add_numbers((<line2>-<line1>+1) * eval(<args>))
+"}}}
 "}}}
 
 "----------------------------------------
@@ -217,8 +215,8 @@ set ignorecase
 set smartcase
 set incsearch
 set hlsearch
-" nnoremap <silent> n nvv
-" nnoremap <silent> N Nvv
+nnoremap <silent> n nvv
+nnoremap <silent> N Nvv
 
 let Grep_Skip_Dirs = '.svn .git .swp'
 let Grep_Skip_Files = '*.bak *~'
@@ -250,11 +248,7 @@ vnoremap v G
 inoremap jj <Esc>
 
 "よくミスキータッチするから削除
-" nnoremap H <Nop>
 vnoremap H <Nop>
-
-" マークを使い易くする
-" nnoremap <silent>; :<C-U>echo "マーク"<CR><ESC>'
 
 " 前回終了したカーソル行に移動
 aug MyAutoCmd
@@ -265,8 +259,6 @@ aug END
 " nnoremap g, g;
 " nnoremap g; g,
 
-" windowの操作
-" ****************
 " 画面の移動
 nnoremap <C-L> <C-T>
 nnoremap <C-W><C-J><C-h> <C-W>j<C-W>h
@@ -281,7 +273,7 @@ nnoremap <silent>L :call <SID>NextWindowOrTab()<CR>
 nnoremap <silent>H :call <SID>PreviousWindowOrTab()<CR>
 nnoremap <silent><C-W>] :call PreviewWord()<CR>
 nnoremap <silent><C-W><Space> :<C-u>SmartSplit<CR>
-func! PreviewWord() "{{{
+function! PreviewWord() "{{{
   if &previewwindow      " プレビューウィンドウ内では実行しない
     return
   endif
@@ -314,7 +306,7 @@ func! PreviewWord() "{{{
       wincmd p      " もとのウィンドウへ戻る
     endif
   endif
-endfun "}}}
+endfunction "}}}
 " smart split window {{{
 function! s:smart_close()
   if winnr('$') != 1
@@ -382,7 +374,7 @@ function! s:OpenWindowWithTab() "{{{
   endif
   tabnew
   exec 'buffer '.buffer
-endfunction"}}}
+endfunction "}}}
 
 " 現在開いているタブとバッファを閉じて
 " 一つ前のタブと統合する
@@ -393,7 +385,7 @@ function! s:CloseTabAndOpenBufferIntoPreviousWindow() "{{{
   endif
 
   tablast
-  vsplit
+  call s:smart_split()
   exec 'buffer '.buffer
 endfunction"}}}
 "}}}
@@ -434,7 +426,7 @@ set equalalways       " 画面の自動サイズ調整
 " set scrolljump=-50
 set breakat=\\;:,!?
 set linebreak
-set list              " 不可視文字表示
+set list
 set listchars=tab:␣.,trail:_,extends:>,precedes:<
 set number            " 行番号表示
 set scrolloff=5
@@ -444,6 +436,7 @@ set showmatch         " 括弧の対応をハイライトa
 set spelllang=en_us
 set title
 set titlelen=95
+
 au FileType coffee,ruby,eruby,php,javascript,c,json,vim set colorcolumn=80
 
 "set display=uhex      " 印字不可能文字を16進数で表示
@@ -455,33 +448,33 @@ set t_Co=256          " 確かカラーコード
 set ttyfast           " 高速ターミナル接続を行う
 " set scrolloff=999     " 常にカーソルを真ん中に
 
-if has('gui_macvim') "{{{
-  " set transparency=10
-  " set guifont=Recty:h12
-  " set lines=90 columns=200
-  set guioptions-=T
-  set guioptions-=L
-  set guioptions-=R
-  set guioptions-=B
-  set cmdheight=1
-
-  " 暫く触らないと、画面を薄くする
-  let g:visible = 0
-  function! SetShow()
-    if g:visible == 1
-      setl transparency=0
-      let g:visible = 0
-    endif
-  endfunction
-  function! SetVisible()
-    setl transparency=98
-    let g:visible = 1
-  endfunction
-  " au CursorHold * call SetVisible()
-  " au CursorMoved,CursorMovedI,WinLeave * call SetShow()
-
-  nnoremap <silent>_ :exec g:visible == 0 ? ":call SetVisible()" : ":call SetShow()"<CR>
-endif "}}}
+" if has('gui_macvim') "{{{
+"   " set transparency=10
+"   " set guifont=Recty:h12
+"   " set lines=90 columns=200
+"   set guioptions-=T
+"   set guioptions-=L
+"   set guioptions-=R
+"   set guioptions-=B
+"   set cmdheight=1
+"
+"   " 暫く触らないと、画面を薄くする
+"   " let g:visible = 0
+"   " function! SetShow()
+"   "   if g:visible == 1
+"   "     setl transparency=0
+"   "     let g:visible = 0
+"   "   endif
+"   " endfunction
+"   " function! SetVisible()
+"   "   setl transparency=98
+"   "   let g:visible = 1
+"   " endfunction
+"   " au CursorHold * call SetVisible()
+"   " au CursorMoved,CursorMovedI,WinLeave * call SetShow()
+"
+"   " nnoremap <silent>_ :exec g:visible == 0 ? ":call SetVisible()" : ":call SetShow()"<CR>
+" endif "}}}
 
 syntax on
 
@@ -520,11 +513,6 @@ set foldnestmax=5
 " 設定を上書きしない為に、最後に書く
 colorscheme molokai
 "}}}
-
-" commitメッセージの編集時には余分なプラグインを読み込まない
-if expand("%") =~ "COMMIT_EDITMSG"
-  finish
-endif
 
 "----------------------------------------
 " Tags関連 cTags使う場合は有効化 "{{{
@@ -580,6 +568,12 @@ augroup neobundle
 augroup END
 "}}}
 
+function! Neo_al(ft)
+  return { 'autoload' : {
+      \ 'filetype' : a:ft
+      \ }}
+endfunction
+
 function! BundleLoadDepends(bundle_names)
   if !exists('g:loaded_bundles')
     let g:loaded_bundles = {}
@@ -628,7 +622,7 @@ NeoBundle 'h1mesuke/vim-alignta'      " 整形
 " vim拡張"{{{
 " NeoBundle 'Lokaltog/vim-easymotion'
 NeoBundle 'grep.vim'
-NeoBundle 'kien/ctrlp.vim' "ファイルを絞る
+NeoBundleLazy 'kien/ctrlp.vim'
 " NeoBundle 'scrooloose/nerdtree' "プロジェクト管理用 tree filer
 " NeoBundle 'taglist.vim' "関数、変数を画面横にリストで表示する
 " NeoBundle 'taku-o/vim-toggle' "true<=>false など、逆の意味のキーワードを切り替えられる
@@ -641,26 +635,50 @@ NeoBundle 'kien/ctrlp.vim' "ファイルを絞る
 NeoBundleLazy 'sjl/gundo.vim', { 'autoload' : { 'commands': ["GundoToggle"] }}                   " undo履歴をツリー表示
 NeoBundle 'Shougo/git-vim'
 NeoBundle 'Shougo/neocomplcache'            " 補完
+call neobundle#config('neocomplcache', {
+      \ 'lazy' : 1,
+      \ 'autoload' : {
+      \   'insert' : 1,
+      \ }})
+
 NeoBundle 'Shougo/neosnippet'
+call neobundle#config('neosnippet', {
+      \ 'lazy' : 1,
+      \ 'autoload' : {
+      \   'insert' : 1,
+      \ }})
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'camelcasemotion'
 NeoBundle 'majutsushi/tagbar'
 NeoBundle 'mattn/zencoding-vim'             " Zencodingを使う
 NeoBundle 'nathanaelkane/vim-indent-guides' " indentに色づけ
 NeoBundle 'open-browser.vim'
-NeoBundle 'smartword'
+NeoBundleLazy 'kana/vim-smartword', '', 'same', { 'autoload' : {
+      \ 'mappings' : [
+      \   '<Plug>(smartword-w)', '<Plug>(smartword-b)', '<Plug>(smartword-ge)']
+      \ }}
 NeoBundle 't9md/vim-textmanip'              " visualモードで、文字列を直感的に移動
 NeoBundle 'thinca/vim-ref'
 NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'vim-scripts/sudo.vim'            " vimで開いた後にsudoで保存
-NeoBundle 'Shougo/vimfiler'
+NeoBundle 'Shougo/vimfiler',
+      \ { 'depends' : 'Shougo/unite.vim' }
 NeoBundleLazy 'Shougo/vimshell'
-NeoBundle 'taichouchou2/vimshell_custom'
+NeoBundleLazy 'taichouchou2/vimshell_custom', Neo_al('vimshell')
+" NeoBundleLazy 'yomi322/vim-gitcomplete', Neo_al('vimshell')
 NeoBundleLazy 'mattn/gist-vim' "gistを利用する
 NeoBundleLazy 'thinca/vim-quickrun'             " <Leader>rで簡易コンパイル
 
 "----------------------------------------
 " text-object拡張"{{{
+function! Neo_operator(mappings)
+  return {
+        \ 'depends' : 'vim-operator-user',
+        \ 'autoload' : {
+        \   'mappings' : a:mappings
+        \ }}
+endfunction
+
 " operator拡張の元
 " NeoBundle 'emonkak/vim-operator-comment'
 " NeoBundle 'https://github.com/kana/vim-textobj-jabraces.git'
@@ -705,7 +723,9 @@ NeoBundle 'rhysd/clever-f.vim'
 NeoBundleLazy 'Shougo/unite-ssh'
 NeoBundle 'taichouchou2/vim-unite-giti'
 NeoBundleLazy 'thinca/vim-unite-history'
-NeoBundleLazy 'ujihisa/vimshell-ssh'
+NeoBundleLazy 'ujihisa/vimshell-ssh', { 'autoload' : {
+      \ 'filetypes' : 'vimshell',
+      \ }}
 NeoBundleLazy 'glidenote/memolist.vim'
 
 " NeoBundle 'TeTrIs.vim'
@@ -714,7 +734,9 @@ NeoBundleLazy 'glidenote/memolist.vim'
 " NeoBundle 'mattn/qiita-vim'
 " NeoBundle 'osyo-manga/vim-itunes'
 " NeoBundle 'yuratomo/w3m.vim'
-NeoBundleLazy 'basyura/TweetVim'
+NeoBundleLazy 'basyura/TweetVim', { 'depends' :
+      \ ['basyura/twibill.vim', 'tyru/open-browser.vim'],
+      \ 'autoload' : { 'commands' : 'TweetVimHomeTimeline' }}
 NeoBundleLazy 'basyura/bitly.vim'
 NeoBundleLazy 'basyura/twibill.vim'
 NeoBundle 'tyru/eskk.vim'
