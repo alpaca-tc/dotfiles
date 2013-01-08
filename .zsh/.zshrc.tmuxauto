@@ -2,6 +2,6 @@
 # https://wiki.archlinux.org/index.php/Tmux#Start_tmux_on_every_shell_login
 export TMUX_POWERLINE_THEME=default
 if which tmux 2>&1 >/dev/null; then
-    #if not inside a tmux session, and if no session is started, start a new session
-    test -z "$TMUX" && (tmux attach || tmux new-session)
+  #if not inside a tmux session, and if no session is started, start a new session
+  test -z "$TMUX" && (tmux attach || mux default)
 fi

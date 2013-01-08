@@ -351,9 +351,9 @@ snippet  cToRegexp
       str = self.dup
       delim_start, delim_end = REGEXP_DELIMITERS.detect { |k, v| str.start_with? k }.map { |delim| ::Regexp.escape delim }
       %r{\A#{delim_start}(.*)#{delim_end}([^#{delim_end}]*)\z} =~ str.strip
-      # TODO BUG CHANGE $1, $2
-      content = $1
-      options = $2
+      # TODO BUG CHANGE $ 1, $ 2
+      content = $ 1
+      options = $ 2
       content.gsub! '\\/', '/'
       ignore_case = options.include?('i') ? ::Regexp::IGNORECASE : nil
       multiline = options.include?('m') ? ::Regexp::MULTILINE : nil

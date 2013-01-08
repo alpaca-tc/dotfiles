@@ -120,6 +120,8 @@ inoremap <leader>h <!-- / --><left><left><left><Left>
 
 " 保存時に無駄な文字を消す{{{
 function! s:remove_dust()
+  if g:remove_dust_enable == 0|return|endif
+
   let cursor = getpos(".")
   let space_length = &ts > 0? &ts : 2
   let space  = ""
@@ -133,6 +135,9 @@ function! s:remove_dust()
   call setpos(".", cursor)
   unlet cursor
 endfunction
+let g:remove_dust_enable=1
+command! RemoveDustEnable let g:remove_dust_enable=1
+command! RemoveDustDisable let g:remove_dust_enable=0
 
 augroup ProgramFiles
   au BufWritePre * call <SID>remove_dust()
@@ -170,6 +175,10 @@ if g:vim_keybind_type == 'us'
   noremap ; :
   cnoremap ; :
   inoremap ; :
+
+  noremap : ;
+  cnoremap : ;
+  inoremap : ;
 endif
 "}}}
 
@@ -608,7 +617,7 @@ NeoBundle 'Shougo/vimproc', {
 NeoBundle 'edsono/vim-matchit'        " %の拡張
 NeoBundle 'kana/vim-arpeggio'         " 同時押しキーマップを使う
 NeoBundle 'rhysd/accelerated-jk'      " jkの移動を高速化
-NeoBundleLazy 'taichouchou2/alpaca'   " 個人的なカラーやフォントなど
+NeoBundle 'taichouchou2/alpaca'   " 個人的なカラーやフォントなど
 NeoBundle 'Lokaltog/vim-powerline'    " StatusLineの拡張
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-fugitive'        " gitを表示
@@ -2475,23 +2484,17 @@ let g:neocomplcache_enable_at_startup = 1
 " default config"{{{
 let g:neocomplcache_auto_completion_start_length = 2
 let g:neocomplcache_enable_camel_case_completion = 1
-" let g:neocomplcache_enable_fuzzy_completion = 1
-" let g:neocomplcache_enable_prefetch = 1
 
-" infercaseに従う
-" let g:neocomplcache_enable_smart_case = 1
 let g:neocomplcache_enable_underbar_completion = 1
 " let g:neocomplcache_manual_completion_start_length = 0
-let g:neocomplcache_min_keyword_length = 1
-let g:neocomplcache_min_syntax_length = 1
-" let g:neocomplcache_enable_auto_select = 1
+let g:neocomplcache_min_keyword_length = 2
+let g:neocomplcache_min_syntax_length = 2
 let g:neocomplcache_disable_caching_buffer_name_pattern = '[\[*]\%(unite\)[\]*]'
 let g:neocomplcache_disable_auto_select_buffer_name_pattern = '\[Command Line\]'
 let g:neocomplcache_lock_buffer_name_pattern = '\.txt'
 let g:neocomplcache_max_list = 120
-let g:neocomplcache_force_overwrite_completefunc = 1
 let g:neocomplcache_skip_auto_completion_time = '0.3'
-let g:neocomplcache_caching_limit_file_size = 1000000
+" let g:neocomplcache_caching_limit_file_size = 1000000
 let g:neocomplcache#sources#rsense#home_directory = expand("~/.vim/ref/rsense-0.3")
 
 " initialize "{{{
@@ -2518,10 +2521,8 @@ endif
 
 " For auto select.
 
-let g:neocomplcache_force_omni_patterns.c =
-      \ '[^.[:digit:] *\t]\%(\.\|->\)'
-let g:neocomplcache_force_omni_patterns.cpp =
-      \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+let g:neocomplcache_force_omni_patterns.c      = '[^.[:digit:] *\t]\%(\.\|->\)'
+let g:neocomplcache_force_omni_patterns.cpp    = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 let g:neocomplcache_force_omni_patterns.python = '[^. \t]\.\w*'
 
 " let g:clang_complete_auto = 0
@@ -2539,7 +2540,6 @@ let g:neocomplcache_snippets_dir = '~/.bundle/neosnippet/autoload/neosnippet/sni
 let g:neocomplcache_omni_patterns.c = '[^.[:digit:]*\t]\%(\.\|->\)'
 "}}}
 
-
 let g:neocomplcache_vim_completefuncs = {
       \ 'Ref' : 'ref#complete',
       \ 'Unite' : 'unite#complete_source',
@@ -2549,7 +2549,7 @@ let g:neocomplcache_vim_completefuncs = {
       \ 'VimShellInteractive' : 'vimshell#vimshell_execute_complete',
       \ 'VimShellTerminal' : 'vimshell#vimshell_execute_complete',
       \ 'Vinarise' : 'vinarise#complete',
-      \}
+      \ }
 
 if !exists('g:neocomplcache_source_completion_length')
   let g:neocomplcache_source_completion_length = {
