@@ -1,17 +1,39 @@
 aug MyAutoCmd
   au!
 aug END
-let g:my_settings = {}
 
+"----------------------------------------
+" initialize"{{{
+let g:my_settings = {}
+let g:my_settings.initialize = 0
+let g:my_settings.keyboard_type = 'us'
+let g:my_settings.dir = {}
+let g:my_settings.dir.trash_dir = expand('~/.Trash/')
+let g:my_settings.dir.swap_dir  = expand('~/.Trash/vimswap')
+let g:my_settings.dir.bundle    = expand('~/.bundle')
+
+let g:my_settings.ft               = {}
+let g:my_settings.ft.html_files    = ['eruby', 'html', 'php', 'haml']
+let g:my_settings.ft.ruby_files    = ['ruby', 'Gemfile', 'haml', 'eruby']
+let g:my_settings.ft.python_files  = ['python']
+let g:my_settings.ft.scala_files   = ['scala']
+let g:my_settings.ft.sh_files      = ['sh']
+let g:my_settings.ft.program_files = ['ruby', 'php', 'python', 'eruby', 'vim']
+let g:my_settings.github = 'https://github.com/'
+
+if  g:my_settings.initialize
+  source ~/.vim/config/.vimrc.initialize
+endif
+"}}}
+
+"----------------------------------------
 "基本"{{{
-" let $SHELL="/usr/local/bin/zsh"
-" set shell=/usr/local/bin/zsh
 let mapleader = ","
 set backspace=indent,eol,start
 set browsedir=buffer
 set clipboard+=autoselect
 set clipboard+=unnamed
-set directory=~/.vim.swapfile
+exe "set directory=".g:my_settings.dir.swap_dir
 set formatoptions+=lcqmM formatoptions-=ro
 set helplang=ja,en
 set modelines=0
@@ -27,9 +49,6 @@ if v:version >= 703
   let &undodir=&directory
 endif
 
-aug MyAutoCmd
-  au FileType help nnoremap <buffer> q <C-w>c
-aug END
 nnoremap <Space>h :<C-u>help<Space><C-r><C-w><CR>
 nnoremap <Space><Space>s :<C-U>so ~/.vimrc<CR>
 nnoremap <Space><Space>v :<C-U>tabnew ~/.vim/config/.vimrc<CR>
@@ -42,83 +61,107 @@ nnoremap <Space><Space>v :<C-U>tabnew ~/.vim/config/.vimrc<CR>
 
 "----------------------------------------
 "編集"{{{
-set autoread
 " set textwidth=100
-set textwidth=0
+set autoread
 set hidden
 set nrformats-=octal
+set textwidth=0
 
 "開いているファイルのディレクトリに自動で移動
 aug MyAutoCmd
   au BufEnter * execute ":lcd " . expand("%:p:h")
 aug END
 
-" 便利キーマップ追記
-nnoremap <silent><Space>w :wq<CR>
-nnoremap <silent><Space>q :q!<CR>
-nnoremap <Space>s :w sudo:%<CR>
-nnoremap re :%s!
-xnoremap re :s!
-vnoremap rep y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<Return>!!g<Left><Left>
-nnoremap <Leader>f :setl ft=
-
-" 新しいバッファを開くときに、rubyか同じファイルタイプで開く{{{
-function! NewBuffer(type)
+" 新しいバッファを開くときに、rubyか同じファイルタイプで開く {{{
+" 引数は何でもいい. あるか無いかのみ判断
+function! s:new_buffer(...)
   let old_ft = &ft
 
-  " 分割
-  if winwidth(0) > winheight(0) * 2
-    vnew
+  " set filetype
+  if a:0 == 0 || empty(old_ft)
+    let ft = 'ruby'
+    echo "new"
   else
-    new
+    let ft = old_ft
+    echo "copy"
   endif
+  let cmd = 'setl ft='.ft
 
-  if a:type == "new"
-    let cmd = "setl ft=ruby"
-  else
-    let cmd = 'setl ft='.old_ft
-  endif
-
-  exec cmd
+  call <SID>smart_split_new(cmd)
 endfunction
+command! -nargs=* NewBuffer call <SID>new_buffer(<q-args>)
+
+nnoremap <silent><C-W>n     :<C-U>NewBuffer<CR>
+nnoremap <silent><C-W><C-N> :<C-U>NewBuffer copy<CR>
 "}}}
-nmap <silent><C-W>n :call NewBuffer("new")<CR>
-nmap <silent><C-W><C-N> :call NewBuffer("copy")<CR>
-
-" 括弧を自動補完
-inoremap { {}<LEFT>
-inoremap [ []<LEFT>
-inoremap ( ()<LEFT>
-inoremap " ""<LEFT>
-inoremap ' ''<LEFT>
-
+" 対応を自動補完 {{{
+inoremap { {}<Left>
+inoremap [ []<Left>
+inoremap ( ()<Left>
+inoremap " ""<Left>
+inoremap ' ''<Left>
 aug MyAutoCmd
-  au FileType ruby,eruby,haml inoremap <buffer>\| \|\|<LEFT>
+  au FileType ruby,eruby,haml inoremap <buffer>\| \|\|<Left>
 aug END
-
-" 一括インデント
+"}}}
+" 整列系 {{{
+" xnoremap <S-TAB>  <
+" xnoremap <TAB>  >
 xnoremap < <gv
-xnoremap > >gv
-xnoremap <TAB>  >
-xnoremap <S-TAB>  <
 xnoremap <C-M> :sort<CR>
-
-" HTML/XMLの閉じタグを </ が入力されたときに補完
+xnoremap > >gv
+"}}}
+" 補完系 {{{
 augroup MyXML
   autocmd!
   autocmd Filetype xml inoremap <buffer> </ </<C-x><C-o>
   autocmd Filetype html inoremap <buffer> </ </<C-x><C-o>
   autocmd Filetype eruby inoremap <buffer> </ </<C-x><C-o>
 augroup END
-
-" コメントを書くときに便利
+"}}}
+" 便利系 {{{
+nnoremap <silent><Space>w :wq<CR>
+nnoremap <silent><Space>q :q!<CR>
+nnoremap <silent><Space>s :w sudo:%<CR>
+nnoremap re :%s!
+xnoremap re :s!
+vnoremap rep y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<Return>!!g<Left><Left>
+nnoremap <Leader>f :setl ft=
+"}}}
+" コメントを書くときに便利 {{{
 inoremap <leader>* ****************************************
 inoremap <leader>- ----------------------------------------
 inoremap <leader>h <!-- / --><left><left><left><Left>
+"}}}
+" 変なマッピングを修正 "{{{
+if has('gui_macvim')
+  map ¥ \
+  inoremap ¥ \
+  nnoremap ¥ \
+  cmap ¥ \
+  smap ¥ \
+endif
 
-" 保存時に無駄な文字を消す{{{
+" キーボードの自動判別はできないのかね。。。
+if g:my_settings.keyboard_type == 'us'
+  cnoremap : ;
+  cnoremap ; :
+  xnoremap ; :
+  xnoremap : ;
+  inoremap : ;
+  inoremap ; :
+  noremap : ;
+  noremap ; :
+endif
+"}}}
+
+" 保存時に無駄な文字を消す {{{
 function! s:remove_dust()
-  if g:remove_dust_enable == 0|return|endif
+  if !exists('b:remove_dust_enable')
+    return
+  endif
+
+  if b:remove_dust_enable == 0|return|endif
 
   let cursor = getpos(".")
   let space_length = &ts > 0? &ts : 2
@@ -133,12 +176,16 @@ function! s:remove_dust()
   call setpos(".", cursor)
   unlet cursor
 endfunction
-let g:remove_dust_enable=1
-command! RemoveDustEnable let g:remove_dust_enable=1
-command! RemoveDustDisable let g:remove_dust_enable=0
 
-augroup ProgramFiles
+command! RemoveDustEnable  let b:remove_dust_enable=1
+command! RemoveDustDisable let b:remove_dust_enable=0
+command! RemoveDustRun call <SID>remove_dust()
+
+let g:remove_dust_enable=1
+augroup RemoveDust
+  au!
   au BufWritePre * call <SID>remove_dust()
+  au BufEnter    * let b:remove_dust_enable = g:remove_dust_enable
 augroup END
 "}}}
 
@@ -154,38 +201,15 @@ function! s:HtmlUnEscape()
   silent s/&amp;/\&/eg
 endfunction
 
-xnoremap <silent> eh :call <SID>HtmlEscape()<CR>
-xnoremap <silent> dh :call <SID>HtmlUnEscape()<CR>
+xmap <silent>eh :call <SID>HtmlEscape()<CR>
+xmap <silent>dh :call <SID>HtmlUnEscape()<CR>
 " }}}
-
-" 変なマッピングを修正 "{{{
-if has('gui_macvim')
-  map ¥ \
-  inoremap ¥ \
-  nnoremap ¥ \
-  cmap ¥ \
-  smap ¥ \
-endif
-
-" キーボードの自動判別はできないのかね。。。
-let g:vim_keybind_type = 'us'
-if g:vim_keybind_type == 'us'
-  noremap ; :
-  cnoremap ; :
-  inoremap ; :
-
-  noremap : ;
-  cnoremap : ;
-  inoremap : ;
-endif
-"}}}
 
 " Improved increment.{{{
 " nmap <C-A> <SID>(increment)
 " nmap <C-X> <SID>(decrement)
 " nmap <silent> <SID>(increment) :AddNumbers 1<CR>
 " nmap <silent> <SID>(decrement) :AddNumbers -1<CR>
-
 function! s:add_numbers(num)
   let prev_line = getline('.')[: col('.')-1]
   let next_line = getline('.')[col('.') :]
@@ -206,7 +230,7 @@ function! s:add_numbers(num)
   endif
 endfunction
 command! -range -nargs=1 AddNumbers
-      \ call s:add_numbers((<line2>-<line1>+1) * eval(<args>))
+      \ call <SID>add_numbers((<line2>-<line1>+1) * eval(<args>))
 "}}}
 "}}}
 
@@ -234,34 +258,22 @@ set grepprg=grep\ -nH
 set ww=b,s,h,l,~,<,>,[,]
 set virtualedit+=block
 " set virtualedit=all " 仮想端末
-map $ g_
 
-" nnoremap <silent>h <Left>
-" nnoremap <silent>l <Right>
-nnoremap <silent>j gj
-nnoremap <silent>k gk
+" 基本的な動き {{{
+inoremap <silent><C-K> <End>
+inoremap <silent><C-L> <Right>
+inoremap <silent><C-O> <Esc>o
+inoremap jj <Esc>
+nnoremap $ g_
+vnoremap $ g_
 nnoremap <silent><Down> gj
 nnoremap <silent><Up>   gk
-
-inoremap <silent><C-L> <Right>
-inoremap <silent><C-L><C-L> <Esc>A
-inoremap <silent><C-O> <Esc>o
-vnoremap v G
-inoremap jj <Esc>
-
-"よくミスキータッチするから削除
+nnoremap <silent>j gj
+nnoremap <silent>k gk
 vnoremap H <Nop>
-
-" 前回終了したカーソル行に移動
-aug MyAutoCmd
-  autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal g`\"" | endif
-aug END
-
-" nnoremap g: `.zz
-" nnoremap g, g;
-" nnoremap g; g,
-
-" 画面の移動
+vnoremap v G
+"}}}
+" 画面の移動 {{{
 nnoremap <C-L> <C-T>
 nnoremap <C-W><C-J><C-h> <C-W>j<C-W>h
 nnoremap <C-W><C-H><C-j> <C-W>h<C-W>j
@@ -270,93 +282,18 @@ nnoremap <C-W><C-K><C-H> <C-W>k<C-W>h
 nnoremap <C-W><C-K><C-L> <C-W>k<C-W>l
 nnoremap <C-W><C-l><C-j> <C-W>l<C-W>j
 nnoremap <C-W><C-l><C-k> <C-W>l<C-W>k
-
-nnoremap <silent>L :call <SID>NextWindowOrTab()<CR>
-nnoremap <silent>H :call <SID>PreviousWindowOrTab()<CR>
-nnoremap <silent><C-W>] :call PreviewWord()<CR>
+nnoremap <silent>L            :call <SID>NextWindowOrTab()<CR>
+nnoremap <silent>H            :call <SID>PreviousWindowOrTab()<CR>
+nnoremap <silent><C-W>]       :call PreviewWord()<CR>
 nnoremap <silent><C-W><Space> :<C-u>SmartSplit<CR>
-function! PreviewWord() "{{{
-  if &previewwindow      " プレビューウィンドウ内では実行しない
-    return
-  endif
-  let w = expand("<cword>")    " カーソル下の単語を得る
-  if w =~ '\a'      " その単語が文字を含んでいるなら
-    " 別のタグを表示させる前にすでに存在するハイライトを消去する
-    silent! wincmd P      " プレビューウィンドウにジャンプ
-    if &previewwindow      " すでにそこにいるなら
-      match none      " 存在するハイライトを消去する
-      wincmd p      " もとのウィンドウに戻る
-    endif
-
-    " カーソル下の単語にマッチするタグを表示してみる
-    try
-      exe "ptag " . w
-    catch
-      return
-    endtry
-
-    silent! wincmd P      " プレビューウィンドウにジャンプ
-    if &previewwindow    " すでにそこにいるなら
-      if has("folding")
-        silent! .foldopen    " 閉じた折り畳みを開く
-      endif
-      call search("$", "b")    " 前の行の最後へ
-      let w = substitute(w, '\\', '\\\\', "")
-      call search('\<\V' . w . '\>')  " カーソルをマッチしたところへ
-      " ここで単語にハイライトをつける
-      " exe 'match previewWord "\%' . line(".") . 'l\%' . col(".") . 'c\k*"'
-      wincmd p      " もとのウィンドウへ戻る
-    endif
-  endif
-endfunction "}}}
-" smart split window {{{
-function! s:smart_close()
-  if winnr('$') != 1
-    close
-  endif
-endfunction
-
-function! s:NextWindowOrTab()
-  if tabpagenr('$') == 1 && winnr('$') == 1
-    call s:smart_split()
-  elseif winnr() < winnr("$")
-    wincmd w
-  else
-    tabnext
-    1wincmd w
-  endif
-endfunction
-
-function! s:PreviousWindowOrTab()
-  if winnr() > 1
-    wincmd W
-  else
-    tabprevious
-    execute winnr("$") . "wincmd w"
-  endif
-endfunction
-
-function! s:smart_split(...)
-  if winwidth(0) > winheight(0) * 2
-    vsplit
-  else
-    split
-  endif
-
-  if a:0 > 0
-    execute a:1
-  endif
-endfunction
-command! -nargs=? -complete=command SmartSplit call <SID>smart_split(<q-args>)
 "}}}
-
 " tabを使い易く{{{
-" nnoremap <silent>t  <Nop>
+nnoremap <silent>t  <Nop>
 nnoremap <silent>tn  :tabn<CR>
 nnoremap <silent>tp  :tabprevious<CR>
 nnoremap <silent>tc  :tabnew<CR>
 nnoremap <silent>tx  :tabclose<CR>
-nnoremap <silent>to  :call <SID>OpenWindowWithTab()<CR>
+nnoremap <silent>to  <C-W>T
 nnoremap <silent>tw  :call <SID>CloseTabAndOpenBufferIntoPreviousWindow()<CR>
 nnoremap <silent>te  :execute 'tabnext' 1 + (tabpagenr() + v:count1 - 1) % tabpagenr('$')<CR>
 
@@ -368,15 +305,97 @@ nnoremap <silent>t5  :tabnext 5<CR>
 nnoremap <silent>t6  :tabnext 6<CR>
 " }}}
 
-" 現在開いているバッファをタブで開く
-function! s:OpenWindowWithTab() "{{{
-  let buffer = bufnr('%')
-  if (winnr("$") != 1)
-    q
+" 前回終了したカーソル行に移動
+aug MyAutoCmd
+  autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal g`\"" | endif
+aug END
+
+function! PreviewWord() "{{{
+  if &previewwindow | return | endif
+
+  let w = expand("<cword>")
+  if w =~ '\a'
+    silent! wincmd P
+    if &previewwindow
+      match none
+      wincmd p
+    endif
+
+    try
+      exe "ptag " . w
+    catch
+      return
+    endtry
+
+    silent! wincmd P
+    if &previewwindow
+      if has("folding")
+        silent! .foldopen
+      endif
+      call search("$", "b")
+      let w = substitute(w, '\\', '\\\\', "")
+      call search('\<\V' . w . '\>')
+
+      wincmd p
+    endif
   endif
-  tabnew
-  exec 'buffer '.buffer
 endfunction "}}}
+" smart split window {{{
+function! s:smart_close() "{{{
+  if winnr('$') != 1
+    close
+  endif
+endfunction"}}}
+function! s:NextWindowOrTab() "{{{
+  if tabpagenr('$') == 1 && winnr('$') == 1
+    call s:smart_split()
+  elseif winnr() < winnr("$")
+    wincmd w
+  else
+    tabnext
+    1wincmd w
+  endif
+endfunction"}}}
+function! s:PreviousWindowOrTab() "{{{
+  if winnr() > 1
+    wincmd W
+  else
+    tabprevious
+    execute winnr("$") . "wincmd w"
+  endif
+endfunction"}}}
+function! s:smart_split_how() "{{{
+  if winwidth(0) > winheight(0) * 2
+    return 'v'
+  else
+    return 's'
+  endif
+endfunction
+function! s:smart_split(...) "{{{
+  if <SID>smart_split_how() == 'v'
+    vsplit
+  else
+    split
+  endif
+
+  if a:0 > 0
+    execute a:1
+  endif
+endfunction"}}}
+function! s:smart_split_new(...) "{{{
+  if <SID>smart_split_how() == 'v'
+    vnew
+  else
+    new
+  endif
+
+  if a:0 > 0
+    execute a:1
+  endif
+endfunction "}}}
+
+command! -nargs=? -complete=command SmartSplit call <SID>smart_split(<q-args>)
+"}}}
 
 " 現在開いているタブとバッファを閉じて
 " 一つ前のタブと統合する
@@ -391,6 +410,7 @@ function! s:CloseTabAndOpenBufferIntoPreviousWindow() "{{{
   exec 'buffer '.buffer
 endfunction"}}}
 "}}}
+"}}}
 
 "----------------------------------------
 "encoding"{{{
@@ -402,11 +422,11 @@ set fileencodings=utf-8,sjis,shift-jis,euc-jp,utf-16,ascii,ucs-bom,cp932,iso-202
 set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc
 
 " 指定文字コードで強制的にファイルを開く
-command! Cp932 edit ++enc=cp932
-command! Eucjp edit ++enc=euc-jp
+command! Cp932     edit ++enc=cp932
+command! Eucjp     edit ++enc=euc-jp
 command! Iso2022jp edit ++enc=iso-2022-jp
-command! Utf8 edit ++enc=utf-8
-command! Sjis edit ++enc=sjis
+command! Utf8      edit ++enc=utf-8
+command! Sjis      edit ++enc=sjis
 "}}}
 
 "----------------------------------------
@@ -423,63 +443,67 @@ filetype indent on
 "----------------------------------------
 "表示"{{{
 " set noequalalways     " 画面の自動サイズ調整解除
-set equalalways       " 画面の自動サイズ調整
 " set relativenumber    " 相対表示
 " set scrolljump=-50
+" set scrolloff=999     " 常にカーソルを真ん中に
 set breakat=\\;:,!?
+set cdpath+=~
+set cmdheight=1
+set cursorline
+set equalalways       " 画面の自動サイズ調整
+set laststatus=2
+set lazyredraw
 set linebreak
 set list
 set listchars=tab:␣.,trail:_,extends:>,precedes:<
-set number            " 行番号表示
+set matchpairs+=<:>
+set number
 set scrolloff=5
 set showcmd
 set showfulltag
-set showmatch         " 括弧の対応をハイライトa
+set showmatch
 set spelllang=en_us
+set t_Co=256
 set title
 set titlelen=95
+set ttyfast
 
 au FileType coffee,ruby,eruby,php,javascript,c,json,vim set colorcolumn=80
 
-"set display=uhex      " 印字不可能文字を16進数で表示
-set cdpath+=~
-set cursorline
-set lazyredraw        " コマンド実行中は再描画しない
-set matchpairs+=<:>
-set t_Co=256          " 確かカラーコード
-set ttyfast           " 高速ターミナル接続を行う
-set cmdheight=1
+"折り畳み
+" set commentstring=%s
+" set foldlevelstart=1
+" set foldminlines=3
+" set foldopen=all
+set foldcolumn=1
+set foldenable
+set foldmethod=marker
+set foldnestmax=5
 
-set laststatus=2
-" set scrolloff=999     " 常にカーソルを真ん中に
+if has('gui_macvim') "{{{
+  " set guifont=Recty:h12
+  " set lines=90 columns=200
+  " set transparency=10
+  set cmdheight=1
+  set guioptions-=BLRT
 
-" if has('gui_macvim') "{{{
-"   " set transparency=10
-"   " set guifont=Recty:h12
-"   " set lines=90 columns=200
-"   set guioptions-=T
-"   set guioptions-=L
-"   set guioptions-=R
-"   set guioptions-=B
-"   set cmdheight=1
-"
-"   " 暫く触らないと、画面を薄くする
-"   " let g:visible = 0
-"   " function! SetShow()
-"   "   if g:visible == 1
-"   "     setl transparency=0
-"   "     let g:visible = 0
-"   "   endif
-"   " endfunction
-"   " function! SetVisible()
-"   "   setl transparency=98
-"   "   let g:visible = 1
-"   " endfunction
-"   " au CursorHold * call SetVisible()
-"   " au CursorMoved,CursorMovedI,WinLeave * call SetShow()
-"
-"   " nnoremap <silent>_ :exec g:visible == 0 ? ":call SetVisible()" : ":call SetShow()"<CR>
-" endif "}}}
+  " 暫く触らないと、画面を薄くする
+  let g:visible = 0
+  function! SetShow()
+    if g:visible == 1
+      setl transparency=0
+      let g:visible = 0
+    endif
+  endfunction
+  function! SetVisible()
+    setl transparency=98
+    let g:visible = 1
+  endfunction
+  au CursorHold * call SetVisible()
+  au CursorMoved,CursorMovedI,WinLeave * call SetShow()
+
+  nnoremap <silent>_ :exec g:visible == 0 ? ":call SetVisible()" : ":call SetShow()"<CR>
+endif "}}}
 
 syntax on
 
@@ -495,27 +519,6 @@ augroup cch
   autocmd WinEnter,BufRead * set cursorline
 augroup END
 
-"折り畳み
-" set commentstring=%s
-set foldcolumn=1
-set foldenable
-" set foldlevelstart=1
-set foldmethod=marker
-" set foldminlines=3
-set foldnestmax=5
-" set foldopen=all
-" set showbreak=>\
-
-" vimを使っているときはtmuxのステータスラインを隠す"{{{
-" if !has('gui_running') && $TMUX !=# ''
-"   augroup Tmux
-"     autocmd!
-"     " au VimEnter,FocusGained * silent !tmux set status off
-"     " au VimLeave,FocusLost * silent !tmux set status on
-"   augroup END
-" endif "}}}
-
-" 設定を上書きしない為に、最後に書く
 colorscheme molokai
 "}}}
 
@@ -539,17 +542,16 @@ function! SetTags()
   endif
 endfunction
 aug MyAutoCmd
-  au BufReadPost * call SetTags()
+  au BufEnter * call SetTags()
 aug END
 
 "tags_jumpを使い易くする
 nnoremap tt  <C-]>
 nnoremap th  :<C-u>pop<CR>
 nnoremap tl  :<C-u>tag<CR>
-nnoremap tj  :<C-u>tp<CR>
+nnoremap tj  :<C-u>tprevious<CR>
 nnoremap tk  :<C-u>tags<CR>
-nnoremap tn  :<C-u>tn<CR>
-nnoremap ts  :<C-u>ts<CR>
+nnoremap ts  :<C-u>tselect<CR>
 "}}}
 
 "----------------------------------------
@@ -558,44 +560,35 @@ filetype plugin indent off     " required!
 
 " initialize"{{{
 if has('vim_starting')
-  let s:bundle_dir = expand("~/.bundle")
-  if !isdirectory(s:bundle_dir)
-    call mkdir(s:bundle_dir)
-  endif
-  if !isdirectory(s:bundle_dir.'neobundle.vim')
-    call system( 'git clone https://github.com/Shougo/neobundle.vim.git '.s:bundle_dir.'/neobundle.vim')
+  let bundle_dir = g:my_settings.dir.bundle
+  if !isdirectory(bundle_dir.'/neobundle.vim')
+    call system( 'git clone https://github.com/Shougo/neobundle.vim.git '.bundle_dir.'/neobundle.vim')
   endif
 
-  exe 'set runtimepath+='.s:bundle_dir.'/neobundle.vim'
-  call neobundle#rc(s:bundle_dir)
+  exe 'set runtimepath+='.bundle_dir.'/neobundle.vim'
+  call neobundle#rc(bundle_dir)
 endif
-augroup neobundle
-  " au!
+
+augroup MyNeobundle
+  au!
   au Syntax vim syntax keyword vimCommand NeoBundle NeoBundleLazy NeoBundleSource NeoBundleFetch
 augroup END
 "}}}
 
-let g:my_settings.github = 'https://github.com/'
-let g:my_settings.ft = {}
-let g:my_settings.ft.program_files = ['ruby', 'php', 'python', 'eruby', 'vim']
-let g:my_settings.ft.html_files = ['eruby', 'html', 'php', 'haml']
-
-" 暫定customize
-" Shougoさんが対応次第削除"{{{
-function! Neo_al(ft)
+" 暫定customize {{{
+function! Neo_al(ft) "{{{
   return { 'autoload' : {
       \ 'filetype' : a:ft
       \ }}
-endfunction
-function! Neo_operator(mappings)
+endfunction"}}}
+function! Neo_operator(mappings) "{{{
   return {
         \ 'depends' : 'kana/vim-textobj-user',
         \ 'autoload' : {
         \   'mappings' : a:mappings
         \ }}
-endfunction
-
-function! BundleLoadDepends(bundle_names)
+endfunction"}}}
+function! BundleLoadDepends(bundle_names) "{{{
   if !exists('g:loaded_bundles')
     let g:loaded_bundles = {}
   endif
@@ -605,7 +598,7 @@ function! BundleLoadDepends(bundle_names)
     execute 'NeoBundleSource '.a:bundle_names
     let g:loaded_bundles[a:bundle_names] = 1
   endif
-endfunction
+endfunction"}}}
 "}}}
 
 " コマンドを伴うやつの遅延読み込み
@@ -617,18 +610,17 @@ function! BundleWithCmd(bundle_names, cmd) "{{{
     execute a:cmd
   endif
 endfunction "}}}
-
+"}}}
 "bundle"{{{
 "----------------------------------------
-" "vim基本機能拡張"{{{
-NeoBundle 'Shougo/neobundle.vim'
+" vim基本機能拡張 {{{
+NeoBundleLazy 'Shougo/neobundle.vim'
 NeoBundle 'Shougo/vimproc', {
       \ 'build' : {
       \     'mac' : 'make -f make_mac.mak',
       \     'unix' : 'make -f make_unix.mak',
       \    },
       \ }
-" NeoBundle 'vim-jp/vital.vim'
 " NeoBundle 'yuroyoro/vim-autoclose'                          " 自動閉じタグ
 NeoBundleLazy 'edsono/vim-matchit', { 'autoload' : {
       \ 'mappings' : '%' }}
@@ -643,11 +635,15 @@ NeoBundle g:my_settings.github.'taichouchou2/alpaca'   " 個人的なカラー�
 NeoBundleLazy 'tpope/vim-surround', {
       \ 'autoload' : {
       \   'mappings' : [
-      \     ['n', '<Plug>Dsurround'], ['n', '<Plug>Csurround'],
-      \     ['n', '<Plug>Ysurround'], ['n', '<Plug>YSurround']
+      \     ['nx', '<Plug>Dsurround'], ['nx', '<Plug>Csurround'],
+      \     ['nx', '<Plug>Ysurround'], ['nx', '<Plug>YSurround'],
+      \     ['nx', '<Plug>Yssurround'], ['nx', '<Plug>YSsurround'],
+      \     ['nx', '<Plug>YSsurround'], ['vx', '<Plug>VgSurround'],
+      \     ['vx', '<Plug>VSurround']
       \ ]}}
-NeoBundle 'tpope/vim-fugitive', { 'autoload' : { 'commands': ['Gcommit', 'Gblame', 'Ggrep', 'Gdiff'] }}
-NeoBundleLazy g:my_settings.github.'taichouchou2/vim-powerline'
+NeoBundleLazy 'tpope/vim-fugitive', { 'autoload' : { 'commands': ['Gcommit', 'Gblame', 'Ggrep', 'Gdiff'] }}
+NeoBundleLazy g:my_settings.github.'taichouchou2/vim-powerline', {
+      \ 'depends': ['majutsushi/tagbar', 'tpope/vim-fugitive'] }
 function! s:startup_powerline() "{{{
   " NeoBundleSource vim-powerline vim-fugitive
   NeoBundleSource vim-powerline
@@ -663,22 +659,72 @@ function! s:startup_powerline() "{{{
   for window in range(1, winnr('$'))
     call Pl#UpdateStatusline(window == curwindow, window)
   endfor
-endfunction"}}}
-au VimEnter * call s:startup_powerline()
-NeoBundleLazy 'h1mesuke/vim-alignta', { 'autoload' : { 'commands' : ['Align'] } }
-"}}}
 
-"----------------------------------------
+  au! StartUpPowerline
+endfunction
+aug StartUpPowerline
+  au VimEnter * call s:startup_powerline()
+aug END
+"}}}
+NeoBundle 'h1mesuke/vim-alignta', { 'autoload' : { 'commands' : ['Align'] } }
+"}}}
 " vim拡張"{{{
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'vim-scripts/sudo.vim'            " vimで開いた後にsudoで保存
-NeoBundle 'Shougo/vimfiler', { 'depends' : 'Shougo/unite.vim' }
-" NeoBundle 'Lokaltog/vim-easymotion'
-NeoBundleLazy 'grep.vim', { 'autoload' : { 'commands': ["Grep", "Rgrep"] }}
-NeoBundleLazy 'kien/ctrlp.vim', { 'autoload' : { 'commands' : ['CtrlPBuffer', 'CtrlPDir']}}
 " NeoBundle 'taku-o/vim-toggle' "true<=>false など、逆の意味のキーワードを切り替えられる
 " NeoBundle 'yuroyoro/vimdoc_ja'
 " NeoBundle 'kana/vim-altr' " 関連するファイルを切り替えれる
+NeoBundleLazy 'Shougo/unite.vim', {
+      \ 'autoload': { 'commands': [ 'Unite', 'UniteBookmarkAdd', 'UniteClose', 'UniteResume', 'UniteWithBufferDir', 'UniteWithCurrentDir', 'UniteWithCursorWord', 'UniteWithInput', 'UniteWithInputDirectory' ] }
+      \ }
+NeoBundleLazy 'vim-scripts/sudo.vim', {
+      \ 'autoload': { 'commands': ['SudoRead', 'SudoWrite'] }
+      \ }
+NeoBundleLazy 'Shougo/vimfiler', {
+      \ 'depends' : 'Shougo/unite.vim',
+      \ 'autoload': { 'commands': [
+      \   'VimFiler', 'VimFilerBufferDir', 'VimFilerClose', 'VimFilerCreate', 'VimFilerCurrentDir', 'VimFilerDetectDrives', 'VimFilerDouble', 'VimFilerExplorer', 'VimFilerExplorerGit', 'VimFilerSimple'
+      \ ]}
+      \ }
+" VimFiler の読み込みを遅延しつつデフォルトのファイラに設定 "{{{
+" Netrw 無効化
+augroup DisableNetrw
+    autocmd!
+    autocmd MyAutoCmd BufEnter,BufCreate,BufWinEnter * call <SID>disable_netrw()
+augroup END
+function! s:disable_netrw()
+    autocmd! FileExplorer
+    autocmd! DisableNetrw
+endfunction
+
+" :edit {dir} や unite.vim などでディレクトリを開こうとした場合
+augroup LoadVimFiler
+    autocmd!
+    autocmd MyAutoCmd BufEnter,BufCreate,BufWinEnter * call <SID>load_vimfiler(expand('<amatch>'))
+augroup END
+function! s:load_vimfiler(path)
+  let path = a:path
+  " For ":edit ~".
+  if fnamemodify(path, ':t') ==# '~'
+    let path = '~'
+  endif
+
+  if isdirectory(expand(path))
+    NeoBundleSource vimfiler
+  endif
+
+  autocmd! LoadVimFiler
+endfunction
+
+" 起動時にディレクトリを指定した場合
+for arg in argv()
+  if isdirectory(getcwd().'/'.arg)
+    NeoBundleSource vimfiler
+    autocmd! LoadVimFiler
+    break
+  endif
+endfor
+"}}}
+NeoBundleLazy 'grep.vim', { 'autoload' : { 'commands': ["Grep", "Rgrep"] }}
+NeoBundleLazy 'kien/ctrlp.vim', { 'autoload' : { 'commands' : ['CtrlPBuffer', 'CtrlPDir']}}
 NeoBundleLazy 'sjl/gundo.vim', { 'autoload' : { 'commands': ["GundoToggle"] }}
 NeoBundleLazy 'Shougo/git-vim', { 'autoload' : { 'commands': ["GitDiff", "GitLog", "GitAdd", "Git", "GitCommit", "GitBlame", "GitBranch", "GitPush"] }}
 NeoBundleLazy 'Shougo/neocomplcache', {
@@ -686,17 +732,15 @@ NeoBundleLazy 'Shougo/neocomplcache', {
       \   'insert' : 1,
       \ }}
 
-NeoBundle 'Shougo/neosnippet'
-call neobundle#config('neosnippet', {
-      \ 'lazy' : 1,
+NeoBundleLazy 'Shougo/neosnippet', {
       \ 'autoload' : {
       \   'insert' : 1,
-      \ }})
+      \ }}
 
 NeoBundleLazy 'camelcasemotion', { 'autoload' : {
       \ 'mappings' : ['<Plug>CamelCaseMotion_w', '<Plug>CamelCaseMotion_b', '<Plug>CamelCaseMotion_e', '<Plug>CamelCaseMotion_iw', '<Plug>CamelCaseMotion_ib', '<Plug>CamelCaseMotion_ie']
       \ }}
-NeoBundle 'majutsushi/tagbar', { 'autoload' : { 'commands': ['TagbarToggle'], 'fuctions': ['tagbar#currenttag'] }}
+NeoBundleLazy 'majutsushi/tagbar', { 'autoload' : { 'commands': ['TagbarToggle'], 'fuctions': ['tagbar#currenttag'] }}
 NeoBundleLazy 'mattn/zencoding-vim', Neo_al(g:my_settings.ft.html_files)
 NeoBundleLazy 'nathanaelkane/vim-indent-guides', Neo_al(g:my_settings.ft.program_files)
 NeoBundleLazy 'open-browser.vim', { 'autoload' : {
@@ -713,11 +757,13 @@ NeoBundleLazy 't9md/vim-textmanip', { 'autoload' : {
 NeoBundleLazy 'thinca/vim-ref', { 'autoload' : {
       \ 'commands' : 'Ref'
       \ }}
-NeoBundleLazy 'tomtom/tcomment_vim', { 'autoload' : { 'commands' : ['TComment', 'TCommentAs', 'TCommentMaybeInline'] } }
+NeoBundle 'tomtom/tcomment_vim', { 'autoload' : { 'commands' : ['TComment', 'TCommentAs', 'TCommentMaybeInline'] } }
 NeoBundleLazy 'Shougo/vimshell'
 NeoBundleLazy 'taichouchou2/vimshell_custom', Neo_al('vimshell')
 " NeoBundleLazy 'yomi322/vim-gitcomplete', Neo_al('vimshell')
-NeoBundleLazy 'mattn/gist-vim', { 'autoload' : {
+NeoBundleLazy 'mattn/gist-vim', {
+      \ 'depends': ['mattn/webapi-vim' ],
+      \ 'autoload' : {
       \ 'commands' : 'Gist'
       \ }}
 NeoBundleLazy 'thinca/vim-quickrun', { 'autoload' : {
@@ -736,54 +782,42 @@ NeoBundleLazy 'thinca/vim-quickrun', { 'autoload' : {
 " NeoBundle 'kana/vim-textobj-syntax.git'    " y syntax hilightされたものをtext-objectに
 " NeoBundle 'textobj-entire'                 " e buffer全体をtext-objectに
 " NeoBundle 'thinca/vim-textobj-comment'     " c commentをtext-objectに
-NeoBundleLazy 'kana/vim-operator-user'
 " NeoBundle 'kana/vim-textobj-function.git'  " f 関数をtext-objectに
+NeoBundle 'kana/vim-operator-user'
 NeoBundleLazy 'kana/vim-textobj-indent.git', Neo_operator([
       \ ['nx', '<Plug>(textobj-indent-a)' ], ['nx', '<Plug>(textobj-indent-i)'], ['nx', '<Plug>(textobj-indent-same-a)'], ['nx', '<Plug>(textobj-indent-same-i)']
       \ ])
 NeoBundleLazy 'kana/vim-textobj-user'
-NeoBundleLazy 'operator-camelize', Neo_operator([
+NeoBundle 'operator-camelize', Neo_operator([
       \ ['nx', '<Plug>(operator-camelize)'], ['nx', '<Plug>(operator-decamelize)']
       \ ])
 " NeoBundle 'tyru/operator-html-escape.vim'
 "}}}
 "}}}
-
-" NeoBundle 'c9s/cascading.vim' "メソッドチェーン整形
-" NeoBundle 'thinca/vim-template' " templeteを作れる
+" その他 {{{
 " NeoBundle 'tyru/urilib.vim' "urilib.vim : vim scriptからURLを扱うライブラリ
 " NeoBundle 'kana/vim-smartchr' "smartchr.vim : ==()などの前後を整形
-NeoBundle 'mattn/webapi-vim' "vim Interface to Web API
+NeoBundleLazy 'mattn/webapi-vim' "vim Interface to Web API
 NeoBundleLazy 'scrooloose/syntastic', Neo_al(g:my_settings.ft.program_files)
-" NeoBundleLazy g:my_settings.github.'taichouchou2/alpaca_look.git', Neo_al(g:my_settings.ft.program_files)
-NeoBundle g:my_settings.github.'taichouchou2/alpaca_look.git'
+NeoBundleLazy g:my_settings.github.'taichouchou2/alpaca_look.git', {
+      \ 'autoload' : {
+      \   'insert' : 1,
+      \ }}
 NeoBundleLazy 'rhysd/clever-f.vim', { 'autoload' : {
       \ 'mappings' : 'f',
       \ }}
-
-" unite.vim : - すべてを破壊し、すべてを繋げ - vim scriptで実装されたanythingプラグイン
 " NeoBundle 'choplin/unite-vim_hacks'
 " NeoBundle 'h1mesuke/unite-outline'
-" NeoBundle 'joker1007/unite-git_grep'
-" NeoBundle 'mattn/unite-source-simplenote'
 " NeoBundle 'tacroe/unite-mark'
-" NeoBundle 'tsukkee/unite-help'
-" NeoBundle 'tsukkee/unite-tag'
-" NeoBundle 'ujihisa/unite-colorscheme'
+" NeoBundleLazy 'yuratomo/w3m.vim'
+NeoBundleLazy 'tsukkee/unite-tag'
+NeoBundleLazy 'glidenote/memolist.vim'
 NeoBundleLazy 'Shougo/unite-ssh'
 NeoBundleLazy 'taichouchou2/vim-unite-giti'
 NeoBundleLazy 'thinca/vim-unite-history'
 NeoBundleLazy 'ujihisa/vimshell-ssh', { 'autoload' : {
       \ 'filetypes' : 'vimshell',
       \ }}
-NeoBundleLazy 'glidenote/memolist.vim'
-
-" NeoBundle 'TeTrIs.vim'
-" NeoBundle 'benmills/vimux'
-" NeoBundle 'daisuzu/facebook.vim'
-" NeoBundle 'mattn/qiita-vim'
-" NeoBundle 'osyo-manga/vim-itunes'
-" NeoBundle 'yuratomo/w3m.vim'
 NeoBundleLazy 'basyura/TweetVim', { 'depends' :
       \ ['basyura/twibill.vim', 'tyru/open-browser.vim'],
       \ 'autoload' : { 'commands' : 'TweetVimHomeTimeline' }}
@@ -792,49 +826,54 @@ NeoBundleLazy 'basyura/twibill.vim'
 NeoBundleLazy 'tyru/eskk.vim', { 'autoload' : {
       \ 'mappings' : [['i', '<Plug>(eskk:toggle)']],
       \ }}
-" }}}
-
+"}}}
 " bundle.lang"{{{
 
 " css
 " ----------------------------------------
-NeoBundleLazy 'hail2u/vim-css3-syntax', Neo_al(['css', 'scss', 'sass'])
+NeoBundleLazy 'hail2u/vim-css3-syntax',
+      \ Neo_al(['css', 'scss', 'sass'])
 
 " html
 " ----------------------------------------
-NeoBundleLazy 'taichouchou2/html5.vim', Neo_al(['html', 'haml', 'erb', 'php'])
+NeoBundleLazy 'taichouchou2/html5.vim',
+      \ Neo_al(['html', 'haml', 'erb', 'php'])
 
 " haml
 " ----------------------------------------
-NeoBundleLazy 'tpope/vim-haml', Neo_al(['haml'])
-" NeoBundle 'xmledit'
+NeoBundleLazy 'tpope/vim-haml',
+      \ Neo_al(['haml'])
 
 "  js / coffee
 " ----------------------------------------
-NeoBundleLazy 'kchmck/vim-coffee-script', Neo_al(['coffee'])
-NeoBundleLazy 'claco/jasmine.vim', Neo_al(['javascript', 'coffee'])
-NeoBundleLazy 'taichouchou2/vim-javascript', Neo_al(['javascript'])
-" NeoBundle 'hallettj/jslint.vim'
-" NeoBundle 'pekepeke/titanium-vim' " Titaniumを使うときに
+NeoBundleLazy 'kchmck/vim-coffee-script',
+      \ Neo_al(['coffee'])
+NeoBundleLazy 'claco/jasmine.vim',
+      \ Neo_al(['javascript', 'coffee'])
+NeoBundleLazy 'taichouchou2/vim-javascript',
+      \ Neo_al(['javascript'])
 
 "  go
 " ----------------------------------------
-NeoBundleLazy 'fsouza/go.vim', Neo_al(['go'])
+NeoBundleLazy 'fsouza/go.vim',
+      \ Neo_al(['go'])
 
 "  markdown
 " ----------------------------------------
 " markdownでの入力をリアルタイムでチェック
 " NeoBundle 'mattn/mkdpreview-vim'
-NeoBundleLazy 'tpope/vim-markdown', Neo_al( ['markdown'] )
+NeoBundleLazy 'tpope/vim-markdown',
+      \ Neo_al( ['markdown'] )
 
 " sassのコンパイル
-NeoBundleLazy 'AtsushiM/sass-compile.vim', Neo_al( ['sass', 'scss'] )
+NeoBundleLazy 'AtsushiM/sass-compile.vim',
+      \ Neo_al( ['sass', 'scss'] )
 
 "  php
 " ----------------------------------------
 " NeoBundle 'oppara/vim-unite-cake'
-" NeoBundle 'violetyk/cake.vim' " cakephpを使いやすく
-NeoBundleLazy g:my_settings.github.'taichouchou2/alpaca_wordpress.vim', Neo_al(['php'])
+NeoBundleLazy g:my_settings.github.'taichouchou2/alpaca_wordpress.vim',
+      \ Neo_al(['php'])
 
 "  binary
 " ----------------------------------------
@@ -848,7 +887,10 @@ NeoBundleLazy 'Shougo/vinarise', {
 
 " ruby
 " ----------------------------------------
-NeoBundle g:my_settings.github.'taichouchou2/vim-endwise.git' "end endifなどを自動で挿入
+NeoBundleLazy g:my_settings.github.'taichouchou2/vim-endwise.git', {
+      \ 'autoload' : {
+      \   'insert' : 1,
+      \ }}
 NeoBundle 'tpope/vim-rails'
 
 " rails
@@ -860,83 +902,93 @@ NeoBundleLazy g:my_settings.github.'taichouchou2/unite-rails_best_practices', {
       \    'unix': 'gem install rails_best_practices',
       \   }
       \ }
-NeoBundleLazy 'ujihisa/unite-rake'
-NeoBundleLazy g:my_settings.github.'taichouchou2/alpaca_complete'
+NeoBundleLazy 'ujihisa/unite-rake', {
+      \ 'depends' : 'Shougo/unite.vim', }
+NeoBundleLazy g:my_settings.github.'taichouchou2/alpaca_complete', {
+      \ 'depends' : 'tpope/vim-rails',
+      \ 'build' : {
+      \    'mac':  'gem install alpaca_complete',
+      \    'unix': 'gem install alpaca_complete',
+      \   }
+      \ }
+
 let s:bundle_rails = 'unite-rails unite-rails_best_practices unite-rake alpaca_complete'
 aug MyAutoCmd
   au User Rails call BundleLoadDepends(s:bundle_rails)
 aug END
 
 " ruby全般
-NeoBundleLazy 'ruby-matchit'
 " NeoBundleLazy 'skalnik/vim-vroom'
-NeoBundleLazy 'skwp/vim-rspec'
-NeoBundleLazy 'taka84u9/vim-ref-ri'
-NeoBundleLazy 'vim-ruby/vim-ruby'
+NeoBundleLazy 'ruby-matchit',
+      \ Neo_al(g:my_settings.ft.ruby_files)
+NeoBundleLazy 'skwp/vim-rspec',
+      \ Neo_al(g:my_settings.ft.ruby_files)
+NeoBundleLazy 'taka84u9/vim-ref-ri',
+      \ Neo_al(g:my_settings.ft.ruby_files)
+NeoBundleLazy 'vim-ruby/vim-ruby',
+      \ Neo_al(g:my_settings.ft.ruby_files)
 NeoBundleLazy g:my_settings.github.'taichouchou2/unite-reek', {
       \ 'build' : {
       \    'mac': 'gem install reek',
       \    'unix': 'gem install reek',
       \ },
+      \ 'autoload': { 'filetypes': g:my_settings.ft.ruby_files },
       \ 'depends' : 'Shougo/unite.vim' }
-NeoBundleLazy 'Shougo/neocomplcache-rsense', { 'depends': 'Shougo/neocomplcache' }
-NeoBundleLazy 'rhysd/unite-ruby-require.vim'
+NeoBundleLazy 'Shougo/neocomplcache-rsense', {
+      \ 'depends': 'Shougo/neocomplcache',
+      \ 'autoload': { 'filetypes': g:my_settings.ft.ruby_files }}
+NeoBundleLazy 'rhysd/unite-ruby-require.vim',
+      \ Neo_al(g:my_settings.ft.ruby_files)
 NeoBundleLazy 'rhysd/vim-textobj-ruby', { 'depends': 'kana/vim-textobj-user' }
-NeoBundleLazy 'deris/vim-textobj-enclosedsyntax'
-let s:bundle_ruby = 'ruby-matchit vim-rspec vim-ref-ri vim-ruby unite-reek unite-ruby-require.vim neco-ruby-keyword-args vim-textobj-ruby neocomplcache-rsense vim-textobj-enclosedsyntax'
-aug MyAutoCmd
-  au FileType ruby,Gemfile,haml,eruby call BundleLoadDepends(s:bundle_ruby)
-aug END
-
-NeoBundleLazy 'ujihisa/unite-gem'
-NeoBundleLazy 'rhysd/neco-ruby-keyword-args'
+NeoBundleLazy 'deris/vim-textobj-enclosedsyntax',
+      \ Neo_al(g:my_settings.ft.ruby_files)
+NeoBundleLazy 'ujihisa/unite-gem', {
+      \ 'depends': 'mattn/webapi-vim',
+      \ 'autoload': { 'filetypes': g:my_settings.ft.ruby_files }}
+NeoBundleLazy 'rhysd/neco-ruby-keyword-args',
+      \ Neo_al(g:my_settings.ft.ruby_files)
 
 " python
 " ----------------------------------------
 " NeoBundle 'Pydiction'
-NeoBundleLazy 'yuroyoro/vim-python', Neo_al(['python'])
-NeoBundle 'davidhalter/jedi-vim', {
+NeoBundleLazy 'yuroyoro/vim-python',
+      \ Neo_al(g:my_settings.ft.python_files)
+NeoBundleLazy 'davidhalter/jedi-vim', {
       \ 'build' : {
       \     'mac' : 'git submodule update --init',
       \     'unix' : 'git submodule update --init',
       \    },
-      \ 'autoload' : { 'filetypes': ['python']}
+      \ 'autoload' : { 'filetypes': g:my_settings.ft.python_files }
       \ }
 " NeoBundleLazy 'kevinw/pyflakes-vim'
 
 " scala
 " ----------------------------------------
-" NeoBundle 'Align'
-" NeoBundle 'SQLUtilities' " SQLUtilities : SQL整形、生成ユーティリティ
-" NeoBundle 'taichouchou2/teol.vim' " C言語など<Leader>;で全行に;を挿入できる
-" NeoBundle 'yuroyoro/vim-scala'
+NeoBundleLazy 'yuroyoro/vim-scala',
+      \ Neo_al(g:my_settings.ft.scala_files)
 
 " sh
 " ----------------------------------------
-NeoBundleLazy 'sh.vim', Neo_al('sh')
+NeoBundleLazy 'sh.vim',
+      \ Neo_al(g:my_settings.ft.sh_files)
 "}}}
-
 " 他のアプリを呼び出すetc "{{{
 " NeoBundle 'thinca/vim-openbuf'
-" NeoBundle 'tell-k/vim-browsereload-mac' " 保存と同時にブラウザをリロードする
 " NeoBundle 'vim-scripts/dbext.vim' "<Leader>seでsqlを実行
 " NeoBundleLazy 'tsukkee/lingr-vim'
-" NeoBundleLazy 'vim-scripts/yanktmp.vim'
 NeoBundleLazy 'mattn/excitetranslate-vim', {
       \ 'depends': 'mattn/webapi-vim',
       \ 'autoload' : { 'commands': ['ExciteTranslate']}
       \ }
-" NeoBundle 'qtmplsel.vim'
 "}}}
-
-" Installation check.
+" Installation check. "{{{
 if neobundle#exists_not_installed_bundles()
   echomsg 'Not installed bundles : ' .
         \ string(neobundle#get_not_installed_bundle_names())
   echomsg 'Install Plugins'
   NeoBundleInstall
-  " finish
 endif
+"}}}
 
 filetype plugin indent on
 "}}}
@@ -1188,7 +1240,6 @@ let g:unite_quick_match_table = {
       \'1' : 21, '2' : 22, '3' : 23, '4' : 24, '5' : 25, '6' : 26, '7' : 27, '8' : 28, '9' : 29, '0' : 30,
       \}
 "}}}
-
 function! UniteSetting() "{{{
   " 動き
   imap <buffer><C-K> <Up>
@@ -1707,7 +1758,7 @@ set guifontwide=Ricty:h10
 " let g:Powerline_colorscheme='molokai'
 let g:Powerline_symbols = 'fancy'
 let g:Powerline_cache_enabled = 1
-" let g:Powerline_theme = 'alpaca'
+let g:Powerline_theme = 'alpaca'
 let g:Powerline_cache_file = expand('/tmp/Powerline.cache')
 "}}}
 
@@ -2185,8 +2236,8 @@ let  g:yankring_default_menu_mode = 0
 " operator-camelize.vim
 "------------------------------------
 " camel-caseへの変換
-xnoremap <Leader>u <Plug>(operator-camelize)
-xnoremap <Leader>U <Plug>(operator-decamelize)
+xmap <Leader>u <Plug>(operator-camelize)
+xmap <Leader>U <Plug>(operator-decamelize)
 
 "------------------------------------
 " operator-replace.vim
@@ -2564,112 +2615,100 @@ set completeopt=menu,menuone,preview
 let g:neocomplcache_enable_at_startup = 1
 
 " default config"{{{
-let g:neocomplcache_auto_completion_start_length = 2
-let g:neocomplcache_enable_camel_case_completion = 1
-
-let g:neocomplcache_enable_underbar_completion = 1
-" let g:neocomplcache_manual_completion_start_length = 0
-let g:neocomplcache_min_keyword_length = 2
-let g:neocomplcache_min_syntax_length = 2
-let g:neocomplcache_disable_caching_buffer_name_pattern = '[\[*]\%(unite\)[\]*]'
-let g:neocomplcache_disable_auto_select_buffer_name_pattern = '\[Command Line\]'
-let g:neocomplcache_lock_buffer_name_pattern = '\.txt'
-let g:neocomplcache_max_list = 120
-let g:neocomplcache_skip_auto_completion_time = '0.3'
+" let g:neocomplcache_auto_completion_start_length = 2
 " let g:neocomplcache_caching_limit_file_size = 1000000
+" let g:neocomplcache_lock_buffer_name_pattern = '\.txt'
+" let g:neocomplcache_manual_completion_start_length = 0
+" let g:neocomplcache_max_list = 120
+" let g:neocomplcache_min_keyword_length = 2
+" let g:neocomplcache_min_syntax_length = 2
 let g:neocomplcache#sources#rsense#home_directory = expand("~/.vim/ref/rsense-0.3")
+let g:neocomplcache_disable_auto_select_buffer_name_pattern = '\[Command Line\]'
+let g:neocomplcache_disable_caching_buffer_name_pattern = '[\[*]\%(unite\)[\]*]'
+let g:neocomplcache_enable_camel_case_completion = 1
+let g:neocomplcache_enable_underbar_completion = 1
+let g:neocomplcache_skip_auto_completion_time = '0.3'
 
 " initialize "{{{
-" if !exists('g:neocomplcache_wildcard_characters')
-"   let g:neocomplcache_wildcard_characters = {}
-" endif
-" let g:neocomplcache_wildcard_characters._ = '*'
 if $USER ==# 'root'
   let g:neocomplcache_temporary_dir       = expand( '~/.neocon' )
 endif
-if !exists('g:neocomplcache_omni_patterns')
-  let g:neocomplcache_omni_patterns       = {}
-endif
-if !exists('g:neocomplcache_force_omni_patterns')
-  let g:neocomplcache_force_omni_patterns = {}
-endif
-if !exists('g:neocomplcache_keyword_patterns')
-  let g:neocomplcache_keyword_patterns    = {}
-endif
-if !exists('g:neocomplcache_same_filetype_lists')
-  let g:neocomplcache_same_filetype_lists = {}
-endif
+let s:neocomplcache_initialize_lists = [
+      \ 'g:neocomplcache_wildcard_characters',
+      \ 'g:neocomplcache_omni_patterns',
+      \ 'g:neocomplcache_force_omni_patterns',
+      \ 'g:neocomplcache_keyword_patterns',
+      \ 'g:neocomplcache_source_completion_length',
+      \ 'g:neocomplcache_vim_completefuncs',
+      \ 'g:neocomplcache_dictionary_filetype_lists',]
+for initialize_variable in s:neocomplcache_initialize_lists
+  if !exists(initialize_variable)
+    exe 'let '. initialize_variable .' = {}'
+  endif
+endfor
 "}}}
 
-" For auto select.
-
+" Define force omni patterns"{{{
 let g:neocomplcache_force_omni_patterns.c      = '[^.[:digit:] *\t]\%(\.\|->\)'
 let g:neocomplcache_force_omni_patterns.cpp    = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 let g:neocomplcache_force_omni_patterns.python = '[^. \t]\.\w*'
-
-" let g:clang_complete_auto = 0
-" let g:clang_auto_select = 0
-" let g:clang_use_library   = 1
+"}}}
 
 " Define keyword pattern. "{{{
 " let g:neocomplcache_keyword_patterns.default = '[0-9a-zA-Z:#_-]\+'
-" let g:neocomplcache_keyword_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-" let g:neocomplcache_keyword_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 let g:neocomplcache_keyword_patterns.filename = '\%(\\.\|[/\[\][:alnum:]()$+_\~.-]\|[^[:print:]]\)\+'
-let g:neocomplcache_snippets_dir = '~/.bundle/neosnippet/autoload/neosnippet/snippets,~/.vim/snippet'
 " let g:neocomplcache_omni_patterns.php = '[^. *\t]\.\w*\|\h\w*::'
 " let g:neocomplcache_omni_patterns.mail = '^\s*\w\+'
 let g:neocomplcache_omni_patterns.c = '[^.[:digit:]*\t]\%(\.\|->\)'
 "}}}
 
-let g:neocomplcache_vim_completefuncs = {
-      \ 'Ref' : 'ref#complete',
-      \ 'Unite' : 'unite#complete_source',
-      \ 'VimFiler' : 'vimfiler#complete',
-      \ 'VimShell' : 'vimshell#complete',
-      \ 'VimShellExecute' : 'vimshell#vimshell_execute_complete',
-      \ 'VimShellInteractive' : 'vimshell#vimshell_execute_complete',
-      \ 'VimShellTerminal' : 'vimshell#vimshell_execute_complete',
-      \ 'Vinarise' : 'vinarise#complete',
-      \ }
-
-if !exists('g:neocomplcache_source_completion_length')
-  let g:neocomplcache_source_completion_length = {
-        \ 'alpaca_look' : 4,
-        \ }
-endif
+" Define completefunc"{{{
+let g:neocomplcache_vim_completefuncs.Ref                 = 'ref#complete'
+let g:neocomplcache_vim_completefuncs.Unite               = 'unite#complete_source'
+let g:neocomplcache_vim_completefuncs.VimFiler            = 'vimfiler#complete'
+let g:neocomplcache_vim_completefuncs.VimShell            = 'vimshell#complete'
+let g:neocomplcache_vim_completefuncs.VimShellExecute     = 'vimshell#vimshell_execute_complete'
+let g:neocomplcache_vim_completefuncs.VimShellInteractive = 'vimshell#vimshell_execute_complete'
+let g:neocomplcache_vim_completefuncs.VimShellTerminal    = 'vimshell#vimshell_execute_complete'
+let g:neocomplcache_vim_completefuncs.Vinarise            = 'vinarise#complete'
 "}}}
 
-" ファイルタイプ毎の辞書ファイルの場所"{{{
+" define completion length"{{{
+let g:neocomplcache_source_completion_length.alpaca_look = 4
+"}}}
+
+" ファイルタイプ毎の辞書ファイルの場所 {{{
 let g:neocomplcache_dictionary_filetype_lists = {
       \ 'default'    : '',
-      \ 'timobile'   : $HOME.'/.vim/dict/timobile.dict',
+      \ 'timobile.javascript'   : $HOME.'/.vim/dict/timobile.dict',
+      \ 'timobile.coffee'   : $HOME.'/.vim/dict/timobile.dict',
       \ }
 "}}}
+"}}}
 
-" keymap " {{{
-" Plugin key-mappings.
-imap <expr><C-g>     neocomplcache#undo_completion()
-imap <expr><C-g>     neocomplcache#undo_completion()
+" keymap {{{
 " inoremap <expr><C-l>     neocomplcache#complete_common_string()
-imap <expr><CR> neocomplcache#smart_close_popup() . "<CR>" . "<Plug>DiscretionaryEnd"
 " inoremap <silent><expr><BS>   neocomplcache#smart_close_popup()."\<C-h>"
+imap <expr><C-g>     neocomplcache#undo_completion()
+imap <expr><C-g>     neocomplcache#undo_completion()
+imap <expr><CR>      neocomplcache#smart_close_popup() . "<CR>" . "<Plug>DiscretionaryEnd"
 imap <silent><expr><S-TAB> pumvisible() ? "\<C-P>" : "\<S-TAB>"
-imap <silent><expr><TAB>  pumvisible() ? "\<C-N>" : "\<TAB>"
+imap <silent><expr><TAB>   pumvisible() ? "\<C-N>" : "\<TAB>"
 " }}}
 "}}}
 
 "----------------------------------------
 " neosnippet"{{{
+let g:neocomplcache_snippets_dir = '~/.bundle/neosnippet/autoload/neosnippet/snippets,~/.vim/snippet'
 let g:neosnippet#snippets_directory = g:neocomplcache_snippets_dir
 aug MyAutoCmd
   au FileType snippet nnoremap <buffer><Space>e :e #<CR>
 aug END
 imap <silent><C-F>                <Plug>(neosnippet_expand_or_jump)
-xmap <silent>o                    <Plug>(neosnippet_register_oneshot_snippet)
 inoremap <silent><C-U>            <ESC>:<C-U>Unite snippet<CR>
 nnoremap <silent><Space>e         :<C-U>NeoSnippetEdit -split<CR>
 nnoremap <silent><expr><Space>ee  ':NeoSnippetEdit -split'.split(&ft, '.')[0].'<CR>'
+xmap <silent>o                    <Plug>(neosnippet_register_oneshot_snippet)
 " imap <silent><C-U>               <Plug>(neosnippet_start_unite_snippet)
 " smap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
 " xnoremap <silent><C-F>     <Plug>(neosnippet_start_unite_snippet_target)
