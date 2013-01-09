@@ -37,7 +37,7 @@ nnoremap <Space><Space>v :<C-U>tabnew ~/.vim/config/.vimrc<CR>
 
 "----------------------------------------
 "StatusLine" {{{
-source ~/.vim/config/.vimrc.statusline
+" source ~/.vim/config/.vimrc.statusline
 " }}}
 
 "----------------------------------------
@@ -448,6 +448,9 @@ set lazyredraw        " コマンド実行中は再描画しない
 set matchpairs+=<:>
 set t_Co=256          " 確かカラーコード
 set ttyfast           " 高速ターミナル接続を行う
+set cmdheight=1
+
+set laststatus=2
 " set scrolloff=999     " 常にカーソルを真ん中に
 
 " if has('gui_macvim') "{{{
@@ -558,6 +561,8 @@ if has('vim_starting')
   let s:bundle_dir = expand("~/.bundle")
   if !isdirectory(s:bundle_dir)
     call mkdir(s:bundle_dir)
+  endif
+  if !isdirectory(s:bundle_dir.'neobundle.vim')
     call system( 'git clone https://github.com/Shougo/neobundle.vim.git '.s:bundle_dir.'/neobundle.vim')
   endif
 
@@ -570,6 +575,7 @@ augroup neobundle
 augroup END
 "}}}
 
+let g:my_settings.github = 'https://github.com/'
 let g:my_settings.ft = {}
 let g:my_settings.ft.program_files = ['ruby', 'php', 'python', 'eruby', 'vim']
 let g:my_settings.ft.html_files = ['eruby', 'html', 'php', 'haml']
@@ -583,7 +589,7 @@ function! Neo_al(ft)
 endfunction
 function! Neo_operator(mappings)
   return {
-        \ 'depends' : 'vim-operator-user',
+        \ 'depends' : 'kana/vim-textobj-user',
         \ 'autoload' : {
         \   'mappings' : a:mappings
         \ }}
@@ -633,17 +639,16 @@ NeoBundleLazy 'rhysd/accelerated-jk', {
       \   'mappings' : [
       \     ['n', '<Plug>(accelerated_jk_gj)'], ['n', '<Plug>(accelerated_jk_gk)']
       \ ]}}
-NeoBundle 'taichouchou2/alpaca'   " 個人的なカラーやフォントなど
+NeoBundle g:my_settings.github.'taichouchou2/alpaca'   " 個人的なカラーやフォントなど
 NeoBundleLazy 'tpope/vim-surround', {
-      \ 'depends' : 'vim-surround',
       \ 'autoload' : {
       \   'mappings' : [
       \     ['n', '<Plug>Dsurround'], ['n', '<Plug>Csurround'],
       \     ['n', '<Plug>Ysurround'], ['n', '<Plug>YSurround']
       \ ]}}
 NeoBundle 'tpope/vim-fugitive', { 'autoload' : { 'commands': ['Gcommit', 'Gblame', 'Ggrep', 'Gdiff'] }}
-NeoBundleLazy 'Lokaltog/vim-powerline'
-function! s:startup_powerline()
+NeoBundleLazy g:my_settings.github.'taichouchou2/vim-powerline'
+function! s:startup_powerline() "{{{
   " NeoBundleSource vim-powerline vim-fugitive
   NeoBundleSource vim-powerline
 
@@ -654,11 +659,11 @@ function! s:startup_powerline()
     au BufLeave,WinLeave,CmdWinLeave * call Pl#UpdateStatusline(0)
   aug END
 
-  " let curwindow = winnr()
-  " for window in range(1, winnr('$'))
-  "   call Pl#UpdateStatusline(window == curwindow, window)
-  " endfor
-endfunction
+  let curwindow = winnr()
+  for window in range(1, winnr('$'))
+    call Pl#UpdateStatusline(window == curwindow, window)
+  endfor
+endfunction"}}}
 au VimEnter * call s:startup_powerline()
 NeoBundleLazy 'h1mesuke/vim-alignta', { 'autoload' : { 'commands' : ['Align'] } }
 "}}}
@@ -676,12 +681,10 @@ NeoBundleLazy 'kien/ctrlp.vim', { 'autoload' : { 'commands' : ['CtrlPBuffer', 'C
 " NeoBundle 'kana/vim-altr' " 関連するファイルを切り替えれる
 NeoBundleLazy 'sjl/gundo.vim', { 'autoload' : { 'commands': ["GundoToggle"] }}
 NeoBundleLazy 'Shougo/git-vim', { 'autoload' : { 'commands': ["GitDiff", "GitLog", "GitAdd", "Git", "GitCommit", "GitBlame", "GitBranch", "GitPush"] }}
-NeoBundle 'Shougo/neocomplcache'
-call neobundle#config('neocomplcache', {
-      \ 'lazy' : 1,
+NeoBundleLazy 'Shougo/neocomplcache', {
       \ 'autoload' : {
       \   'insert' : 1,
-      \ }})
+      \ }}
 
 NeoBundle 'Shougo/neosnippet'
 call neobundle#config('neosnippet', {
@@ -693,7 +696,7 @@ call neobundle#config('neosnippet', {
 NeoBundleLazy 'camelcasemotion', { 'autoload' : {
       \ 'mappings' : ['<Plug>CamelCaseMotion_w', '<Plug>CamelCaseMotion_b', '<Plug>CamelCaseMotion_e', '<Plug>CamelCaseMotion_iw', '<Plug>CamelCaseMotion_ib', '<Plug>CamelCaseMotion_ie']
       \ }}
-NeoBundleLazy 'majutsushi/tagbar', { 'autoload' : { 'commands': ['TagbarToggle'] }}
+NeoBundle 'majutsushi/tagbar', { 'autoload' : { 'commands': ['TagbarToggle'], 'fuctions': ['tagbar#currenttag'] }}
 NeoBundleLazy 'mattn/zencoding-vim', Neo_al(g:my_settings.ft.html_files)
 NeoBundleLazy 'nathanaelkane/vim-indent-guides', Neo_al(g:my_settings.ft.program_files)
 NeoBundleLazy 'open-browser.vim', { 'autoload' : {
@@ -738,7 +741,7 @@ NeoBundleLazy 'kana/vim-operator-user'
 NeoBundleLazy 'kana/vim-textobj-indent.git', Neo_operator([
       \ ['nx', '<Plug>(textobj-indent-a)' ], ['nx', '<Plug>(textobj-indent-i)'], ['nx', '<Plug>(textobj-indent-same-a)'], ['nx', '<Plug>(textobj-indent-same-i)']
       \ ])
-NeoBundleLazy 'kana/vim-textobj-user'          " textobject拡張の元
+NeoBundleLazy 'kana/vim-textobj-user'
 NeoBundleLazy 'operator-camelize', Neo_operator([
       \ ['nx', '<Plug>(operator-camelize)'], ['nx', '<Plug>(operator-decamelize)']
       \ ])
@@ -752,8 +755,8 @@ NeoBundleLazy 'operator-camelize', Neo_operator([
 " NeoBundle 'kana/vim-smartchr' "smartchr.vim : ==()などの前後を整形
 NeoBundle 'mattn/webapi-vim' "vim Interface to Web API
 NeoBundleLazy 'scrooloose/syntastic', Neo_al(g:my_settings.ft.program_files)
-" NeoBundleLazy 'taichouchou2/alpaca_look',
-" Neo_al(g:my_settings.ft.program_files)
+" NeoBundleLazy g:my_settings.github.'taichouchou2/alpaca_look.git', Neo_al(g:my_settings.ft.program_files)
+NeoBundle g:my_settings.github.'taichouchou2/alpaca_look.git'
 NeoBundleLazy 'rhysd/clever-f.vim', { 'autoload' : {
       \ 'mappings' : 'f',
       \ }}
@@ -831,7 +834,7 @@ NeoBundleLazy 'AtsushiM/sass-compile.vim', Neo_al( ['sass', 'scss'] )
 " ----------------------------------------
 " NeoBundle 'oppara/vim-unite-cake'
 " NeoBundle 'violetyk/cake.vim' " cakephpを使いやすく
-NeoBundleLazy 'taichouchou2/alpaca_wordpress.vim', Neo_al(['php'])
+NeoBundleLazy g:my_settings.github.'taichouchou2/alpaca_wordpress.vim', Neo_al(['php'])
 
 "  binary
 " ----------------------------------------
@@ -845,12 +848,12 @@ NeoBundleLazy 'Shougo/vinarise', {
 
 " ruby
 " ----------------------------------------
-NeoBundle 'taichouchou2/vim-endwise.git' "end endifなどを自動で挿入
+NeoBundle g:my_settings.github.'taichouchou2/vim-endwise.git' "end endifなどを自動で挿入
 NeoBundle 'tpope/vim-rails'
 
 " rails
 NeoBundleLazy 'basyura/unite-rails'
-NeoBundleLazy 'taichouchou2/unite-rails_best_practices', {
+NeoBundleLazy g:my_settings.github.'taichouchou2/unite-rails_best_practices', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'build' : {
       \    'mac': 'gem install rails_best_practices',
@@ -858,7 +861,7 @@ NeoBundleLazy 'taichouchou2/unite-rails_best_practices', {
       \   }
       \ }
 NeoBundleLazy 'ujihisa/unite-rake'
-NeoBundleLazy 'taichouchou2/alpaca_complete'
+NeoBundleLazy g:my_settings.github.'taichouchou2/alpaca_complete'
 let s:bundle_rails = 'unite-rails unite-rails_best_practices unite-rake alpaca_complete'
 aug MyAutoCmd
   au User Rails call BundleLoadDepends(s:bundle_rails)
@@ -870,15 +873,15 @@ NeoBundleLazy 'ruby-matchit'
 NeoBundleLazy 'skwp/vim-rspec'
 NeoBundleLazy 'taka84u9/vim-ref-ri'
 NeoBundleLazy 'vim-ruby/vim-ruby'
-NeoBundleLazy 'taichouchou2/unite-reek', {
+NeoBundleLazy g:my_settings.github.'taichouchou2/unite-reek', {
       \ 'build' : {
       \    'mac': 'gem install reek',
       \    'unix': 'gem install reek',
       \ },
       \ 'depends' : 'Shougo/unite.vim' }
-NeoBundleLazy 'Shougo/neocomplcache-rsense'
+NeoBundleLazy 'Shougo/neocomplcache-rsense', { 'depends': 'Shougo/neocomplcache' }
 NeoBundleLazy 'rhysd/unite-ruby-require.vim'
-NeoBundleLazy 'rhysd/vim-textobj-ruby'
+NeoBundleLazy 'rhysd/vim-textobj-ruby', { 'depends': 'kana/vim-textobj-user' }
 NeoBundleLazy 'deris/vim-textobj-enclosedsyntax'
 let s:bundle_ruby = 'ruby-matchit vim-rspec vim-ref-ri vim-ruby unite-reek unite-ruby-require.vim neco-ruby-keyword-args vim-textobj-ruby neocomplcache-rsense vim-textobj-enclosedsyntax'
 aug MyAutoCmd
@@ -1703,8 +1706,8 @@ let b:match_ignorecase = 1
 set guifontwide=Ricty:h10
 " let g:Powerline_colorscheme='molokai'
 let g:Powerline_symbols = 'fancy'
-let g:Powerline_cache_enabled = 0
-let g:Powerline_theme = 'alpaca'
+let g:Powerline_cache_enabled = 1
+" let g:Powerline_theme = 'alpaca'
 let g:Powerline_cache_file = expand('/tmp/Powerline.cache')
 "}}}
 
