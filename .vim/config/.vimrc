@@ -37,7 +37,7 @@ nnoremap <Space><Space>v :<C-U>tabnew ~/.vim/config/.vimrc<CR>
 
 "----------------------------------------
 "StatusLine" {{{
-" source ~/.vim/config/.vimrc.statusline
+source ~/.vim/config/.vimrc.statusline
 " }}}
 
 "----------------------------------------
@@ -181,10 +181,10 @@ endif
 "}}}
 
 " Improved increment.{{{
-nmap <C-A> <SID>(increment)
-nmap <C-X> <SID>(decrement)
-nmap <silent> <SID>(increment) :AddNumbers 1<CR>
-nmap <silent> <SID>(decrement) :AddNumbers -1<CR>
+" nmap <C-A> <SID>(increment)
+" nmap <C-X> <SID>(decrement)
+" nmap <silent> <SID>(increment) :AddNumbers 1<CR>
+" nmap <silent> <SID>(decrement) :AddNumbers -1<CR>
 
 function! s:add_numbers(num)
   let prev_line = getline('.')[: col('.')-1]
@@ -570,12 +570,24 @@ augroup neobundle
 augroup END
 "}}}
 
+let g:my_settings.ft = {}
+let g:my_settings.ft.program_files = ['ruby', 'php', 'python', 'eruby', 'vim']
+let g:my_settings.ft.html_files = ['eruby', 'html', 'php', 'haml']
+
+" 暫定customize
+" Shougoさんが対応次第削除"{{{
 function! Neo_al(ft)
   return { 'autoload' : {
       \ 'filetype' : a:ft
       \ }}
 endfunction
-let g:my_settings.ProgramFiles = ['ruby', 'php', 'python', 'eruby', 'vim']
+function! Neo_operator(mappings)
+  return {
+        \ 'depends' : 'vim-operator-user',
+        \ 'autoload' : {
+        \   'mappings' : a:mappings
+        \ }}
+endfunction
 
 function! BundleLoadDepends(bundle_names)
   if !exists('g:loaded_bundles')
@@ -588,6 +600,7 @@ function! BundleLoadDepends(bundle_names)
     let g:loaded_bundles[a:bundle_names] = 1
   endif
 endfunction
+"}}}
 
 " コマンドを伴うやつの遅延読み込み
 function! BundleWithCmd(bundle_names, cmd) "{{{
@@ -613,8 +626,13 @@ NeoBundle 'Shougo/vimproc', {
 " NeoBundle 'yuroyoro/vim-autoclose'                          " 自動閉じタグ
 NeoBundleLazy 'edsono/vim-matchit', { 'autoload' : {
       \ 'mappings' : '%' }}
-NeoBundle 'kana/vim-arpeggio'         " 同時押しキーマップを使う
-NeoBundle 'rhysd/accelerated-jk'      " jkの移動を高速化
+NeoBundleLazy 'kana/vim-arpeggio', { 'autoload': { 'functions': ['arpeggio#map'] }}
+" 同時押しキーマップを使う
+NeoBundleLazy 'rhysd/accelerated-jk', {
+      \ 'autoload' : {
+      \   'mappings' : [
+      \     ['n', '<Plug>(accelerated_jk_gj)'], ['n', '<Plug>(accelerated_jk_gk)']
+      \ ]}}
 NeoBundle 'taichouchou2/alpaca'   " 個人的なカラーやフォントなど
 NeoBundleLazy 'tpope/vim-surround', {
       \ 'depends' : 'vim-surround',
@@ -623,16 +641,36 @@ NeoBundleLazy 'tpope/vim-surround', {
       \     ['n', '<Plug>Dsurround'], ['n', '<Plug>Csurround'],
       \     ['n', '<Plug>Ysurround'], ['n', '<Plug>YSurround']
       \ ]}}
-NeoBundle 'tpope/vim-fugitive'        " gitを表示
-NeoBundle 'Lokaltog/vim-powerline'    " StatusLineの拡張
-NeoBundle 'h1mesuke/vim-alignta'      " 整形
+NeoBundle 'tpope/vim-fugitive', { 'autoload' : { 'commands': ['Gcommit', 'Gblame', 'Ggrep', 'Gdiff'] }}
+NeoBundleLazy 'Lokaltog/vim-powerline'
+function! s:startup_powerline()
+  " NeoBundleSource vim-powerline vim-fugitive
+  NeoBundleSource vim-powerline
+
+  " call Pl#UpdateStatusline(1)
+  aug PowerlineMain
+    au!
+    au BufEnter,WinEnter,FileType,BufUnload,CmdWinEnter * call Pl#UpdateStatusline(1)
+    au BufLeave,WinLeave,CmdWinLeave * call Pl#UpdateStatusline(0)
+  aug END
+
+  " let curwindow = winnr()
+  " for window in range(1, winnr('$'))
+  "   call Pl#UpdateStatusline(window == curwindow, window)
+  " endfor
+endfunction
+au VimEnter * call s:startup_powerline()
+NeoBundleLazy 'h1mesuke/vim-alignta', { 'autoload' : { 'commands' : ['Align'] } }
 "}}}
 
 "----------------------------------------
 " vim拡張"{{{
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'vim-scripts/sudo.vim'            " vimで開いた後にsudoで保存
+NeoBundle 'Shougo/vimfiler', { 'depends' : 'Shougo/unite.vim' }
 " NeoBundle 'Lokaltog/vim-easymotion'
-NeoBundle 'grep.vim'
-NeoBundleLazy 'kien/ctrlp.vim'
+NeoBundleLazy 'grep.vim', { 'autoload' : { 'commands': ["Grep", "Rgrep"] }}
+NeoBundleLazy 'kien/ctrlp.vim', { 'autoload' : { 'commands' : ['CtrlPBuffer', 'CtrlPDir']}}
 " NeoBundle 'taku-o/vim-toggle' "true<=>false など、逆の意味のキーワードを切り替えられる
 " NeoBundle 'yuroyoro/vimdoc_ja'
 " NeoBundle 'kana/vim-altr' " 関連するファイルを切り替えれる
@@ -651,13 +689,13 @@ call neobundle#config('neosnippet', {
       \ 'autoload' : {
       \   'insert' : 1,
       \ }})
-NeoBundle 'Shougo/unite.vim'
+
 NeoBundleLazy 'camelcasemotion', { 'autoload' : {
       \ 'mappings' : ['<Plug>CamelCaseMotion_w', '<Plug>CamelCaseMotion_b', '<Plug>CamelCaseMotion_e', '<Plug>CamelCaseMotion_iw', '<Plug>CamelCaseMotion_ib', '<Plug>CamelCaseMotion_ie']
       \ }}
-NeoBundle 'majutsushi/tagbar'
-NeoBundle 'mattn/zencoding-vim'             " Zencodingを使う
-NeoBundleLazy 'nathanaelkane/vim-indent-guides', Neo_al(g:my_settings.ProgramFiles)
+NeoBundleLazy 'majutsushi/tagbar', { 'autoload' : { 'commands': ['TagbarToggle'] }}
+NeoBundleLazy 'mattn/zencoding-vim', Neo_al(g:my_settings.ft.html_files)
+NeoBundleLazy 'nathanaelkane/vim-indent-guides', Neo_al(g:my_settings.ft.program_files)
 NeoBundleLazy 'open-browser.vim', { 'autoload' : {
       \ 'mappings' : [ '<Plug>(open-browser-wwwsearch)', '<Plug>(openbrowser-open)',  ],
       \ 'commands' : ['OpenBrowserSearch']
@@ -672,10 +710,7 @@ NeoBundleLazy 't9md/vim-textmanip', { 'autoload' : {
 NeoBundleLazy 'thinca/vim-ref', { 'autoload' : {
       \ 'commands' : 'Ref'
       \ }}
-NeoBundle 'tomtom/tcomment_vim'
-NeoBundle 'vim-scripts/sudo.vim'            " vimで開いた後にsudoで保存
-NeoBundle 'Shougo/vimfiler',
-      \ { 'depends' : 'Shougo/unite.vim' }
+NeoBundleLazy 'tomtom/tcomment_vim', { 'autoload' : { 'commands' : ['TComment', 'TCommentAs', 'TCommentMaybeInline'] } }
 NeoBundleLazy 'Shougo/vimshell'
 NeoBundleLazy 'taichouchou2/vimshell_custom', Neo_al('vimshell')
 " NeoBundleLazy 'yomi322/vim-gitcomplete', Neo_al('vimshell')
@@ -689,14 +724,6 @@ NeoBundleLazy 'thinca/vim-quickrun', { 'autoload' : {
 
 "----------------------------------------
 " text-object拡張"{{{
-function! Neo_operator(mappings)
-  return {
-        \ 'depends' : 'vim-operator-user',
-        \ 'autoload' : {
-        \   'mappings' : a:mappings
-        \ }}
-endfunction
-
 " operator拡張の元
 " NeoBundle 'emonkak/vim-operator-comment'
 " NeoBundle 'https://github.com/kana/vim-textobj-jabraces.git'
@@ -719,15 +746,14 @@ NeoBundleLazy 'operator-camelize', Neo_operator([
 "}}}
 "}}}
 
-" NeoBundle 'L9' "utillity
 " NeoBundle 'c9s/cascading.vim' "メソッドチェーン整形
-" NeoBundle 'cecutil' "cecutil.vim : 他のpluginのためのutillity1
 " NeoBundle 'thinca/vim-template' " templeteを作れる
 " NeoBundle 'tyru/urilib.vim' "urilib.vim : vim scriptからURLを扱うライブラリ
 " NeoBundle 'kana/vim-smartchr' "smartchr.vim : ==()などの前後を整形
 NeoBundle 'mattn/webapi-vim' "vim Interface to Web API
-NeoBundleLazy 'scrooloose/syntastic', Neo_al(g:my_settings.ProgramFiles)
-" NeoBundleLazy 'taichouchou2/alpaca_look', Neo_al(g:my_settings.ProgramFiles)
+NeoBundleLazy 'scrooloose/syntastic', Neo_al(g:my_settings.ft.program_files)
+" NeoBundleLazy 'taichouchou2/alpaca_look',
+" Neo_al(g:my_settings.ft.program_files)
 NeoBundleLazy 'rhysd/clever-f.vim', { 'autoload' : {
       \ 'mappings' : 'f',
       \ }}
@@ -736,9 +762,7 @@ NeoBundleLazy 'rhysd/clever-f.vim', { 'autoload' : {
 " NeoBundle 'choplin/unite-vim_hacks'
 " NeoBundle 'h1mesuke/unite-outline'
 " NeoBundle 'joker1007/unite-git_grep'
-" NeoBundle 'kmnk/vim-unite-giti'
 " NeoBundle 'mattn/unite-source-simplenote'
-" NeoBundle 'sgur/unite-qf'
 " NeoBundle 'tacroe/unite-mark'
 " NeoBundle 'tsukkee/unite-help'
 " NeoBundle 'tsukkee/unite-tag'
@@ -876,10 +900,6 @@ NeoBundle 'davidhalter/jedi-vim', {
       \ 'autoload' : { 'filetypes': ['python']}
       \ }
 " NeoBundleLazy 'kevinw/pyflakes-vim'
-" let s:bundle_python = 'vim-python jedi-vim pyflakes-vim'
-" aug MyAutoCmd
-"   au FileType python call BundleLoadDepends(s:bundle_python)
-" aug END
 
 " scala
 " ----------------------------------------
@@ -1282,11 +1302,11 @@ aug VimFilerKeyMapping
     setl nonumber
 
     " Unite bookmark連携
-    nnoremap <buffer>B :<C-U>UniteBookmarkAdd<CR>
-    nnoremap <buffer><CR> <Plug>(vimfiler_edit_file)
-    nnoremap <buffer>v <Plug>(vimfiler_view_file)
+    nmap <buffer>B :<C-U>UniteBookmarkAdd<CR>
+    nmap <buffer><CR> <Plug>(vimfiler_edit_file)
+    nmap <buffer>v <Plug>(vimfiler_view_file)
 
-    nnoremap <buffer><C-J> [unite]
+    nmap <buffer><C-J> [unite]
   endfunction
 aug END
 "}}}
@@ -1564,7 +1584,7 @@ aug END
 nnoremap <silent>gd :<C-U>GitDiff HEAD<CR>
 nnoremap <silent>gD :GitDiff<Space>
 " " nnoremap <silent><Space>gs :GitStatus<CR>
-nnoremap <silent>gL :GitLog -10<CR>
+" nnoremap <silent>gL :GitLog -10<CR>
 " " nnoremap <silent><Space>gL :<C-u>GitLog -u \| head -10000<CR>
 nnoremap <silent>ga :GitAdd -A<CR>
 nnoremap <silent>gA :GitAdd<Space>
@@ -1684,6 +1704,7 @@ set guifontwide=Ricty:h10
 " let g:Powerline_colorscheme='molokai'
 let g:Powerline_symbols = 'fancy'
 let g:Powerline_cache_enabled = 0
+let g:Powerline_theme = 'alpaca'
 let g:Powerline_cache_file = expand('/tmp/Powerline.cache')
 "}}}
 
@@ -1848,6 +1869,16 @@ nnoremap <Space>bA :AllBrowserReloadStop<CR>
 if !exists('g:tcomment_types')
   let g:tcomment_types = {}
 endif
+let g:tcommentmaps=0
+
+nmap <C-_> [tcomment]
+nmap gc [tcomment]
+noremap <silent>[tcomment]<c-_> :TComment<CR>
+vnoremap <silent>[tcomment]<C-_> :TCommentMaybeInline<CR>
+
+noremap <silent>[tcomment]c :TComment<CR>
+vnoremap <silent>[tcomment]c :TCommentMaybeInline<CR>
+
 let g:tcomment_types = {
       \'php_surround'            : "<?php %s ?>",
       \'eruby_surround'          : "<%% %s %%>",
@@ -1954,7 +1985,7 @@ endfunction
 
 nnoremap <silent><C-H><C-B> :CtrlPBuffer<CR>
 nnoremap <silent><C-H><C-D> :CtrlPDir<CR>
-nnoremap <silent><C-H><C-G> :CtrlPClearCache<Return>:call <SID>CallCtrlPBasedOnGitStatus()<Return>
+" nnoremap <silent><C-H><C-G> :CtrlPClearCache<Return>:call <SID>CallCtrlPBasedOnGitStatus()<Return>
 " "}}}
 
 "------------------------------------
@@ -2317,7 +2348,7 @@ aug END
 " IndentGuidesEnable
 let g:indent_guides_start_level = 2
 let g:indent_guides_auto_colors=0
-let g:indent_guides_enable_on_vim_startup=0
+let g:indent_guides_enable_on_vim_startup=1
 let g:indent_guides_color_change_percent = 20
 " let g:indent_guides_guide_size=&tabstop
 let g:indent_guides_guide_size=1
@@ -2326,10 +2357,10 @@ let g:indent_guides_space_guides = 1
 hi IndentGuidesOdd  ctermbg=235
 " hi IndentGuidesEven ctermbg=237
 hi IndentGuidesEven ctermbg=233
-aug MyAutoCmd
-  au FileType html,php,haml,scss,sass,less,coffee,ruby,javascript,python IndentGuidesEnable
-aug END
-nnoremap <silent><Leader>ig <Plug>IndentGuidesToggle
+" aug MyAutoCmd
+"   au FileType html,php,haml,scss,sass,less,coffee,ruby,javascript,python IndentGuidesEnable
+" aug END
+" nnoremap <silent><Leader>ig <Plug>IndentGuidesToggle
 "}}}
 
 "------------------------------------
@@ -2631,15 +2662,15 @@ let g:neosnippet#snippets_directory = g:neocomplcache_snippets_dir
 aug MyAutoCmd
   au FileType snippet nnoremap <buffer><Space>e :e #<CR>
 aug END
-imap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
-" imap <silent><C-U>     <Plug>(neosnippet_start_unite_snippet)
-inoremap <silent><C-U>     <ESC>:<C-U>Unite snippet<CR>
-nnoremap <silent><Space>e  :<C-U>NeoSnippetEdit -split<CR>
+imap <silent><C-F>                <Plug>(neosnippet_expand_or_jump)
+xmap <silent>o                    <Plug>(neosnippet_register_oneshot_snippet)
+inoremap <silent><C-U>            <ESC>:<C-U>Unite snippet<CR>
+nnoremap <silent><Space>e         :<C-U>NeoSnippetEdit -split<CR>
 nnoremap <silent><expr><Space>ee  ':NeoSnippetEdit -split'.split(&ft, '.')[0].'<CR>'
+" imap <silent><C-U>               <Plug>(neosnippet_start_unite_snippet)
 " smap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
 " xnoremap <silent><C-F>     <Plug>(neosnippet_start_unite_snippet_target)
 " xnoremap <silent>U         <Plug>(neosnippet_expand_target)
-xmap <silent>o         <Plug>(neosnippet_register_oneshot_snippet)
 "}}}
 
 "----------------------------------------
@@ -2681,9 +2712,10 @@ function! OpenYard(...)
 endfunction
 
 command!
-      \   -nargs=*
-      \   OpenYard
-      \   call OpenYard(<q-args>)
+      \ -nargs=*
+      \ OpenYard
+      \ call OpenYard(<q-args>)
+
 " マッピング
 nnoremap <Space>y :<C-U>OpenYard <C-R><C-W><CR>
 
@@ -2768,12 +2800,12 @@ endif
 " Diff
 " ----------------------------------------
 "{{{
-" Display diff with the file.
-command! -nargs=1 -complete=file Diff vertical diffsplit <args>
-" Display diff from last save.
-command! DiffOrig vert new | setlocal bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
-" Disable diff mode.
-command! -nargs=0 Undiff setlocal nodiff noscrollbind wrap
+" " Display diff with the file.
+" command! -nargs=1 -complete=file Diff vertical diffsplit <args>
+" " Display diff from last save.
+" command! DiffOrig vert new | setlocal bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
+" " Disable diff mode.
+" command! -nargs=0 Undiff setlocal nodiff noscrollbind wrap
 "}}}
 "}}}
 
