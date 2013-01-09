@@ -1,5 +1,7 @@
 aug MyAutoCmd
   au!
+aug END
+let g:my_settings = {}
 
 "基本"{{{
 " let $SHELL="/usr/local/bin/zsh"
@@ -564,7 +566,7 @@ if has('vim_starting')
 endif
 augroup neobundle
   " au!
-  au Syntax vim syntax keyword vimCommand NeoBundle NeoBundleLazy NeoBundleSource
+  au Syntax vim syntax keyword vimCommand NeoBundle NeoBundleLazy NeoBundleSource NeoBundleFetch
 augroup END
 "}}}
 
@@ -573,6 +575,7 @@ function! Neo_al(ft)
       \ 'filetype' : a:ft
       \ }}
 endfunction
+let g:my_settings.ProgramFiles = ['ruby', 'php', 'python', 'eruby', 'vim']
 
 function! BundleLoadDepends(bundle_names)
   if !exists('g:loaded_bundles')
@@ -608,13 +611,20 @@ NeoBundle 'Shougo/vimproc', {
       \ }
 " NeoBundle 'vim-jp/vital.vim'
 " NeoBundle 'yuroyoro/vim-autoclose'                          " 自動閉じタグ
-NeoBundle 'edsono/vim-matchit'        " %の拡張
+NeoBundleLazy 'edsono/vim-matchit', { 'autoload' : {
+      \ 'mappings' : '%' }}
 NeoBundle 'kana/vim-arpeggio'         " 同時押しキーマップを使う
 NeoBundle 'rhysd/accelerated-jk'      " jkの移動を高速化
 NeoBundle 'taichouchou2/alpaca'   " 個人的なカラーやフォントなど
-NeoBundle 'Lokaltog/vim-powerline'    " StatusLineの拡張
-NeoBundle 'tpope/vim-surround'
+NeoBundleLazy 'tpope/vim-surround', {
+      \ 'depends' : 'vim-surround',
+      \ 'autoload' : {
+      \   'mappings' : [
+      \     ['n', '<Plug>Dsurround'], ['n', '<Plug>Csurround'],
+      \     ['n', '<Plug>Ysurround'], ['n', '<Plug>YSurround']
+      \ ]}}
 NeoBundle 'tpope/vim-fugitive'        " gitを表示
+NeoBundle 'Lokaltog/vim-powerline'    " StatusLineの拡張
 NeoBundle 'h1mesuke/vim-alignta'      " 整形
 "}}}
 
@@ -623,18 +633,12 @@ NeoBundle 'h1mesuke/vim-alignta'      " 整形
 " NeoBundle 'Lokaltog/vim-easymotion'
 NeoBundle 'grep.vim'
 NeoBundleLazy 'kien/ctrlp.vim'
-" NeoBundle 'scrooloose/nerdtree' "プロジェクト管理用 tree filer
-" NeoBundle 'taglist.vim' "関数、変数を画面横にリストで表示する
 " NeoBundle 'taku-o/vim-toggle' "true<=>false など、逆の意味のキーワードを切り替えられる
 " NeoBundle 'yuroyoro/vimdoc_ja'
-" NeoBundle 'YankRing.vim' "ヤンクの履歴を管理
-" NeoBundle 'hrp/EnhancedCommentify' "コメントアウト
 " NeoBundle 'kana/vim-altr' " 関連するファイルを切り替えれる
-" NeoBundle 'vim-scripts/AnsiEsc.vim' " Ascii color code対応
-" NeoBundle 'vim-scripts/SearchComplete' " /で検索をかけるときでも\tで補完が出来る
-NeoBundleLazy 'sjl/gundo.vim', { 'autoload' : { 'commands': ["GundoToggle"] }}                   " undo履歴をツリー表示
-NeoBundle 'Shougo/git-vim'
-NeoBundle 'Shougo/neocomplcache'            " 補完
+NeoBundleLazy 'sjl/gundo.vim', { 'autoload' : { 'commands': ["GundoToggle"] }}
+NeoBundleLazy 'Shougo/git-vim', { 'autoload' : { 'commands': ["GitDiff", "GitLog", "GitAdd", "Git", "GitCommit", "GitBlame", "GitBranch", "GitPush"] }}
+NeoBundle 'Shougo/neocomplcache'
 call neobundle#config('neocomplcache', {
       \ 'lazy' : 1,
       \ 'autoload' : {
@@ -648,17 +652,26 @@ call neobundle#config('neosnippet', {
       \   'insert' : 1,
       \ }})
 NeoBundle 'Shougo/unite.vim'
-NeoBundle 'camelcasemotion'
+NeoBundleLazy 'camelcasemotion', { 'autoload' : {
+      \ 'mappings' : ['<Plug>CamelCaseMotion_w', '<Plug>CamelCaseMotion_b', '<Plug>CamelCaseMotion_e', '<Plug>CamelCaseMotion_iw', '<Plug>CamelCaseMotion_ib', '<Plug>CamelCaseMotion_ie']
+      \ }}
 NeoBundle 'majutsushi/tagbar'
 NeoBundle 'mattn/zencoding-vim'             " Zencodingを使う
-NeoBundle 'nathanaelkane/vim-indent-guides' " indentに色づけ
-NeoBundle 'open-browser.vim'
+NeoBundleLazy 'nathanaelkane/vim-indent-guides', Neo_al(g:my_settings.ProgramFiles)
+NeoBundleLazy 'open-browser.vim', { 'autoload' : {
+      \ 'mappings' : [ '<Plug>(open-browser-wwwsearch)', '<Plug>(openbrowser-open)',  ],
+      \ 'commands' : ['OpenBrowserSearch']
+      \ }}
 NeoBundleLazy 'kana/vim-smartword', '', 'same', { 'autoload' : {
       \ 'mappings' : [
       \   '<Plug>(smartword-w)', '<Plug>(smartword-b)', '<Plug>(smartword-ge)']
       \ }}
-NeoBundle 't9md/vim-textmanip'              " visualモードで、文字列を直感的に移動
-NeoBundle 'thinca/vim-ref'
+NeoBundleLazy 't9md/vim-textmanip', { 'autoload' : {
+      \ 'mappings' : ['<Plug>(textmanip-move-down)', '<Plug>(textmanip-move-up)', '<Plug>(textmanip-move-left)', '<Plug>(textmanip-move-right)']
+      \ }}
+NeoBundleLazy 'thinca/vim-ref', { 'autoload' : {
+      \ 'commands' : 'Ref'
+      \ }}
 NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'vim-scripts/sudo.vim'            " vimで開いた後にsudoで保存
 NeoBundle 'Shougo/vimfiler',
@@ -666,8 +679,13 @@ NeoBundle 'Shougo/vimfiler',
 NeoBundleLazy 'Shougo/vimshell'
 NeoBundleLazy 'taichouchou2/vimshell_custom', Neo_al('vimshell')
 " NeoBundleLazy 'yomi322/vim-gitcomplete', Neo_al('vimshell')
-NeoBundleLazy 'mattn/gist-vim' "gistを利用する
-NeoBundleLazy 'thinca/vim-quickrun'             " <Leader>rで簡易コンパイル
+NeoBundleLazy 'mattn/gist-vim', { 'autoload' : {
+      \ 'commands' : 'Gist'
+      \ }}
+NeoBundleLazy 'thinca/vim-quickrun', { 'autoload' : {
+      \ 'mappings' : [
+      \   ['nxo', '<Plug>(quickrun)']],
+      \ }}
 
 "----------------------------------------
 " text-object拡張"{{{
@@ -688,12 +706,15 @@ endfunction
 " NeoBundle 'kana/vim-textobj-syntax.git'    " y syntax hilightされたものをtext-objectに
 " NeoBundle 'textobj-entire'                 " e buffer全体をtext-objectに
 " NeoBundle 'thinca/vim-textobj-comment'     " c commentをtext-objectに
-NeoBundle 'kana/vim-operator-user'
+NeoBundleLazy 'kana/vim-operator-user'
 " NeoBundle 'kana/vim-textobj-function.git'  " f 関数をtext-objectに
-NeoBundle 'kana/vim-textobj-indent.git'    " i I インデントをtext-objectに
-NeoBundle 'kana/vim-textobj-user'          " textobject拡張の元
-NeoBundle 'operator-camelize' "operator-camelize : camel-caseへの変換
-" NeoBundle 'thinca/vim-textobj-plugins.git' " vim-textobj-plugins : いろんなものをtext-objectにする
+NeoBundleLazy 'kana/vim-textobj-indent.git', Neo_operator([
+      \ ['nx', '<Plug>(textobj-indent-a)' ], ['nx', '<Plug>(textobj-indent-i)'], ['nx', '<Plug>(textobj-indent-same-a)'], ['nx', '<Plug>(textobj-indent-same-i)']
+      \ ])
+NeoBundleLazy 'kana/vim-textobj-user'          " textobject拡張の元
+NeoBundleLazy 'operator-camelize', Neo_operator([
+      \ ['nx', '<Plug>(operator-camelize)'], ['nx', '<Plug>(operator-decamelize)']
+      \ ])
 " NeoBundle 'tyru/operator-html-escape.vim'
 "}}}
 "}}}
@@ -705,9 +726,11 @@ NeoBundle 'operator-camelize' "operator-camelize : camel-caseへの変換
 " NeoBundle 'tyru/urilib.vim' "urilib.vim : vim scriptからURLを扱うライブラリ
 " NeoBundle 'kana/vim-smartchr' "smartchr.vim : ==()などの前後を整形
 NeoBundle 'mattn/webapi-vim' "vim Interface to Web API
-NeoBundle 'scrooloose/syntastic'
-NeoBundle 'taichouchou2/alpaca_look'
-NeoBundle 'rhysd/clever-f.vim'
+NeoBundleLazy 'scrooloose/syntastic', Neo_al(g:my_settings.ProgramFiles)
+" NeoBundleLazy 'taichouchou2/alpaca_look', Neo_al(g:my_settings.ProgramFiles)
+NeoBundleLazy 'rhysd/clever-f.vim', { 'autoload' : {
+      \ 'mappings' : 'f',
+      \ }}
 
 " unite.vim : - すべてを破壊し、すべてを繋げ - vim scriptで実装されたanythingプラグイン
 " NeoBundle 'choplin/unite-vim_hacks'
@@ -721,7 +744,7 @@ NeoBundle 'rhysd/clever-f.vim'
 " NeoBundle 'tsukkee/unite-tag'
 " NeoBundle 'ujihisa/unite-colorscheme'
 NeoBundleLazy 'Shougo/unite-ssh'
-NeoBundle 'taichouchou2/vim-unite-giti'
+NeoBundleLazy 'taichouchou2/vim-unite-giti'
 NeoBundleLazy 'thinca/vim-unite-history'
 NeoBundleLazy 'ujihisa/vimshell-ssh', { 'autoload' : {
       \ 'filetypes' : 'vimshell',
@@ -739,50 +762,52 @@ NeoBundleLazy 'basyura/TweetVim', { 'depends' :
       \ 'autoload' : { 'commands' : 'TweetVimHomeTimeline' }}
 NeoBundleLazy 'basyura/bitly.vim'
 NeoBundleLazy 'basyura/twibill.vim'
-NeoBundle 'tyru/eskk.vim'
+NeoBundleLazy 'tyru/eskk.vim', { 'autoload' : {
+      \ 'mappings' : [['i', '<Plug>(eskk:toggle)']],
+      \ }}
 " }}}
 
 " bundle.lang"{{{
 
 " css
 " ----------------------------------------
-NeoBundleLazy 'hail2u/vim-css3-syntax', { 'autoload' : { 'filetypes' : ['css', 'scss', 'sass']}}
+NeoBundleLazy 'hail2u/vim-css3-syntax', Neo_al(['css', 'scss', 'sass'])
 
 " html
 " ----------------------------------------
-NeoBundleLazy 'taichouchou2/html5.vim', { 'autoload' : { 'filetypes' : ['html', 'haml', 'erb', 'php']}}
+NeoBundleLazy 'taichouchou2/html5.vim', Neo_al(['html', 'haml', 'erb', 'php'])
 
 " haml
 " ----------------------------------------
-NeoBundleLazy 'tpope/vim-haml', { 'autoload' : { 'filetypes' : ['haml']}}
+NeoBundleLazy 'tpope/vim-haml', Neo_al(['haml'])
 " NeoBundle 'xmledit'
 
 "  js / coffee
 " ----------------------------------------
-NeoBundleLazy 'kchmck/vim-coffee-script', { 'autoload' : { 'filetypes' : ['coffee']}}
-NeoBundleLazy 'claco/jasmine.vim', { 'autoload' : { 'filetypes' : ['javascript', 'coffee']}}
-NeoBundleLazy 'taichouchou2/vim-javascript', { 'autoload' : { 'filetypes' : ['javascript']}}
+NeoBundleLazy 'kchmck/vim-coffee-script', Neo_al(['coffee'])
+NeoBundleLazy 'claco/jasmine.vim', Neo_al(['javascript', 'coffee'])
+NeoBundleLazy 'taichouchou2/vim-javascript', Neo_al(['javascript'])
 " NeoBundle 'hallettj/jslint.vim'
 " NeoBundle 'pekepeke/titanium-vim' " Titaniumを使うときに
 
 "  go
 " ----------------------------------------
-NeoBundleLazy 'fsouza/go.vim', { 'autoload' : { 'filetypes' : ['go']}}
+NeoBundleLazy 'fsouza/go.vim', Neo_al(['go'])
 
 "  markdown
 " ----------------------------------------
 " markdownでの入力をリアルタイムでチェック
 " NeoBundle 'mattn/mkdpreview-vim'
-NeoBundleLazy 'tpope/vim-markdown', { 'autoload' : { 'filetypes' : ['markdown']}}
+NeoBundleLazy 'tpope/vim-markdown', Neo_al( ['markdown'] )
 
 " sassのコンパイル
-NeoBundleLazy 'AtsushiM/sass-compile.vim', { 'autoload' : { 'filetypes' : ['sass', 'scss']}}
+NeoBundleLazy 'AtsushiM/sass-compile.vim', Neo_al( ['sass', 'scss'] )
 
 "  php
 " ----------------------------------------
 " NeoBundle 'oppara/vim-unite-cake'
 " NeoBundle 'violetyk/cake.vim' " cakephpを使いやすく
-NeoBundleLazy 'taichouchou2/alpaca_wordpress.vim', { 'autoload' : { 'filetypes' : ['php']}}
+NeoBundleLazy 'taichouchou2/alpaca_wordpress.vim', Neo_al(['php'])
 
 "  binary
 " ----------------------------------------
@@ -827,7 +852,7 @@ NeoBundleLazy 'taichouchou2/unite-reek', {
       \    'unix': 'gem install reek',
       \ },
       \ 'depends' : 'Shougo/unite.vim' }
-NeoBundle 'Shougo/neocomplcache-rsense'
+NeoBundleLazy 'Shougo/neocomplcache-rsense'
 NeoBundleLazy 'rhysd/unite-ruby-require.vim'
 NeoBundleLazy 'rhysd/vim-textobj-ruby'
 NeoBundleLazy 'deris/vim-textobj-enclosedsyntax'
@@ -842,12 +867,13 @@ NeoBundleLazy 'rhysd/neco-ruby-keyword-args'
 " python
 " ----------------------------------------
 " NeoBundle 'Pydiction'
-NeoBundle 'yuroyoro/vim-python'
+NeoBundleLazy 'yuroyoro/vim-python', Neo_al(['python'])
 NeoBundle 'davidhalter/jedi-vim', {
       \ 'build' : {
       \     'mac' : 'git submodule update --init',
       \     'unix' : 'git submodule update --init',
       \    },
+      \ 'autoload' : { 'filetypes': ['python']}
       \ }
 " NeoBundleLazy 'kevinw/pyflakes-vim'
 " let s:bundle_python = 'vim-python jedi-vim pyflakes-vim'
@@ -864,10 +890,7 @@ NeoBundle 'davidhalter/jedi-vim', {
 
 " sh
 " ----------------------------------------
-NeoBundleLazy 'sh.vim'
-aug MyAutoCmd
-  au FileType sh call BundleLoadDepends('sh.vim')
-aug END
+NeoBundleLazy 'sh.vim', Neo_al('sh')
 "}}}
 
 " 他のアプリを呼び出すetc "{{{
@@ -875,8 +898,11 @@ aug END
 " NeoBundle 'tell-k/vim-browsereload-mac' " 保存と同時にブラウザをリロードする
 " NeoBundle 'vim-scripts/dbext.vim' "<Leader>seでsqlを実行
 " NeoBundleLazy 'tsukkee/lingr-vim'
-NeoBundle 'vim-scripts/yanktmp.vim'
-NeoBundle 'mattn/excitetranslate-vim', {'depends': 'mattn/webapi-vim'}
+" NeoBundleLazy 'vim-scripts/yanktmp.vim'
+NeoBundleLazy 'mattn/excitetranslate-vim', {
+      \ 'depends': 'mattn/webapi-vim',
+      \ 'autoload' : { 'commands': ['ExciteTranslate']}
+      \ }
 " NeoBundle 'qtmplsel.vim'
 "}}}
 
@@ -1553,9 +1579,9 @@ nnoremap <silent>gp :Git push<Space>
 " unite-giti
 "----------------------------------------
 "{{{
-nnoremap <silent>gl :<C-U>Unite giti/log<CR>
-nnoremap <silent>gs :<C-U>Unite giti/status<CR>
-nnoremap <silent>gh :<C-U>Unite giti/branch_all<CR>
+nnoremap <silent>gl :<C-U>call BundleWithCmd('vim-unite-giti', 'Unite giti/log')<CR>
+nnoremap <silent>gs :<C-U>call BundleWithCmd('vim-unite-giti', 'Unite giti/status')<CR>
+nnoremap <silent>gh :<C-U>call BundleWithCmd('vim-unite-giti', 'Unite giti/branch_all')<CR>
 "}}}
 
 "----------------------------------------
@@ -1629,12 +1655,12 @@ nnoremap dab da,b
 nnoremap dae da,e
 
 " text-objectで使用できるように
-onoremap <silent> iw <Plug>CamelCaseMotion_iw
-xnoremap <silent> iw <Plug>CamelCaseMotion_iw
-onoremap <silent> ib <Plug>CamelCaseMotion_ib
-xnoremap <silent> ib <Plug>CamelCaseMotion_ib
-onoremap <silent> ie <Plug>CamelCaseMotion_ie
-xnoremap <silent> ie <Plug>CamelCaseMotion_ie
+omap <silent>iw <Plug>CamelCaseMotion_iw
+xmap <silent>iw <Plug>CamelCaseMotion_iw
+omap <silent>ib <Plug>CamelCaseMotion_ib
+xmap <silent>ib <Plug>CamelCaseMotion_ib
+omap <silent>ie <Plug>CamelCaseMotion_ie
+xmap <silent>ie <Plug>CamelCaseMotion_ie
 "}}}
 
 "------------------------------------
@@ -2008,8 +2034,8 @@ let g:gist_open_browser_after_post = 1
 let g:gist_browser_command = 'w3m %URL%'
 let g:github_user = 'taichouchou2'
 
-nnoremap <silent><C-H>g :call BundleWithCmd('gist-vim', 'Gist')<CR>
-nnoremap <silent><C-H>gl :call BundleWithCmd('gist-vim', 'Gist -l')<CR>
+nnoremap <silent><C-H>g :<C-U>Gist<CR>
+nnoremap <silent><C-H>gl :<C-U>Gist -l<CR>
 "}}}
 
 "------------------------------------
@@ -2372,10 +2398,10 @@ aug END
 " text-manipvim
 "------------------------------------
 "{{{
-xnoremap <C-j> <Plug>(textmanip-move-down)
-xnoremap <C-k> <Plug>(textmanip-move-up)
-xnoremap <C-h> <Plug>(textmanip-move-left)
-xnoremap <C-l> <Plug>(textmanip-move-right)
+xmap <C-j> <Plug>(textmanip-move-down)
+xmap <C-k> <Plug>(textmanip-move-up)
+xmap <C-h> <Plug>(textmanip-move-left)
+xmap <C-l> <Plug>(textmanip-move-right)
 "}}}
 
 "------------------------------------
