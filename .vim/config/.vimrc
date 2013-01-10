@@ -1281,11 +1281,11 @@ let g:unite_winheight = 20
 nmap [unite] <Nop>
 nmap <C-J> [unite]
 
-nnoremap <silent> [unite]<C-U>   :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
-nnoremap <silent> [unite]<C-J>   :<C-u>Unite file_mru<CR>
-nnoremap <silent> [unite]b       :<C-u>Unite bookmark<CR>
-nnoremap <silent> [unite]<C-B>   :<C-u>Unite buffer<CR>
-nnoremap <silent> <Space>b       :<C-u>UniteBookmarkAdd<CR>
+nmap <silent> [unite]<C-U>   :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
+nmap <silent> [unite]<C-J>   :<C-u>Unite file_mru<CR>
+nmap <silent> [unite]b       :<C-u>Unite bookmark<CR>
+nmap <silent> [unite]<C-B>   :<C-u>Unite buffer<CR>
+nmap <silent> <Space>b       :<C-u>UniteBookmarkAdd<CR>
 let g:unite_quick_match_table = {
       \'a' : 1, 's' : 2, 'd' : 3, 'f' : 4, 'g' : 5, 'h' : 6, 'j' : 7, 'k' : 8, 'l' : 9, ';' : 10,
       \'q' : 11, 'w' : 12, 'e' : 13, 'r' : 14, 't' : 15, 'y' : 16, 'u' : 17, 'i' : 18, 'o' : 19, 'p' : 20,
@@ -2712,7 +2712,7 @@ endfor
 imap <expr><C-g>     neocomplcache#undo_completion()
 imap <expr><CR>      neocomplcache#smart_close_popup() . "<CR>" . "<Plug>DiscretionaryEnd"
 imap <silent><expr><S-TAB> pumvisible() ? "\<C-P>" : "\<S-TAB>"
-imap <silent><expr><TAB>   pumvisible() ? "\<C-N>" : "\<TAB>"
+" imap <silent><expr><TAB>   pumvisible() ? "\<C-N>" : "\<TAB>"
 imap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_jump_or_expand)" : pumvisible() ? "\<C-n>" : "\<TAB>"
 " }}}
 "}}}

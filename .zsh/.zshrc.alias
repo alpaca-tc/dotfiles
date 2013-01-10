@@ -36,7 +36,8 @@ alias msql="mysql -u root -p"
 # }}}
 
 # オプション付けたり、別のコマンドにしたり# {{{
-alias grep='egrep -R --color=auto -UIns'
+alias grep='egrep --color=auto -UIns'
+alias rgrep='egrep -R --color=auto -UIns'
 alias rm='gmv -f --backup=numbered --target-directory ~/.Trash/'
 alias diff='colordiff'
 # objdump homebrewだとgobjdumpという名前だから
