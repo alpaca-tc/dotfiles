@@ -1,11 +1,12 @@
 # coding: utf-8
 
+# ininialize alias
 command_alias = {
   "show" => "show-method",
   "edit" => "edit-method",
-  # "c" => "continue",
-  # "s" => "step",
-  # "n" => "next",
+  "c" => "continue",
+  "s" => "step",
+  "n" => "next",
 }
 command_alias.each do |k, v|
   Pry.config.commands.alias_command k, v
@@ -35,7 +36,6 @@ Pry.config.prompt = [
   }
 ]
 
-
 # hirbをpryに対応させる
 def hirb_hack
   Pry.config.print = proc do |output, value|
@@ -43,7 +43,7 @@ def hirb_hack
   end
 end
 
-# Hirbをdefaultで使う場合は以下をコメントアウト
+# Hirbをdefaultで使う場合は以下をコメントイン
 def hirb_enable
   require 'hirb'
   Hirb.enable
