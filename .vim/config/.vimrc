@@ -6,7 +6,7 @@ aug END
 " initialize"{{{
 let g:my_settings = {}
 let g:my_settings.initialize = 0
-let g:my_settings.keyboard_type = 'us'
+let g:my_settings.keyboard_type = 'jis'
 
 let g:my_settings.dir = {}
 let g:my_settings.dir.trash_dir = expand('~/.Trash/')
@@ -1257,8 +1257,8 @@ let g:unite_quick_match_table = {
       \}
 "}}}
 function! UniteSetting() "{{{
-  inoremap <buffer><C-K> gk
-  inoremap <buffer><C-J> gj
+  inoremap <buffer><C-K> <Up>
+  inoremap <buffer><C-J> <Down>
   nnoremap <silent><buffer><expr><C-W>s unite#do_action('split')
   nnoremap <silent><buffer><expr><C-W>v unite#do_action('vsplit')
 endfunction
@@ -1766,7 +1766,7 @@ let g:memolist_memo_date         = "%D %T"
 let g:memolist_vimfiler          = 1
 
 nnoremap <silent><Space>mn  :<C-U>MemoNew<CR>
-nnoremap <silent><Space>ml  :<C-U>Unite file:~/.memolist/<CR>
+nnoremap <silent><Space>ml  :<C-U>VimFiler file:~/.memolist/<CR>
 nnoremap <silent><Space>mg  :<C-U>MemoGrep<CR>
 "}}}
 
@@ -1949,11 +1949,11 @@ let g:rails_default_file='config/database.yml'
 let g:rails_gnu_screen=1
 let g:rails_level = 4
 let g:rails_mappings=1
-" let g:rails_modelines=1
+let g:rails_modelines=0
 " let g:rails_some_option = 1
 " let g:rails_statusline = 1
 " let g:rails_subversion=0
-let g:rails_syntax = 1
+" let g:rails_syntax = 1
 let g:rails_url='http://localhost:3000'
 " let g:rails_ctags_arguments='--languages=-javascript'
 " let g:rails_ctags_arguments = ''
@@ -2438,6 +2438,7 @@ let g:neocomplcache_enable_at_startup = 1
 " let g:neocomplcache_max_list = 120
 " let g:neocomplcache_min_keyword_length = 2
 " let g:neocomplcache_min_syntax_length = 2
+let g:neocomplcache_force_overwrite_completefunc = 1
 let g:neocomplcache#sources#rsense#home_directory = g:my_settings.dir.rsense
 let g:neocomplcache_enable_camel_case_completion = 1
 let g:neocomplcache_enable_underbar_completion = 1
