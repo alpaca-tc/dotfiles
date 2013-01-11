@@ -2,6 +2,7 @@ source ~/.zsh/git-completion.bash
 source ~/.zsh/git-prompt.sh
 source ~/.zsh/tmux-completion.bash
 source ~/.zsh/rbenv.zsh
+source ~/.zsh/scala.sh
 # source ~/.zsh/zaw/zaw.zsh
 
 # brewの読み込みなど

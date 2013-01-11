@@ -23,6 +23,9 @@ alias ee="emacs ~/.emacs.el"
 
 # vim# {{{
 alias vim='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
+alias mvim='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/mvim "$@"'
+alias m='mvim'
+alias mi='mvim'
 alias v='vim'
 alias vi='vim'
 # }}}

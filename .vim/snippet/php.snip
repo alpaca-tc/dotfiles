@@ -1,100 +1,88 @@
-snippet right_contents
-        <div id='right_contents'>
-          <div id='right_contents_wrapper'>
-            <div id='pankuzu'>
-              <a href='/'>ホーム</a>
-              &nbsp;&gt;&nbsp;
-              <a href='company.html'>会社概要</a>
-            </div>
-          </div><!--/right_contents_wrapper-->
-        </div><!--/right_contents-->
 
-snippet class
-    class ${1:ClassName} {
-      function ${2:__construct} ( ${3:argument} ) {
-          ${4:# code...}
-      }
+# custom function#{{{
+snippet     f_path_to_url
+  function path_to_url($path, $default_port = 80){/*{{{*/
+    //ドキュメントルートのパスとURLの作成
+    $document_root_url = $_SERVER['SCRIPT_NAME'];
+    $document_root_path = $_SERVER['SCRIPT_FILENAME'];
+    while(basename($document_root_url) === basename($document_root_path)){
+      $document_root_url = dirname($document_root_url);
+      $document_root_path = dirname($document_root_path);
     }
+    if($document_root_path === '/')  $document_root_path = '';
+    if($document_root_url === '/') $document_root_url = '';
 
-snippet     ex
-abbr        extends
-prev_word   '^'
-    extends ${1}
+    $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] !== 'off')? 'https': 'http';
+    $port = ($_SERVER['SERVER_PORT'] && $_SERVER['SERVER_PORT'] != $default_port)? ':'.$_SERVER['SERVER_PORT']: '';
+    $document_root_url = $protocol.'://'.$_SERVER['SERVER_NAME'].$port.$document_root_url;
 
-snippet     func
-abbr        function
-prev_word     '^'
-    function ${1:__construct} ( ${2:argument} ) {
-      ${3:# code...}
+    //絶対パスの取得 (realpath関数ではファイルが存在しない場合や、シンボリックリンクである場合にうまくいかない)
+    $absolute_path = realpath($path);
+    if(!$absolute_path)
+      return false;
+    if(substr($absolute_path, -1) !== '/' && substr($path, -1) === '/')
+      $absolute_path .= '/';
+
+    //パスを置換して返す
+    $url = str_replace($document_root_path, $document_root_url, $absolute_path);
+    if($absolute_path === $url)
+      return false;
+    return $url;
+  }/*}}}*/
+#}}}
+# custom#{{{
+snippet     public
+  public function ${1:name}(${2}) {
+    ${3}
+  }
+
+snippet     protected
+  protected function ${1:name}(${2}) {
+    ${3}
+  }
+
+snippet     private
+  private function ${1:name}(${2}) {
+    ${3}
+  }
+
+snippet     static
+  static function ${1:name}(${2}) {
+    ${3}
+  }
+
+snippet     this
+abbr        this
+  $this->${1}
+
+snippet     self
+  self::${1}
+#}}}
+# classes #{{{
+snippet     Setting
+  class Setting {/*{{{*/
+    protected $_data;
+    public function __construct() {
+      $this->_data = array();
     }
-
-snippet     header
-abbr        header
-prev_word   '^'
-   header('Location: ${1:http://www.example.com}');
-
-# snipmate{{{
-snippet php
-    <?php
-    ${1}
-
-snippet ec
-    echo "${1:string}"${2};
-
-snippet inc
-    include '${1:file}';${2}
-
-snippet inc1
-    include_once '${1:file}';${2}
-
-snippet req
-    require '${1:file}';${2}
-
-snippet req1
-    require_once '${1:file}';${2}
-
-# $GLOBALS['...']
-snippet globals
-    $GLOBALS['${1:variable}']${2: = }${3:something}${4:;}${5}
-
-# Class - post doc
-snippet doc_cp
+    public function get($name) {
+      return $this->_data[$name];
+    }
+    public function set($name, $value) {
+      $this->_data[$name] = $value;
+      return $this;
+    }
+  }/*}}}*/
+#}}}
+# default {{{
+# docs#{{{
+snippet doc
     /**
      * ${1:undocumented class}
      *
      * @package ${2:default}
-     * @author ${3:`g:snips_author`}
-    **/${4}
-
-snippet $_COOKIE['...']
-    $_COOKIE['${1:variable}']${2}
-
-snippet $_ENV['...']
-    $_ENV['${1:variable}']${2}
-
-snippet $_FILES['...']
-    $_FILES['${1:variable}']${2}
-
-snippet $_Get['...']
-    $_GET['${1:variable}']${2}
-
-snippet $_POST['...']
-    $_POST['${1:variable}']${2}
-
-snippet $_REQUEST['...']
-    $_REQUEST['${1:variable}']${2}
-
-snippet $_SERVER['...']
-    $_SERVER['${1:variable}']${2}
-
-snippet $_SESSION['...']
-    $_SESSION['${1:variable}']${2}
-
-# Start Docblock
-snippet /*
-    /**
-     * ${1}
-     **/
+     * @author ${3:`g:my_settings.author`}
+    **/
 
 # Class Variable - post doc
 snippet doc_vp
@@ -102,7 +90,7 @@ snippet doc_vp
      * ${1:undocumented class variable}
      *
      * @var ${2:string}
-     **/${3}
+     **/
 
 # Class Variable
 snippet doc_v
@@ -112,18 +100,6 @@ snippet doc_v
      * @var ${4:string}
      **/
     ${1:var} $${2};${5}
-
-# Class
-snippet doc_c
-    /**
-     * ${3:undocumented class}
-     *
-     * @packaged ${4:default}
-     * @author ${5:`g:snips_author`}
-     **/
-    ${1:}class ${2:}
-    {${6}
-    } // END $1class $2
 
 # Constant Definition - post doc
 snippet doc_dp
@@ -144,8 +120,8 @@ snippet doc_fp
      * ${1:undocumented function}
      *
      * @return ${2:void}
-     * @author ${3:`g:snips_author`}
-     **/${4}
+     * @author ${3:`g:my_settings.author`}
+     **/
 
 # Function signature
 snippet doc_s
@@ -153,7 +129,7 @@ snippet doc_s
      * ${4:undocumented function}
      *
      * @return ${5:void}
-     * @author ${6:`g:snips_author`}
+     * @author ${6:`g:my_settings.author`}
      **/
     ${1}function ${2}(${3});${7}
 
@@ -163,7 +139,7 @@ snippet doc_f
      * ${4:undocumented function}
      *
      * @return ${5:void}
-     * @author ${6:`g:snips_author`}
+     * @author ${6:`g:my_settings.author`}
      **/
     ${1}function ${2}(${3})
     {${7}
@@ -174,9 +150,9 @@ snippet doc_h
     /**
      * ${1}
      *
-     * @author ${2:`g:snips_author`}
+     * @author ${2:`g:my_settings.author`}
      * @version ${3:$Id$}
-     * @copyright ${4:$2}, `strftime('%d %B, %Y')`
+     * @copyright ${4:$2}, `g:my_settings.date`
      * @package ${5:default}
      **/
 
@@ -190,19 +166,93 @@ snippet doc_i
      * ${2:undocumented class}
      *
      * @package ${3:default}
-     * @author ${4:`g:snips_author`}
+     * @author ${4:`g:my_settings.author`}
      **/
-    interface ${1:}
-    {${5}
-    } // END interface $1
 
-# define(...)
+    interface ${1} {
+      ${5}
+    } // END interface
+
+
+# Start Docblock
+snippet /*
+    /**
+     * ${1}
+     **/
+
+# }}}
+# global env#{{{
+snippet $_COOKIE
+    $_COOKIE['${1:variable}']
+
+snippet globals
+    $GLOBALS['${1:variable}']${2: = }${3:something}${4:;}
+
+snippet $_ENV
+    $_ENV['${1:variable}']
+
+snippet $_FILES
+    $_FILES['${1:variable}']
+
+snippet $_GET
+    $_GET['${1:variable}']
+
+snippet $_POST
+    $_POST['${1:variable}']
+
+snippet $_REQUEST
+    $_REQUEST['${1:variable}']
+
+snippet $_SERVER
+    $_SERVER['${1:variable}']
+
+snippet $_SESSION
+    $_SESSION['${1:variable}']
+#}}}
+# defaults#{{{
+snippet class
+    class ${1:ClassName} {
+      ${2}
+    }
+
+snippet     func
+abbr        function
+prev_word     '^'
+    function ${1:name} (${2}) {
+      ${3:# code...}
+    }
+
+snippet     header
+abbr        header
+prev_word   '^'
+   header('Location: ${1:http://www.example.com}');
+
+snippet     dump
+  var_dump(${1:variable})
+
+snippet php
+    <?php
+    ${1}
+
+snippet inc
+    include '${1:file}';
+
+snippet inco
+    include_once '${1:file}';
+
+snippet req
+    require '${1:file}';
+
+snippet reqo
+    require_once '${1:file}';
+
+
 snippet def
-    define('${1}'${2});${3}
+    define('${1}'${2});
 
 # defined(...)
 snippet def?
-    ${1}defined('${2}')${3}
+    ${1}defined('${2}')
 
 snippet wh
     while (${1:/* condition */}) {
@@ -221,274 +271,56 @@ snippet if
     }
 
 snippet ife
-    if (${1:/* condition */}) {
-        ${2:// code...}
+    if (${1}) {
+        ${2}
     } else {
-        ${3:// code...}
+        ${3}
     }
-    ${4}
 
 snippet else
     else {
-        ${1:// code...}
+        ${1}
     }
 
 snippet elseif
-    elseif (${1:/* condition */}) {
-        ${2:// code...}
+    elseif (${1}) {
+        ${2}
     }
 
 # Tertiary conditional
 snippet t
-    $${1:retVal} = (${2:condition}) ? ${3:a} : ${4:b};${5}
+    $${1} = (${2}) ? ${3} : ${4};
 
 snippet switch
-    switch ($${1:variable}) {
-        case '${2:value}':
-            ${3:// code...}
+    switch ($${1}) {
+        case '${2}':
+            ${3}
             break;
-        ${5}
         default:
-            ${4:// code...}
+            ${4}
             break;
     }
 
 snippet case
-    case '${1:value}':
-        ${2:// code...}
-        break;${3}
+    case '${1}':
+        ${2}
+        break;
 snippet for
-    for ($${2:i} = 0; $$2 < ${1:count}; $$2${3:++}) {
-        ${4: // code...}
+    for ($i = 0; $i < ${1:count}; $i++) {
+        ${2}
     }
 
 snippet foreach
-    foreach ($${1:variable} as $${2:key}) {
-        ${3:// code...}
+    foreach ($${1} as $${2}) {
+      ${3}
     }
 
-snippet fun
-    ${1:public }function ${2:FunctionName}(${3})
-    {
-        ${4:// code...}
-    }
-
-# $... = array (...)
 snippet array
-    $${1:arrayName} = array(
-        '${2}' => ${3},
-        );${4}
-
-##### CodeIgniter Snippets #####
-# Generic $this->
-snippet this
-    $this->${1:model/controller}->${2:method}(${3:array});${4}
-
-# New Model Class
-snippet classm
-    /*
-    * ${1:Describe the model's purpose}
-    */
-
-    class `Filename()` extends CI_Model
-    {
-        function __construct()
-        {
-            parent::__construct();
-        }
-        ${3:// Code...}
-    }
-
-# New Controller Class
-snippet classc
-    /*
-    * ${1:Describe the controller's purpose}
-    */
-
-    class `Filename()` extends CI_Controller
-    {
-        function __construct()
-        {
-            parent::__construct();
-        }
-        ${3:// Code...}
-    }
-
-# Form Validation Rules
-snippet formrule
-    $this->form_validation->set_rules('${1:field name}','${2:human name}', '${3:rules}');${4}
-
-# Data array - $data['key']
-snippet darr
-    $data['${1:arrayName}'] = array(
-        '${2}' => ${3},${4}
-        );
-
-# Additional array data
-snippet arrv
-    '${1}' => ${2},${3}
-
-# Load view template
-snippet loadtemp
-    $data['main_content'] = '${1:view}';
-    $this->load->view('includes/template', $data);${2}
-
-##### Common Functions #####
-# Form validation run == FALSE
-snippet funform
-    function ${1:function}()
-    {
-        ${2:rules}
-        if($this->form_validation_run() == FALSE)
-        {
-            ${3:form data arrays}
-        }
-        else
-        {
-            ${4:success view}
-        }
-    }
-
-# Return If
-snippet returnif
-    if ($q->num_rows() > 0)
-    {
-        $${1:array} = $q->row_array();
-
-        return $${1:array};
-    }
-    else
-    {
-        return FALSE;
-    }
-
-##### Form Helper #####
-# Validation Errors
-snippet valerr
-    <?php echo validation_errors(); ?>${1}
-
-# Form Open
-snippet formo
-    <?php echo form_open('${1:form controller}'); ?>${2}
-
-# Form Close
-snippet formc
-    <?php echo form_close(); ?>${1}
-
-## Form Fields ##
-# Hidden
-snippet fhidden
-    <?php echo form_hidden('${1:name}', ${2:array}); ?>${3}
-
-# Input
-snippet finput
-    <?php echo form_input('${1:array}', set_value('${2:name}')); ?>${3}
-
-# Password
-snippet fpass
-    <?php echo form_password('${1:array}', set_value('${2:name}')); ?>${3}
-
-# Upload
-snippet fupload
-    <?php echo form_upload('${1:array}', set_value('${2:name}')); ?>${3}
-
-# Text area
-snippet ftext
-    <?php echo form_textarea('${1:array}', set_value('${2:name}')); ?>${3}
-
-# Drop-down
-snippet fdrop
-    <?php echo form_dropdown('${1:name}',${2:array}, $this->input->post('${1}')); ?>${3}
-
-# Checkbox
-snippet fcheck
-    <?php echo form_checkbox($${1:array}['${2:key}'], '', set_checkbox('${1}[]', '${2}')); ?>${3}
-
-# Radio button
-snippet fradio
-    <?php echo form_radio($${1:array}['${2:key}'], '', set_radio('${1}[]', '${2}')); ?>${3}
-
-# Form submit
-snippet fsubmit
-    <?php echo form_submit('${1:name}', '${2:value}'); ?>${3}
-
-# Form reset
-snippet freset
-    <?php echo form_reset('${1:name}', '${2:value}'); ?>${3}
-
-# Fieldset open
-snippet fieldo
-    <?php form_fieldset('${1:label}', '${2:array}'); ?>${3}
-
-# Fieldset close
-snippet fieldc
-    <?php form_fieldset_close(); ?>${1}
-
-##### HTML Snippets #####
-# <br>
-snippet r
-    <br`Close()[1:]`>
-
-# Div with class
-snippet div
-    <div id="${1:name}" class="${2}">
-        ${3}
-    </div>
-
-# Ordered list
-snippet ol
-    <ol id="${1}">
-        ${2}
-    </ol>
-
-# Unordered list
-snippet ul
-    <ul id="${1}">
-        ${2}
-    </ul>
-
-# List Item
-snippet li
-    <li>${1}</li>${2}
-
-##### PHP/HTML Shorthand #####
-# PHP Foreach
-snippet sforeach
-    <?php foreach ($${1:array} as $${2:key}) : ?>
-        ${3:// code...}
-    <?php endforeach; ?>
-
-##### Database Class/Active Record #####
-# Get query
-snippet dbget
-    $q = $this->db->get('${1:table}');${2}
-
-# Get_where query
-snippet dbgetwhere
-    $q = $this->db->get_where('${1:table}', array('${2:field}' => $${3:input}));${4}
-
-# Select
-snippet dbselect
-    $this->db->select('${1:fields}');${2}
-
-# Where
-snippet dbwhere
-    $this->db->where('${1:field}', $${2:input});${3}
-
-# Insert
-snippet dbinsert
-    $this->db->insert('${1:table}', $${2:array});${3}
-
-# Update
-snippet dbupdate
-    $this->db->update('${1:table}', $${2:array});${3}
-
-# Delete
-snippet dbdelete
-    $this->db->delete('${1:table}', $${2:array});${3}
-
-##### URL Helper #####
-# Site URL
+    ${1} = array(
+      '${2}' => ${3},
+    );
+#}}}
+##### URL Helper ######{{{
 snippet surl
     <?php echo site_url("${1:segments}"); ?>${2}
 
@@ -507,29 +339,6 @@ snippet anchor
 # Safe Mailto
 snippet mailto
     <?php echo safe_mailto('${1:email}', '${2:text}'); ?>${3}
-
-
-
-
-
-
-
+#}}}
 #}}}
 
-snippet     dump
-  var_dump(${1:variable})
-
-snippet     Setting
-  class Setting {/*{{{*/
-  protected $_data;
-  public function __construct() {
-    $this->_data = array();
-  }
-  public function get($name) {
-    return $this->_data[$name];
-  }
-  public function set($name, $value) {
-    $this->_data[$name] = $value;
-    return $this;
-  }
-  }/*}}}*/

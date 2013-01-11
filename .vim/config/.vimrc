@@ -1,12 +1,16 @@
 aug MyAutoCmd
   au!
 aug END
+source ~/.vim/config/.vimrc.commands
 
 "----------------------------------------
 " initialize"{{{
 let g:my_settings = {}
 let g:my_settings.initialize = 0
 let g:my_settings.keyboard_type = 'jis'
+
+let g:my_settings.date = Today()
+let g:my_settings.author = 'Ishii Hiroyuki'
 
 let g:my_settings.dir = {}
 let g:my_settings.dir.trash_dir = expand('~/.Trash/')
@@ -136,7 +140,7 @@ nnoremap <silent><Space>w :wq<CR>
 nnoremap <silent><Space><Space>w :wall!<CR>
 nnoremap <silent><Space>q :q!<CR>
 nnoremap <silent><Space><Space>q :qall!<CR>
-nnoremap <silent><Space>s :SudoWrite %<CR>
+nnoremap <silent><Space>s :w sudo:%<CR>
 nnoremap re :%s!
 xnoremap re :s!
 vnoremap rep y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<Return>!!g<Left><Left>
@@ -499,31 +503,6 @@ set foldenable
 set foldmethod=marker
 set foldnestmax=5
 
-if has('gui_macvim') "{{{
-  " set guifont=Recty:h12
-  " set lines=90 columns=200
-  " set transparency=10
-  set cmdheight=1
-  set guioptions-=BLRT
-
-  " 暫く触らないと、画面を薄くする
-  let g:visible = 0
-  function! SetShow()
-    if g:visible == 1
-      setl transparency=0
-      let g:visible = 0
-    endif
-  endfunction
-  function! SetVisible()
-    setl transparency=98
-    let g:visible = 1
-  endfunction
-  " au CursorHold * call SetVisible()
-  " au CursorMoved,CursorMovedI,WinLeave * call SetShow()
-
-  nnoremap <silent>_ :exec g:visible == 0 ? ":call SetVisible()" : ":call SetShow()"<CR>
-endif "}}}
-
 syntax on
 
 " 全角スペースの表示
@@ -701,7 +680,7 @@ NeoBundleLazy 'Shougo/unite.vim', {
       \ 'autoload': { 'commands': [ 'Unite', 'UniteBookmarkAdd', 'UniteClose', 'UniteResume', 'UniteWithBufferDir', 'UniteWithCurrentDir', 'UniteWithCursorWord', 'UniteWithInput', 'UniteWithInputDirectory' ] }
       \ }
 NeoBundleLazy 'vim-scripts/sudo.vim', {
-      \ 'autoload': { 'commands': ['SudoRead', 'SudoWrite'] }
+      \ 'autoload': { 'commands': ['SudoRead', 'SudoWrite'], 'insert': 1 }
       \ }
 NeoBundleLazy 'Shougo/vimfiler', {
       \ 'depends' : 'Shougo/unite.vim',
@@ -1013,7 +992,7 @@ NeoBundleLazy 'davidhalter/jedi-vim', {
 
 " scala
 " ----------------------------------------
-NeoBundleLazy 'yuroyoro/vim-scala',
+NeoBundleLazy g:my_settings.github.url.'taichouchou2/vim-scala',
       \ Neo_al(g:my_settings.ft.scala_files)
 " https://github.com/derekwyatt/vim-scala.git
 
@@ -2730,124 +2709,6 @@ nnoremap <silent><expr><Space>ee  ':NeoSnippetEdit -split'.split(&ft, '.')[0].'<
 smap <silent><C-F>                <Plug>(neosnippet_expand_or_jump)
 " xmap <silent><C-F>                <Plug>(neosnippet_start_unite_snippet_target)
 xmap <silent>o                    <Plug>(neosnippet_register_oneshot_snippet)
-"}}}
-
-"----------------------------------------
-" コマンドの実行"{{{
-
-"----------------------------------------
-" phptohtml
-"----------------------------------------
-aug MyAutoCmd
-  au Filetype php nnoremap <Leader>R :! phptohtml<CR>
-aug END
-
-"----------------------------------------
-" 独自関数
-"----------------------------------------
-" ----------------------------------------
-" today
-" ----------------------------------------
-"{{{
-function! Today()
-  return strftime("%Y-%m-%d")
-endfunction
-inoremap <C-D><C-D> <C-R>=Today()<CR>
-"}}}
-
-" ----------------------------------------
-" open yard
-" ----------------------------------------
-" カーソル下のgemのrdocを開く
-"{{{
-function! OpenYard(...)
-  let gem = a:1 == "" ? "" : a:1
-  if gem == ""
-    call OpenBrowser("http://localhost:8808/")
-  else
-    let url = "http://localhost:8808/docs/" . tolower(gem) . "/frames/"
-    call OpenBrowser(url)
-  endif
-endfunction
-
-command!
-      \ -nargs=*
-      \ OpenYard
-      \ call OpenYard(<q-args>)
-
-" マッピング
-nnoremap <Space>y :<C-U>OpenYard <C-R><C-W><CR>
-"}}}
-
-" ----------------------------------------
-" haml2html
-" ----------------------------------------
-"{{{
-" function! ConvertHamlToHtml(fileType)
-"   " 同じディレクトリに、pathというファイルを作り
-"   " `cat path` -> `../`
-"   " となっていれば、その相対パスディレクトリに保存する
-"
-"   " 設定ファイルを読み込む
-"   let dir_name = expand("%:p:h")
-"   let save_path = ''
-"   if filereadable(dir_name . '/path')
-"     let save_path = readfile("path")[0]
-"   endif
-"
-"   " 2html
-"   let current_file = expand("%")
-"   let target_file  = substitute(current_file, '.html', '', 'g')
-"   let target_file  = dir_name.'/'.save_path.substitute(target_file, '.'.expand("%:e").'$', '.html', 'g')
-"
-"   " コマンドの分岐
-"   if a:fileType == 'eruby'
-"     " exec ":call vimproc#system('rm " .target_file"')"
-"     let convert_cmd  = 'erb ' . current_file . ' > ' . target_file
-"   elseif a:fileType == 'haml'
-"     " let convert_cmd  = 'haml_with_ruby2html ' . current_file . ' > ' . target_file
-"     let convert_cmd  = 'haml --format html4 ' . current_file . ' > ' . target_file
-"   endif
-"
-"   echo "convert " . a:fileType . ' to ' . target_file
-"   exec ":call vimproc#system('" . convert_cmd . "')"
-" endfunction
-"
-" function! HamlSetting()
-"   nnoremap <buffer><Leader>R :<C-U>call ConvertHamlToHtml("haml")<CR>
-"   aug MyAutoCmd
-"     au BufWritePost *.haml silent call ConvertHamlToHtml("haml")
-"   aug END
-" endfunction
-" " au Filetype haml call HamlSetting()
-"
-" function! ErubySetting()
-"   nnoremap <buffer><Leader>R :<C-U>call ConvertHamlToHtml("eruby")<CR>
-"   aug MyAutoCmd
-"     au BufWritePost *.erb silent call ConvertHamlToHtml("eruby")
-"   aug END
-" endfunction
-" au Filetype eruby call ErubySetting()
-"}}}
-" au Filetype eruby call ErubySetting()
-
-" Mac の辞書.appで開く {{{
-if has('mac')
-  " 引数に渡したワードを検索
-  command! -nargs=1 MacDict      call system('open '.shellescape('dict://'.<q-args>))
-  " カーソル下のワードを検索
-  command! -nargs=0 MacDictCWord call system('open '.shellescape('dict://'.shellescape(expand('<cword>'))))
-  " 辞書.app を閉じる
-  command! -nargs=0 MacDictClose call system("osascript -e 'tell application \"Dictionary\" to quit'")
-  " 辞書にフォーカスを当てる
-  command! -nargs=0 MacDictFocus call system("osascript -e 'tell application \"Dictionary\" to activate'")
-  " キーマッピング
-
-  nnoremap <silent>mo :<C-u>MacDictCWord<CR>
-  vnoremap <silent>mm y:<C-u>MacDict<Space><C-r>*<CR>
-  nnoremap <silent>mc :<C-u>MacDictClose<CR>
-  nnoremap <silent>mf :<C-u>MacDictFocus<CR>
-endif
 "}}}
 
 set secure
