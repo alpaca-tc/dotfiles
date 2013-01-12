@@ -222,7 +222,7 @@ augroup RemoveDust
 augroup END
 "}}}
 
-" htmlを変換 {{{
+" htmlをescape {{{
 function! s:HtmlEscape()
   silent s/&/\&amp;/eg
   silent s/</\&lt;/eg
@@ -237,6 +237,8 @@ endfunction
 xmap <silent>eh :call <SID>HtmlEscape()<CR>
 xmap <silent>dh :call <SID>HtmlUnEscape()<CR>
 " }}}
+
+au Filetype php nnoremap <Leader>R :! phptohtml<CR>
 
 " Improved increment.{{{
 nmap <C-A> <SID>(increment)
@@ -284,6 +286,9 @@ let Grep_Xargs_Options = '--print0'
 
 "grepをしたときにQuickFixで表示するようにする
 set grepprg=grep\ -nH
+nnoremap <silent>mc :<C-u>call alpaca#function#macdict#close()<CR>
+nnoremap <silent>mf :<C-u>call alpaca#function#macdict#focus()<CR>
+nnoremap <silent>mo :<C-u>call alpaca#function#macdict#with_cursor_word()<CR>
 "}}}
 
 "----------------------------------------
