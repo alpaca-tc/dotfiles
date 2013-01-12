@@ -37,27 +37,6 @@ if [ $yn = "y" -o $yn = "Y" ]; then
         mkdir -p $HOME/$file
     done
 
-    # ~/.vim/のdict, colorsを生成
-    VIM_FOLDERS=( dict colors )
-    for file in ${VIM_FOLDERS[@]}
-    do
-        if [ -a $HOME/.vim/$file ]; then
-            if [ "$yn" != "a" ]; then
-                echo "exists: ~/.vim/$file"
-                read -p "override? y/n/a " yn
-            fi
-        else
-            if [ $yn != "a" ]; then
-                export yn=y
-            fi
-        fi
-
-        if [ $yn = "y" -o $yn = "Y" -o $yn = "a" ]; then
-            rm -rf $HOME/.vim/$file
-            ln -s $HOME/.bundle/alpaca/$file $HOME/.vim/$file
-            echo "done!!: symbolic link  $HOME/.bunlde/alpaca/$file   => $HOME/.vim/$file"
-        fi
-    done
 fi
 
 # finderで隠しファイルを表示する
