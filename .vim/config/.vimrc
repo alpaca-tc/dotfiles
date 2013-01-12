@@ -659,8 +659,7 @@ NeoBundleLazy 'rhysd/accelerated-jk', {
       \ ]}}
 " NeoBundle 'vim-scripts/Smooth-Scroll'
 
-" 個人的なカラーやフォントや廃止になったプラグインなど
-NeoBundleLazy g:my.github.url.'taichouchou2/alpaca'
+NeoBundleLazy 'taichouchou2/alpaca' " 個人的なカラーやフォントや廃止になったプラグインなど。読み込むことは無し。
 NeoBundleLazy 'tpope/vim-surround', {
       \ 'autoload' : {
       \   'mappings' : [

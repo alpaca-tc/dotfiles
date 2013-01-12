@@ -1,12 +1,10 @@
-source ~/.zsh/git-completion.bash
+# zstyle ':completion:*:*:git:*' script ~/.zsh/completion/git-completion.zsh
 source ~/.zsh/git-prompt.sh
-source ~/.zsh/tmux-completion.bash
+# source ~/.zsh/tmux-completion.bash
 source ~/.zsh/rbenv.zsh
-source ~/.zsh/scala.sh
-# source ~/.zsh/zaw/zaw.zsh
+# source ~/.zsh/scala.sh
 
 # brewの読み込みなど
-fpath=(~/.zsh/functions/$fpath)
 
 # コマンドを一時避難# {{{
 show_buffer_stack() {

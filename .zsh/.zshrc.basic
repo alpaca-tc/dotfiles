@@ -1,3 +1,6 @@
+# 重複パスを設定しない
+typeset -U path cdpath fpath manpath
+
 # 色をつける# {{{
 # ls -G 表示の設定
 # mac系

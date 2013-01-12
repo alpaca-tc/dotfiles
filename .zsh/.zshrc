@@ -54,6 +54,8 @@ eval "$(rbenv init -)"
 export PATH=/Applications/XAMPP/xamppfiles/bin:$PATH
 # }}}
 
+fpath=(~/.zsh/site-functions $fpath)
+
 # 各種読み込み
 # {{{
 source ~/.zsh/.zshrc.basic
