@@ -168,6 +168,7 @@ nnoremap <silent><Space><Space>w :wall!<CR>
 nnoremap <silent><Space>q :q!<CR>
 nnoremap <silent><Space><Space>q :qall!<CR>
 nnoremap <silent><Space>s :w sudo:%<CR>
+inoremap <C-D><C-D> <C-R>=g:my.info.date<CR>
 nnoremap re :%s!
 xnoremap re :s!
 vnoremap rep y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<Return>!!g<Left><Left>
@@ -581,6 +582,7 @@ nnoremap [tag_or_tab]s  :<C-u>tselect<CR>
 "}}}
 
 "----------------------------------------
+  " let g:neobundle#types#git#default_protocol = 'https'
 " neobundle"{{{
 filetype plugin indent off     " required!
 
@@ -919,7 +921,8 @@ NeoBundleLazy g:my.github.url.'taichouchou2/vim-endwise.git', {
       \ }}
 
 " rails
-NeoBundleLazy 'basyura/unite-rails'
+NeoBundleLazy 'basyura/unite-rails', {
+      \ 'depends' : 'Shougo/unite.vim' }
 NeoBundleLazy g:my.github.url.'taichouchou2/unite-rails_best_practices', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'build' : {
@@ -962,7 +965,12 @@ NeoBundleLazy g:my.github.url.'taichouchou2/unite-reek', {
       \ 'depends' : 'Shougo/unite.vim' }
 NeoBundleLazy 'Shougo/neocomplcache-rsense', {
       \ 'depends': 'Shougo/neocomplcache',
-      \ 'autoload': { 'filetypes': g:my.ft.ruby_files }}
+      \ 'autoload': { 'filetypes': 'ruby' }}
+NeoBundleLazy 'taichouchou2/rsense-0.3', {
+      \ 'build' : {
+      \    'mac': 'ruby etc/config.rb > ~/.rsense',
+      \    'unix': 'ruby etc/config.rb > ~/.rsense',
+      \ } }
 NeoBundleLazy 'rhysd/unite-ruby-require.vim',
       \ Neo_al(g:my.ft.ruby_files)
 NeoBundleLazy 'rhysd/vim-textobj-ruby', { 'depends': 'kana/vim-textobj-user' }
@@ -2691,9 +2699,6 @@ imap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_jump_or_expand)" 
 "----------------------------------------
 " neosnippet"{{{
 let g:neosnippet#snippets_directory = g:my.dir.bundle . '/neosnippet/autoload/neosnippet/snippets,' . g:my.dir.snippets
-aug MyAutoCmd
-  au FileType snippet nnoremap <buffer><Space>e :e #<CR>
-aug END
 imap <silent><C-F>                <Plug>(neosnippet_expand_or_jump)
 inoremap <silent><C-U>            <ESC>:<C-U>Unite snippet<CR>
 nnoremap <silent><Space>e         :<C-U>NeoSnippetEdit -split<CR>
@@ -2702,5 +2707,6 @@ smap <silent><C-F>                <Plug>(neosnippet_expand_or_jump)
 " xmap <silent><C-F>                <Plug>(neosnippet_start_unite_snippet_target)
 xmap <silent>o                    <Plug>(neosnippet_register_oneshot_snippet)
 "}}}
+
 
 set secure
