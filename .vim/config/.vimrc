@@ -35,7 +35,6 @@ let g:my.dir = {
       \ "vimref"    : expand('~/.Trash/vim-ref'),
       \ "memolist"  : expand('~/.memolist'),
       \ "ctrlp"     : expand('~/.Trash/ctrlp'),
-      \ "rsense"    : expand('~/.vim/ref/rsense-0.3'),
       \ "snippets"  : expand('~/.vim/snippet'),
       \ }
 "}}}
@@ -141,7 +140,7 @@ command! -nargs=* NewBuffer call <SID>new_buffer(<q-args>)
 nnoremap <silent><C-W>n     :<C-U>NewBuffer<CR>
 nnoremap <silent><C-W><C-N> :<C-U>NewBuffer copy<CR>
 "}}}
-" 対応を自動補完 {{{
+" 対応を補完 {{{
 inoremap { {}<Left>
 inoremap [ []<Left>
 inoremap ( ()<Left>
@@ -171,7 +170,7 @@ nnoremap <silent><Space>s :w sudo:%<CR>
 inoremap <C-D><C-D> <C-R>=g:my.info.date<CR>
 nnoremap re :%s!
 xnoremap re :s!
-vnoremap rep y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<Return>!!g<Left><Left>
+xnoremap rep y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<Return>!!g<Left><Left>
 nnoremap <Leader>f :setl ft=
 "}}}
 " コメントを書くときに便利 {{{
@@ -304,14 +303,14 @@ inoremap <silent><C-L> <Right>
 inoremap <silent><C-O> <Esc>o
 inoremap jj <Esc>
 nnoremap $ g_
-vnoremap $ g_
+xnoremap $ g_
 nnoremap <silent><Down> gj
 nnoremap <silent><Up>   gk
 nnoremap <silent>j gj
 nnoremap <silent>k gk
 
-vnoremap H <Nop>
-vnoremap v G
+xnoremap H <Nop>
+xnoremap v G
 "}}}
 " 画面の移動 {{{
 nnoremap <C-L> <C-T>
@@ -544,7 +543,6 @@ colorscheme molokai
 " http://vim-users.jp/2010/06/hack154/
 
 set tags& tags-=tags tags+=./tags;
-set tags+=./**/tags
 
 function! SetTags()
   let g:current_git_root = system('git rev-parse --show-cdup')
@@ -582,7 +580,7 @@ nnoremap [tag_or_tab]s  :<C-u>tselect<CR>
 "}}}
 
 "----------------------------------------
-  " let g:neobundle#types#git#default_protocol = 'https'
+let g:neobundle#types#git#default_protocol = 'https'
 " neobundle"{{{
 filetype plugin indent off     " required!
 
@@ -675,8 +673,8 @@ NeoBundleLazy 'tpope/vim-fugitive', { 'autoload' : { 'commands': ['Gcommit', 'Gb
 NeoBundleLazy 'taichouchou2/alpaca_powerline', {
       \ 'depends': ['majutsushi/tagbar', 'tpope/vim-fugitive', 'basyura/TweetVim', 'basyura/twibill.vim',],
       \ 'autoload' : { 'functions': ['Pl#UpdateStatusline', 'Pl#Hi#Allocate', 'Pl#Hi#Segments', 'Pl#Colorscheme#Init',]  }}
-au BufEnter,WinEnter,FileType,BufUnload,CmdWinEnter * call Pl#UpdateStatusline(1)
-au BufLeave,WinLeave,CmdWinLeave * call Pl#UpdateStatusline(0)
+" au BufEnter,WinEnter,FileType,BufUnload,CmdWinEnter * call Pl#UpdateStatusline(1)
+" au BufLeave,WinLeave,CmdWinLeave * call Pl#UpdateStatusline(0)
 NeoBundle 'h1mesuke/vim-alignta', { 'autoload' : { 'commands' : ['Align'] } }
 "}}}
 " vim拡張"{{{
@@ -738,7 +736,12 @@ NeoBundleLazy 'grep.vim', { 'autoload' : { 'commands': ["Grep", "Rgrep"] }}
 NeoBundleLazy 'kien/ctrlp.vim', { 'autoload' : { 'commands' : ['CtrlPBuffer', 'CtrlPDir']}}
 NeoBundleLazy 'sjl/gundo.vim', { 'autoload' : { 'commands': ["GundoToggle", 'GundoRenderGraph'] }}
 NeoBundleLazy 'Shougo/git-vim', { 'autoload' : { 'commands': ["GitDiff", "GitLog", "GitAdd", "Git", "GitCommit", "GitBlame", "GitBranch", "GitPush"] }}
-NeoBundleLazy 'Shougo/neocomplcache', {
+NeoBundle 'Shougo/neocomplcache', {
+      \ 'autoload' : {
+      \   'insert' : 1,
+      \ }}
+NeoBundleLazy 'Shougo/echodoc', {
+      \ 'depends' : 'Shougo/neocomplcache',
       \ 'autoload' : {
       \   'insert' : 1,
       \ }}
@@ -819,10 +822,10 @@ NeoBundle 'operator-camelize', Neo_operator([
 " NeoBundle 'kana/vim-smartchr' "smartchr.vim : ==()などの前後を整形
 NeoBundleLazy 'mattn/webapi-vim' "vim Interface to Web API
 NeoBundleLazy 'scrooloose/syntastic', Neo_al(g:my.ft.program_files)
-NeoBundleLazy g:my.github.url.'taichouchou2/alpaca_look.git', {
-      \ 'autoload' : {
-      \   'insert' : 1,
-      \ }}
+" NeoBundleLazy g:my.github.url.'taichouchou2/alpaca_look.git', {
+"       \ 'autoload' : {
+"       \   'insert' : 1,
+"       \ }}
 NeoBundleLazy 'rhysd/clever-f.vim', { 'autoload' : {
       \ 'mappings' : 'f',
       \ }}
@@ -963,7 +966,7 @@ NeoBundleLazy g:my.github.url.'taichouchou2/unite-reek', {
       \ },
       \ 'autoload': { 'filetypes': g:my.ft.ruby_files },
       \ 'depends' : 'Shougo/unite.vim' }
-NeoBundleLazy 'Shougo/neocomplcache-rsense', {
+NeoBundle 'Shougo/neocomplcache-rsense', {
       \ 'depends': 'Shougo/neocomplcache',
       \ 'autoload': { 'filetypes': 'ruby' }}
 NeoBundleLazy 'taichouchou2/rsense-0.3', {
@@ -1061,8 +1064,8 @@ call arpeggio#map('v', '', 0, 'jk', '<C-[>:noh<CR>:echo ""<CR>')
 "{{{
 " Alignを日本語環境で使用するための設定
 let g:Align_xstrlen = 3
-vnoremap <C-N> :Align<Space>
-vnoremap <C-N><C-N> :Align =<CR>
+xnoremap <C-N> :Align<Space>
+xnoremap <C-N><C-N> :Align =<CR>
 "}}}
 
 "------------------------------------
@@ -1078,7 +1081,7 @@ nmap ySs <Plug>YSsurround
 nmap ySS <Plug>YSsurround
 xmap S   <Plug>VSurround
 xmap gS  <Plug>VgSurround
-vmap s   <Plug>VSurround
+xmap s   <Plug>VSurround
 
 " surround_custom_mappings.vim"{{{
 let g:surround_custom_mapping = {}
@@ -1265,7 +1268,7 @@ let g:tagbar_type_css = {
 "{{{
 " カーソル下のURLをブラウザで開く
 nmap <Leader>o <Plug>(openbrowser-open)
-vmap <Leader>o <Plug>(openbrowser-open)
+" xmap <Leader>o <Plug>(openbrowser-open)
 nnoremap <Leader>g :<C-u>OpenBrowserSearch<Space><C-r><C-w><CR>
 "}}}
 
@@ -1500,7 +1503,7 @@ aug END
 "<C-T>で、true<->falseなど切り替えられる
 " inoremap <C-D> <Plug>ToggleI
 " nnoremap <C-D> <Plug>ToggleN
-" vnoremap <C-D> <Plug>ToggleV
+" xnoremap <C-D> <Plug>ToggleV
 "
 " let g:toggle_pairs = { 'and':'or', 'or':'and', 'if':'unless', 'unless':'if', 'yes':'no', 'no':'yes', 'enable':'disable', 'disable':'enable', 'pick':'reword', 'reword':'fixup', 'fixup':'squash', 'squash':'edit', 'edit':'exec', 'exec':'pick'}
 "}}}
@@ -1539,7 +1542,7 @@ let g:ref_phpmanual_path          = expand('~/.vim/ref/php-chunked-xhtml')
 let g:ref_ri_cmd                  = g:my.bin.ri
 
 nnoremap <C-K> :<C-U>Ref alc <Space><C-R><C-W><CR>
-vnoremap <C-K> :<C-U>Ref alc <Space><C-R><C-W><CR>
+xnoremap <C-K> :<C-U>Ref alc <Space><C-R><C-W><CR>
 nnoremap ra :<C-U>Ref alc<Space>
 nnoremap rp :<C-U>Ref phpmanual<Space>
 nnoremap rr :<C-U>Unite ref/refe     -default-action=split -input=
@@ -1717,142 +1720,6 @@ let g:Powerline_cache_enabled = 0
 " let g:Powerline_cache_file = expand('/tmp/Powerline.cache')
 let g:Powerline_symbols = 'fancy'
 
-
-" {{{
-
-"{{{
-call Pl#Hi#Allocate({
-  \ 'black'          : 16,
-  \ 'white'          : 231,
-  \
-  \ 'darkestgreen'   : 22,
-  \ 'darkgreen'      : 28,
-  \
-  \ 'darkestcyan'    : 23,
-  \ 'mediumcyan'     : 117,
-  \
-  \ 'darkestblue'    : 24,
-  \ 'darkblue'       : 31,
-  \
-  \ 'darkestred'     : 52,
-  \ 'darkred'        : 88,
-  \ 'mediumred'      : 124,
-  \ 'brightred'      : 160,
-  \ 'brightestred'   : 196,
-  \
-  \
-  \ 'darkestyellow'  : 59,
-  \ 'darkyellow'     : 100,
-  \ 'darkestpurple'  : 55,
-  \ 'mediumpurple'   : 98,
-  \ 'brightpurple'   : 189,
-  \
-  \ 'brightorange'   : 208,
-  \ 'brightestorange': 214,
-  \
-  \ 'gray0'          : 233,
-  \ 'gray1'          : 234,
-  \ 'gray2'          : 236,
-  \ 'gray3'          : 239,
-  \ 'gray4'          : 240,
-  \ 'gray5'          : 241,
-  \ 'gray6'          : 244,
-  \ 'gray7'          : 245,
-  \ 'gray8'          : 247,
-  \ 'gray9'          : 250,
-  \ 'gray10'         : 252,
-  \ })
-"}}}
-
-" 'n': normal mode
-" 'i': insert mode
-" 'v': visual mode
-" 'r': replace mode
-" 'N': not active
-
-"{{{
-let g:Powerline#Colorschemes#my#colorscheme = Pl#Colorscheme#Init([
-  \ Pl#Hi#Segments(['SPLIT'], {
-    \ 'n': ['white', 'gray1'],
-    \ 'N': ['gray0', 'gray1'],
-    \ }),
-  \
-  \ Pl#Hi#Segments(['mode_indicator'], {
-    \ 'i': ['darkestgreen', 'white', ['bold']],
-    \ 'n': ['darkestcyan', 'white', ['bold']],
-    \ 'v': ['darkestpurple', 'white', ['bold']],
-    \ 'r': ['mediumred', 'white', ['bold']],
-    \ 's': ['white', 'gray5', ['bold']],
-    \ }),
-  \
-  \ Pl#Hi#Segments(['fileinfo', 'filename'], {
-    \ 'i': ['white', 'darkestgreen', ['bold']],
-    \ 'n': ['white', 'darkestblue', ['bold']],
-    \ 'v': ['white', 'darkestpurple', ['bold']],
-    \ 'r': ['white', 'mediumred', ['bold']],
-    \ 'N': ['gray0', 'gray2', ['bold']],
-    \ }),
-  \
-  \ Pl#Hi#Segments(['branch', 'scrollpercent', 'raw', 'filesize'], {
-    \ 'n': ['gray2', 'gray7'],
-    \ 'N': ['gray0', 'gray2'],
-    \ }),
-  \
-  \ Pl#Hi#Segments(['fileinfo.filepath', 'status'], {
-    \ 'n': ['gray10'],
-    \ 'N': ['gray5'],
-    \ }),
-  \
-  \ Pl#Hi#Segments(['static_str'], {
-    \ 'n': ['white', 'gray4'],
-    \ 'N': ['gray1', 'gray1'],
-    \ }),
-  \
-  \ Pl#Hi#Segments(['fileinfo.flags'], {
-    \ 'n': ['white'],
-    \ 'N': ['gray4'],
-    \ }),
-  \
-  \ Pl#Hi#Segments(['currenttag', 'fileformat', 'fileencoding', 'pwd', 'filetype', 'rvm:string', 'rvm:statusline', 'virtualenv:statusline', 'charcode', 'currhigroup'], {
-    \ 'n': ['gray9', 'gray4'],
-    \ }),
-  \
-  \ Pl#Hi#Segments(['lineinfo'], {
-    \ 'n': ['gray2', 'gray10'],
-    \ 'N': ['gray2', 'gray4'],
-    \ }),
-  \
-  \ Pl#Hi#Segments(['errors'], {
-    \ 'n': ['white', 'gray2'],
-    \ }),
-  \
-  \ Pl#Hi#Segments(['lineinfo.line.tot'], {
-    \ 'n': ['gray2'],
-    \ 'N': ['gray2'],
-    \ }),
-  \
-  \ Pl#Hi#Segments(['paste_indicator', 'ws_marker'], {
-    \ 'n': ['white', 'brightred', ['bold']],
-    \ }),
-  \
-  \ Pl#Hi#Segments(['gundo:static_str.name', 'command_t:static_str.name'], {
-    \ 'n': ['white', 'mediumred', ['bold']],
-    \ 'N': ['brightred', 'darkestred', ['bold']],
-    \ }),
-  \
-  \ Pl#Hi#Segments(['gundo:static_str.buffer', 'command_t:raw.line'], {
-    \ 'n': ['white', 'darkred'],
-    \ 'N': ['brightred', 'darkestred'],
-    \ }),
-  \
-  \ Pl#Hi#Segments(['gundo:SPLIT', 'command_t:SPLIT'], {
-    \ 'n': ['white', 'darkred'],
-    \ 'N': ['white', 'darkestred'],
-    \ }),
-  \ ])
-"}}}
-" let g:Powerline_colorscheme='my'
-" }}}
 "}}}
 
 "------------------------------------
@@ -1963,10 +1830,10 @@ let g:tcommentmaps=0
 nmap <C-_> [tcomment]
 nmap gc [tcomment]
 noremap <silent>[tcomment]<c-_> :TComment<CR>
-vnoremap <silent>[tcomment]<C-_> :TCommentMaybeInline<CR>
+xnoremap <silent>[tcomment]<C-_> :TCommentMaybeInline<CR>
 
 noremap <silent>[tcomment]c :TComment<CR>
-vnoremap <silent>[tcomment]c :TCommentMaybeInline<CR>
+xnoremap <silent>[tcomment]c :TCommentMaybeInline<CR>
 
 let g:tcomment_types = {
       \'php_surround'            : "<?php %s ?>",
@@ -1992,10 +1859,10 @@ function! SetErubyMapping2()
   inoremap <buffer> [tcomment]d <%=begin rdoc=end%><ESC><Left><Left>i
   inoremap <buffer> [tcomment]n <%=begin=end%><ESC><Left><Left>i
 
-  vnoremap <buffer> [tcomment]c :TCommentAs eruby_surround<CR>
-  vnoremap <buffer> [tcomment]<C-C> :TCommentAs eruby_surround<CR>
-  vnoremap <buffer> [tcomment]- :TCommentAs eruby_surround_minus<CR>
-  vnoremap <buffer> [tcomment]= :TCommentAs eruby_surround_equality<CR>
+  xnoremap <buffer> [tcomment]c :TCommentAs eruby_surround<CR>
+  xnoremap <buffer> [tcomment]<C-C> :TCommentAs eruby_surround<CR>
+  xnoremap <buffer> [tcomment]- :TCommentAs eruby_surround_minus<CR>
+  xnoremap <buffer> [tcomment]= :TCommentAs eruby_surround_equality<CR>
   nnoremap <buffer> <C-j>c :TCommentAs eruby_surround<CR><Right><Right><Right>
   nnoremap <buffer> <C-j><C-C> :TCommentAs eruby_surround<CR><Right><Right><Right>
   nnoremap <buffer> <C-j>- :TCommentAs eruby_surround_minus<CR><Right><Right><Right>
@@ -2008,10 +1875,10 @@ function! SetErubyMapping2()
   inoremap <buffer> <C-j>= <%=  %><ESC><Left><Left>i
   inoremap <buffer> <C-j>d <%=begin rdoc=end%><ESC><Left><Left>i
   inoremap <buffer> <C-j>n <%=begin=end%><ESC><Left><Left>i
-  vnoremap <buffer> <C-j>c :TCommentAs eruby_surround<CR>
-  vnoremap <buffer> <C-j><C-C> :TCommentAs eruby_surround<CR>
-  vnoremap <buffer> <C-j>- :TCommentAs eruby_surround_minus<CR>
-  vnoremap <buffer> <C-j>= :TCommentAs eruby_surround_equality<CR>
+  xnoremap <buffer> <C-j>c :TCommentAs eruby_surround<CR>
+  xnoremap <buffer> <C-j><C-C> :TCommentAs eruby_surround<CR>
+  xnoremap <buffer> <C-j>- :TCommentAs eruby_surround_minus<CR>
+  xnoremap <buffer> <C-j>= :TCommentAs eruby_surround_equality<CR>
 endfunction
 function! SetRubyMapping()
   nnoremap <buffer> <C-j>b :TCommentAs ruby_block<CR><Right><Right><Right><Right>
@@ -2029,7 +1896,7 @@ aug MyAutoCmd
   au FileType eruby call SetErubyMapping2()
   au FileType ruby,ruby.rspec call SetRubyMapping()
   au FileType php nnoremap <buffer><C-_>c :TCommentAs php_surround<CR><Right><Right><Right>
-  au FileType php vnoremap <buffer><C-_>c :TCommentAs php_surround<CR><Right><Right><Right>
+  au FileType php xnoremap <buffer><C-_>c :TCommentAs php_surround<CR><Right><Right><Right>
 aug END
 "}}}
 
@@ -2402,12 +2269,12 @@ nnoremap [unite]q :unite qiita<CR>
 " let g:sqlutil_align_keyword_right = 0
 " let g:sqlutil_align_first_word = 1
 " let g:sqlutil_align_comma = 1
-" " vnoremap <leader>sf    <Plug>SQLU_Formatter<CR>
+" " xnoremap <leader>sf    <Plug>SQLU_Formatter<CR>
 " " nnoremap <leader>scl   <Plug>SQLU_CreateColumnList<CR>
 " " nnoremap <leader>scd   <Plug>SQLU_GetColumnDef<CR>
 " " nnoremap <leader>scdt  <Plug>SQLU_GetColumnDataType<CR>
 " " nnoremap <leader>scp   <Plug>SQLU_CreateProcedure<CR>
-" vnoremap sf :SQLUFormatter<CR>
+" xnoremap sf :SQLUFormatter<CR>
 "}}}
 
 "------------------------------------
@@ -2509,16 +2376,16 @@ let g:textobj_enclosedsyntax_no_default_key_mappings = 1
 
 " ax、ixにマッピングしたい場合
 omap ax <Plug>(textobj-enclosedsyntax-a)
-vmap ax <Plug>(textobj-enclosedsyntax-a)
+xmap ax <Plug>(textobj-enclosedsyntax-a)
 omap ix <Plug>(textobj-enclosedsyntax-i)
-vmap ix <Plug>(textobj-enclosedsyntax-i)
+xmap ix <Plug>(textobj-enclosedsyntax-i)
 "}}}
 
 "------------------------------------
 " excitetranslate
 "------------------------------------
 " {{{
-vnoremap e :ExciteTranslate<CR>
+xnoremap e :ExciteTranslate<CR>
 " }}}
 
 "------------------------------------
@@ -2613,6 +2480,7 @@ set infercase
 "----------------------------------------
 " neocomplcache
 let g:neocomplcache_enable_at_startup = 1
+let g:echodoc_enable_at_startup = 1
 
 " default config"{{{
 " let g:neocomplcache_auto_completion_start_length = 2
@@ -2625,7 +2493,7 @@ let g:neocomplcache_enable_at_startup = 1
 " let g:neocomplcache_min_keyword_length = 2
 " let g:neocomplcache_min_syntax_length = 2
 let g:neocomplcache_force_overwrite_completefunc = 1
-let g:neocomplcache#sources#rsense#home_directory = g:my.dir.rsense
+let g:neocomplcache#sources#rsense#home_directory = neobundle#get_neobundle_dir() . '/rsense-0.3'
 let g:neocomplcache_enable_camel_case_completion = 1
 let g:neocomplcache_enable_underbar_completion = 1
 let g:neocomplcache_skip_auto_completion_time = '0.3'
