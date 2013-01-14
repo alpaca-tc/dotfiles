@@ -56,6 +56,7 @@ let g:my.ft = {
       \ "scala_files"   : ['scala'],
       \ "sh_files"      : ['sh'],
       \ "program_files" : ['ruby', 'php', 'python', 'eruby', 'vim'],
+      \ "ignore_patterns" : ['vimfiler', 'unite'],
       \ }
 " TODO インストールするプログラムを書く
 let g:my.install = {
@@ -458,8 +459,8 @@ NeoBundleLazy 'tpope/vim-markdown',
       \ Neo_al( ['markdown'] )
 
 " sassのコンパイル
-NeoBundleLazy 'AtsushiM/sass-compile.vim',
-      \ Neo_al( ['sass', 'scss'] )
+NeoBundleLazy 'AtsushiM/sass-compile.vim', {
+      \ 'autoload': { 'filetypes': ['sass', 'scss'] }}
 
 "  php
 " ----------------------------------------
@@ -479,7 +480,7 @@ NeoBundleLazy 'Shougo/vinarise', {
 
 " ruby
 " ----------------------------------------
-NeoBundle 'tpope/vim-rails'
+NeoBundle 'taichouchou2/vim-rails'
 NeoBundleLazy 'taichouchou2/vim-endwise.git', {
       \ 'autoload' : {
       \   'insert' : 1,
@@ -498,7 +499,7 @@ NeoBundleLazy 'taichouchou2/unite-rails_best_practices', {
 NeoBundleLazy 'ujihisa/unite-rake', {
       \ 'depends' : 'Shougo/unite.vim', }
 NeoBundleLazy 'taichouchou2/alpaca_complete', {
-      \ 'depends' : 'tpope/vim-rails',
+      \ 'depends' : 'taichouchou2/vim-rails',
       \ 'build' : {
       \    'mac':  'gem install alpaca_complete',
       \    'unix': 'gem install alpaca_complete',
@@ -1279,7 +1280,7 @@ let g:tagbar_width = 30
 " let g:tagbar_autoclose = 1
 " let g:tagbar_sort = 0
 
-" gem ins coffeetags
+" gem ins coffeetags {{{
 if executable('coffeetags')
   let g:tagbar_type_coffee = {
         \ 'ctagsbin' : 'coffeetags',
@@ -1308,7 +1309,8 @@ else
         \ }
         \ }
 endif
-
+"}}}
+" js{{{
 let g:tagbar_type_javascript = {
       \'ctagstype' : 'js',
       \'kinds'     : [
@@ -1318,7 +1320,8 @@ let g:tagbar_type_javascript = {
       \   's:strings'
       \]
       \}
-
+"}}}
+" php {{{
 let g:tagbar_type_php = {
       \ 'kinds' : [
       \ 'c:classes',
@@ -1326,7 +1329,8 @@ let g:tagbar_type_php = {
       \ 'v:variables:1'
       \ ]
       \ }
-
+"}}}
+" markdown {{{
 " let g:tagbar_type_markdown = {
 "   \ 'ctagstype' : 'markdown',
 "   \ 'kinds' : [
@@ -1335,6 +1339,8 @@ let g:tagbar_type_php = {
 "     \ 'k:Heading_L3'
 "   \ ]
 " \ }
+""}}}
+" ruby {{{
 let g:tagbar_type_ruby = {
       \ 'kinds' : [
       \ 'm:modules',
@@ -1345,7 +1351,8 @@ let g:tagbar_type_ruby = {
       \ 'F:singleton methods'
       \ ]
       \ }
-
+"}}}
+" html {{{
 let g:tagbar_type_html = {
       \ 'ctagstype' : 'html',
       \ 'kinds' : [
@@ -1354,16 +1361,21 @@ let g:tagbar_type_html = {
       \ 'c:Classes'
       \ ]
       \ }
-
+"}}}
+" css {{{
 let g:tagbar_type_css = {
       \ 'ctagstype' : 'css',
       \ 'kinds' : [
-      \ 't:Tags(Elements)',
-      \ 'o:Objects(ID)',
-      \ 'c:Classes'
+      \   's:selectors',
+      \   'i:identities',
+      \   't:Tags(Elements)',
+      \   'o:Objects(ID)',
+      \   'c:Classes',
       \ ]
       \ }
+"}}}
 
+" scala {{{
 let g:tagbar_type_scala = {
       \ "ctagstype" : 'Scala',
       \ 'sro' : '.',
@@ -1389,6 +1401,7 @@ let g:tagbar_type_scala = {
       \ },
       \}
 "}}}
+"}}}
 
 "------------------------------------
 " open-blowser.vim
@@ -1411,7 +1424,8 @@ let g:unite_winheight = 20
 let g:unite_source_file_mru_time_format="(%m-%d %H:%M:%S) "
 let g:unite_source_file_mru_filename_format=":~:."
 let g:unite_source_directory_mru_time_format="(%m-%d %H:%M:%S) "
-let g:unite_cursor_line_highlight = 'LineNr'
+let g:unite_cursor_line_highlight='LineNr'
+" let g:unite_abbr_highlight = 'TabLine'
 let g:unite_source_file_mru_limit = 300
 let g:unite_source_directory_mru_limit = 300
 let s:unite_kuso_hooks = {}
@@ -1422,32 +1436,50 @@ nmap [unite] <Nop>
 nmap <C-J> [unite]
 
 nnoremap <silent> [unite]<C-U>   :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
-nnoremap <silent> [unite]<C-J>   :<C-u>Unite file_mru<CR>
-nnoremap <silent> [unite]b       :<C-u>Unite bookmark<CR>
-nnoremap <silent> [unite]<C-B>   :<C-u>Unite buffer<CR>
+nnoremap <silent> [unite]<C-J>   :<C-u>Unite file_mru -buffer-name=file_mru<CR>
+nnoremap <silent> [unite]b       :<C-u>Unite bookmark -buffer-name=bookmark<CR>
+nnoremap <silent> [unite]<C-B>   :<C-u>Unite buffer -buffer-name=buffer<CR>
 nnoremap <silent> <Space>b       :<C-u>UniteBookmarkAdd<CR>
 
-nnoremap <silent> g/ :<C-U>call Smart_unite_open('Unite -buffer-name=search -hide-source-names -horizontal -start-insert -no-quit line/fast')<CR>
+nnoremap <silent> g/ :<C-U>call Smart_unite_open('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast')<CR>
 
 " XXX 本体の関数をつかって実装したい
 function! Smart_unite_open(cmd) "{{{
   let file_syntax=&syntax
+  let rails_root = exists('b:rails_root')? b:rails_root : ''
+  let rails_buffer = rails#buffer()
 
+  " uniteを起動
   exe a:cmd
+
+  if rails_root != ''
+    let b:rails_root = rails_root
+    call rails#set_syntax(rails_buffer)
+  endif
   if file_syntax != ''
     exe 'setl syntax='.file_syntax
-    " call unite#set_buffer_name_option('search', 'syntax',  file_syntax)
   endif
 endfunction"}}}
 
+function! s:unite_kuso_hooks.file_mru() "{{{
+  highlight link uniteSource__FileMru_Time Comment
+endfunction"}}}
+
 function! UniteSetting() "{{{
+  highlight link uniteMarkedLine Identifier
+  highlight link uniteNonMarkedLine Comment
+  highlight link uniteCandidateInputKeyword Statement
+
   inoremap <buffer><C-J> <Down>
   inoremap <buffer><C-K> <Up>
+  nmap     <buffer>f <Plug>(unite_toggle_mark_current_candidate)
+  xmap     <buffer>f <Plug>(unite_toggle_mark_selected_candidates)
   nmap     <buffer><C-H> <Plug>(unite_toggle_transpose_window)
   nmap     <buffer><C-J> <Plug>(unite_toggle_auto_preview)
   nnoremap <silent><buffer><expr>S unite#do_action('split')
   nnoremap <silent><buffer><expr>V unite#do_action('vsplit')
 
+  " hook
   let unite = unite#get_current_unite()
   let buffer_name = unite.buffer_name != '' ? unite.buffer_name : '_'
 
@@ -1491,7 +1523,7 @@ let g:unite_source_grep_recursive_opt = "-R"
 "         \|     nnoremap <silent>[unite]<C-K>  :call BundleWithCmd('unite-tag', 'Unite tag -input'<C-R><C-W>)<CR>
 "         \|  endif
 " aug END
-nnoremap <silent>[unite]<C-K>  :call BundleWithCmd('unite-tag unite.vim', 'Unite tag')<CR>
+nnoremap <silent>[unite]<C-K>  :call BundleWithCmd('unite-tag unite.vim', 'Unite tag -buffer-name=tag -no-empty')<CR>
 "}}}
 
 "------------------------------------
@@ -1553,11 +1585,7 @@ function! s:unite_kuso_hooks.giti_status()
   nnoremap <silent><buffer><expr>ga unite#do_action('stage')
   nnoremap <silent><buffer><expr>gc unite#do_action('checkout')
   nnoremap <silent><buffer><expr>gd unite#do_action('diff')
-  " nnoremap <silent><buffer><expr>gm unite#do_action('commit')
   nnoremap <silent><buffer><expr>gu unite#do_action('unstage')
-
-  " nmap <silent><buffer>gA <Plug>(unite_toggle_mark_all_candidates)
-  "       \ call unite#do_action('stage')
 endfunction
 
 function! s:unite_kuso_hooks.giti_log()
@@ -1604,7 +1632,9 @@ endfunction"}}}
 function! s:vimfiler_local() "{{{
   if !exists('b:vimfiler') | return | endif
 
-  if vimfiler#get_context().explorer
+  let vimfiler = vimfiler#get_context()
+
+  if vimfiler.explorer
     call <SID>vimfiler_explorer_local()
   else
     call <SID>vimfiler_not_explorer_local()
@@ -1614,6 +1644,7 @@ function! s:vimfiler_local() "{{{
   setl nonumber
   nmap <buffer><C-J> [unite]
   nmap <buffer><CR> <Plug>(vimfiler_edit_file)
+  nmap <buffer>f <Plug>(vimfiler_toggle_mark_current_line)
   nnoremap <buffer>b :<C-U>UniteBookmarkAdd<CR>
   nnoremap <buffer>p :call vimfiler#mappings#do_action('preview')<CR>
   nnoremap <buffer>v v
@@ -2091,7 +2122,7 @@ nnoremap <silent>[plug]<C-D> :CtrlPDir<CR>
 "}}}
 
 "------------------------------------
-" vim-rails.vim
+" vim-rails
 "------------------------------------
 ""{{{
 "有効化
@@ -2104,7 +2135,7 @@ let g:rails_modelines=0
 " let g:rails_some_option = 1
 " let g:rails_statusline = 1
 " let g:rails_subversion=0
-" let g:rails_syntax = 1
+let g:rails_syntax = 1
 let g:rails_url='http://localhost:3000'
 " let g:rails_ctags_arguments='--languages=-javascript'
 " let g:rails_ctags_arguments = ''
@@ -2181,13 +2212,17 @@ nnoremap <silent>tv :<C-U>TweetVimSay<CR>
 "}}}
 
 "------------------------------------
-" sass
+" sass-compile.vim
 "------------------------------------
 ""{{{
-let g:sass_compile_aftercmd = ""
-let g:sass_compile_auto = 1
-let g:sass_compile_beforecmd = ""
-let g:sass_compile_cdloop = 1
+" let g:sass_compile_aftercmd = ""
+" let g:sass_compile_auto = 1
+" let g:sass_compile_beforecmd = ""
+" let g:sass_compile_cdloop = 1
+" let g:sass_compile_cssdir = ['css', 'stylesheet']
+" let g:sass_compile_file = ['scss', 'sass']
+" let g:sass_started_dirs = []
+let g:sass_compile_cdloop = 5
 let g:sass_compile_cssdir = ['css', 'stylesheet']
 let g:sass_compile_file = ['scss', 'sass']
 let g:sass_started_dirs = []
@@ -2618,9 +2653,11 @@ func! s:auto_dict_setting()
   endif
 
   let dict_name = split( file_type_name, '.' )
-  if !empty( dict_name )
-    exe  "setl dict+=~/.vim/dict/".dict_name[0].".dict"
+  if empty( dict_name ) || count(g:my.ft.ignore_patterns, dict_name) > 0
+    return
   endif
+
+  exe  "setl dict+=~/.vim/dict/".dict_name[0].".dict"
 
   let b:dict_path = expand('~/.vim/dict/'.file_type_name.'.dict')
   exe  "setl dict+=".b:dict_path
