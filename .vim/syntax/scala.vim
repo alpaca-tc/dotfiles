@@ -40,7 +40,7 @@ syn keyword scalaObject object nextgroup=scalaClassName skipwhite
 syn keyword scalaTrait trait nextgroup=scalaClassName skipwhite
 syn match scalaDefName "[^ =:;([]\+" contained nextgroup=scalaDefSpecializer skipwhite
 syn match scalaValName "[^ =:;([]\+" contained
-syn match scalaVarName "[^ =:;([]\+" contained 
+syn match scalaVarName "[^ =:;([]\+" contained
 syn match scalaClassName "[^ =:;(\[]\+" contained nextgroup=scalaClassSpecializer skipwhite
 syn region scalaDefSpecializer start="\[" end="\]" contained contains=scalaDefSpecializer
 syn region scalaClassSpecializer start="\[" end="\]" contained contains=scalaClassSpecializer
@@ -71,7 +71,7 @@ syn match scalaDocTags "@[a-z]\+" contained
 syn match scalaEmptyString "\"\""
 
 " multi-line string literals
-syn region scalaMultiLineString start="\"\"\"" end="\"\"\"" contains=scalaUnicode
+syn region scalaMultiLineString start="\"\"\"\(\\\"\)*" end="\(\\\"\)*\"\"\"" contains=scalaUnicode
 syn match scalaUnicode "\\u[0-9a-fA-F]\{4}" contained
 
 " string literals with escapes

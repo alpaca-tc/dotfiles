@@ -1,5 +1,12 @@
 " XXX vimprocが読み込まれているか、動的に判別
 let s:is_vimproc = 1
+function! s:let(scope, name, value) "{{{
+  let global_variable_name = a:scope . ':' . a:name
+  if !exists(global_variable_name)
+    let cmd = 'let ' . global_variable_name . ' = ' . string( a:value )
+    exe cmd
+  endif
+endfunction"}}}
 
 " XXX vimprocの使い方というか仕様が分からない...
 function! alpaca#system(...) "{{{
@@ -21,12 +28,17 @@ function! alpaca#system_bg(...) "{{{
 endfunction"}}}
 
 function! alpaca#let_g:(name, value) "{{{
-  let global_variable_name = 'g:' . a:name
-  if !exists(global_variable_name)
-    let cmd = 'let ' . global_variable_name . ' = ' . string( a:value )
-    exe cmd
-  endif
-endfunction
+  call s:let('g', a:name, a:value)
+endfunction"}}}
+function! alpaca#let_s:(name, value) "{{{
+  call s:let('s', a:name, a:value)
+endfunction"}}}
+function! alpaca#let_b:(name, value) "{{{
+  call s:let('b', a:name, a:value)
+endfunction"}}}
+function! alpaca#let_t:(name, value) "{{{
+  call s:let('t', a:name, a:value)
+endfunction"}}}
 
 function! alpaca#print_error(string) "{{{
   echohl Error | echomsg a:string | echohl None

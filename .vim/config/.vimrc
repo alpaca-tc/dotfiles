@@ -222,6 +222,8 @@ NeoBundleLazy 'Shougo/unite-build', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload': { 'filetypes' : g:my.ft.scala_files }
       \ }
+NeoBundleLazy 'h1mesuke/unite-outline', {
+      \ 'depends' : 'Shougo/unite.vim' }
 NeoBundleLazy 'vim-scripts/sudo.vim', {
       \ 'autoload': { 'commands': ['SudoRead', 'SudoWrite'], 'insert': 1 }
       \ }
@@ -294,7 +296,16 @@ NeoBundleLazy 'Shougo/neosnippet', {
 NeoBundleLazy 'camelcasemotion', { 'autoload' : {
       \ 'mappings' : ['<Plug>CamelCaseMotion_w', '<Plug>CamelCaseMotion_b', '<Plug>CamelCaseMotion_e', '<Plug>CamelCaseMotion_iw', '<Plug>CamelCaseMotion_ib', '<Plug>CamelCaseMotion_ie']
       \ }}
-NeoBundleLazy 'majutsushi/tagbar', { 'autoload' : { 'commands': ['TagbarToggle'], 'fuctions': ['tagbar#currenttag'] }}
+NeoBundleLazy 'majutsushi/tagbar',
+      \ { 'autoload' : {
+      \   'commands': [
+      \       "TagbarClose", "TagbarCurrentTag", "TagbarDebug",
+      \       "TagbarDebugEnd", "TagbarGetTypeConfig", "TagbarOpen",
+      \       "TagbarOpenAutoClose", "TagbarSetFoldlevel", "TagbarShowTag",
+      \       "TagbarToggle", "TagbarTogglePause", ],
+      \   'fuctions': ['tagbar#currenttag']
+      \ }}
+
 NeoBundleLazy 'mattn/zencoding-vim', {
       \ 'autoload': {
       \   'functions': ['zencoding#expandAbbr'],
@@ -557,8 +568,8 @@ NeoBundleLazy 'davidhalter/jedi-vim', {
 
 " scala
 " ----------------------------------------
-" NeoBundleLazy 'ujihisa/vim-scala',
-"       \ Neo_al(g:my.ft.scala_files)
+NeoBundleLazy 'taichouchou2/vim-scala',
+      \ Neo_al(g:my.ft.scala_files)
 " NeoBundleLazy 'aemoncannon/ensime', {
 "       \ "branch" : "scala-2.9",
 "       \ 'autoload' : { 'filetypes' : g:my.ft.scala_files }}
@@ -569,7 +580,7 @@ NeoBundleLazy 'davidhalter/jedi-vim', {
 "       \   'aemoncannon/ensime',
 "       \ ],
 "       \ 'autoload' : { 'filetypes' : g:my.ft.scala_files }}
-" NeoBundle 'andreypopp/ensime'
+NeoBundle 'andreypopp/ensime'
 
 " https://github.com/derekwyatt/vim-scala.git
 
@@ -1251,12 +1262,22 @@ aug END
 " tagbar.vim
 "------------------------------------
 "{{{
-nnoremap [space]t :TagbarToggle<CR>
+nnoremap [space]t :<C-U>TagbarToggle<CR>
+
+aug MyAutoCmd
+  au FileType tagbar
+        \ nnoremap <buffer><Space> [space]
+        \|nnoremap <buffer><space>t :<C-U>TagbarToggle<CR>
+aug END
+
 let g:tagbar_ctags_bin="/Applications/MacVim.app/Contents/MacOS/ctags"
 let g:tagbar_compact    = 1
 let g:tagbar_autofocus  = 1
 let g:tagbar_autoshowtag= 1
 let g:tagbar_iconchars  =  ['▸', '▾']
+let g:tagbar_width = 30
+" let g:tagbar_autoclose = 1
+" let g:tagbar_sort = 0
 
 " gem ins coffeetags
 if executable('coffeetags')
@@ -1273,10 +1294,23 @@ if executable('coffeetags')
         \   'o' : 'object',
         \ }
         \ }
+else
+  let g:tagbar_type_coffee = {
+        \ 'ctagsargs' : '',
+        \ 'kinds' : [
+        \   'f:functions',
+        \   'o:object',
+        \ ],
+        \ 'sro' : ".",
+        \ 'kind2scope' : {
+        \   'f' : 'object',
+        \   'o' : 'object',
+        \ }
+        \ }
 endif
 
 let g:tagbar_type_javascript = {
-      \'ctagstype' : 'JavaScript',
+      \'ctagstype' : 'js',
       \'kinds'     : [
       \   'o:objects',
       \   'f:functions',
@@ -1284,6 +1318,7 @@ let g:tagbar_type_javascript = {
       \   's:strings'
       \]
       \}
+
 let g:tagbar_type_php = {
       \ 'kinds' : [
       \ 'c:classes',
@@ -1291,6 +1326,7 @@ let g:tagbar_type_php = {
       \ 'v:variables:1'
       \ ]
       \ }
+
 " let g:tagbar_type_markdown = {
 "   \ 'ctagstype' : 'markdown',
 "   \ 'kinds' : [
@@ -1318,6 +1354,7 @@ let g:tagbar_type_html = {
       \ 'c:Classes'
       \ ]
       \ }
+
 let g:tagbar_type_css = {
       \ 'ctagstype' : 'css',
       \ 'kinds' : [
@@ -1326,6 +1363,31 @@ let g:tagbar_type_css = {
       \ 'c:Classes'
       \ ]
       \ }
+
+let g:tagbar_type_scala = {
+      \ "ctagstype" : 'Scala',
+      \ 'sro' : '.',
+      \ 'kinds' : [
+      \   'p:packages:1',
+      \   'V:values',
+      \   'v:variables',
+      \   'T:types',
+      \   't:traits',
+      \   'o:objects',
+      \   'a:aclasses',
+      \   'c:classes',
+      \   'r:cclasses',
+      \   'm:methods',
+      \ ],
+      \ 'kind2scope' : {
+      \   'T' : 'type',
+      \   't' : 'trait',
+      \   'o' : 'object',
+      \   'a' : 'abstract class',
+      \   'c' : 'class',
+      \   'r' : 'case class',
+      \ },
+      \}
 "}}}
 
 "------------------------------------
@@ -1352,6 +1414,7 @@ let g:unite_source_directory_mru_time_format="(%m-%d %H:%M:%S) "
 let g:unite_cursor_line_highlight = 'LineNr'
 let g:unite_source_file_mru_limit = 300
 let g:unite_source_directory_mru_limit = 300
+let s:unite_kuso_hooks = {}
 " let g:unite_source_directory_mru_filename_format
 
 "unite prefix key.
@@ -1364,15 +1427,19 @@ nnoremap <silent> [unite]b       :<C-u>Unite bookmark<CR>
 nnoremap <silent> [unite]<C-B>   :<C-u>Unite buffer<CR>
 nnoremap <silent> <Space>b       :<C-u>UniteBookmarkAdd<CR>
 
-nnoremap <silent> g/ :<C-U>call Smart_unite_line()<CR>
-function! Smart_unite_line() "{{{
+nnoremap <silent> g/ :<C-U>call Smart_unite_open('Unite -buffer-name=search -hide-source-names -horizontal -start-insert -no-quit line/fast')<CR>
+
+" XXX 本体の関数をつかって実装したい
+function! Smart_unite_open(cmd) "{{{
   let file_syntax=&syntax
 
-  Unite -buffer-name=search -no-split -start-insert line/fast
+  exe a:cmd
   if file_syntax != ''
     exe 'setl syntax='.file_syntax
+    " call unite#set_buffer_name_option('search', 'syntax',  file_syntax)
   endif
 endfunction"}}}
+
 function! UniteSetting() "{{{
   inoremap <buffer><C-J> <Down>
   inoremap <buffer><C-K> <Up>
@@ -1380,6 +1447,15 @@ function! UniteSetting() "{{{
   nmap     <buffer><C-J> <Plug>(unite_toggle_auto_preview)
   nnoremap <silent><buffer><expr>S unite#do_action('split')
   nnoremap <silent><buffer><expr>V unite#do_action('vsplit')
+
+  let unite = unite#get_current_unite()
+  let buffer_name = unite.buffer_name != '' ? unite.buffer_name : '_'
+
+  " XXX 本体の関数をつかって実装したい
+  call alpaca#let_s:('unite_kuso_hooks', {})
+  if has_key( s:unite_kuso_hooks, buffer_name )
+    call s:unite_kuso_hooks[buffer_name]()
+  endif
 endfunction
 aug MyAutoCmd
   au FileType unite call UniteSetting()
@@ -1415,7 +1491,26 @@ let g:unite_source_grep_recursive_opt = "-R"
 "         \|     nnoremap <silent>[unite]<C-K>  :call BundleWithCmd('unite-tag', 'Unite tag -input'<C-R><C-W>)<CR>
 "         \|  endif
 " aug END
-nnoremap <silent>[unite]<C-K>  :call BundleWithCmd('unite-tag unite.vim', 'Unite tag')<CR> "}}}
+nnoremap <silent>[unite]<C-K>  :call BundleWithCmd('unite-tag unite.vim', 'Unite tag')<CR>
+"}}}
+
+"------------------------------------
+" Unite-outline
+"------------------------------------
+"{{{
+" let g:unite_source_outline_filetype_options
+" let g:unite_source_outline_info
+" let g:unite_source_outline_indent_width
+" let g:unite_source_outline_max_headings
+" let g:unite_source_outline_cache_limit
+" let g:unite_source_outline_highlight
+function! s:unite_kuso_hooks.outline()
+  let unite = unite#get_context()
+  let unite.auto_preview = 0
+  nnoremap <buffer><C-J> gj
+endfunction
+nnoremap <silent>[unite]<C-O>  :call BundleWithCmd('unite-outline', 'Unite -auto-preview -horizontal -no-quit -buffer-name=outline -hide-source-names outline')<CR>
+"}}}
 
 "------------------------------------
 " Unite-rails.vim
@@ -1448,6 +1543,39 @@ aug END
 nnoremap <silent> [unite]<C-R>      :<C-u>Unite -no-quit reek<CR>
 nnoremap <silent> [unite]<C-R><C-R> :<C-u>Unite -no-quit rails_best_practices<CR>
 " }}}
+
+"----------------------------------------
+" unite-giti
+"----------------------------------------
+"{{{
+function! s:unite_kuso_hooks.giti_status()
+  " nnoremap <silent><buffer><expr>gM unite#do_action('ammend')
+  nnoremap <silent><buffer><expr>ga unite#do_action('stage')
+  nnoremap <silent><buffer><expr>gc unite#do_action('checkout')
+  nnoremap <silent><buffer><expr>gd unite#do_action('diff')
+  " nnoremap <silent><buffer><expr>gm unite#do_action('commit')
+  nnoremap <silent><buffer><expr>gu unite#do_action('unstage')
+
+  " nmap <silent><buffer>gA <Plug>(unite_toggle_mark_all_candidates)
+  "       \ call unite#do_action('stage')
+endfunction
+
+function! s:unite_kuso_hooks.giti_log()
+  nnoremap <silent><buffer><expr>gd unite#do_action('diff')
+  nnoremap <silent><buffer><expr>d unite#do_action('diff')
+endfunction
+
+nnoremap <silent>gl :<C-U>call BundleWithCmd('vim-unite-giti', 'Unite -buffer-name=giti_log -no-start-insert giti/log')<CR>
+nnoremap <silent>gs :<C-U>call BundleWithCmd('vim-unite-giti', 'Unite -buffer-name=giti_status -no-start-insert giti/status ')<CR>
+nnoremap <silent>gh :<C-U>call BundleWithCmd('vim-unite-giti', 'Unite -buffer-name=giti_branchall -no-start-insert giti/branch_all')<CR>
+"}}}
+
+"------------------------------------
+" qiita
+"------------------------------------
+"{{{
+nnoremap [unite]q :unite qiita<CR>
+"}}}
 
 "------------------------------------
 " VimFiler
@@ -1675,36 +1803,6 @@ nnoremap <silent>ga :<C-U>GitAdd -A<CR>
 nnoremap <silent>gd :<C-U>GitDiff HEAD<CR>
 nnoremap <silent>gD :<C-U>GitDiff<Space>
 nnoremap <silent>gp :<C-U>Git push<Space>
-"}}}
-
-"----------------------------------------
-" unite-giti
-"----------------------------------------
-"{{{
-function! s:unite_giti()
-  let unite = unite#get_current_unite()
-  if unite.buffer_name =~ '^giti_status'
-    " nnoremap <silent><buffer><expr>gM unite#do_action('ammend')
-    nnoremap <silent><buffer><expr>ga unite#do_action('stage')
-    nnoremap <silent><buffer><expr>gc unite#do_action('checkout')
-    nnoremap <silent><buffer><expr>gd unite#do_action('diff')
-    nnoremap <silent><buffer><expr>gm unite#do_action('commit')
-    nnoremap <silent><buffer><expr>gu unite#do_action('unstage')
-    nnoremap <silent><buffer>gA *:<C-U>call unite#do_action('stage')<CR>
-
-  elseif unite.buffer_name =~ '^giti_log'
-    nnoremap <silent><buffer><expr>gd unite#do_action('diff')
-    nnoremap <silent><buffer><expr>d unite#do_action('diff')
-  " elseif unite.buffer_name =~ '^giti_branchall'
-  endif
-endfunction
-
-aug MyAutoCmd
-  au FileType unite call <SID>unite_giti()
-aug END
-nnoremap <silent>gl :<C-U>call BundleWithCmd('vim-unite-giti', 'Unite -buffer-name=giti_log -no-start-insert giti/log')<CR>
-nnoremap <silent>gs :<C-U>call BundleWithCmd('vim-unite-giti', 'Unite -buffer-name=giti_status -no-start-insert giti/status ')<CR>
-nnoremap <silent>gh :<C-U>call BundleWithCmd('vim-unite-giti', 'Unite -buffer-name=giti_branchall -no-start-insert giti/branch_all')<CR>
 "}}}
 
 "----------------------------------------
@@ -2064,7 +2162,7 @@ let g:tweetvim_display_time = 1
 let g:tweetvim_open_buffer_cmd = 'tabnew'
 let g:tweetvim_async_post = 1
 nnoremap <silent>[unite]t  :call BundleWithCmd('TweetVim bitly.vim twibill.vim', 'Unite tweetvim')<CR>
-nnoremap <silent>[space]ts  :<C-U>TweetVimSay<CR>
+nnoremap <silent>tv :<C-U>TweetVimSay<CR>
 "}}}
 
 "------------------------------------
@@ -2282,13 +2380,6 @@ nnoremap <silent><Leader>ig <Plug>IndentGuidesToggle
 "}}}
 
 "------------------------------------
-" qiita
-"------------------------------------
-"{{{
-nnoremap [unite]q :unite qiita<CR>
-"}}}
-
-"------------------------------------
 " SQLUtils
 "------------------------------------
 "{{{
@@ -2448,7 +2539,6 @@ let g:jscomplete_use = ['dom', 'moz', 'ex6th']
 "  typescript
 "------------------------------------
 " {{{
-set updatetime=50
 " let s:system = neobundle#is_installed('vimproc') ? 'vimproc#system_bg' : 'system'
 "
 " augroup vim-auto-typescript
@@ -2578,17 +2668,16 @@ if $USER ==# 'root'
   let g:neocomplcache_temporary_dir       = expand( '~/.neocon' )
 endif
 let s:neocomplcache_initialize_lists = [
-      \ 'g:neocomplcache_wildcard_characters',
-      \ 'g:neocomplcache_omni_patterns',
-      \ 'g:neocomplcache_force_omni_patterns',
-      \ 'g:neocomplcache_keyword_patterns',
-      \ 'g:neocomplcache_source_completion_length',
-      \ 'g:neocomplcache_vim_completefuncs',
-      \ 'g:neocomplcache_dictionary_filetype_lists',]
+      \ 'neocomplcache_include_patterns',
+      \ 'neocomplcache_wildcard_characters',
+      \ 'neocomplcache_omni_patterns',
+      \ 'neocomplcache_force_omni_patterns',
+      \ 'neocomplcache_keyword_patterns',
+      \ 'neocomplcache_source_completion_length',
+      \ 'neocomplcache_vim_completefuncs',
+      \ 'neocomplcache_dictionary_filetype_lists',]
 for initialize_variable in s:neocomplcache_initialize_lists
-  if !exists(initialize_variable)
-    exe 'let '. initialize_variable .' = {}'
-  endif
+  call alpaca#let_g:(initialize_variable, {})
 endfor
 "}}}
 " Define force omni patterns"{{{
@@ -2602,6 +2691,9 @@ let g:neocomplcache_force_omni_patterns.python = '[^. \t]\.\w*'
 " let g:neocomplcache_omni_patterns.php = '[^. *\t]\.\w*\|\h\w*::'
 " let g:neocomplcache_keyword_patterns.filename = '\%(\\.\|[/\[\][:alnum:]()$+_\~.-]\|[^[:print:]]\)\+'
 " let g:neocomplcache_omni_patterns.c = '[^.[:digit:]*\t]\%(\.\|->\)'
+"}}}
+"Define include pattern. {{{
+let g:neocomplcache_include_patterns.scala = '^import'
 "}}}
 " Define completefunc"{{{
 let g:neocomplcache_vim_completefuncs.Ref                 = 'ref#complete'
