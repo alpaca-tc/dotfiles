@@ -42,9 +42,9 @@ export PATH=/usr/local/bin:$PATH
 export MANPATH=/usr/local/share/man:$MANPATH
 
 # java 1.7.0
-# export PATH=/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin:$PATH
-# export JAVA_HOME=/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home
-# export CLASSPATH=$JAVA_HOME'/lib/ext'
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home
+export PATH=$JAVA_HOME/bin:$PATH
+export CLASSPATH=$JAVA_HOME'/lib/ext'
 
 # rbenv
 export PATH=$HOME/.rbenv/bin:$HOME/.rbenv:$PATH
@@ -52,6 +52,15 @@ eval "$(rbenv init -)"
 
 # XAMPP
 export PATH=/Applications/XAMPP/xamppfiles/bin:$PATH
+
+# scala
+[[ -s "$HOME/.bundle/ensime" ]] && export PATH=$HOME/.bundle/ensime/lib_2.9.2/:$PATH
+
+# python
+[[ -s "$HOME/.pythonbrew/etc/bashrc" ]] && source "$HOME/.pythonbrew/etc/bashrc"
+
+
+
 # }}}
 
 fpath=(~/.zsh/site-functions $fpath)

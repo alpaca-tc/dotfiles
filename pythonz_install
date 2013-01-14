@@ -1,11 +1,11 @@
 #!/bin/sh
 
-echo '下記を~/.zshrcに追記してください'
-echo '[[ -s "${HOME}/.pythonbrew/etc/bashrc" ]] && source $HOME/.pythonbrew/etc/bashrc'
-read -p "zshrcに設定を追記しますか？y/n" yn
-
-if [ -x `which pythonbrew` ]
+if [ -x `pythonbrew` ]
 then
+    echo '下記を~/.zshrcに追記してください'
+    echo '[[ -s "${HOME}/.pythonbrew/etc/bashrc" ]] && source $HOME/.pythonbrew/etc/bashrc'
+    read -p "zshrcに設定を追記しますか？y/n" yn
+
     if [ $yn = "y" ] ;then
         echo '[[ -s "${HOME}/.pythonbrew/etc/bashrc" ]] && source $HOME/.pythonbrew/etc/bashrc' >> ~/.zshrc
     fi
@@ -13,7 +13,7 @@ then
     echo "source ~/.zshrcをおこなって、もう一度実行してください"
     exit
 else
-    pythonbrew install -fn 2.7.2 3.2  # 時間かかる
+    pythonbrew install -f 2.7.2 3.2  # 時間かかる
     pythonbrew venv create lab -p 2.7.2
     pythonbrew venv create lab -p 3.2
     pythonbrew venv use lab -p 2.7.2
