@@ -384,7 +384,7 @@ NeoBundleLazy 'taichouchou2/alpaca_look.git', {
       \   'insert' : 1,
       \ }}
 NeoBundleLazy 'rhysd/clever-f.vim', { 'autoload' : {
-      \ 'mappings' : 'f',
+      \   'mappings' : 'f',
       \ }}
 " NeoBundle 'choplin/unite-vim_hacks'
 " NeoBundle 'h1mesuke/unite-outline'
@@ -395,7 +395,13 @@ NeoBundleLazy 'tsukkee/unite-tag', { 'depends' :
 NeoBundleLazy 'glidenote/memolist.vim', { 'depends' :
       \ ['Shougo/unite.vim'],
       \ 'autoload' : { 'commands' : ['MemoNew', 'MemoGrep'] }}
-NeoBundleLazy 'Shougo/unite-ssh'
+" TODO autoloadを改良
+NeoBundleLazy 'Shougo/unite-ssh', {
+      \ 'depends' : ['Shougo/unite.vim', 'Shougo/vimproc', 'Shougo/vimfiler'],
+      \ 'autoload' : {
+      \   'mappings' : '[unite]s',
+      \ }
+      \ }
 NeoBundleLazy 'taichouchou2/vim-unite-giti'
 NeoBundleLazy 'thinca/vim-unite-history'
 NeoBundleLazy 'ujihisa/vimshell-ssh', { 'autoload' : {
@@ -827,13 +833,13 @@ xnoremap v G
 "}}}
 " 画面の移動 {{{
 nnoremap <C-L> <C-T>
-nnoremap <C-W><C-J><C-h> <C-W>j<C-W>h
-nnoremap <C-W><C-H><C-j> <C-W>h<C-W>j
-nnoremap <C-W><C-H><C-k> <C-W>h<C-W>k
-nnoremap <C-W><C-K><C-H> <C-W>k<C-W>h
-nnoremap <C-W><C-K><C-L> <C-W>k<C-W>l
-nnoremap <C-W><C-l><C-j> <C-W>l<C-W>j
-nnoremap <C-W><C-l><C-k> <C-W>l<C-W>k
+" nnoremap <C-W><C-J><C-h> <C-W>j<C-W>h
+" nnoremap <C-W><C-H><C-j> <C-W>h<C-W>j
+" nnoremap <C-W><C-H><C-k> <C-W>h<C-W>k
+" nnoremap <C-W><C-K><C-H> <C-W>k<C-W>h
+" nnoremap <C-W><C-K><C-L> <C-W>k<C-W>l
+" nnoremap <C-W><C-l><C-j> <C-W>l<C-W>j
+" nnoremap <C-W><C-l><C-k> <C-W>l<C-W>k
 nnoremap <silent>L            :call <SID>NextWindowOrTab()<CR>
 nnoremap <silent>H            :call <SID>PreviousWindowOrTab()<CR>
 nnoremap <silent><C-W>]       :call PreviewWord()<CR>
@@ -1210,8 +1216,8 @@ let g:surround_custom_mapping.vim= {
 "------------------------------------
 "{{{
 " カーソル下の単語をgrepする
-nnoremap <silent>[hoge]<C-g> :<C-u>Rgrep<Space><C-r><C-w> *<Enter><CR>
-nnoremap <silent>[hoge]<C-b> :<C-u>GrepBuffer<Space><C-r><C-w><ENTER>
+nnoremap <silent>[hoge]<C-g> :<C-u>Rgrep<Space><C-r><C-w> *<CR><CR>
+nnoremap <silent>[hoge]<C-b> :<C-u>GrepBuffer<Space><C-r><C-w><CR>
 
 " 検索外のディレクトリ、ファイルパターン
 let Grep_Skip_Dirs  = '.svn .git .hg .swp'
@@ -1437,6 +1443,7 @@ nmap <C-J> [unite]
 
 nnoremap <silent> [unite]<C-U>   :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
 nnoremap <silent> [unite]<C-J>   :<C-u>Unite file_mru -buffer-name=file_mru<CR>
+nnoremap [unite]<C-F>   :<C-u>Unite -buffer-name=file file:
 nnoremap <silent> [unite]b       :<C-u>Unite bookmark -buffer-name=bookmark<CR>
 nnoremap <silent> [unite]<C-B>   :<C-u>Unite buffer -buffer-name=buffer<CR>
 nnoremap <silent> <Space>b       :<C-u>UniteBookmarkAdd<CR>
@@ -1463,6 +1470,16 @@ endfunction"}}}
 
 function! s:unite_kuso_hooks.file_mru() "{{{
   highlight link uniteSource__FileMru_Time Comment
+endfunction"}}}
+function! s:unite_kuso_hooks.file() "{{{
+  syntax match uniteFileDirectory '.*\/'
+  highlight link uniteFileDirectory Statement
+  function! s:unite_file_smart_action(candidate)
+    call alpaca#print_error(a:candidate)
+    " call unite#start_script([['file', a:candidate.action__directory]])
+  endfunction
+
+  call unite#custom_action('cdable', 'file', s:unite_file_smart_action)
 endfunction"}}}
 
 function! UniteSetting() "{{{
@@ -1493,6 +1510,35 @@ aug MyAutoCmd
   au FileType unite call UniteSetting()
 aug END
 "}}}
+"}}}
+
+"------------------------------------
+" unite-history
+"------------------------------------
+"{{{
+let g:unite_source_history_yank_enable =1
+
+" TODO kusoすぎわろた。 実装方法考えないとなぁ。
+function BundleWithUniteHisoryCmd(cmd) "{{{
+  call BundleWithCmd( 'vim-unite-history unite.vim', '' )
+
+  call Smart_unite_open(a:cmd)
+endfunction"}}}
+function s:unite_kuso_hooks.history_command() "{{{
+  set syntax=vim
+endfunction"}}}
+
+nnoremap <silent>[unite]hy :<C-U>call BundleWithUniteHisoryCmd('Unite -buffer-name=history_yank -no-empty history/yank')<CR>
+nnoremap <silent>[unite]hc  :<C-U>call BundleWithCmd('vim-unite-history', 'Unite -buffer-name=history_command -no-empty history/command')<CR>
+nnoremap <silent>[unite]hs  :<C-U>call BundleWithUniteHisoryCmd('Unite -buffer-name=history_search -no-empty history/search')<CR>
+"}}}
+
+"------------------------------------
+" unite-ssh
+"------------------------------------
+"{{{
+" call unite#custom_source('file_rec', 'ignore_pattern', '\$global\|\.class$')
+nnoremap [unite]s :Unite -buffer-name=ssh ssh://
 "}}}
 
 "------------------------------------
@@ -1541,7 +1587,7 @@ function! s:unite_kuso_hooks.outline()
   let unite.auto_preview = 0
   nnoremap <buffer><C-J> gj
 endfunction
-nnoremap <silent>[unite]<C-O>  :call BundleWithCmd('unite-outline', 'Unite -auto-preview -horizontal -no-quit -buffer-name=outline -hide-source-names outline')<CR>
+nnoremap <silent>[unite]o  :call BundleWithCmd('unite-outline', 'Unite -auto-preview -horizontal -no-quit -buffer-name=outline -hide-source-names outline')<CR>
 "}}}
 
 "------------------------------------
@@ -1572,8 +1618,8 @@ aug END
 " Unite-reek, Unite-rails_best_practices
 "------------------------------------
 " {{{
-nnoremap <silent> [unite]<C-R>      :<C-u>Unite -no-quit reek<CR>
-nnoremap <silent> [unite]<C-R><C-R> :<C-u>Unite -no-quit rails_best_practices<CR>
+nnoremap <silent> [unite]r      :<C-u>Unite -no-quit reek<CR>
+nnoremap <silent> [unite]rr :<C-u>Unite -no-quit rails_best_practices<CR>
 " }}}
 
 "----------------------------------------
@@ -1812,7 +1858,7 @@ nnoremap <silent>gM :<C-U>Gcommit --amend<CR>
 nnoremap <silent>gS :<C-U>Gstatus<CR>
 nnoremap <silent>gb :<C-U>Gblame<CR>
 nnoremap <silent>gm :<C-U>Gcommit<CR>
-nnoremap <silent>gr :<C-U>Ggrep<Space>
+nnoremap gr :<C-U>Ggrep<Space>
 
 aug MyGitCmd
   au!
@@ -1832,7 +1878,7 @@ let g:git_no_default_mappings = 1
 nnoremap <silent>gA :<C-U>GitAdd<Space>
 nnoremap <silent>ga :<C-U>GitAdd -A<CR>
 nnoremap <silent>gd :<C-U>GitDiff HEAD<CR>
-nnoremap <silent>gD :<C-U>GitDiff<Space>
+nnoremap gD :<C-U>GitDiff<Space>
 nnoremap <silent>gp :<C-U>Git push<Space>
 "}}}
 
@@ -1920,7 +1966,7 @@ let b:match_words .= ':<if>:<endif>,<while>:<endwhile>,<foreach>:<endforeach>'
 "------------------------------------
 "{{{
 set guifontwide=Ricty:h10
-let g:Powerline_cache_enabled = 1
+let g:Powerline_cache_enabled = 0
 " let g:Powerline_cache_file = expand('/tmp/Powerline.cache')
 let g:Powerline_symbols = 'fancy'
 "}}}
@@ -2003,8 +2049,8 @@ let g:memolist_memo_date         = "%D %T"
 let g:memolist_vimfiler          = 1
 
 nnoremap <silent><Space>mn  :<C-U>MemoNew<CR>
-nnoremap <silent><Space>ml  :<C-U>VimFiler file:~/.memolist/<CR>
-nnoremap <silent><Space>mg  :<C-U>MemoGrep<CR>
+nnoremap <silent><Space>ml  :<C-U>VimFiler -buffer-name=file file:~/.memolist/<CR>
+nnoremap <Space>mg  :<C-U>MemoGrep<CR>
 "}}}
 
 "------------------------------------
