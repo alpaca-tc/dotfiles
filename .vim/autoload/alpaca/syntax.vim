@@ -2,7 +2,7 @@ function! s:define_highlight(args) "{{{
   " TODO Co256の振り分け
   let args = a:args
   let highlight_opts = []
-  call add( highlight_opts, 'highlight' )
+  call add( highlight_opts, 'highlight!' )
   call add( highlight_opts, args.name )
 
   if has_key(args, 'guifg')

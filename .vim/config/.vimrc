@@ -1487,15 +1487,15 @@ function! s:unite_kuso_hooks.file() "{{{
 endfunction"}}}
 
 function! UniteSetting() "{{{
-  SmartHighlight 'UniteStatement', {
-        \ 'guifg'   : '#F92672',
-        \ 'ctermfg' : '161',
-        \ 'style' : 'bold',
-        \ }
+  " SmartHighlight 'UniteStatement', {
+  "       \ 'guifg'   : '#F92672',
+  "       \ 'ctermfg' : '161',
+  "       \ 'style' : 'bold',
+  "       \ }
 
   highlight link uniteMarkedLine Identifier
   highlight link uniteNonMarkedLine Comment
-  highlight link uniteCandidateInputKeyword UniteStatement
+  highlight link uniteCandidateInputKeyword Statement
 
   inoremap <buffer><C-J> <Down>
   inoremap <buffer><C-K> <Up>
@@ -1529,7 +1529,7 @@ aug END
 let g:unite_source_history_yank_enable =1
 
 " TODO kusoすぎわろた。 実装方法考えないとなぁ。
-function BundleWithUniteHisoryCmd(cmd) "{{{
+function! BundleWithUniteHisoryCmd(cmd) "{{{
   call BundleWithCmd( 'vim-unite-history unite.vim', '' )
 
   call Smart_unite_open(a:cmd)
@@ -1924,12 +1924,12 @@ syn match   htmlArg contained "\s*data-[-a-zA-Z0-9_]\+"
 "}}}
 
 "------------------------------------
-" smartword.vim
+" vim-smartword
 "------------------------------------
 "{{{
-map W  <Plug>(smartword-w)
-map B  <Plug>(smartword-b)
-map E  <Plug>(smartword-e)
+map ,w  <Plug>(smartword-w)
+map ,b  <Plug>(smartword-b)
+map ,e  <Plug>(smartword-e)
 "}}}
 
 "------------------------------------
