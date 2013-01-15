@@ -2,6 +2,8 @@ aug MyAutoCmd
   au!
 aug END
 
+call alpaca#init()
+
 "----------------------------------------
 " initialize"{{{
 let g:my = {}
@@ -1483,9 +1485,15 @@ function! s:unite_kuso_hooks.file() "{{{
 endfunction"}}}
 
 function! UniteSetting() "{{{
+  SmartHighlight 'UniteStatement', {
+        \ 'guifg'   : '#F92672',
+        \ 'ctermfg' : '161',
+        \ 'style' : 'bold',
+        \ }
+
   highlight link uniteMarkedLine Identifier
   highlight link uniteNonMarkedLine Comment
-  highlight link uniteCandidateInputKeyword Statement
+  highlight link uniteCandidateInputKeyword UniteStatement
 
   inoremap <buffer><C-J> <Down>
   inoremap <buffer><C-K> <Up>

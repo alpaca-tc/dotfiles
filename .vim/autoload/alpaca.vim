@@ -43,3 +43,24 @@ endfunction"}}}
 function! alpaca#print_error(string) "{{{
   echohl Error | echomsg a:string | echohl None
 endfunction"}}}
+function! alpaca#init() "{{{
+endfunction"}}}
+function! alpaca#parse_arg(arg) "{{{
+  let arg = type(a:arg) == type([]) ?
+        \ string(a:arg) : '[' . a:arg . ']'
+
+  sandbox let args = eval(arg)
+
+  if empty(args)
+    return {}
+  endif
+
+  return args
+endfunction"}}}
+
+" vimrc用
+command! -nargs=+ SmartHighlight
+      \ call alpaca#syntax#smart_define(
+      \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
+
+

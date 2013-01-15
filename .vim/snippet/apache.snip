@@ -1,19 +1,25 @@
+snippet     301
+  Redirect 301 ${1:path} ${2:url}
+
+snippet     redirect
+  Redirect ${1} ${2:path} ${3:url}
+
 snippet     addtype
-    AddType application/${1} ${2} ${3}
+  AddType application/${1} ${2} ${3}
 
 snippet     addtypephp
-    AddType application/x-httpd-php .php .html
+  AddType application/x-httpd-php .php .html
 
 snippet     dir
-    <Directory ${1:/}>
-        ${2}
-    </Directory>
+  <Directory ${1:/}>
+    ${2}
+  </Directory>
 
 snippet     deny_htaccess
   <Files ~ "^.*\.([Hh][Tt][Aa])">
-   order allow,deny
-   deny from all
-   satisfy all
+    order allow,deny
+    deny from all
+    satisfy all
   </Files>
 
 snippet     rewrite_maintenance

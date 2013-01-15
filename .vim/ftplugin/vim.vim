@@ -14,5 +14,3 @@ setl suffixesadd=.vim
 setl includeexpr=fnamemodify(substitute(v:fname,'#','/','g'),':h')
 
 let &cpo = s:save_cpo
-
-

@@ -340,5 +340,9 @@ snippet anchor
 snippet mailto
     <?php echo safe_mailto('${1:email}', '${2:text}'); ?>${3}
 #}}}
+snippet     ob
+  ob_start();
+  ${1}
+  ob_get_clean();
 #}}}
 
