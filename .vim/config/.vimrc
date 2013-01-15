@@ -111,8 +111,10 @@ set vb t_vb=
 set viminfo='100,<800,s300,\"300
 " set updatetime=4000 " swpを作るまでの時間(au CursorHoldの時間)
 set norestorescreen=off
-set undofile
-let &undodir=&directory
+if v:version >= 703
+  set undofile
+  let &undodir=&directory
+endif
 
 nnoremap <Space>h :<C-u>help<Space><C-r><C-w><CR>
 nnoremap <Space><Space>s :<C-U>source ~/.vimrc<CR>
@@ -2831,7 +2833,7 @@ nnoremap <silent><Space>e         :<C-U>NeoSnippetEdit -split<CR>
 nnoremap <silent><expr><Space>ee  ':NeoSnippetEdit -split'.split(&ft, '.')[0].'<CR>'
 smap <silent><C-F>                <Plug>(neosnippet_expand_or_jump)
 " xmap <silent><C-F>                <Plug>(neosnippet_start_unite_snippet_target)
-xmap <silent>o                    <Plug>(neosnippet_register_oneshot_snippet)
+" xmap <silent>o                    <Plug>(neosnippet_register_oneshot_snippet)
 "}}}
 
 set secure

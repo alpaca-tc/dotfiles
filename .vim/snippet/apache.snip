@@ -1,3 +1,9 @@
+snippet     files
+  <Files ~ ${1:(Guardfile)} >
+      order allow,deny
+      deny from all
+  </Files>
+
 snippet     301
   Redirect 301 ${1:path} ${2:url}
 
