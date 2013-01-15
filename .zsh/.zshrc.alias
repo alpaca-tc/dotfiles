@@ -30,6 +30,11 @@ alias v='vim'
 alias vi='vim'
 # }}}
 
+# vim# {{{
+alias sul='/Applications/Sublime\ Text\ 2.app/Contents/MacOS/Sublime\ Text\ 2 "$@"'
+alias sl='sul'
+# }}}
+
 # 省略# {{{
 alias pk='pkill -f'
 alias pb="pythonbrew"

@@ -146,13 +146,6 @@ function! Neo_al(ft) "{{{
       \ 'filetype' : a:ft
       \ }}
 endfunction"}}}
-function! Neo_operator(mappings) "{{{
-  return {
-        \ 'depends' : 'kana/vim-textobj-user',
-        \ 'autoload' : {
-        \   'mappings' : a:mappings
-        \ }}
-endfunction"}}}
 function! BundleLoadDepends(bundle_names) "{{{
   if !exists('g:loaded_bundles')
     let g:loaded_bundles = {}
@@ -220,9 +213,12 @@ NeoBundle 'h1mesuke/vim-alignta', { 'autoload' : { 'commands' : ['Align'] } }
 " NeoBundle 'taku-o/vim-toggle' "true<=>false など、逆の意味のキーワードを切り替えられる
 " NeoBundle 'yuroyoro/vimdoc_ja'
 " NeoBundle 'kana/vim-altr' " 関連するファイルを切り替えれる
-NeoBundleLazy 'Shougo/unite.vim', {
-      \ 'autoload': { 'commands': [ 'Unite', 'UniteBookmarkAdd', 'UniteClose', 'UniteResume', 'UniteWithBufferDir', 'UniteWithCurrentDir', 'UniteWithCursorWord', 'UniteWithInput', 'UniteWithInputDirectory' ] }
-      \ }
+NeoBundle 'Shougo/unite.vim'
+call neobundle#config('unite.vim',{
+      \ 'lazy' : 1,
+      \ 'autoload' : {
+      \   'commands' : [ 'Unite', 'UniteBookmarkAdd', 'UniteClose', 'UniteResume', 'UniteWithBufferDir', 'UniteWithCurrentDir', 'UniteWithCursorWord', 'UniteWithInput', 'UniteWithInputDirectory' ]
+      \ }})
 NeoBundleLazy 'Shougo/unite-build', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload': { 'filetypes' : g:my.ft.scala_files }
@@ -292,25 +288,22 @@ NeoBundleLazy 'Shougo/echodoc', {
       \ 'autoload' : {
       \   'insert' : 1,
       \ }}
-
 NeoBundleLazy 'Shougo/neosnippet', {
       \ 'autoload' : {
       \   'insert' : 1,
       \ }}
-
 NeoBundleLazy 'camelcasemotion', { 'autoload' : {
       \ 'mappings' : ['<Plug>CamelCaseMotion_w', '<Plug>CamelCaseMotion_b', '<Plug>CamelCaseMotion_e', '<Plug>CamelCaseMotion_iw', '<Plug>CamelCaseMotion_ib', '<Plug>CamelCaseMotion_ie']
       \ }}
 NeoBundleLazy 'majutsushi/tagbar',
       \ { 'autoload' : {
       \   'commands': [
-      \       "TagbarClose", "TagbarCurrentTag", "TagbarDebug",
-      \       "TagbarDebugEnd", "TagbarGetTypeConfig", "TagbarOpen",
-      \       "TagbarOpenAutoClose", "TagbarSetFoldlevel", "TagbarShowTag",
       \       "TagbarToggle", "TagbarTogglePause", ],
       \   'fuctions': ['tagbar#currenttag']
       \ }}
-
+      " \       "TagbarClose", "TagbarCurrentTag", "TagbarDebug",
+      " \       "TagbarDebugEnd", "TagbarGetTypeConfig", "TagbarOpen",
+      " \       "TagbarOpenAutoClose", "TagbarSetFoldlevel", "TagbarShowTag",
 NeoBundleLazy 'mattn/zencoding-vim', {
       \ 'autoload': {
       \   'functions': ['zencoding#expandAbbr'],
@@ -318,7 +311,7 @@ NeoBundleLazy 'mattn/zencoding-vim', {
       \ }}
 NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
       \ 'autoload': {
-      \   'commands': ['IndentGuidesEnable'],
+      \   'commands': 'IndentGuidesEnable',
       \   'filetypes': g:my.ft.program_files,
       \ }}
 NeoBundleLazy 'open-browser.vim', { 'autoload' : {
@@ -330,7 +323,9 @@ NeoBundleLazy 'kana/vim-smartword', '', 'same', { 'autoload' : {
       \   '<Plug>(smartword-w)', '<Plug>(smartword-b)', '<Plug>(smartword-ge)']
       \ }}
 NeoBundleLazy 't9md/vim-textmanip', { 'autoload' : {
-      \ 'mappings' : ['<Plug>(textmanip-move-down)', '<Plug>(textmanip-move-up)', '<Plug>(textmanip-move-left)', '<Plug>(textmanip-move-right)']
+      \ 'mappings' : [
+      \   '<Plug>(textmanip-move-down)', '<Plug>(textmanip-move-up)',
+      \   '<Plug>(textmanip-move-left)', '<Plug>(textmanip-move-right)'],
       \ }}
 NeoBundleLazy 'thinca/vim-ref', { 'autoload' : {
       \ 'commands' : 'Ref'
@@ -367,21 +362,29 @@ NeoBundleLazy 'thinca/vim-quickrun', { 'autoload' : {
 " NeoBundle 'textobj-entire'                 " e buffer全体をtext-objectに
 " NeoBundle 'thinca/vim-textobj-comment'     " c commentをtext-objectに
 " NeoBundle 'kana/vim-textobj-function.git'  " f 関数をtext-objectに
-NeoBundle 'kana/vim-operator-user'
-NeoBundleLazy 'kana/vim-textobj-indent.git', Neo_operator([
-      \ ['nx', '<Plug>(textobj-indent-a)' ], ['nx', '<Plug>(textobj-indent-i)'], ['nx', '<Plug>(textobj-indent-same-a)'], ['nx', '<Plug>(textobj-indent-same-i)']
-      \ ])
-NeoBundleLazy 'kana/vim-textobj-user'
-NeoBundle 'operator-camelize', Neo_operator([
-      \ ['nx', '<Plug>(operator-camelize)'], ['nx', '<Plug>(operator-decamelize)']
-      \ ])
+" NeoBundleLazy 'kana/vim-operator-user'
+" NeoBundleLazy 'kana/vim-textobj-user'
+"
+" NeoBundleLazy 'kana/vim-textobj-indent.git', {
+"       \ 'depends' : 'kana/vim-textobj-user',
+"       \ 'autoload': {
+"       \   'mappings' : [
+"       \     ['nx', '<Plug>(textobj-indent-a)' ], ['nx', '<Plug>(textobj-indent-i)'],
+"       \     ['nx', '<Plug>(textobj-indent-same-a)'], ['nx', '<Plug>(textobj-indent-same-i)']
+"       \ ]}}
+NeoBundle 'operator-camelize', {
+      \ 'depends' : 'kana/vim-operator-user',
+      \ 'autoload' : {
+      \   'mappings' : [
+      \     ['nx', '<Plug>(operator-camelize)'], ['nx', '<Plug>(operator-decamelize)']
+      \ ]}}
 " NeoBundle 'tyru/operator-html-escape.vim'
 "}}}
 "}}}
 " その他 {{{
 " NeoBundle 'tyru/urilib.vim' "urilib.vim : vim scriptからURLを扱うライブラリ
 " NeoBundle 'kana/vim-smartchr' "smartchr.vim : ==()などの前後を整形
-NeoBundleLazy 'mattn/webapi-vim' "vim Interface to Web API
+NeoBundleLazy 'mattn/webapi-vim'
 NeoBundleLazy 'scrooloose/syntastic', Neo_al(g:my.ft.program_files)
 NeoBundleLazy 'taichouchou2/alpaca_look.git', {
       \ 'autoload' : {
@@ -403,7 +406,7 @@ NeoBundleLazy 'glidenote/memolist.vim', { 'depends' :
 NeoBundleLazy 'Shougo/unite-ssh', {
       \ 'depends' : ['Shougo/unite.vim', 'Shougo/vimproc', 'Shougo/vimfiler'],
       \ 'autoload' : {
-      \   'mappings' : '[unite]s',
+      \   'mappings' : ['n', '[unite]s'],
       \ }
       \ }
 NeoBundleLazy 'taichouchou2/vim-unite-giti'
@@ -539,9 +542,9 @@ NeoBundleLazy 'taichouchou2/unite-reek', {
       \ },
       \ 'autoload': { 'filetypes': g:my.ft.ruby_files },
       \ 'depends' : 'Shougo/unite.vim' }
-NeoBundleLazy 'Shougo/neocomplcache-rsense', {
-      \ 'depends': 'Shougo/neocomplcache',
-      \ 'autoload': { 'filetypes': 'ruby' }}
+" NeoBundleLazy 'Shougo/neocomplcache-rsense', {
+"       \ 'depends': 'Shougo/neocomplcache',
+"       \ 'autoload': { 'filetypes': 'ruby' }}
 NeoBundleLazy 'taichouchou2/rsense-0.3', {
       \ 'build' : {
       \    'mac': 'ruby etc/config.rb > ~/.rsense',
@@ -986,12 +989,15 @@ set ambiwidth=double
 " ワイルドカードで表示するときに優先度を低くする拡張子
 set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc
 
-" 指定文字コードで強制的にファイルを開く
-command! Cp932     edit ++enc=cp932
-command! Eucjp     edit ++enc=euc-jp
-command! Iso2022jp edit ++enc=iso-2022-jp
-command! Utf8      edit ++enc=utf-8
-command! Sjis      edit ++enc=sjis
+command! -bang -bar -complete=file -nargs=? Utf8 edit<bang> ++enc=utf-8 <args>
+command! -bang -bar -complete=file -nargs=? Iso2022jp edit<bang> ++enc=iso-2022-jp <args>
+command! -bang -bar -complete=file -nargs=? Cp932 edit<bang> ++enc=cp932 <args>
+command! -bang -bar -complete=file -nargs=? Euc edit<bang> ++enc=euc-jp <args>
+command! -bang -bar -complete=file -nargs=? Utf16 edit<bang> ++enc=ucs-2le <args>
+command! -bang -bar -complete=file -nargs=? Utf16be edit<bang> ++enc=ucs-2 <args>
+command! -bang -bar -complete=file -nargs=? Jis  Iso2022jp<bang> <args>
+command! -bang -bar -complete=file -nargs=? Sjis  Cp932<bang> <args>
+command! -bang -bar -complete=file -nargs=? Unicode Utf16<bang> <args>
 "}}}
 
 "----------------------------------------
@@ -1035,7 +1041,9 @@ set title
 set titlelen=95
 set ttyfast
 
-au FileType coffee,ruby,eruby,php,javascript,c,json,vim set colorcolumn=80
+if v:version >= 703
+  au FileType coffee,ruby,eruby,php,javascript,c,json,vim set colorcolumn=80
+endif
 
 "折り畳み
 set foldcolumn=1
@@ -1421,237 +1429,6 @@ let g:tagbar_type_scala = {
 nmap <Leader>o <Plug>(openbrowser-open)
 xmap <Leader>o <Plug>(openbrowser-open)
 nnoremap <Leader>g :<C-u>OpenBrowserSearch<Space><C-r><C-w><CR>
-"}}}
-
-"------------------------------------
-" unite.vim
-"------------------------------------
-"{{{
-" 入力モードで開始する
-let g:unite_enable_split_vertically=1
-let g:unite_enable_start_insert=1
-let g:unite_winheight = 20
-let g:unite_source_file_mru_time_format="(%m-%d %H:%M:%S) "
-let g:unite_source_file_mru_filename_format=":~:."
-let g:unite_source_directory_mru_time_format="(%m-%d %H:%M:%S) "
-let g:unite_cursor_line_highlight='LineNr'
-" let g:unite_abbr_highlight = 'TabLine'
-let g:unite_source_file_mru_limit = 300
-let g:unite_source_directory_mru_limit = 300
-let s:unite_kuso_hooks = {}
-" let g:unite_source_directory_mru_filename_format
-
-"unite prefix key.
-nmap [unite] <Nop>
-nmap <C-J> [unite]
-
-nnoremap <silent> [unite]<C-U>   :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
-nnoremap <silent> [unite]<C-J>   :<C-u>Unite file_mru -buffer-name=file_mru<CR>
-nnoremap [unite]<C-F>   :<C-u>Unite -buffer-name=file file:
-nnoremap <silent> [unite]b       :<C-u>Unite bookmark -buffer-name=bookmark<CR>
-nnoremap <silent> [unite]<C-B>   :<C-u>Unite buffer -buffer-name=buffer<CR>
-nnoremap <silent> <Space>b       :<C-u>UniteBookmarkAdd<CR>
-
-nnoremap <silent> g/ :<C-U>call Smart_unite_open('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast')<CR>
-
-" XXX 本体の関数をつかって実装したい
-function! Smart_unite_open(cmd) "{{{
-  let file_syntax=&syntax
-  let rails_root = exists('b:rails_root')? b:rails_root : ''
-  let rails_buffer = rails#buffer()
-
-  " uniteを起動
-  exe a:cmd
-
-  if rails_root != ''
-    let b:rails_root = rails_root
-    call rails#set_syntax(rails_buffer)
-  endif
-  if file_syntax != ''
-    exe 'setl syntax='.file_syntax
-  endif
-endfunction"}}}
-
-function! s:unite_kuso_hooks.file_mru() "{{{
-  highlight link uniteSource__FileMru_Time Comment
-endfunction"}}}
-function! s:unite_kuso_hooks.file() "{{{
-  syntax match uniteFileDirectory '.*\/'
-  highlight link uniteFileDirectory Statement
-  function! s:unite_file_smart_action(candidate)
-    call alpaca#print_error(a:candidate)
-    " call unite#start_script([['file', a:candidate.action__directory]])
-  endfunction
-
-  call unite#custom_action('cdable', 'file', s:unite_file_smart_action)
-endfunction"}}}
-
-function! UniteSetting() "{{{
-  " SmartHighlight 'UniteStatement', {
-  "       \ 'guifg'   : '#F92672',
-  "       \ 'ctermfg' : '161',
-  "       \ 'style' : 'bold',
-  "       \ }
-
-  highlight link uniteMarkedLine Identifier
-  highlight link uniteNonMarkedLine Comment
-  highlight link uniteCandidateInputKeyword Statement
-
-  inoremap <buffer><C-J> <Down>
-  inoremap <buffer><C-K> <Up>
-  nmap     <buffer>f <Plug>(unite_toggle_mark_current_candidate)
-  xmap     <buffer>f <Plug>(unite_toggle_mark_selected_candidates)
-  nmap     <buffer><C-H> <Plug>(unite_toggle_transpose_window)
-  nmap     <buffer><C-J> <Plug>(unite_toggle_auto_preview)
-  nnoremap <silent><buffer><expr>S unite#do_action('split')
-  nnoremap <silent><buffer><expr>V unite#do_action('vsplit')
-
-  " hook
-  let unite = unite#get_current_unite()
-  let buffer_name = unite.buffer_name != '' ? unite.buffer_name : '_'
-
-  " XXX 本体の関数をつかって実装したい
-  call alpaca#let_s:('unite_kuso_hooks', {})
-  if has_key( s:unite_kuso_hooks, buffer_name )
-    call s:unite_kuso_hooks[buffer_name]()
-  endif
-endfunction
-aug MyAutoCmd
-  au FileType unite call UniteSetting()
-aug END
-"}}}
-"}}}
-
-"------------------------------------
-" unite-history
-"------------------------------------
-"{{{
-let g:unite_source_history_yank_enable =1
-
-" TODO kusoすぎわろた。 実装方法考えないとなぁ。
-function! BundleWithUniteHisoryCmd(cmd) "{{{
-  call BundleWithCmd( 'vim-unite-history unite.vim', '' )
-
-  call Smart_unite_open(a:cmd)
-endfunction"}}}
-function s:unite_kuso_hooks.history_command() "{{{
-  set syntax=vim
-endfunction"}}}
-
-nnoremap <silent>[unite]hy :<C-U>call BundleWithUniteHisoryCmd('Unite -buffer-name=history_yank -no-empty history/yank')<CR>
-nnoremap <silent>[unite]hc  :<C-U>call BundleWithCmd('vim-unite-history', 'Unite -buffer-name=history_command -no-empty history/command')<CR>
-nnoremap <silent>[unite]hs  :<C-U>call BundleWithUniteHisoryCmd('Unite -buffer-name=history_search -no-empty history/search')<CR>
-"}}}
-
-"------------------------------------
-" unite-ssh
-"------------------------------------
-"{{{
-" call unite#custom_source('file_rec', 'ignore_pattern', '\$global\|\.class$')
-nnoremap [unite]s :Unite -buffer-name=ssh ssh://
-"}}}
-
-"------------------------------------
-" Unite-mark.vim
-"------------------------------------
-"{{{
-" let g:unite_source_mark_marks =
-"       \   "abcdefghijklmnopqrstuvwxyz"
-"       \ . "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-"       \ . "0123456789.'`^<>[]{}()\""
-"}}}
-
-"------------------------------------
-" Unite-grep.vim
-"------------------------------------
-"{{{
-let g:unite_source_grep_command = "grep"
-let g:unite_source_grep_recursive_opt = "-R"
-"}}}
-
-"------------------------------------
-" Unite-tag.vim
-"------------------------------------
-"{{{
-" aug MyAutoCmd
-"   au BufEnter *
-"         \   if empty(&buftype)
-"         \|     nnoremap <silent>[unite]<C-K>  :call BundleWithCmd('unite-tag', 'Unite tag -input'<C-R><C-W>)<CR>
-"         \|  endif
-" aug END
-nnoremap <silent>[unite]<C-K>  :call BundleWithCmd('unite-tag unite.vim', 'Unite tag -buffer-name=tag -no-empty')<CR>
-"}}}
-
-"------------------------------------
-" Unite-outline
-"------------------------------------
-"{{{
-" let g:unite_source_outline_filetype_options
-" let g:unite_source_outline_info
-" let g:unite_source_outline_indent_width
-" let g:unite_source_outline_max_headings
-" let g:unite_source_outline_cache_limit
-" let g:unite_source_outline_highlight
-function! s:unite_kuso_hooks.outline()
-  let unite = unite#get_context()
-  let unite.auto_preview = 0
-  nnoremap <buffer><C-J> gj
-endfunction
-nnoremap <silent>[unite]o  :call BundleWithCmd('unite-outline', 'Unite -auto-preview -horizontal -no-quit -buffer-name=outline -hide-source-names outline')<CR>
-"}}}
-
-"------------------------------------
-" Unite-rails.vim
-"------------------------------------
-"{{{
-function! UniteRailsSetting()
-  nnoremap <buffer>[plug]<C-H><C-H>  :<C-U>Unite rails/view<CR>
-  nnoremap <buffer>[plug]<C-H>       :<C-U>Unite rails/model<CR>
-  nnoremap <buffer>[plug]            :<C-U>Unite rails/controller<CR>
-
-  nnoremap <buffer>[plug]c           :<C-U>Unite rails/config<CR>
-  nnoremap <buffer>[plug]s           :<C-U>Unite rails/spec<CR>
-  nnoremap <buffer>[plug]m           :<C-U>Unite rails/db -input=migrate<CR>
-  nnoremap <buffer>[plug]l           :<C-U>Unite rails/lib<CR>
-  nnoremap <buffer><expr>[plug]g     ':e '.b:rails_root.'/Gemfile<CR>'
-  nnoremap <buffer><expr>[plug]r     ':e '.b:rails_root.'/config/routes.rb<CR>'
-  nnoremap <buffer><expr>[plug]se    ':e '.b:rails_root.'/db/seeds.rb<CR>'
-  nnoremap <buffer>[plug]ra          :<C-U>Unite rails/rake<CR>
-  nnoremap <buffer>[plug]h           :<C-U>Unite rails/heroku<CR>
-endfunction
-aug MyAutoCmd
-  au User Rails call UniteRailsSetting()
-aug END
-"}}}
-
-"------------------------------------
-" Unite-reek, Unite-rails_best_practices
-"------------------------------------
-" {{{
-nnoremap <silent> [unite]r      :<C-u>Unite -no-quit reek<CR>
-nnoremap <silent> [unite]rr :<C-u>Unite -no-quit rails_best_practices<CR>
-" }}}
-
-"----------------------------------------
-" unite-giti
-"----------------------------------------
-"{{{
-function! s:unite_kuso_hooks.giti_status()
-  " nnoremap <silent><buffer><expr>gM unite#do_action('ammend')
-  nnoremap <silent><buffer><expr>ga unite#do_action('stage')
-  nnoremap <silent><buffer><expr>gc unite#do_action('checkout')
-  nnoremap <silent><buffer><expr>gd unite#do_action('diff')
-  nnoremap <silent><buffer><expr>gu unite#do_action('unstage')
-endfunction
-
-function! s:unite_kuso_hooks.giti_log()
-  nnoremap <silent><buffer><expr>gd unite#do_action('diff')
-  nnoremap <silent><buffer><expr>d unite#do_action('diff')
-endfunction
-
-nnoremap <silent>gl :<C-U>call BundleWithCmd('vim-unite-giti', 'Unite -buffer-name=giti_log -no-start-insert giti/log')<CR>
-nnoremap <silent>gs :<C-U>call BundleWithCmd('vim-unite-giti', 'Unite -buffer-name=giti_status -no-start-insert giti/status ')<CR>
-nnoremap <silent>gh :<C-U>call BundleWithCmd('vim-unite-giti', 'Unite -buffer-name=giti_branchall -no-start-insert giti/branch_all')<CR>
 "}}}
 
 "------------------------------------
@@ -2082,6 +1859,7 @@ endfunction
 " {{{
 let g:tcommentmaps=0
 
+" TODO 特殊文字に書き換える
 nmap <C-_> [tcomment]
 nmap gc [tcomment]
 noremap <silent>[tcomment]<c-_> :TComment<CR>
@@ -2692,6 +2470,264 @@ let g:scala_use_default_keymappings = 0
 "}}}
 
 "----------------------------------------
+" unite.vim"{{{
+"unite prefix key.
+nmap [unite] <Nop>
+nmap <C-J> [unite]
+let bundle = neobundle#get('unite.vim')
+function! bundle.hooks.on_source(bundle)
+  function! s:unite_my_settings() "{{{
+    " SmartHighlight 'UniteStatement', {
+    "       \ 'guifg'   : '#F92672',
+    "       \ 'ctermfg' : '161',
+    "       \ 'style' : 'bold',
+    "       \ }
+
+    highlight link uniteMarkedLine Identifier
+    highlight link uniteNonMarkedLine Comment
+    highlight link uniteCandidateInputKeyword Statement
+
+    inoremap <buffer><C-J> <Down>
+    inoremap <buffer><C-K> <Up>
+    nmap     <buffer>f <Plug>(unite_toggle_mark_current_candidate)
+    xmap     <buffer>f <Plug>(unite_toggle_mark_selected_candidates)
+    nmap     <buffer><C-H> <Plug>(unite_toggle_transpose_window)
+    nmap     <buffer><C-J> <Plug>(unite_toggle_auto_preview)
+    nnoremap <silent><buffer><expr>S unite#do_action('split')
+    nnoremap <silent><buffer><expr>V unite#do_action('vsplit')
+
+    " hook
+    let unite = unite#get_current_unite()
+    let buffer_name = unite.buffer_name != '' ? unite.buffer_name : '_'
+
+    " XXX 本体の関数をつかって実装したい
+    call alpaca#let_s:('unite_kuso_hooks', {})
+    if has_key( s:unite_kuso_hooks, buffer_name )
+      call s:unite_kuso_hooks[buffer_name]()
+    endif
+  endfunction
+  aug MyUniteCmd
+    au FileType unite call <SID>unite_my_settings()
+  aug END
+  "}}}
+
+  " For unite-menu."{{{
+  call alpaca#let_g:('unite_source_menu_menus', {})
+  let g:unite_source_menu_menus.enc = {
+        \     'description' : 'Open with a specific character code again.',
+        \ }
+  let g:unite_source_menu_menus.enc.command_candidates = [
+        \       ['utf8', 'Utf8'],
+        \       ['iso2022jp', 'Iso2022jp'],
+        \       ['cp932', 'Cp932'],
+        \       ['euc', 'Euc'],
+        \       ['utf16', 'Utf16'],
+        \       ['utf16-be', 'Utf16be'],
+        \       ['jis', 'Jis'],
+        \       ['sjis', 'Sjis'],
+        \       ['unicode', 'Unicode'],
+        \     ]
+  nnoremap ;e :<C-u>Unite menu:enc
+  "}}}
+
+  "------------------------------------
+  " unite.vim
+  "------------------------------------
+  "{{{
+  " 入力モードで開始する
+  " let g:unite_abbr_highlight = 'TabLine'
+  " let g:unite_source_directory_mru_filename_format
+  let g:unite_cursor_line_highlight='LineNr'
+  let g:unite_enable_split_vertically=1
+  let g:unite_enable_start_insert=1
+  let g:unite_source_directory_mru_limit = 100
+  let g:unite_source_directory_mru_time_format="(%m-%d %H:%M:%S) "
+  let g:unite_source_file_mru_filename_format=":~:."
+  let g:unite_source_file_mru_limit = 100
+  let g:unite_source_file_mru_time_format="(%m-%d %H:%M:%S) "
+  let g:unite_winheight = 20
+  let g:unite_source_history_yank_enable =1
+  let s:unite_kuso_hooks = {}
+
+  nnoremap <silent> [unite]<C-U>   :<C-u>UniteWithBufferDir -buffer-name=file file<CR>
+  nnoremap <silent> [unite]<C-J>   :<C-u>Unite file_mru -buffer-name=file_mru<CR>
+  nnoremap [unite]<C-F>   :<C-u>Unite -buffer-name=file file:
+  nnoremap <silent> [unite]b       :<C-u>Unite bookmark -buffer-name=bookmark<CR>
+  nnoremap <silent> [unite]<C-B>   :<C-u>Unite buffer -buffer-name=buffer<CR>
+  nnoremap <silent> <Space>b       :<C-u>UniteBookmarkAdd<CR>
+
+  nnoremap <silent> g/ :<C-U>call Smart_unite_open('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast')<CR>
+
+  " XXX 本体の関数をつかって実装したい
+  function! Smart_unite_open(cmd) "{{{
+    let file_syntax=&syntax
+    let rails_root = exists('b:rails_root')? b:rails_root : ''
+    let rails_buffer = rails#buffer()
+
+    " uniteを起動
+    exe a:cmd
+
+    if rails_root != ''
+      let b:rails_root = rails_root
+      call rails#set_syntax(rails_buffer)
+    endif
+    if file_syntax != ''
+      exe 'setl syntax='.file_syntax
+    endif
+  endfunction"}}}
+
+  function! s:unite_kuso_hooks.file_mru() "{{{
+    highlight link uniteSource__FileMru_Time Comment
+    syntax region uniteSource__FileMru start=/\%3c/ end=/$/
+
+    " syntax link uniteSource__FileMru contained
+    syntax region uniteSource__FileMru start=/\%3c/ end=/$/ contained
+
+    syntax match uniteFileDirectory '.*\/'
+    syntax match uniteFileFile '[^/]*[^/]$'
+    highlight link uniteFileDirectory Identifier
+    highlight link uniteFileDirectory Statement
+  endfunction"}}}
+  function! s:unite_kuso_hooks.file() "{{{
+    syntax match uniteFileDirectory '.*\/'
+    highlight link uniteFileDirectory Statement
+  endfunction"}}}
+  "}}}
+
+  "------------------------------------
+  " unite-history
+  "------------------------------------
+  "{{{
+
+  " TODO kusoすぎわろた。 実装方法考えないとなぁ。
+  function! BundleWithUniteHisoryCmd(cmd) "{{{
+    call BundleWithCmd( 'vim-unite-history unite.vim', '' )
+
+    call Smart_unite_open(a:cmd)
+  endfunction"}}}
+  function s:unite_kuso_hooks.history_command() "{{{
+    set syntax=vim
+  endfunction"}}}
+
+  nnoremap <silent>[unite]hy :<C-U>call BundleWithUniteHisoryCmd('Unite -buffer-name=history_yank -no-empty history/yank')<CR>
+  nnoremap <silent>[unite]hc  :<C-U>call BundleWithCmd('vim-unite-history', 'Unite -buffer-name=history_command -no-empty history/command')<CR>
+  nnoremap <silent>[unite]hs  :<C-U>call BundleWithUniteHisoryCmd('Unite -buffer-name=history_search -no-empty history/search')<CR>
+  "}}}
+
+  "------------------------------------
+  " unite-ssh
+  "------------------------------------
+  "{{{
+  " call unite#custom_source('file_rec', 'ignore_pattern', '\$global\|\.class$')
+  nnoremap [unite]s :Unite -buffer-name=ssh ssh://
+  "}}}
+
+  "------------------------------------
+  " Unite-mark.vim
+  "------------------------------------
+  "{{{
+  " let g:unite_source_mark_marks =
+  "       \   "abcdefghijklmnopqrstuvwxyz"
+  "       \ . "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  "       \ . "0123456789.'`^<>[]{}()\""
+  "}}}
+
+  "------------------------------------
+  " Unite-grep.vim
+  "------------------------------------
+  "{{{
+  let g:unite_source_grep_command = "grep"
+  let g:unite_source_grep_recursive_opt = "-R"
+  "}}}
+
+  "------------------------------------
+  " Unite-tag.vim
+  "------------------------------------
+  "{{{
+  " aug MyAutoCmd
+  "   au BufEnter *
+  "         \   if empty(&buftype)
+  "         \|     nnoremap <silent>[unite]<C-K>  :call BundleWithCmd('unite-tag', 'Unite tag -input'<C-R><C-W>)<CR>
+  "         \|  endif
+  " aug END
+  nnoremap <silent>[unite]<C-K>  :call BundleWithCmd('unite-tag unite.vim', 'Unite tag -buffer-name=tag -no-empty')<CR>
+  "}}}
+
+  "------------------------------------
+  " Unite-outline
+  "------------------------------------
+  "{{{
+  " let g:unite_source_outline_filetype_options
+  " let g:unite_source_outline_info
+  " let g:unite_source_outline_indent_width
+  " let g:unite_source_outline_max_headings
+  " let g:unite_source_outline_cache_limit
+  " let g:unite_source_outline_highlight
+  function! s:unite_kuso_hooks.outline()
+    let unite = unite#get_context()
+    let unite.auto_preview = 0
+    nnoremap <buffer><C-J> gj
+  endfunction
+  nnoremap <silent>[unite]o  :call BundleWithCmd('unite-outline', 'Unite -auto-preview -horizontal -no-quit -buffer-name=outline -hide-source-names outline')<CR>
+  "}}}
+
+  "------------------------------------
+  " Unite-rails.vim
+  "------------------------------------
+  "{{{
+  function! UniteRailsSetting()
+    nnoremap <buffer>[plug]<C-H><C-H>  :<C-U>Unite rails/view<CR>
+    nnoremap <buffer>[plug]<C-H>       :<C-U>Unite rails/model<CR>
+    nnoremap <buffer>[plug]            :<C-U>Unite rails/controller<CR>
+
+    nnoremap <buffer>[plug]c           :<C-U>Unite rails/config<CR>
+    nnoremap <buffer>[plug]s           :<C-U>Unite rails/spec<CR>
+    nnoremap <buffer>[plug]m           :<C-U>Unite rails/db -input=migrate<CR>
+    nnoremap <buffer>[plug]l           :<C-U>Unite rails/lib<CR>
+    nnoremap <buffer><expr>[plug]g     ':e '.b:rails_root.'/Gemfile<CR>'
+    nnoremap <buffer><expr>[plug]r     ':e '.b:rails_root.'/config/routes.rb<CR>'
+    nnoremap <buffer><expr>[plug]se    ':e '.b:rails_root.'/db/seeds.rb<CR>'
+    nnoremap <buffer>[plug]ra          :<C-U>Unite rails/rake<CR>
+    nnoremap <buffer>[plug]h           :<C-U>Unite rails/heroku<CR>
+  endfunction
+  aug MyAutoCmd
+    au User Rails call UniteRailsSetting()
+  aug END
+  "}}}
+
+  "------------------------------------
+  " Unite-reek, Unite-rails_best_practices
+  "------------------------------------
+  " {{{
+  nnoremap <silent> [unite]r      :<C-u>Unite -no-quit reek<CR>
+  nnoremap <silent> [unite]rr :<C-u>Unite -no-quit rails_best_practices<CR>
+  " }}}
+
+  "----------------------------------------
+  " unite-giti
+  "----------------------------------------
+  "{{{
+  function! s:unite_kuso_hooks.giti_status()
+    " nnoremap <silent><buffer><expr>gM unite#do_action('ammend')
+    nnoremap <silent><buffer><expr>ga unite#do_action('stage')
+    nnoremap <silent><buffer><expr>gc unite#do_action('checkout')
+    nnoremap <silent><buffer><expr>gd unite#do_action('diff')
+    nnoremap <silent><buffer><expr>gu unite#do_action('unstage')
+  endfunction
+
+  function! s:unite_kuso_hooks.giti_log()
+    nnoremap <silent><buffer><expr>gd unite#do_action('diff')
+    nnoremap <silent><buffer><expr>d unite#do_action('diff')
+  endfunction
+
+  nnoremap <silent>gl :<C-U>call BundleWithCmd('vim-unite-giti', 'Unite -buffer-name=giti_log -no-start-insert giti/log')<CR>
+  nnoremap <silent>gs :<C-U>call BundleWithCmd('vim-unite-giti', 'Unite -buffer-name=giti_status -no-start-insert giti/status ')<CR>
+  nnoremap <silent>gh :<C-U>call BundleWithCmd('vim-unite-giti', 'Unite -buffer-name=giti_branchall -no-start-insert giti/branch_all')<CR>
+  "}}}
+endfunction
+"}}}
+
+"----------------------------------------
 " 辞書:dict "{{{
 augroup DictSetting
   au!
@@ -2750,69 +2786,78 @@ let g:echodoc_enable_at_startup = 1
 " let g:neocomplcache_max_list = 120
 " let g:neocomplcache_min_keyword_length = 2
 " let g:neocomplcache_min_syntax_length = 2
-let g:neocomplcache_force_overwrite_completefunc = 1
-let g:neocomplcache#sources#rsense#home_directory = neobundle#get_neobundle_dir() . '/rsense-0.3'
-let g:neocomplcache_enable_camel_case_completion = 1
-let g:neocomplcache_enable_underbar_completion = 1
-let g:neocomplcache_skip_auto_completion_time = '0.3'
+let bundle = neobundle#get('neocomplcache')
+function! bundle.hooks.on_source(bundle)
+  let g:neocomplcache_force_overwrite_completefunc = 1
+  let g:neocomplcache#sources#rsense#home_directory = neobundle#get_neobundle_dir() . '/rsense-0.3'
+  let g:neocomplcache_enable_camel_case_completion = 1
+  let g:neocomplcache_enable_underbar_completion = 1
+  let g:neocomplcache_skip_auto_completion_time = '0.3'
 
-" initialize "{{{
-if $USER ==# 'root'
-  let g:neocomplcache_temporary_dir       = expand( '~/.neocon' )
-endif
-let s:neocomplcache_initialize_lists = [
-      \ 'neocomplcache_include_patterns',
-      \ 'neocomplcache_wildcard_characters',
-      \ 'neocomplcache_omni_patterns',
-      \ 'neocomplcache_force_omni_patterns',
-      \ 'neocomplcache_keyword_patterns',
-      \ 'neocomplcache_source_completion_length',
-      \ 'neocomplcache_vim_completefuncs',
-      \ 'neocomplcache_dictionary_filetype_lists',]
-for initialize_variable in s:neocomplcache_initialize_lists
-  call alpaca#let_g:(initialize_variable, {})
-endfor
-"}}}
-" Define force omni patterns"{{{
-let g:neocomplcache_force_omni_patterns.c      = '[^.[:digit:] *\t]\%(\.\|->\)'
-let g:neocomplcache_force_omni_patterns.cpp    = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-let g:neocomplcache_force_omni_patterns.python = '[^. \t]\.\w*'
-"}}}
-" Define keyword pattern. "{{{
-" let g:neocomplcache_keyword_patterns.default = '[0-9a-zA-Z:#_-]\+'
-" let g:neocomplcache_omni_patterns.mail = '^\s*\w\+'
-" let g:neocomplcache_omni_patterns.php = '[^. *\t]\.\w*\|\h\w*::'
-" let g:neocomplcache_keyword_patterns.filename = '\%(\\.\|[/\[\][:alnum:]()$+_\~.-]\|[^[:print:]]\)\+'
-" let g:neocomplcache_omni_patterns.c = '[^.[:digit:]*\t]\%(\.\|->\)'
-"}}}
-"Define include pattern. {{{
-let g:neocomplcache_include_patterns.scala = '^import'
-"}}}
-" Define completefunc"{{{
-let g:neocomplcache_vim_completefuncs.Ref                 = 'ref#complete'
-let g:neocomplcache_vim_completefuncs.Unite               = 'unite#complete_source'
-let g:neocomplcache_vim_completefuncs.VimFiler            = 'vimfiler#complete'
-let g:neocomplcache_vim_completefuncs.VimShell            = 'vimshell#complete'
-let g:neocomplcache_vim_completefuncs.VimShellExecute     = 'vimshell#vimshell_execute_complete'
-let g:neocomplcache_vim_completefuncs.VimShellInteractive = 'vimshell#vimshell_execute_complete'
-let g:neocomplcache_vim_completefuncs.VimShellTerminal    = 'vimshell#vimshell_execute_complete'
-let g:neocomplcache_vim_completefuncs.Vinarise            = 'vinarise#complete'
-"}}}
-" define completion length"{{{
-let g:neocomplcache_source_completion_length.alpaca_look = 4
-" let g:neocomplcache_source_completion_length.rsense      = 2
-"}}}
-" ファイルタイプ毎の辞書ファイルの場所 {{{
-let g:neocomplcache_dictionary_filetype_lists = {
-      \ 'default'    : '',
-      \ 'timobile.javascript'   : $HOME.'/.vim/dict/timobile.dict',
-      \ 'timobile.coffee'   : $HOME.'/.vim/dict/timobile.dict',
-      \ }
-for s:dict in split(glob($HOME.'/.vim/dict/*.dict'))
-  let s:ft = matchstr(s:dict, '\w\+\ze\.dict$')
-  let g:neocomplcache_dictionary_filetype_lists[s:ft] = s:dict
-endfor
-"}}}
+  " initialize "{{{
+  if $USER ==# 'root'
+    let g:neocomplcache_temporary_dir       = expand( '~/.neocon' )
+  endif
+  let s:neocomplcache_initialize_lists = [
+        \ 'neocomplcache_include_patterns',
+        \ 'neocomplcache_wildcard_characters',
+        \ 'neocomplcache_omni_patterns',
+        \ 'neocomplcache_force_omni_patterns',
+        \ 'neocomplcache_keyword_patterns',
+        \ 'neocomplcache_source_completion_length',
+        \ 'neocomplcache_vim_completefuncs',
+        \ 'neocomplcache_dictionary_filetype_lists',]
+  for initialize_variable in s:neocomplcache_initialize_lists
+    call alpaca#let_g:(initialize_variable, {})
+  endfor
+  "}}}
+  " Define force omni patterns"{{{
+  let g:neocomplcache_force_omni_patterns.c      = '[^.[:digit:] *\t]\%(\.\|->\)'
+  let g:neocomplcache_force_omni_patterns.cpp    = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+  let g:neocomplcache_force_omni_patterns.python = '[^. \t]\.\w*'
+  "}}}
+  " Define keyword pattern. "{{{
+  " let g:neocomplcache_keyword_patterns.default = '[0-9a-zA-Z:#_-]\+'
+  " let g:neocomplcache_omni_patterns.mail = '^\s*\w\+'
+  " let g:neocomplcache_omni_patterns.php = '[^. *\t]\.\w*\|\h\w*::'
+  " let g:neocomplcache_keyword_patterns.filename = '\%(\\.\|[/\[\][:alnum:]()$+_\~.-]\|[^[:print:]]\)\+'
+  " let g:neocomplcache_omni_patterns.c = '[^.[:digit:]*\t]\%(\.\|->\)'
+  "}}}
+  "Define include pattern. {{{
+  let g:neocomplcache_include_patterns.scala = '^import'
+  "}}}
+  " Define completefunc"{{{
+  let g:neocomplcache_vim_completefuncs.Ref                 = 'ref#complete'
+  let g:neocomplcache_vim_completefuncs.Unite               = 'unite#complete_source'
+  let g:neocomplcache_vim_completefuncs.VimFiler            = 'vimfiler#complete'
+  let g:neocomplcache_vim_completefuncs.VimShell            = 'vimshell#complete'
+  let g:neocomplcache_vim_completefuncs.VimShellExecute     = 'vimshell#vimshell_execute_complete'
+  let g:neocomplcache_vim_completefuncs.VimShellInteractive = 'vimshell#vimshell_execute_complete'
+  let g:neocomplcache_vim_completefuncs.VimShellTerminal    = 'vimshell#vimshell_execute_complete'
+  let g:neocomplcache_vim_completefuncs.Vinarise            = 'vinarise#complete'
+  "}}}
+  " Define source rank"{{{
+  call neocomplcache#util#set_default_dictionary(
+        \ 'g:neocomplcache_source_rank',
+        \ 'alpaca_look', 200)
+  "}}}
+  " define completion length"{{{
+  let g:neocomplcache_source_completion_length.alpaca_look = 4
+  " let g:neocomplcache_source_completion_length.rsense      = 2
+  "}}}
+  " ファイルタイプ毎の辞書ファイルの場所 {{{
+  let g:neocomplcache_dictionary_filetype_lists = {
+        \ 'default'    : '',
+        \ 'timobile.javascript'   : $HOME.'/.vim/dict/timobile.dict',
+        \ 'timobile.coffee'   : $HOME.'/.vim/dict/timobile.dict',
+        \ }
+  for s:dict in split(glob($HOME.'/.vim/dict/*.dict'))
+    let s:ft = matchstr(s:dict, '\w\+\ze\.dict$')
+    let g:neocomplcache_dictionary_filetype_lists[s:ft] = s:dict
+  endfor
+  "}}}
+
+endfunction
 "}}}
 
 " keymap {{{
@@ -2835,5 +2880,9 @@ smap <silent><C-F>                <Plug>(neosnippet_expand_or_jump)
 " xmap <silent><C-F>                <Plug>(neosnippet_start_unite_snippet_target)
 " xmap <silent>o                    <Plug>(neosnippet_register_oneshot_snippet)
 "}}}
+
+if !has('vim_starting')
+  call neobundle#call_hook('on_source')
+endif
 
 set secure
