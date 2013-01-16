@@ -410,6 +410,9 @@ NeoBundleLazy 'Shougo/unite-ssh', {
       \ }
       \ }
 NeoBundleLazy 'taichouchou2/vim-unite-giti'
+NeoBundleLazy 'hrsh7th/vim-versions', {
+      \ 'autoload' : {'functions' : 'versions#info', 'commands' : 'UniteVersions'},
+      \ }
 NeoBundleLazy 'thinca/vim-unite-history'
 NeoBundleLazy 'ujihisa/vimshell-ssh', { 'autoload' : {
       \ 'filetypes' : 'vimshell',
@@ -1133,12 +1136,44 @@ nnoremap [tag_or_tab]s  :<C-u>tselect<CR>
 "}}}
 
 "----------------------------------------
-nnoremap [hoge] <Nop>
+" 辞書:dict "{{{
+augroup DictSetting
+  au!
+  au FileType coffee.jasmine,javascript.jasmine setl dict+=~/.vim/dict/js.jasmine.dict
+  au FileType html,php,eruby       setl dict+=~/.vim/dict/html.dict
+  au FileType ruby.rspec           setl dict+=~/.vim/dict/rspec.dict
+augroup END
+
+" カスタムファイルタイプでも、自動でdictを読み込む
+" そして、編集画面までさくっと移動。
+func! s:auto_dict_setting()
+  let file_type_name = &ft
+  if exists('b:file_type_name')
+    let file_type_name = b:file_type_name
+  endif
+
+  let dict_name = split( file_type_name, '.' )
+  if empty( dict_name ) || count(g:my.ft.ignore_patterns, dict_name) > 0
+    return
+  endif
+
+  exe  "setl dict+=~/.vim/dict/".dict_name[0].".dict"
+
+  let b:dict_path = expand('~/.vim/dict/'.file_type_name.'.dict')
+  exe  "setl dict+=".b:dict_path
+  nnoremap <buffer><expr><Space>d ':<C-U>SmartSplit e '.b:dict_path.'<CR>'
+endfunc
+
+aug MyAutoCmd
+  au FileType * call s:auto_dict_setting()
+aug END
+"}}}
+
+"----------------------------------------
 nnoremap [plug] <Nop>
 nnoremap [space] <Space>
 nmap <C-H> [plug]
 nmap <Space> [space]
-nmap <C-G> [hoge]
 "----------------------------------------
 "個別のプラグイン " {{{
 
@@ -1228,8 +1263,8 @@ let g:surround_custom_mapping.vim= {
 "------------------------------------
 "{{{
 " カーソル下の単語をgrepする
-nnoremap <silent>[hoge]<C-g> :<C-u>Rgrep<Space><C-r><C-w> *<CR><CR>
-nnoremap <silent>[hoge]<C-b> :<C-u>GrepBuffer<Space><C-r><C-w><CR>
+nnoremap <silent><C-G><C-g> :<C-u>Rgrep<Space><C-r><C-w> *<CR><CR>
+nnoremap <silent><C-G><C-b> :<C-u>GrepBuffer<Space><C-r><C-w><CR>
 
 " 検索外のディレクトリ、ファイルパターン
 let Grep_Skip_Dirs  = '.svn .git .hg .swp'
@@ -1479,7 +1514,7 @@ function! s:vimfiler_local() "{{{
   nmap <buffer><CR> <Plug>(vimfiler_edit_file)
   nmap <buffer>f <Plug>(vimfiler_toggle_mark_current_line)
   nnoremap <buffer>b :<C-U>UniteBookmarkAdd<CR>
-  nnoremap <buffer>p :call vimfiler#mappings#do_action('preview')<CR>
+  nnoremap <buffer><expr>p vimfiler#do_action('preview')
   nnoremap <buffer>v v
 endfunction"}}}
 function! s:vimfiler_explorer_local() "{{{
@@ -1489,7 +1524,7 @@ function! s:vimfiler_explorer_local() "{{{
   let g:my.conf.tags.auto_create = 0
 endfunction"}}}
 function! s:vimfiler_not_explorer_local() "{{{
-  nnoremap <buffer>g/ :<C-U>Unite file<CR>
+  nnoremap <buffer><expr>u vimfiler#do_action('file')
 endfunction"}}}
 aug VimFilerKeyMapping "{{{
   au!
@@ -2470,298 +2505,6 @@ let g:scala_use_default_keymappings = 0
 "}}}
 
 "----------------------------------------
-" unite.vim"{{{
-"unite prefix key.
-nmap [unite] <Nop>
-nmap <C-J> [unite]
-let bundle = neobundle#get('unite.vim')
-function! bundle.hooks.on_source(bundle)
-  function! s:unite_my_settings() "{{{
-    " SmartHighlight 'UniteStatement', {
-    "       \ 'guifg'   : '#F92672',
-    "       \ 'ctermfg' : '161',
-    "       \ 'style' : 'bold',
-    "       \ }
-
-    highlight link uniteMarkedLine Identifier
-    highlight link uniteNonMarkedLine Comment
-    highlight link uniteCandidateInputKeyword Statement
-
-    inoremap <buffer><C-J> <Down>
-    inoremap <buffer><C-K> <Up>
-    nmap     <buffer>f <Plug>(unite_toggle_mark_current_candidate)
-    xmap     <buffer>f <Plug>(unite_toggle_mark_selected_candidates)
-    nmap     <buffer><C-H> <Plug>(unite_toggle_transpose_window)
-    nmap     <buffer><C-J> <Plug>(unite_toggle_auto_preview)
-    nnoremap <silent><buffer><expr>S unite#do_action('split')
-    nnoremap <silent><buffer><expr>V unite#do_action('vsplit')
-
-    " hook
-    let unite = unite#get_current_unite()
-    let buffer_name = unite.buffer_name != '' ? unite.buffer_name : '_'
-
-    " XXX 本体の関数をつかって実装したい
-    call alpaca#let_s:('unite_kuso_hooks', {})
-    if has_key( s:unite_kuso_hooks, buffer_name )
-      call s:unite_kuso_hooks[buffer_name]()
-    endif
-  endfunction
-  aug MyUniteCmd
-    au FileType unite call <SID>unite_my_settings()
-  aug END
-  "}}}
-
-  " For unite-menu."{{{
-  call alpaca#let_g:('unite_source_menu_menus', {})
-  let g:unite_source_menu_menus.enc = {
-        \     'description' : 'Open with a specific character code again.',
-        \ }
-  let g:unite_source_menu_menus.enc.command_candidates = [
-        \       ['utf8', 'Utf8'],
-        \       ['iso2022jp', 'Iso2022jp'],
-        \       ['cp932', 'Cp932'],
-        \       ['euc', 'Euc'],
-        \       ['utf16', 'Utf16'],
-        \       ['utf16-be', 'Utf16be'],
-        \       ['jis', 'Jis'],
-        \       ['sjis', 'Sjis'],
-        \       ['unicode', 'Unicode'],
-        \     ]
-  nnoremap ;e :<C-u>Unite menu:enc
-  "}}}
-
-  "------------------------------------
-  " unite.vim
-  "------------------------------------
-  "{{{
-  " 入力モードで開始する
-  " let g:unite_abbr_highlight = 'TabLine'
-  " let g:unite_source_directory_mru_filename_format
-  let g:unite_cursor_line_highlight='LineNr'
-  let g:unite_enable_split_vertically=1
-  let g:unite_enable_start_insert=1
-  let g:unite_source_directory_mru_limit = 100
-  let g:unite_source_directory_mru_time_format="(%m-%d %H:%M:%S) "
-  let g:unite_source_file_mru_filename_format=":~:."
-  let g:unite_source_file_mru_limit = 100
-  let g:unite_source_file_mru_time_format="(%m-%d %H:%M:%S) "
-  let g:unite_winheight = 20
-  let g:unite_source_history_yank_enable =1
-  let s:unite_kuso_hooks = {}
-
-  nnoremap <silent> [unite]<C-U>   :<C-u>UniteWithBufferDir -buffer-name=file file<CR>
-  nnoremap <silent> [unite]<C-J>   :<C-u>Unite file_mru -buffer-name=file_mru<CR>
-  nnoremap [unite]<C-F>   :<C-u>Unite -buffer-name=file file:
-  nnoremap <silent> [unite]b       :<C-u>Unite bookmark -buffer-name=bookmark<CR>
-  nnoremap <silent> [unite]<C-B>   :<C-u>Unite buffer -buffer-name=buffer<CR>
-  nnoremap <silent> <Space>b       :<C-u>UniteBookmarkAdd<CR>
-
-  nnoremap <silent> g/ :<C-U>call Smart_unite_open('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast')<CR>
-
-  " XXX 本体の関数をつかって実装したい
-  function! Smart_unite_open(cmd) "{{{
-    let file_syntax=&syntax
-    let rails_root = exists('b:rails_root')? b:rails_root : ''
-    let rails_buffer = rails#buffer()
-
-    " uniteを起動
-    exe a:cmd
-
-    if rails_root != ''
-      let b:rails_root = rails_root
-      call rails#set_syntax(rails_buffer)
-    endif
-    if file_syntax != ''
-      exe 'setl syntax='.file_syntax
-    endif
-  endfunction"}}}
-
-  function! s:unite_kuso_hooks.file_mru() "{{{
-    highlight link uniteSource__FileMru_Time Comment
-    syntax region uniteSource__FileMru start=/\%3c/ end=/$/
-
-    " syntax link uniteSource__FileMru contained
-    syntax region uniteSource__FileMru start=/\%3c/ end=/$/ contained
-
-    syntax match uniteFileDirectory '.*\/'
-    syntax match uniteFileFile '[^/]*[^/]$'
-    highlight link uniteFileDirectory Identifier
-    highlight link uniteFileDirectory Statement
-  endfunction"}}}
-  function! s:unite_kuso_hooks.file() "{{{
-    syntax match uniteFileDirectory '.*\/'
-    highlight link uniteFileDirectory Statement
-  endfunction"}}}
-  "}}}
-
-  "------------------------------------
-  " unite-history
-  "------------------------------------
-  "{{{
-
-  " TODO kusoすぎわろた。 実装方法考えないとなぁ。
-  function! BundleWithUniteHisoryCmd(cmd) "{{{
-    call BundleWithCmd( 'vim-unite-history unite.vim', '' )
-
-    call Smart_unite_open(a:cmd)
-  endfunction"}}}
-  function s:unite_kuso_hooks.history_command() "{{{
-    set syntax=vim
-  endfunction"}}}
-
-  nnoremap <silent>[unite]hy :<C-U>call BundleWithUniteHisoryCmd('Unite -buffer-name=history_yank -no-empty history/yank')<CR>
-  nnoremap <silent>[unite]hc  :<C-U>call BundleWithCmd('vim-unite-history', 'Unite -buffer-name=history_command -no-empty history/command')<CR>
-  nnoremap <silent>[unite]hs  :<C-U>call BundleWithUniteHisoryCmd('Unite -buffer-name=history_search -no-empty history/search')<CR>
-  "}}}
-
-  "------------------------------------
-  " unite-ssh
-  "------------------------------------
-  "{{{
-  " call unite#custom_source('file_rec', 'ignore_pattern', '\$global\|\.class$')
-  nnoremap [unite]s :Unite -buffer-name=ssh ssh://
-  "}}}
-
-  "------------------------------------
-  " Unite-mark.vim
-  "------------------------------------
-  "{{{
-  " let g:unite_source_mark_marks =
-  "       \   "abcdefghijklmnopqrstuvwxyz"
-  "       \ . "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-  "       \ . "0123456789.'`^<>[]{}()\""
-  "}}}
-
-  "------------------------------------
-  " Unite-grep.vim
-  "------------------------------------
-  "{{{
-  let g:unite_source_grep_command = "grep"
-  let g:unite_source_grep_recursive_opt = "-R"
-  "}}}
-
-  "------------------------------------
-  " Unite-tag.vim
-  "------------------------------------
-  "{{{
-  " aug MyAutoCmd
-  "   au BufEnter *
-  "         \   if empty(&buftype)
-  "         \|     nnoremap <silent>[unite]<C-K>  :call BundleWithCmd('unite-tag', 'Unite tag -input'<C-R><C-W>)<CR>
-  "         \|  endif
-  " aug END
-  nnoremap <silent>[unite]<C-K>  :call BundleWithCmd('unite-tag unite.vim', 'Unite tag -buffer-name=tag -no-empty')<CR>
-  "}}}
-
-  "------------------------------------
-  " Unite-outline
-  "------------------------------------
-  "{{{
-  " let g:unite_source_outline_filetype_options
-  " let g:unite_source_outline_info
-  " let g:unite_source_outline_indent_width
-  " let g:unite_source_outline_max_headings
-  " let g:unite_source_outline_cache_limit
-  " let g:unite_source_outline_highlight
-  function! s:unite_kuso_hooks.outline()
-    let unite = unite#get_context()
-    let unite.auto_preview = 0
-    nnoremap <buffer><C-J> gj
-  endfunction
-  nnoremap <silent>[unite]o  :call BundleWithCmd('unite-outline', 'Unite -auto-preview -horizontal -no-quit -buffer-name=outline -hide-source-names outline')<CR>
-  "}}}
-
-  "------------------------------------
-  " Unite-rails.vim
-  "------------------------------------
-  "{{{
-  function! UniteRailsSetting()
-    nnoremap <buffer>[plug]<C-H><C-H>  :<C-U>Unite rails/view<CR>
-    nnoremap <buffer>[plug]<C-H>       :<C-U>Unite rails/model<CR>
-    nnoremap <buffer>[plug]            :<C-U>Unite rails/controller<CR>
-
-    nnoremap <buffer>[plug]c           :<C-U>Unite rails/config<CR>
-    nnoremap <buffer>[plug]s           :<C-U>Unite rails/spec<CR>
-    nnoremap <buffer>[plug]m           :<C-U>Unite rails/db -input=migrate<CR>
-    nnoremap <buffer>[plug]l           :<C-U>Unite rails/lib<CR>
-    nnoremap <buffer><expr>[plug]g     ':e '.b:rails_root.'/Gemfile<CR>'
-    nnoremap <buffer><expr>[plug]r     ':e '.b:rails_root.'/config/routes.rb<CR>'
-    nnoremap <buffer><expr>[plug]se    ':e '.b:rails_root.'/db/seeds.rb<CR>'
-    nnoremap <buffer>[plug]ra          :<C-U>Unite rails/rake<CR>
-    nnoremap <buffer>[plug]h           :<C-U>Unite rails/heroku<CR>
-  endfunction
-  aug MyAutoCmd
-    au User Rails call UniteRailsSetting()
-  aug END
-  "}}}
-
-  "------------------------------------
-  " Unite-reek, Unite-rails_best_practices
-  "------------------------------------
-  " {{{
-  nnoremap <silent> [unite]r      :<C-u>Unite -no-quit reek<CR>
-  nnoremap <silent> [unite]rr :<C-u>Unite -no-quit rails_best_practices<CR>
-  " }}}
-
-  "----------------------------------------
-  " unite-giti
-  "----------------------------------------
-  "{{{
-  function! s:unite_kuso_hooks.giti_status()
-    " nnoremap <silent><buffer><expr>gM unite#do_action('ammend')
-    nnoremap <silent><buffer><expr>ga unite#do_action('stage')
-    nnoremap <silent><buffer><expr>gc unite#do_action('checkout')
-    nnoremap <silent><buffer><expr>gd unite#do_action('diff')
-    nnoremap <silent><buffer><expr>gu unite#do_action('unstage')
-  endfunction
-
-  function! s:unite_kuso_hooks.giti_log()
-    nnoremap <silent><buffer><expr>gd unite#do_action('diff')
-    nnoremap <silent><buffer><expr>d unite#do_action('diff')
-  endfunction
-
-  nnoremap <silent>gl :<C-U>call BundleWithCmd('vim-unite-giti', 'Unite -buffer-name=giti_log -no-start-insert giti/log')<CR>
-  nnoremap <silent>gs :<C-U>call BundleWithCmd('vim-unite-giti', 'Unite -buffer-name=giti_status -no-start-insert giti/status ')<CR>
-  nnoremap <silent>gh :<C-U>call BundleWithCmd('vim-unite-giti', 'Unite -buffer-name=giti_branchall -no-start-insert giti/branch_all')<CR>
-  "}}}
-endfunction
-"}}}
-
-"----------------------------------------
-" 辞書:dict "{{{
-augroup DictSetting
-  au!
-  au FileType coffee.jasmine,javascript.jasmine setl dict+=~/.vim/dict/js.jasmine.dict
-  au FileType html,php,eruby       setl dict+=~/.vim/dict/html.dict
-  au FileType ruby.rspec           setl dict+=~/.vim/dict/rspec.dict
-augroup END
-
-" カスタムファイルタイプでも、自動でdictを読み込む
-" そして、編集画面までさくっと移動。
-func! s:auto_dict_setting()
-  let file_type_name = &ft
-  if exists('b:file_type_name')
-    let file_type_name = b:file_type_name
-  endif
-
-  let dict_name = split( file_type_name, '.' )
-  if empty( dict_name ) || count(g:my.ft.ignore_patterns, dict_name) > 0
-    return
-  endif
-
-  exe  "setl dict+=~/.vim/dict/".dict_name[0].".dict"
-
-  let b:dict_path = expand('~/.vim/dict/'.file_type_name.'.dict')
-  exe  "setl dict+=".b:dict_path
-  nnoremap <buffer><expr><Space>d ':<C-U>SmartSplit e '.b:dict_path.'<CR>'
-endfunc
-
-aug MyAutoCmd
-  au FileType * call s:auto_dict_setting()
-aug END
-"}}}
-
-"----------------------------------------
 " 補完・履歴 neocomplcache "{{{
 set wildmenu                 " コマンド補完を強化
 set wildchar=<tab>           " コマンド補完を開始するキー
@@ -2867,6 +2610,256 @@ imap <silent><expr><S-TAB> pumvisible() ? "\<C-P>" : "\<S-TAB>"
 " imap <silent><expr><TAB>   pumvisible() ? "\<C-N>" : "\<TAB>"
 imap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_jump_or_expand)" : pumvisible() ? "\<C-n>" : "\<TAB>"
 " }}}
+"}}}
+
+"----------------------------------------
+" unite.vim"{{{
+" unite prefix key.
+
+" keymappings"{{{
+nmap [unite] <Nop>
+nmap <C-J> [unite]
+
+nnoremap <silent> <Space>b       :<C-u>UniteBookmarkAdd<CR>
+nnoremap <silent> [unite]<C-B>   :<C-u>Unite buffer -buffer-name=buffer<CR>
+nnoremap <silent> [unite]<C-J>   :<C-u>Unite file_mru -buffer-name=file_mru<CR>
+nnoremap <silent> [unite]<C-U>   :<C-u>UniteWithBufferDir -buffer-name=file file<CR>
+nnoremap <silent> [unite]b       :<C-u>Unite bookmark -buffer-name=bookmark<CR>
+nnoremap <silent> g/             :<C-U>call Smart_unite_open('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast')<CR>
+nnoremap [unite]<C-F>            :<C-u>UniteFile<Space>
+nnoremap <silent><expr>[unite]f ':Unite -buffer-name=file file:' . expand("%:p:h") . '<CR>'
+nnoremap <silent>[unite]y        :<C-U>call BundleWithUniteHisoryCmd('Unite -buffer-name=history_yank -no-empty history/yank')<CR>
+nnoremap <silent>[unite]c        :<C-U>call BundleWithCmd('vim-unite-history', 'Unite -buffer-name=history_command -no-empty history/command')<CR>
+nnoremap <silent>[unite]s        :<C-U>call BundleWithUniteHisoryCmd('Unite -buffer-name=history_search -no-empty history/search')<CR>
+nnoremap [unite]S                :<C-U>call BundleWithCmd('unite-ssh', ':Unite -buffer-name=ssh ssh://')<Left><Left>
+nnoremap <silent>[unite]<C-K>    :call BundleWithCmd('unite-tag unite.vim', 'Unite tag -buffer-name=tag -no-empty')<CR>
+nnoremap <silent>[unite]o        :call BundleWithCmd('unite-outline', 'Unite -auto-preview -horizontal -no-quit -buffer-name=outline -hide-source-names outline')<CR>
+
+" UniteFile {{{
+function! s:unite_file(path)
+  exe 'Unite -buffer-name=file file:' . substitute(a:path, '^\s*', '', '')
+endfunction
+command! -nargs=? -complete=file UniteFile call <SID>unite_file(<q-args>)
+"}}}
+"}}}
+function! UniteRailsSetting() "Unite-rails.vim {{{
+  nnoremap <buffer>[plug]<C-H><C-H>  :<C-U>Unite rails/view<CR>
+  nnoremap <buffer>[plug]<C-H>       :<C-U>Unite rails/model<CR>
+  nnoremap <buffer>[plug]            :<C-U>Unite rails/controller<CR>
+
+  nnoremap <buffer>[plug]c           :<C-U>Unite rails/config<CR>
+  nnoremap <buffer>[plug]s           :<C-U>Unite rails/spec<CR>
+  nnoremap <buffer>[plug]m           :<C-U>Unite rails/db -input=migrate<CR>
+  nnoremap <buffer>[plug]l           :<C-U>Unite rails/lib<CR>
+  nnoremap <buffer><expr>[plug]g     ':e '.b:rails_root.'/Gemfile<CR>'
+  nnoremap <buffer><expr>[plug]r     ':e '.b:rails_root.'/config/routes.rb<CR>'
+  nnoremap <buffer><expr>[plug]se    ':e '.b:rails_root.'/db/seeds.rb<CR>'
+  nnoremap <buffer>[plug]ra          :<C-U>Unite rails/rake<CR>
+  nnoremap <buffer>[plug]h           :<C-U>Unite rails/heroku<CR>
+endfunction
+aug MyAutoCmd
+  au User Rails call UniteRailsSetting()
+aug END
+"}}}
+" unite_reek, unite_rails_best_practices"{{{
+nnoremap <silent> [unite]r      :<C-u>Unite -no-quit reek<CR>
+nnoremap <silent> [unite]rr :<C-u>Unite -no-quit rails_best_practices<CR>
+"}}}
+" unite-giti {{{
+nnoremap <silent>gl :<C-U>call BundleWithCmd('vim-unite-giti', 'Unite -buffer-name=giti_log -no-start-insert giti/log')<CR>
+nnoremap <silent>gs :<C-U>call BundleWithCmd('vim-unite-giti', 'Unite -buffer-name=giti_status -no-start-insert giti/status ')<CR>
+nnoremap <silent>gh :<C-U>call BundleWithCmd('vim-unite-giti', 'Unite -buffer-name=giti_branchall -no-start-insert giti/branch_all')<CR>
+"}}}
+
+" XXX 本体の関数をつかって実装したい
+function! Smart_unite_open(cmd) "{{{
+  let file_syntax=&syntax
+  let rails_root = exists('b:rails_root')? b:rails_root : ''
+  let rails_buffer = rails#buffer()
+
+  " uniteを起動
+  exe a:cmd
+
+  if rails_root != ''
+    let b:rails_root = rails_root
+    call rails#set_syntax(rails_buffer)
+  endif
+  if file_syntax != ''
+    exe 'setl syntax='.file_syntax
+  endif
+endfunction"}}}
+
+let bundle = neobundle#get('unite.vim')
+function! bundle.hooks.on_source(bundle)
+  " settings {{{
+  " 入力モードで開始する
+  " let g:unite_abbr_highlight = 'TabLine'
+  " let g:unite_source_directory_mru_filename_format
+  let g:unite_cursor_line_highlight='LineNr'
+  let g:unite_enable_split_vertically=1
+  let g:unite_enable_start_insert=1
+  let g:unite_source_directory_mru_limit = 100
+  let g:unite_source_directory_mru_time_format="(%m-%d %H:%M:%S) "
+  let g:unite_source_file_mru_filename_format=":~:."
+  let g:unite_source_file_mru_limit = 100
+  let g:unite_source_file_mru_time_format="(%m-%d %H:%M:%S) "
+  let g:unite_winheight = 20
+  let g:unite_source_history_yank_enable =1
+  let s:unite_kuso_hooks = {}
+  "}}}
+  function! s:unite_my_settings() "{{{
+    " SmartHighlight 'UniteStatement', {
+    "       \ 'guifg'   : '#F92672',
+    "       \ 'ctermfg' : '161',
+    "       \ 'style' : 'bold',
+    "       \ }
+
+    highlight link uniteMarkedLine Identifier
+    highlight link uniteCandidateInputKeyword Statement
+    " highlight link uniteNonMarkedLine Comment
+
+    inoremap <buffer><C-J> <Down>
+    inoremap <buffer><C-K> <Up>
+    nmap     <buffer>f <Plug>(unite_toggle_mark_current_candidate)
+    xmap     <buffer>f <Plug>(unite_toggle_mark_selected_candidates)
+    nmap     <buffer><C-H> <Plug>(unite_toggle_transpose_window)
+    nmap     <buffer><C-J> <Plug>(unite_toggle_auto_preview)
+    nnoremap <silent><buffer><expr>S unite#do_action('split')
+    nnoremap <silent><buffer><expr>V unite#do_action('vsplit')
+    nnoremap <silent><buffer><expr><Leader><Leader> unite#do_action('vimfiler')
+
+    " Custom actions."{{{
+    let my_tabopen = {
+          \ 'description' : 'my tabopen items',
+          \ 'is_selectable' : 1,
+          \ }
+    function! my_tabopen.func(candidates) "{{{
+      call unite#take_action('tabopen', a:candidates)
+
+      let dir = isdirectory(a:candidates[0].word) ?
+            \ a:candidates[0].word : fnamemodify(a:candidates[0].word, ':p:h')
+      execute g:unite_kind_openable_lcd_command '`=dir`'
+    endfunction"}}}
+    call unite#custom_action('file,buffer', 'tabopen', my_tabopen)
+    unlet my_tabopen
+    "}}}
+
+    " hook
+    let unite = unite#get_current_unite()
+    let buffer_name = unite.buffer_name != '' ? unite.buffer_name : '_'
+
+    " XXX 本体の関数をつかって実装したい
+    call alpaca#let_s:('unite_kuso_hooks', {})
+    if has_key( s:unite_kuso_hooks, buffer_name )
+      call s:unite_kuso_hooks[buffer_name]()
+    endif
+  endfunction
+  aug MyUniteCmd
+    au FileType unite call <SID>unite_my_settings()
+  aug END
+  "}}}
+
+  " For unite-menu."{{{
+  call alpaca#let_g:('unite_source_menu_menus', {})
+  let g:unite_source_menu_menus.enc = {
+        \     'description' : 'Open with a specific character code again.',
+        \ }
+  let g:unite_source_menu_menus.enc.command_candidates = [
+        \       ['utf8', 'Utf8'],
+        \       ['iso2022jp', 'Iso2022jp'],
+        \       ['cp932', 'Cp932'],
+        \       ['euc', 'Euc'],
+        \       ['utf16', 'Utf16'],
+        \       ['utf16-be', 'Utf16be'],
+        \       ['jis', 'Jis'],
+        \       ['sjis', 'Sjis'],
+        \       ['unicode', 'Unicode'],
+        \     ]
+  nnoremap ;e :<C-u>Unite menu:enc
+  "}}}
+
+  function! s:unite_kuso_hooks.file_mru() "{{{
+    highlight link uniteSource__FileMru_Time Comment
+    syntax region uniteSource__FileMru start=/\%3c/ end=/$/
+
+    " syntax link uniteSource__FileMru contained
+    syntax region uniteSource__FileMru start=/\%3c/ end=/$/ contained
+
+    syntax match uniteFileDirectory '.*\/'
+    syntax match uniteFileFile '[^/]*[^/]$'
+    highlight link uniteFileDirectory Identifier
+    highlight link uniteFileDirectory Statement
+  endfunction"}}}
+  function! s:unite_kuso_hooks.file() "{{{
+    syntax match uniteFileDirectory '.*\/'
+    highlight link uniteFileDirectory Statement
+  endfunction"}}}
+
+  "------------------------------------
+  " unite-history
+  "------------------------------------
+  "{{{
+
+  " TODO kusoすぎわろた。 実装方法考えないとなぁ。
+  function! BundleWithUniteHisoryCmd(cmd) "{{{
+    call BundleWithCmd( 'vim-unite-history unite.vim', '' )
+
+    call Smart_unite_open(a:cmd)
+  endfunction"}}}
+  function s:unite_kuso_hooks.history_command() "{{{
+    set syntax=vim
+  endfunction"}}}
+  "}}}
+
+  "------------------------------------
+  " Unite-grep.vim
+  "------------------------------------
+  "{{{
+  let g:unite_source_grep_command = "grep"
+  let g:unite_source_grep_recursive_opt = "-R"
+  "}}}
+
+  "------------------------------------
+  " Unite-outline
+  "------------------------------------
+  "{{{
+  " let g:unite_source_outline_filetype_options
+  " let g:unite_source_outline_info
+  " let g:unite_source_outline_indent_width
+  " let g:unite_source_outline_max_headings
+  " let g:unite_source_outline_cache_limit
+  " let g:unite_source_outline_highlight
+  function! s:unite_kuso_hooks.outline()
+    let unite = unite#get_context()
+    let unite.auto_preview = 0
+    nnoremap <buffer><C-J> gj
+  endfunction
+  "}}}
+
+  "------------------------------------
+  " Unite-reek, Unite-rails_best_practices
+  "------------------------------------
+  " {{{
+  " }}}
+
+  "----------------------------------------
+  " unite-giti
+  "----------------------------------------
+  "{{{
+  function! s:unite_kuso_hooks.giti_status()
+    " nnoremap <silent><buffer><expr>gM unite#do_action('ammend')
+    nnoremap <silent><buffer><expr>ga unite#do_action('stage')
+    nnoremap <silent><buffer><expr>gc unite#do_action('checkout')
+    nnoremap <silent><buffer><expr>gd unite#do_action('diff')
+    nnoremap <silent><buffer><expr>gu unite#do_action('unstage')
+  endfunction
+
+  function! s:unite_kuso_hooks.giti_log()
+    nnoremap <silent><buffer><expr>gd unite#do_action('diff')
+    nnoremap <silent><buffer><expr>d unite#do_action('diff')
+  endfunction
+  "}}}
+endfunction
 "}}}
 
 "----------------------------------------
