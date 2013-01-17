@@ -28,9 +28,9 @@ let g:my.lingr = {
 let g:my.conf = {
       \ "initialize" : 1,
       \ "tags": {
-      \   "auto_create": 1,
-      \   "append": 1,
-      \   "ctags_opts":  '--sort=yes --exclude=log --exclude=.git -R',
+      \   "auto_create" : 1,
+      \   "append"      : 1,
+      \   "ctags_opts"  : '--sort=yes --exclude=log --exclude=.git -R',
       \ },
       \ }
 "}}}
@@ -53,13 +53,15 @@ let g:my.dir = {
 " その他設定"{{{
 let g:my.ft = {
       \ "html_files"    : ['eruby', 'html', 'php', 'haml'],
-      \ "ruby_files"    : ['ruby', 'Gemfile', 'haml', 'eruby'],
+      \ "ruby_files"    : ['ruby', 'Gemfile', 'haml', 'eruby', 'yaml'],
       \ "python_files"  : ['python'],
       \ "scala_files"   : ['scala'],
       \ "sh_files"      : ['sh'],
+      \ "php_files"     : ['php', 'phtml'],
       \ "program_files" : ['ruby', 'php', 'python', 'eruby', 'vim'],
       \ "ignore_patterns" : ['vimfiler', 'unite'],
       \ }
+
 " TODO インストールするプログラムを書く
 let g:my.install = {
       \ "gem" : ['alpaca_complete', 'CoffeeTags', 'rails', 'bundler', 'i18n', 'coffee-script',],
@@ -71,10 +73,12 @@ let s:is_windows = has('win32') || has('win64')
 let s:is_mac     = has('mac')
 let s:is_unix    = has('unix')
 "}}}
+" XXX コードは見てないけど、uniteのkindに同じ機能があるような。
 function! s:current_git() "{{{
   let git_root_dir = alpaca#system('git rev-parse --show-cdup')
-  " XXX trim的なの無いの？
+  " XXX vimscriptにtrim的なの無いの？
   let git_root_dir = substitute(git_root_dir, '\n', '', 'g')
+
   return fnamemodify(git_root_dir, ':p')
 endfunction"}}}
 function! s:git_exists() "{{{
@@ -103,20 +107,19 @@ set clipboard+=unnamed
 exe "set directory=".g:my.dir.swap_dir
 set formatoptions+=lcqmM formatoptions-=ro
 set helplang=ja,en
-set modelines=0
+set modelines=1
 set nobackup
 set showmode
-" set timeout timeoutlen=300 ttimeoutlen=100
-set vb t_vb=
+set timeout timeoutlen=300 ttimeoutlen=100
+set visualbell t_vb=
 set viminfo='100,<800,s300,\"300
-" set updatetime=4000 " swpを作るまでの時間(au CursorHoldの時間)
 set norestorescreen=off
+
 if v:version >= 703
   set undofile
   let &undodir=&directory
 endif
 
-nnoremap <Space>h :<C-u>help<Space><C-r><C-w><CR>
 nnoremap <Space><Space>s :<C-U>source ~/.vimrc<CR>
 nnoremap <Space><Space>v :<C-U>tabnew ~/.vim/config/.vimrc<CR>
 "}}}
@@ -129,14 +132,14 @@ let g:neobundle#types#git#default_protocol = 'https'
 
 " initialize"{{{
 if has('vim_starting')
-  let bundle_dir = g:my.dir.bundle
+  let s:bundle_dir = g:my.dir.bundle
 
-  if !isdirectory(bundle_dir.'/neobundle.vim')
-    call system( 'git clone https://github.com/Shougo/neobundle.vim.git '.bundle_dir.'/neobundle.vim')
+  if g:my.conf.initialize && !isdirectory(s:bundle_dir.'/neobundle.vim')
+    call alpaca#system( 'git clone', 'https://github.com/Shougo/neobundle.vim.git', bundle_dir.'/neobundle.vim')
   endif
 
-  exe 'set runtimepath+='.bundle_dir.'/neobundle.vim'
-  call neobundle#rc(bundle_dir)
+  exe 'set runtimepath+='.s:bundle_dir.'/neobundle.vim'
+  call neobundle#rc(s:bundle_dir)
 endif
 "}}}
 
@@ -147,14 +150,14 @@ function! Neo_al(ft) "{{{
       \ }}
 endfunction"}}}
 function! BundleLoadDepends(bundle_names) "{{{
-  if !exists('g:loaded_bundles')
-    let g:loaded_bundles = {}
+  if !exists('s:loaded_bundles')
+    let s:loaded_bundles = {}
   endif
 
   " bundleの読み込み
-  if !has_key( g:loaded_bundles, a:bundle_names )
+  if !has_key( s:loaded_bundles, a:bundle_names )
     execute 'NeoBundleSource '.a:bundle_names
-    let g:loaded_bundles[a:bundle_names] = 1
+    let s:loaded_bundles[a:bundle_names] = 1
   endif
 endfunction"}}}
 "}}}
@@ -180,8 +183,8 @@ NeoBundle 'Shougo/vimproc', {
       \    },
       \ }
 " NeoBundle 'yuroyoro/vim-autoclose'                          " 自動閉じタグ
-NeoBundleLazy 'edsono/vim-matchit', { 'autoload' : {
-      \ 'mappings' : '%' }}
+" NeoBundleLazy 'edsono/vim-matchit', { 'autoload' : {
+"       \ 'mappings' : ['nx', '%'] }}
 NeoBundleLazy 'kana/vim-arpeggio', { 'autoload': { 'functions': ['arpeggio#map'] }}
 " 同時押しキーマップを使う
 NeoBundleLazy 'rhysd/accelerated-jk', {
@@ -189,9 +192,8 @@ NeoBundleLazy 'rhysd/accelerated-jk', {
       \   'mappings' : [
       \     ['n', '<Plug>(accelerated_jk_gj)'], ['n', '<Plug>(accelerated_jk_gk)']
       \ ]}}
-" NeoBundle 'vim-scripts/Smooth-Scroll'
-
-NeoBundleLazy 'taichouchou2/alpaca' " 個人的なカラーやフォントや廃止になったプラグインなど。読み込むことは無し。
+" 個人的なカラーやフォント。読み込むことは無し。
+NeoBundleLazy 'taichouchou2/alpaca'
 NeoBundleLazy 'tpope/vim-surround', {
       \ 'autoload' : {
       \   'mappings' : [
@@ -206,7 +208,6 @@ NeoBundleLazy 'taichouchou2/alpaca_powerline', {
       \ 'depends': ['majutsushi/tagbar', 'tpope/vim-fugitive', 'basyura/TweetVim', 'basyura/twibill.vim',],
       \ 'autoload' : { 'functions': ['Pl#UpdateStatusline', 'Pl#Hi#Allocate', 'Pl#Hi#Segments', 'Pl#Colorscheme#Init',]  }}
 au BufEnter,WinEnter,FileType,BufUnload,CmdWinEnter * call Pl#UpdateStatusline(1)
-" au BufLeave,WinLeave,CmdWinLeave * call Pl#UpdateStatusline(0)
 NeoBundle 'h1mesuke/vim-alignta', { 'autoload' : { 'commands' : ['Align'] } }
 "}}}
 " vim拡張"{{{
@@ -290,6 +291,7 @@ NeoBundleLazy 'Shougo/echodoc', {
       \ }}
 NeoBundleLazy 'Shougo/neosnippet', {
       \ 'autoload' : {
+      \   'commands' : ['NeoSnippetEdit'],
       \   'insert' : 1,
       \ }}
 NeoBundleLazy 'camelcasemotion', { 'autoload' : {
@@ -301,9 +303,6 @@ NeoBundleLazy 'majutsushi/tagbar',
       \       "TagbarToggle", "TagbarTogglePause", ],
       \   'fuctions': ['tagbar#currenttag']
       \ }}
-      " \       "TagbarClose", "TagbarCurrentTag", "TagbarDebug",
-      " \       "TagbarDebugEnd", "TagbarGetTypeConfig", "TagbarOpen",
-      " \       "TagbarOpenAutoClose", "TagbarSetFoldlevel", "TagbarShowTag",
 NeoBundleLazy 'mattn/zencoding-vim', {
       \ 'autoload': {
       \   'functions': ['zencoding#expandAbbr'],
@@ -352,7 +351,6 @@ NeoBundleLazy 'thinca/vim-quickrun', { 'autoload' : {
 
 "----------------------------------------
 " text-object拡張"{{{
-" operator拡張の元
 " NeoBundle 'emonkak/vim-operator-comment'
 " NeoBundle 'https://github.com/kana/vim-textobj-jabraces.git'
 " NeoBundle 'kana/vim-textobj-datetime'      " d 日付
@@ -394,7 +392,6 @@ NeoBundleLazy 'rhysd/clever-f.vim', { 'autoload' : {
       \   'mappings' : 'f',
       \ }}
 " NeoBundle 'choplin/unite-vim_hacks'
-" NeoBundle 'h1mesuke/unite-outline'
 " NeoBundle 'tacroe/unite-mark'
 " NeoBundleLazy 'yuratomo/w3m.vim'
 NeoBundleLazy 'tsukkee/unite-tag', { 'depends' :
@@ -402,7 +399,7 @@ NeoBundleLazy 'tsukkee/unite-tag', { 'depends' :
 NeoBundleLazy 'glidenote/memolist.vim', { 'depends' :
       \ ['Shougo/unite.vim'],
       \ 'autoload' : { 'commands' : ['MemoNew', 'MemoGrep'] }}
-" TODO autoloadを改良
+" TODO autoloadが動かないので改良
 NeoBundleLazy 'Shougo/unite-ssh', {
       \ 'depends' : ['Shougo/unite.vim', 'Shougo/vimproc', 'Shougo/vimfiler'],
       \ 'autoload' : {
@@ -805,16 +802,11 @@ set ignorecase
 set smartcase
 set incsearch
 set hlsearch
+"grepをしたときにQuickFixで表示するようにする
+set grepprg=grep\ -nH
 nnoremap <silent> n nvv
 nnoremap <silent> N Nvv
 
-let Grep_Skip_Dirs = '.svn .git .swp'
-let Grep_Skip_Files = '*.bak *~'
-let Grep_Find_Use_Xargs = 0
-let Grep_Xargs_Options = '--print0'
-
-"grepをしたときにQuickFixで表示するようにする
-set grepprg=grep\ -nH
 nnoremap <silent>mc :<C-u>call alpaca#function#macdict#close()<CR>
 nnoremap <silent>mf :<C-u>call alpaca#function#macdict#focus()<CR>
 nnoremap <silent>mo :<C-u>call alpaca#function#macdict#with_cursor_word()<CR>
@@ -1030,7 +1022,6 @@ set laststatus=2
 set lazyredraw
 set linebreak
 set list
-set titlestring=%<%F%=%l/%L-%P
 set listchars=tab:␣.,trail:_,extends:>,precedes:<
 set matchpairs+=<:>
 set number
@@ -1042,9 +1033,11 @@ set spelllang=en_us
 set t_Co=256
 set title
 set titlelen=95
+set titlestring=%<%F%=%l/%L-%P
 set ttyfast
 
 if v:version >= 703
+  highlight ColorColumn guibg=#012345
   au FileType coffee,ruby,eruby,php,javascript,c,json,vim set colorcolumn=80
 endif
 
@@ -1165,7 +1158,7 @@ func! s:auto_dict_setting()
 endfunc
 
 aug MyAutoCmd
-  au FileType * call s:auto_dict_setting()
+  au FileType * call <SID>auto_dict_setting()
 aug END
 "}}}
 
@@ -1214,81 +1207,113 @@ xmap S   <Plug>VSurround
 xmap gS  <Plug>VgSurround
 xmap s   <Plug>VSurround
 
-" surround_custom_mappings.vim"{{{
-let g:surround_custom_mapping = {}
-let g:surround_custom_mapping._ = {
-      \ 'p':  "<pre> \r </pre>",
-      \ 'w':  "%w(\r)",
+" append custom mappings {{{
+let s:surround_mapping = []
+call add( s:surround_mapping, {
+      \ 'filetypes' : g:my.ft.ruby_files,
+      \ 'mappings' : {
+      \   '#':  "#{\r}",
+      \   '%':  "<% \r %>",
+      \   '-':  "<% \r -%>",
+      \   'w':  "%w!\r!",
+      \   'W':  "%W!\r!",
+      \   'q':  "%q!\r!",
+      \   'Q':  "%Q!\r!",
+      \   'r':  "%r!\r!",
+      \   'R':  "%R!\r!",
+      \   '=':  "<%= \r %>",
+      \   '{':  "{\r}",
       \ }
-let g:surround_custom_mapping.help = {
-      \ 'p':  "> \r <",
+      \ })
+
+call add( s:surround_mapping, {
+      \ 'filetypes' : g:my.ft.php_files,
+      \ 'mappings' : {
+      \   '<' : "<?php \r ?>",
       \ }
-let g:surround_custom_mapping.ruby = {
-      \ '-':  "<% \r %>",
-      \ '=':  "<%= \r %>",
-      \ '9':  "(\r)",
-      \ '5':  "%(\r)",
-      \ '%':  "%(\r)",
-      \ 'w':  "%w(\r)",
-      \ '#':  "#{\r}",
-      \ '3':  "#{\r}",
-      \ 'e':  "begin \r end",
-      \ 'E':  "<<EOS \r EOS",
-      \ 'i':  "if \1if\1 \r end",
-      \ 'u':  "unless \1unless\1 \r end",
-      \ 'c':  "class \1class\1 \r end",
-      \ 'm':  "module \1module\1 \r end",
-      \ 'd':  "def \1def\1\2args\r..*\r(&)\2 \r end",
-      \ 'p':  "\1method\1 do \2args\r..*\r|&| \2\r end",
-      \ 'P':  "\1method\1 {\2args\r..*\r|&|\2 \r }",
-      \ }
-let g:surround_custom_mapping.javascript = {
-      \ 'f':  "function(){ \r }"
-      \ }
-let g:surround_custom_mapping.lua = {
-      \ 'f':  "function(){ \r }"
-      \ }
-let g:surround_custom_mapping.python = {
-      \ 'p':  "print( \r)",
-      \ '[':  "[\r]",
-      \ }
-let g:surround_custom_mapping.vim= {
-      \'f':  "function! \r endfunction"
-      \ }
+      \ })
+
+" XXX rubyのinlucde?的な。
+" vimには無いのかなー。
+function! s:include(target, value) "{{{
+  let target_type = type(a:target)
+
+  if type({}) == target_type
+    return has_key(a:target, a:value)
+
+  elseif type([]) == target_type || type('') == target_type || type(0) == target_type
+    return match(a:target, a:value) > -1
+  endif
+
+  return 0
+endfunction"}}}
+function! s:let_surround_mapping(mapping_dict) "{{{
+  for [ key, mapping ] in items(a:mapping_dict)
+    call alpaca#let_b:('surround_'.char2nr(key), mapping )
+  endfor
+endfunction"}}}
+function! s:surround_mapping_filetype() "{{{
+  if empty(&filetype) |return| endif
+  if !exists('s:surround_mapping_memo')
+    let s:surround_mapping_memo = {}
+  endif
+
+  let filetype = split( &filetype, '\.' )[0]
+
+
+  if has_key( s:surround_mapping_memo, filetype )
+    return <SID>let_surround_mapping( s:surround_mapping_memo[ filetype ] )
+  endif
+
+  for mapping_settings in s:surround_mapping
+    if <SID>include( mapping_settings, 'filetypes' ) && <SID>include( mapping_settings, 'mappings')
+      let filetypes = mapping_settings.filetypes
+      let mappings  = mapping_settings.mappings
+
+      if <SID>include( filetypes, filetype)
+        call <SID>let_surround_mapping( mappings )
+        call alpaca#let_s:('surround_mapping_memo' . filetype, mappings)
+      endif
+    endif
+  endfor
+endfunction"}}}
+
+augroup MyAutoCmd
+  autocmd!
+  autocmd FileType * call <SID>surround_mapping_filetype()
+augroup END
 "}}}
-"}}}
+" }}}
 
 " ------------------------------------
 " grep.vim
 "------------------------------------
 "{{{
 " カーソル下の単語をgrepする
+let Grep_Skip_Dirs = '.svn .git .swp .hg cache compile'
+let Grep_Skip_Files = '*.bak *~ .swp .swa .swo'
+let Grep_Find_Use_Xargs = 0
+let Grep_Xargs_Options = '--print0'
+
 nnoremap <silent><C-G><C-g> :<C-u>Rgrep<Space><C-r><C-w> *<CR><CR>
 nnoremap <silent><C-G><C-b> :<C-u>GrepBuffer<Space><C-r><C-w><CR>
 
 " 検索外のディレクトリ、ファイルパターン
-let Grep_Skip_Dirs  = '.svn .git .hg .swp'
-let Grep_Skip_Files = '*.bak *~'
-
 " qf内でファイルを開いた後画面を閉じる
-function! OpenInQF()
+function! s:open_qf() "{{{
   .cc
   ccl
-  "  filetype on
-endfunction
+endfunction"}}}
 
 " rgrepなどで開いたqfを編修可にする
 " また、Enterで飛べるようにする
-function! OpenGrepQF()
-  " cw
-  set nowrap "折り返ししない
-  " set modifiable "編修可
+function! OpenGrepQF() "{{{
+  setl nowrap "折り返ししない
 
-  " gfで開くときに、新しいTabで開く
   nnoremap <buffer>gf <C-W>gf
-  nnoremap <buffer><CR> :call OpenInQF()<CR>
+  nnoremap <buffer><expr><CR> <SID>open_qf()
   nnoremap <buffer> q :q!<CR>
-endfunction
+endfunction"}}}
 aug MyAutoCmd
   autocmd Filetype qf call OpenGrepQF()
 aug END
@@ -1324,7 +1349,7 @@ aug MyAutoCmd
         \|nnoremap <buffer><space>t :<C-U>TagbarToggle<CR>
 aug END
 
-let g:tagbar_ctags_bin="/Applications/MacVim.app/Contents/MacOS/ctags"
+let g:tagbar_ctags_bin  = g:my.bin.ctags
 let g:tagbar_compact    = 1
 let g:tagbar_autofocus  = 1
 let g:tagbar_autoshowtag= 1
@@ -1677,10 +1702,8 @@ aug END
 "----------------------------------------
 "{{{
 nnoremap <silent>gM :<C-U>Gcommit --amend<CR>
-nnoremap <silent>gS :<C-U>Gstatus<CR>
 nnoremap <silent>gb :<C-U>Gblame<CR>
 nnoremap <silent>gm :<C-U>Gcommit<CR>
-nnoremap gr :<C-U>Ggrep<Space>
 
 aug MyGitCmd
   au!
@@ -1777,10 +1800,29 @@ xmap <silent>ie <Plug>CamelCaseMotion_ie
 " matchit.zip
 "------------------------------------
 "{{{
+" source $VIMRUNTIME/macros/matchit.vim
 " % での移動出来るタグを増やす
 let b:match_ignorecase = 1
-let b:match_words = '<div.*>:</div>,<ul.*>:</ul>,<li.*>:</li>,<head.*>:</head>,<a.*>:</a>,<p.*>:</p>,<form.*>:</form>,<span.*>:</span>,<iflame.*>:</iflame>'
-let b:match_words .= ':<if>:<endif>,<while>:<endwhile>,<foreach>:<endforeach>'
+let s:match_words = {}
+
+function! s:set_match_words() "{{{
+  let ft = &ft
+  if ft == '' || !has_key(s:match_words, ft)
+    return
+  endif
+
+  call alpaca#let_b:('match_words', '')
+
+  if b:match_words != '' && b:match_words !~ ':$'
+    let b:match_words = b:match_words . ''
+  endif
+
+  let b:match_words = b:match_words . s:match_words[ft]
+endfunction"}}}
+
+aug MyAutoCmd
+  au Filetype * call <SID>set_match_words()
+aug END
 "}}}
 
 "------------------------------------
@@ -2515,7 +2557,7 @@ set completeopt=menu,menuone,preview
 set infercase
 
 "----------------------------------------
-" neocomplcache
+" neocomplcache / echodoc
 let g:neocomplcache_enable_at_startup = 1
 let g:echodoc_enable_at_startup = 1
 
@@ -2531,15 +2573,15 @@ let g:echodoc_enable_at_startup = 1
 " let g:neocomplcache_min_syntax_length = 2
 let bundle = neobundle#get('neocomplcache')
 function! bundle.hooks.on_source(bundle)
-  let g:neocomplcache_force_overwrite_completefunc = 1
+  let g:neocomplcache_force_overwrite_completefunc  = 1
   let g:neocomplcache#sources#rsense#home_directory = neobundle#get_neobundle_dir() . '/rsense-0.3'
-  let g:neocomplcache_enable_camel_case_completion = 1
-  let g:neocomplcache_enable_underbar_completion = 1
-  let g:neocomplcache_skip_auto_completion_time = '0.3'
+  let g:neocomplcache_enable_camel_case_completion  = 1
+  let g:neocomplcache_enable_underbar_completion    = 1
+  let g:neocomplcache_skip_auto_completion_time     = '0.3'
 
   " initialize "{{{
   if $USER ==# 'root'
-    let g:neocomplcache_temporary_dir       = expand( '~/.neocon' )
+    let g:neocomplcache_temporary_dir = g:my.dir.bundle
   endif
   let s:neocomplcache_initialize_lists = [
         \ 'neocomplcache_include_patterns',
@@ -2548,65 +2590,81 @@ function! bundle.hooks.on_source(bundle)
         \ 'neocomplcache_force_omni_patterns',
         \ 'neocomplcache_keyword_patterns',
         \ 'neocomplcache_source_completion_length',
+        \ 'neocomplcache_source_rank',
         \ 'neocomplcache_vim_completefuncs',
         \ 'neocomplcache_dictionary_filetype_lists',]
   for initialize_variable in s:neocomplcache_initialize_lists
     call alpaca#let_g:(initialize_variable, {})
   endfor
   "}}}
+
+  " XXX どこで定義されてるか分からんので、上書きはしない。
   " Define force omni patterns"{{{
-  let g:neocomplcache_force_omni_patterns.c      = '[^.[:digit:] *\t]\%(\.\|->\)'
-  let g:neocomplcache_force_omni_patterns.cpp    = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-  let g:neocomplcache_force_omni_patterns.python = '[^. \t]\.\w*'
+  call alpaca#let_dict( 'g:neocomplcache_source_rank', {
+        \ 'c'       : '[^.[:digit:] *\t]\%(\.\|->\)',
+        \ 'cpp'     : '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::',
+        \ 'python'  : '[^. \t]\.\w*',
+        \} )
+
+  " Define keyword pattern.
+  call alpaca#let_dict( 'g:neocomplcache_keyword_patterns', {
+        \ 'filename'  : '\%(\\.\|[/\[\][:alnum:]()$+_\~.-]\|[^[:print:]]\)\+',
+        \ 'c'         : '[^.[:digit:]*\t]\%(\.\|->\)',
+        \ 'mail'      : '^\s*\w\+',
+        \ 'php'       : '[^. *\t]\.\w*\|\h\w*::'
+        \} )
+
+  " Define include pattern.
+  call alpaca#let_dict( 'g:neocomplcache_include_patterns', {
+        \ 'scala' : '^import'
+        \} )
+
+  " Define omni patterns
+  call alpaca#let_dict( 'g:neocomplcache_omni_patterns', {
+        \ 'php' : '[^. *\t]\.\w*\|\h\w*::'
+        \} )
+
+  " Define completefunc
+  call alpaca#let_dict( 'g:neocomplcache_vim_completefuncs', {
+        \ "Ref"                 : 'ref#complete',
+        \ "Unite"               : 'unite#complete_source',
+        \ "VimFiler"            : 'vimfiler#complete',
+        \ "VimShell"            : 'vimshell#complete',
+        \ "VimShellExecute"     : 'vimshell#vimshell_execute_complete',
+        \ "VimShellInteractive" : 'vimshell#vimshell_execute_complete',
+        \ "VimShellTerminal"    : 'vimshell#vimshell_execute_complete',
+        \ "Vinarise"            : 'vinarise#complete',
+        \ } )
+
+  " Define source rank
+  " 'rsense' : 2,
+  call alpaca#let_dict( 'g:neocomplcache_source_rank', {
+        \ 'alpaca_look' : 200,
+        \ } )
   "}}}
-  " Define keyword pattern. "{{{
-  " let g:neocomplcache_keyword_patterns.default = '[0-9a-zA-Z:#_-]\+'
-  " let g:neocomplcache_omni_patterns.mail = '^\s*\w\+'
-  " let g:neocomplcache_omni_patterns.php = '[^. *\t]\.\w*\|\h\w*::'
-  " let g:neocomplcache_keyword_patterns.filename = '\%(\\.\|[/\[\][:alnum:]()$+_\~.-]\|[^[:print:]]\)\+'
-  " let g:neocomplcache_omni_patterns.c = '[^.[:digit:]*\t]\%(\.\|->\)'
-  "}}}
-  "Define include pattern. {{{
-  let g:neocomplcache_include_patterns.scala = '^import'
-  "}}}
-  " Define completefunc"{{{
-  let g:neocomplcache_vim_completefuncs.Ref                 = 'ref#complete'
-  let g:neocomplcache_vim_completefuncs.Unite               = 'unite#complete_source'
-  let g:neocomplcache_vim_completefuncs.VimFiler            = 'vimfiler#complete'
-  let g:neocomplcache_vim_completefuncs.VimShell            = 'vimshell#complete'
-  let g:neocomplcache_vim_completefuncs.VimShellExecute     = 'vimshell#vimshell_execute_complete'
-  let g:neocomplcache_vim_completefuncs.VimShellInteractive = 'vimshell#vimshell_execute_complete'
-  let g:neocomplcache_vim_completefuncs.VimShellTerminal    = 'vimshell#vimshell_execute_complete'
-  let g:neocomplcache_vim_completefuncs.Vinarise            = 'vinarise#complete'
-  "}}}
-  " Define source rank"{{{
-  call neocomplcache#util#set_default_dictionary(
-        \ 'g:neocomplcache_source_rank',
-        \ 'alpaca_look', 200)
-  "}}}
-  " define completion length"{{{
-  let g:neocomplcache_source_completion_length.alpaca_look = 4
-  " let g:neocomplcache_source_completion_length.rsense      = 2
-  "}}}
+
+  " let g:neocomplcache_source_completion_length.
+
   " ファイルタイプ毎の辞書ファイルの場所 {{{
   let g:neocomplcache_dictionary_filetype_lists = {
         \ 'default'    : '',
         \ 'timobile.javascript'   : $HOME.'/.vim/dict/timobile.dict',
         \ 'timobile.coffee'   : $HOME.'/.vim/dict/timobile.dict',
         \ }
+
   for s:dict in split(glob($HOME.'/.vim/dict/*.dict'))
     let s:ft = matchstr(s:dict, '\w\+\ze\.dict$')
     let g:neocomplcache_dictionary_filetype_lists[s:ft] = s:dict
   endfor
   "}}}
-
 endfunction
+unlet bundle
 "}}}
 
 " keymap {{{
-imap <expr><C-g>     neocomplcache#undo_completion()
+imap <expr><C-G>     neocomplcache#undo_completion()
 imap <expr><CR>      neocomplcache#smart_close_popup() . "<CR>" . "<Plug>DiscretionaryEnd"
-imap <silent><expr><S-TAB> pumvisible() ? "\<C-P>" : "\<S-TAB>"
+" imap <silent><expr><S-TAB> pumvisible() ? "\<C-P>" : "\<S-TAB>"
 " imap <silent><expr><TAB>   pumvisible() ? "\<C-N>" : "\<TAB>"
 imap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_jump_or_expand)" : pumvisible() ? "\<C-n>" : "\<TAB>"
 " }}}
@@ -2641,7 +2699,6 @@ function! s:unite_file(path)
 endfunction
 command! -nargs=? -complete=file UniteFile call <SID>unite_file(<q-args>)
 "}}}
-"}}}
 function! UniteRailsSetting() "Unite-rails.vim {{{
   nnoremap <buffer>[plug]<C-H><C-H>  :<C-U>Unite rails/view<CR>
   nnoremap <buffer>[plug]<C-H>       :<C-U>Unite rails/model<CR>
@@ -2667,11 +2724,15 @@ nnoremap <silent> [unite]rr :<C-u>Unite -no-quit rails_best_practices<CR>
 "}}}
 " unite-giti {{{
 nnoremap <silent>gl :<C-U>call BundleWithCmd('vim-unite-giti', 'Unite -buffer-name=giti_log -no-start-insert giti/log')<CR>
+nnoremap <silent>gL :<C-U>call BundleWithCmd('vim-versions', 'Unite -buffer-name=versions_log -no-start-insert versions/git/log')<CR>
+nnoremap <silent>gS :<C-U>call BundleWithCmd('vim-versions', 'Unite -buffer-name=versions_status -no-start-insert versions/git/status')<CR>
 nnoremap <silent>gs :<C-U>call BundleWithCmd('vim-unite-giti', 'Unite -buffer-name=giti_status -no-start-insert giti/status ')<CR>
 nnoremap <silent>gh :<C-U>call BundleWithCmd('vim-unite-giti', 'Unite -buffer-name=giti_branchall -no-start-insert giti/branch_all')<CR>
 "}}}
+"}}}
 
 " XXX 本体の関数をつかって実装したい
+" lineなどsyntaxがあった方がいいものは、開いていたファイルのsyntaxを適応
 function! Smart_unite_open(cmd) "{{{
   let file_syntax=&syntax
   let rails_root = exists('b:rails_root')? b:rails_root : ''
@@ -2707,16 +2768,10 @@ function! bundle.hooks.on_source(bundle)
   let g:unite_source_history_yank_enable =1
   let s:unite_kuso_hooks = {}
   "}}}
-  function! s:unite_my_settings() "{{{
-    " SmartHighlight 'UniteStatement', {
-    "       \ 'guifg'   : '#F92672',
-    "       \ 'ctermfg' : '161',
-    "       \ 'style' : 'bold',
-    "       \ }
 
+  function! s:unite_my_settings() "{{{
     highlight link uniteMarkedLine Identifier
     highlight link uniteCandidateInputKeyword Statement
-    " highlight link uniteNonMarkedLine Comment
 
     inoremap <buffer><C-J> <Down>
     inoremap <buffer><C-K> <Up>
@@ -2728,7 +2783,9 @@ function! bundle.hooks.on_source(bundle)
     nnoremap <silent><buffer><expr>V unite#do_action('vsplit')
     nnoremap <silent><buffer><expr><Leader><Leader> unite#do_action('vimfiler')
 
-    " Custom actions."{{{
+    " Custom actions.
+    " sample
+    " {{{
     let my_tabopen = {
           \ 'description' : 'my tabopen items',
           \ 'is_selectable' : 1,
@@ -2749,6 +2806,7 @@ function! bundle.hooks.on_source(bundle)
     let buffer_name = unite.buffer_name != '' ? unite.buffer_name : '_'
 
     " XXX 本体の関数をつかって実装したい
+    " バッファ名に基づいたフックを実行
     call alpaca#let_s:('unite_kuso_hooks', {})
     if has_key( s:unite_kuso_hooks, buffer_name )
       call s:unite_kuso_hooks[buffer_name]()
@@ -2759,7 +2817,9 @@ function! bundle.hooks.on_source(bundle)
   aug END
   "}}}
 
-  " For unite-menu."{{{
+  " For unite-menu.
+  " Shougoさんのvimrcより拝借。sample
+  " {{{
   call alpaca#let_g:('unite_source_menu_menus', {})
   let g:unite_source_menu_menus.enc = {
         \     'description' : 'Open with a specific character code again.',
@@ -2796,10 +2856,16 @@ function! bundle.hooks.on_source(bundle)
   endfunction"}}}
 
   "------------------------------------
+  " vim-version
+  "------------------------------------
+  let g:versions#type#git#log#first_parent=1
+  let g:versions#source#git#log#revision_length=0
+  let g:versions#type#git#branch#merge#ignore_all_space=1
+
+  "------------------------------------
   " unite-history
   "------------------------------------
   "{{{
-
   " TODO kusoすぎわろた。 実装方法考えないとなぁ。
   function! BundleWithUniteHisoryCmd(cmd) "{{{
     call BundleWithCmd( 'vim-unite-history unite.vim', '' )
@@ -2807,7 +2873,7 @@ function! bundle.hooks.on_source(bundle)
     call Smart_unite_open(a:cmd)
   endfunction"}}}
   function s:unite_kuso_hooks.history_command() "{{{
-    set syntax=vim
+    setl syntax=vim
   endfunction"}}}
   "}}}
 
@@ -2817,6 +2883,7 @@ function! bundle.hooks.on_source(bundle)
   "{{{
   let g:unite_source_grep_command = "grep"
   let g:unite_source_grep_recursive_opt = "-R"
+  " let g:unite_source_grep_ignore_pattern = ''
   "}}}
 
   "------------------------------------
@@ -2843,9 +2910,17 @@ function! bundle.hooks.on_source(bundle)
   " }}}
 
   "----------------------------------------
-  " unite-giti
+  " unite-giti / vim-versions
   "----------------------------------------
   "{{{
+  function! s:unite_kuso_hooks.giti_status()
+    " nnoremap <silent><buffer><expr>gM unite#do_action('ammend')
+    nnoremap <silent><buffer><expr>ga unite#do_action('stage')
+    nnoremap <silent><buffer><expr>gc unite#do_action('checkout')
+    nnoremap <silent><buffer><expr>gd unite#do_action('diff')
+    nnoremap <silent><buffer><expr>gu unite#do_action('unstage')
+  endfunction
+
   function! s:unite_kuso_hooks.giti_status()
     " nnoremap <silent><buffer><expr>gM unite#do_action('ammend')
     nnoremap <silent><buffer><expr>ga unite#do_action('stage')
@@ -2860,6 +2935,7 @@ function! bundle.hooks.on_source(bundle)
   endfunction
   "}}}
 endfunction
+unlet bundle
 "}}}
 
 "----------------------------------------

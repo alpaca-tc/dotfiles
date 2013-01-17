@@ -27,6 +27,7 @@ function! alpaca#system_bg(...) "{{{
   endif
 endfunction"}}}
 
+" TODO scopeを修正 vitalみたいにオブジェクト化しようか。
 function! alpaca#let_g:(name, value) "{{{
   call s:let('g', a:name, a:value)
 endfunction"}}}
@@ -38,6 +39,14 @@ function! alpaca#let_b:(name, value) "{{{
 endfunction"}}}
 function! alpaca#let_t:(name, value) "{{{
   call s:let('t', a:name, a:value)
+endfunction"}}}
+function! alpaca#let_dict(name, dict) "{{{
+  let scope_and_name = substitute(a:name, '\([a-zA-Z]\):\(.*\)', '["\1","\2"]', 'g')
+  let [scope, name] = eval(scope_and_name)
+
+  for key in keys( a:dict )
+    call s:let( scope, name, a:dict[key])
+  endfor
 endfunction"}}}
 
 function! alpaca#print_error(string) "{{{
