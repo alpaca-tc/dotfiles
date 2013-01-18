@@ -4,6 +4,10 @@ aug END
 
 call alpaca#init()
 
+" 学習用
+imap <BS> <Nop>
+imap <ESC> <Nop>
+
 "----------------------------------------
 " initialize"{{{
 let g:my = {}
@@ -114,6 +118,7 @@ set timeout timeoutlen=300 ttimeoutlen=100
 set visualbell t_vb=
 set viminfo='100,<800,s300,\"300
 set norestorescreen=off
+set mouse=a
 
 if v:version >= 703
   set undofile
@@ -226,7 +231,7 @@ NeoBundleLazy 'Shougo/unite-build', {
       \ }
 NeoBundleLazy 'h1mesuke/unite-outline', {
       \ 'depends' : 'Shougo/unite.vim' }
-NeoBundleLazy 'vim-scripts/sudo.vim', {
+NeoBundle 'vim-scripts/sudo.vim', {
       \ 'autoload': { 'commands': ['SudoRead', 'SudoWrite'], 'insert': 1 }
       \ }
 NeoBundleLazy 'Shougo/vimfiler', {
@@ -487,6 +492,12 @@ NeoBundleLazy 'Shougo/vinarise', {
       \ 'depends': ['s-yukikaze/vinarise-plugin-peanalysis'],
       \ 'autoload': { 'commands': 'Vinarise'}}
 
+" html
+" ----------------------------------------
+NeoBundleLazy 'koron/chalice', {
+      \ 'depends': ['ynkdir/vim-funlib'],
+      \ 'autoload': { 'functions': ['AL_urlencode', 'AL_urldecode'] }}
+
 " objective-c
 " ----------------------------------------
 " NeoBundle 'msanders/cocoa.vim'
@@ -639,9 +650,11 @@ set hidden
 set nrformats-=octal
 set textwidth=0
 
-"開いているファイルのディレクトリに自動で移動
+" 開いているファイルのディレクトリに自動で移動
 aug MyAutoCmd
-  au BufEnter * if !exists('b:vimfiler') | exe 'lcd ' . expand("%:p:h") | endif
+  " au BufEnter * if bufname('%') !~# 'vimfiler' | lcd `=expand("%:p:h")` | endif
+  " au BufEnter * lcd `=expand("%:p:h")`
+  au BufEnter * execute ":silent! lcd! " . expand("%:p:h")
 aug END
 
 " 新しいバッファを開くときに、rubyか同じファイルタイプで開く {{{
@@ -1503,7 +1516,7 @@ nnoremap [unite]q :unite qiita<CR>
 "------------------------------------
 "{{{
 nnoremap <silent>[plug]<C-F>  :call VimFilerExplorerGit()<CR>
-nnoremap <silent><Leader><Leader>  :VimFilerCreate<CR>
+nnoremap <silent><Leader><Leader>  :VimFilerBufferDir<CR>
 
 let g:vimfiler_safe_mode_by_default = 0
 let g:vimfiler_as_default_explorer = 1
@@ -2544,6 +2557,23 @@ xmap gcc <Plug>(caw:i:toggle)
 "------------------------------------
 let g:scala_use_default_keymappings = 0
 
+"------------------------------------
+"  alice.vim
+"------------------------------------
+function! s:URLEncode()
+  let l:line = getline('.')
+  let l:encoded = AL_urlencode(l:line)
+  call setline('.', l:encoded)
+endfunction
+
+function! s:URLDecode()
+  let l:line = getline('.')
+  let l:encoded = AL_urldecode(l:line)
+  call setline('.', l:encoded)
+endfunction
+
+command! -nargs=0 -range URLEncode :call <SID>URLEncode()
+command! -nargs=0 -range URLDecode :call <SID>URLDecode()
 "}}}
 
 "----------------------------------------
@@ -2643,7 +2673,9 @@ function! bundle.hooks.on_source(bundle)
         \ } )
   "}}}
 
-  " let g:neocomplcache_source_completion_length.
+  call alpaca#let_dict( 'g:neocomplcache_source_completion_length',  {
+        \ 'alpaca_look' : 4
+        \ })
 
   " ファイルタイプ毎の辞書ファイルの場所 {{{
   let g:neocomplcache_dictionary_filetype_lists = {

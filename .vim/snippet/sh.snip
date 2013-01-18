@@ -21,3 +21,8 @@ snippet     receive-post
 
   www_dir="${HOME}/app"
   (cd ${www_dir};git --git-dir=.git pull;)
+
+snippet     read
+  read -p "${1:message}" yn
+  if [ $yn = "y" -o $yn = "Y" ]; then
+  fi
