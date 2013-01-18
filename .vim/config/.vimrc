@@ -15,7 +15,7 @@ let g:my = {}
 " ユーザー情報"{{{
 let g:my.info = {
       \ "date" : alpaca#function#today(),
-      \ "autor": 'Ishii Hiroyuki',
+      \ "author": 'Ishii Hiroyuki',
       \ }
 
 let g:my.github = {
@@ -389,10 +389,10 @@ NeoBundle 'operator-camelize', {
 " NeoBundle 'kana/vim-smartchr' "smartchr.vim : ==()などの前後を整形
 NeoBundleLazy 'mattn/webapi-vim'
 NeoBundleLazy 'scrooloose/syntastic', Neo_al(g:my.ft.program_files)
-NeoBundleLazy 'taichouchou2/alpaca_look.git', {
-      \ 'autoload' : {
-      \   'insert' : 1,
-      \ }}
+" NeoBundleLazy 'taichouchou2/alpaca_look.git', {
+"       \ 'autoload' : {
+"       \   'insert' : 1,
+"       \ }}
 NeoBundleLazy 'rhysd/clever-f.vim', { 'autoload' : {
       \   'mappings' : 'f',
       \ }}
@@ -1153,12 +1153,10 @@ augroup END
 " カスタムファイルタイプでも、自動でdictを読み込む
 " そして、編集画面までさくっと移動。
 func! s:auto_dict_setting()
-  let file_type_name = &ft
-  if exists('b:file_type_name')
-    let file_type_name = b:file_type_name
-  endif
+  let file_type_name = &filetype
 
-  let dict_name = split( file_type_name, '.' )
+  let dict_name = split( file_type_name, '\.' )
+
   if empty( dict_name ) || count(g:my.ft.ignore_patterns, dict_name) > 0
     return
   endif
@@ -1166,13 +1164,15 @@ func! s:auto_dict_setting()
   exe  "setl dict+=~/.vim/dict/".dict_name[0].".dict"
 
   let b:dict_path = expand('~/.vim/dict/'.file_type_name.'.dict')
-  exe  "setl dict+=".b:dict_path
-  nnoremap <buffer><expr><Space>d ':<C-U>SmartSplit e '.b:dict_path.'<CR>'
+  exe  "setl dictionary+=".b:dict_path
+
+  nnoremap <buffer><expr>[space]d ':<C-U>SmartSplit e '.b:dict_path.'<CR>'
 endfunc
 
-aug MyAutoCmd
-  au FileType * call <SID>auto_dict_setting()
-aug END
+au FileType * call <SID>auto_dict_setting()
+" aug MyAutoCmd
+"   au FileType * call <SID>auto_dict_setting()
+" aug END
 "}}}
 
 "----------------------------------------
@@ -2646,7 +2646,9 @@ function! bundle.hooks.on_source(bundle)
 
   " Define include pattern.
   call alpaca#let_dict( 'g:neocomplcache_include_patterns', {
-        \ 'scala' : '^import'
+        \ 'scala' : '^import',
+        \ 'scss'  : '^\s*\<\%(@import\)\>',
+        \ 'php'  :  '^\s*\<\%(inlcude\|\|include_once\|require\|require_once\)\>',
         \} )
 
   " Define omni patterns

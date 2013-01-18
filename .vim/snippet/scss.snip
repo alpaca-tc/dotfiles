@@ -1,6 +1,5 @@
-# 標準構文
+# 標準構文#{{{
 snippet     for
-abbr        for
     @for $i from ${1} through ${2} {
       ${3:${i}}
     }
@@ -8,8 +7,8 @@ abbr        for
 snippet     r
 abbr        return
     @return
-
-# 拡張関数
+#}}}
+# 拡張関数#{{{
 snippet     ex
 abbr        extend
     @extend ${1}
@@ -23,14 +22,22 @@ abbr        if
     @if ${1:$flg > 0} {
         ${2}
     }
-
-# include
+#}}}
+# include#{{{
 snippet     icf
 abbr        clearfix
 prev_word    '^'
     @include clearfix;
 
-snippet     clearfix
+snippet     ibr
+abbr        abbr
+prev_word    '^'
+    @include border-radius(${1});
+
+
+#}}}
+# mixin#{{{
+snippet     mclearfix
   @mixin cf {
     /* For modern browsers */
     &:before,
@@ -53,10 +60,14 @@ snippet     clearfix
     @include cf;
   }
 
-snippet     ibr
-abbr        abbr
-prev_word    '^'
-    @include border-radius(${1});
+snippet     mabsolute
+  @mixin absolute($x, $y) {// {{{
+    display: block;
+    left: $x;
+    position: absolute;
+    top: $y;
+  }// }}}
+#}}}
 
 # CSS & SASS Snippets for VIM's Snipmate
 # Author: Chris Batchelor, Firegoby Design
@@ -69,8 +80,7 @@ prev_word    '^'
 #   most used features use single letter abbreviations
 #   standard CSS declarations use two letters (occasionally three)
 #   SASS functions use the first three letters of the function (occ. four)
-
-# element
+# element#{{{
 snippet e
     ${1:element} {
         ${2}
@@ -306,28 +316,6 @@ snippet     imp
 snippet     utf8
   @charset "UTF-8";
 
-## font lists{{{
-snippet ff
-    font-family: Verdana,Arial,"メイリオ",Meiryo,"ヒラギノ角ゴPro W3","Hiragino Kaku Gothic Pro","ＭＳ Ｐゴシック","MS PGothic",sans-serif;
-    font-weight:normal;
-    color:${1:#CCC};
-
-snippet ffhira
-  font-family:"ヒラギノ明朝 Pro W6", "HiraMinPro-W6";
-
-snippet ffosaka
-  font-family:"Osaka";
-  font-weight:bold
-
-snippet     ffhiramarug
-  font-family:"ヒラギノ丸ゴシックPro W4", "Hiragino Maru Gothic Pro";font-weight:bold
-
-snippet     ffhirakakug
-  font-family:"ヒラギノ角ゴシック Std W8", "Hiragino Kaku Gothic Std"
-
-snippet     ffonts
-  http://nov.azarea.jp/fonts.html
-##}}}
 
 snippet     @mreset
   @mixin reset {
@@ -359,4 +347,26 @@ snippet     fadehover
     opacity: 0.8;
   }
 
+#}}}
+## font lists{{{
+snippet ff
+    font-family: Verdana,Arial,"メイリオ",Meiryo,"ヒラギノ角ゴPro W3","Hiragino Kaku Gothic Pro","ＭＳ Ｐゴシック","MS PGothic",sans-serif;
+    font-weight:normal;
+    color:${1:#CCC};
 
+snippet ffhira
+  font-family:"ヒラギノ明朝 Pro W6", "HiraMinPro-W6";
+
+snippet ffosaka
+  font-family:"Osaka";
+  font-weight:bold
+
+snippet     ffhiramarug
+  font-family:"ヒラギノ丸ゴシックPro W4", "Hiragino Maru Gothic Pro";font-weight:bold
+
+snippet     ffhirakakug
+  font-family:"ヒラギノ角ゴシック Std W8", "Hiragino Kaku Gothic Std"
+
+snippet     ffonts
+  http://nov.azarea.jp/fonts.html
+##}}}

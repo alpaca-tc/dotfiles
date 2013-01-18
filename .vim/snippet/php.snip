@@ -2,14 +2,15 @@
 snippet     f_path_to_url
   function path_to_url($path, $default_port = 80){/*{{{*/
     //ドキュメントルートのパスとURLの作成
-    $document_root_url = $_SERVER['SCRIPT_NAME'];
+    $document_root_url  = $_SERVER['SCRIPT_NAME'];
     $document_root_path = $_SERVER['SCRIPT_FILENAME'];
+
     while(basename($document_root_url) === basename($document_root_path)){
-      $document_root_url = dirname($document_root_url);
+      $document_root_url  = dirname($document_root_url);
       $document_root_path = dirname($document_root_path);
     }
-    if($document_root_path === '/')  $document_root_path = '';
-    if($document_root_url === '/') $document_root_url = '';
+    if($document_root_path === '/') $document_root_path = '';
+    if($document_root_url  === '/') $document_root_url  = '';
 
     $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] !== 'off')? 'https': 'http';
     $port = ($_SERVER['SERVER_PORT'] && $_SERVER['SERVER_PORT'] != $default_port)? ':'.$_SERVER['SERVER_PORT']: '';
@@ -24,8 +25,53 @@ snippet     f_path_to_url
 
     //パスを置換して返す
     $url = str_replace($document_root_path, $document_root_url, $absolute_path);
-    if($absolute_path === $url)
+
+    if($absolute_path === $url) {
       return false;
+    }
+
+    return $url;
+  }/*}}}*/
+
+
+snippet     f_relative_url
+abbr 2つのパスを比べて、相対パスを書き出す
+  function relative_url ( $base, $target, $option = true ) {/*{{{*/
+    // 戻り値（$url）を $option に基づいて初期化
+    $url = ($option) ? './': '';
+
+    // 構成要素を '/' で分解
+    $base   = explode('/', $base);
+    $target = explode('/', $target);
+
+    // 要素をはじめから順番に比較し同じ要素は排除
+    do {
+      $f = array_shift($base);
+      $t = array_shift($target);
+    } while ($f == $t);
+
+    // 要素をひとつ捨てすぎたので配列に戻す
+    array_unshift($base, $b);
+    array_unshift($target, $t);
+
+    // 残りの要素数を数える
+    $bcount = count($base);
+    $tcount = count($target);
+
+    // ひとつずつしか残ってないので同じディレクトリだ！
+    if ($bcount == 1 && $tcount == 1) {
+      // ならばファイル名だけを $url に格納
+      $url .= array_pop($target);
+    } else {
+      // 上位へ走査が必要な分 '../' を出力
+      if($bcount > 1) {
+        $url = str_repeat('../', $bcount - 1);
+      }
+      // $target のパスを '/' で連結して $url に格納
+      $url .= implode('/', $target);
+    }
+
+    // 出来上がったところで出力
     return $url;
   }/*}}}*/
 #}}}
@@ -80,7 +126,7 @@ snippet doc
      * ${1:undocumented class}
      *
      * @package ${2:default}
-     * @author ${3:`g:my.info.author`}
+     * @author `g:my.info.author`
     **/
 
 # Class Variable - post doc
