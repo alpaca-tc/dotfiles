@@ -198,7 +198,13 @@ NeoBundleLazy 'rhysd/accelerated-jk', {
       \     ['n', '<Plug>(accelerated_jk_gj)'], ['n', '<Plug>(accelerated_jk_gk)']
       \ ]}}
 " 個人的なカラーやフォント。読み込むことは無し。
-NeoBundleLazy 'taichouchou2/alpaca'
+NeoBundleLazy 'taichouchou2/alpaca', {
+      \ 'build' : {
+      \     'mac' : 'sh fonts/ricty_generator.sh fonts/Inconsolata.otf fonts/migu-1m-regular.ttf fonts/migu-1m-bold.ttf',
+      \     'unix' : 'sh fonts/ricty_generator.sh fonts/Inconsolata.otf fonts/migu-1m-regular.ttf fonts/migu-1m-bold.ttf',
+      \    },
+      \ }
+
 NeoBundleLazy 'tpope/vim-surround', {
       \ 'autoload' : {
       \   'mappings' : [
@@ -212,6 +218,9 @@ NeoBundle 'tpope/vim-fugitive', { 'autoload' : { 'commands': ['Gcommit', 'Gblame
 NeoBundleLazy 'taichouchou2/alpaca_powerline', {
       \ 'depends': ['majutsushi/tagbar', 'tpope/vim-fugitive', 'basyura/TweetVim', 'basyura/twibill.vim',],
       \ 'autoload' : { 'functions': ['Pl#UpdateStatusline', 'Pl#Hi#Allocate', 'Pl#Hi#Segments', 'Pl#Colorscheme#Init',]  }}
+NeoBundle 'Lokaltog/powerline'
+
+" so ~/.bundle/powerline/powerline/ext/vim/source_plugin.vim
 au BufEnter,WinEnter,FileType,BufUnload,CmdWinEnter * call Pl#UpdateStatusline(1)
 NeoBundle 'h1mesuke/vim-alignta', { 'autoload' : { 'commands' : ['Align'] } }
 "}}}
@@ -1303,13 +1312,14 @@ augroup END
 "------------------------------------
 "{{{
 " カーソル下の単語をgrepする
+nnoremap <silent><C-G><C-g> :<C-u>Rgrep<Space><C-r><C-w> *<CR><CR>
+nnoremap <silent><C-G><C-b> :<C-u>GrepBuffer<Space><C-r><C-w><CR>
+
 let Grep_Skip_Dirs = '.svn .git .swp .hg cache compile'
 let Grep_Skip_Files = '*.bak *~ .swp .swa .swo'
 let Grep_Find_Use_Xargs = 0
 let Grep_Xargs_Options = '--print0'
 
-nnoremap <silent><C-G><C-g> :<C-u>Rgrep<Space><C-r><C-w> *<CR><CR>
-nnoremap <silent><C-G><C-b> :<C-u>GrepBuffer<Space><C-r><C-w><CR>
 
 " 検索外のディレクトリ、ファイルパターン
 " qf内でファイルを開いた後画面を閉じる
@@ -1517,86 +1527,90 @@ nnoremap [unite]q :unite qiita<CR>
 "{{{
 nnoremap <silent>[plug]<C-F>  :call VimFilerExplorerGit()<CR>
 nnoremap <silent><Leader><Leader>  :VimFilerBufferDir<CR>
-
-let g:vimfiler_safe_mode_by_default = 0
-let g:vimfiler_as_default_explorer = 1
-let g:vimfiler_sort_type = "filename"
-let g:vimfiler_preview_action = ""
-let g:vimfiler_enable_auto_cd= 1
-let g:vimfiler_file_icon = "-"
-" XXX 思った通りに動かない...
-" let g:vimfiler_execute_file_list = { '_' : 'edit', "       \ }
-let g:vimfiler_readonly_file_icon = "x"
-let g:vimfiler_tree_closed_icon = "‣"
-let g:vimfiler_tree_leaf_icon = " "
-let g:vimfiler_tree_opened_icon = "▾"
-let g:vimfiler_marked_file_icon = "✓"
-
-function! s:vimfiler_is_active() "{{{
-  return exists('b:vimfiler')
-endfunction"}}}
-function! s:vimfiler_local() "{{{
-  if !exists('b:vimfiler') | return | endif
-
-  let vimfiler = vimfiler#get_context()
-
-  if vimfiler.explorer
-    call <SID>vimfiler_explorer_local()
-  else
-    call <SID>vimfiler_not_explorer_local()
-  endif
-
-  " vimfiler common settings
-  setl nonumber
-  nmap <buffer><C-J> [unite]
-  nmap <buffer><CR> <Plug>(vimfiler_edit_file)
-  nmap <buffer>f <Plug>(vimfiler_toggle_mark_current_line)
-  nnoremap <buffer>b :<C-U>UniteBookmarkAdd<CR>
-  nnoremap <buffer><expr>p vimfiler#do_action('preview')
-  nnoremap <buffer>v v
-endfunction"}}}
-function! s:vimfiler_explorer_local() "{{{
-  au BufEnter <buffer> if (winnr('$') == 1 && &filetype ==# 'vimfiler' && <SID>vimfiler_is_active()) | q | endif
-  let vimfiler = vimfiler#get_current_vimfiler()
-  call UpdateTags()
-  let g:my.conf.tags.auto_create = 0
-endfunction"}}}
-function! s:vimfiler_not_explorer_local() "{{{
-  nnoremap <buffer><expr>u vimfiler#do_action('file')
-endfunction"}}}
-aug VimFilerKeyMapping "{{{
-  au!
-  au FileType vimfiler call <SID>vimfiler_local()
-aug END "}}}
-
-function! VimFilerExplorerGit() "{{{
-  " TODO 開いているファイルのパスまで、Uniteも開く
-  let cmd = bufname("%") != "" ? "2wincmd w" : ""
-  let s:git_root = system('git rev-parse --show-cdup')
-
-  if(system('git rev-parse --is-inside-work-tree') == "true\n")
-    if s:git_root == "" |let g:git_root = "."| endif
-    exe 'VimFilerExplorer -simple ' . substitute( s:git_root, '\n', "", "g" )
-  else
-    exe 'VimFilerExplorer -simple .'
-  endif
-
-  if <SID>vimfiler_is_active()
-    return
-  endif
-
-  aug VimFilerExplorerKeyMapping
-    au!
-    au FileType vimfiler call s:vimfiler_local()
-  aug END
-
-  exe cmd
-endfunction
-command! VimFilerExplorerGit call VimFilerExplorerGit()
-"}}}
-
-" VimFilerExplorer自動起動
 " au VimEnter * call VimFilerExplorerGit()
+
+let bundle = neobundle#get('vimfiler')
+function! bundle.hooks.on_source(bundle) "{{{
+  let g:vimfiler_safe_mode_by_default = 0
+  let g:vimfiler_as_default_explorer = 1
+  let g:vimfiler_sort_type = "filename"
+  let g:vimfiler_preview_action = ""
+  let g:vimfiler_enable_auto_cd= 1
+  let g:vimfiler_file_icon = "-"
+  " XXX 思った通りに動かない...
+  " let g:vimfiler_execute_file_list = { '_' : 'edit', "       \ }
+  let g:vimfiler_readonly_file_icon = "x"
+  let g:vimfiler_tree_closed_icon = "‣"
+  let g:vimfiler_tree_leaf_icon = " "
+  let g:vimfiler_tree_opened_icon = "▾"
+  let g:vimfiler_marked_file_icon = "✓"
+
+  function! s:vimfiler_is_active() "{{{
+    return exists('b:vimfiler')
+  endfunction"}}}
+  function! s:vimfiler_local() "{{{
+    if !exists('b:vimfiler') | return | endif
+
+    let vimfiler = vimfiler#get_context()
+
+    if vimfiler.explorer
+      call <SID>vimfiler_explorer_local()
+    else
+      call <SID>vimfiler_not_explorer_local()
+    endif
+
+    " vimfiler common settings
+    setl nonumber
+    nmap <buffer><C-J> [unite]
+    nmap <buffer><CR> <Plug>(vimfiler_edit_file)
+    nmap <buffer>f <Plug>(vimfiler_toggle_mark_current_line)
+    nnoremap <buffer>b :<C-U>UniteBookmarkAdd<CR>
+    nnoremap <buffer><expr>p vimfiler#do_action('preview')
+    nnoremap <buffer>v v
+  endfunction"}}}
+  function! s:vimfiler_explorer_local() "{{{
+    au BufEnter <buffer> if (winnr('$') == 1 && &filetype ==# 'vimfiler' && <SID>vimfiler_is_active()) | q | endif
+    let vimfiler = vimfiler#get_current_vimfiler()
+    call UpdateTags()
+    let g:my.conf.tags.auto_create = 0
+  endfunction"}}}
+  function! s:vimfiler_not_explorer_local() "{{{
+    nnoremap <buffer><expr>u vimfiler#do_action('file')
+  endfunction"}}}
+  aug VimFilerKeyMapping "{{{
+    au!
+    au FileType vimfiler call <SID>vimfiler_local()
+  aug END "}}}
+
+  function! VimFilerExplorerGit() "{{{
+    " TODO 開いているファイルのパスまで、Uniteも開く
+    let cmd = bufname("%") != "" ? "2wincmd w" : ""
+    let s:git_root = system('git rev-parse --show-cdup')
+
+    if(system('git rev-parse --is-inside-work-tree') == "true\n")
+      if s:git_root == "" |let g:git_root = "."| endif
+      exe 'VimFilerExplorer -simple ' . substitute( s:git_root, '\n', "", "g" )
+    else
+      exe 'VimFilerExplorer -simple .'
+    endif
+
+    if <SID>vimfiler_is_active()
+      return
+    endif
+
+    aug VimFilerExplorerKeyMapping
+      au!
+      au FileType vimfiler call s:vimfiler_local()
+    aug END
+
+    exe cmd
+  endfunction
+  command! VimFilerExplorerGit call VimFilerExplorerGit()
+  "}}}
+
+  " VimFilerExplorer自動起動
+endfunction"}}}
+unlet bundle
 "}}}
 
 "------------------------------------
@@ -1606,36 +1620,40 @@ command! VimFilerExplorerGit call VimFilerExplorerGit()
 let g:quickrun_config = {}
 let g:quickrun_no_default_key_mappings = 1
 
-nnoremap <silent><Leader>r :QuickRu<CR>
+let bundle = neobundle#get('vimfiler')
+function! bundle.hooks.on_source(bundle) "{{{
+  nnoremap <silent><Leader>r :QuickRu<CR>
 
-" quickrun config {{{
-let g:quickrun_config.javascript = {
-      \ 'command': 'node'}
+  " quickrun config {{{
+  let g:quickrun_config.javascript = {
+        \ 'command': 'node'}
 
-let g:quickrun_config.lisp = {
-      \ 'command': 'clisp' }
+  let g:quickrun_config.lisp = {
+        \ 'command': 'clisp' }
 
-let g:quickrun_config.coffee_compile = {
-      \ 'command' : 'coffee',
-      \ 'exec' : ['%c -cbp %s'] }
+  let g:quickrun_config.coffee_compile = {
+        \ 'command' : 'coffee',
+        \ 'exec' : ['%c -cbp %s'] }
 
-let g:quickrun_config.markdown = {
-      \ 'outputter': 'browser',
-      \ 'cmdopt': '-s' }
+  let g:quickrun_config.markdown = {
+        \ 'outputter': 'browser',
+        \ 'cmdopt': '-s' }
 
-let g:quickrun_config.applescript = {
-      \ 'command' : 'osascript' , 'output' : '_'}
+  let g:quickrun_config.applescript = {
+        \ 'command' : 'osascript' , 'output' : '_'}
 
-let g:quickrun_config['ruby.rspec'] = {
-      \ 'type' : 'ruby.rspec',
-      \ 'command': 'rspec',
-      \ 'exec': 'bundle exec %c %o %s', }
-"}}}
-aug QuickRunAutoCmd "{{{
-  au!
-  au FileType quickrun
-        \ au BufEnter <buffer> if (winnr('$') == 1) | q | endif
-aug END "}}}
+  let g:quickrun_config['ruby.rspec'] = {
+        \ 'type' : 'ruby.rspec',
+        \ 'command': 'rspec',
+        \ 'exec': 'bundle exec %c %o %s', }
+  "}}}
+  aug QuickRunAutoCmd "{{{
+    au!
+    au FileType quickrun
+          \ au BufEnter <buffer> if (winnr('$') == 1) | q | endif
+  aug END "}}}
+endfunction"}}}
+unlet bundle
 "}}}
 
 "------------------------------------
@@ -1842,10 +1860,11 @@ aug END
 " vim-powerline / alpaca_powerline
 "------------------------------------
 "{{{
-set guifontwide=Ricty:h10
-let g:Powerline_cache_enabled = 0
-" let g:Powerline_cache_file = expand('/tmp/Powerline.cache')
-let g:Powerline_symbols = 'fancy'
+let g:Powerline_cache_enabled = 1
+let g:Powerline_symbols='fancy'
+" source ~/.bundle/powerline/ext/vim/source_plugin.vim
+" python from powerline.ext.vim import source_plugin; source_plugin()
+" source ~/.bundle/powerline/powerline/ext/vim/powerline.vim
 "}}}
 
 "------------------------------------
@@ -1853,64 +1872,68 @@ let g:Powerline_symbols = 'fancy'
 "------------------------------------
 "{{{
 nnoremap <silent><Leader>v  :<C-U>VimShell<CR>
-let g:vimshell_user_prompt  = '"(" . getcwd() . ")" '
-let g:vimshell_prompt       = '$ '
-let g:vimshell_ignore_case  = 1
-let g:vimshell_smart_case   = 1
 
-" vimshell altercommand"{{{
-function! s:SID() "{{{
-  return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$')
-endfunction "}}}
-function! s:SNR(map) "{{{
-  return printf("<SNR>%d_%s", s:SID(), a:map)
-endfunction "}}}
-function! s:skip_spaces(q_args) "{{{
-  return substitute(a:q_args, '^\s*', '', '')
-endfunction "}}}
-function! s:parse_one_arg_from_q_args(q_args) "{{{
-  let arg = s:skip_spaces(a:q_args)
-  let head = matchstr(arg, '^.\{-}[^\\]\ze\([ \t]\|$\)')
-  let rest = strpart(arg, strlen(head))
+let bundle = neobundle#get('vimfiler')
+function! bundle.hooks.on_source(bundle) "{{{
+  let g:vimshell_user_prompt  = '"(" . getcwd() . ")" '
+  let g:vimshell_prompt       = '$ '
+  let g:vimshell_ignore_case  = 1
+  let g:vimshell_smart_case   = 1
 
-  return [head, rest]
-endfunction "}}}
-function! s:eat_n_args_from_q_args(q_args, n) "{{{
-  let rest = a:q_args
-  for _ in range(1, a:n)
-    let rest = s:parse_one_arg_from_q_args(rest)[1]
-  endfor
-  let rest = s:skip_spaces(rest)    " for next arguments.
-  return rest
-endfunction "}}}
+  " vimshell altercommand"{{{
+  function! s:SID() "{{{
+    return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$')
+  endfunction "}}}
+  function! s:SNR(map) "{{{
+    return printf("<SNR>%d_%s", s:SID(), a:map)
+  endfunction "}}}
+  function! s:skip_spaces(q_args) "{{{
+    return substitute(a:q_args, '^\s*', '', '')
+  endfunction "}}}
+  function! s:parse_one_arg_from_q_args(q_args) "{{{
+    let arg = s:skip_spaces(a:q_args)
+    let head = matchstr(arg, '^.\{-}[^\\]\ze\([ \t]\|$\)')
+    let rest = strpart(arg, strlen(head))
 
-"}}}
-function! s:globpath(path, expr) "{{{
-  return split(globpath(a:path, a:expr), "\n")
-endfunction "}}}
+    return [head, rest]
+  endfunction "}}}
+  function! s:eat_n_args_from_q_args(q_args, n) "{{{
+    let rest = a:q_args
+    for _ in range(1, a:n)
+      let rest = s:parse_one_arg_from_q_args(rest)[1]
+    endfor
+    let rest = s:skip_spaces(rest)    " for next arguments.
+    return rest
+  endfunction "}}}
 
-function! s:vimshell_settings() "{{{
-  command! -buffer -nargs=+ VimShellAlterCommand
-        \   call vimshell#altercmd#define(
-        \       s:parse_one_arg_from_q_args(<q-args>)[0],
-        \       s:eat_n_args_from_q_args(<q-args>, 1)
-        \   )
-  VimShellAlterCommand vi vim
-  VimShellAlterCommand v vim
-  VimShellAlterCommand g git
-  VimShellAlterCommand r rails
-  VimShellAlterCommand diff diff --unified
-  VimShellAlterCommand du du -h
-  VimShellAlterCommand free free -m -l -t
-  VimShellAlterCommand ll ls -lh
-  VimShellAlterCommand la ls -a
-  VimShellAlterCommand sudo iexe sudo
-  VimShellAlterCommand ssh iexe ssh
-endfunction "}}}
+  "}}}
+  function! s:globpath(path, expr) "{{{
+    return split(globpath(a:path, a:expr), "\n")
+  endfunction "}}}
 
-aug MyAutoCmd
-  au FileType vimshell call s:vimshell_settings()
-aug END
+  function! s:vimshell_settings() "{{{
+    command! -buffer -nargs=+ VimShellAlterCommand
+          \   call vimshell#altercmd#define(
+          \       s:parse_one_arg_from_q_args(<q-args>)[0],
+          \       s:eat_n_args_from_q_args(<q-args>, 1)
+          \   )
+    VimShellAlterCommand vi vim
+    VimShellAlterCommand v vim
+    VimShellAlterCommand g git
+    VimShellAlterCommand r rails
+    VimShellAlterCommand diff diff --unified
+    VimShellAlterCommand du du -h
+    VimShellAlterCommand free free -m -l -t
+    VimShellAlterCommand ll ls -lh
+    VimShellAlterCommand la ls -a
+    VimShellAlterCommand sudo iexe sudo
+    VimShellAlterCommand ssh iexe ssh
+  endfunction "}}}
+
+  aug MyAutoCmd
+    au FileType vimshell call s:vimshell_settings()
+  aug END
+endfunction"}}}
 "}}}
 
 "------------------------------------
@@ -2801,6 +2824,9 @@ function! bundle.hooks.on_source(bundle)
   let g:unite_winheight = 20
   let g:unite_source_history_yank_enable =1
   let s:unite_kuso_hooks = {}
+
+  call unite#set_substitute_pattern('file', '^@', '\=getcwd()."/*"', 1)
+  call unite#set_substitute_pattern('file', '^@@', '\=fnamemodify(expand("#"), ":p:h")."/*"', 2)
   "}}}
 
   function! s:unite_my_settings() "{{{
