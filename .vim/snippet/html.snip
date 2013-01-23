@@ -5,9 +5,9 @@ snippet     value
   value="${1}"
 
 snippet     v
-  <?php secho( $pData['${1}'] ); ?>
+  <?php secho( $sData['${1}'] ); ?>
 snippet     s
-  <?php OutputErrorMsg::sechoError($errors['${1}']); ?>
+  <?php OutputErrorMsg::sechoErrorWithName("${1}", $errors['${2}']); ?>
 
 # Some useful Unicode entities
 # Non-Breaking Space

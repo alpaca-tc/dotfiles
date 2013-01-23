@@ -119,7 +119,7 @@ snippet  cMixin
 snippet     random_int
   randnum = Math.floor( Math.random() * 100000000 )
 
-snippet     random_str
+snippet     frandom_str
   randobet = (length, extendStr = "") ->
     strList = 'abcdefghijklmnopqrstuvwxyz' + 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' + '0123456789' + extendStr
 
@@ -132,4 +132,28 @@ snippet     random_str
       result += strListArray[random]
 
     result
+
+snippet     ftoggle
+  toggleImg = (own) ->
+    off_rgxp = /off\./
+    on_rgxp  = /on\./
+    after    = null
+
+    $target  = $(own)
+    before   = $target.attr("src")
+    if before.match(off_rgxp)
+      after    = before.replace(off_rgxp, "on.")
+    else
+      after    = before.replace(on_rgxp, "off.")
+
+    $target.attr("src", after)
+
+  $(document).ready ->
+    $(".toggle").hover(
+      ->
+        toggleImg $(@).find("img")
+      ->
+        toggleImg $(@).find("img")
+    )
+
 #}}}
