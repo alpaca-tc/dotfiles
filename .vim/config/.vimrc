@@ -317,7 +317,7 @@ NeoBundle 'vim-scripts/sudo.vim', {
       \ }
 NeoBundle 'h1mesuke/vim-alignta', { 'autoload' : { 'commands' : ['Align'] } }
 NeoBundleLazy 'grep.vim', { 'autoload' : { 'commands': ["Grep", "Rgrep"] }}
-NeoBundleLazy 'kien/ctrlp.vim', { 'autoload' : { 'commands' : ['CtrlPBuffer', 'CtrlPDir']}}
+NeoBundleLazy 'kien/ctrlp.vim', { 'autoload' : { 'commands' : ['CtrlPBuffer', 'CtrlPDir', 'CtrlPCurFile']}}
 NeoBundleLazy 'sjl/gundo.vim', { 'autoload' : { 'commands': ["GundoToggle", 'GundoRenderGraph'] }}
 NeoBundleLazy 'majutsushi/tagbar', {
       \ 'autoload' : {
@@ -335,7 +335,8 @@ NeoBundleLazy 'open-browser.vim', { 'autoload' : {
       \ 'commands' : ['OpenBrowserSearch']
       \ }}
 NeoBundleLazy 'thinca/vim-ref', { 'autoload' : {
-      \ 'commands' : 'Ref'
+      \ 'commands' : 'Ref',
+      \ 'mappings' : ['n', 'K'],
       \ }}
 NeoBundle 'tomtom/tcomment_vim', { 'autoload' : { 'commands' : ['TComment', 'TCommentAs', 'TCommentMaybeInline'] } }
 NeoBundleLazy 'tyru/caw.vim', {
@@ -397,12 +398,12 @@ NeoBundleLazy 'tpope/vim-surround', {
       \ ]}}
 
 " extend vim
-NeoBundleLazy 'kana/vim-fakeclip', { 'autoload' : {
-      \ 'mappings' : [
-      \   ['nv', '<Plug>(fakeclip-y)'], ['nv', '<Plug>(fakeclip-Y)'],
-      \   ['nv', '<Plug>(fakeclip-p)'], ['nv', '<Plug>(fakeclip-P)'],
-      \   ['nv', '<Plug>(fakeclip-gp)']]
-      \ }}
+" NeoBundle 'kana/vim-fakeclip', { 'autoload' : {
+"       \ 'mappings' : [
+"       \   ['nv', '<Plug>(fakeclip-y)'], ['nv', '<Plug>(fakeclip-Y)'],
+"       \   ['nv', '<Plug>(fakeclip-p)'], ['nv', '<Plug>(fakeclip-P)'],
+"       \   ['nv', '<Plug>(fakeclip-gp)']]
+"       \ }}
 NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
       \ 'autoload': {
       \   'commands': 'IndentGuidesEnable',
@@ -768,6 +769,7 @@ inoremap ( ()<Left>
 inoremap " ""<Left>
 inoremap ' ''<Left>
 aug MyAutoCmd
+  au FileType scala inoremap <buffer>' '
   au FileType ruby,eruby,haml inoremap <buffer>\| \|\|<Left>
 aug END
 augroup MyXML
@@ -1070,6 +1072,7 @@ set encoding=utf-8
 set fileencodings=utf-8,sjis,shift-jis,euc-jp,utf-16,ascii,ucs-bom,cp932,iso-2022-jp
 set fileformats=unix,dos,mac
 set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc
+set termencoding=utf8
 
 command! -bang -bar -complete=file -nargs=? Cp932 edit<bang> ++enc=cp932 <args>
 command! -bang -bar -complete=file -nargs=? Euc edit<bang> ++enc=euc-jp <args>
@@ -1362,6 +1365,13 @@ call add( s:surround_mapping, {
       \ }
       \ })
 
+call add( s:surround_mapping, {
+      \ 'filetypes' : '_',
+      \ 'mappings' : {
+      \   '[' : "[\r]",
+      \ }
+      \ })
+
 " XXX rubyのinlucde?的な。
 " vimには無いのかなー。
 function! s:include(target, value) "{{{
@@ -1370,8 +1380,13 @@ function! s:include(target, value) "{{{
   if type({}) == target_type
     return has_key(a:target, a:value)
 
-  elseif type([]) == target_type || type('') == target_type || type(0) == target_type
-    return match(a:target, a:value) > -1
+  elseif type([]) == target_type
+    " return match(a:target, a:value) > -1
+    echo a:target
+
+  " elseif type('') == target_type || type(0) == target_type
+  "   return match(a:target, a:value) > -1
+
   endif
 
   return 0
@@ -1381,35 +1396,47 @@ function! s:let_surround_mapping(mapping_dict) "{{{
     call alpaca#let_b:('surround_'.char2nr(key), mapping )
   endfor
 endfunction"}}}
-function! s:surround_mapping_filetype() "{{{
-  if empty(&filetype) |return| endif
-  if !exists('s:surround_mapping_memo')
-    let s:surround_mapping_memo = {}
-  endif
-
-  let filetype = split( &filetype, '\.' )[0]
-
-
-  if has_key( s:surround_mapping_memo, filetype )
-    return <SID>let_surround_mapping( s:surround_mapping_memo[ filetype ] )
-  endif
-
-  for mapping_settings in s:surround_mapping
-    if <SID>include( mapping_settings, 'filetypes' ) && <SID>include( mapping_settings, 'mappings')
-      let filetypes = mapping_settings.filetypes
-      let mappings  = mapping_settings.mappings
-
-      if <SID>include( filetypes, filetype)
-        call <SID>let_surround_mapping( mappings )
-        call alpaca#let_s:('surround_mapping_memo' . filetype, mappings)
-      endif
-    endif
-  endfor
-endfunction"}}}
-
-augroup MyAutoCmd
-  autocmd FileType * call <SID>surround_mapping_filetype()
-augroup END
+" function! s:surround_mapping_filetype() "{{{
+"   if !exists('s:surround_mapping_memo')
+"     let s:surround_mapping_memo = {}
+"   endif
+"
+"   if empty(&filetype) |return| endif
+"   let filetype = split( &filetype, '\.' )[0]
+"
+"   " メモ化してある場合は設定"{{{
+"   if has_key( s:surround_mapping_memo, filetype )
+"   "   for mappings in s:surround_mapping_memo[filetype]
+"   "     call <SID>let_surround_mapping( mappings )
+"   "   endfor
+"   "   return
+"   endif "}}}
+"   " filetypeに当てはまる設定を追加 "{{{
+"   let memo = []
+"   for mapping_settings in s:surround_mapping
+"     if <SID>include( mapping_settings, 'filetypes' ) && <SID>include( mapping_settings, 'mappings')
+"       " let filetypes = mapping_settings.filetypes
+"       " let mappings  = mapping_settings.mappings
+"
+"       " if <SID>include( filetypes, '_' )
+"       "   call <SID>let_surround_mapping( mappings )
+"       "   call join(memo, mappings)
+"       "   break
+"       " endif
+"
+"       " if <SID>include( filetypes, filetype )
+"       "   call <SID>let_surround_mapping( mappings )
+"       "   call join(memo, mappings)
+"       " endif
+"     endif
+"   endfor "}}}
+"
+"   call alpaca#let_s:('surround_mapping_memo.' . filetype, memo)
+" endfunction"}}}
+"
+" augroup MyAutoCmd
+"   autocmd FileType * call <SID>surround_mapping_filetype()
+" augroup END
 "}}}
 " }}}
 
@@ -1615,10 +1642,10 @@ nnoremap [unite]q :unite qiita<CR>
 "{{{
 let g:quickrun_config = {}
 let g:quickrun_no_default_key_mappings = 1
+nnoremap <silent><Leader>r :QuickRun<CR>
 
 let bundle = neobundle#get('vim-quickrun')
 function! bundle.hooks.on_source(bundle) "{{{
-  nnoremap <silent><Leader>r :QuickRu<CR>
 
   " quickrun config {{{
   let g:quickrun_config.javascript = {
@@ -2019,8 +2046,9 @@ aug END
 " ctrlp
 "------------------------------------
 " {{{
-nnoremap <silent>[plug]<C-B> :CtrlPBuffer<CR>
-nnoremap <silent>[plug]<C-D> :CtrlPDir<CR>
+nnoremap <silent>[plug]<C-B> :<C-U>CtrlPBuffer<CR>
+nnoremap <silent>[plug]<C-D> :<C-U>CtrlPDir<CR>
+nnoremap <silent>[plug]<C-F> :<C-U>CtrlPCurFile<CR>
 let bundle = neobundle#get('ctrlp.vim')
 function! bundle.hooks.on_source(bundle) "{{{
   " let g:ctrlp_mruf_case_sensitive = 0
@@ -2032,15 +2060,15 @@ function! bundle.hooks.on_source(bundle) "{{{
   let g:ctrlp_show_hidden = 1
   let g:ctrlp_use_caching = 1
   let g:ctrlp_custom_ignore = {
-        \ 'dir':  '\.\(hg\|git\|sass-cache\|svn\)$',
+        \ 'dir':  '\.\(hg\|git\|sass-cache\|svn|\~\)$',
         \ 'file': '\.\(dll\|exe\|gif\|jpg\|png\|psd\|so\|woff\)$' }
   let g:ctrlp_mruf_exclude = '\(\\\|/\)\(Temp\|Downloads\)\(\\\|/\)\|\(\\\|/\)\.\(hg\|git\|svn\|sass-cache\)'
   let g:ctrlp_prompt_mappings = {
         \ 'AcceptSelection("t")': ['<c-n>'],
         \ }
 
-  hi link CtrlPLinePre NonText
-  hi link CtrlPMatch IncSearch
+  " hi link CtrlPLinePre NonText
+  " hi link CtrlPMatch IncSearch
 endfunction"}}}
 unlet bundle
 " }}}
@@ -2105,7 +2133,7 @@ aug RailsDictSetting
   au User Rails/config/locales/*      let b:file_type_name="rails.locales.ruby"
   au User Rails/config/initializes    let b:file_type_name="rails.initializes.ruby"
   au User Rails/config/environments/* let b:file_type_name="rails.environments.ruby"
-  au User Rails set dict+=~/.vim/dict/ruby.rails.dict syntax=ruby | nnoremap <buffer><Space>dd  :<C-U>SmartSplit e ~/.vim/dict/ruby.rails.dict<CR>
+  au User Rails set dict+=~/.vim/dict/ruby.rails.dict | nnoremap <buffer><Space>dd  :<C-U>SmartSplit e ~/.vim/dict/ruby.rails.dict<CR>
 aug END
 "}}}
 
@@ -2164,6 +2192,7 @@ let g:sass_compile_cdloop = 5
 let g:sass_compile_cssdir = ['css', 'stylesheet']
 let g:sass_compile_file = ['scss', 'sass']
 let g:sass_started_dirs = []
+let g:sass_compile_beforecmd=''
 function! AutoSassCompile()
   aug MyAutoCmd
     au BufWritePost <buffer> SassCompile
@@ -2259,7 +2288,7 @@ let g:syntastic_warning_symbol='X'
 let g:syntastic_mode_map = {
       \ 'mode'              : 'active',
       \ 'active_filetypes'  : g:my.ft.program_files,
-      \ 'passive_filetypes' : g:my.ft.ignore_patterns,
+      \ 'passive_filetypes' : ["html"],
       \}
 "}}}
 
@@ -2551,6 +2580,34 @@ xnoremap ue :<C-U>URLEncode<CR>
 xnoremap ud :<C-U>URLDecode<CR>
 "}}}
 
+"------------------------------------
+"  fakeclip.vim
+"------------------------------------
+" fakeclip.vim"{{{
+" let g:fakeclip_no_default_key_mappings = 1
+"
+" for _ in ['+', '*']
+"   echo 'silent! nmap "'._.'y  <Plug>(fakeclip-y)'
+"   echo 'silent! nmap "'._.'Y  <Plug>(fakeclip-Y)'
+"   echo 'silent! nmap "'._.'yy  <Plug>(fakeclip-Y)'
+"   echo 'silent! vmap "'._.'y  <Plug>(fakeclip-y)'
+"   echo 'silent! vmap "'._.'Y  <Plug>(fakeclip-Y)'
+"
+"   echo 'silent! nmap "'._.'p  <Plug>(fakeclip-p)'
+"   echo 'silent! nmap "'._.'P  <Plug>(fakeclip-P)'
+"   echo 'silent! nmap "'._.'gp  <Plug>(fakeclip-gp)'
+"   echo 'silent! nmap "'._.'gP  <Plug>(fakeclip-gP)'
+"   echo 'silent! vmap "'._.'p  <Plug>(fakeclip-p)'
+"   echo 'silent! vmap "'._.'P  <Plug>(fakeclip-P)'
+"   echo 'silent! vmap "'._.'gp  <Plug>(fakeclip-gp)'
+"   echo 'silent! vmap "'._.'gP  <Plug>(fakeclip-gP)'
+"
+"   echo 'silent! map! <C-r>'._.'  <Plug>(fakeclip-insert)'
+"   echo 'silent! map! <C-r><C-r>'._.'  <Plug>(fakeclip-insert-r)'
+"   echo 'silent! map! <C-r><C-o>'._.'  <Plug>(fakeclip-insert-o)'
+"   echo 'silent! imap <C-r><C-p>'._.'  <Plug>(fakeclip-insert-p)'
+" endfor
+"}}}
 "}}}
 
 "----------------------------------------
@@ -2683,9 +2740,34 @@ imap <silent><expr><CR> neocomplcache#smart_close_popup() . "<CR>" . "<Plug>Disc
 
 "------------------------------------
 " VimFiler {{{
-nnoremap <silent>[plug]<C-F>       :call VimFilerExplorerGit()<CR>
+nnoremap <silent>[plug]f       :call VimFilerExplorerGit()<CR>
 nnoremap <silent><Leader><Leader>  :VimFilerBufferDir<CR>
 " au VimEnter * call VimFilerExplorerGit()
+
+function! VimFilerExplorerGit() "{{{
+  " TODO 開いているファイルのパスまで、Uniteも開く
+  let cmd = bufname("%") != "" ? "2wincmd w" : ""
+  let s:git_root = system('git rev-parse --show-cdup')
+
+  if(system('git rev-parse --is-inside-work-tree') == "true\n")
+    if s:git_root == "" |let g:git_root = "."| endif
+    exe 'VimFilerExplorer -simple ' . substitute( s:git_root, '\n', "", "g" )
+  else
+    exe 'VimFilerExplorer -simple .'
+  endif
+
+  if <SID>vimfiler_is_active()
+    return
+  endif
+
+  aug VimFilerExplorerKeyMapping
+    au!
+    au FileType vimfiler call s:vimfiler_local()
+  aug END
+
+  exe cmd
+endfunction "}}}
+command! VimFilerExplorerGit call VimFilerExplorerGit()
 
 let bundle = neobundle#get('vimfiler')
 function! bundle.hooks.on_source(bundle) "{{{
@@ -2740,31 +2822,6 @@ function! bundle.hooks.on_source(bundle) "{{{
     au FileType vimfiler call <SID>vimfiler_local()
   aug END "}}}
 
-  function! VimFilerExplorerGit() "{{{
-    " TODO 開いているファイルのパスまで、Uniteも開く
-    let cmd = bufname("%") != "" ? "2wincmd w" : ""
-    let s:git_root = system('git rev-parse --show-cdup')
-
-    if(system('git rev-parse --is-inside-work-tree') == "true\n")
-      if s:git_root == "" |let g:git_root = "."| endif
-      exe 'VimFilerExplorer -simple ' . substitute( s:git_root, '\n', "", "g" )
-    else
-      exe 'VimFilerExplorer -simple .'
-    endif
-
-    if <SID>vimfiler_is_active()
-      return
-    endif
-
-    aug VimFilerExplorerKeyMapping
-      au!
-      au FileType vimfiler call s:vimfiler_local()
-    aug END
-
-    exe cmd
-  endfunction
-  command! VimFilerExplorerGit call VimFilerExplorerGit()
-  "}}}
 
   " VimFilerExplorer自動起動
 endfunction"}}}

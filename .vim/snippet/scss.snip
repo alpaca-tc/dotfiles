@@ -38,7 +38,7 @@ prev_word    '^'
 #}}}
 # mixin#{{{
 snippet     mclearfix
-  @mixin cf {
+  @mixin cf {// {{{
     /* For modern browsers */
     &:before,
     &:after {
@@ -58,8 +58,11 @@ snippet     mclearfix
 
   @mixin clearfix {
     @include cf;
-  }
-
+  }// }}}
+snippet     mborder-image
+  @mixin border-image($url, $offsets, $repeats)  {// {{{
+    @include experimental("border-image", $url $offsets $repeats,  -moz, not -webkit, -o, -ms, -khtml, official);
+  }// }}}
 snippet     mabsolute
   @mixin absolute($x, $y) {// {{{
     display: block;
