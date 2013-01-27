@@ -182,7 +182,7 @@ endfunction "}}}
 "bundle"{{{
 "----------------------------------------
 " 基本 / その他 {{{
-NeoBundleLazy 'Shougo/neobundle.vim'
+NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundle 'Shougo/vimproc', {
       \ 'build' : {
       \     'mac' : 'make -f make_mac.mak',
@@ -312,7 +312,7 @@ call neobundle#config('vimshell',{
       \ }})
 "}}}
 " commands"{{{
-NeoBundle 'vim-scripts/sudo.vim', {
+NeoBundleLazy 'vim-scripts/sudo.vim', {
       \ 'autoload': { 'commands': ['SudoRead', 'SudoWrite'], 'insert': 1 }
       \ }
 NeoBundle 'h1mesuke/vim-alignta', { 'autoload' : { 'commands' : ['Align'] } }
@@ -366,10 +366,11 @@ NeoBundleLazy 'camelcasemotion', { 'autoload' : {
 NeoBundleLazy 'rhysd/clever-f.vim', { 'autoload' : {
       \   'mappings' : 'f',
       \ }}
-NeoBundle 'mattn/zencoding-vim', {
+NeoBundleLazy 'mattn/zencoding-vim', {
       \ 'autoload': {
       \   'functions': ['zencoding#expandAbbr'],
       \   'filetypes': g:my.ft.html_files,
+      \   'insert'   : 1
       \ }}
 NeoBundleLazy 'kana/vim-smartword', '', 'same', { 'autoload' : {
       \ 'mappings' : [
@@ -547,15 +548,15 @@ NeoBundleLazy 'leafgarland/typescript-vim', { 'autoload' : {
 
 "  go
 " ----------------------------------------
-NeoBundleLazy 'fsouza/go.vim',
-      \ Neo_al(['go'])
+NeoBundleLazy 'fsouza/go.vim', { 'autoload' : {
+      \ 'filetypes' : ['go'] }}
 
 "  markdown
 " ----------------------------------------
 " markdownでの入力をリアルタイムでチェック
 " NeoBundle 'mattn/mkdpreview-vim'
-NeoBundleLazy 'tpope/vim-markdown',
-      \ Neo_al( ['markdown'] )
+NeoBundleLazy 'tpope/vim-markdown', { 'autoload' : {
+      \ 'filetypes' : ['markdown'] }}
 
 " sassのコンパイル
 NeoBundleLazy 'AtsushiM/sass-compile.vim', {
@@ -676,8 +677,8 @@ NeoBundleLazy 'davidhalter/jedi-vim', {
 
 " scala
 " ----------------------------------------
-NeoBundleLazy 'taichouchou2/vim-scala',
-      \ Neo_al(g:my.ft.scala_files)
+NeoBundleLazy 'taichouchou2/vim-scala', { 'autoload': {
+      \ 'filetypes' : g:my.ft.scala_files }}
 " NeoBundleLazy 'aemoncannon/ensime', {
 "       \ "branch" : "scala-2.9",
 "       \ 'autoload' : { 'filetypes' : g:my.ft.scala_files }}
@@ -694,8 +695,8 @@ NeoBundle 'andreypopp/ensime'
 
 " sh
 " ----------------------------------------
-NeoBundleLazy 'sh.vim',
-      \ Neo_al(g:my.ft.sh_files)
+NeoBundleLazy 'sh.vim', { 'autoload': {
+      \ 'filetypes': g:my.ft.sh_files }}
 "}}}
 " 他のアプリを呼び出すetc "{{{
 " NeoBundle 'thinca/vim-openbuf'
@@ -1648,6 +1649,7 @@ let bundle = neobundle#get('vim-quickrun')
 function! bundle.hooks.on_source(bundle) "{{{
 
   " quickrun config {{{
+  let g:quickrun_config._ = {'runner' : 'vimproc'}
   let g:quickrun_config.javascript = {
         \ 'command': 'node'}
 
