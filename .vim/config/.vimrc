@@ -229,16 +229,27 @@ NeoBundleLazy 'Shougo/unite-build', {
       \ }
 NeoBundleLazy 'Shougo/unite-outline', {
       \ 'depends' : 'Shougo/unite.vim' }
+" NeoBundle 'Shougo/vimfiler'
+" call neobundle#config('vimfiler', {
+"       \ 'lazy' : 1,
+"       \ 'depends' : 'Shougo/unite.vim',
+"       \ 'autoload' : {
+"       \   'commands' : [ {
+"       \     'name' : 'VimFiler',
+"       \     'complete' : 'customlist,vimfiler#complete' },
+"       \     'VimFiler', 'VimFilerBufferDir', 'VimFilerClose', 'VimFilerCreate', 'VimFilerCurrentDir', 'VimFilerDetectDrives', 'VimFilerDouble', 'VimFilerExplorer', 'VimFilerExplorerGit', 'VimFilerSimple'],
+"       \   'mappings' : ['<Plug>(vimfiler_switch)']
+"       \ }
+"       \ })
 NeoBundle 'Shougo/vimfiler'
 call neobundle#config('vimfiler', {
       \ 'lazy' : 1,
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload' : {
-      \   'commands' : [ {
-      \     'name' : 'VimFiler',
-      \     'complete' : 'customlist,vimfiler#complete' },
-      \     'VimFiler', 'VimFilerBufferDir', 'VimFilerClose', 'VimFilerCreate', 'VimFilerCurrentDir', 'VimFilerDetectDrives', 'VimFilerDouble', 'VimFilerExplorer', 'VimFilerExplorerGit', 'VimFilerSimple'],
-      \   'mappings' : ['<Plug>(vimfiler_switch)']
+      \    'commands' : [{ 'name' : 'VimFiler',
+      \                    'complete' : 'customlist,vimfiler#complete' },
+      \                   'VimFilerBufferDir', 'VimFilerExplorer', 'Edit', 'Read', 'Source', 'Write'],
+      \    'mappings' : ['<Plug>(vimfiler_switch)']
       \ }
       \ })
 " VimFiler の読み込みを遅延しつつデフォルトのファイラに設定 "{{{
@@ -279,7 +290,7 @@ for arg in argv()
     break
   endif
 endfor
-"}}}
+" }}}
 NeoBundleLazy 'Shougo/git-vim', { 'autoload' : { 'commands': ["GitDiff", "GitLog", "GitAdd", "Git", "GitCommit", "GitBlame", "GitBranch", "GitPush"] }}
 NeoBundle 'Shougo/neocomplcache'
 call neobundle#config('neocomplcache', {
