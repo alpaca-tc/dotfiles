@@ -2753,8 +2753,9 @@ imap <silent><expr><CR> neocomplcache#smart_close_popup() . "<CR>" . "<Plug>Disc
 
 "------------------------------------
 " VimFiler {{{
-nnoremap <silent>[plug]f       :call VimFilerExplorerGit()<CR>
-nnoremap <silent><Leader><Leader>  :VimFilerBufferDir<CR>
+nnoremap <silent>[plug]f          :<C-U>call VimFilerExplorerGit()<CR>
+nnoremap <silent><Leader><Leader> :<C-U>VimFilerBufferDir<CR>
+nnoremap <Leader>s                :<C-U>VimFiler ssh://
 " au VimEnter * call VimFilerExplorerGit()
 
 function! VimFilerExplorerGit() "{{{
