@@ -6,7 +6,7 @@ call alpaca#init()
 
 " 学習用
 imap <BS> <Nop>
-imap <ESC> <Nop>
+imap <ESC> <Esc>:<C-U>echo "!!!"<CR>
 
 "----------------------------------------
 " initialize"{{{
@@ -64,7 +64,7 @@ let g:my.ft = {
       \ "php_files"     : ['php', 'phtml'],
       \ "style_files"   : ['css', 'scss', 'sass'],
       \ "markup_files"  : ['html', 'haml', 'erb', 'php'],
-      \ "program_files" : ['ruby', 'php', 'python', 'eruby', 'vim'],
+      \ "program_files" : ['ruby', 'php', 'python', 'eruby', 'vim', 'javascript', 'coffee', 'scala'],
       \ "ignore_patterns" : ['vimfiler', 'unite'],
       \ }
 
@@ -111,7 +111,7 @@ set backspace=indent,eol,start
 set browsedir=buffer
 set clipboard+=autoselect
 set clipboard+=unnamed
-set formatoptions+=lcqmM formatoptions-=ro
+set formatoptions+=lcqmM
 set helplang=ja,en
 set modelines=1
 set mouse=a
@@ -198,6 +198,8 @@ NeoBundleLazy 'taichouchou2/alpaca', {
 NeoBundle 'tpope/vim-fugitive', { 'autoload' : { 'commands': ['Gcommit', 'Gblame', 'Ggrep', 'Gdiff'] }}
 NeoBundleLazy 'scrooloose/syntastic', { 'autoload': {
       \ 'filetypes' : g:my.ft.program_files}}
+" NeoBundleLazy 'chikatoike/activefix.vim', { 'autoload': {
+"       \ 'filetypes' : g:my.ft.program_files}}
 NeoBundleLazy 'taichouchou2/alpaca_powerline', {
       \ 'depends': ['majutsushi/tagbar', 'tpope/vim-fugitive', 'basyura/TweetVim', 'basyura/twibill.vim',],
       \ 'autoload' : { 'functions': ['Pl#UpdateStatusline', 'Pl#Hi#Allocate', 'Pl#Hi#Segments', 'Pl#Colorscheme#Init',]  }}
@@ -383,7 +385,7 @@ NeoBundleLazy 'mattn/zencoding-vim', {
       \   'filetypes': g:my.ft.html_files,
       \   'insert'   : 1
       \ }}
-NeoBundleLazy 'kana/vim-smartword', '', 'same', { 'autoload' : {
+NeoBundleLazy 'kana/vim-smartword', { 'autoload' : {
       \ 'mappings' : [
       \   '<Plug>(smartword-w)', '<Plug>(smartword-b)', '<Plug>(smartword-ge)']
       \ }}
@@ -402,11 +404,11 @@ NeoBundleLazy 'rhysd/accelerated-jk', {
 NeoBundleLazy 'tpope/vim-surround', {
       \ 'autoload' : {
       \   'mappings' : [
-      \     ['nx', '<Plug>Dsurround'], ['nx', '<Plug>Csurround'],
-      \     ['nx', '<Plug>Ysurround'], ['nx', '<Plug>YSurround'],
-      \     ['nx', '<Plug>Yssurround'], ['nx', '<Plug>YSsurround'],
-      \     ['nx', '<Plug>YSsurround'], ['vx', '<Plug>VgSurround'],
-      \     ['vx', '<Plug>VSurround']
+      \     '<Plug>Dsurround', '<Plug>Csurround',
+      \     '<Plug>Ysurround', '<Plug>YSurround',
+      \     '<Plug>Yssurround', '<Plug>YSsurround',
+      \     '<Plug>YSsurround', '<Plug>VgSurround',
+      \     '<Plug>VSurround'
       \ ]}}
 
 " extend vim
@@ -461,7 +463,7 @@ NeoBundle 'operator-camelize', {
 "}}}
 "}}}
 " unite"{{{
-NeoBundleLazy 'thinca/vim-qfreplace', '', 'same', { 'autoload' : {
+NeoBundleLazy 'thinca/vim-qfreplace', { 'autoload' : {
       \ 'filetypes' : ['unite', 'quickfix'],
       \ }}
 NeoBundleLazy 'tacroe/unite-mark'
@@ -486,13 +488,17 @@ NeoBundleLazy 'ujihisa/unite-locate'
 NeoBundleLazy 'basyura/TweetVim', { 'depends' :
       \ ['basyura/twibill.vim', 'tyru/open-browser.vim', 'Shougo/unite.vim'],
       \ 'autoload' : { 'commands' : [ 'TweetVimAccessToken', 'TweetVimAddAccount', 'TweetVimBitly', 'TweetVimCommandSay', 'TweetVimCurrentLineSay', 'TweetVimHomeTimeline', 'TweetVimListStatuses', 'TweetVimMentions', 'TweetVimSay', 'TweetVimSearch', 'TweetVimSwitchAccount', 'TweetVimUserTimeline', 'TweetVimVersion' ] }}
-NeoBundleLazy 'ujihisa/unite-font', '', 'same', {
+NeoBundleLazy 'ujihisa/unite-font', {
       \ 'gui' : 1,
       \ }
 "}}}
 " その他 / テスト {{{
-" NeoBundle 'kana/vim-smartchr' "smartchr.vim : ==()などの前後を整形
-NeoBundleLazy 'tyru/restart.vim', '', 'same', {
+NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
+      \ 'insert' : 1,
+      \ 'filetypes' : g:my.ft.program_files,
+      \ 'functions' : [ "smartchr#loop" ],
+      \ }}
+NeoBundleLazy 'tyru/restart.vim', {
       \ 'gui' : 1,
       \ 'autoload' : {
       \  'commands' : 'Restart'
@@ -500,7 +506,7 @@ NeoBundleLazy 'tyru/restart.vim', '', 'same', {
 NeoBundleLazy 'glidenote/memolist.vim', { 'depends' :
       \ ['Shougo/unite.vim'],
       \ 'autoload' : { 'commands' : ['MemoNew', 'MemoGrep'] }}
-NeoBundleLazy 'DirDiff.vim', '', 'same', { 'autoload' : {
+NeoBundleLazy 'DirDiff.vim', { 'autoload' : {
       \ 'commands' : 'DirDiff'
       \ }}
 "}}}
@@ -720,7 +726,7 @@ NeoBundleLazy 'mattn/excitetranslate-vim', {
       \ 'depends': 'mattn/webapi-vim',
       \ 'autoload' : { 'commands': ['ExciteTranslate']}
       \ }
-NeoBundleLazy 'thinca/vim-scouter', '', 'same', { 'autoload' : {
+NeoBundleLazy 'thinca/vim-scouter', { 'autoload' : {
       \ 'commands' : 'Scouter'
       \ }}
 "}}}
@@ -931,8 +937,9 @@ set whichwrap=b,s,h,l,~,<,>,[,]
 " 基本的な動き {{{
 inoremap <silent><C-K> <End>
 inoremap <silent><C-L> <Right>
-inoremap <silent><C-O> <Esc>o
-inoremap jj <Esc>
+inoremap <silent><C-O><C-O> <Esc>o
+inoremap <silent><C-O> <CR><Esc>O
+" inoremap jj <Esc>
 nnoremap $ g_
 xnoremap $ g_
 nnoremap <silent><Down> gj
@@ -941,6 +948,7 @@ nnoremap <silent>j gj
 nnoremap <silent>k gk
 
 xnoremap H <Nop>
+inoremap <C-@> <Nop>
 xnoremap v G
 "}}}
 " 画面の移動 {{{
@@ -1115,7 +1123,9 @@ filetype indent on
 " set relativenumber    " 相対表示
 set breakat=\\;:,!?
 set cdpath+=~
-set cmdheight=1
+" set cmdheight=1
+set cmdheight=3
+set cmdwinheight=3
 set cursorline
 set equalalways       " 画面の自動サイズ調整
 set laststatus=2
@@ -1340,6 +1350,7 @@ xnoremap <C-N><C-N> :Align =<CR>
 " vim-surround
 "------------------------------------
 " {{{
+let g:surround_no_mappings = 1
 nmap cs  <Plug>Csurround
 nmap ds  <Plug>Dsurround
 nmap yS  <Plug>YSurround
@@ -1377,13 +1388,6 @@ call add( s:surround_mapping, {
       \ }
       \ })
 
-call add( s:surround_mapping, {
-      \ 'filetypes' : '_',
-      \ 'mappings' : {
-      \   '[' : "[\r]",
-      \ }
-      \ })
-
 " XXX rubyのinlucde?的な。
 " vimには無いのかなー。
 function! s:include(target, value) "{{{
@@ -1393,11 +1397,11 @@ function! s:include(target, value) "{{{
     return has_key(a:target, a:value)
 
   elseif type([]) == target_type
-    " return match(a:target, a:value) > -1
+    return match(a:target, a:value) > -1
     echo a:target
 
-  " elseif type('') == target_type || type(0) == target_type
-  "   return match(a:target, a:value) > -1
+  elseif type('') == target_type || type(0) == target_type
+    return match(a:target, a:value) > -1
 
   endif
 
@@ -1408,47 +1412,41 @@ function! s:let_surround_mapping(mapping_dict) "{{{
     call alpaca#let_b:('surround_'.char2nr(key), mapping )
   endfor
 endfunction"}}}
-" function! s:surround_mapping_filetype() "{{{
-"   if !exists('s:surround_mapping_memo')
-"     let s:surround_mapping_memo = {}
-"   endif
-"
-"   if empty(&filetype) |return| endif
-"   let filetype = split( &filetype, '\.' )[0]
-"
-"   " メモ化してある場合は設定"{{{
-"   if has_key( s:surround_mapping_memo, filetype )
-"   "   for mappings in s:surround_mapping_memo[filetype]
-"   "     call <SID>let_surround_mapping( mappings )
-"   "   endfor
-"   "   return
-"   endif "}}}
-"   " filetypeに当てはまる設定を追加 "{{{
-"   let memo = []
-"   for mapping_settings in s:surround_mapping
-"     if <SID>include( mapping_settings, 'filetypes' ) && <SID>include( mapping_settings, 'mappings')
-"       " let filetypes = mapping_settings.filetypes
-"       " let mappings  = mapping_settings.mappings
-"
-"       " if <SID>include( filetypes, '_' )
-"       "   call <SID>let_surround_mapping( mappings )
-"       "   call join(memo, mappings)
-"       "   break
-"       " endif
-"
-"       " if <SID>include( filetypes, filetype )
-"       "   call <SID>let_surround_mapping( mappings )
-"       "   call join(memo, mappings)
-"       " endif
-"     endif
-"   endfor "}}}
-"
-"   call alpaca#let_s:('surround_mapping_memo.' . filetype, memo)
-" endfunction"}}}
-"
-" augroup MyAutoCmd
-"   autocmd FileType * call <SID>surround_mapping_filetype()
-" augroup END
+function! s:surround_mapping_filetype() "{{{
+  if !exists('s:surround_mapping_memo')
+    let s:surround_mapping_memo = {}
+  endif
+
+  if empty(&filetype) |return| endif
+  let filetype = split( &filetype, '\.' )[0]
+
+  " メモ化してある場合は設定"{{{
+  if has_key( s:surround_mapping_memo, filetype )
+    for mappings in s:surround_mapping_memo[filetype]
+      call <SID>let_surround_mapping( mappings )
+    endfor
+    return
+  endif "}}}
+  " filetypeに当てはまる設定を追加 "{{{
+  let memo = []
+  for mapping_settings in s:surround_mapping
+    if <SID>include( mapping_settings, 'filetypes' ) && <SID>include( mapping_settings, 'mappings')
+      let filetypes = mapping_settings.filetypes
+      let mappings  = mapping_settings.mappings
+
+      if <SID>include( filetypes, filetype )
+        call <SID>let_surround_mapping( mappings )
+        call add(memo, mappings)
+      endif
+    endif
+  endfor "}}}
+
+  let s:surround_mapping_memo[filetype] = memo
+endfunction"}}}
+
+augroup MyAutoCmd
+  autocmd FileType * call <SID>surround_mapping_filetype()
+augroup END
 "}}}
 " }}}
 
@@ -2234,50 +2232,39 @@ xmap <Leader>U <Plug>(operator-decamelize)
 " smartchr.vim
 "------------------------------------
 " "{{{
-" let g:smartchr_enable = 0
-"
-" " Smart =.
-"
-" if g:smartchr_enable == 1
-"   " inoremap <expr> = search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '
-"   "       \ : search('\(*\<bar>!\)\%#', 'bcn') ? '= '
-"   "       \ : smartchr#one_of(' = ', '=', ' == ')
-"   inoremap <expr> , smartchr#one_of(',', ', ')
-"   inoremap <expr> ? smartchr#one_of('?', '? ')
-"   " inoremap <expr> = smartchr#one_of(' = ', '=')
-"
-"   " Smart =.
-"   " inoremap <expr> = search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '
-"   "       \ : search('\(*\<bar>!\)\%#', 'bcn') ? '= '
-"   "       \ : smartchr#one_of(' = ', '=', ' == ')
-"   augroup MyAutoCmd
-"     " Substitute .. into -> .
-"     au FileType c,cpp    inoremap <buffer><expr> . smartchr#loop('.', '->', '...')
-"     au FileType perl,php inoremap <buffer><expr> - smartchr#loop('-', '->')
-"     au FileType vim      inoremap <buffer><expr> . smartchr#loop('.', ' . ', '..', '...')
-"     au FileType coffee   inoremap <buffer><expr> - smartchr#loop('-', '->', '=>')
-"
-"     " 使わない
-"     " autocmd FileType haskell,int-ghci
-"     "       \ inoremap <buffer> <expr> + smartchr#loop('+', ' ++ ')
-"     "       \| inoremap <buffer> <expr> - smartchr#loop('-', ' -> ', ' <- ')
-"     "       \| inoremap <buffer> <expr> $ smartchr#loop(' $ ', '$')
-"     "       \| inoremap <buffer> <expr> \ smartchr#loop('\ ', '\')
-"     "       \| inoremap <buffer> <expr> : smartchr#loop(':', ' :: ', ' : ')
-"     "       \| inoremap <buffer> <expr> . smartchr#loop('.', ' . ', '..')
-"
-"     " autocmd FileType scala
-"     "       \ inoremap <buffer> <expr> - smartchr#loop('-', ' -> ', ' <- ')
-"     "       \| inoremap <buffer> <expr> = smartchr#loop(' = ', '=', ' => ')
-"     "       \| inoremap <buffer> <expr> : smartchr#loop(': ', ':', ' :: ')
-"     "       \| inoremap <buffer> <expr> . smartchr#loop('.', ' => ')
-"
-"     autocmd FileType eruby
-"           \ inoremap <buffer> <expr> > smartchr#loop('>', '%>')
-"           \| inoremap <buffer> <expr> < smartchr#loop('<', '<%', '<%=')
-"   augroup END
-" endif
-" "}}}
+
+let bundle = neobundle#get('vim-smartchr')
+function! bundle.hooks.on_source(bundle)
+  augroup MyAutoCmd
+    " Substitute .. into -> .
+    au FileType c,cpp    inoremap <buffer><expr> . smartchr#loop('.', '->', '...')
+    au FileType perl,php inoremap <buffer><expr> - smartchr#loop('-', '->')
+    au FileType vim      inoremap <buffer><expr> . smartchr#loop('.', ' . ', '..', '...')
+    au FileType coffee   inoremap <buffer><expr> - smartchr#loop('-', '->', '=>')
+    au FileType scala    inoremap <buffer><expr> - smartchr#loop('-', '->', '=>')
+          \| inoremap <buffer><expr> < smartchr#loop('<', '<-')
+
+    " 使わない
+    " autocmd FileType haskell,int-ghci
+    "       \ inoremap <buffer> <expr> + smartchr#loop('+', ' ++ ')
+    "       \| inoremap <buffer> <expr> - smartchr#loop('-', ' -> ', ' <- ')
+    "       \| inoremap <buffer> <expr> $ smartchr#loop(' $ ', '$')
+    "       \| inoremap <buffer> <expr> \ smartchr#loop('\ ', '\')
+    "       \| inoremap <buffer> <expr> : smartchr#loop(':', ' :: ', ' : ')
+    "       \| inoremap <buffer> <expr> . smartchr#loop('.', ' . ', '..')
+
+    " autocmd FileType scala
+    "       \ inoremap <buffer> <expr> - smartchr#loop('-', ' -> ', ' <- ')
+    "       \| inoremap <buffer> <expr> = smartchr#loop(' = ', '=', ' => ')
+    "       \| inoremap <buffer> <expr> : smartchr#loop(': ', ':', ' :: ')
+    "       \| inoremap <buffer> <expr> . smartchr#loop('.', ' => ')
+
+    autocmd FileType eruby
+          \ inoremap <buffer> <expr> > smartchr#loop('>', '%>')
+          \| inoremap <buffer> <expr> < smartchr#loop('<', '<%', '<%=')
+  augroup END
+endfunction
+"}}}
 
 "------------------------------------
 " Syntastic
@@ -2836,7 +2823,6 @@ function! bundle.hooks.on_source(bundle) "{{{
     au FileType vimfiler call <SID>vimfiler_local()
   aug END "}}}
 
-
   " VimFilerExplorer自動起動
 endfunction"}}}
 unlet bundle
@@ -3036,16 +3022,16 @@ function! bundle.hooks.on_source(bundle) "{{{
   "}}}
 
   function! s:unite_kuso_hooks.file_mru() "{{{
+    syntax match uniteFileDirectory '.*\/'
+    syntax match uniteFileFile '[^/]*[^/]$'
+    highlight link uniteFileDirectory Identifier
+    highlight link uniteFileDirectory Statement
+
     highlight link uniteSource__FileMru_Time Comment
     syntax region uniteSource__FileMru start=/\%3c/ end=/$/
 
     " syntax link uniteSource__FileMru contained
     syntax region uniteSource__FileMru start=/\%3c/ end=/$/ contained
-
-    syntax match uniteFileDirectory '.*\/'
-    syntax match uniteFileFile '[^/]*[^/]$'
-    highlight link uniteFileDirectory Identifier
-    highlight link uniteFileDirectory Statement
   endfunction"}}}
   function! s:unite_kuso_hooks.file() "{{{
     syntax match uniteFileDirectory '.*\/'

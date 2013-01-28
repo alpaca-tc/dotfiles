@@ -31,6 +31,7 @@ endfunction"}}}
 function! alpaca#let_g:(name, value) "{{{
   call s:let('g', a:name, a:value)
 endfunction"}}}
+" TODO 意味ない
 function! alpaca#let_s:(name, value) "{{{
   call s:let('s', a:name, a:value)
 endfunction"}}}
