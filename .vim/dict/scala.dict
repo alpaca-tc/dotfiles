@@ -1345,3 +1345,7 @@ tuple82ordered
 tuple92ordered
 unit
 unit2ordered
+
+; my dictionary
+contains
+startsWith
