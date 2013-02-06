@@ -157,3 +157,14 @@ snippet     ftoggle
     )
 
 #}}}
+
+###
+snippet     cMyError
+  class MyError
+      constructor: (@message)->
+          @name = @constructor.name
+      @:: = new Error()
+      @::constructor = @
+
+  myError = new MyError("This is my original error")
+

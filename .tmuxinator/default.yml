@@ -2,4 +2,4 @@ project_name: default
 project_root: ~/
 tabs:
   - default:
-  - vmail: vmail
+  - git_backup: /Users/taichou/git/backup_hhd_repo

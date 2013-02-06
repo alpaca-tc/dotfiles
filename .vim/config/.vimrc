@@ -12,12 +12,11 @@ function! s:include(target, value) "{{{
   if type({}) == target_type
     return has_key(a:target, a:value)
 
-  elseif type([]) == target_type
+  elseif type([]) == target_type || type('') == target_type
     return match(a:target, a:value) > -1
-    echo a:target
 
-  elseif type('') == target_type || type(0) == target_type
-    return match(a:target, a:value) > -1
+  elseif type(0) == target_type
+    return a:target == a:value
 
   endif
 
@@ -34,6 +33,9 @@ endfunction"}}}
 function! s:git_exists() "{{{
   return aplaca#system('git rev-parse --is-inside-work-tree') == "true\n"
 endfunction"}}}
+function! s:filetype()
+  return split( &filetype, '\.' )[0]
+endfunction
 
 "----------------------------------------
 " initialize"{{{
@@ -336,6 +338,9 @@ NeoBundleLazy 'ujihisa/vimshell-ssh', { 'autoload' : {
 " commands"{{{
 NeoBundleLazy 'vim-scripts/sudo.vim', {
       \ 'autoload': { 'commands': ['SudoRead', 'SudoWrite'], 'insert': 1 }}
+NeoBundleLazy 'glidenote/memolist.vim', { 'depends' :
+      \ ['Shougo/unite.vim'],
+      \ 'autoload' : { 'commands' : ['MemoNew', 'MemoGrep'] }}
 NeoBundle 'h1mesuke/vim-alignta', {
       \ 'autoload' : { 'commands' : ['Align'] }}
 NeoBundleLazy 'grep.vim', {
@@ -380,6 +385,9 @@ NeoBundleLazy 'thinca/vim-quickrun', { 'autoload' : {
 NeoBundleLazy 'tyru/eskk.vim', { 'autoload' : {
       \ 'mappings' : [['i', '<Plug>(eskk:toggle)']],
       \ }}
+NeoBundleLazy 'AndrewRadev/switch.vim', { 'autoload' : {
+      \ 'commands' : 'Switch',
+      \ }}
 NeoBundleLazy 'kana/vim-arpeggio', { 'autoload': { 'functions': ['arpeggio#map'] }}
 NeoBundleLazy 'camelcasemotion', { 'autoload' : {
       \ 'mappings' : ['<Plug>CamelCaseMotion_w', '<Plug>CamelCaseMotion_b', '<Plug>CamelCaseMotion_e', '<Plug>CamelCaseMotion_iw', '<Plug>CamelCaseMotion_ib', '<Plug>CamelCaseMotion_ie']
@@ -409,14 +417,20 @@ NeoBundleLazy 'rhysd/accelerated-jk', {
       \   'mappings' : [
       \     ['n', '<Plug>(accelerated_jk_gj)'], ['n', '<Plug>(accelerated_jk_gk)']
       \ ]}}
-NeoBundleLazy 'tpope/vim-surround', {
+" NeoBundleLazy 'tpope/vim-surround', {
+"       \ 'autoload' : {
+"       \   'mappings' : [
+"       \     ['nx', '<Plug>Dsurround'], ['nx', '<Plug>Csurround' ],
+"       \     ['nx', '<Plug>Ysurround' ], ['nx', '<Plug>YSurround' ],
+"       \     ['nx', '<Plug>Yssurround'], ['nx', '<Plug>YSsurround'],
+"       \     ['nx', '<Plug>YSsurround'], ['nx', '<Plug>VgSurround'],
+"       \     ['nx', '<Plug>VSurround']
+"       \ ]}}
+NeoBundle 'anyakichi/vim-surround', {
       \ 'autoload' : {
       \   'mappings' : [
-      \     '<Plug>Dsurround', '<Plug>Csurround',
-      \     '<Plug>Ysurround', '<Plug>YSurround',
-      \     '<Plug>Yssurround', '<Plug>YSsurround',
-      \     '<Plug>YSsurround', '<Plug>VgSurround',
-      \     '<Plug>VSurround'
+      \     ['n', '<Plug>Dsurround'], ['n', '<Plug>Csurround'],
+      \     ['n', '<Plug>Ysurround'], ['n', '<Plug>YSurround']
       \ ]}}
 
 " extend vim
@@ -509,9 +523,12 @@ NeoBundleLazy 'tyru/restart.vim', {
       \ 'autoload' : {
       \  'commands' : 'Restart'
       \ }}
-NeoBundleLazy 'glidenote/memolist.vim', { 'depends' :
-      \ ['Shougo/unite.vim'],
-      \ 'autoload' : { 'commands' : ['MemoNew', 'MemoGrep'] }}
+NeoBundleLazy 'kana/vim-niceblock', { 'autoload' : {
+      \ 'mappings' : ['<Plug>(niceblock-I)', '<Plug>(niceblock-A)']
+      \ }}
+NeoBundleLazy 'HybridText', { 'autoload' : {
+      \ 'filetypes' : 'hybrid',
+      \ }}
 NeoBundleLazy 'DirDiff.vim', { 'autoload' : {
       \ 'commands' : 'DirDiff'
       \ }}
@@ -633,9 +650,11 @@ NeoBundleLazy 'taichouchou2/alpaca_complete', {
       \ }
 
 let s:bundle_rails = 'unite-rails unite-rails_best_practices alpaca_complete'
-aug MyAutoCmd
-  au User Rails call <SID>bundle_load_depends(s:bundle_rails)
-aug END
+if has('vim_starting')
+  aug MyAutoCmd
+    au User Rails call <SID>bundle_load_depends(s:bundle_rails)
+  aug END
+endif
 
 " ruby全般
 " NeoBundleLazy 'skalnik/vim-vroom'
@@ -749,7 +768,6 @@ filetype plugin indent on
 "StatusLine" {{{
 " source ~/.vim/config/.vimrc.statusline
 " }}}
-
 "----------------------------------------
 "編集"{{{
 " set textwidth=100
@@ -762,6 +780,9 @@ set textwidth=0
 aug MyAutoCmd
   au BufEnter * execute ":silent! lcd! " . expand("%:p:h")
 aug END
+
+" Disable paste.
+autocmd MyAutoCmd InsertLeave * if &paste | set nopaste mouse=a | echo 'nopaste' | endif
 
 " 新しいバッファを開くときに、rubyか同じファイルタイプで開く {{{
 function! s:open_buffer(new_buffer)
@@ -817,6 +838,8 @@ nnoremap re :%s!
 xnoremap re :s!
 xnoremap rep y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!g<Left><Left>
 nnoremap <Leader>f :setl filetype=
+" XXX shougoさんのとこから持って来たけど何やっとるか謎。
+" xnoremap <silent> y "*y:let [@+,@"]=[@*,@*]<CR>
 "}}}
 " コメントを書くときに便利 {{{
 inoremap <leader>* ****************************************
@@ -901,9 +924,9 @@ set whichwrap=b,s,h,l,~,<,>,[,]
 " set virtualedit=all " 仮想端末
 
 " 基本的な動き {{{
-inoremap <silent><C-K> <End>
+inoremap <silent><C-A> <End>
 inoremap <silent><C-L> <Right>
-inoremap <silent><C-O><C-O> <Esc>o
+" inoremap <silent><C-O><C-O> <Esc>o
 inoremap <silent><C-O> <CR><Esc>O
 " inoremap jj <Esc>
 nnoremap $ g_
@@ -1223,11 +1246,11 @@ xnoremap <C-N><C-N> :Align =<CR>
 let g:surround_no_mappings = 1
 nmap cs  <Plug>Csurround
 nmap ds  <Plug>Dsurround
-nmap yS  <Plug>YSurround
 nmap ySS <Plug>YSsurround
 nmap ySs <Plug>YSsurround
 nmap ys  <Plug>Ysurround
 nmap yss <Plug>Yssurround
+
 xmap S   <Plug>VSurround
 xmap gS  <Plug>VgSurround
 xmap s   <Plug>VSurround
@@ -1269,7 +1292,7 @@ function! s:surround_mapping_filetype() "{{{
   endif
 
   if empty(&filetype) |return| endif
-  let filetype = split( &filetype, '\.' )[0]
+  let filetype = <SID>filetype()
 
   " メモ化してある場合は設定"{{{
   if has_key( s:surround_mapping_memo, filetype )
@@ -1806,6 +1829,8 @@ function! bundle.hooks.on_source(bundle) "{{{
     VimShellAlterCommand la ls -a
     VimShellAlterCommand sudo iexe sudo
     VimShellAlterCommand ssh iexe ssh
+
+    imap <buffer>! <Plug>(vimshell_zsh_complete)
   endfunction "}}}
 
   aug MyAutoCmd
@@ -2012,7 +2037,7 @@ let g:tweetvim_async_post = 1
 let g:tweetvim_display_source = 1
 let g:tweetvim_display_time = 1
 let g:tweetvim_open_buffer_cmd = 'tabnew'
-nnoremap <silent>[unite]T  :call <SID>bundle_with_cmd('TweetVim bitly.vim twibill.vim', 'Unite tweetvim')<CR>
+nnoremap <silent>[unite]T  :call <SID>bundle_with_cmd('TweetVim bitly.vim twibill.vim', 'Unite tweetvim -buffer-name=tweetvim -no-start-insert')<CR>
 nnoremap <silent>tv :<C-U>TweetVimSay<CR>
 "}}}
 
@@ -2074,8 +2099,7 @@ xmap <Leader>U <Plug>(operator-decamelize)
 "------------------------------------
 " smartchr.vim
 "------------------------------------
-" "{{{
-
+"{{{
 let bundle = neobundle#get('vim-smartchr')
 function! bundle.hooks.on_source(bundle)
   augroup MyAutoCmd
@@ -2084,6 +2108,8 @@ function! bundle.hooks.on_source(bundle)
     au FileType perl,php inoremap <buffer><expr> - smartchr#loop('-', '->')
     au FileType vim      inoremap <buffer><expr> . smartchr#loop('.', ' . ', '..', '...')
     au FileType coffee   inoremap <buffer><expr> - smartchr#loop('-', '->', '=>')
+    au FileType php      inoremap <buffer><expr> . smartchr#loop('.', '->', '..')
+          \| inoremap <buffer><expr>> smartchr#loop('>', '=>')
     au FileType scala    inoremap <buffer><expr> - smartchr#loop('-', '->', '=>')
           \| inoremap <buffer><expr> < smartchr#loop('<', '<-')
 
@@ -2101,10 +2127,6 @@ function! bundle.hooks.on_source(bundle)
     "       \| inoremap <buffer> <expr> = smartchr#loop(' = ', '=', ' => ')
     "       \| inoremap <buffer> <expr> : smartchr#loop(': ', ':', ' :: ')
     "       \| inoremap <buffer> <expr> . smartchr#loop('.', ' => ')
-
-    autocmd FileType eruby
-          \ inoremap <buffer> <expr> > smartchr#loop('>', '%>')
-          \| inoremap <buffer> <expr> < smartchr#loop('<', '<%', '<%=')
   augroup END
 endfunction
 "}}}
@@ -2115,7 +2137,7 @@ endfunction
 "{{{
 "loadのときに、syntaxCheckをする
 let g:syntastic_auto_jump=1
-let g:syntastic_auto_loc_list=0
+let g:syntastic_auto_loc_list=1
 let g:syntastic_check_on_open=0
 let g:syntastic_echo_current_error=1
 let g:syntastic_enable_balloons = 1
@@ -2459,6 +2481,32 @@ xnoremap ud :<C-U>URLDecode<CR>
 let g:remove_dust_enable=1
 "}}}
 
+" ------------------------------------
+" vim-niceblock
+" ------------------------------------
+"{{{
+xmap I  <Plug>(niceblock-I)
+xmap A  <Plug>(niceblock-A)
+"}}}
+
+" ------------------------------------
+" switch.vim
+" ------------------------------------
+nnoremap <silent>! :Switch<CR>
+let s:switch_define = {}
+
+function! s:define_switch_mappings()
+  call alpaca#let_b:('switch_definitions', [])
+
+  let filetype = <SID>filetype()
+  if has_key(s:switch_define, filetype)
+    call add(b:switch_definitions, s:switch_define[filetype])
+  endif
+endfunction
+
+aug MyAutoCmd
+  au Filetype * if !empty( <SID>filetype() ) | call <SID>define_switch_mappings() | endif
+aug END
 "}}}
 
 "----------------------------------------
@@ -2524,7 +2572,6 @@ function! bundle.hooks.on_source(bundle) "{{{
 
   " Define keyword pattern.
   call alpaca#let_dict( 'g:neocomplcache_keyword_patterns', {
-        \ 'filename'  : '\%(\\.\|[/\[\][:alnum:]()$+_\~.-]\|[^[:print:]]\)\+',
         \ 'c'         : '[^.[:digit:]*\t]\%(\.\|->\)',
         \ 'mail'      : '^\s*\w\+',
         \ 'php'       : '[^. *\t]\.\w*\|\h\w*::'
@@ -2699,24 +2746,25 @@ nmap [unite] <Nop>
 nmap <C-J> [unite]
 
 nnoremap <silent> <Space>b       :<C-u>UniteBookmarkAdd<CR>
-nnoremap <silent> [unite]<C-B>   :<C-u>Unite buffer -buffer-name=buffer<CR>
-nnoremap <silent> [unite]<C-J>   :<C-u>Unite file_mru -buffer-name=file_mru<CR>
-nnoremap <silent> [unite]<C-U>   :<C-u>UniteWithBufferDir -buffer-name=file file<CR>
-nnoremap <silent> [unite]b       :<C-u>Unite bookmark -buffer-name=bookmark<CR>
+nnoremap <silent> [unite]b       :<C-u>Unite buffer -buffer-name=buffer<CR>
+nnoremap <silent> [unite]j       :<C-u>Unite file_mru -buffer-name=file_mru<CR>
+nnoremap <silent> [unite]u       :<C-u>UniteWithBufferDir -buffer-name=file file<CR>
+nnoremap <silent> [unite]B       :<C-u>Unite bookmark -buffer-name=bookmark<CR>
 nnoremap <silent> g/             :<C-U>call <SID>smart_unite_open('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast')<CR>
+cnoremap <expr><silent><C-g>     (getcmdtype() == '/') ?  "\<ESC>:Unite -buffer-name=search line -input=".getcmdline()."\<CR>" : "\<C-g>"
 nnoremap <silent><expr>[unite]f ':Unite -buffer-name=file file:' . expand("%:p:h") . '<CR>'
 nnoremap [unite]<C-F>            :<C-u>UniteFile<Space><C-R>=$PWD<CR>
 
 nnoremap <silent>[unite]c        :<C-U>call <SID>bundle_with_cmd('vim-unite-history', 'Unite -buffer-name=history_command -no-empty history/command')<CR>
 nnoremap <silent>[unite]h        :<C-U>call <SID>bundle_with_cmd('unite-help', ':Unite help -buffer-name=help')<CR>
-nnoremap <silent>[unite]m        :<C-U>call <SID>bundle_with_cmd('unite-mark', ':Unite mark -buffer-name=mark')<CR>
-nnoremap <silent>[unite]o        :<C-U>call <SID>bundle_with_cmd('unite-outline', 'Unite -auto-preview -horizontal -no-quit -buffer-name=outline -hide-source-names outline')<CR>
+nnoremap <silent>[unite]m        :<C-U>call <SID>bundle_with_cmd('unite-mark', ':Unite mark -no-start-insert -buffer-name=mark')<CR>
+nnoremap <silent>[unite]o        :<C-U>call <SID>bundle_with_cmd('unite-outline', 'Unite -no-start-insert -horizontal -no-quit -buffer-name=outline -hide-source-names outline')<CR>
 nnoremap <silent>[unite]q        :<C-U>call <SID>bundle_with_cmd('qiita-vim', ':Unite qiita -buffer-name=qiita')<CR>
 nnoremap <silent>[unite]ra       :<C-U>call <SID>bundle_with_cmd('unite-rake', 'Unite -buffer-name=rake rake')<CR>
 nnoremap <silent>[unite]s        :<C-U>call BundleWithUniteHisoryCmd('Unite -buffer-name=history_search -no-empty history/search')<CR>
 nnoremap <silent>[unite]t        :<C-U>call <SID>bundle_with_cmd('unite-tag unite.vim', 'Unite tag -buffer-name=tag -no-empty')<CR>
 nnoremap <silent>[unite]y        :<C-U>call BundleWithUniteHisoryCmd('Unite -buffer-name=history_yank -no-empty history/yank')<CR>
-nnoremap [unite]S                :<C-U>call <SID>bundle_with_cmd('unite-ssh', ':Unite -buffer-name=ssh ssh://')<Left><Left>
+nnoremap [unite]S                :<C-U>call <SID>bundle_with_cmd('unite-ssh', ':Unite -no-start-insert -buffer-name=ssh ssh://')<Left><Left>
 nnoremap [unite]l                :<C-U>call <SID>bundle_with_cmd('unite-locate', ':Unite locate -buffer-name=locate -input=')<Left><Left>
 
 " UniteFile {{{
