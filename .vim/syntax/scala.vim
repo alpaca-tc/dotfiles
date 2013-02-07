@@ -45,6 +45,7 @@ syn match scalaClassName "[^ =:;(\[]\+" contained nextgroup=scalaClassSpecialize
 syn region scalaDefSpecializer start="\[" end="\]" contained contains=scalaDefSpecializer
 syn region scalaClassSpecializer start="\[" end="\]" contained contains=scalaClassSpecializer
 
+syn keyword scalaBasicClass contained Number String Hash List
 " type constructor (actually anything with an uppercase letter)
 syn match scalaConstructor "\<[A-Z][_$a-zA-Z0-9]*\>" nextgroup=scalaConstructorSpecializer
 syn region scalaConstructorSpecializer start="\[" end="\]" contained contains=scalaConstructorSpecializer
@@ -122,6 +123,7 @@ hi link scalaTodo Todo
 hi link scalaType Type
 hi link scalaTypeSpecializer scalaType
 hi link scalaXml String
+" hi link scalaBasicClass
 hi link scalaXmlTag Include
 hi link scalaXmlString String
 hi link scalaXmlStart Include

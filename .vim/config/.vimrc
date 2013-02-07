@@ -718,8 +718,8 @@ NeoBundleLazy 'davidhalter/jedi-vim', {
 
 " scala
 " ----------------------------------------
-NeoBundleLazy 'taichouchou2/vim-scala', { 'autoload': {
-      \ 'filetypes' : g:my.ft.scala_files }}
+" NeoBundleLazy 'taichouchou2/vim-scala', { 'autoload': {
+"       \ 'filetypes' : g:my.ft.scala_files }}
 NeoBundleLazy 'andreypopp/ensime', { 'autoload' : {
       \ 'filetypes' : g:my.ft.scala_files }}
 " NeoBundleLazy 'aemoncannon/ensime', {
