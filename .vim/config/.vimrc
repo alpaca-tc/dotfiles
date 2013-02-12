@@ -33,9 +33,9 @@ endfunction"}}}
 function! s:git_exists() "{{{
   return aplaca#system('git rev-parse --is-inside-work-tree') == "true\n"
 endfunction"}}}
-function! s:filetype()
+function! s:filetype() "{{{
   return split( &filetype, '\.' )[0]
-endfunction
+endfunction"}}}
 
 "----------------------------------------
 " initialize"{{{
@@ -59,9 +59,11 @@ let g:my.lingr = {
 let g:my.conf = {
       \ "initialize" : 1,
       \ "tags": {
-      \   "auto_create" : 0,
+      \   "auto_create" : 1,
       \   "append"      : 1,
-      \   "ctags_opts"  : '--sort=yes --exclude=log --exclude=.git -R',
+      \   "enable_without_git" : 0,
+      \   "ctags_opts"  : '-R --sort=yes --exclude=log --exclude=.git',
+      \   "GEM_HOME"    : '~/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems',
       \ },
       \ }
 "}}}
@@ -72,12 +74,12 @@ let g:my.bin = {
       \ }
 
 let g:my.dir = {
-      \ "trash_dir" : expand('~/.Trash/'),
-      \ "swap_dir"  : expand('~/.Trash/vimswap'),
+      \ "trash_dir" : expand('~/.vim.trash/'),
+      \ "swap_dir"  : expand('~/.vim.trash/vimswap'),
       \ "bundle"    : expand('~/.bundle'),
-      \ "vimref"    : expand('~/.Trash/vim-ref'),
+      \ "vimref"    : expand('~/.vim.trash/vim-ref'),
       \ "memolist"  : expand('~/.memolist'),
-      \ "ctrlp"     : expand('~/.Trash/ctrlp'),
+      \ "ctrlp"     : expand('~/.vim.trash/ctrlp'),
       \ "snippets"  : expand('~/.vim/snippet'),
       \ }
 "}}}
@@ -132,6 +134,8 @@ set formatoptions+=lcqmM
 set helplang=ja,en
 set modelines=1
 set mouse=a
+set guioptions+=a
+set ttymouse=xterm2
 set nobackup
 set norestorescreen=off
 set showmode
@@ -147,6 +151,7 @@ endif
 nnoremap <Space><Space>s :<C-U>source ~/.vimrc<CR>
 nnoremap <Space><Space>v :<C-U>tabnew ~/.vim/config/.vimrc<CR>
 "}}}
+
 "----------------------------------------
 " neobundle initialize {{{
 filetype plugin indent off     " required!
@@ -660,8 +665,12 @@ endif
 " NeoBundleLazy 'skalnik/vim-vroom'
 NeoBundleLazy 'ruby-matchit', { 'autoload': {
       \ 'filetypes': g:my.ft.ruby_files}}
-NeoBundleLazy 'skwp/vim-rspec', { 'autoload': {
-      \ 'filetypes': g:my.ft.ruby_files}}
+NeoBundleLazy 'skwp/vim-rspec', {
+      \ 'build': {
+      \   'mac': 'gem install hpricot',
+      \   'unix': 'gem install hpricot'
+      \ },
+      \ 'autoload': { 'filetypes': g:my.ft.ruby_files}}
 NeoBundleLazy 'taka84u9/vim-ref-ri', {
       \ 'depends': ['Shougo/unite.vim', 'thinca/vim-ref'],
       \ 'autoload': { 'filetypes': g:my.ft.ruby_files } }
@@ -695,8 +704,8 @@ NeoBundleLazy 'rhysd/vim-textobj-ruby', { 'depends': 'kana/vim-textobj-user' }
 NeoBundleLazy 'ujihisa/unite-gem', {
       \ 'depends': 'mattn/webapi-vim',
       \ 'autoload': { 'filetypes': g:my.ft.ruby_files }}
-NeoBundleLazy 'rhysd/neco-ruby-keyword-args', { 'autoload': {
-      \ 'filetypes': g:my.ft.ruby_files }}
+" NeoBundleLazy 'rhysd/neco-ruby-keyword-args', { 'autoload': {
+"       \ 'filetypes': g:my.ft.ruby_files }}
 NeoBundleLazy 'tpope/vim-cucumber', { 'autoload': {
       \ 'filetypes': g:my.ft.ruby_files }}
 NeoBundleLazy 'mutewinter/nginx.vim', { 'autoload': {
@@ -768,6 +777,7 @@ filetype plugin indent on
 "StatusLine" {{{
 " source ~/.vim/config/.vimrc.statusline
 " }}}
+
 "----------------------------------------
 "編集"{{{
 " set textwidth=100
@@ -813,6 +823,7 @@ inoremap ' ''<Left>
 aug MyAutoCmd
   au FileType scala inoremap <buffer>' '
   au FileType ruby,eruby,haml inoremap <buffer>\| \|\|<Left>
+        \| inoremap <buffer>,{ #{}<Left>
 aug END
 augroup MyXML
   au!
@@ -834,6 +845,7 @@ nnoremap <silent><Space>w :wq<CR>
 nnoremap <silent><Space>s :w sudo:%<CR>
 inoremap <C-D><C-D> <C-R>=g:my.info.date<CR>
 inoremap <C-D><C-R> <C-R>=<SID>current_git()<CR>
+xnoremap <silent><C-p> "0p<CR>
 nnoremap re :%s!
 xnoremap re :s!
 xnoremap rep y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!g<Left><Left>
@@ -926,9 +938,8 @@ set whichwrap=b,s,h,l,~,<,>,[,]
 " 基本的な動き {{{
 inoremap <silent><C-A> <End>
 inoremap <silent><C-L> <Right>
-" inoremap <silent><C-O><C-O> <Esc>o
 inoremap <silent><C-O> <CR><Esc>O
-" inoremap jj <Esc>
+inoremap jj <Esc>
 nnoremap $ g_
 xnoremap $ g_
 nnoremap <silent><Down> gj
@@ -1153,21 +1164,47 @@ function! s:set_tags() "{{{
     execute 'setl tags+='.expand(current_git_root.'/tags')
   endif
 endfunction"}}}
+
 function! s:update_tags() "{{{
   if g:my.conf.tags.auto_create != 1 |return| endif
 
-  let append_opts = g:my.conf.tags.append ? ' --append=yes' : ''
-  call alpaca#let_g:('my.conf.tags.append', 0)
-  call alpaca#let_g:('my.conf.tags.auto_create', 0)
+  " XXX とりあえず、一度だけ実行するようにする
+  au! MyUpdateTagsCmd
 
   let current_git_root = <SID>current_git()
-  let path = current_git_root ?  current_git_root. "/tags" : './tags'
 
-  return alpaca#system_bg( g:my.bin.ctags, g:my.conf.tags.ctags_opts, append_opts )
+  " git管理化でない場合で、許可してなければ実行しない
+  if current_git_root != '' || ( current_git_root && g:my.conf.tags.enable_without_git == 1 )
+    let path = current_git_root !='' ?  current_git_root. "tags" : './tags'
+
+    call alpaca#let_g:('my.conf.tags.append', 0)
+    let append_opts = g:my.conf.tags.append ? ' --append=yes' : ''
+
+    return alpaca#system_bg( g:my.bin.ctags, g:my.conf.tags.ctags_opts , '-f '.path, append_opts)
+  endif
 endfunction"}}}
+
+function! s:update_gtags() "{{{
+  let exclude = ['*.c', '*.js', '*.exp', '*.am', '*.in', '*.m4', '*.o', '*.h', 'log', '*.yml', '.git']
+  let exclude_opt = ''
+  for expect in exclude
+    let exclude_opt .= ' --exclude=' . expect
+  endfor
+
+  let gtags_opts = '-R -f ~/gtags -a --sort=yes --langmap=RUBY:.rb'
+  let target_path = g:my.conf.tags.GEM_HOME
+
+  return alpaca#system( 'ctags -R -f ~/gtags -a --sort=yes --exclude=*.c --exclude=*.js --exclude=*.exp  --exclude=*.am --exclude=*.in --exclude=*.m4--exclude=*.o --exclude=*.h --exclude=log --exclude=*.yml --exclude=.git --langmap=RUBY:.rb ~/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems', '' )
+endfunction"}}}
+command! UpdateGtags call s:update_gtags()
+
 aug MyTagsCmd
   au!
   au BufEnter * call <SID>set_tags()
+aug END
+
+aug MyUpdateTagsCmd
+  au!
   au VimEnter * call <SID>update_tags()
 aug END
 
@@ -2017,6 +2054,17 @@ aug END
 "}}}
 
 "------------------------------------
+" vim-rspec
+"------------------------------------
+let g:RspecKeymap=0
+function! s:rspec_settings()
+  nnoremap <buffer><Leader>r :RunSpec<CR>
+  nnoremap <buffer><Leader>lr :RunSpecLine<CR>
+  au FileType RSpecOutput setl nofoldenable
+endfunction
+au bufNewFile,bufRead *_spec.rb call s:rspec_settings()
+
+"------------------------------------
 " gist.vim
 "------------------------------------
 "{{{
@@ -2100,8 +2148,8 @@ xmap <Leader>U <Plug>(operator-decamelize)
 " smartchr.vim
 "------------------------------------
 "{{{
-let bundle = neobundle#get('vim-smartchr')
-function! bundle.hooks.on_source(bundle)
+" let bundle = neobundle#get('vim-smartchr')
+" function! bundle.hooks.on_source(bundle)
   augroup MyAutoCmd
     " Substitute .. into -> .
     au FileType c,cpp    inoremap <buffer><expr> . smartchr#loop('.', '->', '...')
@@ -2112,6 +2160,8 @@ function! bundle.hooks.on_source(bundle)
           \| inoremap <buffer><expr>> smartchr#loop('>', '=>')
     au FileType scala    inoremap <buffer><expr> - smartchr#loop('-', '->', '=>')
           \| inoremap <buffer><expr> < smartchr#loop('<', '<-')
+    au FileType yaml     inoremap <buffer><expr> < smartchr#loop('<', '<%', '<%=')
+          \| inoremap <buffer><expr> > smartchr#loop('>', '%>', '-%>')
 
     " 使わない
     " autocmd FileType haskell,int-ghci
@@ -2128,7 +2178,7 @@ function! bundle.hooks.on_source(bundle)
     "       \| inoremap <buffer> <expr> : smartchr#loop(': ', ':', ' :: ')
     "       \| inoremap <buffer> <expr> . smartchr#loop('.', ' => ')
   augroup END
-endfunction
+" endfunction
 "}}}
 
 "------------------------------------
@@ -2201,9 +2251,9 @@ let g:indent_guides_start_level = 2
 hi IndentGuidesOdd  ctermbg=235
 hi IndentGuidesEven ctermbg=233
 augroup MyAutoCmd
-  au BufEnter * let g:indent_guides_guide_size=&tabstop
+  " au BufEnter * let g:indent_guides_guide_size=&tabstop
 augroup END
-" nnoremap <silent><Leader>ig <Plug>IndentGuidesToggle
+nnoremap <silent><Leader>i :<C-U>IndentGuidesToggle<CR>
 "}}}
 
 "------------------------------------
@@ -2522,8 +2572,6 @@ set wildmode=longest:full,full
 "----------------------------------------
 " neocomplcache / echodoc
 let g:neocomplcache_enable_at_startup = 1
-let g:echodoc_enable_at_startup = 1
-
 " default config"{{{
 " let g:neocomplcache_enable_auto_select=1
 let g:neocomplcache#sources#rsense#home_directory = neobundle#get_neobundle_dir() . '/rsense-0.3'
@@ -2631,9 +2679,22 @@ unlet bundle
 " keymap {{{
 imap <expr><C-G>     neocomplcache#undo_completion()
 imap <expr><TAB>     neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
-" inoremap <silent><expr><CR> neocomplcache#smart_close_popup() . "<CR>"
 imap <silent><expr><CR> neocomplcache#smart_close_popup() . "<CR>" . "<Plug>DiscretionaryEnd"
+inoremap <expr><C-n>  pumvisible() ? "\<C-n>" : "\<Down>"
+" <C-p>: keyword completion.
+inoremap <expr><C-p>  pumvisible() ? "\<C-p>" : "\<Up>"
+inoremap <expr><C-x><C-f>  neocomplcache#manual_filename_complete()
+
 " }}}
+"}}}
+
+"----------------------------------------
+" echodoc"{{{
+let bundle = neobundle#get('echodoc')
+function! bundle.hooks.on_source(bundle)
+  let g:echodoc_enable_at_startup = 1
+endfunction
+unlet bundle
 "}}}
 
 "------------------------------------
@@ -2926,6 +2987,7 @@ function! bundle.hooks.on_source(bundle) "{{{
     highlight link uniteSource__FileMru_Time Comment
   endfunction"}}}
   function! s:unite_kuso_hooks.file() "{{{
+    inoremap <buffer><Tab> <CR>
     syntax match uniteFileDirectory '.*\/'
     highlight link uniteFileDirectory Directory
   endfunction"}}}
@@ -2947,7 +3009,7 @@ function! bundle.hooks.on_source(bundle) "{{{
 
     call <SID>smart_unite_open(a:cmd)
   endfunction"}}}
-  function s:unite_kuso_hooks.history_command() "{{{
+  function! s:unite_kuso_hooks.history_command() "{{{
     setl syntax=vim
   endfunction"}}}
   "}}}

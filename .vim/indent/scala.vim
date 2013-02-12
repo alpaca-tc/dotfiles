@@ -1,13 +1,15 @@
 
+
 " Vim indent file
 " Language         : Scala (http://scala-lang.org/)
 " Original Author  : Stefan Matthias Aust
 " Modifications by : Derek Wyatt
 " Last Change: 2013-02-06
 
-if exists("b:did_indent")
- finish
-endif
+
+" if exists("b:did_indent")
+"  finish
+" endif
 let b:did_indent = 1
 
 setlocal indentexpr=GetScalaIndent()

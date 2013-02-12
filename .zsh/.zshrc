@@ -45,6 +45,9 @@ export JAVA_HOME=/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home
 export PATH=$JAVA_HOME/bin:$PATH
 export CLASSPATH=$JAVA_HOME'/lib/ext'
 
+# scala 2.9
+export SCALA_HOME=/usr/local/Cellar/scala/2.9.2
+
 # rbenv
 export PATH=$HOME/.rbenv/bin:$HOME/.rbenv:$PATH
 eval "$(rbenv init -)"

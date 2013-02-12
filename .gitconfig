@@ -4,7 +4,7 @@
 
 [core]
   excludesfile = /Users/taichou/.gitignore_global
-  autocrlf     = input
+  ; autocrlf     = input
   trailing-space = false
   space-before-tab = false
   precomposeunicode = true
@@ -13,26 +13,20 @@
   ui = true
 
 [alias]
-  ci = commit
-  st = status
   rs = reset
   tr = log --graph --pretty='format:%C(yellow)%h%Creset %C(magenta)%cd%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset' --date=iso
   st = !sh -c 'git ls-remote . | grep `git log -1 --grep="git-svn-id"`
   dm = !git branch --merged | grep -v '*' | xargs -I % git branch -d %
-  sn = git shortlog -sn
+  sn = shortlog -sn
+  assume = update-index --assume-unchanged
+  no-assume = update-index --no-assume-unchanged
 
 [push]
   default = tracking
 
-[difftool "sourcetree"]
-  cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-  path =
-
-[mergetool "sourcetree"]
-  cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-  trustExitCode = true
 [rerere]
   enabled = 1
+
 [help]
   autocorrect = 1
 

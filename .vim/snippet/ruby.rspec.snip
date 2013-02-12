@@ -1,63 +1,120 @@
 # rspec
 snippet     con
-abbr        context do
-    context '${1}' do
-      ${2}
-    end
+abbr        context '...' do
+  context '${1}' do
+    ${2}
+  end
 
 snippet     bef
-abbr        before do
-    before do
-      ${1}
-    end
+abbr        before do ... end
+  before do
+    ${1}
+  end
 
 snippet     it
 abbr        it do
-    it '${1}' do
-      ${2}
-    end
+  it '${1}' do
+    ${2}
+  end
 
 snippet     des
 abbr        describe do
-    describe '${1}' do
+  describe '${1}' do
       ${2}
     end
 
 snippet     sub
 abbr        subject
 prev_word    '^'
-    subject { ${1} }
+  subject { ${1} }
 
 snippet     share
 abbr        shared_examples_for
 prev_word      '^'
-    shared_examples_for "${1:name}" do
+  shared_examples_for "${1:name}" do
     end
 
 snippet     behave
 prev_word       '^'
-    it_should_behave_like "${1:name}"
+  it_should_behave_like "${1:name}"
 
 snippet     let
 abbr        let(:name) {}
 prev_word   '^'
-    let(:${1:symbol}) { ${2} }
+  let(:${1:symbol}) { ${2} }
 
 snippet     req
-    require '${1}'
+  require '${1}'
 
 snippet     reqs
 abbr        require rspec
 prev_word     '^'
-    require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+  require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 snippet     its
-    its(${1}) { ${2} }
+  its(${1}) { ${2} }
 
 snippet     cassociate
-    context "should associate" do
+  context "should associate" do
       [${1::column_name}].each do |associate|
           # type ModelName before "should"
           it { should be_associate(associate, ${2::belongs_to}) }
       end
     end
+
+# shoulda-matchers
+snippet     belong
+abbr        belong_to(...)
+  belong_to(${1:table})
+
+snippet     have_many
+abbr        have_many(...)
+  have_many(${1:table})
+
+snippet     have_manyt
+abbr        have_many(...).through(...)
+  have_many(${1:table}).through(${2:table})
+
+snippet     uniq
+abbr        validate_uniqueness_of(...)
+  validate_uniqueness_of(${1:column})
+
+snippet     presence
+abbr        validate_presence_of(...)
+  validate_presence_of(${1:column})
+
+snippet     presencew
+abbr        validate_presence_of(...).with_message(...)
+  validate_presence_of(${1:column}).with_message(${2:regexp})
+
+snippet     numericality
+abbr        validate_numericality_of(...)
+  validate_numericality_of(${1:column})
+
+snippet     allow_v
+abbr        allow_value(...).for(...)
+  allow_value(${1:value}).for(${2:column})
+
+snippet     inclusion
+abbr        ensure_inclusion_of(...).in_range(...)
+  ensure_inclusion_of(${1:column}).in_range(${1:1..100})
+
+snippet     allow_m
+abbr        allow_mass_assignment_of(...)
+  allow_mass_assignment_of(${1:column})
+
+snippet     assign
+abbr        assign_to(...)
+  assign_to(${1:column})
+
+snippet     respond
+abbr        respond_with
+  respond_with(:success)
+
+snippet     render
+abbr        render_template(...)
+  render_template(${1:templete})
+
+snippet     flash
+abbr        set_the_flash
+  set_the_flash
