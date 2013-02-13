@@ -34,6 +34,7 @@ function! s:git_exists() "{{{
   return aplaca#system('git rev-parse --is-inside-work-tree') == "true\n"
 endfunction"}}}
 function! s:filetype() "{{{
+  if empty(&filetype) | return '' | endif
   return split( &filetype, '\.' )[0]
 endfunction"}}}
 
@@ -1194,7 +1195,7 @@ function! s:update_gtags() "{{{
   let gtags_opts = '-R -f ~/gtags -a --sort=yes --langmap=RUBY:.rb'
   let target_path = g:my.conf.tags.GEM_HOME
 
-  return alpaca#system( 'ctags -R -f ~/gtags -a --sort=yes --exclude=*.c --exclude=*.js --exclude=*.exp  --exclude=*.am --exclude=*.in --exclude=*.m4--exclude=*.o --exclude=*.h --exclude=log --exclude=*.yml --exclude=.git --langmap=RUBY:.rb ~/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems', '' )
+  return alpaca#system( 'ctags -R -f ~/gtags -a --sort=yes --exclude=*.c --exclude=*.js --exclude=*.exp  --exclude=*.am --exclude=*.in --exclude=*.m4--exclude=*.o --exclude=*.h --exclude=log --exclude=*.yml --exclude=.git --langmap=RUBY:.rb ~/.rbenv/versions/1.9.3-p194/lib/ruby/gems/1.9.1/gems', '' )
 endfunction"}}}
 command! UpdateGtags call s:update_gtags()
 

@@ -8,11 +8,17 @@ export BROWSER=w3m
 export ARCHFLAGS="-arch x86_64"
 export APXS2=/usr/sbin/apxs
 export GITHUB_HOST='github.com'
+export CONFIGURE_OPTS="--with-gcc=clang"
 
 # 各種の設定 古いgccを使う場合
 # export CC='/usr/local/bin/gcc-4.2'
 # alias gcc='/usr/local/bin/gcc-4.5'
 # }}}
+
+# rbenvの設定
+export CPPFLAGS="-I/usr/local/Cellar/readline/6.2.4/include"
+export LDFLAGS="-L/usr/local/Cellar/readline/6.2.4/lib"
+export CONFIGURE_OPTS="--with-gcc=clang"
 
 # PATH
 # {{{

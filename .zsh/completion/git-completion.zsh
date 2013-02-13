@@ -17,8 +17,8 @@
 
 complete ()
 {
-	# do nothing
-	return 0
+    # do nothing
+    return 0
 }
 
 zstyle -s ":completion:*:*:git:*" script script
@@ -27,52 +27,52 @@ ZSH_VERSION='' . "$script"
 
 __gitcomp ()
 {
-	emulate -L zsh
+    emulate -L zsh
 
-	local cur_="${3-$cur}"
+    local cur_="${3-$cur}"
 
-	case "$cur_" in
-	--*=)
-		;;
-	*)
-		local c IFS=$' \t\n'
-		local -a array
-		for c in ${=1}; do
-			c="$c${4-}"
-			case $c in
-			--*=*|*.) ;;
-			*) c="$c " ;;
-			esac
-			array+=("$c")
-		done
-		compset -P '*[=:]'
-		compadd -Q -S '' -p "${2-}" -a -- array && _ret=0
-		;;
-	esac
+    case "$cur_" in
+    --*=)
+        ;;
+    *)
+        local c IFS=$' \t\n'
+        local -a array
+        for c in ${=1}; do
+            c="$c${4-}"
+            case $c in
+            --*=*|*.) ;;
+            *) c="$c " ;;
+            esac
+            array+=("$c")
+        done
+        compset -P '*[=:]'
+        compadd -Q -S '' -p "${2-}" -a -- array && _ret=0
+        ;;
+    esac
 }
 
 __gitcomp_nl ()
 {
-	emulate -L zsh
+    emulate -L zsh
 
-	local IFS=$'\n'
-	compset -P '*[=:]'
-	compadd -Q -S "${4- }" -p "${2-}" -- ${=1} && _ret=0
+    local IFS=$'\n'
+    compset -P '*[=:]'
+    compadd -Q -S "${4- }" -p "${2-}" -- ${=1} && _ret=0
 }
 
 _git ()
 {
-	local _ret=1
-	() {
-		emulate -L ksh
-		local cur cword prev
-		cur=${words[CURRENT-1]}
-		prev=${words[CURRENT-2]}
-		let cword=CURRENT-1
-		__${service}_main
-	}
-	let _ret && _default -S '' && _ret=0
-	return _ret
+    local _ret=1
+    () {
+        emulate -L ksh
+        local cur cword prev
+        cur=${words[CURRENT-1]}
+        prev=${words[CURRENT-2]}
+        let cword=CURRENT-1
+        __${service}_main
+    }
+    let _ret && _default -S '' && _ret=0
+    return _ret
 }
 
 _git
