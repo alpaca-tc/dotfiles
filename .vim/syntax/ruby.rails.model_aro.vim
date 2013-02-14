@@ -1,0 +1,1 @@
+syn keyword rubyRailsARMethod observe

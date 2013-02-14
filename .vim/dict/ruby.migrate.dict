@@ -1,0 +1,5 @@
+create_table
+change_table
+string
+boolean
+has_attached_file

@@ -1,0 +1,3 @@
+syn keyword rubyRailsMethod logger url_for polymorphic_path polymorphic_url
+syn keyword rubyRailsRenderMethod mail render
+syn keyword rubyRailsControllerMethod attachments default helper helper_attr helper_method

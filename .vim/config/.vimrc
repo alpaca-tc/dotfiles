@@ -844,6 +844,7 @@ nnoremap <silent><Space><Space>w :wall!<CR>
 nnoremap <silent><Space>q :q!<CR>
 nnoremap <silent><Space>w :wq<CR>
 nnoremap <silent><Space>s :w sudo:%<CR>
+inoremap <C-D><C-A> <C-R>=g:my.info.author<CR>
 inoremap <C-D><C-D> <C-R>=g:my.info.date<CR>
 inoremap <C-D><C-R> <C-R>=<SID>current_git()<CR>
 xnoremap <silent><C-p> "0p<CR>
@@ -2035,23 +2036,40 @@ aug MyAutoCmd
   au User Rails call SetUpRailsSetting()
 aug END
 
-aug RailsDictSetting
+function! s:rails_syntax_settings()
+  for s:syntax in split(glob($HOME.'/.vim/syntax/ruby.rails.*.vim'))
+    execute 'source ' . s:syntax
+  endfor
+endfunction
+
+function! s:rails_dict_settings() "{{{
+  setl dict+=~/.vim/dict/ruby.rails.dict
+
+  if !exists('b:file_type_name') | return | endif
+
+  execute 'nnoremap <buffer><Space><Space>d  :<C-U>SmartEdit ~/.vim/dict/'. b:file_type_name .'.dict<CR>'
+  execute 'setl dict+=~/.vim/dict/' . b:file_type_name . '.dict'
+
+  call <SID>rails_syntax_settings()
+endfunction"}}}
+
+aug RailsDictSetting "{{{
   au!
   " 別の関数に移そうか..
-  au User Rails.controller*           let b:file_type_name="rails.controller.ruby"
-  au User Rails.view*erb              let b:file_type_name="rails.view.ruby"
-  au User Rails.view*haml             let b:file_type_name="rails.view.haml"
-  au User Rails.model*                let b:file_type_name="rails.model.ruby"
-  au User Rails/db/migrate/*          let b:file_type_name="rails.migrate.ruby"
-  au User Rails/config/environment.rb let b:file_type_name="rails.environment.ruby"
-  au User Rails/config/routes.rb      let b:file_type_name="rails.routes.ruby"
-  au User Rails/config/database.rb    let b:file_type_name="rails.database.ruby"
-  au User Rails/config/boot.rb        let b:file_type_name="rails.boot.ruby"
-  au User Rails/config/locales/*      let b:file_type_name="rails.locales.ruby"
-  au User Rails/config/initializes    let b:file_type_name="rails.initializes.ruby"
-  au User Rails/config/environments/* let b:file_type_name="rails.environments.ruby"
-  au User Rails set dict+=~/.vim/dict/ruby.rails.dict | nnoremap <buffer><Space>dd  :<C-U>SmartEdit ~/.vim/dict/ruby.rails.dict<CR>
-aug END
+  au User Rails.controller*           let b:file_type_name="ruby.controller"
+  au User Rails.view*erb              let b:file_type_name="ruby.view"
+  au User Rails.view*haml             let b:file_type_name="haml.view"
+  au User Rails.model*                let b:file_type_name="ruby.model"
+  au User Rails/db/migrate/*          let b:file_type_name="ruby.migrate"
+  au User Rails/config/environment.rb let b:file_type_name="ruby.environment"
+  au User Rails/config/routes.rb      let b:file_type_name="ruby.routes"
+  au User Rails/config/database.rb    let b:file_type_name="ruby.database"
+  au User Rails/config/boot.rb        let b:file_type_name="ruby.boot"
+  au User Rails/config/locales/*      let b:file_type_name="ruby.locales"
+  au User Rails/config/initializes    let b:file_type_name="ruby.initializes"
+  au User Rails/config/environments/* let b:file_type_name="ruby.environments"
+  au BufEnter * call <SID>rails_dict_settings()
+aug END"}}}
 "}}}
 
 "------------------------------------

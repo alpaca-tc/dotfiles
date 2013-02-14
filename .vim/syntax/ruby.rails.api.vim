@@ -1,0 +1,1 @@
+syn keyword rubyRailsAPIMethod api_method inflect_names
