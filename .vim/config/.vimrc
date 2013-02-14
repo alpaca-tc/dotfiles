@@ -1309,7 +1309,7 @@ call add( s:surround_mapping, {
       \   'r':  "%r!\r!",
       \   'R':  "%R!\r!",
       \   '=':  "<%= \r %>",
-      \   '{':  "{\r}",
+      \   '{':  "{ \r }",
       \ }
       \ })
 
@@ -2023,35 +2023,28 @@ let g:rails_mappings=1
 let g:rails_modelines=0
 let g:rails_syntax = 1
 let g:rails_url='http://localhost:3000'
-function! SetUpRailsSetting()
+function! s:set_up_rails_setting() "{{{
   nnoremap <buffer><Space>r :R<CR>
   nnoremap <buffer><Space>a :A<CR>
   nnoremap <buffer><Space>m :Rmodel<Space>
   nnoremap <buffer><Space>c :Rcontroller<Space>
   nnoremap <buffer><Space>v :Rview<Space>
   nnoremap <buffer><Space>p :Rpreview<CR>
-endfunction
 
-aug MyAutoCmd
-  au User Rails call SetUpRailsSetting()
-aug END
-
-function! s:rails_syntax_settings()
+  setl dict+=~/.vim/dict/ruby.rails.dict
   for s:syntax in split(glob($HOME.'/.vim/syntax/ruby.rails.*.vim'))
     execute 'source ' . s:syntax
   endfor
-endfunction
-
-function! s:rails_dict_settings() "{{{
-  setl dict+=~/.vim/dict/ruby.rails.dict
 
   if !exists('b:file_type_name') | return | endif
 
   execute 'nnoremap <buffer><Space><Space>d  :<C-U>SmartEdit ~/.vim/dict/'. b:file_type_name .'.dict<CR>'
   execute 'setl dict+=~/.vim/dict/' . b:file_type_name . '.dict'
-
-  call <SID>rails_syntax_settings()
 endfunction"}}}
+
+aug MyAutoCmd
+  au User Rails call <SID>set_up_rails_setting()
+aug END
 
 aug RailsDictSetting "{{{
   au!
@@ -2068,7 +2061,6 @@ aug RailsDictSetting "{{{
   au User Rails/config/locales/*      let b:file_type_name="ruby.locales"
   au User Rails/config/initializes    let b:file_type_name="ruby.initializes"
   au User Rails/config/environments/* let b:file_type_name="ruby.environments"
-  au BufEnter * call <SID>rails_dict_settings()
 aug END"}}}
 "}}}
 

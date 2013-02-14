@@ -137,6 +137,10 @@ abbr include Enumerable
   end
 #}}}
 
+# paperclip
+snippet     has_attached_file
+  has_attached_file ${1:column}, :styles => { ${1:big: '100x100'} }
+
 # validates
 #{{{
 snippet     reg_email
@@ -145,6 +149,14 @@ snippet     reg_email
 snippet     reg_tell
   /^((\d+)-?)*\d$/
 
+snippet     v_boolean
+  validates ${1:column}, :inclusion => {:in => [true, false]}
+
+snippet     v_attachiment
+abbr validate attachment, :column, ...
+  validates ${1:attachment}, presence: true,
+    content_type: { content_type: ['image/png', 'image/jpg', 'image/gif']},
+    size: { in: 0..10.kilobytes }
 #}}}
 
 # class etc..
@@ -718,3 +730,229 @@ abbr        @raise [${1:Class}] ...
   @raise [${1:Class}] ${2:...}
 
 #}}}
+
+# rspec
+snippet     con
+abbr        context '...' do
+  context '${1}' do
+    ${2}
+  end
+
+snippet     bef
+abbr        before do ... end
+  before do
+    ${1}
+  end
+
+snippet     it
+abbr        it do
+  it '${1}' do
+    ${2}
+  end
+
+snippet     des
+abbr        describe do
+  describe '${1}' do
+      ${2}
+    end
+
+snippet     sub
+abbr        subject
+prev_word    '^'
+  subject { ${1} }
+
+snippet     share
+abbr        shared_examples_for
+prev_word      '^'
+  shared_examples_for "${1:name}" do
+    end
+
+snippet     behave
+prev_word       '^'
+  it_should_behave_like "${1:name}"
+
+snippet     let
+abbr        let(:name) {}
+prev_word   '^'
+  let(:${1:symbol}) { ${2} }
+
+#snippet     req
+#  require '${1}'
+
+snippet     reqs
+abbr        require rspec
+prev_word     '^'
+  require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+
+snippet     its
+  its(${1}) { ${2} }
+
+snippet     cassociate
+  context "should associate" do
+      [${1::column_name}].each do |associate|
+          # type ModelName before "should"
+          it { should be_associate(associate, ${2::belongs_to}) }
+      end
+    end
+
+# shoulda-matchers
+snippet     belong
+abbr        belong_to(...)
+  belong_to(${1:table})
+
+snippet     have_many
+abbr        have_many(...)
+  have_many(${1:table})
+
+snippet     have_manyt
+abbr        have_many(...).through(...)
+  have_many(${1:table}).through(${2:table})
+
+snippet     uniq
+abbr        validate_uniqueness_of(...)
+  validate_uniqueness_of(${1:column})
+
+snippet     presence
+abbr        validate_presence_of(...)
+  validate_presence_of(${1:column})
+
+snippet     presencew
+abbr        validate_presence_of(...).with_message(...)
+  validate_presence_of(${1:column}).with_message(${2:regexp})
+
+snippet     numericality
+abbr        validate_numericality_of(...)
+  validate_numericality_of(${1:column})
+
+snippet     allow_v
+abbr        allow_value(...).for(...)
+  allow_value(${1:value}).for(${2:column})
+
+snippet     length
+abbr ensure_length_of(...).is_at_least(...)
+  ensure_length_of(${1:column})${2:.is_at_least(${3\}})${4:.is_at_most(${5\}})${6:.with_short_message(/${7:regext\}/) }
+
+snippet     acceptance
+abbr validate_acceptance_of(...)
+  validate_acceptance_of(${1:column})
+
+snippet     confirmation
+abbr        validate_confirmation_of(...)
+  validate_confirmation_of(${1:column})
+
+snippet     exclusion
+abbr        ensure_exclusion_of(...)
+  ensure_exclusion_of(${1:column})
+    ${2:.in_range(${3:10..20\})}
+
+snippet     inclusion
+abbr        ensure_inclusion_of(...).in_range(...)
+  ensure_inclusion_of(${1:column}).in_range(${1:1..100})
+
+snippet     format_of
+abbr validate_format_of(...)
+  validate_format_of(${1:column}).with(${2:message})
+
+snippet     allow_m
+abbr        allow_mass_assignment_of(...)
+  allow_mass_assignment_of(${1:column})
+
+snippet     assign
+abbr        assign_to(...)
+  assign_to(${1:column})
+
+snippet     respond
+abbr        respond_with
+  respond_with(:success)
+
+snippet     render
+abbr        render_template(...)
+  render_template(${1:templete})
+
+snippet     flash
+abbr        set_the_flash
+  set_the_flash
+
+snippet     kind_of
+abbr        be_a_kind_of(...)
+  be_a_kind_of(${1:Klass})
+
+snippet     instance_of
+abbr        be_an_instance_of(...)
+  be_an_instance_of(${1:Klass})
+
+snippet     have_key
+abbr        have_key(...)
+  have_key(${1:key})
+
+# shoulda
+snippet samao
+    should_allow_mass_assignment_of :${1:field}
+
+snippet savf
+    should_allow_values_for :${1:field}, "${2:value}"
+
+snippet sbt
+    should_belong_to :${1:association}
+
+snippet selal
+    should_ensure_length_at_least :${1:field}, ${2:min_length}
+
+snippet seli
+    should_ensure_length_is :${1:field}, ${2:length}
+
+snippet selir
+    should_ensure_length_in_range :${1:field}, ${2:start}..${3:end}
+
+snippet setup
+    setup do
+        ${1}
+    end
+
+snippet sevir
+    should_ensure_value_in_range :${1:field}, ${2:start}..${3:end}
+
+snippet shabtm
+    should_have_and_belong_to_many :${1:association}
+
+snippet shcm
+    should_have_class_methods :${1:method}
+
+snippet shdc
+    should_have_db_columns :${1:field}
+
+snippet shi
+    should_have_indices :${1:field}
+
+snippet shim
+    should_have_instance_methods :${1:method}
+
+snippet shm
+    should_have_many :${1:association}
+
+snippet shns
+    should_have_named_scope :${1:scope}, :conditions => {${2:conditions}}
+
+snippet sho
+    should_have_one :${1:association}
+
+snippet shroa
+    should_have_read_only_attributes :${1:field}
+
+snippet snamao
+    should_not_allow_mass_assignment_of :${1:field}
+
+snippet snavf
+    should_not_allow_values_for :${1:field}, "${2:value}"
+
+snippet svao
+    should_validate_acceptance_of :${1:field}
+
+snippet svno
+    should_validate_numericality_of :${1:field}
+
+snippet svpo
+    should_validate_presence_of :${1:field}
+
+snippet svuo
+    should_validate_uniqueness_of :${1:field}, :scoped_to => ${2:arrayofnames}

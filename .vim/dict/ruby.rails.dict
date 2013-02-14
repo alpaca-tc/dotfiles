@@ -275,4 +275,4 @@ violated
 write_inheritable_array
 write_inheritable_attribute
 write_inheritable_hash
-
+attr_accessor_paperclip

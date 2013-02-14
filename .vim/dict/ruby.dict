@@ -207,6 +207,10 @@ dup
 each
 each_byte
 each_char
+megabyte
+megabytes
+kilobyte
+kilobytes
 each_codepoint
 each_cons
 each_entry
@@ -764,3 +768,4 @@ zip
 zone
 |
 ~
+
