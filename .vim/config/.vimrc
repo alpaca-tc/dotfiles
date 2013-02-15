@@ -60,7 +60,7 @@ let g:my.lingr = {
 let g:my.conf = {
       \ "initialize" : 1,
       \ "tags": {
-      \   "auto_create" : 1,
+      \   "auto_create" : 0,
       \   "append"      : 1,
       \   "enable_without_git" : 0,
       \   "ctags_opts"  : '-R --sort=yes --exclude=log --exclude=.git',
@@ -750,7 +750,7 @@ NeoBundleLazy 'sh.vim', { 'autoload': {
 "}}}
 " 他のアプリを呼び出すetc "{{{
 " NeoBundle 'thinca/vim-openbuf'
-" NeoBundle 'vim-scripts/dbext.vim' "<Leader>seでsqlを実行
+NeoBundleLazy 'vim-scripts/dbext.vim' "<Leader>seでsqlを実行
 NeoBundleLazy 'tsukkee/lingr-vim', {
       \ 'depends': 'mattn/webapi-vim',
       \ 'autoload': {
@@ -1138,7 +1138,7 @@ set foldnestmax=5
 
 if v:version >= 703
   highlight ColorColumn guibg=#012345
-  au FileType coffee,ruby,eruby,php,javascript,c,json,vim set colorcolumn=80
+  au FileType coffee,ruby,ruby.rspec,eruby,php,javascript,c,json,vim set colorcolumn=80
 endif
 
 syntax on
@@ -2592,7 +2592,7 @@ let g:neocomplcache_force_overwrite_completefunc  = 1
 let g:neocomplcache_max_list                      = 80
 let g:neocomplcache_skip_auto_completion_time     = '0.3'
 
-" let g:neocomplcache_auto_completion_start_length = 2
+let g:neocomplcache_auto_completion_start_length = 2
 " let g:neocomplcache_caching_limit_file_size = 1000000
 " let g:neocomplcache_disable_auto_select_buffer_name_pattern = '\[Command Line\]'
 " let g:neocomplcache_disable_caching_buffer_name_pattern = '[\[*]\%(unite\)[\]*]'

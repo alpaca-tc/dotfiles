@@ -339,16 +339,14 @@ snippet     @mreset
     vertical-align:text-bottom;
   }
 
-snippet     fadehover
-  .fadehover {
-    -webkit-transition: 0.3s;
-    -moz-transition: 0.3s;
-    -ms-transition: 0.3s;
-    transition: 0.3s;
-  }
-  .fadehover:hover {
-    opacity: 0.8;
-  }
+snippet     m_fadehover
+  @mixin fadehover($speed: 0.4s, $opacity: 0.8) {// {{{
+    @include transition( all $speed ease );
+
+    &:hover {
+      @mixin opecity($opacity);
+    }
+  }// }}}
 
 #}}}
 ## font lists{{{

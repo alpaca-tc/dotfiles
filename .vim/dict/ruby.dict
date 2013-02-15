@@ -768,4 +768,5 @@ zip
 zone
 |
 ~
-
+only_integer
+numericality
