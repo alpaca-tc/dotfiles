@@ -32,7 +32,7 @@ run_segment() {
   fi
 
   if [ -n "$wan_ip" ]; then
-      echo "⦿ ${wan_ip}"
+      echo "Wan:${wan_ip}"
   fi
 
   return 0

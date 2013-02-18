@@ -27,7 +27,7 @@ run_segment() {
   fi
 
   if [ -n "$lan_ip" ]; then
-    echo "⊙${lan_ip}"
+    echo "Lan:${lan_ip}"
     return 0
   else
     return 1
