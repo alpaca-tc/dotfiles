@@ -21,6 +21,7 @@
   assume = update-index --assume-unchanged
   no-assume = update-index --no-assume-unchanged
   branch-note = "!git config branch.$(git symbolic-ref HEAD|sed \"s/refs\\/heads\\///\").note $( if [ $# -gt 0 ]; then $1; fi)"
+  append-gitkeep = "!find . -type d -empty -not -path './.git*' -exec touch {}\\/.gitkeep \\;"
 
 [push]
   default = tracking
