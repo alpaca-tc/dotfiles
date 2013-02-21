@@ -3,7 +3,6 @@
 # ininialize alias
 command_alias = {
   "show" => "show-method",
-  "edit" => "edit-method",
   "c" => "continue",
   "s" => "step",
   "n" => "next",

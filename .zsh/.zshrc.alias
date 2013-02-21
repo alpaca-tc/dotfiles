@@ -136,8 +136,13 @@ alias rmg=_rakeDbMigrate
 _rakeDbSetUp() {
   rake db:drop:all
   rake db:create
-  rake db:migrate db:test:prepare
-  rake db:seed
+
+  echo "--development--"
+  rake db:migrate RAILS_ENV=development
+  rake db:seed RAILS_ENV=development
+  # rake db:migrate db:test:prepare
+
+  echo "--test--"
   rake db:migrate RAILS_ENV=test
   rake db:seed RAILS_ENV=test
 }

@@ -1,0 +1,30 @@
+snippet     login
+            <!--{* ▼HeaderInternal COLUMN*}-->
+            <!--{if $arrPageLayout.HeaderInternalNavi|@count > 0}-->
+                <!--{* ▼上ナビ *}-->
+                <!--{foreach key=HeaderInternalNaviKey item=HeaderInternalNaviItem from=$arrPageLayout.HeaderInternalNavi}-->
+                    <!-- ▼<!--{$HeaderInternalNaviItem.bloc_name}--> -->
+                    <!--{if $HeaderInternalNaviItem.php_path != ""}-->
+                        <!--{include_php file=$HeaderInternalNaviItem.php_path items=$HeaderInternalNaviItem}-->
+                    <!--{else}-->
+                        <!--{include file=$HeaderInternalNaviItem.tpl_path items=$HeaderInternalNaviItem}-->
+                    <!--{/if}-->
+                    <!-- ▲<!--{$HeaderInternalNaviItem.bloc_name}--> -->
+                <!--{/foreach}-->
+                <!--{* ▲上ナビ *}-->
+            <!--{/if}-->
+            <!--{* ▲HeaderInternal COLUMN*}-->
+
+snippet     url_mypage
+  <!--{$smarty.const.HTTPS_URL}-->mypage/login.php
+
+snippet     url_kiyaku
+  <!--{$smarty.const.ROOT_URLPATH}-->entry/kiyaku.php
+
+snippet     url_cart
+  <!--{$smarty.const.CART_URLPATH}-->
+snippet     urlpath
+  <!--{$TPL_URLPATH}-->
+snippet     url_top
+options     word
+  <!--{$smarty.const.TOP_URLPATH}-->

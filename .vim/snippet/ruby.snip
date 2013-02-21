@@ -1,5 +1,5 @@
 
-# ruby
+# ruby#{{{
 #/*{{{*/
 snippet     ini
 abbr        def initialize end
@@ -136,10 +136,7 @@ abbr include Enumerable
     ${1}
   end
 #}}}
-
-# paperclip
-snippet     has_attached_file
-  has_attached_file ${1:column}, :styles => { ${1:big: '100x100'} }
+#}}}
 
 # validates
 #{{{
@@ -159,7 +156,7 @@ abbr validate attachment, :column, ...
     size: { in: 0..10.kilobytes }
 #}}}
 
-# class etc..
+# class etc..#{{{
 # /*{{{*/
 snippet     watcher
 prev_word        '^'
@@ -333,6 +330,18 @@ snippet     method_missing
     end
   end
 
+snippet     f_get_json
+ def get_json(url)
+    require 'net/http'
+    require 'uri'
+    require 'json'
+
+    uri = URI.parse(url)
+    json = Net::HTTP.get(uri)
+
+    JSON.parse(json)
+ end
+
 snippet     f_randobet
 abbr ランダムな文字列を生成
   def randobet(length, extendStr = "")
@@ -373,51 +382,9 @@ snippet     fsimpleActiveRecord
 
   binding.pry
 #}}}
-# rails shortcut
-
-# migration#{{{
-snippet     mig_change_table
-abbr        change_table
-  change_table ${1::table_name} do |t|
-    t.change ${2::column_name}, ${3::column_type}
-  end
 #}}}
 
-# controller
-# rescue all exception#{{{
-snippet     con_rescue_exceptions
-  rescue_from ::ActionController::RoutingError, ::ActionController::UnknownController, ::AbstractController::ActionNotFound, ::ActiveRecord::RecordNotFound, with: lambda { |exception| render_error 404, exception }
-    rescue_from Exception, with: lambda { |exception| render_error 500, exception }
-
-    private
-    def render_error(status, exception)# {{{
-
-      if status == 500
-        begin
-          if status == 404 then logger.debug exception else logger.error exception end
-          ContactMailer.catch_error(status, exception).deliver
-        rescue => e
-          logger.error e
-        end
-      end
-
-      respond_to do |format|
-        format.html { render template: "errors/error_#{status}", layout: 'layouts/application', status: status }
-        format.all { render nothing: true, status: status }
-      end
-    end# }}}
-#}}}
-
-# basic authenticate
-snippet basic_auth
-  http_basic_authenticate_with name: ${1:user_name}, password: ${2:password} if Rails.env.production?
-
-
-# routes
-snippet     match_not_found
-  match '*not_found', to: 'errors#error_404'
-
-# Gof
+# Gof#{{{
 # Strategy#{{{
 snippet     gof_strategy_1
 abbr        別々のオブジェクトにアルゴリズムを引き出す
@@ -730,8 +697,14 @@ abbr        @raise [${1:Class}] ...
   @raise [${1:Class}] ${2:...}
 
 #}}}
+#}}}
 
-# model
+# rails #{{{
+# model#{{{
+# paperclip#{{{
+snippet     has_attached_file
+  has_attached_file ${1:column}, :styles => { ${1:big: '100x100'} }
+#}}}
 
 snippet     v_length
 abbr   length: { in: ... }
@@ -807,3 +780,47 @@ abbr in: ...
 snippet     v_minimum
 abbr minimum: ...
   minimum: ${1}
+#}}}
+
+# migration#{{{
+snippet     mig_change_table
+abbr        change_table
+  change_table ${1::table_name} do |t|
+    t.change ${2::column_name}, ${3::column_type}
+  end
+#}}}
+
+# controller
+# rescue all exception#{{{
+snippet     con_rescue_exceptions
+  rescue_from ::ActionController::RoutingError, ::ActionController::UnknownController, ::AbstractController::ActionNotFound, ::ActiveRecord::RecordNotFound, with: lambda { |exception| render_error 404, exception }
+    rescue_from Exception, with: lambda { |exception| render_error 500, exception }
+
+    private
+    def render_error(status, exception)# {{{
+
+      if status == 500
+        begin
+          if status == 404 then logger.debug exception else logger.error exception end
+          ContactMailer.catch_error(status, exception).deliver
+        rescue => e
+          logger.error e
+        end
+      end
+
+      respond_to do |format|
+        format.html { render template: "errors/error_#{status}", layout: 'layouts/application', status: status }
+        format.all { render nothing: true, status: status }
+      end
+    end# }}}
+#}}}
+# basic authenticate#{{{
+snippet basic_auth
+  http_basic_authenticate_with name: ${1:user_name}, password: ${2:password} if Rails.env.production?
+#}}}
+# routes#{{{
+snippet     match_not_found
+  match '*not_found', to: 'errors#error_404'
+#}}}
+#}}}
+

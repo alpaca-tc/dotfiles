@@ -2712,6 +2712,7 @@ unlet bundle
 " VimFiler {{{
 nnoremap <silent>[plug]f          :<C-U>call VimFilerExplorerGit()<CR>
 nnoremap <silent><Leader><Leader> :<C-U>VimFilerBufferDir<CR>
+nnoremap <silent><Leader>n        :<C-U>VimFilerCreate<CR>
 nnoremap <Leader>s                :<C-U>VimFiler ssh://
 " au VimEnter * call VimFilerExplorerGit()
 
@@ -2782,7 +2783,7 @@ function! bundle.hooks.on_source(bundle) "{{{
   function! s:vimfiler_explorer_local() "{{{
     au BufEnter <buffer> if (winnr('$') == 1 && &filetype ==# 'vimfiler' && <SID>vimfiler_is_active()) | q | endif
     let vimfiler = vimfiler#get_current_vimfiler()
-    call UpdateTags()
+    " call UpdateTags()
     let g:my.conf.tags.auto_create = 0
   endfunction"}}}
   function! s:vimfiler_not_explorer_local() "{{{
@@ -2798,7 +2799,7 @@ unlet bundle
 
 "----------------------------------------
 " neosnippet"{{{
-let g:neosnippet#snippets_directory = g:my.dir.bundle . '/neosnippet/autoload/neosnippet/snippets,' . g:my.dir.snippets
+let g:neosnippet#snippets_directory = g:my.dir.snippets
 imap <silent><C-F>                <Plug>(neosnippet_expand_or_jump)
 inoremap <silent><C-U>            <ESC>:<C-U>Unite snippet<CR>
 nnoremap <silent><Space>e         :<C-U>NeoSnippetEdit -split<CR>
@@ -3085,6 +3086,20 @@ function! bundle.hooks.on_source(bundle) "{{{
 endfunction"}}}
 unlet bundle
 "}}}
+
+function! s:dash(...)
+  let ft = <SID>filetype()
+  if &filetype == 'python'
+    let ft = ft.'2'
+  endif
+  let ft = ft.':'
+  let word = len(a:000) == 0 ? input('Dash search: ', ft.expand('<cword>')) : ft.join(a:000, ' ')
+  call system(printf("open dash://'%s'", word))
+endfunction
+command! -nargs=* Dash call <SID>dash(<f-args>)
+nnoremap <C-K><C-K> :Dash <C-R><C-W><CR>
+au User Rails nnoremap <buffer><C-K><C-K> :Dash rails:<C-R><C-W><CR>
+nnoremap <Leader>d :Dash<Space>
 
 if !has('vim_starting')
   call neobundle#call_hook('on_source')
