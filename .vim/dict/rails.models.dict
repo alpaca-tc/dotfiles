@@ -21,3 +21,4 @@ validate
 restrict
 amoeba
 attachment_presence
+accepts_nested_attributes_for

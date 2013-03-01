@@ -1,4 +1,5 @@
 snippet     login
+options     word
             <!--{* ▼HeaderInternal COLUMN*}-->
             <!--{if $arrPageLayout.HeaderInternalNavi|@count > 0}-->
                 <!--{* ▼上ナビ *}-->
@@ -16,14 +17,18 @@ snippet     login
             <!--{* ▲HeaderInternal COLUMN*}-->
 
 snippet     url_mypage
+options     word
   <!--{$smarty.const.HTTPS_URL}-->mypage/login.php
 
 snippet     url_kiyaku
+options     word
   <!--{$smarty.const.ROOT_URLPATH}-->entry/kiyaku.php
 
 snippet     url_cart
+options     word
   <!--{$smarty.const.CART_URLPATH}-->
 snippet     urlpath
+options     word
   <!--{$TPL_URLPATH}-->
 snippet     url_top
 options     word

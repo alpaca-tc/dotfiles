@@ -126,6 +126,13 @@ snippet dm
   define_method ${1:method_name} do ${2}
 #/*}}}*/
 
+# ruby_custom#{{{
+snippet     Hash.new[
+abbr        Hash.new { |h,k| h[k] = [] }
+options     word
+  Hash.new { |h,k| h[k] = [] }
+#}}}
+
 # ruby2
 # Enumerable {{{
 snippet     enu
@@ -341,6 +348,14 @@ snippet     f_get_json
 
     JSON.parse(json)
  end
+
+snippet     f_capture
+abbr        URLのキャプチャ画像を取得
+  require 'capybara-webkit'
+
+  browser = Capybara::Webkit::Driver.new('web_capture').browser
+  browser.visit 'http://qiita.com/'
+  browser.render('qiita.png', 1280, 650)
 
 snippet     f_randobet
 abbr ランダムな文字列を生成
@@ -822,5 +837,14 @@ snippet basic_auth
 snippet     match_not_found
   match '*not_found', to: 'errors#error_404'
 #}}}
+
+# rspec-setting
+snippet     config.include
+abbr        config.include ..., {...}
+regexp      '^config\.'
+    config.include ${1:ModuleName}, example_group: {
+      file_path: config.escaped_path(%w[spec (${2:views|controllers})])
+    }
 #}}}
+
 

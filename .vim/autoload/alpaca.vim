@@ -43,10 +43,15 @@ function! alpaca#let_t:(name, value) "{{{
 endfunction"}}}
 function! alpaca#let_dict(name, dict) "{{{
   let scope_and_name = substitute(a:name, '\([a-zA-Z]\):\(.*\)', '["\1","\2"]', 'g')
-  let [scope, name] = eval(scope_and_name)
+  let [scope, name]  = eval(scope_and_name)
+
+  " initialize
+  call alpaca#let_g:(name, {})
 
   for key in keys( a:dict )
-    call s:let( scope, name, a:dict[key])
+    " call s:let( scope, name, a:dict[key])
+    " やっぱり上書きするようにする
+    execute 'let ' . a:name . '.'.key.' = "'. a:dict[key]. '"'
   endfor
 endfunction"}}}
 
@@ -72,5 +77,3 @@ endfunction"}}}
 command! -nargs=+ SmartHighlight
       \ call alpaca#syntax#smart_define(
       \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
-
-

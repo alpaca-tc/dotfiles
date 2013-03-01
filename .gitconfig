@@ -4,10 +4,15 @@
 
 [core]
   excludesfile = /Users/taichou/.gitignore_global
-  ; autocrlf     = input
+  ; autocrlf     = true ; input false
   trailing-space = false
   space-before-tab = false
+  ; indent-with-non-tab =
+  ; cr-at-eol =
   precomposeunicode = true
+
+[receive]
+  fsckObjects = true
 
 [color]
   ui = true

@@ -391,7 +391,7 @@ NeoBundleLazy 'thinca/vim-quickrun', { 'autoload' : {
 NeoBundleLazy 'tyru/eskk.vim', { 'autoload' : {
       \ 'mappings' : [['i', '<Plug>(eskk:toggle)']],
       \ }}
-NeoBundleLazy 'AndrewRadev/switch.vim', { 'autoload' : {
+NeoBundle 'AndrewRadev/switch.vim', { 'autoload' : {
       \ 'commands' : 'Switch',
       \ }}
 NeoBundleLazy 'kana/vim-arpeggio', { 'autoload': { 'functions': ['arpeggio#map'] }}
@@ -647,7 +647,7 @@ NeoBundleLazy 'taichouchou2/unite-rails_best_practices', {
       \    'unix': 'gem install rails_best_practices',
       \   }
       \ }
-NeoBundleLazy 'taichouchou2/alpaca_complete', {
+NeoBundle 'taichouchou2/alpaca_complete', {
       \ 'depends' : 'taichouchou2/vim-rails',
       \ 'build' : {
       \    'mac':  'gem install alpaca_complete',
@@ -689,9 +689,9 @@ NeoBundleLazy 'taichouchou2/unite-reek', {
 NeoBundleLazy 'ujihisa/unite-rake', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload': { 'filetypes' : g:my.ft.ruby_files }}
-NeoBundleLazy 'Shougo/neocomplcache-rsense', {
-      \ 'depends': 'Shougo/neocomplcache',
-      \ 'autoload': { 'filetypes': 'ruby' }}
+" NeoBundleLazy 'Shougo/neocomplcache-rsense', {
+"       \ 'depends': 'Shougo/neocomplcache',
+"       \ 'autoload': { 'filetypes': 'ruby' }}
 NeoBundleLazy 'taichouchou2/rsense-0.3', {
       \ 'build' : {
       \    'mac': 'ruby etc/config.rb > ~/.rsense',
@@ -851,6 +851,7 @@ xnoremap <silent><C-p> "0p<CR>
 nnoremap re :%s!
 xnoremap re :s!
 xnoremap rep y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!g<Left><Left>
+xnoremap <Leader>c :s/./&/g
 nnoremap <Leader>f :setl filetype=
 " XXX shougoさんのとこから持って来たけど何やっとるか謎。
 " xnoremap <silent> y "*y:let [@+,@"]=[@*,@*]<CR>
@@ -2023,15 +2024,33 @@ let g:rails_mappings=1
 let g:rails_modelines=0
 let g:rails_syntax = 1
 let g:rails_url='http://localhost:3000'
+" function! s:set_up_rails_setting() "{{{
+"   nnoremap <buffer><Space>r :R<CR>
+"   nnoremap <buffer><Space>a :A<CR>
+"   nnoremap <buffer><Space>m :Rmodel<Space>
+"   nnoremap <buffer><Space>c :Rcontroller<Space>
+"   nnoremap <buffer><Space>v :Rview<Space>
+"   nnoremap <buffer><Space>p :Rpreview<CR>
+"
+"   setl dict+=~/.vim/dict/ruby.rails.dict
+"   for s:syntax in split(glob($HOME.'/.vim/syntax/ruby.rails.*.vim'))
+"     execute 'source ' . s:syntax
+"   endfor
+"
+"   if !exists('b:file_type_name') | return | endif
+"
+"   execute 'nnoremap <buffer><Space><Space>d  :<C-U>SmartEdit ~/.vim/dict/'. b:file_type_name .'.dict<CR>'
+"   execute 'setl dict+=~/.vim/dict/' . b:file_type_name . '.dict'
+" endfunction"}}}
 function! s:set_up_rails_setting() "{{{
-  nnoremap <buffer><Space>r :R<CR>
-  nnoremap <buffer><Space>a :A<CR>
-  nnoremap <buffer><Space>m :Rmodel<Space>
-  nnoremap <buffer><Space>c :Rcontroller<Space>
-  nnoremap <buffer><Space>v :Rview<Space>
-  nnoremap <buffer><Space>p :Rpreview<CR>
+  nnoremap <Space>r :R<CR>
+  nnoremap <Space>a :A<CR>
+  nnoremap <Space>m :Rmodel<Space>
+  nnoremap <Space>c :Rcontroller<Space>
+  nnoremap <Space>v :Rview<Space>
+  nnoremap <Space>p :Rpreview<CR>
 
-  setl dict+=~/.vim/dict/ruby.rails.dict
+  set dict+=~/.vim/dict/ruby.rails.dict
   for s:syntax in split(glob($HOME.'/.vim/syntax/ruby.rails.*.vim'))
     execute 'source ' . s:syntax
   endfor
@@ -2039,7 +2058,7 @@ function! s:set_up_rails_setting() "{{{
   if !exists('b:file_type_name') | return | endif
 
   execute 'nnoremap <buffer><Space><Space>d  :<C-U>SmartEdit ~/.vim/dict/'. b:file_type_name .'.dict<CR>'
-  execute 'setl dict+=~/.vim/dict/' . b:file_type_name . '.dict'
+  execute 'set dict+=~/.vim/dict/' . b:file_type_name . '.dict'
 endfunction"}}}
 
 aug MyAutoCmd
@@ -2214,7 +2233,7 @@ let g:syntastic_warning_symbol='X'
 let g:syntastic_mode_map = {
       \ 'mode'              : 'active',
       \ 'active_filetypes'  : g:my.ft.program_files,
-      \ 'passive_filetypes' : ["html"],
+      \ 'passive_filetypes' : ["html", "yaml"],
       \}
 "}}}
 
@@ -2553,7 +2572,7 @@ xmap A  <Plug>(niceblock-A)
 " ------------------------------------
 " switch.vim
 " ------------------------------------
-nnoremap <silent>! :Switch<CR>
+nnoremap ! :Switch<CR>
 let s:switch_define = {}
 
 function! s:define_switch_mappings()
@@ -2615,41 +2634,49 @@ function! bundle.hooks.on_source(bundle) "{{{
         \ 'neocomplcache_source_completion_length',
         \ 'neocomplcache_source_rank',
         \ 'neocomplcache_vim_completefuncs',
+        \ 'neocomplcache_same_filetype_lists',
+        \ 'neocomplcache_delimiter_patterns',
         \ 'neocomplcache_dictionary_filetype_lists',]
+
   for initialize_variable in s:neocomplcache_initialize_lists
     call alpaca#let_g:(initialize_variable, {})
   endfor
   "}}}
 
-  " XXX どこで定義されてるか分からんので、上書きはしない。
   " Define force omni patterns"{{{
-  call alpaca#let_dict( 'g:neocomplcache_source_rank', {
+  let g:neocomplcache_source_rank = {
         \ 'c'       : '[^.[:digit:] *\t]\%(\.\|->\)',
         \ 'cpp'     : '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::',
         \ 'python'  : '[^. \t]\.\w*',
-        \ } )
+        \ }
 
   " Define keyword pattern.
-  call alpaca#let_dict( 'g:neocomplcache_keyword_patterns', {
+  let g:neocomplcache_keyword_patterns = {
         \ 'c'         : '[^.[:digit:]*\t]\%(\.\|->\)',
         \ 'mail'      : '^\s*\w\+',
-        \ 'php'       : '[^. *\t]\.\w*\|\h\w*::'
-        \ } )
+        \ }
+
+  " let g:neocomplcache_keyword_patterns['php'] = '[^. *\t]\.\w*\|\h\w*::'
+        " \' '^=\%(b\%[egin]\|e\%[nd]\)\|\%(@@\|[:$@]\)\h\w*\|\h\w*\%(::\w*\)*[!?]\?'
 
   " Define include pattern.
-  call alpaca#let_dict( 'g:neocomplcache_include_patterns', {
+  let g:neocomplcache_include_patterns = {
         \ 'scala' : '^import',
         \ 'scss'  : '^\s*\<\%(@import\)\>',
         \ 'php'   : '^\s*\<\%(inlcude\|\|include_once\|require\|require_once\)\>',
-        \ } )
+        \ }
 
   " Define omni patterns
-  call alpaca#let_dict( 'g:neocomplcache_omni_patterns', {
+  let g:neocomplcache_omni_patterns = {
         \ 'php' : '[^. *\t]\.\w*\|\h\w*::'
-        \ } )
+        \ }
+
+  let g:neocomplcache_delimiter_patterns = {
+        \ 'ruby' : []
+        \ }
 
   " Define completefunc
-  call alpaca#let_dict( 'g:neocomplcache_vim_completefuncs', {
+  let g:neocomplcache_vim_completefuncs = {
         \ "Ref"                 : 'ref#complete',
         \ "Unite"               : 'unite#complete_source',
         \ "VimFiler"            : 'vimfiler#complete',
@@ -2658,18 +2685,18 @@ function! bundle.hooks.on_source(bundle) "{{{
         \ "VimShellInteractive" : 'vimshell#vimshell_execute_complete',
         \ "VimShellTerminal"    : 'vimshell#vimshell_execute_complete',
         \ "Vinarise"            : 'vinarise#complete',
-        \ } )
+        \ }
 
   " Define source rank
   " 'rsense' : 2,
-  call alpaca#let_dict( 'g:neocomplcache_source_rank', {
+  let g:neocomplcache_source_rank = {
         \ 'alpaca_look' : 200,
-        \ } )
+        \ }
   "}}}
 
-  call alpaca#let_dict( 'g:neocomplcache_source_completion_length',  {
+  let g:neocomplcache_source_completion_length = {
         \ 'alpaca_look' : 4
-        \ } )
+        \ }
 
   " ファイルタイプ毎の辞書ファイルの場所 {{{
   let g:neocomplcache_dictionary_filetype_lists = {
@@ -2800,6 +2827,10 @@ unlet bundle
 "----------------------------------------
 " neosnippet"{{{
 let g:neosnippet#snippets_directory = g:my.dir.snippets
+let g:neosnippet#disable_runtime_snippets = {
+      \ '_' : 1
+      \ }
+
 imap <silent><C-F>                <Plug>(neosnippet_expand_or_jump)
 inoremap <silent><C-U>            <ESC>:<C-U>Unite snippet<CR>
 nnoremap <silent><Space>e         :<C-U>NeoSnippetEdit -split<CR>
@@ -3087,19 +3118,26 @@ endfunction"}}}
 unlet bundle
 "}}}
 
+" Dash"{{{
 function! s:dash(...)
   let ft = <SID>filetype()
   if &filetype == 'python'
     let ft = ft.'2'
   endif
   let ft = ft.':'
-  let word = len(a:000) == 0 ? input('Dash search: ', ft.expand('<cword>')) : ft.join(a:000, ' ')
+
+  let word = len(a:000) == 0 ? ft.join('<cword>') : join(a:000, ' ')
   call system(printf("open dash://'%s'", word))
 endfunction
 command! -nargs=* Dash call <SID>dash(<f-args>)
 nnoremap <C-K><C-K> :Dash <C-R><C-W><CR>
 au User Rails nnoremap <buffer><C-K><C-K> :Dash rails:<C-R><C-W><CR>
 nnoremap <Leader>d :Dash<Space>
+"}}}
+
+aug MyAutoCmd
+  au FileType haml,ruby,eruby,yaml xnoremap <silent><buffer>H :s!:\(\w\+\)\s*=>!\1:!g
+aug END
 
 if !has('vim_starting')
   call neobundle#call_hook('on_source')
