@@ -215,9 +215,12 @@ NeoBundleLazy 'scrooloose/syntastic', { 'autoload': {
       \ 'filetypes' : g:my.ft.program_files}}
 " NeoBundleLazy 'chikatoike/activefix.vim', { 'autoload': {
 "       \ 'filetypes' : g:my.ft.program_files}}
-NeoBundleLazy 'taichouchou2/alpaca_powerline', {
+NeoBundleLazy 'Lokaltog/vim-powerline', {
       \ 'depends': ['majutsushi/tagbar', 'tpope/vim-fugitive', 'basyura/TweetVim', 'basyura/twibill.vim',],
       \ 'autoload' : { 'functions': ['Pl#UpdateStatusline', 'Pl#Hi#Allocate', 'Pl#Hi#Segments', 'Pl#Colorscheme#Init',]  }}
+" NeoBundleLazy 'taichouchou2/alpaca_powerline', {
+"       \ 'depends': ['majutsushi/tagbar', 'tpope/vim-fugitive', 'basyura/TweetVim', 'basyura/twibill.vim',],
+"       \ 'autoload' : { 'functions': ['Pl#UpdateStatusline', 'Pl#Hi#Allocate', 'Pl#Hi#Segments', 'Pl#Colorscheme#Init',]  }}
 au BufEnter,WinEnter,FileType,BufUnload,CmdWinEnter * call Pl#UpdateStatusline(1)
 
 NeoBundleLazy 'mattn/webapi-vim'
@@ -2941,7 +2944,7 @@ hi UniteCursorLine ctermbg=236   cterm=none
 let g:unite_cursor_line_highlight='UniteCursorLine'
 let g:unite_enable_split_vertically=1
 let g:unite_enable_start_insert=1
-let g:unite_source_directory_mru_limit = 100
+let g:unite_source_directory_mru_limit = 300
 let g:unite_source_directory_mru_time_format="(%m-%d %H:%M) "
 let g:unite_source_file_mru_time_format="(%m-%d %H:%M) "
 let g:unite_source_file_mru_filename_format=":~:."
