@@ -145,6 +145,12 @@ abbr include Enumerable
 #}}}
 #}}}
 
+# module
+snippet     alias
+abbr        alias :new_name, :old_name
+options     word
+  alias :${1:new_name}, :${2:old_name}
+
 # validates
 #{{{
 snippet     reg_email

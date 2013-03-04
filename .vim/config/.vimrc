@@ -215,12 +215,12 @@ NeoBundleLazy 'scrooloose/syntastic', { 'autoload': {
       \ 'filetypes' : g:my.ft.program_files}}
 " NeoBundleLazy 'chikatoike/activefix.vim', { 'autoload': {
 "       \ 'filetypes' : g:my.ft.program_files}}
-NeoBundleLazy 'Lokaltog/vim-powerline', {
-      \ 'depends': ['majutsushi/tagbar', 'tpope/vim-fugitive', 'basyura/TweetVim', 'basyura/twibill.vim',],
-      \ 'autoload' : { 'functions': ['Pl#UpdateStatusline', 'Pl#Hi#Allocate', 'Pl#Hi#Segments', 'Pl#Colorscheme#Init',]  }}
-" NeoBundleLazy 'taichouchou2/alpaca_powerline', {
+" NeoBundleLazy 'Lokaltog/vim-powerline', {
 "       \ 'depends': ['majutsushi/tagbar', 'tpope/vim-fugitive', 'basyura/TweetVim', 'basyura/twibill.vim',],
 "       \ 'autoload' : { 'functions': ['Pl#UpdateStatusline', 'Pl#Hi#Allocate', 'Pl#Hi#Segments', 'Pl#Colorscheme#Init',]  }}
+NeoBundleLazy 'taichouchou2/alpaca_powerline', {
+      \ 'depends': ['majutsushi/tagbar', 'tpope/vim-fugitive', 'basyura/TweetVim', 'basyura/twibill.vim',],
+      \ 'autoload' : { 'functions': ['Pl#UpdateStatusline', 'Pl#Hi#Allocate', 'Pl#Hi#Segments', 'Pl#Colorscheme#Init',]  }}
 au BufEnter,WinEnter,FileType,BufUnload,CmdWinEnter * call Pl#UpdateStatusline(1)
 
 NeoBundleLazy 'mattn/webapi-vim'
@@ -426,21 +426,21 @@ NeoBundleLazy 'rhysd/accelerated-jk', {
       \   'mappings' : [
       \     ['n', '<Plug>(accelerated_jk_gj)'], ['n', '<Plug>(accelerated_jk_gk)']
       \ ]}}
-" NeoBundleLazy 'tpope/vim-surround', {
-"       \ 'autoload' : {
-"       \   'mappings' : [
-"       \     ['nx', '<Plug>Dsurround'], ['nx', '<Plug>Csurround' ],
-"       \     ['nx', '<Plug>Ysurround' ], ['nx', '<Plug>YSurround' ],
-"       \     ['nx', '<Plug>Yssurround'], ['nx', '<Plug>YSsurround'],
-"       \     ['nx', '<Plug>YSsurround'], ['nx', '<Plug>VgSurround'],
-"       \     ['nx', '<Plug>VSurround']
-"       \ ]}}
-NeoBundle 'anyakichi/vim-surround', {
+NeoBundleLazy 'tpope/vim-surround', {
       \ 'autoload' : {
       \   'mappings' : [
-      \     ['n', '<Plug>Dsurround'], ['n', '<Plug>Csurround'],
-      \     ['n', '<Plug>Ysurround'], ['n', '<Plug>YSurround']
+      \     ['nx', '<Plug>Dsurround'], ['nx', '<Plug>Csurround' ],
+      \     ['nx', '<Plug>Ysurround' ], ['nx', '<Plug>YSurround' ],
+      \     ['nx', '<Plug>Yssurround'], ['nx', '<Plug>YSsurround'],
+      \     ['nx', '<Plug>YSsurround'], ['nx', '<Plug>VgSurround'],
+      \     ['nx', '<Plug>VSurround']
       \ ]}}
+" NeoBundle 'anyakichi/vim-surround', {
+"       \ 'autoload' : {
+"       \   'mappings' : [
+"       \     ['n', '<Plug>Dsurround'], ['n', '<Plug>Csurround'],
+"       \     ['n', '<Plug>Ysurround'], ['n', '<Plug>YSurround']
+"       \ ]}}
 
 " extend vim
 " NeoBundle 'kana/vim-fakeclip', { 'autoload' : {
@@ -1142,7 +1142,8 @@ set foldnestmax=5
 
 if v:version >= 703
   highlight ColorColumn guibg=#012345
-  au FileType coffee,ruby,ruby.rspec,eruby,php,javascript,c,json,vim set colorcolumn=80
+  au FileType * set colorcolumn=80
+  " au FileType coffee,ruby,ruby.rspec,eruby,php,javascript,c,json,vim,haml set colorcolumn=80
 endif
 
 syntax on
@@ -2193,7 +2194,7 @@ xmap <Leader>U <Plug>(operator-decamelize)
           \| inoremap <buffer><expr>> smartchr#loop('>', '=>')
     au FileType scala    inoremap <buffer><expr> - smartchr#loop('-', '->', '=>')
           \| inoremap <buffer><expr> < smartchr#loop('<', '<-')
-    au FileType yaml     inoremap <buffer><expr> < smartchr#loop('<', '<%', '<%=')
+    au FileType yaml,eruby inoremap <buffer><expr> < smartchr#loop('<', '<%', '<%=')
           \| inoremap <buffer><expr> > smartchr#loop('>', '%>', '-%>')
 
     " 使わない
@@ -2622,6 +2623,24 @@ let g:neocomplcache_auto_completion_start_length = 2
 " let g:neocomplcache_manual_completion_start_length = 0
 " let g:neocomplcache_min_keyword_length = 2
 " let g:neocomplcache_min_syntax_length = 2
+
+" alpaca_complete.vim
+" let g:alpaca_complete_assets_dir = {
+"       \ 'img'   : 'app/assets/images',
+"       \ 'js'    : 'app/assets/javascripts',
+"       \ 'style' : 'app/assets/stylesheets',
+"       \ 'ctrl'  : 'app/controllers',
+"       \ 'mig'   : 'db/migrate',
+"       \ 'seed'  : 'db/seeds',
+"       \ 'lib'   : 'lib',
+"       \ 'spec'  : 'spec',
+"       \ 'model' : 'app/models',
+"       \ 'view'  : 'app/views',
+"       \ 'helper': 'app/helpers',
+"       \ 'admin' : 'app/admin',
+"       \ 'conf'  : 'config',
+"       \}
+
 let bundle = neobundle#get('neocomplcache')
 function! bundle.hooks.on_source(bundle) "{{{
   " initialize "{{{
@@ -2731,11 +2750,7 @@ inoremap <expr><C-x><C-f>  neocomplcache#manual_filename_complete()
 
 "----------------------------------------
 " echodoc"{{{
-let bundle = neobundle#get('echodoc')
-function! bundle.hooks.on_source(bundle)
-  let g:echodoc_enable_at_startup = 1
-endfunction
-unlet bundle
+let g:echodoc_enable_at_startup = 1
 "}}}
 
 "------------------------------------

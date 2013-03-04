@@ -513,6 +513,109 @@ options     word
 #}}}
 
 # f.helpers#{{{
+# ActionView::Helpers::FormTagHelper#{{{
+#snippet     form_tag
+#abbr        form_tag(url_for_opt={}, prop={}, &block)
+#options     word
+#  form_tag ${1:url}, method: ${2:put|post}${3:, remote: true, authenticity_token: false } do
+
+snippet     .select_with_opt
+abbr        .select(name, opt_tags=nil, prop={})
+options     word
+  .select ${1:name}, options_from_collection_for_select(@${2:array}, ${3:text}, ${4:value})${5:, include_blank: true}${6:, prompt: "${7:Select something\}"}${8:, disable: true}
+
+snippet     .text_field
+abbr        .text_field(name, value=nil, prop={})
+options     word
+  .text_field_tag :${1:name}, ${2:value}${3:, { ${4:prop\} \}}
+
+snippet     .hidden_field_tag
+abbr        .hidden_field(name, value=nil, prop={})
+options     word
+  .hidden_field_tag ${1:name}, ${2:value}${3:, { ${4:prop\} \}}
+
+snippet     .file_field_tag
+abbr        .file_field(name, prop={})
+options     word
+  .file_field_tag :${1:name}${2:, { ${3:accept: 'image/png,image/gif,image/jpg'\} \}}
+
+snippet     .password_field_with_value
+abbr        .password_field(name="password", value=nil, prop={})
+options     word
+  .password_field ${1:name}${2:, ${3:value\}}${4: { ${5\} }}
+
+snippet     .text_area
+abbr        .text_area(name, content=nil, prop={})
+options     word
+  .text_area ${1:name}${2:, ${3:value\}}${4:, { ${5\} \}}
+
+snippet     .check_box_tag
+abbr        .check_box(name, value="1", checked=false, prop={})
+options     word
+  .check_box ${1:name}, ${2:value}${3:, ${4:cheked(true)\}}${5:, { ${6:prop\} \}}
+
+snippet     .radio_button
+abbr        .radio_button(name, value, checked=false, prop={})
+options     word
+  .radio_button ${1:name}
+
+snippet     .submit
+abbr        .submit(value, prop={})
+options     word
+  .submit ${1:text}${2:, { ${3:prop\} \}}
+
+snippet     .button
+abbr        .button(content_or_prop=nil, prop=nil, &block)
+options     word
+  .button ${1:text}${2:, disable_with: "お待ちください..."}
+
+snippet     .button_do
+abbr        .button(content_or_prop=nil, prop=nil) do ... end
+options     word
+  .button "${1:text}"${2:, disable_with: "お待ちください..."} do
+    ${3}
+
+snippet     .image_submit
+abbr        .image_submit(source, prop={})
+options     word
+  .image_submit ${1:source}${2:, ${3:prop\}}
+
+snippet     .field_set
+abbr        .field_set(legend=nil, prop={}, &block)
+options     word
+  .field_set ${1:field_title}${2:, ${3:prop\}}
+
+snippet     .search_field_tag
+abbr        .search_field(name, value=nil, prop={})
+options     word
+  .search_field ${1:name}${2:, ${3:value\}}${4:, ${5:prop\}}
+
+snippet     .telephone_field_tag
+abbr        .telephone_field(name, value=nil, prop={})
+options     word
+  .telephone_field ${1:name}, ${2:value}${3:, ${4:prop\}}
+
+snippet     .url_field_tag
+abbr        .url_field(name, value=nil, prop={})
+options     word
+  .url_field ${1:name}, ${2:value}${3:, ${4:value\}}
+
+snippet     .email_field
+abbr        .email_field(name, value=nil, prop={})
+options     word
+  .email_field ${1:name}, ${2:value}${3:, ${4:prop\}}
+
+snippet     .number_field_tag
+abbr        .number_field(name, value=nil, prop={})
+options     word
+  .number_field ${1:name}, ${2:value}${3:, ${4:prop\}}
+
+snippet     .range_field_tag
+abbr        .range_field(name, value=nil, prop={})
+options     word
+  .range_field ${1:name}, ${2:value}${3:, ${4:prop\}}
+#}}}
+
 #ActionView::Helpers::FormOptionsHelper#{{{
 snippet     .select
 abbr        .select(method, choices, prop={}, html_prop={})
@@ -592,7 +695,7 @@ abbr        .file_field(:method, prop={})
 options     word
   .file_field :${1:method}${2:, ${3:accept: 'text/html'\}}
 
-snippet     .text_area
+snippet     .text_area_tag
 abbr        .text_area(:method, prop={})
 options     word
   .text_area :${1:method}${2:, ${3:accept: 'text/html'\}}
@@ -603,7 +706,7 @@ options     word
   .check_box :${1:method}, ${2:{\}}${3:, ${4:checked_value\}}${5:, ${6:unchecked_value\}}
 
 
-snippet     .radio_button
+snippet     .radio_button_tag
 abbr        .radio_button(method, tag_value, prop={})
 options     word
   .radio_button :${1:method}, ${2:tag_value}${3:, ${4:prop\}}

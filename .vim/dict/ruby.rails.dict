@@ -1,4 +1,5 @@
 accepts_nested_attributes_for
+binding.pry
 add_assertion
 add_column
 add_index
@@ -276,3 +277,4 @@ write_inheritable_array
 write_inheritable_attribute
 write_inheritable_hash
 attr_accessor_paperclip
+human_attribute_name
