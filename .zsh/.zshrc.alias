@@ -114,7 +114,7 @@ _rtags() {
 }
 
 alias rtags='ctags -R -a --sort=yes --exclude=*.js --exclude=*.h --exclude=log --exclude=*.yml --exclude=.git --langmap=RUBY:.rb ~/.rbenv/versions/1.9.3-p125/lib/ruby/1.9.1 -f ~/rubyTags'
-alias gtags='ctags -R -f ~/gtags -a --sort=yes --exclude=*.c --exclude=*.js --exclude=*.exp  --exclude=*.am --exclude=*.in --exclude=*.m4--exclude=*.o --exclude=*.h --exclude=log --exclude=*.yml --exclude=.git --langmap=RUBY:.rb ~/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems'
+alias gtags='ctags -R -f ~/gtags -a --sort=yes --exclude=*.c --exclude=*.js --exclude=*.exp  --exclude=*.am --exclude=*.in --exclude=*.m4--exclude=*.o --exclude=*.h --exclude=log --exclude=*.yml --exclude=.git --langmap=RUBY:.rb ~/.rbenv/versions/2.0.0-p0/lib/ruby/gems/2.0.0/gems'
 # }}}
 
 # rals# {{{

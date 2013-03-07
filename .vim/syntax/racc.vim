@@ -10,6 +10,13 @@ endif
 let s:cpo_save = &cpo
 set cpo&vim
 
+if !exists("main_syntax")
+  let main_syntax = 'racc'
+endif
+
+" runtime syntax/ruby.vim
+" unlet b:current_syntax
+
 syn keyword raccTodo        contained TODO FIXME XXX NOTE
 
 syn region  raccComment     start='/\*' end='\*/'
@@ -137,6 +144,7 @@ hi def link raccPreProc     PreProc
 hi def link raccKeyword     Keyword
 
 let b:current_syntax = "racc"
+unlet main_syntax
 
 let &cpo = s:cpo_save
 unlet s:cpo_save

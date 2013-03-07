@@ -1,0 +1,7 @@
+#!/bin/sh
+
+gem install passenger
+/usr/local/bin/passenger-install-apache2-module
+/usr/local/bin/passenger-install-apache2-module --snippet
+vim /Applications/XAMPP/etc/httpd.conf
+

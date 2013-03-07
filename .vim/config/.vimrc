@@ -24,14 +24,10 @@ function! s:include(target, value) "{{{
 endfunction"}}}
 " XXX コードは見てないけど、uniteのkindに同じ機能があるような。
 function! s:current_git() "{{{
-  let git_root_dir = alpaca#system('git rev-parse --show-cdup')
-  " XXX vimscriptにtrim的なの無いの？
+  let git_root_dir = alpaca#system('git rev-parse --show-toplevel')
   let git_root_dir = substitute(git_root_dir, '\n', '', 'g')
 
   return fnamemodify(git_root_dir, ':p')
-endfunction"}}}
-function! s:git_exists() "{{{
-  return aplaca#system('git rev-parse --is-inside-work-tree') == "true\n"
 endfunction"}}}
 function! s:filetype() "{{{
   if empty(&filetype) | return '' | endif
@@ -60,11 +56,8 @@ let g:my.lingr = {
 let g:my.conf = {
       \ "initialize" : 1,
       \ "tags": {
-      \   "auto_create" : 0,
-      \   "append"      : 1,
-      \   "enable_without_git" : 0,
-      \   "ctags_opts"  : '-R --sort=yes --exclude=log --exclude=.git',
-      \   "GEM_HOME"    : '~/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems',
+      \   "auto_create" : 1,
+      \   "ctags_opts"  : '-R --sort=yes --exclude=log --exclude=.git --exclude=.js',
       \ },
       \ }
 "}}}
@@ -134,7 +127,10 @@ set clipboard+=unnamed
 set formatoptions+=lcqmM
 set helplang=ja,en
 set modelines=1
+set nomore
 set mouse=a
+set mousefocus
+set mousehide
 set guioptions+=a
 set ttymouse=xterm2
 set nobackup
@@ -212,6 +208,9 @@ NeoBundle 'taichouchou2/alpaca_remove_dust.vim', {
       \   'insert' : 1 }}
 NeoBundle 'tpope/vim-fugitive', { 'autoload' : { 'commands': ['Gcommit', 'Gblame', 'Ggrep', 'Gdiff'] }}
 NeoBundleLazy 'scrooloose/syntastic', { 'autoload': {
+      \ 'build' : {
+      \   'mac' : ['brew install tidy', 'brew install csslint', 'gem install sass', 'brew install jslint']
+      \ },
       \ 'filetypes' : g:my.ft.program_files}}
 " NeoBundleLazy 'chikatoike/activefix.vim', { 'autoload': {
 "       \ 'filetypes' : g:my.ft.program_files}}
@@ -373,7 +372,7 @@ NeoBundleLazy 'open-browser.vim', { 'autoload' : {
       \ 'commands' : ['OpenBrowserSearch'] }}
 NeoBundleLazy 'thinca/vim-ref', { 'autoload' : {
       \ 'commands' : 'Ref',
-      \ 'mappings' : ['n', 'K'] }}
+      \ 'mappings' : ['n', 'K', '<Plug>(ref-keyword)'] }}
 NeoBundle 'tomtom/tcomment_vim', { 'autoload' : {
       \ 'commands' : ['TComment', 'TCommentAs', 'TCommentMaybeInline'] }}
 NeoBundleLazy 'tyru/caw.vim', {
@@ -402,7 +401,7 @@ NeoBundleLazy 'camelcasemotion', { 'autoload' : {
       \ 'mappings' : ['<Plug>CamelCaseMotion_w', '<Plug>CamelCaseMotion_b', '<Plug>CamelCaseMotion_e', '<Plug>CamelCaseMotion_iw', '<Plug>CamelCaseMotion_ib', '<Plug>CamelCaseMotion_ie']
       \ }}
 NeoBundleLazy 'rhysd/clever-f.vim', { 'autoload' : {
-      \   'mappings' : 'f',
+      \   'mappings' : ['f', '<Plug>(clever-f-f)'],
       \ }}
 NeoBundleLazy 'mattn/zencoding-vim', {
       \ 'autoload': {
@@ -435,6 +434,13 @@ NeoBundleLazy 'tpope/vim-surround', {
       \     ['nx', '<Plug>YSsurround'], ['nx', '<Plug>VgSurround'],
       \     ['nx', '<Plug>VSurround']
       \ ]}}
+NeoBundleLazy 'tpope/vim-speeddating', {
+      \ 'autoload': {
+      \   'mappings': [
+      \     ['nx', '<C-A>'], ['nx', '<C-X>']
+      \ ]
+      \ }
+      \ }
 " NeoBundle 'anyakichi/vim-surround', {
 "       \ 'autoload' : {
 "       \   'mappings' : [
@@ -459,10 +465,10 @@ NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
 NeoBundleLazy 'yomi322/vim-gitcomplete', { 'autoload' : {
       \ 'filetype' : 'vimshell'
       \ }}
-" NeoBundleLazy 'taichouchou2/alpaca_look.git', {
-"       \ 'autoload' : {
-"       \   'insert' : 1,
-"       \ }}
+NeoBundleLazy 'taichouchou2/alpaca_look.git', {
+      \ 'autoload' : {
+      \   'insert' : 1,
+      \ }}
 "}}}
 " text-object拡張"{{{
 " NeoBundle 'emonkak/vim-operator-comment'
@@ -788,7 +794,10 @@ filetype plugin indent on
 set autoread
 set hidden
 set nrformats-=octal
+set nrformats+=alpha
 set textwidth=0
+set gdefault
+set splitright
 
 " 開いているファイルのディレクトリに自動で移動
 aug MyAutoCmd
@@ -826,7 +835,7 @@ inoremap " ""<Left>
 inoremap ' ''<Left>
 aug MyAutoCmd
   au FileType scala inoremap <buffer>' '
-  au FileType ruby,eruby,haml inoremap <buffer>\| \|\|<Left>
+  au FileType ruby,eruby,haml,racc,racc.ruby inoremap <buffer>\| \|\|<Left>
         \| inoremap <buffer>,{ #{}<Left>
 aug END
 augroup MyXML
@@ -850,6 +859,8 @@ nnoremap <silent><Space>s :w sudo:%<CR>
 inoremap <C-D><C-A> <C-R>=g:my.info.author<CR>
 inoremap <C-D><C-D> <C-R>=g:my.info.date<CR>
 inoremap <C-D><C-R> <C-R>=<SID>current_git()<CR>
+nnoremap <Leader>s :call <SID>toggle_set_spell()<CR>
+inoremap <C-@> <Esc>[s1z=`]a
 xnoremap <silent><C-p> "0p<CR>
 nnoremap re :%s!
 xnoremap re :s!
@@ -858,11 +869,22 @@ xnoremap <Leader>c :s/./&/g
 nnoremap <Leader>f :setl filetype=
 " XXX shougoさんのとこから持って来たけど何やっとるか謎。
 " xnoremap <silent> y "*y:let [@+,@"]=[@*,@*]<CR>
+function! s:toggle_set_spell() "{{{
+  if &spell
+    setl nospell
+  else
+    setl spell
+  endif
+endfunction"}}}
+
 "}}}
 " コメントを書くときに便利 {{{
 inoremap <leader>* ****************************************
 inoremap <leader>- ----------------------------------------
 inoremap <leader>h <!-- / --><left><left><left><Left>
+
+nnoremap ,t :<C-u>call alpaca#endtag_comment()<CR>
+let g:endtagcommentFormat = '<!-- /%tag_name%id%class -->'
 "}}}
 " 変なマッピングを修正 "{{{
 nnoremap ¥ \
@@ -889,8 +911,8 @@ xmap <silent>eh :call <SID>HtmlEscape()<CR>
 xmap <silent>dh :call <SID>HtmlUnEscape()<CR>
 " }}}
 " Improved increment.{{{
-nmap <C-A> <SID>(increment)
-nmap <C-X> <SID>(decrement)
+" nmap <C-A> <SID>(increment)
+" nmap <C-X> <SID>(decrement)
 nmap <silent> <SID>(increment) :AddNumbers 1<CR>
 nmap <silent> <SID>(decrement) :AddNumbers -1<CR>
 function! s:add_numbers(num)
@@ -1113,14 +1135,21 @@ filetype indent on
 " set relativenumber    " 相対表示
 set breakat=\\;:,!?
 set cdpath+=~
-set cmdheight=3
+set cmdheight=2
+set cmdwinheight=2
 set cursorline
 set equalalways       " 画面の自動サイズ調整
 set laststatus=2
 set lazyredraw
 set linebreak
+" set balloondelay=300
+set browsedir=buffer
+" http://www15.ocn.ne.jp/~tusr/vim/options_help.html#highlight
+" set highlight=8:SpecialKey,@:NonText,d:Directory,e:ErrorMsg,i:IncSearch,l:Search, m:MoreMsg,M:ModeMsg,n:LineNr,r:Question,s:StatusLine,S:StatusLineNC,c:VertSplit,t:Title,v:Visual,w:WarningMsg,W:WildMenu,f:Folded,F:FoldColumn
+" set browsedir=current
 set list
 set listchars=tab:␣.,trail:_,extends:>,precedes:<
+set fillchars=vert:\|,fold:-
 set matchpairs+=<:>
 set number
 set scrolloff=5
@@ -1129,10 +1158,19 @@ set showfulltag
 set showmatch
 set showtabline=2
 set spelllang=en_us
+set nospell
 set t_Co=256
 set title
 set titlelen=95
 set ttyfast
+
+if has('title') && (has('gui_running') || &title)
+  set titlestring=
+  set titlestring+=%f\                                              " file name
+  set titlestring+=%h%m%r%w                                         " flags
+  set titlestring+=\ -\ %{v:progname}                               " program name
+  set titlestring+=\ -\ %{substitute(getcwd(),\ $HOME,\ '~',\ '')}  " working directory
+endif
 
 "折り畳み
 set foldcolumn=1
@@ -1167,52 +1205,33 @@ set tags& tags-=tags tags+=./tags;
 
 function! s:set_tags() "{{{
   let current_git_root = <SID>current_git()
-  if filereadable(current_git_root.'/tags')
-    execute 'setl tags+='.expand(current_git_root.'/tags')
-  endif
+  " XXX まぁ、設定しといても害はないよね。
+  " if filereadable(current_git_root.'tags')
+  execute "set tags+=" . expand(current_git_root.'tags')
+  " endif
+  " if filereadable(current_git_root.'.git/tags')
+  execute "set tags+=" . expand(current_git_root.'.git/tags')
+  " endif
 endfunction"}}}
 
 function! s:update_tags() "{{{
-  if g:my.conf.tags.auto_create != 1 |return| endif
-
-  " XXX とりあえず、一度だけ実行するようにする
-  au! MyUpdateTagsCmd
+  if g:my.conf.tags.auto_create != 1 | return -1 | endif
 
   let current_git_root = <SID>current_git()
-
-  " git管理化でない場合で、許可してなければ実行しない
-  if current_git_root != '' || ( current_git_root && g:my.conf.tags.enable_without_git == 1 )
-    let path = current_git_root !='' ?  current_git_root. "tags" : './tags'
-
-    call alpaca#let_g:('my.conf.tags.append', 0)
-    let append_opts = g:my.conf.tags.append ? ' --append=yes' : ''
-
-    return alpaca#system_bg( g:my.bin.ctags, g:my.conf.tags.ctags_opts , '-f '.path, append_opts)
+  if isdirectory(current_git_root)
+    call vimproc#system_bg($HOME . "/.vim/bin/create_tags_into_git")
   endif
 endfunction"}}}
-
-function! s:update_gtags() "{{{
-  let exclude = ['*.c', '*.js', '*.exp', '*.am', '*.in', '*.m4', '*.o', '*.h', 'log', '*.yml', '.git']
-  let exclude_opt = ''
-  for expect in exclude
-    let exclude_opt .= ' --exclude=' . expect
-  endfor
-
-  let gtags_opts = '-R -f ~/gtags -a --sort=yes --langmap=RUBY:.rb'
-  let target_path = g:my.conf.tags.GEM_HOME
-
-  return alpaca#system( 'ctags -R -f ~/gtags -a --sort=yes --exclude=*.c --exclude=*.js --exclude=*.exp  --exclude=*.am --exclude=*.in --exclude=*.m4--exclude=*.o --exclude=*.h --exclude=log --exclude=*.yml --exclude=.git --langmap=RUBY:.rb ~/.rbenv/versions/1.9.3-p194/lib/ruby/gems/1.9.1/gems', '' )
-endfunction"}}}
-command! UpdateGtags call s:update_gtags()
+command! UpdateTags call s:update_tags()
 
 aug MyTagsCmd
   au!
   au BufEnter * call <SID>set_tags()
 aug END
 
-aug MyUpdateTagsCmd
+aug MyUpdateTags
   au!
-  au VimEnter * call <SID>update_tags()
+  au BufWritePost * call <SID>update_tags()
 aug END
 
 "tags_jumpを使い易くする
@@ -1586,18 +1605,33 @@ function! bundle.hooks.on_source(bundle) "{{{
   let g:quickrun_config.applescript = {
         \ 'command' : 'osascript' , 'output' : '_'}
 
+  let g:quickrun_config["racc.ruby"] = {
+        \ 'command': 'racc',
+        \ 'cmdopt' : '-o',
+        \ 'args'   : 'main.rb',
+        \ 'outputter': 'message',
+        \ 'exec'   : '%c %o %a %s', }
+
+  let g:quickrun_config['racc.run'] = {
+        \ 'command': 'ruby',
+        \ 'args'   : 'main.rb',
+        \ 'exec'   : '%c %a src/', }
+
   let g:quickrun_config['ruby.rspec'] = {
         \ 'type' : 'ruby.rspec',
         \ 'command': 'rspec',
         \ 'exec': 'bundle exec %c %o %s', }
+
   "}}}
-  aug QuickRunAutoCmd "{{{
-    au!
-    au FileType quickrun
-          \ au BufEnter <buffer> if (winnr('$') == 1) | q | endif
-  aug END "}}}
 endfunction"}}}
 unlet bundle
+
+aug QuickRunAutoCmd "{{{
+  au!
+  au FileType quickrun
+        \ au BufEnter <buffer> if (winnr('$') == 1) | q | endif
+  au FileType racc.ruby,racc nnoremap <buffer><Leader>R :<C-U>QuickRun racc.run<CR>
+aug END "}}}
 "}}}
 
 "------------------------------------
@@ -1650,6 +1684,7 @@ let g:ref_cache_dir               = g:my.dir.vimref
 let g:ref_refe_cmd                = expand('~/.vim/ref/ruby-ref1.9.2/refe-1_9_2')
 let g:ref_phpmanual_path          = expand('~/.vim/ref/php-chunked-xhtml')
 let g:ref_ri_cmd                  = g:my.bin.ri
+let g:ref_no_default_key_mappings = 1
 
 nnoremap <C-K> :<C-U>Ref alc <Space><C-R><C-W><CR>
 xnoremap <C-K> :<C-U>Ref alc <Space><C-R><C-W><CR>
@@ -1664,6 +1699,7 @@ nnoremap rpe :<C-U>Unite ref/perldoc -default-action=split -input=
 aug MyAutoCmd
   au FileType ruby,eruby,ruby.rspec nnoremap <silent><buffer>KK :<C-U>Unite -no-start-insert ref/ri   -input=<C-R><C-W><CR>
   au FileType ruby,eruby,ruby.rspec nnoremap <silent><buffer>K  :<C-U>Unite -no-start-insert ref/refe -input=<C-R><C-W><CR>
+  au FileType vim if empty(&buftype) && &filetype != 'vim' |nnoremap <buffer>K <Plug>(ref-keyword)| endif
 aug END
 
 function! s:initialize_ref_viewer()
@@ -2234,10 +2270,20 @@ let g:syntastic_warning_symbol='X'
 " let g:syntastic_error_symbol='✗'
 " let g:syntastic_warning_symbol='⚠'
 
+" neosnippetsといい、syntasticといい、custom filetypeで判定されるとつらい。。
+" racc.rubyのftで編集すると、保存時に怒られるので除外する。元はといえば、
+" neosnippetsがfiletypeしか見ないでsnipを読み込むからいけないのか。。
+au FileType ruby let g:syntastic_mode_map.passive_filetypes = copy( s:passive_filetypes )
+au BufEnter *.y call <SID>remove_ruby_syntastic()
+function! s:remove_ruby_syntastic() "{{{
+  call add( g:syntastic_mode_map.passive_filetypes, "ruby" )
+endfunction"}}}
+
+let s:passive_filetypes = ["html", "yaml", "racc.ruby"]
 let g:syntastic_mode_map = {
       \ 'mode'              : 'active',
       \ 'active_filetypes'  : g:my.ft.program_files,
-      \ 'passive_filetypes' : ["html", "yaml"],
+      \ 'passive_filetypes' : copy(s:passive_filetypes),
       \}
 "}}}
 
@@ -2576,6 +2622,7 @@ xmap A  <Plug>(niceblock-A)
 " ------------------------------------
 " switch.vim
 " ------------------------------------
+"{{{
 nnoremap ! :Switch<CR>
 let s:switch_define = {}
 
@@ -2593,15 +2640,27 @@ aug MyAutoCmd
 aug END
 "}}}
 
+" ------------------------------------
+" clever-f
+" ------------------------------------
+"{{{
+let g:clever_f_not_overwrites_standard_mappings=1
+map f <Plug>(clever-f-f)
+map F <Plug>(clever-f-F)
+"}}}
+
+"}}}
+
 "----------------------------------------
 " 補完・履歴 neocomplcache "{{{
-set complete+=k,U,kspell,t,d " 補完を充実
+set complete=.,w,b,u,U,s,i,d,t
 set completeopt=menu,menuone,preview
 set history=1000             " コマンド・検索パターンの履歴数
 set infercase
 set wildchar=<tab>           " コマンド補完を開始するキー
 set wildmenu                 " コマンド補完を強化
 set wildmode=longest:full,full
+set thesaurus+=~/.vim/thesaurus/mthes10/mthesaur.txt
 
 "----------------------------------------
 " neocomplcache / echodoc
@@ -2717,7 +2776,7 @@ function! bundle.hooks.on_source(bundle) "{{{
   "}}}
 
   let g:neocomplcache_source_completion_length = {
-        \ 'alpaca_look' : 4
+        \ 'alpaca_look' : 3
         \ }
 
   " ファイルタイプ毎の辞書ファイルの場所 {{{
@@ -2758,7 +2817,7 @@ let g:echodoc_enable_at_startup = 1
 nnoremap <silent>[plug]f          :<C-U>call VimFilerExplorerGit()<CR>
 nnoremap <silent><Leader><Leader> :<C-U>VimFilerBufferDir<CR>
 nnoremap <silent><Leader>n        :<C-U>VimFilerCreate<CR>
-nnoremap <Leader>s                :<C-U>VimFiler ssh://
+" nnoremap <Leader>s                :<C-U>VimFiler ssh://
 " au VimEnter * call VimFilerExplorerGit()
 
 function! VimFilerExplorerGit() "{{{
@@ -2845,9 +2904,9 @@ unlet bundle
 "----------------------------------------
 " neosnippet"{{{
 let g:neosnippet#snippets_directory = g:my.dir.snippets
-let g:neosnippet#disable_runtime_snippets = {
-      \ '_' : 1
-      \ }
+" let g:neosnippet#disable_runtime_snippets = {
+"       \ '_' : 1
+"       \ }
 
 imap <silent><C-F>                <Plug>(neosnippet_expand_or_jump)
 inoremap <silent><C-U>            <ESC>:<C-U>Unite snippet<CR>
@@ -2931,7 +2990,6 @@ nnoremap <silent>gh :<C-U>call <SID>bundle_with_cmd('vim-unite-giti', 'Unite -bu
 "}}}
 "}}}
 
-" XXX 本体の関数をつかって実装したい
 " lineなどsyntaxがあった方がいいものは、開いていたファイルのsyntaxを適応
 function! s:smart_unite_open(cmd) "{{{
   let file_syntax=&syntax
@@ -2982,35 +3040,15 @@ function! s:unite_my_settings() "{{{
   nnoremap <silent><buffer><expr>V unite#do_action('vsplit')
   nnoremap <silent><buffer><expr><Leader><Leader> unite#do_action('vimfiler')
 
-  " Custom actions.
-  " sample
-  " {{{
-  let my_tabopen = {
-        \ 'description' : 'my tabopen items',
-        \ 'is_selectable' : 1,
-        \ }
-  function! my_tabopen.func(candidates) "{{{
-    call unite#take_action('tabopen', a:candidates)
-
-    let dir = isdirectory(a:candidates[0].word) ?
-          \ a:candidates[0].word : fnamemodify(a:candidates[0].word, ':p:h')
-    execute g:unite_kind_openable_lcd_command '`=dir`'
-  endfunction"}}}
-  call unite#custom_action('file,buffer', 'tabopen', my_tabopen)
-  unlet my_tabopen
-  "}}}
-
   " hook
   let unite = unite#get_current_unite()
   let buffer_name = unite.buffer_name != '' ? unite.buffer_name : '_'
 
-  " XXX 本体の関数をつかって実装したい
   " バッファ名に基づいたフックを実行
   call alpaca#let_s:('unite_kuso_hooks', {})
   if has_key( s:unite_kuso_hooks, buffer_name )
     call s:unite_kuso_hooks[buffer_name]()
   endif
-
 endfunction
 aug MyUniteCmd
   au FileType unite call <SID>unite_my_settings()
@@ -3064,7 +3102,6 @@ function! bundle.hooks.on_source(bundle) "{{{
   " unite-history
   "------------------------------------
   "{{{
-  " TODO kusoすぎわろた。 実装方法考えないとなぁ。
   function! BundleWithUniteHisoryCmd(cmd) "{{{
     call <SID>bundle_with_cmd( 'vim-unite-history unite.vim', '' )
 
@@ -3139,27 +3176,23 @@ unlet bundle
 " Dash"{{{
 function! s:dash(...)
   let ft = <SID>filetype()
-  if &filetype == 'python'
-    let ft = ft.'2'
-  endif
+  if &filetype == 'python' |let ft = ft.'2'| endif
+
   let ft = ft.':'
 
   let word = len(a:000) == 0 ? ft.join('<cword>') : join(a:000, ' ')
   call system(printf("open dash://'%s'", word))
 endfunction
 command! -nargs=* Dash call <SID>dash(<f-args>)
+
 nnoremap <C-K><C-K> :Dash <C-R><C-W><CR>
-au User Rails nnoremap <buffer><C-K><C-K> :Dash rails:<C-R><C-W><CR>
+au User Rails nnoremap <buffer><C-K><C-K><C-K> :Dash rails:<C-R><C-W><CR>
 nnoremap <Leader>d :Dash<Space>
 "}}}
 
 aug MyAutoCmd
   au FileType haml,ruby,eruby,yaml xnoremap <silent><buffer>H :s!:\(\w\+\)\s*=>!\1:!g
 aug END
-
-if !has('vim_starting')
-  call neobundle#call_hook('on_source')
-endif
 
 " 学習用
 imap <BS> <Nop>
