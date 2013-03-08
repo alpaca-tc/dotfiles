@@ -4,7 +4,7 @@ aug END
 
 "----------------------------------------
 call alpaca#init()
-" XXX rubyのinlucde?的な。
+" XXX rubyのinlucde?的な。そんなにテストしてない。
 " vimには無いのかなー。
 function! s:include(target, value) "{{{
   let target_type = type(a:target)
@@ -465,10 +465,10 @@ NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
 NeoBundleLazy 'yomi322/vim-gitcomplete', { 'autoload' : {
       \ 'filetype' : 'vimshell'
       \ }}
-NeoBundleLazy 'taichouchou2/alpaca_look.git', {
-      \ 'autoload' : {
-      \   'insert' : 1,
-      \ }}
+" NeoBundleLazy 'taichouchou2/alpaca_look.git', {
+"       \ 'autoload' : {
+"       \   'insert' : 1,
+"       \ }}
 "}}}
 " text-object拡張"{{{
 " NeoBundle 'emonkak/vim-operator-comment'
@@ -675,6 +675,8 @@ endif
 " NeoBundleLazy 'skalnik/vim-vroom'
 NeoBundleLazy 'ruby-matchit', { 'autoload': {
       \ 'filetypes': g:my.ft.ruby_files}}
+NeoBundleLazy 'tpope/vim-rbenv', { 'autoload': {
+      \   'filetypes' : g:my.ft.ruby_files }}
 NeoBundleLazy 'skwp/vim-rspec', {
       \ 'build': {
       \   'mac': 'gem install hpricot',
@@ -695,6 +697,9 @@ NeoBundleLazy 'taichouchou2/unite-reek', {
       \ },
       \ 'autoload': { 'filetypes': g:my.ft.ruby_files },
       \ 'depends' : 'Shougo/unite.vim' }
+NeoBundle 'tpope/vim-rake', {
+      \ 'commands' : ['Rake'] ,
+      \ 'autoload': { 'filetypes' : g:my.ft.ruby_files }}
 NeoBundleLazy 'ujihisa/unite-rake', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload': { 'filetypes' : g:my.ft.ruby_files }}
@@ -1201,17 +1206,17 @@ colorscheme molokai
 " Tags関連 cTags使う場合は有効化 "{{{
 " http://vim-users.jp/2010/06/hack154/
 
-set tags& tags-=tags tags+=./tags;
+set tags-=tags tags+=./tags;
 
 function! s:set_tags() "{{{
   let current_git_root = <SID>current_git()
   " XXX まぁ、設定しといても害はないよね。
-  " if filereadable(current_git_root.'tags')
-  execute "set tags+=" . expand(current_git_root.'tags')
-  " endif
-  " if filereadable(current_git_root.'.git/tags')
-  execute "set tags+=" . expand(current_git_root.'.git/tags')
-  " endif
+  if filereadable(current_git_root.'tags')
+    execute "setl tags+=" . expand(current_git_root.'tags')
+  endif
+  if filereadable(current_git_root.'.git/tags')
+    execute "setl tags+=" . expand(current_git_root.'.git/tags')
+  endif
 endfunction"}}}
 
 function! s:update_tags() "{{{
@@ -2037,9 +2042,9 @@ unlet bundle
 "------------------------------------
 "{{{
 " function! s:vimRuby()
-"   let g:rubycomplete_buffer_loading = 0
-"   let g:rubycomplete_classes_in_global = 0
-"   let g:rubycomplete_rails = 0
+let g:rubycomplete_buffer_loading = 1
+let g:rubycomplete_classes_in_global = 0
+let g:rubycomplete_rails = 0
 " endfunction
 " aug MyAutoCmd
 "   au FileType ruby,eruby,ruby.rspec call s:vimRuby()
@@ -2771,7 +2776,7 @@ function! bundle.hooks.on_source(bundle) "{{{
   " Define source rank
   " 'rsense' : 2,
   let g:neocomplcache_source_rank = {
-        \ 'alpaca_look' : 200,
+        \ 'alpaca_look' : 1000,
         \ }
   "}}}
 
@@ -3017,11 +3022,11 @@ hi UniteCursorLine ctermbg=236   cterm=none
 let g:unite_cursor_line_highlight='UniteCursorLine'
 let g:unite_enable_split_vertically=1
 let g:unite_enable_start_insert=1
-let g:unite_source_directory_mru_limit = 300
+let g:unite_source_directory_mru_limit = 200
 let g:unite_source_directory_mru_time_format="(%m-%d %H:%M) "
 let g:unite_source_file_mru_time_format="(%m-%d %H:%M) "
 let g:unite_source_file_mru_filename_format=":~:."
-let g:unite_source_file_mru_limit = 100
+let g:unite_source_file_mru_limit = 300
 let g:unite_winheight = 20
 let g:unite_source_history_yank_enable =1
 let s:unite_kuso_hooks = {}

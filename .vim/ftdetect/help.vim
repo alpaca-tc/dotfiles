@@ -1,4 +1,4 @@
-au BufNewFile,BufRead *.txt,*.mkd,*.md call s:set_help_settings()
+au BufNewFile,BufRead *.txt call s:set_help_settings()
 
 function! s:set_help_settings()
   if expand("%:p")  =~ 'doc/.*\.txt'

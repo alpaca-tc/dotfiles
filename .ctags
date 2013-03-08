@@ -1,4 +1,10 @@
+--jcode=utf8
+
+--exclude=.git
+--exclude=log
+
 --langdef=js
+--langmap=Javascript:.js
 --langmap=js:.js
 --regex-js=/([A-Za-z0-9._$()]+)[ \t]*[:=][ \t]*function[ \t]*\(/\1/,function/
 --regex-js=/([A-Za-z0-9._$]+)[ \t]*[:=][ \t]*\[/\1/,array/
@@ -21,8 +27,6 @@
 --regex-scala=/^[ \t]*((abstract|final|sealed|implicit|lazy)[ \t]*)*val[ \t]+([a-zA-Z0-9_]+)/\3/l,constants/
 --regex-scala=/^[ \t]*((abstract|final|sealed|implicit|lazy)[ \t]*)*var[ \t]+([a-zA-Z0-9_]+)/\3/l,variables/
 --regex-scala=/^[ \t]*package[ \t]+([a-zA-Z0-9_.]+)/\1/p,packages/
---jcode=utf8
-
 
 --langdef=coffee
 --langmap=coffee:.coffee
@@ -35,6 +39,7 @@
 --regex-coffee=/^[ \t]*(@[A-Za-z]+)[ \t]*=.*$/\1/i,ivar/
 
 --langdef=rb
+--langmap=Ruby:.rb
 --langmap=rb:.rb
 --regex-rb=/^[\t ]*([A-Z][-_A-Za-z0-9]*::)*([A-Z][-_A-Za-z0-9]*)[\t ]*=/\2/C,constant/
 --regex-rb=/^[ \t]*([A-Z_][A-Z0-9_]*)[ \t]*=/\1/C,constant/
