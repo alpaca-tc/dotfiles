@@ -61,6 +61,9 @@ export SCALA_HOME=/usr/local/Cellar/scala/2.9.2
 export PATH=$HOME/.rbenv/bin:$HOME/.rbenv:$PATH
 eval "$(rbenv init -)"
 
+# MacVim
+export PATH=/Applications/MacVim.app/Contents/MacOS:$PATH
+
 # scala
 [[ -s "$HOME/.bundle/ensime" ]] && export PATH=$HOME/.bundle/ensime/lib_2.9.2/:$PATH
 

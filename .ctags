@@ -38,11 +38,9 @@
 --regex-coffee=/^[ \t]*([ \t][a-z]+)[ \t]*=.*$/\1/v,var/
 --regex-coffee=/^[ \t]*(@[A-Za-z]+)[ \t]*=.*$/\1/i,ivar/
 
---langdef=rb
 --langmap=Ruby:.rb
---langmap=rb:.rb
---regex-rb=/^[\t ]*([A-Z][-_A-Za-z0-9]*::)*([A-Z][-_A-Za-z0-9]*)[\t ]*=/\2/C,constant/
---regex-rb=/^[ \t]*([A-Z_][A-Z0-9_]*)[ \t]*=/\1/C,constant/
+--regex-ruby=/^[\t ]*([A-Z][-_A-Za-z0-9]*::)*([A-Z][-_A-Za-z0-9]*)[\t ]*=/\2/C,constant/
+--regex-ruby=/^[ \t]*([A-Z_][A-Z0-9_]*)[ \t]*=/\1/C,constant/
 
 --langdef=scss
 --langmap=scss:.scss

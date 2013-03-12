@@ -22,15 +22,17 @@ function! s:include(target, value) "{{{
 
   return 0
 endfunction"}}}
-" XXX コードは見てないけど、uniteのkindに同じ機能があるような。
+" XXX 後でテスト
 function! s:current_git() "{{{
-  let git_root_dir = alpaca#system('git rev-parse --show-toplevel')
-  let git_root_dir = substitute(git_root_dir, '\n', '', 'g')
+  if !exists('b:git_dir')
+    return ''
+  endif
 
-  return fnamemodify(git_root_dir, ':p')
+  return substitute(b:git_dir, '/.git$', '', 'g')
 endfunction"}}}
 function! s:filetype() "{{{
   if empty(&filetype) | return '' | endif
+
   return split( &filetype, '\.' )[0]
 endfunction"}}}
 
@@ -675,8 +677,8 @@ endif
 " NeoBundleLazy 'skalnik/vim-vroom'
 NeoBundleLazy 'ruby-matchit', { 'autoload': {
       \ 'filetypes': g:my.ft.ruby_files}}
-NeoBundleLazy 'tpope/vim-rbenv', { 'autoload': {
-      \   'filetypes' : g:my.ft.ruby_files }}
+" NeoBundleLazy 'tpope/vim-rbenv', { 'autoload': {
+"       \   'filetypes' : g:my.ft.ruby_files }}
 NeoBundleLazy 'skwp/vim-rspec', {
       \ 'build': {
       \   'mac': 'gem install hpricot',
@@ -686,9 +688,9 @@ NeoBundleLazy 'skwp/vim-rspec', {
 NeoBundleLazy 'taka84u9/vim-ref-ri', {
       \ 'depends': ['Shougo/unite.vim', 'thinca/vim-ref'],
       \ 'autoload': { 'filetypes': g:my.ft.ruby_files } }
-NeoBundleLazy 'vim-ruby/vim-ruby', { 'autoload': {
-      \ 'mappings' : '<Plug>(ref-keyword)',
-      \ 'filetypes': g:my.ft.ruby_files}}
+" NeoBundleLazy 'vim-ruby/vim-ruby', { 'autoload': {
+"       \ 'mappings' : '<Plug>(ref-keyword)',
+"       \ 'filetypes': g:my.ft.ruby_files}}
 NeoBundleLazy 'Shougo/unite-help'
 NeoBundleLazy 'taichouchou2/unite-reek', {
       \ 'build' : {
@@ -697,9 +699,9 @@ NeoBundleLazy 'taichouchou2/unite-reek', {
       \ },
       \ 'autoload': { 'filetypes': g:my.ft.ruby_files },
       \ 'depends' : 'Shougo/unite.vim' }
-NeoBundle 'tpope/vim-rake', {
-      \ 'commands' : ['Rake'] ,
-      \ 'autoload': { 'filetypes' : g:my.ft.ruby_files }}
+" NeoBundle 'tpope/vim-rake', {
+"       \ 'commands' : ['Rake'] ,
+"       \ 'autoload': { 'filetypes' : g:my.ft.ruby_files }}
 NeoBundleLazy 'ujihisa/unite-rake', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload': { 'filetypes' : g:my.ft.ruby_files }}
@@ -1210,7 +1212,7 @@ set tags-=tags tags+=./tags;
 
 function! s:set_tags() "{{{
   let current_git_root = <SID>current_git()
-  " XXX まぁ、設定しといても害はないよね。
+
   if filereadable(current_git_root.'tags')
     execute "setl tags+=" . expand(current_git_root.'tags')
   endif
@@ -1222,21 +1224,28 @@ endfunction"}}}
 function! s:update_tags() "{{{
   if g:my.conf.tags.auto_create != 1 | return -1 | endif
 
-  let current_git_root = <SID>current_git()
-  if isdirectory(current_git_root)
+  let git_root_dir = <SID>current_git()
+  if git_root_dir == ''
+    return -1
+  endif
+
+  if !exists('s:update_tags_done')
+    let s:update_tags_done = {}
+  endif
+
+  if !has_key(s:update_tags_done, git_root_dir)
     call vimproc#system_bg($HOME . "/.vim/bin/create_tags_into_git")
+    let s:update_tags_done[git_root_dir] = 1
+    let g:update_tags_done = s:update_tags_done
   endif
 endfunction"}}}
 command! UpdateTags call s:update_tags()
 
-aug MyTagsCmd
-  au!
-  au BufEnter * call <SID>set_tags()
-aug END
-
 aug MyUpdateTags
   au!
-  au BufWritePost * call <SID>update_tags()
+  au VimEnter * call <SID>update_tags()
+  " au FileReadPre * call <SID>set_tags()
+  " git系のプラグインで既に実装されている
 aug END
 
 "tags_jumpを使い易くする
@@ -2679,7 +2688,11 @@ let g:neocomplcache_force_overwrite_completefunc  = 1
 let g:neocomplcache_max_list                      = 80
 let g:neocomplcache_skip_auto_completion_time     = '0.3'
 
-let g:neocomplcache_auto_completion_start_length = 2
+let g:neocomplcache_auto_completion_start_length = 3
+aug MyAutoCmd
+  au FileType ruby,haml,eruby,ruby.rspec set omnifunc=
+  " rubycomplete#Completeを消す
+aug END
 " let g:neocomplcache_caching_limit_file_size = 1000000
 " let g:neocomplcache_disable_auto_select_buffer_name_pattern = '\[Command Line\]'
 " let g:neocomplcache_disable_caching_buffer_name_pattern = '[\[*]\%(unite\)[\]*]'
@@ -2876,8 +2889,6 @@ function! bundle.hooks.on_source(bundle) "{{{
 
     if vimfiler.explorer
       call <SID>vimfiler_explorer_local()
-    else
-      call <SID>vimfiler_not_explorer_local()
     endif
 
     " vimfiler common settings
@@ -2891,12 +2902,6 @@ function! bundle.hooks.on_source(bundle) "{{{
   endfunction"}}}
   function! s:vimfiler_explorer_local() "{{{
     au BufEnter <buffer> if (winnr('$') == 1 && &filetype ==# 'vimfiler' && <SID>vimfiler_is_active()) | q | endif
-    let vimfiler = vimfiler#get_current_vimfiler()
-    " call UpdateTags()
-    let g:my.conf.tags.auto_create = 0
-  endfunction"}}}
-  function! s:vimfiler_not_explorer_local() "{{{
-    nnoremap <buffer><expr>u vimfiler#do_action('file')
   endfunction"}}}
   aug VimFilerKeyMapping "{{{
     au!
@@ -3195,8 +3200,36 @@ au User Rails nnoremap <buffer><C-K><C-K><C-K> :Dash rails:<C-R><C-W><CR>
 nnoremap <Leader>d :Dash<Space>
 "}}}
 
+function! s:get_ruby_root() "{{{
+  if !exists('s:ruby_root')
+    let s:ruby_root = substitute(system('echo `rbenv root`/versions/`rbenv version-name`/lib/ruby'), '\n', '', 'g')
+  endif
+
+  return s:ruby_root
+endfunction"}}}
+
+function! s:set_ruby_tags() "{{{
+  if !executable('rbenv')|return -1 |endif
+
+  if !exists('s:ruby_tags')
+    " let ruby_root = s:get_ruby_root()
+    let ruby_root = "/Users/taichou/.rbenv/versions/2.0.0-p0/lib/ruby"
+    let number    = "/2.0.0" " ここを抽象化する
+    let tags      = "/tags"
+    let s:ruby_tags = join([
+          \ ruby_root . number . tags,
+          \ ruby_root . '/gems' . number . '/gems/**2' . tags,
+          \ ruby_root . '/site_ruby' . number . tags,
+          \ ruby_root . '/vendor_ruby' . number . tags,
+          \ ], ',')
+  endif
+
+  execute 'setl tags+='.s:ruby_tags
+endfunction"}}}
+
 aug MyAutoCmd
-  au FileType haml,ruby,eruby,yaml xnoremap <silent><buffer>H :s!:\(\w\+\)\s*=>!\1:!g
+  " au FileType haml,ruby,eruby,yaml xnoremap <silent><buffer>H :s!:\(\w\+\)\s*=>!\1:!g
+  au FileType haml,ruby,eruby call <SID>set_ruby_tags()
 aug END
 
 " 学習用
