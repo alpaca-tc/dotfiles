@@ -1,1 +1,1 @@
-au BufNewFile,BufRead *.coffee   setl filetype=coffee
+au BufNewFile,BufRead *.coffee   setl filetype=coffee.javascript

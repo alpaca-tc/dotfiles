@@ -813,13 +813,13 @@ snippet     execute_script
 abbr        page.execute_script("...")
 options     word
 alias       script_ex
-  execute_script(${1})
+  execute_script(%Q!${1}!)
 
 snippet     evaluate_script
 alias       script_ev
 options     word
 abbr        evaluate_script("...")
-  page.evaluate_script(${1})
+  page.evaluate_script(%Q!${1}!)
 #}}}
 
 # debug {{{

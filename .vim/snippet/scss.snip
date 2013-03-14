@@ -23,19 +23,6 @@ abbr        if
         ${2}
     }
 #}}}
-# include#{{{
-snippet     icf
-abbr        clearfix
-prev_word    '^'
-    @include clearfix;
-
-snippet     ibr
-abbr        abbr
-prev_word    '^'
-    @include border-radius(${1});
-
-
-#}}}
 # mixin#{{{
 snippet     mclearfix
   @mixin cf {// {{{
@@ -84,32 +71,11 @@ snippet     mabsolute
 #   standard CSS declarations use two letters (occasionally three)
 #   SASS functions use the first three letters of the function (occ. four)
 # element#{{{
-snippet e
-    ${1:element} {
-        ${2}
-    }
-# class
-snippet c
-    .${1:class} {
-        ${2}
-    }
-# id
-snippet i
-    #${1:id} {
-        ${2}
-    }
-# Define a variable
-snippet v
-    $${1:name}: ${2:value};
 # @mixin - Define a mixin
 snippet mix
     @mixin ${1:name} {
         ${2}
     }
-# @include - Use a mixin
-snippet inc
-    @include ${1:mixin};
-
 # Standard CSS Declarations
 # positioning
 snippet di
@@ -372,7 +338,608 @@ snippet     ffonts
   http://nov.azarea.jp/fonts.html
 ##}}}
 
-## compass
+## compass #{{{
+# css3#{{{
+snippet     appearance
+abbr        appearance($ap)
+alias       compass_appearance
+options     word
+  @include appearance(${1:normal|button|push-button|hyperlink|radio-button|checkbox|pop-up_menu|list-menu|radio-group|checkbox-group|field|password});
+
+snippet     background-clip
+abbr        background-clip([$clip])
+alias       compass_background-clip
+options     word
+  @include background-clip(${1:border-box|padding-box|content-box});
+
+snippet     background-origin
+abbr        background-origin([$origin])
+alias       compass_background-origin
+options     word
+  @include background-origin(${1:padding-box|border-box|content-box});
+
+snippet     background-size
+abbr        background-size([$size-1], [$size-2]...)
+alias       compass_background-size
+options     word
+  @include background-size(${1:size-1}${2:, ${3:size-2\}});
+
 snippet     border-radius
-abbr        @include border-radius(...)
-  @include border-radius(${1:radius});
+abbr        border-radius([$radius], [$vertical-radius])
+alias       compass_border-radius
+options     word
+  @include border-radius(${1:px});
+
+# css3/box#{{{
+snippet     display-box
+abbr        display-box
+alias       compass_display-box
+options     word
+  @include display-box;
+
+snippet     box-orient
+abbr        box-orient([$orientation])
+alias       compass_box-orient
+options     word
+  @include box-orient(${1:horizontal|vertical|inline-axis|block-axis|inherit});
+
+snippet     box-align
+abbr        box-align([$alignment])
+alias       compass_box-align
+options     word
+  @include box-align(${1:start|end|center|baseline|stretch});
+
+snippet     box-flex
+abbr        box-flex([$flex])
+alias       compass_box-flex
+options     word
+  @include box-flex(${1:n});
+
+snippet     box-flex-group
+abbr        box-flex-group([$group])
+alias       compass_box-flex-group
+options     word
+  @include box-flex-group(${1:group});
+
+snippet     box-ordinal-group
+abbr        box-ordinal-group([$group])
+alias       compass_box-ordinal-group
+options     word
+  @include box-ordinal-group(${1:group});
+
+snippet     box-direction
+abbr        box-direction([$direction])
+alias       compass_box-direction
+options     word
+  @include box-direction(${1:normal|reverse|inherit});
+
+snippet     box-lines
+abbr        box-lines([$lines])
+alias       compass_box-lines
+options     word
+  @include box-lines(${1:single|multiple});
+
+snippet     box-pack
+abbr        box-pack([$pack])
+alias       compass_box-pack
+options     word
+  @include box-pack(${1:start|end|center|justify});
+
+snippet     box-shadow
+abbr        box-shadow([$shadow-1], [$shadow2]...)
+alias       compass_box-shadow
+options     word
+  @include box-shadow(${1:shadow1}${2:, ${3:shadow2\}});
+
+snippet     single-box-shadow
+abbr        single-box-shadow([$color], [$hoff], [$voff], [$blur], [$spread], [$inset])
+alias       compass_single-box-shadow
+options     word
+  @include single-box-shadow(${1:color}, ${2:hoff}, ${3:voff});
+
+snippet     box-sizing
+abbr        box-sizing($bs)
+alias       compass_box-sizing
+options     word
+  @include box-sizing(${1:content-box|border-box});
+#}}}
+
+# columns#{{{
+snippet     columns
+abbr        columns($width-and-count)
+alias       compass_columns
+options     word
+  @include columns(${1:20em 2});
+
+snippet     column-count
+abbr        column-count($count)
+alias       compass_column-count
+options     word
+  @include column-count(${1:n});
+
+snippet     column-gap
+abbr        column-gap($width)
+alias       compass_column-gap
+options     word
+  @include column-gap(${1:width});
+
+snippet     column-width
+abbr        column-width($width)
+alias       compass_column-width
+options     word
+  @include column-width(${1:px});
+
+snippet     column-rule-width
+abbr        column-rule-width($width)
+alias       compass_column-rule-width
+options     word
+  @include column-rule-width(${1:px});
+
+snippet     column-rule-style
+abbr        column-rule-style($style)
+alias       compass_column-rule-style
+options     word
+  @include column-rule-style(${1:style});
+
+snippet     column-rule-color
+abbr        column-rule-color($color)
+alias       compass_column-rule-color
+options     word
+  @include column-rule-color(${1:color});
+
+snippet     column-rule
+abbr        column-rule($width, $style, $color)
+alias       compass_column-rule
+options     word
+  @include column-rule(${1:width}, ${2:style}, ${3:color});
+
+snippet     column-break-before
+abbr        column-break-before([$value])
+alias       compass_column-break-before
+options     word
+  @include column-break-before(${1:auto|always|avoid|left|right|page|column|avoid-page|avoid-column});
+
+snippet     column-break-after
+abbr        column-break-after([$value])
+alias       compass_column-break-after
+options     word
+  @include column-break-after(${1:auto|always|avoid|left|right|page|column|avoid-page|avoid-column});
+
+snippet     column-break-inside
+abbr        column-break-inside([$value])
+alias       compass_column-break-inside
+options     word
+  @include column-break-inside(${1:auto|avoid|avoid-page|avoid-column});
+
+snippet     column-break
+abbr        column-break([$type], [$value])
+alias       compass_column-break
+options     word
+  @include column-break(${1:type}, ${2:value});
+#}}}
+
+snippet     filter
+abbr        filter($filter-1, filter-2...)
+alias       compass_filter
+options     word
+  @include filter(${1:filter-1}, ${2:filter-2});
+
+snippet     font-face
+abbr        font-face($name, $font-files, [$eot], [$weight], [$style])
+alias       compass_font-face
+options     word
+  @include font-face(${1:name}, ${2:font-files}${3:, ${4:eot\}}${5:, ${6:weight\}}${7:, ${8:style\}});
+
+snippet     word-break
+abbr        word-break([$value])
+alias       compass_word-break
+options     word
+  @include word-break(${1:normal|keep-all|break-all});
+
+snippet     hyphens
+abbr        hyphens([$value])
+alias       compass_hyphens
+options     word
+  @include hyphens(${1:auto|manual|none});
+
+snippet     hyphenation
+abbr        hyphenation
+alias       compass_hyphenation
+options     word
+  @include hyphenation;
+
+# background#{{{
+snippet     background
+abbr        background($background-1...)
+alias       compass_background
+options     word
+  @include background(${1:background});
+
+snippet     background-image
+abbr        background-image($image-1)
+alias       compass_background-image
+options     word
+  @include background-image(${1:image-1});
+
+snippet     filter-gradient
+abbr        filter-gradient($start-color, $end-color, [$orientation])
+alias       compass_filter-gradient
+options     word
+  @include filter-gradient(${1:start-color}, ${2:end-color}${3:, ${4:orientation\}});
+
+snippet     border-image
+abbr        border-image($value)
+alias       compass_border-image
+options     word
+  @include border-image(${1:value});
+
+snippet     list-style-image
+abbr        list-style-image($image)
+alias       compass_list-style-image
+options     word
+  @include list-style-image(${1:image});
+
+snippet     list-style
+abbr        list-style($value)
+alias       compass_list-style
+options     word
+  @include list-style(${1:value});
+
+snippet     content
+abbr        content($value)
+alias       compass_content
+options     word
+  @include content(${1:value});
+#}}}
+
+snippet     inline-block
+abbr        inline-block([$alignment])
+alias       compass_inline-block
+options     word
+  @include inline-block(${1:alignment});
+
+snippet     opacity
+abbr        opacity($opacity)
+alias       compass_opacity
+options     word
+  @include opacity(${1:0.5});
+
+snippet     flow-into
+abbr        flow-into($target)
+alias       compass_flow-into
+options     word
+  @include flow-into(${1:target});
+
+snippet     flow-from
+abbr        flow-from($target)
+alias       compass_flow-from
+options     word
+  @include flow-from(${1:target});
+
+snippet     text-shadow
+abbr        text-shadow($shadow-1...)
+alias       compass_text-shadow
+options     word
+  @include text-shadow(${1:shadow-1});
+
+snippet     apply-origin
+abbr        apply-origin($origin, $only3d)
+alias       compass_apply-origin
+options     word
+  @include apply-origin(${1:origin}, ${2:only3d});
+
+snippet     transform-origin
+abbr        transform-origin([$origin-x], [$origin-y], [$origin-z], [$only3d])
+alias       compass_transform-origin
+options     word
+  @include transform-origin(${1:[origin-x]});
+
+snippet     transform
+abbr        transform($transform, [$only3d])
+alias       compass_transform
+options     word
+  @include transform(transform${2:, ${3:3D-only\}});
+
+# TODO 使わない。http://compass-style.org/reference/compass/css3/transform/
+# http://compass-style.org/reference/compass/css3/transition/
+#}}}
+
+# Compass Grid Backgrounds#{{{
+snippet     get-baseline-gradient
+abbr        get-baseline-gradient([$color])
+alias       compass_get-baseline-gradient
+options     word
+  get-baseline-gradient(${1:[$color]});
+
+snippet     build-grid-background
+abbr        build-grid-background([$total], [$column], [$gutter], [$offset], [$column-color], [$gutter-color])
+alias       compass_build-grid-background
+options     word
+  build-grid-background(${1:total});
+
+snippet     get-column-gradient
+abbr        get-column-gradient([$total], [$column], [$gutter], [$offset], [$column-color], [$gutter-color])
+alias       compass_get-column-gradient
+options     word
+  get-column-gradient(${1:total});
+
+snippet     get-column-fluid-grid
+abbr        get-column-fluid-grid([$total], [$column], [$gutter], [$offset], [$column-color], [$gutter-color])
+alias       compass_get-column-fluid-grid
+options     word
+  get-column-fluid-grid(${1:total});
+
+snippet     baseline-grid-background
+abbr        baseline-grid-background([$baseline], [$color])
+alias       compass_baseline-grid-background
+options     word
+  @include baseline-grid-background(${1:baseline}, ${2:color});
+
+snippet     column-grid-background
+abbr        column-grid-background([$total], [$column], [$gutter], [$offset], [$column-color], [$gutter-color], [$force-fluid])
+alias       compass_column-grid-background
+options     word
+  @include column-grid-background(${1:total});
+
+snippet     grid-background
+abbr        grid-background([$total], [$column], [$gutter], [$offset], [$column-color], [$gutter-color], [$force-fluid])
+alias       compass_grid-background
+options     word
+  @include grid-background(${1:total});
+#}}}
+
+snippet     sticky-footer
+abbr        sticky-footer($footer-height, [$root-selector], [$root-footer-selector], [$footer-selector])
+alias       compass_sticky-footer
+options     word
+  @include sticky-footer(${1:height}${2:, ${3:selector...\}});
+
+# reset#{{{
+snippet     reset
+abbr        @import "compass/reset"
+alias       compass_reset
+options     word
+  @import "compass/reset"
+
+snippet     reset-legacy
+abbr        @import "compass/reset-legacy"
+alias       compass_reset-legacy
+options     word
+  @import "compass/reset-legacy"
+#}}}
+
+# link#{{{
+snippet     hover-link
+abbr        hover-link
+alias       compass_hover-link
+options     word
+  @include hover-link;
+
+snippet     link-colors
+abbr        link-colors($normal, [$hover], [$active], [$visited], [$focus])
+alias       compass_link-colors
+options     word
+  @include link-colors(${1:normal}, ${2:hover}, ${3:active}, ${4:visited}, ${5:focus});
+
+snippet     unstyled-link
+abbr        unstyled-link
+alias       compass_unstyled-link
+options     word
+  @include unstyled-link;
+#}}}
+
+# list#{{{
+# bullet#{{{
+snippet     no-bullet
+abbr        no-bullet
+alias       compass_no-bullet
+options     word
+  @include no-bullet;
+
+snippet     no-bullets
+abbr        no-bullets
+alias       compass_no-bullets
+options     word
+  @include no-bullets;
+
+snippet     pretty-bullets
+abbr        pretty-bullets($bullet-icon, [$width], [$height], [$line-height], [$padding])
+alias       compass_pretty-bullets
+options     word
+  @include pretty-bullets(${1:icon_path}, ${2:width}, ${3:height}${4:, ${5:line-height\}}${6:, ${7:padding\}});
+#}}}
+
+snippet     horizontal-list-container
+abbr        horizontal-list-container
+alias       compass_horizontal-list-container
+options     word
+  @include horizontal-list-container;
+
+snippet     horizontal-list-item
+abbr        horizontal-list-item([$padding], [$direction])
+alias       compass_horizontal-list-item
+options     word
+  @include horizontal-list-item(${1:padding}${2:, ${3:direction\}});
+
+snippet     horizontal-list
+abbr        horizontal-list([$padding], [$direction])
+alias       compass_horizontal-list
+options     word
+  @include horizontal-list(${1:padding}${2:, ${3:direction\}});
+
+snippet     inline-block-list-container
+abbr        inline-block-list-container
+alias       compass_inline-block-list-container
+options     word
+  @include inline-block-list-container;
+
+snippet     inline-block-list-item
+abbr        inline-block-list-item([$padding])
+alias       compass_inline-block-list-item
+options     word
+  @include inline-block-list-item(${1:padding});
+
+snippet     inline-block-list
+abbr        inline-block-list([$padding])
+alias       compass_inline-block-list
+options     word
+  @include inline-block-list(${1:padding});
+
+snippet     inline-list
+abbr        inline-list
+alias       compass_inline-list
+options     word
+  @include inline-list;
+
+snippet     delimited-list
+abbr        delimited-list([$separator])
+alias       compass_delimited-list
+options     word
+  @include delimited-list(${1:separator});
+
+snippet     comma-delimited-list
+abbr        comma-delimited-list
+alias       compass_comma-delimited-list
+options     word
+  @include comma-delimited-list;
+#}}}
+
+# text
+# @import "compass/typography/text/ellipsis"
+# compass install compass/ellipsis
+snippet     ellipsis
+abbr        ellipsis([$no-wrap])
+alias       compass_ellipsis
+options     word
+  @include ellipsis(${1:no-wrap});
+
+snippet     force-wrap
+abbr        force-wrap
+alias       compass_force-wrap
+options     word
+  @include force-wrap;
+
+snippet     no-wrap
+abbr        no-wrap
+alias       compass_no-wrap
+options     word
+  @include no-wrap;
+
+snippet     replace-text
+abbr        replace-text($img, [$x], [$y])
+alias       compass_replace-text
+options     word
+  @include replace-text(${1:img_path}${2:, ${3:x\}}${4:, ${5:y\}});
+
+snippet     replace-text-with-dimensions
+abbr        replace-text-with-dimensions($img, [$x], [$y], [$inline])
+alias       compass_replace-text-with-dimensions
+options     word
+  @include replace-text-with-dimensions(${1:img_path}${2:, ${3:x\}}${4:, ${5:y\}}${6:, ${7:inline}});
+
+snippet     hide-text
+abbr        hide-text([$direction])
+alias       compass_hide-text
+options     word
+  @include hide-text(${1:direction});
+
+snippet     squish-text
+abbr        squish-text
+alias       compass_squish-text
+options     word
+  @include squish-text;
+
+snippet     contrast-color
+abbr        contrast-color($color, [$dark], [$light], [$threshold])
+alias       compass_contrast-color
+options     word
+  contrast-color(${1:color}, ${2:dark%}, ${3:light%}, ${4:threshold%});
+
+snippet     contrasted
+abbr        contrasted($background-color)
+alias       compass_contrasted
+options     word
+  @include contrasted(${1:color}, ${2:dark%}, ${3:light%}, ${4:threshold%});
+
+# clearfix
+snippet     clearfix
+abbr        clearfix
+alias       compass_clearfix
+options     word
+  @include clearfix;
+
+snippet     float-left
+abbr        float-left
+alias       compass_float-left
+options     word
+  @include float-left;
+
+snippet     float-right
+abbr        float-right
+alias       compass_float-right
+options     word
+  @include float-right;
+
+snippet     float
+abbr        float([$side])
+alias       compass_float
+options     word
+  @include float(${1:side});
+
+snippet     reset-float
+abbr        reset-float([$display])
+alias       compass_reset-float
+options     word
+  @include reset-float(${1:display});
+
+snippet     min-height
+abbr        min-height($value)
+alias       compass_min-height
+options     word
+  @include min-height(${1:value});
+
+snippet     min-width
+abbr        min-width($value)
+alias       compass_min-width
+options     word
+  @include min-width(${1:value});
+
+snippet     tag-cloud
+abbr        tag-cloud([$base-size])
+alias       compass_tag-cloud
+options     word
+  @include tag-cloud(${1:base-size});
+
+# splite#{{{
+snippet     spriting_image
+abbr        @import "path";
+alias       compass_spriting_image
+options     word
+  @import "${1:path}";
+
+snippet     all-sprites
+abbr        all-sprites
+alias       compass_all-sprites
+options     word
+  @include all-${1:last-folder-name}-sprites;
+
+snippet     sprite
+abbr        sprite($filename)
+alias       compass_sprite
+options     word
+  @include sprite(${1:filename});
+
+snippet     icon-sprite-height
+abbr        icon-sprite-height(some_icon)
+alias       compass_icon-sprite-height
+options     word
+  @include ${1:folder-name}-sprite-height(${2:filename});
+
+snippet     icon-sprite-width
+abbr        icon-sprite-width(some_icon)
+alias       compass_icon-sprite-width
+options     word
+  @include ${1:folder-name}-sprite-width(${2:filename});
+#}}}
+
+#}}}
