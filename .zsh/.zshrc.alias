@@ -151,3 +151,6 @@ alias y='yard'
 alias yg='yard server --gems'
 # }}}
 
+# ftp server
+alias ftpd_load='sudo launchctl load -w /System/Library/LaunchDaemons/ftp.plist'
+alias ftpd_unload='sudo launchctl unload -w /System/Library/LaunchDaemons/ftp.plist'

@@ -14,6 +14,6 @@ setl suffixesadd=.vim
 setl includeexpr=fnamemodify(substitute(v:fname,'#','/','g'),':h')
 let &keywordprg=':help'
 
-autocmd BufWritePost,FileWritePost <buffer> source <afile> | echo 'source ' . bufname('%')
+" autocmd BufWritePost,FileWritePost <buffer> source <afile> | echo 'source ' . bufname('%')
 
 let &cpo = s:save_cpo
