@@ -7,7 +7,7 @@ source ~/.zsh/git-prompt.sh
 # source ~/.zsh/scala.sh
 
 # zaw.zsh# {{{
-source ~/.zsh/zaw/zaw.zsh
+# source ~/.zsh/zaw/zaw.zsh
 bindkey '^g' zaw-history
 zstyle ':filter-select' max-lines $(($LINES / 2))
 # }}}

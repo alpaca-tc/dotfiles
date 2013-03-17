@@ -3,7 +3,6 @@ augroup MyAutoCmd
 augroup END
 
 "----------------------------------------
-call alpaca#init()
 " XXX rubyのinlucde?的な。そんなにテストしてない。
 " vimには無いのかなー。
 function! s:include(target, value) "{{{
@@ -146,6 +145,10 @@ if v:version >= 703
   set undofile
   let &undodir=&directory
 endif
+if has('unix')
+  set nofsync
+  set swapsync=
+endif
 
 nnoremap <Space><Space>s :<C-U>source ~/.vimrc<CR>
 nnoremap <Space><Space>v :<C-U>tabnew ~/.vim/config/.vimrc<CR>
@@ -197,7 +200,6 @@ NeoBundle 'Shougo/vimproc', {
       \   'mac' : 'make -f make_mac.mak',
       \   'unix' : 'make -f make_unix.mak',
       \ }}
-" loadすることはない
 NeoBundleLazy 'taichouchou2/alpaca', {
       \ 'build' : {
       \   'mac'  : 'sh fonts/ricty_generator.sh fonts/Inconsolata.otf fonts/migu-1m-regular.ttf fonts/migu-1m-bold.ttf',
@@ -241,7 +243,7 @@ NeoBundleLazy 'Shougo/unite-build', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload': {
       \   'filetypes' : g:my.ft.scala_files,
-      \   'unite-sources' : 'build'
+      \   'unite_sources' : 'build'
       \ }}
 NeoBundleLazy 'Shougo/unite-outline', {
       \ 'depends' : 'Shougo/unite.vim',
@@ -318,12 +320,10 @@ call neobundle#config('neocomplcache', {
       \   'insert' : 1,
       \ }})
 
-NeoBundle 'Shougo/echodoc'
-call neobundle#config('echodoc', {
-      \ 'lazy' : 1,
+NeoBundle 'Shougo/echodoc', {
       \ 'autoload' : {
       \   'insert' : 1,
-      \ }})
+      \ }}
 
 NeoBundle 'Shougo/neosnippet'
 call neobundle#config('neosnippet', {
@@ -592,6 +592,19 @@ NeoBundleLazy 'DirDiff.vim', { 'autoload' : {
 NeoBundleLazy 'repeat.vim', { 'autoload' : {
       \ 'mappings' : '.',
       \ }}
+NeoBundle 'taichouchou2/alpaca_dash.vim'
+NeoBundle 'mattn/vdbi-vim', {
+      \ 'depends': 'mattn/webapi-vim' }
+
+if has('python')
+  NeoBundle 'kakkyz81/evervim', {
+        \ 'build' : {
+        \   'mac' : 'easy_install markdown',
+        \   'unix': 'easy_install markdown',
+        \ },
+        \ 'autoload' : {
+        \ }}
+endif
 "}}}
 " bundle.lang"{{{
 
@@ -640,6 +653,8 @@ NeoBundleLazy 'taichouchou2/vim-json', { 'autoload' : {
 NeoBundleLazy 'teramako/jscomplete-vim', { 'autoload' : {
       \ 'filetypes' : g:my.ft.js_files
       \ }}
+" TODO こいつはすごい。気になる。完成したらneocomplcacheのsource作ろう
+" NeoBundle 'marijnh/tern'
 NeoBundleLazy 'leafgarland/typescript-vim', { 'autoload' : {
       \ 'filetypes' : ['typescript']
       \ }}
@@ -847,6 +862,11 @@ NeoBundleLazy 'mattn/excitetranslate-vim', {
       \ 'depends': 'mattn/webapi-vim',
       \ 'autoload' : { 'commands': ['ExciteTranslate']}
       \ }
+NeoBundleLazy 'taichouchou2/alpaca_update_tags', {
+      \ 'depends' : 'tpope/vim-fugitive',
+      \ 'autoload' : {
+      \   'commands': ['AlpacaUpdateTags', 'AlpacaSetTags']
+      \ }}
 " NeoBundleLazy 'thinca/vim-scouter', { 'autoload' : {
 "       \ 'commands' : 'Scouter'
 "       \ }}
@@ -947,6 +967,7 @@ xnoremap <silent><C-p> "0p<CR>
 nnoremap re :%s!
 xnoremap re :s!
 xnoremap rep y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!g<Left><Left>
+nnoremap g#          `[v`]
 xnoremap <Leader>c :s/./&/g
 nnoremap <Leader>f :setl filetype=
 aug MyAutoCmd
@@ -1244,10 +1265,16 @@ set browsedir=buffer
 " set highlight=8:SpecialKey,@:NonText,d:Directory,e:ErrorMsg,i:IncSearch,l:Search, m:MoreMsg,M:ModeMsg,n:LineNr,r:Question,s:StatusLine,S:StatusLineNC,c:VertSplit,t:Title,v:Visual,w:WarningMsg,W:WildMenu,f:Folded,F:FoldColumn
 " set browsedir=current
 set list
-set listchars=tab:␣.,trail:_,extends:>,precedes:<
+set listchars=tab:␣.,trail:›,extends:>,precedes:<
 " set listchars=tab:▸\ ,trail:-,extends:»,precedes:«,nbsp:%
 " set listchars=tab:>-,trail:-,extends:>,precedes:<
-set fillchars=vert:\|,fold:-
+
+" set fillchars=vert:\|,fold:-
+set fillchars=stl:\ ,stlnc:\ ,vert:░,fold:-,diff:-
+" set fillchars=vert:╷
+" set fillchars=vert:╷
+" set fillchars=vert:░
+
 set matchpairs+=<:>
 set number
 set scrolloff=5
@@ -1267,6 +1294,7 @@ set foldcolumn=1
 set foldenable
 set foldmethod=marker
 set foldnestmax=5
+let apache_version = "2.0"
 
 if v:version >= 703
   highlight ColorColumn guibg=#012345
@@ -1285,6 +1313,7 @@ augroup END
 
 let g:molokai_original=1
 colorscheme molokai
+" colorscheme orig_molokai
 "}}}
 
 "----------------------------------------
@@ -1293,42 +1322,10 @@ colorscheme molokai
 
 set tags-=tags
 
-function! s:set_tags() "{{{
-  let current_git_root = <SID>current_git()
-
-  if filereadable(current_git_root.'tags')
-    execute "setl tags+=" . expand(current_git_root.'tags')
-  endif
-  if filereadable(current_git_root.'.git/tags')
-    execute "setl tags+=" . expand(current_git_root.'.git/tags')
-  endif
-endfunction"}}}
-
-function! s:update_tags() "{{{
-  if g:my.conf.tags.auto_create != 1 | return -1 | endif
-
-  let git_root_dir = <SID>current_git()
-  if git_root_dir == ''
-    return -1
-  endif
-
-  " if !exists('s:update_tags_done')
-  "   let s:update_tags_done = {}
-  " endif
-
-  " if !has_key(s:update_tags_done, git_root_dir)
-    call vimproc#system_bg($HOME . "/.vim/bin/create_tags_into_git")
-    " let s:update_tags_done[git_root_dir] = 1
-    " let g:update_tags_done = s:update_tags_done
-  " endif
-endfunction"}}}
-command! UpdateTags call s:update_tags()
-
 aug MyUpdateTags
   au!
-  au VimEnter * call <SID>update_tags()
-  au FileReadPre * call <SID>set_tags()
-  " git系のプラグインで既に実装されている
+  au FileWritePost,BufWritePost * AlpacaUpdateTags
+  au FileReadPost,BufEnter * AlpacaSetTags
 aug END
 
 "tags_jumpを使い易くする
@@ -1664,15 +1661,21 @@ function! bundle.hooks.on_source(bundle) "{{{
 
   " quickrun config {{{
   let g:quickrun_config._ = {'runner' : 'vimproc'}
+
   let g:quickrun_config.javascript = {
         \ 'command': 'node'}
 
   let g:quickrun_config.lisp = {
         \ 'command': 'clisp' }
 
-  let g:quickrun_config.coffee_compile = {
+  let g:quickrun_config["coffee.compile"] = {
         \ 'command' : 'coffee',
         \ 'exec' : ['%c -cbp %s'] }
+
+  let g:quickrun_config["coffee"] = {
+        \ 'command' : 'coffee'
+        \ }
+  let g:quickrun_config["coffee.javascript"] = g:quickrun_config["coffee"]
 
   let g:quickrun_config.markdown = {
         \ 'outputter': 'browser',
@@ -2539,6 +2542,7 @@ xnoremap e :ExciteTranslate<CR>
 " {{{
 autocmd FileType javascript setlocal omnifunc=jscomplete#CompleteJS
 let g:jscomplete_use = ['dom', 'moz', 'ex6th']
+" xpcom.vim
 " }}}
 
 "------------------------------------
@@ -2701,12 +2705,33 @@ map f <Plug>(clever-f-f)
 map F <Plug>(clever-f-F)
 "}}}
 
+" ------------------------------------
+" evervim
+" ------------------------------------
+"{{{
+let g:evervim_devtoken='S=s36:U=3d4ae2:E=144cb576ba9:C=13d73a63fad:P=1cd:A=en-devtoken:V=2:H=ff00fa0e63346327d6d1a479ab1f1556'
+"}}}
+
+" ------------------------------------
+" alpaca_update_tags
+" ------------------------------------
+"{{{
+      " \ '_' : '-R --sort=yes --languages=-css --languages=-scss --languages=-js',
+let g:alpaca_update_tags_config = {
+      \ '_' : '-R --sort=yes --languages=-js',
+      \ 'javascript' : '--languages=+js',
+      \ 'scss' : '--languages=+scss',
+      \ 'sass' : '--languages=+sass',
+      \ 'css' : '--languages=+css',
+      \ }
+"}}}
+
 "}}}
 
 "----------------------------------------
 " 補完・履歴 neocomplcache "{{{
 set complete=.,w,b,u,U,s,i,d,t
-set completeopt=menu,menuone,preview
+set completeopt=menu,menuone,longest,preview
 set history=1000             " コマンド・検索パターンの履歴数
 set infercase
 set wildchar=<tab>           " コマンド補完を開始するキー
@@ -2714,6 +2739,13 @@ set wildmenu                 " コマンド補完を強化
 set wildoptions=tagfile
 set wildmode=longest:full,full
 set thesaurus+=~/.vim/thesaurus/mthes10/mthesaur.txt
+" シンタックスハイライトの予約語を補完へ流用
+autocmd FileType *
+\   if &l:omnifunc == ''
+\ |     setlocal omnifunc=syntaxcomplete#Complete
+\ | endif
+
+" set pumheight=10
 
 "----------------------------------------
 " neocomplcache / echodoc
@@ -2727,11 +2759,12 @@ let g:neocomplcache_force_overwrite_completefunc  = 1
 let g:neocomplcache_max_list                      = 80
 let g:neocomplcache_skip_auto_completion_time     = '0.3'
 let g:neocomplcache_caching_limit_file_size       = 0
+" let g:neocomplcache_enable_auto_close_preview = 1
 
 let g:neocomplcache_auto_completion_start_length = 2
 aug MyAutoCmd
-  au FileType ruby,haml,eruby,ruby.rspec set omnifunc=
   " rubycomplete#Completeを消す
+  au FileType ruby,haml,eruby,ruby.rspec set omnifunc=
 aug END
 " let g:neocomplcache_disable_auto_select_buffer_name_pattern = '\[Command Line\]'
 " let g:neocomplcache_disable_caching_buffer_name_pattern = '[\[*]\%(unite\)[\]*]'
@@ -3197,7 +3230,7 @@ unlet bundle
 "}}}
 
 " Dash"{{{
-function! s:dash(...)
+function! s:dash(...) "{{{
   let ft = <SID>filetype()
   if &filetype == 'python' |let ft = ft.'2'| endif
 
@@ -3205,7 +3238,7 @@ function! s:dash(...)
 
   let word = len(a:000) == 0 ? ft.join('<cword>') : join(a:000, ' ')
   call system(printf("open dash://'%s'", word))
-endfunction
+endfunction"}}}
 command! -nargs=* Dash call <SID>dash(<f-args>)
 
 nnoremap <C-K><C-K> :Dash <C-R><C-W><CR>
