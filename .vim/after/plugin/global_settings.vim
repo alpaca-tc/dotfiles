@@ -1,1 +1,1 @@
-setlocal formatoptions-=ro
+autocmd FileType * setlocal formatoptions-=ro

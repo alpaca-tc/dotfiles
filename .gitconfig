@@ -10,6 +10,7 @@
   ; indent-with-non-tab =
   ; cr-at-eol =
   precomposeunicode = true
+  quotepath = false
 
 [receive]
   fsckObjects = true

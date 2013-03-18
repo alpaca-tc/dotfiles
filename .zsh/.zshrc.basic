@@ -89,6 +89,9 @@ zstyle ':completion:*' menu select
 setopt extended_glob
 setopt nonomatch
 
+# 濁点を考慮
+setopt combining_chars
+
 # 補完候補リストを詰めて表示
 setopt list_packed
 
