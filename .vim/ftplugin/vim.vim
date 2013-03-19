@@ -14,6 +14,11 @@ setl suffixesadd=.vim
 setl includeexpr=fnamemodify(substitute(v:fname,'#','/','g'),':h')
 let &keywordprg=':help'
 
-" autocmd BufWritePost,FileWritePost <buffer> source <afile> | echo 'source ' . bufname('%')
+" colorschemeの編集時は自動で読み込む
+if expand("%:p:h") =~ 'colors'
+  augroup MyAutoCmd
+    autocmd FileWritePost,InsertLeave <buffer> write | source `=expand("%")`
+  augroup END
+endif
 
 let &cpo = s:save_cpo

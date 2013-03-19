@@ -195,27 +195,33 @@ endfunction "}}}
 "----------------------------------------
 " 基本 / その他 {{{
 NeoBundleFetch 'Shougo/neobundle.vim'
+" 非同期通信
 NeoBundle 'Shougo/vimproc', {
       \ 'build' : {
       \   'mac' : 'make -f make_mac.mak',
       \   'unix' : 'make -f make_unix.mak',
       \ }}
+" フォントとか。読み込むことは無い
 NeoBundleLazy 'taichouchou2/alpaca', {
       \ 'build' : {
       \   'mac'  : 'sh fonts/ricty_generator.sh fonts/Inconsolata.otf fonts/migu-1m-regular.ttf fonts/migu-1m-bold.ttf',
       \   'unix' : 'sh fonts/ricty_generator.sh fonts/Inconsolata.otf fonts/migu-1m-regular.ttf fonts/migu-1m-bold.ttf',
       \ }}
+" 保存と同時にタブ文字消す
 NeoBundleLazy 'taichouchou2/alpaca_remove_dust.vim', {
       \ 'autoload': {
       \   'insert' : 1 }}
+" Git操作
 NeoBundle 'tpope/vim-fugitive', {
       \ 'autoload' : {
       \   'commands': ['Gcommit', 'Gblame', 'Ggrep', 'Gdiff'] }}
+" syntaxチェック
 NeoBundleLazy 'scrooloose/syntastic', { 'autoload': {
       \ 'build' : {
       \   'mac' : ['brew install tidy', 'brew install csslint', 'gem install sass', 'brew install jslint']
       \ },
       \ 'filetypes' : g:my.ft.program_files }}
+" なんか色々遊んでみたけど、結局戻した
 NeoBundle 'taichouchou2/alpaca_powerline', {
       \ 'depends': ['majutsushi/tagbar', 'tpope/vim-fugitive', 'basyura/TweetVim', 'basyura/twibill.vim',],
       \ 'autoload' : { 'functions': ['Pl#UpdateStatusline', 'Pl#Hi#Allocate', 'Pl#Hi#Segments', 'Pl#Colorscheme#Init',]  }}
@@ -223,13 +229,11 @@ NeoBundleLazy 'mattn/webapi-vim'
 "}}}
 " vim拡張"{{{
 " NeoBundle 'taku-o/vim-toggle' "true<=>false など、逆の意味のキーワードを切り替えられる
-NeoBundle 'yuroyoro/vimdoc_ja'
+" NeoBundle 'yuroyoro/vimdoc_ja'
 " NeoBundle 'kana/vim-altr' " 関連するファイルを切り替えれる
 
 " Shougo"{{{
-NeoBundle 'Shougo/unite.vim'
-call neobundle#config('unite.vim', {
-      \ 'lazy' : 1,
+NeoBundleLazy 'Shougo/unite.vim', {
       \ 'autoload' : {
       \   'commands' : [ {
       \     'name' : 'Unite',
@@ -237,8 +241,11 @@ call neobundle#config('unite.vim', {
       \     'UniteBookmarkAdd', 'UniteClose', 'UniteResume',
       \     'UniteWithBufferDir', 'UniteWithCurrentDir', 'UniteWithCursorWord',
       \     'UniteWithInput', 'UniteWithInputDirectory']
-      \ }})
-
+      \ }}
+NeoBundleLazy 'ujihisa/unite-colorscheme', {
+      \ 'autoload': {
+      \   'unite_sources': 'colorscheme'
+      \ }}
 NeoBundleLazy 'Shougo/unite-build', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload': {
@@ -248,11 +255,9 @@ NeoBundleLazy 'Shougo/unite-build', {
 NeoBundleLazy 'Shougo/unite-outline', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload' : {
-      \   'unite_sources' : 'outline'},
+      \   'unite_sources' : 'outline' },
       \ }
-NeoBundle 'Shougo/vimfiler'
-call neobundle#config('vimfiler', {
-      \ 'lazy' : 1,
+NeoBundleLazy 'Shougo/vimfiler', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload' : {
       \   'commands' : [
@@ -269,7 +274,7 @@ call neobundle#config('vimfiler', {
       \       'Read', 'Source'],
       \   'mappings' : ['<Plug>(vimfiler_switch)'],
       \   'explorer' : 1,
-      \ }})
+      \ }}
 " VimFiler の読み込みを遅延しつつデフォルトのファイラに設定 "{{{
 " Netrw 無効化
 augroup DisableNetrw
@@ -476,14 +481,17 @@ NeoBundleLazy 'ujihisa/neco-look', {
 "}}}
 " text-object拡張"{{{
 " NeoBundle 'emonkak/vim-operator-comment'
-" NeoBundle 'https://github.com/kana/vim-textobj-jabraces.git'
+" NeoBundle 'kana/vim-textobj-jabraces'
 " NeoBundle 'kana/vim-textobj-datetime'      " d 日付
 " NeoBundle 'kana/vim-textobj-fold.git'      " z 折りたたまれた{{ {をtext-objectに
 " NeoBundle 'kana/vim-textobj-lastpat.git'   " /? 最後に検索されたパターンをtext-objectに
 " NeoBundle 'kana/vim-textobj-syntax.git'    " y syntax hilightされたものをtext-objectに
 " NeoBundle 'textobj-entire'                 " e buffer全体をtext-objectに
 " NeoBundle 'thinca/vim-textobj-comment'     " c commentをtext-objectに
-" NeoBundle 'kana/vim-textobj-function.git'  " f 関数をtext-objectに
+" f 関数をtext-objectに
+NeoBundleLazy 'kana/vim-textobj-function.git', {
+      \ 'depends' : 'kana/vim-textobj-user',
+      \ }
 NeoBundleLazy 'kana/vim-operator-user'
 NeoBundleLazy 'kana/vim-operator-replace', {
       \ 'depends' : 'vim-operator-user',
@@ -491,15 +499,17 @@ NeoBundleLazy 'kana/vim-operator-replace', {
       \   'mappings' : [
       \     ['nx', '<Plug>(operator-replace)']]
       \ }}
+nmap _  <Plug>(operator-replace)
+
 NeoBundleLazy 'kana/vim-textobj-user'
 
-" NeoBundleLazy 'kana/vim-textobj-indent.git', {
-"       \ 'depends' : 'kana/vim-textobj-user',
-"       \ 'autoload': {
-"       \   'mappings' : [
-"       \     ['nx', '<Plug>(textobj-indent-a)' ], ['nx', '<Plug>(textobj-indent-i)'],
-"       \     ['nx', '<Plug>(textobj-indent-same-a)'], ['nx', '<Plug>(textobj-indent-same-i)']
-"       \ ]}}
+NeoBundleLazy 'kana/vim-textobj-indent.git', {
+      \ 'depends' : 'kana/vim-textobj-user',
+      \ 'autoload': {
+      \   'mappings' : [
+      \     ['nx', '<Plug>(textobj-indent-a)' ], ['nx', '<Plug>(textobj-indent-i)'],
+      \     ['nx', '<Plug>(textobj-indent-same-a)'], ['nx', '<Plug>(textobj-indent-same-i)']
+      \ ]}}
 NeoBundleLazy 'operator-camelize', {
       \ 'depends' : 'kana/vim-operator-user',
       \ 'autoload' : {
@@ -688,9 +698,10 @@ NeoBundleLazy 'Shougo/vinarise', {
 
 " html
 " ----------------------------------------
-NeoBundleLazy 'koron/chalice', {
-      \ 'depends': ['ynkdir/vim-funlib'],
-      \ 'autoload': { 'commands': ['AL_urlencode', 'AL_urldecode'] }}
+" なんかプラグイン間違えてる...
+" NeoBundleLazy 'koron/chalice', {
+"       \ 'depends': ['ynkdir/vim-funlib'],
+"       \ 'autoload': { 'commands': ['AL_urlencode', 'AL_urldecode'] }}
 
 " objective-c
 " ----------------------------------------
@@ -958,6 +969,7 @@ nnoremap <silent><Space><Space>w :wall!<CR>
 nnoremap <silent><Space>q :q!<CR>
 nnoremap <silent><Space>w :wq<CR>
 nnoremap <silent><Space>s :w sudo:%<CR>
+map <silent><ESC> <Esc>:nohlsearch<CR>
 inoremap <C-D><C-A> <C-R>=g:my.info.author<CR>
 inoremap <C-D><C-D> <C-R>=g:my.info.date<CR>
 inoremap <C-D><C-R> <C-R>=<SID>current_git()<CR>
@@ -980,8 +992,6 @@ aug MyAutoCmd
         \| inoreabbrev @in @include
         \| inoreabbrev @im @import
 aug END
-" XXX shougoさんのとこから持って来たけど何やっとるか謎。
-" xnoremap <silent> y "*y:let [@+,@"]=[@*,@*]<CR>
 function! s:toggle_set_spell() "{{{
   if &spell
     setl nospell
@@ -1157,10 +1167,8 @@ function! s:preview_word() "{{{
 endfunction "}}}
 " smart split window {{{
 function! s:smart_close() "{{{
-  if winnr('$') != 1
-    close
-  endif
-endfunction"}}}
+  if winnr('$') != 1 |close| endif
+endfunction "}}}
 function! s:next_window_or_tab() "{{{
   if tabpagenr('$') == 1 && winnr('$') == 1
     call s:smart_split()
@@ -2718,11 +2726,11 @@ let g:evervim_devtoken='S=s36:U=3d4ae2:E=144cb576ba9:C=13d73a63fad:P=1cd:A=en-de
 "{{{
       " \ '_' : '-R --sort=yes --languages=-css --languages=-scss --languages=-js',
 let g:alpaca_update_tags_config = {
-      \ '_' : '-R --sort=yes --languages=-js',
-      \ 'javascript' : '--languages=+js',
-      \ 'scss' : '--languages=+scss',
-      \ 'sass' : '--languages=+sass',
-      \ 'css' : '--languages=+css',
+      \ '_' : '-R --sort=yes --languages-=js',
+      \ 'javascript' : '--languages+=js',
+      \ 'scss' : '--languages+=scss',
+      \ 'sass' : '--languages+=sass',
+      \ 'css' : '--languages+=css',
       \ }
 "}}}
 
@@ -3287,7 +3295,6 @@ aug END
 
 " 学習用
 imap <BS> <Nop>
-imap <ESC> <Esc>:<C-U>echo "!!!"<CR>
 
 " eccube用、即席
 function! s:setting_eccube()
