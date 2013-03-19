@@ -202,17 +202,27 @@ NeoBundle 'Shougo/vimproc', {
       \   'unix' : 'make -f make_unix.mak',
       \ }}
 " フォントとか。読み込むことは無い
-NeoBundleLazy 'taichouchou2/alpaca', {
-      \ 'build' : {
-      \   'mac'  : 'sh fonts/ricty_generator.sh fonts/Inconsolata.otf fonts/migu-1m-regular.ttf fonts/migu-1m-bold.ttf',
-      \   'unix' : 'sh fonts/ricty_generator.sh fonts/Inconsolata.otf fonts/migu-1m-regular.ttf fonts/migu-1m-bold.ttf',
-      \ }}
+let g:ricty_generate_command = join([
+      \   'sh ricty_generator.sh',
+      \   neobundle#get_neobundle_dir().'/alpaca/fonts/Inconsolata.otf',
+      \   neobundle#get_neobundle_dir().'/alpaca/fonts/migu-1m-regular.ttf',
+      \   neobundle#get_neobundle_dir().'/alpaca/fonts/migu-1m-bold.ttf',
+      \ ], ' ')
+NeoBundleLazy 'yascentur/Ricty', {
+      \ 'depends' : 'taichouchou2/alpaca',
+      \ 'autoload' : {
+      \   'build' : {
+      \     'mac'  : g:ricty_generate_command,
+      \     'unix' : g:ricty_generate_command,
+      \ }}}
 " 保存と同時にタブ文字消す
 NeoBundleLazy 'taichouchou2/alpaca_remove_dust.vim', {
       \ 'autoload': {
-      \   'insert' : 1 }}
+      \   'insert' : 1,
+      \   'commands': ['RemoveDustDisable', 'RemoveDustEnable', 'RemoveDustRun']
+      \ }}
 " Git操作
-NeoBundle 'tpope/vim-fugitive', {
+NeoBundleLazy 'tpope/vim-fugitive', {
       \ 'autoload' : {
       \   'commands': ['Gcommit', 'Gblame', 'Ggrep', 'Gdiff'] }}
 " syntaxチェック
@@ -221,12 +231,15 @@ NeoBundleLazy 'scrooloose/syntastic', { 'autoload': {
       \   'mac' : ['brew install tidy', 'brew install csslint', 'gem install sass', 'brew install jslint']
       \ },
       \ 'filetypes' : g:my.ft.program_files }}
+NeoBundle 'Lokaltog/powerline'
+execute 'set runtimepath+=' . neobundle#get_neobundle_dir() . '/powerline/powerline/bindings/vim'
 " なんか色々遊んでみたけど、結局戻した
-NeoBundle 'taichouchou2/alpaca_powerline', {
-      \ 'depends': ['majutsushi/tagbar', 'tpope/vim-fugitive', 'basyura/TweetVim', 'basyura/twibill.vim',],
-      \ 'autoload' : { 'functions': ['Pl#UpdateStatusline', 'Pl#Hi#Allocate', 'Pl#Hi#Segments', 'Pl#Colorscheme#Init',]  }}
+" NeoBundle 'taichouchou2/alpaca_powerline', {
+"       \ 'depends': ['majutsushi/tagbar', 'tpope/vim-fugitive', 'basyura/TweetVim', 'basyura/twibill.vim',],
+"       \ 'autoload' : { 'functions': ['Pl#UpdateStatusline', 'Pl#Hi#Allocate', 'Pl#Hi#Segments', 'Pl#Colorscheme#Init',]  }}
 NeoBundleLazy 'mattn/webapi-vim'
 "}}}
+" {{{
 " vim拡張"{{{
 " NeoBundle 'taku-o/vim-toggle' "true<=>false など、逆の意味のキーワードを切り替えられる
 " NeoBundle 'yuroyoro/vimdoc_ja'
@@ -418,8 +431,7 @@ NeoBundleLazy 'kana/vim-niceblock', { 'autoload' : {
 NeoBundleLazy 'mattn/zencoding-vim', {
       \ 'autoload': {
       \   'functions': ['zencoding#expandAbbr'],
-      \   'filetypes': g:my.ft.html_files,
-      \   'insert'   : 1
+      \   'filetypes': g:my.ft.html_files + g:my.ft.style_files,
       \ }}
 NeoBundleLazy 'kana/vim-smartword', { 'autoload' : {
       \ 'mappings' : [
@@ -472,7 +484,7 @@ NeoBundleLazy 'yomi322/vim-gitcomplete', { 'autoload' : {
 NeoBundleLazy 'ujihisa/neco-look', {
       \ 'depends' : 'Shougo/neocomplcache',
       \ 'autoload': {
-      \   'insert' : 1,
+      \   'filetypes' : g:my.ft.program_files,
       \ }}
 " NeoBundleLazy 'taichouchou2/alpaca_look.git', {
 "       \ 'autoload' : {
@@ -602,9 +614,9 @@ NeoBundleLazy 'DirDiff.vim', { 'autoload' : {
 NeoBundleLazy 'repeat.vim', { 'autoload' : {
       \ 'mappings' : '.',
       \ }}
-NeoBundle 'taichouchou2/alpaca_dash.vim'
-NeoBundle 'mattn/vdbi-vim', {
-      \ 'depends': 'mattn/webapi-vim' }
+" NeoBundle 'taichouchou2/alpaca_dash.vim'
+" NeoBundleLazy 'mattn/vdbi-vim', {
+"       \ 'depends': 'mattn/webapi-vim' }
 
 if has('python')
   NeoBundle 'kakkyz81/evervim', {
@@ -1320,7 +1332,7 @@ augroup cch
 augroup END
 
 let g:molokai_original=1
-colorscheme molokai
+colorscheme  desertEx
 " colorscheme orig_molokai
 "}}}
 
@@ -1333,7 +1345,7 @@ set tags-=tags
 aug MyUpdateTags
   au!
   au FileWritePost,BufWritePost * AlpacaUpdateTags
-  au FileReadPost,BufEnter * AlpacaSetTags
+  " au FileReadPost,BufEnter * AlpacaSetTags
 aug END
 
 "tags_jumpを使い易くする
@@ -3131,9 +3143,12 @@ function! s:unite_my_settings() "{{{
   " hook
   let unite = unite#get_current_unite()
   let buffer_name = unite.buffer_name != '' ? unite.buffer_name : '_'
+  call alpaca#print_error(buffer_name)
 
   " バッファ名に基づいたフックを実行
-  call alpaca#let_s:('unite_kuso_hooks', {})
+  if !exists('s:unite_kuso_hooks')
+    let s:unite_kuso_hooks = {}
+  endif
   if has_key( s:unite_kuso_hooks, buffer_name )
     call s:unite_kuso_hooks[buffer_name]()
   endif
@@ -3212,14 +3227,6 @@ function! bundle.hooks.on_source(bundle) "{{{
   " unite-giti / vim-versions
   "----------------------------------------
   "{{{
-  function! s:unite_kuso_hooks.giti_status()
-    " nnoremap <silent><buffer><expr>gM unite#do_action('ammend')
-    nnoremap <silent><buffer><expr>ga unite#do_action('stage')
-    nnoremap <silent><buffer><expr>gc unite#do_action('checkout')
-    nnoremap <silent><buffer><expr>gd unite#do_action('diff')
-    nnoremap <silent><buffer><expr>gu unite#do_action('unstage')
-  endfunction
-
   function! s:unite_kuso_hooks.giti_status()
     " nnoremap <silent><buffer><expr>gM unite#do_action('ammend')
     nnoremap <silent><buffer><expr>ga unite#do_action('stage')

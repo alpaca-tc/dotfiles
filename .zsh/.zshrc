@@ -33,6 +33,9 @@ export PATH=$HOME/.autojump/bin:$PATH
 # zsh関連
 export PATH=$HOME/bin:$PATH
 
+# powerline
+export PATH=$HOME/.bundle/powerline/scripts:$PATH
+
 # rsense
 export PATH=$HOME/.vim/ref/rsense-0.3/bin:$PATH
 export PATH=$PATH:$HOME/.vim/ref/rsense-0.3/bin
