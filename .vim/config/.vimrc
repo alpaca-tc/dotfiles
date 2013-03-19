@@ -532,9 +532,9 @@ NeoBundleLazy 'operator-camelize', {
 "}}}
 "}}}
 " unite"{{{
-" NeoBundleLazy 'thinca/vim-qfreplace', { 'autoload' : {
-"       \ 'filetypes' : ['unite', 'quickfix'],
-"       \ }}
+NeoBundleLazy 'thinca/vim-qfreplace', { 'autoload' : {
+      \ 'filetypes' : ['unite'],
+      \ }}
 NeoBundleLazy 'tacroe/unite-mark', {
       \ 'depends' : ['Shougo/unite.vim'],
       \ 'autoload': {
@@ -981,7 +981,8 @@ nnoremap <silent><Space><Space>w :wall!<CR>
 nnoremap <silent><Space>q :q!<CR>
 nnoremap <silent><Space>w :wq<CR>
 nnoremap <silent><Space>s :w sudo:%<CR>
-map <silent><ESC> <Esc>:nohlsearch<CR>
+inoremap <silent><ESC> <Esc>:nohlsearch<CR>
+nnoremap <silent><ESC> <Esc>:nohlsearch<CR>
 inoremap <C-D><C-A> <C-R>=g:my.info.author<CR>
 inoremap <C-D><C-D> <C-R>=g:my.info.date<CR>
 inoremap <C-D><C-R> <C-R>=<SID>current_git()<CR>
@@ -1310,7 +1311,7 @@ set titlelen=95
 set ttyfast
 
 "折り畳み
-set foldcolumn=1
+" set foldcolumn=1
 set foldenable
 set foldmethod=marker
 set foldnestmax=5
@@ -3049,6 +3050,7 @@ function! s:unite_file(path)
     execute 'edit ' . path
   endif
 endfunction
+" デフォルトのunite file:は補完がないので。
 command! -nargs=? -complete=file UniteFile call <SID>unite_file(<q-args>)
 "}}}
 function! UniteRailsSetting() "Unite-rails.vim {{{
@@ -3143,7 +3145,6 @@ function! s:unite_my_settings() "{{{
   " hook
   let unite = unite#get_current_unite()
   let buffer_name = unite.buffer_name != '' ? unite.buffer_name : '_'
-  call alpaca#print_error(buffer_name)
 
   " バッファ名に基づいたフックを実行
   if !exists('s:unite_kuso_hooks')
@@ -3198,6 +3199,9 @@ function! bundle.hooks.on_source(bundle) "{{{
   let g:unite_source_grep_command = "grep"
   let g:unite_source_grep_recursive_opt = "-R"
   " let g:unite_source_grep_ignore_pattern = ''
+  function! s:unite_kuso_hooks.grep()
+    nnoremap <expr><buffer>re unite#do_action('replace')
+  endfunction
   "}}}
 
   "------------------------------------

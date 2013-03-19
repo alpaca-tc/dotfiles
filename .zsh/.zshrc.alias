@@ -151,6 +151,11 @@ alias y='yard'
 alias yg='yard server --gems'
 # }}}
 
+# postgres {{{
+alias postdb_start='pg_ctl -D /usr/local/var/postgres -l logfile start'
+alias postdb_stop='pg_ctl -D /usr/local/var/postgres stop -s -m fast'
+# }}}
+
 alias chrome='open -a Google\ chrome'
 
 # ftp server
