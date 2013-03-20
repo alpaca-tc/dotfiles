@@ -189,9 +189,9 @@ function! s:bundle_with_cmd(bundle_names, cmd) "{{{
   if !empty(a:cmd)
     execute a:cmd
   endif
-endfunction "}}}
+endfunction
 "}}}
-" load bundles {{{
+
 "----------------------------------------
 " 基本 / その他 {{{
 NeoBundleFetch 'Shougo/neobundle.vim'
@@ -221,6 +221,17 @@ NeoBundleLazy 'taichouchou2/alpaca_remove_dust.vim', {
       \   'insert' : 1,
       \   'commands': ['RemoveDustDisable', 'RemoveDustEnable', 'RemoveDustRun']
       \ }}
+
+" window系script
+NeoBundleLazy 'taichouchou2/alpaca_window.vim', {
+      \ 'autoload': {
+      \   'mappings' : [
+      \     '<Plug>(alpaca_window_new)', '<Plug>(alpaca_window_smart_new)',
+      \     '<Plug>(alpaca_window_tabnew)', '<Plug>(alpaca_window_move_next_window_or_tab)',
+      \     '<Plug>(alpaca_window_move_previous_window_or_tab)', '<Plug>(alpaca_window_move_buffer_into_last_tab)'
+      \   ],
+      \ }}
+
 " Git操作
 NeoBundleLazy 'tpope/vim-fugitive', {
       \ 'autoload' : {
@@ -255,16 +266,16 @@ NeoBundleLazy 'Shougo/unite.vim', {
       \     'UniteWithBufferDir', 'UniteWithCurrentDir', 'UniteWithCursorWord',
       \     'UniteWithInput', 'UniteWithInputDirectory']
       \ }}
-NeoBundleLazy 'ujihisa/unite-colorscheme', {
-      \ 'autoload': {
-      \   'unite_sources': 'colorscheme'
-      \ }}
-NeoBundleLazy 'Shougo/unite-build', {
-      \ 'depends' : 'Shougo/unite.vim',
-      \ 'autoload': {
-      \   'filetypes' : g:my.ft.scala_files,
-      \   'unite_sources' : 'build'
-      \ }}
+" NeoBundleLazy 'ujihisa/unite-colorscheme', {
+"       \ 'autoload': {
+"       \   'unite_sources': 'colorscheme'
+"       \ }}
+" NeoBundleLazy 'Shougo/unite-build', {
+"       \ 'depends' : 'Shougo/unite.vim',
+"       \ 'autoload': {
+"       \   'filetypes' : g:my.ft.scala_files,
+"       \   'unite_sources' : 'build'
+"       \ }}
 NeoBundleLazy 'Shougo/unite-outline', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload' : {
@@ -331,37 +342,32 @@ NeoBundleLazy 'Shougo/git-vim', {
       \ 'autoload' : {
       \ 'commands': ["GitDiff", "GitLog", "GitAdd", "Git", "GitCommit", "GitBlame", "GitBranch", "GitPush"] }}
 
-NeoBundle 'Shougo/neocomplcache'
-call neobundle#config('neocomplcache', {
-      \ 'lazy' : 1,
-      \ 'autoload' : {
-      \   'insert' : 1,
-      \ }})
-
-NeoBundle 'Shougo/echodoc', {
+NeoBundleLazy 'Shougo/neocomplcache', {
       \ 'autoload' : {
       \   'insert' : 1,
       \ }}
 
-NeoBundle 'Shougo/neosnippet'
-call neobundle#config('neosnippet', {
-      \ 'unite_sources' : ['snippet', 'neosnippet/user', 'neosnippet/runtime'],
+NeoBundleLazy 'Shougo/echodoc', {
+      \ 'autoload' : {
+      \   'insert' : 1,
+      \ }}
+
+NeoBundleLazy 'Shougo/neosnippet', {
       \ 'autoload' : {
       \   'commands' : ['NeoSnippetEdit'],
       \   'filetypes' : 'snippet',
       \   'insert' : 1,
-      \ }})
+      \   'unite_sources' : ['snippet', 'neosnippet/user', 'neosnippet/runtime'],
+      \ }}
 
-NeoBundle 'Shougo/vimshell'
-call neobundle#config('vimshell',{
-      \ 'lazy' : 1,
+NeoBundle 'Shougo/vimshell', {
       \ 'autoload' : {
       \   'commands' : [{
       \     'name' : 'VimShell',
       \     'complete' : 'customlist,vimshell#complete'},
       \     'VimShellExecute', 'VimShellInteractive', 'VimShellTerminal', 'VimShellPop'],
       \   'mappings' : ['<Plug>(vimshell_switch)']
-      \ }})
+      \ }}
 NeoBundleLazy 'ujihisa/vimshell-ssh', { 'autoload' : {
       \ 'filetypes' : 'vimshell' }}
 "}}}
@@ -383,12 +389,12 @@ NeoBundleLazy 'majutsushi/tagbar', {
       \ 'autoload' : {
       \   'commands': ["TagbarToggle", "TagbarTogglePause"],
       \   'fuctions': ['tagbar#currenttag'] }}
-NeoBundleLazy 'yuratomo/w3m.vim', {
-      \ 'build' : {
-      \   'mac' : 'brew install w3m',
-      \   'unix': 'sudo yum install w3m',
-      \ },
-      \ 'autoload' : { 'commands' : 'W3m' }}
+" NeoBundleLazy 'yuratomo/w3m.vim', {
+"       \ 'build' : {
+"       \   'mac' : 'brew install w3m',
+"       \   'unix': 'sudo yum install w3m',
+"       \ },
+"       \ 'autoload' : { 'commands' : 'W3m' }}
 NeoBundleLazy 'open-browser.vim', { 'autoload' : {
       \ 'mappings' : [ '<Plug>(open-browser-wwwsearch)', '<Plug>(openbrowser-open)',  ],
       \ 'commands' : ['OpenBrowserSearch'] }}
@@ -424,9 +430,6 @@ NeoBundleLazy 'camelcasemotion', { 'autoload' : {
       \ }}
 NeoBundleLazy 'rhysd/clever-f.vim', { 'autoload' : {
       \   'mappings' : ['f', '<Plug>(clever-f-f)'],
-      \ }}
-NeoBundleLazy 'kana/vim-niceblock', { 'autoload' : {
-      \ 'mappings' : ['<Plug>(niceblock-I)', '<Plug>(niceblock-A)']
       \ }}
 NeoBundleLazy 'mattn/zencoding-vim', {
       \ 'autoload': {
@@ -514,7 +517,6 @@ NeoBundleLazy 'kana/vim-operator-replace', {
 nmap _  <Plug>(operator-replace)
 
 NeoBundleLazy 'kana/vim-textobj-user'
-
 NeoBundleLazy 'kana/vim-textobj-indent.git', {
       \ 'depends' : 'kana/vim-textobj-user',
       \ 'autoload': {
@@ -532,9 +534,9 @@ NeoBundleLazy 'operator-camelize', {
 "}}}
 "}}}
 " unite"{{{
-NeoBundleLazy 'thinca/vim-qfreplace', { 'autoload' : {
-      \ 'filetypes' : ['unite'],
-      \ }}
+" NeoBundleLazy 'thinca/vim-qfreplace', { 'autoload' : {
+"       \ 'filetypes' : ['unite'],
+"       \ }}
 NeoBundleLazy 'tacroe/unite-mark', {
       \ 'depends' : ['Shougo/unite.vim'],
       \ 'autoload': {
@@ -545,29 +547,29 @@ NeoBundleLazy 'tsukkee/unite-tag', {
       \ 'autoload' : {
       \   'unite_sources' : 'tag'
       \ }}
-NeoBundleLazy 'mattn/qiita-vim', { 'depends' :
-      \ ['Shougo/unite.vim', 'mattn/webapi-vim'],
-      \ 'autoload': {
-      \   'unite_sources' : 'qiita'
-      \ }}
-NeoBundleLazy 'Shougo/unite-ssh', {
-      \ 'depends' : ['Shougo/unite.vim', 'Shougo/vimproc', 'Shougo/vimfiler'],
-      \ 'autoload' : {
-      \   'mappings' : ['n', '[unite]s'],
-      \   'unite_sources' : 'ssh'
-      \ }}
-NeoBundleLazy 'choplin/unite-vim_hacks'
-NeoBundleLazy 'taichouchou2/vim-unite-giti', {
+" NeoBundleLazy 'mattn/qiita-vim', { 'depends' :
+"       \ ['Shougo/unite.vim', 'mattn/webapi-vim'],
+"       \ 'autoload': {
+"       \   'unite_sources' : 'qiita'
+"       \ }}
+" NeoBundleLazy 'Shougo/unite-ssh', {
+"       \ 'depends' : ['Shougo/unite.vim', 'Shougo/vimproc', 'Shougo/vimfiler'],
+"       \ 'autoload' : {
+"       \   'mappings' : ['n', '[unite]s'],
+"       \   'unite_sources' : 'ssh'
+"       \ }}
+" NeoBundleLazy 'choplin/unite-vim_hacks'
+NeoBundleLazy 'kmnk/vim-unite-giti', {
       \ 'autoload': {
       \   'unite_sources': [
       \     'giti', 'giti/branch', 'giti/branch/new', 'giti/branch_all',
       \     'giti/config', 'giti/log', 'giti/remote', 'giti/status'
       \   ]
       \ }}
-NeoBundleLazy 'hrsh7th/vim-versions', {
-      \ 'autoload' : {
-      \   'functions' : 'versions#info',
-      \   'commands' : 'UniteVersions' }}
+" NeoBundleLazy 'hrsh7th/vim-versions', {
+"       \ 'autoload' : {
+"       \   'functions' : 'versions#info',
+"       \   'commands' : 'UniteVersions' }}
 NeoBundleLazy 'thinca/vim-unite-history', { 'autoload' : {
       \ 'unite_sources' : ['history/command', 'history/search']
       \ }}
@@ -576,20 +578,20 @@ NeoBundleLazy 'ujihisa/unite-locate', {
       \ 'autoload': {
       \   'unite_sources': 'locate'
       \ }}
-NeoBundleLazy 'osyo-manga/unite-filetype', { 'autoload' : {
-      \ 'unite_sources' : 'filetype',
-      \ }}
+" NeoBundleLazy 'osyo-manga/unite-filetype', { 'autoload' : {
+"       \ 'unite_sources' : 'filetype',
+"       \ }}
 NeoBundleLazy 'basyura/TweetVim', { 'depends' :
       \ ['basyura/twibill.vim', 'tyru/open-browser.vim', 'Shougo/unite.vim'],
       \ 'autoload' : {
       \   'commands' : [ 'TweetVimAccessToken', 'TweetVimAddAccount', 'TweetVimBitly', 'TweetVimCommandSay', 'TweetVimCurrentLineSay', 'TweetVimHomeTimeline', 'TweetVimListStatuses', 'TweetVimMentions', 'TweetVimSay', 'TweetVimSearch', 'TweetVimSwitchAccount', 'TweetVimUserTimeline', 'TweetVimVersion' ],
       \   'unite-sources' : ['tweetvim', 'tweetvim/account']
       \ }}
-NeoBundleLazy 'ujihisa/unite-font', {
-      \ 'gui' : 1,
-      \ 'autoload' : {
-      \   'unite_sources' : 'font'
-      \ }}
+" NeoBundleLazy 'ujihisa/unite-font', {
+"       \ 'gui' : 1,
+"       \ 'autoload' : {
+"       \   'unite_sources' : 'font'
+"       \ }}
 "}}}
 " その他 / テスト {{{
 NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
@@ -608,9 +610,9 @@ NeoBundleLazy 'kana/vim-niceblock', { 'autoload' : {
 " NeoBundleLazy 'HybridText', { 'autoload' : {
 "       \ 'filetypes' : 'hybrid',
 "       \ }}
-NeoBundleLazy 'DirDiff.vim', { 'autoload' : {
-      \ 'commands' : 'DirDiff'
-      \ }}
+" NeoBundleLazy 'DirDiff.vim', { 'autoload' : {
+"       \ 'commands' : 'DirDiff'
+"       \ }}
 NeoBundleLazy 'repeat.vim', { 'autoload' : {
       \ 'mappings' : '.',
       \ }}
@@ -619,7 +621,8 @@ NeoBundleLazy 'repeat.vim', { 'autoload' : {
 "       \ 'depends': 'mattn/webapi-vim' }
 
 if has('python')
-  NeoBundle 'kakkyz81/evervim', {
+  " エラーで使えない
+  NeoBundleLazy 'kakkyz81/evervim', {
         \ 'build' : {
         \   'mac' : 'easy_install markdown',
         \   'unix': 'easy_install markdown',
@@ -675,7 +678,7 @@ NeoBundleLazy 'taichouchou2/vim-json', { 'autoload' : {
 NeoBundleLazy 'teramako/jscomplete-vim', { 'autoload' : {
       \ 'filetypes' : g:my.ft.js_files
       \ }}
-" TODO こいつはすごい。気になる。完成したらneocomplcacheのsource作ろう
+" TODO こいつはすごい。気になる。時間がある時にneocomplcacheのsource作ろう
 " NeoBundle 'marijnh/tern'
 NeoBundleLazy 'leafgarland/typescript-vim', { 'autoload' : {
       \ 'filetypes' : ['typescript']
@@ -689,7 +692,6 @@ NeoBundleLazy 'fsouza/go.vim', { 'autoload' : {
 "  markdown
 " ----------------------------------------
 " markdownでの入力をリアルタイムでチェック
-" NeoBundle 'mattn/mkdpreview-vim'
 NeoBundleLazy 'tpope/vim-markdown', { 'autoload' : {
       \ 'filetypes' : ['markdown'] }}
 
@@ -810,10 +812,12 @@ NeoBundleLazy 'taichouchou2/rsense-0.3', {
 NeoBundleLazy 'rhysd/unite-ruby-require.vim', { 'autoload': {
       \ 'filetypes': g:my.ft.ruby_files }}
 NeoBundleLazy 'rhysd/vim-textobj-ruby', { 'depends': 'kana/vim-textobj-user' }
-" NeoBundleLazy 'deris/vim-textobj-enclosedsyntax', { 'autoload': {
-"       \ 'filetypes': g:my.ft.ruby_files}}
-" NeoBundleLazy 'rhysd/neco-ruby-keyword-args', { 'autoload': {
-"       \ 'filetypes': g:my.ft.ruby_files }}
+
+NeoBundleLazy 'deris/vim-textobj-enclosedsyntax', { 'autoload': {
+      \ 'filetypes': g:my.ft.ruby_files}}
+NeoBundleLazy 'rhysd/neco-ruby-keyword-args', { 'autoload': {
+      \ 'filetypes': g:my.ft.ruby_files }}
+
 NeoBundleLazy 'ujihisa/unite-gem', {
       \ 'depends': 'mattn/webapi-vim',
       \ 'autoload': { 'filetypes': g:my.ft.ruby_files }}
@@ -923,6 +927,7 @@ set textwidth=0
 " set splitbelow
 set previewheight=8
 set helpheight=12
+let s:default_filetype = 'ruby'
 
 " 開いているファイルのディレクトリに自動で移動
 aug MyAutoCmd
@@ -932,26 +937,6 @@ aug END
 " Disable paste.
 autocmd MyAutoCmd InsertLeave * if &paste | set nopaste mouse=a | echo 'nopaste' | endif
 
-" 新しいバッファを開くときに、rubyか同じファイルタイプで開く {{{
-function! s:open_buffer(new_buffer)
-  let old_ft = &ft
-
-  " set filetype
-  if a:new_buffer == 1 || empty(old_ft)
-    let ft = 'ruby'
-  else
-    let ft = old_ft
-  endif
-  let cmd = 'setl ft='.ft
-
-  call <SID>smart_split_new()
-  silent exec cmd
-endfunction
-command! -nargs=* NewBuffer call <SID>open_buffer(<q-args>)
-
-nnoremap <silent><C-W>n     :<C-U>NewBuffer 1<CR>
-nnoremap <silent><C-W><C-N> :<C-U>NewBuffer<CR>
-"}}}
 " 対応を補完 {{{
 inoremap { {}<Left>
 inoremap [ []<Left>
@@ -992,7 +977,7 @@ xnoremap <silent><C-p> "0p<CR>
 nnoremap re :%s!
 xnoremap re :s!
 xnoremap rep y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!g<Left><Left>
-nnoremap g#          `[v`]
+nnoremap g# `[v`]
 xnoremap <Leader>c :s/./&/g
 nnoremap <Leader>f :setl filetype=
 aug MyAutoCmd
@@ -1014,15 +999,14 @@ function! s:toggle_set_spell() "{{{
     echo "spell"
   endif
 endfunction"}}}
-
 "}}}
 " コメントを書くときに便利 {{{
 inoremap <leader>* ****************************************
 inoremap <leader>- ----------------------------------------
 inoremap <leader>h <!-- / --><left><left><left><Left>
 
+let g:end_tag_commant_format = '<!-- /%tag_name%id%class -->'
 nnoremap ,t :<C-u>call alpaca#endtag_comment()<CR>
-let g:endtagcommentFormat = '<!-- /%tag_name%id%class -->'
 "}}}
 " 変なマッピングを修正 "{{{
 nnoremap ¥ \
@@ -1119,9 +1103,11 @@ xnoremap v G
 "}}}
 " 画面の移動 {{{
 " nnoremap <C-L> <C-T>
-nnoremap <silent>L            :call <SID>next_window_or_tab()<CR>
-nnoremap <silent>H            :call <SID>previous_window_or_tab()<CR>
-nnoremap <silent><C-W>]       :call <SID>preview_word()<CR>
+let g:alpaca_window_default_filetype='ruby'
+nmap <silent>L            <Plug>(alpaca_window_move_next_window_or_tab)
+nmap <silent>H            <Plug>(alpaca_window_move_previous_window_or_tab)
+nmap <silent><C-W>n       <Plug>(alpaca_window_smart_new)
+nmap <silent><C-W><C-N>   <Plug>(alpaca_window_smart_new)
 "}}}
 " tabを使い易く{{{
 
@@ -1129,11 +1115,11 @@ nmap [tag_or_tab] <Nop>
 nmap t [tag_or_tab]
 nnoremap <silent>[tag_or_tab]n  :tabnext<CR>
 nnoremap <silent>[tag_or_tab]p  :tabprevious<CR>
-nnoremap <silent>[tag_or_tab]c  :tabnew<CR>
+nmap <silent>[tag_or_tab]c      <Plug>(alpaca_window_tabnew)
 nnoremap <silent>[tag_or_tab]x  :tabclose<CR>
 nnoremap <silent>[tag_or_tab]o  <C-W>T
-nnoremap <silent>[tag_or_tab]w  :call <SID>open_buffer_into_previous_window()<CR>
-nnoremap <silent>[tag_or_tab]e  :execute 'tabnext' 1 + (tabpagenr() + v:count1 - 1) % tabpagenr('$')<CR>
+nmap <silent>[tag_or_tab]w      <Plug>(alpaca_window_move_buffer_into_last_tab)
+" nnoremap <silent>[tag_or_tab]e  :execute 'tabnext' 1 + (tabpagenr() + v:count1 - 1) % tabpagenr('$')<CR>
 
 nnoremap <silent>[tag_or_tab]1  :tabnext 1<CR>
 nnoremap <silent>[tag_or_tab]2  :tabnext 2<CR>
@@ -1144,92 +1130,10 @@ nnoremap <silent>[tag_or_tab]6  :tabnext 6<CR>
 " }}}
 
 " 前回終了したカーソル行に移動
-aug MyAutoCmd
-  autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute "normal g`\"" | endif
-aug END
-
-function! s:preview_word() "{{{
-  if &previewwindow | return | endif
-
-  let w = expand("<cword>")
-  if w =~ '\a'
-    silent! wincmd P
-    if &previewwindow
-      match none
-      wincmd p
-    endif
-
-    try
-      exe "ptag " . w
-    catch
-      return
-    endtry
-
-    silent! wincmd P
-    if &previewwindow
-      if has("folding")
-        silent! .foldopen
-      endif
-      call search("$", "b")
-      let w = substitute(w, '\\', '\\\\', "")
-      call search('\<\V' . w . '\>')
-
-      wincmd p
-    endif
-  endif
-endfunction "}}}
-" smart split window {{{
-function! s:smart_close() "{{{
-  if winnr('$') != 1 |close| endif
-endfunction "}}}
-function! s:next_window_or_tab() "{{{
-  if tabpagenr('$') == 1 && winnr('$') == 1
-    call s:smart_split()
-  elseif winnr() < winnr("$")
-    wincmd w
-  else
-    tabnext
-    1wincmd w
-  endif
-endfunction"}}}
-function! s:previous_window_or_tab() "{{{
-  if winnr() > 1
-    wincmd W
-  else
-    tabprevious
-    execute winnr("$") . "wincmd w"
-  endif
-endfunction"}}}
-function! s:smart_split_how() "{{{
-  return ( winwidth(0) > winheight(0) * 2 )? 'v' : ''
-endfunction
-function! s:smart_split()
-  exec <SID>smart_split_how() . 'split'
-endfunction
-function! s:smart_split_new()
-  exec <SID>smart_split_how() . 'new'
-endfunction
-function! s:smart_split_edit(path)
-  exec <SID>smart_split_how() . 'new'
-  edit `=a:path`
-endfunction
-command! -nargs=0 SmartSplit call <SID>smart_split()
-command! -nargs=1 -complete=file SmartEdit  call <SID>smart_split_edit(<q-args>)
-"}}}
-
-" 現在開いているタブとバッファを閉じて
-" 一つ前のタブと統合する
-function! s:open_buffer_into_previous_window() "{{{
-  let buffer = bufnr('%')
-  if ( tabpagenr("$") != 1)
-    q
-  endif
-
-  tablast
-  call s:smart_split()
-  exec 'buffer '.buffer
-endfunction"}}}
-"}}}
+" kaoriyaだとdefaultらしい。
+" aug MyAutoCmd
+"   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute "normal g`\"" | endif
+" aug END
 "}}}
 
 "----------------------------------------
@@ -1287,15 +1191,9 @@ set browsedir=buffer
 " set browsedir=current
 set list
 set listchars=tab:␣.,trail:›,extends:>,precedes:<
+set fillchars=stl:\ ,stlnc:\ ,vert:░,fold:-,diff:-
 " set listchars=tab:▸\ ,trail:-,extends:»,precedes:«,nbsp:%
 " set listchars=tab:>-,trail:-,extends:>,precedes:<
-
-" set fillchars=vert:\|,fold:-
-set fillchars=stl:\ ,stlnc:\ ,vert:░,fold:-,diff:-
-" set fillchars=vert:╷
-" set fillchars=vert:╷
-" set fillchars=vert:░
-
 set matchpairs+=<:>
 set number
 set scrolloff=5
@@ -1315,7 +1213,6 @@ set ttyfast
 set foldenable
 set foldmethod=marker
 set foldnestmax=5
-let apache_version = "2.0"
 
 if v:version >= 703
   highlight ColorColumn guibg=#012345
@@ -1435,32 +1332,45 @@ xmap s   <Plug>VSurround
 
 " append custom mappings {{{
 let s:surround_mapping = []
-call add( s:surround_mapping, {
-      \ 'filetypes' : g:my.ft.ruby_files,
-      \ 'mappings' : {
-      \   '#':  "#{\r}",
-      \   '%':  "<% \r %>",
-      \   '-':  "<% \r -%>",
-      \   'w':  "%w!\r!",
-      \   'W':  "%W!\r!",
-      \   'q':  "%q!\r!",
-      \   'Q':  "%Q!\r!",
-      \   'r':  "%r!\r!",
-      \   'R':  "%R!\r!",
-      \   '=':  "<%= \r %>",
-      \   '{':  "{ \r }",
-      \ }
-      \ })
 
-call add( s:surround_mapping, {
-      \ 'filetypes' : g:my.ft.php_files,
-      \ 'mappings' : {
-      \   '<' : "<?php \r ?>",
-      \ }
-      \ })
+if empty( s:surround_mapping )
+  call add( s:surround_mapping, {
+        \ 'filetypes' : g:my.ft.ruby_files,
+        \ 'mappings' : {
+        \   '#':  "#{\r}",
+        \   '%':  "<% \r %>",
+        \   '-':  "<% \r -%>",
+        \   '=':  "<%= \r %>",
+        \   'w':  "%w!\r!",
+        \   'W':  "%W!\r!",
+        \   'q':  "%q!\r!",
+        \   'Q':  "%Q!\r!",
+        \   'r':  "%r!\r!",
+        \   'R':  "%R!\r!",
+        \   '{':  "{ \r }",
+        \ }
+        \ })
+
+  call add( s:surround_mapping, {
+        \ 'filetypes' : g:my.ft.php_files,
+        \ 'mappings' : {
+        \   '<' : "<?php \r ?>",
+        \ }
+        \ })
+
+  call add( s:surround_mapping, {
+        \ 'filetypes' : ['_'],
+        \ 'mappings' : {
+        \   '(' : "(\r)",
+        \   '[' : "[\r]",
+        \   '{' : "{ \r }",
+        \ }
+        \ })
+endif
 
 function! s:let_surround_mapping(mapping_dict) "{{{
   for [ key, mapping ] in items(a:mapping_dict)
+    " XXX filetype変わったときに、unletできない
     call alpaca#let_b:('surround_'.char2nr(key), mapping )
   endfor
 endfunction"}}}
@@ -1486,7 +1396,7 @@ function! s:surround_mapping_filetype() "{{{
       let filetypes = mapping_settings.filetypes
       let mappings  = mapping_settings.mappings
 
-      if <SID>include( filetypes, filetype )
+      if <SID>include( filetypes, filetype ) || <SID>include( filetypes, '_' )
         call <SID>let_surround_mapping( mappings )
         call add(memo, mappings)
       endif
@@ -1927,7 +1837,9 @@ function! s:set_match_words() "{{{
     return
   endif
 
-  call alpaca#let_b:('match_words', '')
+  if !exists('b:match_words')
+    let b:match_words = ''
+  endif
 
   if b:match_words != '' && b:match_words !~ ':$'
     let b:match_words = b:match_words . ''
@@ -1936,9 +1848,9 @@ function! s:set_match_words() "{{{
   let b:match_words = b:match_words . s:match_words[ft]
 endfunction"}}}
 
-aug MyAutoCmd
-  au Filetype * call <SID>set_match_words()
-aug END
+" aug MyAutoCmd
+"   au Filetype * call <SID>set_match_words()
+" aug END
 "}}}
 
 "------------------------------------
@@ -2020,50 +1932,8 @@ endfunction
 "------------------------------------
 " {{{
 let g:tcommentmaps=0
-
-" TODO 特殊文字に書き換える
-nmap <C-_> [tcomment]
-nmap gc [tcomment]
-noremap <silent>[tcomment]<c-_> :TComment<CR>
-xnoremap <silent>[tcomment]<C-_> :TCommentMaybeInline<CR>
-
-noremap <silent>[tcomment]c :TComment<CR>
-xnoremap <silent>[tcomment]c :TCommentMaybeInline<CR>
-
-let g:tcomment_types = {
-      \'php_surround'            : "<?php %s ?>",
-      \'eruby_surround'          : "<%% %s %%>",
-      \'eruby_surround_minus'    : "<%% %s -%%>",
-      \'eruby_surround_equality' : "<%%= %s %%>",
-      \'eruby_block'             : "<%%=begin rdoc%s=end%%>",
-      \'eruby_nodoc_block'       : "<%%=begin%s=end%%>"
-      \ }
-function! SetErubyMapping() "{{{
-  inoremap <buffer> [tcomment]- <%  -%><ESC><Left><Left><Left>i
-  inoremap <buffer> [tcomment]= <%=  %><ESC><Left><Left>i
-  inoremap <buffer> [tcomment]c <%  %><ESC><Left><Left>i
-  inoremap <buffer> [tcomment]d <%=begin rdoc=end%><ESC><Left><Left>i
-  inoremap <buffer> [tcomment]n <%=begin=end%><ESC><Left><Left>i
-
-  nnoremap <buffer> [tcomment]- :TCommentAs eruby_surround_minus<CR><Right><Right><Right>
-  nnoremap <buffer> [tcomment]= :TCommentAs eruby_surround_equality<CR><Right><Right><Right><Right>
-  nnoremap <buffer> [tcomment]c :TCommentAs eruby_surround<CR><Right><Right><Right>
-  nnoremap <buffer> [tcomment]d :TCommentAs eruby_block<CR><Right><Right><Right><Right>
-  nnoremap <buffer> [tcomment]n :TCommentAs eruby_nodoc_block<CR><Right><Right><Right><Right>
-endfunction"}}}
-function! SetRubyMapping() "{{{
-  inoremap <buffer> [tcomment]b <%=begin rdoc=end%><ESC><Left><Left>i
-  inoremap <buffer> [tcomment]n <%=begin=end%><ESC><Left><Left>i
-  nnoremap <buffer> [tcomment]b :TCommentAs ruby_block<CR><Right><Right><Right><Right>
-  nnoremap <buffer> [tcomment]n :TCommentAs ruby_nodoc_block<CR><Right><Right><Right><Right>
-endfunction"}}}
-
-aug MyAutoCmd
-  au FileType eruby call SetErubyMapping()
-  au FileType ruby,ruby.rspec call SetRubyMapping()
-  au FileType php nnoremap <buffer><C-_>c :<C-U>TCommentAs php_surround<CR><Right><Right><Right>
-  au FileType php xnoremap <buffer><C-_>c :<C-U>TCommentAs php_surround<CR><Right><Right><Right>
-aug END
+noremap <silent><C-_><c-_> :TComment<CR>
+noremap <silent><C-_>c :TComment<CR>
 "}}}
 
 "------------------------------------
@@ -2746,7 +2616,6 @@ let g:alpaca_update_tags_config = {
       \ 'css' : '--languages+=css',
       \ }
 "}}}
-
 "}}}
 
 "----------------------------------------
@@ -3320,4 +3189,3 @@ if !has('vim_starting')
 endif
 
 set secure
-

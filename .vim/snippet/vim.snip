@@ -1,7 +1,7 @@
 snippet     exists?
 abbr        if exists('...') | let ... | endif
 options     word
-  if exists('${1:valiable}')
+  if !exists('${1:valiable}')
     let $1 = ${2}
   endif
 
@@ -12,6 +12,12 @@ options     word
     finish
   endif
   let g:$1 = 1
+
+  let s:save_cpo = &cpo
+  set cpo&vim
+
+  let &cpo = s:save_cpo
+  unlet s:save_cpo
 
 snippet     neol
   NeoBundle ${1}, {

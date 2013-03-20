@@ -103,10 +103,10 @@ function! alpaca#endtag_comment() "{{{
 
   execute "normal `>va<\<Esc>`<"
 
-  if !exists('g:endtagcommentFormat')
-    let g:endtagcommentFormat = '<!-- /%tag_name%id%class -->'
+  if !exists('g:end_tag_commant_format')
+    let g:end_tag_commant_format = '<!-- /%tag_name%id%class -->'
   endif
-  let comment = g:endtagcommentFormat
+  let comment = g:end_tag_commant_format
   let comment = substitute(comment, '%tag_name', tag_name, 'g')
   let comment = substitute(comment, '%id', id, 'g')
   let comment = substitute(comment, '%class', class, 'g')
