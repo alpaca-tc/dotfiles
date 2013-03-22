@@ -64,18 +64,19 @@ let g:my.conf = {
 "}}}
 " path"{{{
 let g:my.bin = {
-      \ "ri" : expand('~/.rbenv/versions/1.9.3-p125/bin/ri'),
+      \ "ri" : expand('/Users/taichou/.rbenv/shims/ri'),
       \ "ctags" : expand('/Applications/MacVim.app/Contents/MacOS/ctags'),
       \ }
 
 let g:my.dir = {
-      \ "trash_dir" : expand('~/.vim.trash/'),
-      \ "swap_dir"  : expand('~/.vim.trash/vimswap'),
       \ "bundle"    : expand('~/.bundle'),
-      \ "vimref"    : expand('~/.vim.trash/vim-ref'),
-      \ "memolist"  : expand('~/.memolist'),
       \ "ctrlp"     : expand('~/.vim.trash/ctrlp'),
+      \ "memolist"  : expand('~/.memolist'),
+      \ "neocomplcache"  : expand('~/.vim.trash/neocomplcache'),
       \ "snippets"  : expand('~/.vim/snippet'),
+      \ "swap_dir"  : expand('~/.vim.trash/vimswap'),
+      \ "trash_dir" : expand('~/.vim.trash/'),
+      \ "vimref"    : expand('~/.vim.trash/vim-ref'),
       \ }
 "}}}
 " その他設定"{{{
@@ -138,7 +139,7 @@ set nobackup
 set norestorescreen=off
 set showmode
 set timeout timeoutlen=300 ttimeoutlen=100
-set viminfo='100,<800,s300,\"300
+set viminfo='1000,<800,s300,\"300,f1,:1000,/1000
 set visualbell t_vb=
 
 if v:version >= 703
@@ -244,10 +245,6 @@ NeoBundleLazy 'scrooloose/syntastic', { 'autoload': {
       \ 'filetypes' : g:my.ft.program_files }}
 NeoBundle 'Lokaltog/powerline'
 execute 'set runtimepath+=' . neobundle#get_neobundle_dir() . '/powerline/powerline/bindings/vim'
-" なんか色々遊んでみたけど、結局戻した
-" NeoBundle 'taichouchou2/alpaca_powerline', {
-"       \ 'depends': ['majutsushi/tagbar', 'tpope/vim-fugitive', 'basyura/TweetVim', 'basyura/twibill.vim',],
-"       \ 'autoload' : { 'functions': ['Pl#UpdateStatusline', 'Pl#Hi#Allocate', 'Pl#Hi#Segments', 'Pl#Colorscheme#Init',]  }}
 NeoBundleLazy 'mattn/webapi-vim'
 "}}}
 " {{{
@@ -675,11 +672,14 @@ NeoBundleLazy 'jelera/vim-javascript-syntax', { 'autoload' : {
 NeoBundleLazy 'taichouchou2/vim-json', { 'autoload' : {
       \ 'filetypes' : g:my.ft.js_files
       \ }}
-NeoBundleLazy 'teramako/jscomplete-vim', { 'autoload' : {
-      \ 'filetypes' : g:my.ft.js_files
-      \ }}
+" NeoBundleLazy 'teramako/jscomplete-vim', { 'autoload' : {
+"       \ 'filetypes' : g:my.ft.js_files
+"       \ }}
 " TODO こいつはすごい。気になる。時間がある時にneocomplcacheのsource作ろう
-" NeoBundle 'marijnh/tern'
+NeoBundle 'marijnh/tern'
+so ~/.bundle/tern/vim/tern.vim
+call tern#Enable()
+
 NeoBundleLazy 'leafgarland/typescript-vim', { 'autoload' : {
       \ 'filetypes' : ['typescript']
       \ }}
@@ -2369,7 +2369,7 @@ nmap <silent>k <Plug>(accelerated_jk_gk)
 "------------------------------------
 " "{{{
 " let g:eskk#egg_like_newline = 1
-" let g:eskk#revert_henkan_style = "okuri"
+let g:eskk#revert_henkan_style = "okuri"
 let g:eskk#debug = 0
 let g:eskk#dictionary = { 'path': expand( "~/.eskk_jisyo" ), 'sorted': 0, 'encoding': 'utf-8', }
 let g:eskk#directory = "~/.eskk"
@@ -2389,7 +2389,7 @@ let g:eskk#marker_henkan=""
 let g:eskk#marker_henkan_select=""
 let g:eskk#marker_jisyo_touroku="?"
 let g:eskk#marker_okuri='*'
-imap <C-J> <Plug>(eskk:toggle)
+imap <C-@> <Plug>(eskk:toggle)
 " "}}}
 
 "------------------------------------
@@ -2431,7 +2431,7 @@ xnoremap e :ExciteTranslate<CR>
 "  jscomplete-vim
 "------------------------------------
 " {{{
-autocmd FileType javascript setlocal omnifunc=jscomplete#CompleteJS
+" autocmd FileType javascript setlocal omnifunc=jscomplete#CompleteJS
 let g:jscomplete_use = ['dom', 'moz', 'ex6th']
 " xpcom.vim
 " }}}
@@ -2649,6 +2649,7 @@ let g:neocomplcache_force_overwrite_completefunc  = 1
 let g:neocomplcache_max_list                      = 80
 let g:neocomplcache_skip_auto_completion_time     = '0.3'
 let g:neocomplcache_caching_limit_file_size       = 0
+let g:neocomplcache_temporary_dir=g:my.dir.neocomplcache
 " let g:neocomplcache_enable_auto_close_preview = 1
 
 let g:neocomplcache_auto_completion_start_length = 2
@@ -2718,9 +2719,6 @@ function! bundle.hooks.on_source(bundle) "{{{
         \ 'mail'      : '^\s*\w\+',
         \ }
 
-  " let g:neocomplcache_keyword_patterns['php'] = '[^. *\t]\.\w*\|\h\w*::'
-        " \' '^=\%(b\%[egin]\|e\%[nd]\)\|\%(@@\|[:$@]\)\h\w*\|\h\w*\%(::\w*\)*[!?]\?'
-
   " Define include pattern.
   let g:neocomplcache_include_patterns = {
         \ 'scala' : '^import',
@@ -2729,16 +2727,17 @@ function! bundle.hooks.on_source(bundle) "{{{
         \ }
 
   " もはやデフォルトでOFFでいい。。
-  let g:neocomplcache_disabled_sources_list._ = ['tags_complete']
+  " let g:neocomplcache_disabled_sources_list._ = ['tags_complete']
+  let g:neocomplcache_disabled_sources_list._ = ['tags_complete', 'omni_complete']
 
   " Define omni patterns
   let g:neocomplcache_omni_patterns = {
         \ 'php' : '[^. *\t]\.\w*\|\h\w*::'
         \ }
 
-  let g:neocomplcache_delimiter_patterns = {
-        \ 'ruby' : []
-        \ }
+  " let g:neocomplcache_delimiter_patterns = {
+  "       \ 'ruby' : []
+  "       \ }
 
   " Define completefunc
   let g:neocomplcache_vim_completefuncs = {
@@ -2898,13 +2897,13 @@ cnoremap <expr><silent><C-g>     (getcmdtype() == '/') ?  "\<ESC>:Unite -buffer-
 nnoremap [unite]f                :<C-U>Unite -buffer-name=file file:
 nnoremap [unite]<C-F>            :<C-u>UniteFile<Space><C-R>=$PWD<CR>
 
-nnoremap <silent>[unite]c        :<C-U>Unite -buffer-name=history_command -no-empty history/command<CR>
+nnoremap <silent>[unite]:        :<C-U>Unite -buffer-name=history_command -no-empty history/command<CR>
 nnoremap <silent>[unite]h        :<C-U>Unite help -buffer-name=help<CR>
 nnoremap <silent>[unite]m        :<C-U>Unite mark -no-start-insert -buffer-name=mark<CR>
 nnoremap <silent>[unite]o        :<C-U>Unite -no-start-insert -horizontal -no-quit -buffer-name=outline -hide-source-names outline<CR>
 nnoremap <silent>[unite]q        :<C-U>Unite qiita -buffer-name=qiita<CR>
 nnoremap <silent>[unite]ra       :<C-U>Unite -buffer-name=rake rake<CR>
-nnoremap <silent>[unite]s        :<C-U>Unite -buffer-name=history_search -no-empty history/search<CR>
+nnoremap <silent>[unite]/        :<C-U>Unite -buffer-name=history_search -no-empty history/search<CR>
 nnoremap <silent>[unite]t        :<C-U>Unite tag -buffer-name=tag -no-empty<CR>
 nnoremap <silent>[unite]y        :<C-U>Unite -buffer-name=history_yank -no-empty history/yank<CR>
 nnoremap [unite]S                :<C-U>Unite -no-start-insert -buffer-name=ssh ssh://
