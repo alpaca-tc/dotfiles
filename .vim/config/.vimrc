@@ -90,7 +90,7 @@ let g:my.ft = {
       \ "php_files"       : ['php', 'phtml'],
       \ "style_files"     : ['css', 'scss', 'sass'],
       \ "markup_files"    : ['html', 'haml', 'erb', 'php'],
-      \ "program_files"   : ['ruby', 'php', 'python', 'eruby', 'vim', 'javascript', 'coffee', 'scala'],
+      \ "program_files"   : ['ruby', 'php', 'python', 'eruby', 'vim', 'javascript', 'coffee', 'scala', 'java'],
       \ "ignore_patterns" : ['vimfiler', 'unite'],
       \ }
 
@@ -156,7 +156,7 @@ nnoremap <Space><Space>v :<C-U>tabnew ~/.vim/config/.vimrc<CR>
 "}}}
 
 "----------------------------------------
-" neobundle initialize {{{
+" neobundle initialize E
 filetype plugin indent off     " required!
 let g:neobundle#types#git#default_protocol = 'https'
 
@@ -215,7 +215,8 @@ NeoBundleLazy 'yascentur/Ricty', {
       \   'build' : {
       \     'mac'  : g:ricty_generate_command,
       \     'unix' : g:ricty_generate_command,
-      \ }}}
+      \   }
+      \ }}
 " 保存と同時にタブ文字消す
 NeoBundleLazy 'taichouchou2/alpaca_remove_dust.vim', {
       \ 'autoload': {
@@ -263,16 +264,16 @@ NeoBundleLazy 'Shougo/unite.vim', {
       \     'UniteWithBufferDir', 'UniteWithCurrentDir', 'UniteWithCursorWord',
       \     'UniteWithInput', 'UniteWithInputDirectory']
       \ }}
-" NeoBundleLazy 'ujihisa/unite-colorscheme', {
-"       \ 'autoload': {
-"       \   'unite_sources': 'colorscheme'
-"       \ }}
-" NeoBundleLazy 'Shougo/unite-build', {
-"       \ 'depends' : 'Shougo/unite.vim',
-"       \ 'autoload': {
-"       \   'filetypes' : g:my.ft.scala_files,
-"       \   'unite_sources' : 'build'
-"       \ }}
+NeoBundleLazy 'ujihisa/unite-colorscheme', {
+      \ 'autoload': {
+      \   'unite_sources': 'colorscheme'
+      \ }}
+NeoBundleLazy 'Shougo/unite-build', {
+      \ 'depends' : 'Shougo/unite.vim',
+      \ 'autoload': {
+      \   'filetypes' : g:my.ft.scala_files,
+      \   'unite_sources' : 'build'
+      \ }}
 NeoBundleLazy 'Shougo/unite-outline', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload' : {
@@ -409,10 +410,15 @@ NeoBundleLazy 'mattn/gist-vim', {
       \ 'depends': ['mattn/webapi-vim' ],
       \ 'autoload' : {
       \   'commands' : 'Gist' }}
+" NeoBundleLazy 'sgur/unite-qf', { 'autoload': {
+"       \ 'unite_sources' : 'qf'
+"       \ }}
+NeoBundleLazy  'osyo-manga/unite-quickfix', { 'autoload': {
+      \ 'unite_sources' : 'quickfix'
+      \ }}
 NeoBundleLazy 'thinca/vim-quickrun', { 'autoload' : {
-      \ 'mappings' : [
-      \   ['nxo', '<Plug>(quickrun)']],
-      \ 'commands' : 'QuickRun' }}
+      \   'mappings' : [['nxo', '<Plug>(quickrun)']],
+      \   'commands' : 'QuickRun' }}
 "}}}
 " extend mappings"{{{
 NeoBundleLazy 'tyru/eskk.vim', { 'autoload' : {
@@ -596,6 +602,9 @@ NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
       \ 'filetypes' : g:my.ft.program_files,
       \ 'functions' : [ "smartchr#loop" ],
       \ }}
+NeoBundleLazy 'itchyny/thumbnail.vim', { 'autoload' : {
+      \ 'commands' : 'Thumbnail'
+      \ }}
 NeoBundleLazy 'tyru/restart.vim', {
       \ 'gui' : 1,
       \ 'autoload' : {
@@ -604,6 +613,14 @@ NeoBundleLazy 'tyru/restart.vim', {
 NeoBundleLazy 'kana/vim-niceblock', { 'autoload' : {
       \ 'mappings' : ['<Plug>(niceblock-I)', '<Plug>(niceblock-A)']
       \ }}
+NeoBundleLazy 'airblade/vim-gitgutter', {
+      \ 'autoload': {
+      \   'install' : 1,
+      \   'commands': [
+      \     'GitGutterDisable', 'GitGutterEnable', 'GitGutterToggle', 'GitGutter',
+      \     'GitGutterAll', 'GitGutterNextHunk', 'GitGutterPrevHunk', ''
+      \ ]}}
+
 " NeoBundleLazy 'HybridText', { 'autoload' : {
 "       \ 'filetypes' : 'hybrid',
 "       \ }}
@@ -677,8 +694,8 @@ NeoBundleLazy 'taichouchou2/vim-json', { 'autoload' : {
 "       \ }}
 " TODO こいつはすごい。気になる。時間がある時にneocomplcacheのsource作ろう
 NeoBundle 'marijnh/tern'
-so ~/.bundle/tern/vim/tern.vim
-call tern#Enable()
+" so ~/.bundle/tern/vim/tern.vim
+" call tern#Enable()
 
 NeoBundleLazy 'leafgarland/typescript-vim', { 'autoload' : {
       \ 'filetypes' : ['typescript']
@@ -977,7 +994,6 @@ xnoremap <silent><C-p> "0p<CR>
 nnoremap re :%s!
 xnoremap re :s!
 xnoremap rep y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!g<Left><Left>
-nnoremap g# `[v`]
 xnoremap <Leader>c :s/./&/g
 nnoremap <Leader>f :setl filetype=
 aug MyAutoCmd
@@ -1589,10 +1605,10 @@ nnoremap <silent><Leader>r :QuickRun<CR>
 
 let bundle = neobundle#get('vim-quickrun')
 function! bundle.hooks.on_source(bundle) "{{{
-
   " quickrun config {{{
-  let g:quickrun_config._ = {'runner' : 'vimproc'}
-
+  let g:quickrun_config._ = {
+        \ 'runner' : 'vimproc',
+        \ }
   let g:quickrun_config.javascript = {
         \ 'command': 'node'}
 
@@ -2614,8 +2630,23 @@ let g:alpaca_update_tags_config = {
       \ 'scss' : '--languages+=scss',
       \ 'sass' : '--languages+=sass',
       \ 'css' : '--languages+=css',
+      \ 'java' : '--languages+=java $JAVA_HOME/src',
       \ }
 "}}}
+
+" ------------------------------------
+" vim-gitgutter
+" ------------------------------------
+" let g:gitgutter_sign_added = 'xx'
+" let g:gitgutter_sign_modified = 'yy'
+" let g:gitgutter_sign_removed = 'zz'
+" let g:gitgutter_sign_modified_removed = 'ww'
+" let g:gitgutter_all_on_focusgained = 0
+" let g:gitgutter_on_bufenter = 0
+" let g:gitgutter_highlight_lines = 1
+" let g:gitgutter_on_bufenter = 0
+" let g:gitgutter_all_on_focusgained = 0
+
 "}}}
 
 "----------------------------------------
@@ -2889,6 +2920,7 @@ nnoremap <silent> [unite]j       :<C-u>Unite file_mru -buffer-name=file_mru<CR>
 nnoremap <silent> [unite]u       :<C-u>UniteWithBufferDir -buffer-name=file file<CR>
 nnoremap <silent> [unite]B       :<C-u>Unite bookmark -buffer-name=bookmark<CR>
 nnoremap <silent> g/             :<C-U>call <SID>smart_unite_open('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast')<CR>
+nnoremap <silent> g#             :<C-U>call <SID>smart_unite_open('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast -input=<C-R><C-W>')<CR>
 " nnoremap <silent>gn              :<C-U>call <SID>line_fast_move_next_match()<CR>
 " nnoremap <silent>gN              :<C-U>call <SID>line_fast_move_prev_match()<CR>
 
@@ -3186,5 +3218,19 @@ au FileType php,scss,phtml,tpl call <SID>setting_eccube()
 if !has('vim_starting')
   call neobundle#call_hook('on_source')
 endif
+
+" 人のvimrc
+" @see http://vim-users.jp/2011/02/hack202/
+" 保存時に対象ディレクトリが存在しなければ作成する(作成有無は確認できる)
+augroup AutoMkdir
+  autocmd!
+  autocmd BufWritePre * call s:auto_mkdir(expand('<afile>:p:h'), v:cmdbang)
+  function! s:auto_mkdir(dir, force)
+    if !isdirectory(a:dir) && (a:force ||
+          \    input(printf('"%s" does not exist. Create? [y/N]', a:dir)) =~? '^y\%[es]$')
+      call mkdir(a:dir, 'p')
+    endif
+  endfunction
+augroup END
 
 set secure
