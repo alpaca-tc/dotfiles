@@ -231,6 +231,9 @@ NeoBundleLazy 'taichouchou2/alpaca_window.vim', {
       \     '<Plug>(alpaca_window_tabnew)', '<Plug>(alpaca_window_move_next_window_or_tab)',
       \     '<Plug>(alpaca_window_move_previous_window_or_tab)', '<Plug>(alpaca_window_move_buffer_into_last_tab)'
       \   ],
+      \   'functions' : [
+      \     'alpaca_window#set_smart_close', 'alpaca_window#smart_close', 'alpaca_window#open_buffer'
+      \   ],
       \ }}
 
 " Git操作
@@ -613,6 +616,7 @@ NeoBundleLazy 'kana/vim-niceblock', { 'autoload' : {
 NeoBundleLazy 'repeat.vim', { 'autoload' : {
       \ 'mappings' : '.',
       \ }}
+
 " NeoBundle 'taichouchou2/alpaca_dash.vim'
 " NeoBundleLazy 'mattn/vdbi-vim', {
 "       \ 'depends': 'mattn/webapi-vim' }
@@ -1638,8 +1642,10 @@ unlet bundle
 
 aug QuickRunAutoCmd "{{{
   au!
-  au FileType quickrun
-        \ au BufEnter <buffer> if (winnr('$') == 1) | q | endif
+
+  au FileType quickrun call alpaca_window#set_smart_close()
+  " au FileType quickrun
+  "       \ au BufEnter <buffer> if (winnr('$') == 1) | q | endif
   au FileType racc.ruby,racc nnoremap <buffer><Leader>R :<C-U>QuickRun racc.run<CR>
 aug END "}}}
 "}}}
@@ -2387,8 +2393,8 @@ let g:eskk#cursor_color = {
 " let g:eskk#marker_henkan_select="`"
 let g:eskk#marker_henkan=""
 let g:eskk#marker_henkan_select=""
-let g:eskk#marker_jisyo_touroku="?"
-let g:eskk#marker_okuri='*'
+let g:eskk#marker_jisyo_touroku=""
+let g:eskk#marker_okuri=''
 imap <C-@> <Plug>(eskk:toggle)
 " "}}}
 
@@ -2616,6 +2622,7 @@ let g:alpaca_update_tags_config = {
       \ 'css' : '--languages+=css',
       \ }
 "}}}
+
 "}}}
 
 "----------------------------------------
@@ -2997,6 +3004,8 @@ let g:unite_source_history_yank_enable =1
 let s:unite_kuso_hooks = {}
 "}}}
 function! s:unite_my_settings() "{{{
+  call alpaca_window#set_smart_close()
+
   highlight link uniteMarkedLine Identifier
   highlight link uniteCandidateInputKeyword Statement
 

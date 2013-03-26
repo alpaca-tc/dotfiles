@@ -1,0 +1,16 @@
+FATAL:  lock file "postmaster.pid" already exists
+HINT:  Is another postmaster (PID 13433) running in data directory "/usr/local/var/postgres"?
+LOG:  database system was shut down at 2013-03-25 13:26:19 JST
+LOG:  database system is ready to accept connections
+LOG:  autovacuum launcher started
+FATAL:  database "taichou" does not exist
+FATAL:  database "taichou" does not exist
+FATAL:  database "kaika_user" does not exist
+FATAL:  database "taichou" does not exist
+ERROR:  syntax error at or near "exit" at character 1
+STATEMENT:  exit
+	;
+LOG:  autovacuum launcher shutting down
+LOG:  received smart shutdown request
+LOG:  shutting down
+LOG:  database system is shut down
