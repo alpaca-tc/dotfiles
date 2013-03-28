@@ -175,3 +175,30 @@ snippet     cMyError
 
   myError = new MyError("This is my original error")
 
+# rdoc /*{{{*/
+snippet     ##
+  ##
+  # ${1}
+
+snippet     @s
+abbr        @see
+  @see ${1:Class}
+
+snippet     @p
+abbr        @param [Class] ...
+  @param [${1:Class}] ${2:...}
+
+snippet     @e
+abbr        @example ...
+  @example ${1:...}
+
+    ${2:sample}
+
+snippet     @r
+abbr        @return [Class] ...
+  @return [${1:Class}] ${2:...}
+
+snippet     @ra
+abbr        @throw [${1:Class}] ...
+  @raise [${1:Class}] ${2:...}
+#}}}
