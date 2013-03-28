@@ -417,7 +417,7 @@ NeoBundleLazy 'mattn/gist-vim', {
 "       \ 'unite_sources' : 'qf'
 "       \ }}
 NeoBundleLazy  'osyo-manga/unite-quickfix', { 'autoload': {
-      \ 'unite_sources' : 'quickfix'
+      \ 'unite_sources' : ['quickfix', 'location_list']
       \ }}
 NeoBundleLazy 'thinca/vim-quickrun', { 'autoload' : {
       \   'mappings' : [['nxo', '<Plug>(quickrun)']],
@@ -3195,8 +3195,8 @@ function! s:set_ruby_tags() "{{{
 
   if !exists('s:ruby_tags')
     " let ruby_root = s:get_ruby_root()
-    let ruby_root = "/Users/taichou/.rbenv/versions/2.0.0-p0/lib/ruby"
-    let number    = "/2.0.0" " TODO ここを抽象化する
+    let ruby_root = <SID>get_ruby_root()
+    let number    = isdirectory(ruby_root . "/1.9.1") ? "/1.9.1" : "/2.0.0"
     let tags      = "/tags"
     let s:ruby_tags = join([
           \ ruby_root . number . tags,
@@ -3211,8 +3211,8 @@ endfunction"}}}
 
 " あとでautoloaderへ移す
 function! s:update_ruby_ctags() "{{{
-  call vimproc#system_bg("rbenv ctags")
-  call vimproc#system_bg("gem gem-tags")
+  call vimproc#system("rbenv ctags")
+  call vimproc#system("gem ctags")
 endfunction"}}}
 command! UpdateRubyTags call <SID>update_ruby_ctags()
 
