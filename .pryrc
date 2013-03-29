@@ -1,39 +1,54 @@
 # coding: utf-8
 
+require 'active_support/all'
+
 # ininialize alias
-# command_alias = {
-#   "show" => "show-method",
-#   "c" => "continue",
-#   "s" => "step",
-#   "n" => "next",
-# }
-# command_alias.each do |k, v|
-#   Pry.config.commands.alias_command k, v
-# end
+command_alias = {
+  "show" => "show-method",
+  "c" => "continue",
+  "s" => "step",
+  "n" => "next",
+}
+command_alias.each do |k, v|
+  Pry.config.commands.alias_command k, v
+end
 Pry.config.editor="vim"
 
 # デフォルトがださいのでカスタマイズprompt
-# def get_prompt (target_self, nest_level, pry)
-#   space_string = " "
-#   nest_string  = "‣"
-#
-#   nest =  ""
-#   0.upto( nest_level ) { nest += nest_string  }                 #=> "‣‣‣"
-#   klass_or_module = Pry.view_clip(target_self) + space_string * 10 #=> "String     "
-#   nest = nest + space_string * 10
-#
-#   sprintf( "\e[33;1m%.10s \e[36;5m%.4s\e[0m ", klass_or_module, nest)
-# end
+module Prompt
+  mattr_accessor :max_length, :space, :nest_string
 
-# Pry.config.prompt = [
-#   proc { |target_self, nest_level, pry|
-#     get_prompt(target_self, nest_level, pry)
-#   },
-#
-#   proc { |target_self, nest_level, pry|
-#     get_prompt(target_self, nest_level, pry)
-#   }
-# ]
+  @@klass_length = 20
+  @@klass_max_length = 15
+  @@max_length = 10
+  @@nest_string = "‣"
+  @@space = " "
+
+  class << self
+    def prompt (target_self, nest_level, pry)
+      klass_or_module = fill_blank(Pry.view_clip(target_self), @@klass_length)
+      nest_level += 1
+      nest = fill_blank(@@nest_string * nest_level.to_i, 5)
+
+      sprintf( "\e[33;1m%s \e[36;5m%s\e[0m « ", klass_or_module, nest)
+    end
+
+    private
+    def fill_blank(str, length)
+      [str, @@space * length].join[0..length]
+    end
+  end
+end
+
+Pry.config.prompt = [
+  proc { |target_self, nest_level, pry|
+    Prompt.prompt(target_self, nest_level, pry)
+  },
+
+  proc { |target_self, nest_level, pry|
+    get_prompt(target_self, nest_level, pry)
+  }
+]
 
 # hirbをpryに対応させる
 # def hirb_hack

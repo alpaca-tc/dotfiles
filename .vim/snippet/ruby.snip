@@ -856,6 +856,22 @@ regexp      '^config\.'
     config.include ${1:ModuleName}, example_group: {
       file_path: config.escaped_path(%w[spec (${2:views|controllers})])
     }
+
+snippet     rand
+abbr        rand
+options     word
+  offset = rand(${1}.count)
+  rand_record = $1.first(:offset => offset)
+
+snippet     hoge
+abbr        hoge
+options     word
+  if ${1}.exists?
+    offset = rand($1.count)
+    $1.first(:offset => offset)
+  else
+    FactoryGirl.create(:${2}).id
+  end
 #}}}
 
 

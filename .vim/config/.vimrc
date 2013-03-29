@@ -195,7 +195,8 @@ endfunction
 
 "----------------------------------------
 " 基本 / その他 {{{
-NeoBundleFetch 'Shougo/neobundle.vim'
+NeoBundle 'Shougo/neobundle.vim'
+
 " 非同期通信
 NeoBundle 'Shougo/vimproc', {
       \ 'build' : {
@@ -209,7 +210,7 @@ let g:ricty_generate_command = join([
       \   neobundle#get_neobundle_dir().'/alpaca/fonts/migu-1m-regular.ttf',
       \   neobundle#get_neobundle_dir().'/alpaca/fonts/migu-1m-bold.ttf',
       \ ], ' ')
-NeoBundleLazy 'yascentur/Ricty', {
+NeoBundleFetch 'yascentur/Ricty', {
       \ 'depends' : 'taichouchou2/alpaca',
       \ 'autoload' : {
       \   'build' : {
@@ -361,7 +362,7 @@ NeoBundleLazy 'Shougo/neosnippet', {
       \   'unite_sources' : ['snippet', 'neosnippet/user', 'neosnippet/runtime'],
       \ }}
 
-NeoBundle 'Shougo/vimshell', {
+NeoBundleLazy 'Shougo/vimshell', {
       \ 'autoload' : {
       \   'commands' : [{
       \     'name' : 'VimShell',
@@ -510,7 +511,7 @@ NeoBundleLazy 'ujihisa/neco-look', {
 " NeoBundle 'textobj-entire'                 " e buffer全体をtext-objectに
 " NeoBundle 'thinca/vim-textobj-comment'     " c commentをtext-objectに
 " f 関数をtext-objectに
-NeoBundleLazy 'kana/vim-textobj-function.git', {
+NeoBundle 'kana/vim-textobj-function.git', {
       \ 'depends' : 'kana/vim-textobj-user',
       \ }
 NeoBundleLazy 'kana/vim-operator-user'
@@ -523,7 +524,7 @@ NeoBundleLazy 'kana/vim-operator-replace', {
 nmap _  <Plug>(operator-replace)
 
 NeoBundleLazy 'kana/vim-textobj-user'
-NeoBundleLazy 'kana/vim-textobj-indent.git', {
+NeoBundle 'kana/vim-textobj-indent.git', {
       \ 'depends' : 'kana/vim-textobj-user',
       \ 'autoload': {
       \   'mappings' : [
@@ -618,36 +619,28 @@ NeoBundleLazy 'kana/vim-niceblock', { 'autoload' : {
       \ }}
 NeoBundleLazy 'airblade/vim-gitgutter', {
       \ 'autoload': {
-      \   'install' : 1,
       \   'commands': [
       \     'GitGutterDisable', 'GitGutterEnable', 'GitGutterToggle', 'GitGutter',
       \     'GitGutterAll', 'GitGutterNextHunk', 'GitGutterPrevHunk', ''
       \ ]}}
+NeoBundleLazy 'taichouchou2/yanktmp.vim', { 'autoload': {
+      \ 'functions': [
+      \   "yanktmp#yank", "yanktmp#paste_p", "yanktmp#paste_P"
+      \ ]
+      \ }}
 
-" NeoBundleLazy 'HybridText', { 'autoload' : {
-"       \ 'filetypes' : 'hybrid',
-"       \ }}
-" NeoBundleLazy 'DirDiff.vim', { 'autoload' : {
-"       \ 'commands' : 'DirDiff'
-"       \ }}
+NeoBundleLazy 'HybridText', { 'autoload' : {
+      \ 'filetypes' : 'hybrid',
+      \ }}
+NeoBundleLazy 'DirDiff.vim', { 'autoload' : {
+      \ 'commands' : 'DirDiff'
+      \ }}
 NeoBundleLazy 'repeat.vim', { 'autoload' : {
       \ 'mappings' : '.',
       \ }}
 
-" NeoBundle 'taichouchou2/alpaca_dash.vim'
 " NeoBundleLazy 'mattn/vdbi-vim', {
 "       \ 'depends': 'mattn/webapi-vim' }
-
-if has('python')
-  " エラーで使えない
-  NeoBundleLazy 'kakkyz81/evervim', {
-        \ 'build' : {
-        \   'mac' : 'easy_install markdown',
-        \   'unix': 'easy_install markdown',
-        \ },
-        \ 'autoload' : {
-        \ }}
-endif
 "}}}
 " bundle.lang"{{{
 
@@ -681,25 +674,30 @@ NeoBundleLazy 'kchmck/vim-coffee-script', { 'autoload' : {
       \ 'filetypes' : 'coffee' }}
 NeoBundleLazy 'claco/jasmine.vim', { 'autoload' : {
       \ 'filetypes' : g:my.ft.js_files }}
+NeoBundleLazy 'jiangmiao/simple-javascript-indenter', { 'autoload' : {
+      \ 'filetypes' : ['javascript', 'json'],
+      \ }}
 " NeoBundleLazy 'taichouchou2/vim-javascript', { 'autoload' : {
 "       \ 'filetypes' : ['javascript']
 "       \ }}
-NeoBundleLazy 'jiangmiao/simple-javascript-indenter', { 'autoload' : {
-      \ 'filetypes' : 'javascript',
-      \ }}
 NeoBundleLazy 'jelera/vim-javascript-syntax', { 'autoload' : {
-      \ 'filetypes' : 'javascript',
+      \ 'filetypes' : ['javascript', 'json'],
       \ }}
 NeoBundleLazy 'taichouchou2/vim-json', { 'autoload' : {
       \ 'filetypes' : g:my.ft.js_files
       \ }}
-" NeoBundleLazy 'teramako/jscomplete-vim', { 'autoload' : {
-"       \ 'filetypes' : g:my.ft.js_files
-"       \ }}
+NeoBundleLazy 'teramako/jscomplete-vim', { 'autoload' : {
+      \ 'filetypes' : g:my.ft.js_files
+      \ }}
 " TODO こいつはすごい。気になる。時間がある時にneocomplcacheのsource作ろう
-NeoBundle 'marijnh/tern'
-" so ~/.bundle/tern/vim/tern.vim
-" call tern#Enable()
+NeoBundleLazy 'marijnh/tern', {
+      \ 'build' : {
+      \   'mac': 'npm install',
+      \   'unix': 'npm install'
+      \ },
+      \ 'autoload' : {
+      \   'filetypes': 'javascript'
+      \ }}
 
 NeoBundleLazy 'leafgarland/typescript-vim', { 'autoload' : {
       \ 'filetypes' : ['typescript']
@@ -1309,8 +1307,11 @@ aug END
 "----------------------------------------
 nnoremap [plug] <Nop>
 nnoremap [space] <Nop>
+nnoremap [minor] <Nop>
 nmap <C-H> [plug]
 nmap <Space> [space]
+nmap ; [minor]
+
 "----------------------------------------
 "個別のプラグイン " {{{
 
@@ -1926,9 +1927,10 @@ unlet bundle
 let g:memolist_path              = g:my.dir.memolist
 let g:memolist_template_dir_path = g:my.dir.memolist
 let g:memolist_memo_suffix       = "mkd"
-let g:memolist_memo_date         = "%Y-%m-%d %H:%M"
-let g:memolist_memo_date         = "epoch"
+" let g:memolist_memo_date         = "%Y-%m-%d %H:%M"
 let g:memolist_memo_date         = "%D %T"
+let g:memolist_memo_date         = "%D %T"
+let g:memolist_memo_date         = ""
 let g:memolist_vimfiler          = 1
 
 nnoremap <silent><Space>mn  :<C-U>MemoNew<CR>
@@ -2453,7 +2455,6 @@ xnoremap e :ExciteTranslate<CR>
 "  jscomplete-vim
 "------------------------------------
 " {{{
-" autocmd FileType javascript setlocal omnifunc=jscomplete#CompleteJS
 let g:jscomplete_use = ['dom', 'moz', 'ex6th']
 " xpcom.vim
 " }}}
@@ -2652,11 +2653,31 @@ let g:alpaca_update_tags_config = {
 " let g:gitgutter_highlight_lines = 1
 " let g:gitgutter_on_bufenter = 0
 " let g:gitgutter_all_on_focusgained = 0
+nnoremap [space]g :<C-U>GitGutterToggle<CR>
 
+" ------------------------------------
+" yanktmp.vim
+" ------------------------------------
+"{{{
+xnoremap <silent>[minor]y :<C-U>call yanktmp#yank()<CR>
+nnoremap <silent>[minor]p :<C-U>call yanktmp#paste_p()<CR>
+nnoremap <silent>[minor]P :<C-U>call yanktmp#paste_P()<CR>
+"}}}
+
+" ------------------------------------
+" tern
+" ------------------------------------
+let bundle = neobundle#get('tern')
+function! bundle.hooks.on_source(bundle) "{{{
+  " source `neobundle#get_neobundle_dir() . '/tern/vim/tern.vim'`
+  execute 'source ' . neobundle#get_neobundle_dir() . '/tern/vim/tern.vim'
+  call tern#Enable()
+endfunction"}}}
+unlet bundle
 "}}}
 
 "----------------------------------------
-" 補完・履歴 neocomplcache "{{{
+"map 補完・履歴 neocomplcache "{{{
 set complete=.,w,b,u,U,s,i,d,t
 set completeopt=menu,menuone,longest,preview
 set history=1000             " コマンド・検索パターンの履歴数
