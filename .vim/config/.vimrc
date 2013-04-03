@@ -146,10 +146,13 @@ if v:version >= 703
   set undofile
   let &undodir=&directory
 endif
-if has('unix')
-  set nofsync
-  set swapsync=
-endif
+
+
+" if has('unix')
+"   set nofsync
+"   set swapsync=
+" endif
+
 
 nnoremap <Space><Space>s :<C-U>source ~/.vimrc<CR>
 nnoremap <Space><Space>v :<C-U>tabnew ~/.vim/config/.vimrc<CR>
@@ -342,7 +345,13 @@ endfor
 " }}}
 NeoBundleLazy 'Shougo/git-vim', {
       \ 'autoload' : {
-      \ 'commands': ["GitDiff", "GitLog", "GitAdd", "Git", "GitCommit", "GitBlame", "GitBranch", "GitPush"] }}
+      \ 'commands': [
+      \   { "name": "GitDiff",     "complete" : "customlist,git#list_commits" },
+      \   { "name": "GitVimDiff",  "complete" : "customlist,git#list_commits" },
+      \   { "name": "Git",         "complete" : "customlist,git#list_commits" },
+      \   { "name": "GitCheckout", "complete" : "customlist,git#list_commits" },
+      \   { "name": "GitAdd",      "complete" : "file" },
+      \   "GitLog", "GitCommit", "GitBlame", "GitPush"] }}
 
 NeoBundleLazy 'Shougo/neocomplcache', {
       \ 'autoload' : {
@@ -1660,9 +1669,8 @@ unlet bundle
 aug QuickRunAutoCmd "{{{
   au!
 
-  au FileType quickrun call alpaca_window#set_smart_close()
-  " au FileType quickrun
-  "       \ au BufEnter <buffer> if (winnr('$') == 1) | q | endif
+  au FileType quickrun
+        \ au BufEnter <buffer> if (winnr('$') == 1) | q | endif
   au FileType racc.ruby,racc nnoremap <buffer><Leader>R :<C-U>QuickRun racc.run<CR>
 aug END "}}}
 "}}}
@@ -2955,8 +2963,6 @@ nnoremap <silent> [unite]u       :<C-u>UniteWithBufferDir -buffer-name=file file
 nnoremap <silent> [unite]B       :<C-u>Unite bookmark -buffer-name=bookmark<CR>
 nnoremap <silent> g/             :<C-U>call <SID>smart_unite_open('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast')<CR>
 nnoremap <silent> g#             :<C-U>call <SID>smart_unite_open('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast -input=<C-R><C-W>')<CR>
-" nnoremap <silent>gn              :<C-U>call <SID>line_fast_move_next_match()<CR>
-" nnoremap <silent>gN              :<C-U>call <SID>line_fast_move_prev_match()<CR>
 
 cnoremap <expr><silent><C-g>     (getcmdtype() == '/') ?  "\<ESC>:Unite -buffer-name=search line -input=".getcmdline()."\<CR>" : "\<C-g>"
 " nnoremap <silent><expr>[unite]f ':Unite -buffer-name=file file:' . expand("%:p:h") . '<CR>'
@@ -3031,19 +3037,19 @@ nnoremap <silent>gh :<C-U>Unite -buffer-name=giti_branchall -no-start-insert git
 " endfunction
 function! s:smart_unite_open(cmd) "{{{
   let file_syntax=&syntax
-  let rails_root = exists('b:rails_root')? b:rails_root : ''
-  let rails_buffer = rails#buffer()
+  " let rails_root = exists('b:rails_root')? b:rails_root : ''
+  " let rails_buffer = rails#buffer()
 
   " uniteを起動
   exe a:cmd
 
-  if rails_root != ''
-    let b:rails_root = rails_root
-    call rails#set_syntax(rails_buffer)
-  endif
   if file_syntax != ''
     exe 'setl syntax='.file_syntax
   endif
+  " if rails_root != ''
+  "   let b:rails_root = rails_root
+  "   call rails#set_syntax(rails_buffer)
+  " endif
 endfunction"}}}
 
 " settings {{{
@@ -3065,7 +3071,7 @@ let g:unite_source_history_yank_enable =1
 let s:unite_kuso_hooks = {}
 "}}}
 function! s:unite_my_settings() "{{{
-  call alpaca_window#set_smart_close()
+  " call alpaca_window#set_smart_close()
 
   highlight link uniteMarkedLine Identifier
   highlight link uniteCandidateInputKeyword Statement
@@ -3109,9 +3115,6 @@ function! bundle.hooks.on_source(bundle) "{{{
     inoremap <buffer><Tab> <CR>
     syntax match uniteFileDirectory '.*\/'
     highlight link uniteFileDirectory Directory
-  endfunction"}}}
-  function! s:unite_kuso_hooks.line_fast() "{{{
-    let g:last_line_fast_buf_number = bufnr("%")
   endfunction"}}}
 
   "------------------------------------
