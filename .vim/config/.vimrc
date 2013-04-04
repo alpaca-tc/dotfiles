@@ -3,8 +3,6 @@ augroup MyAutoCmd
 augroup END
 
 "----------------------------------------
-" XXX rubyのinlucde?的な。そんなにテストしてない。
-" vimには無いのかなー。
 function! s:include(target, value) "{{{
   let target_type = type(a:target)
 
@@ -21,7 +19,6 @@ function! s:include(target, value) "{{{
 
   return 0
 endfunction"}}}
-" XXX 後でテスト
 function! s:current_git() "{{{
   if !exists('b:git_dir')
     return ''
@@ -34,14 +31,17 @@ function! s:filetype() "{{{
 
   return split( &filetype, '\.' )[0]
 endfunction"}}}
+function! s:smart_close() "{{{
+  if winnr('$') == 1 |quit| endif
+endfunction"}}}
 
 "----------------------------------------
 " initialize"{{{
 let g:my = {}
 " ユーザー情報"{{{
 let g:my.info = {
-      \ "date" : alpaca#function#today(),
       \ "author": 'Ishii Hiroyuki',
+      \ "email": 'alprhcp666@gmail.com',
       \ }
 
 let g:my.github = {
@@ -997,7 +997,7 @@ nnoremap <silent><Space>s :w sudo:%<CR>
 inoremap <silent><ESC> <Esc>:nohlsearch<CR>
 nnoremap <silent><ESC> <Esc>:nohlsearch<CR>
 inoremap <C-D><C-A> <C-R>=g:my.info.author<CR>
-inoremap <C-D><C-D> <C-R>=g:my.info.date<CR>
+inoremap <C-D><C-D> <C-R>=alpaca#function#today()<CR>
 inoremap <C-D><C-R> <C-R>=<SID>current_git()<CR>
 nnoremap <Leader>s :call <SID>toggle_set_spell()<CR>
 inoremap <C-@> <Esc>[s1z=`]a
@@ -1669,8 +1669,8 @@ unlet bundle
 aug QuickRunAutoCmd "{{{
   au!
 
-  au FileType quickrun
-        \ au BufEnter <buffer> if (winnr('$') == 1) | q | endif
+  " au FileType quickrun au BufEnter <buffer> if winnr('$') == 1 |quit| endif
+  au FileType quickrun au BufEnter <buffer> call s:smart_close()
   au FileType racc.ruby,racc nnoremap <buffer><Leader>R :<C-U>QuickRun racc.run<CR>
 aug END "}}}
 "}}}
@@ -2836,6 +2836,11 @@ function! bundle.hooks.on_source(bundle) "{{{
     let g:neocomplcache_dictionary_filetype_lists[s:ft] = s:dict
   endfor
   "}}}
+
+  aug MyAutoCmd
+    " previewwindowを自動で閉じる
+    au BufReadPre * if &previewwindow |au BufEnter <buffer> call <SID>smart_close()| endif
+  aug END
 endfunction"}}}
 unlet bundle
 "}}}
@@ -3071,7 +3076,9 @@ let g:unite_source_history_yank_enable =1
 let s:unite_kuso_hooks = {}
 "}}}
 function! s:unite_my_settings() "{{{
-  " call alpaca_window#set_smart_close()
+  aug MyAutoCmd
+    autocmd BufEnter <buffer> call s:smart_close()
+  aug END
 
   highlight link uniteMarkedLine Identifier
   highlight link uniteCandidateInputKeyword Statement
@@ -3250,9 +3257,9 @@ imap <BS> <Nop>
 
 " eccube用、即席
 function! s:setting_eccube()
-  nnoremap <Space>a :Edit /Users/taichou/project/umaka.co.jp_eccube/html/user_data/packages/default/css<CR>
-  nnoremap <Space>c :Edit /Users/taichou/project/umaka.co.jp_eccube/data/class_extends<CR>
-  nnoremap <Space>t :Edit /Users/taichou/project/umaka.co.jp_eccube/data/Smarty/templates/default<CR>
+  nnoremap <Space>a :Edit /Users/taichou/project/kaika/html/user_data/packages/default/css<CR>
+  nnoremap <Space>c :Edit /Users/taichou/project/kaika/data/class_extends<CR>
+  nnoremap <Space>t :Edit /Users/taichou/project/kaika/data/Smarty/templates/default<CR>
 endfunction
 au FileType php,scss,phtml,tpl call <SID>setting_eccube()
 

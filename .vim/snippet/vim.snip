@@ -39,7 +39,7 @@ snippet     mit
   "=============================================================================
   " FILE: ${1:file_name}
   " AUTHOR:  Hiroyuki Ishii <alprhcp666@gmail.com>
-  " Last Modified: `g:my.info.date`
+  " Last Modified: `alpaca#function#today()`
   " License: MIT license  {{{
   "     Permission is hereby granted, free of charge, to any person obtaining
   "     a copy of this software and associated documentation files (the
@@ -67,3 +67,10 @@ snippet   neobundle#get
   function! bundle.hooks.on_source(bundle)
 
   endfunction
+
+snippet     aug
+abbr        aug Name ... aug END
+options     word
+  aug ${1:Name}
+    ${2}
+  aug END
