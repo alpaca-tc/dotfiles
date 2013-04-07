@@ -1,3 +1,28 @@
+# basic#{{{
+snippet     augroup
+abbr        augroup ... augroup END
+alias       aug
+options     word
+  augroup ${1:Name}
+    ${2}
+  augroup END
+
+snippet     for
+abbr        for value in array
+options     word
+  for ${1:value} in ${2:array}
+    ${3}
+  endfor
+
+snippet     ford
+abbr        for [key, value] in items(array)
+options     word
+  for [${1:key}, ${2:value}] in items(${3:array})
+    ${4}
+  endfor
+#}}}
+
+# for plugins#{{{
 snippet     exists?
 abbr        if exists('...') | let ... | endif
 options     word
@@ -19,27 +44,11 @@ options     word
   let &cpo = s:save_cpo
   unlet s:save_cpo
 
-snippet     neol
-  NeoBundle ${1}, {
-  \ 'depends' : [],
-  \ 'build' : {
-  \   'unix' : '',
-  \   'mac'  : '',
-  \ },
-  \ 'autoload': {
-  \   'mappings' : [],
-  \   'commands' : [],
-  \   ''
-  \ }
-  \ }
-
-snippet     neo
-    NeoBundle '${1}'
 snippet     mit
   "=============================================================================
   " FILE: ${1:file_name}
-  " AUTHOR:  Hiroyuki Ishii <alprhcp666@gmail.com>
-  " Last Modified: `g:my.info.date`
+  " AUTHOR: `g:my.info.author` <`g:my.info.email`>
+  " Last Modified: `alpaca#function#today()`
   " License: MIT license  {{{
   "     Permission is hereby granted, free of charge, to any person obtaining
   "     a copy of this software and associated documentation files (the
@@ -61,9 +70,29 @@ snippet     mit
   "     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   " }}}
   "=============================================================================
+#}}}
+
+# for .vimrc#{{{
+snippet     neol
+  NeoBundle ${1}, {
+  \ 'depends' : [],
+  \ 'build' : {
+  \   'unix' : '',
+  \   'mac'  : '',
+  \ },
+  \ 'autoload': {
+  \   'mappings' : [],
+  \   'commands' : [],
+  \   ''
+  \ }
+  \ }
+
+snippet     neo
+    NeoBundle '${1}'
 
 snippet   neobundle#get
   let bundle = neobundle#get('${1}')
   function! bundle.hooks.on_source(bundle)
-
+    ${2}
   endfunction
+#}}}

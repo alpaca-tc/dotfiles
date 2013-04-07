@@ -8,7 +8,6 @@ source ~/.zsh/git-prompt.sh
 
 # zaw.zsh# {{{
 # source ~/.zsh/zaw/zaw.zsh
-bindkey '^g' zaw-history
 zstyle ':filter-select' max-lines $(($LINES / 2))
 # }}}
 
@@ -20,7 +19,6 @@ show_buffer_stack() {
 }
 zle -N show_buffer_stack
 setopt noflowcontrol
-bindkey '^Q' show_buffer_stack
 # }}}
 
 # w3mでgoogle検索# {{{

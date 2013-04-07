@@ -121,11 +121,6 @@ zle -N magic-abbrev-expand
 zle -N magic-abbrev-expand-and-insert
 zle -N magic-abbrev-expand-and-accept
 zle -N no-magic-abbrev-expand
-bindkey "\r"  magic-abbrev-expand-and-accept # M-x RET はできなくなる
-bindkey "^J"  accept-line # no magic
-bindkey " "   magic-abbrev-expand-and-insert
-bindkey "."   magic-abbrev-expand-and-insert
-bindkey "^x " no-magic-abbrev-expand
 # }}}
 
 
