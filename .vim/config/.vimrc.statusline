@@ -1,11 +1,7 @@
 "-------------------------------------------------------------------------------
 " ステータスライン StatusLine
 "-------------------------------------------------------------------------------
-" "自動的に QuickFix リストを表示する
-" autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,vimgrepadd cwin
-" autocmd QuickfixCmdPost lmake,lgrep,lgrepadd,lvimgrep,lvimgrepadd lwin
-
-func! String2Hex(str)
+func! String2Hex(str)"{{{
   let out = ''
   let ix = 0
   while ix < strlen(a:str)
@@ -13,43 +9,164 @@ func! String2Hex(str)
     let ix = ix + 1
   endwhile
   return out
-endfunc
+endfunc"}}}
 
 "statuslineの設定
-set statusline=[FORMAT=%{&ff}]\ [ENC=%{&fileencoding}]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]\ %F%m%r%h%w\
+" set statusline=[FORMAT=%{&ff}]\ [ENC=%{&fileencoding}]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]\ %F%m%r%h%w\
 
-function MyTabLine()
-  let s = ''
-  for i in range(tabpagenr('$'))
-    " 強調表示グループの選択
-    if i + 1 == tabpagenr()
-      let s .= '%#TabLineSel#'
+let s:to_powerline = [
+      \ [
+      \   '%#PassiveTabLine#', '%#PassiveTabLineBG# %#PassiveTabLineBG#',
+      \   '%#PassiveTabLine#', '%#PassiveTabLineBGL# %#TabLineFill#',
+      \   '%#PassiveTabLine#', '%#PassiveTabLineRightIsActive# %#ActiveTabLine#',
+      \ ],
+      \ [
+      \   '%#ActiveTabLine#', '%#ActiveTabLineBG# %#PassiveTabLine#',
+      \   '%#ActiveTabLine#', '%#ActiveTabLineBGL# %#TabLineFill#',
+      \ ],
+      \ ]
+
+function! s:columns()
+  return exists('&columns') ? &columns : '80'
+endfunction
+
+function! s:highlight() "{{{
+  hi TabLine ctermfg=7 ctermbg=236 cterm=NONE
+  hi TabLineSel ctermfg=231 ctermbg=031 cterm=bold
+  hi TabLineFill ctermfg=7 ctermbg=236 cterm=NONE
+
+  hi ActiveTabLine ctermfg=255 ctermbg=075 cterm=NONE
+  hi ActiveTabLineBG ctermfg=075 ctermbg=236 cterm=NONE
+  hi ActiveTabLineBGL ctermfg=075 ctermbg=236
+  hi PassiveTabLine ctermfg=245 ctermbg=236 cterm=NONE
+  hi PassiveTabLineBG ctermfg=236 ctermbg=236 cterm=NONE
+  hi PassiveTabLineBGL ctermfg=236 ctermbg=236 cterm=NONE
+  hi PassiveTabLineRightIsActive ctermfg=236 ctermbg=075 cterm=NONE
+endfunction"}}}
+autocmd ColorScheme * call s:highlight()
+
+function! s:tabname2powerline(str, n) "{{{
+  let current = a:n is tabpagenr()
+  let last    = a:n is tabpagenr("$")
+  let next_is_active    = (a:n + 1) is tabpagenr()
+
+  if last
+    " last tab
+    return s:to_powerline[current][2] . a:str . s:to_powerline[current][3]
+  else
+    if next_is_active
+      return s:to_powerline[current][4] . a:str . s:to_powerline[current][5]
     else
-      let s .= '%#TabLine#'
+      return s:to_powerline[current][0] . a:str . s:to_powerline[current][1]
+    endif
+  endif
+endfunction"}}}
+
+function! s:tabpage_label(n, powerline) "{{{
+  let n = a:n
+  let bufnrs = tabpagebuflist(n)
+  let curbufnr = bufnrs[tabpagewinnr(n) - 1]  " first window, first appears
+
+  let label = n is 0 ? '' : n . '  '
+  " TODO lingr使わないから要らない..
+  if getbufvar(curbufnr, '&filetype') =~# '^lingr-'
+    " lingr-vim
+    let unread = lingr#unread_count()
+    let status = lingr#status()
+
+    let label .= 'lingr - ' . status
+    if unread != 0
+      let label .= '(' . unread . ')'
     endif
 
-    " タブページ番号の設定 (マウスクリック用)
-    let s .= '%' . (i + 1) . 'T'
+  else
+    let no = len(bufnrs)
+    if no is 1
+      let no = ''
+    endif
+    let mod = len(filter(bufnrs, 'getbufvar(v:val, "&modified")')) ? '+' : ''
+    let sp = (no . mod) ==# '' ? '' : ' '
+    let fname = GetBufname(curbufnr, 1)
 
-    " ラベルは MyTabLabel() で作成する
-    let s .= ' %{MyTabLabel(' . (i + 1) . ')} '
-  endfor
-
-  " 最後のタブページの後は TabLineFill で埋め、タブページ番号をリセッ
-  " トする
-  let s .= '%#TabLineFill#%T'
-
-  " カレントタブページを閉じるボタンのラベルを右添えで作成
-  if tabpagenr('$') > 1
-    let s .= '%=%#TabLine#%999Xclose'
+    let label .= mod . sp . fname
   endif
 
-  return s
-endfunction
+  if a:powerline
+    let label = s:tabname2powerline(label, n)
+    return '%' . a:n . 'T' . label . '%T%#TabLineFill#'
+  else
+    return '%' . a:n . 'T' . label . '   '
+  endif
+endfunction"}}}
 
-function MyTabLabel(n)
-  let buflist = tabpagebuflist(a:n)
-  let winnr = tabpagewinnr(a:n)
-  return bufname(buflist[winnr - 1])
-endfunction
-set tabline=%!MyTabLine()
+function! MakeTabLine() "{{{
+  let titles = map(range(1, tabpagenr('$')), 's:tabpage_label(v:val, 1)')
+  let titles_len = len(join(map(range(1, tabpagenr('$')), 's:tabpage_label(v:val, 0)'), ""))
+  let sep = ''
+
+  let tabs = join(titles, sep) . sep . '%#TabLineFill#%T'
+  let info = '%#TabLine#'
+  if exists('t:tabline_extra')
+    let info .= t:tabline_extra . sep
+  endif
+  if s:has_plugin('cfi')
+    let info .= cfi#format('%s()' . sep, '')
+  endif
+  if exists('*Uptime')
+    let info .= Uptime(2) . sep
+  endif
+
+  " 中央寄せ
+  let space_len = (s:columns() / 2) - (titles_len / 2)
+  let space_len = space_len > 0 ? space_len : 1
+
+  " XXX もっと賢い書き方ありそう
+  " 評価後の文字列が取得したいよ...><
+  " 教えてエロい人
+  let first = ""
+  for i in range(1, space_len)
+    let first .= " "
+  endfor
+  let first   = s:tabname2powerline(first, 0)
+
+  let info .= fnamemodify(getcwd(), ":~") . ' '
+
+  " return first . tabs . '%=' . info
+  return first . tabs
+endfunction"}}}
+
+function! GetBufname(bufnr, tail) "{{{
+  let bufname = bufname(a:bufnr)
+  if bufname =~# '^[[:alnum:].+-]\+:\\\\'
+    let bufname = substitute(bufname, '\\', '/', 'g')
+  endif
+  let buftype = getbufvar(a:bufnr, '&buftype')
+  if bufname ==# ''
+    if buftype ==# ''
+      return '[No Name]'
+    elseif buftype ==# 'quickfix'
+      return '[Quickfix List]'
+    elseif buftype ==# 'nofile' || buftype ==# 'acwrite'
+      return '[Scratch]'
+    endif
+  endif
+  if buftype ==# 'nofile' || buftype ==# 'acwrite'
+    return bufname
+  endif
+  if a:tail
+    return fnamemodify(bufname, ':t')
+  endif
+  let fullpath = fnamemodify(bufname, ':p')
+  if exists('b:lcd') && b:lcd !=# ''
+    let bufname = matchstr(fullpath, '^\V\(' . escape(b:lcd, '\')
+    \ . '\v)?[/\\]?\zs.*')
+  endif
+  return bufname
+endfunction"}}}
+
+function! s:has_plugin(name) "{{{
+  return globpath(&runtimepath, 'plugin/' . a:name . '.vim') !=# ''
+  \   || globpath(&runtimepath, 'autoload/' . a:name . '.vim') !=# ''
+endfunction"}}}
+
+set tabline=%!MakeTabLine()
