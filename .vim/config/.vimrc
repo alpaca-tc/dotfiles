@@ -78,7 +78,10 @@ let g:my.dir = {
       \ "snippets"  : expand('~/.vim/snippet'),
       \ "swap_dir"  : expand('~/.vim.trash/vimswap'),
       \ "trash_dir" : expand('~/.vim.trash/'),
+      \ "unite"     : expand('~/.vim.trash/unite'),
       \ "vimref"    : expand('~/.vim.trash/vim-ref'),
+      \ "vimfiler"  : expand('~/.vim.trash/vimfiler'),
+      \ "vimshell"  : expand('~/.vim.trash/vimshell'),
       \ }
 "}}}
 " その他設定"{{{
@@ -90,6 +93,7 @@ let g:my.ft = {
       \ "scala_files"     : ['scala'],
       \ "sh_files"        : ['sh'],
       \ "php_files"       : ['php', 'phtml'],
+      \ "c_files"         : ["c", "cpp"],
       \ "style_files"     : ['css', 'scss', 'sass'],
       \ "markup_files"    : ['html', 'haml', 'erb', 'php'],
       \ "program_files"   : ['ruby', 'php', 'python', 'eruby', 'vim', 'javascript', 'coffee', 'scala', 'java'],
@@ -103,22 +107,17 @@ let g:my.install = {
       \ "homebrew" : ['scala', 'sbt'],
       \ }
 "}}}
+if g:my.conf.initialize "{{{
+  let dir_list = []
+  call map(copy(g:my.dir), 'add(dir_list, v:val)')
+  call alpaca#initialize#directory(dir_list)
+endif"}}}
 " OS"{{{
 let s:is_windows = has('win32') || has('win64')
 let s:is_mac     = has('mac')
 let s:is_imac    = s:is_mac && match(substitute(system("echo $HOST"), "\n", "", "g"), "iMac") > -1
 let s:is_unix    = has('unix')
 "}}}
-" initialze functions {{{
-let g:my.initialize_funcs = {
-      \   "directory": {
-      \     "active" : 1,
-      \   },
-      \ }
-"}}}
-if g:my.conf.initialize "{{{
-  call alpaca#initialize#directory()
-endif"}}}
 "}}}
 
 "----------------------------------------
@@ -133,13 +132,13 @@ set formatoptions+=lcqmM
 set helplang=ja,en
 set modelines=1
 set nomore
-" set mouse=a
+" set mouse=nv
 " set mousefocus
 " set mousehide
-set guioptions+=a
+" set guioptions+=a
 set ttymouse=xterm2
 set nobackup
-set norestorescreen=off
+set norestorescreen
 set showmode
 set timeout timeoutlen=300 ttimeoutlen=100
 set viminfo='1000,<800,s300,\"300,f1,:1000,/1000
@@ -150,20 +149,14 @@ if v:version >= 703
   let &undodir=&directory
 endif
 
-
-" if has('unix')
-"   set nofsync
-"   set swapsync=
-" endif
-
-
 nnoremap <Space><Space>s :<C-U>source ~/.vimrc<CR>
 nnoremap <Space><Space>v :<C-U>tabnew ~/.vim/config/.vimrc<CR>
 "}}}
 
 "----------------------------------------
-" neobundle"{{{
-filetype plugin indent off
+" neobundle initialize {{{
+filetype plugin indent off     " required!
+let g:neobundle#types#git#default_protocol = 'https'
 
 " initialize"{{{
 if has('vim_starting')
@@ -211,14 +204,15 @@ NeoBundle 'Shougo/vimproc', {
       \   'mac' : 'make -f make_mac.mak',
       \   'unix' : 'make -f make_unix.mak',
       \ }}
-" フォントとか。読み込むことは無い
+" フォントとか。読み込むことは無い"{{{
 let g:ricty_generate_command = join([
       \   'sh ricty_generator.sh',
       \   neobundle#get_neobundle_dir().'/alpaca/fonts/Inconsolata.otf',
       \   neobundle#get_neobundle_dir().'/alpaca/fonts/migu-1m-regular.ttf',
       \   neobundle#get_neobundle_dir().'/alpaca/fonts/migu-1m-bold.ttf',
       \ ], ' ')
-" 保存と同時にタブ文字消す
+"}}}
+" ゴミ文字文字消す
 NeoBundleLazy 'taichouchou2/alpaca_remove_dust.vim', {
       \ 'autoload': {
       \   'insert' : 1,
@@ -249,7 +243,16 @@ NeoBundleLazy 'scrooloose/syntastic', { 'autoload': {
       \ },
       \ 'filetypes' : g:my.ft.program_files }}
 NeoBundle 'Lokaltog/powerline'
-execute 'set runtimepath+=' . neobundle#get_neobundle_dir() . '/powerline/powerline/bindings/vim'
+" powerlineの推奨設定(runtimepath)のままだと、swapfileを開いたときにフリーズするので。"{{{
+augroup LoadPowerline
+  au!
+  au VimEnter * call s:load_powerline()
+augroup END
+
+function! s:load_powerline()
+  au! LoadPowerline
+  source `=neobundle#get_neobundle_dir() . '/powerline/powerline/bindings/vim/plugin/powerline.vim'`
+endfunction"}}}
 NeoBundleLazy 'mattn/webapi-vim'
 "}}}
 " {{{
@@ -407,8 +410,13 @@ NeoBundleLazy 'open-browser.vim', { 'autoload' : {
       \ 'mappings' : [ '<Plug>(open-browser-wwwsearch)', '<Plug>(openbrowser-open)',  ],
       \ 'commands' : ['OpenBrowserSearch'] }}
 NeoBundleLazy 'thinca/vim-ref', { 'autoload' : {
-      \ 'commands' : 'Ref',
-      \ 'mappings' : ['n', 'K', '<Plug>(ref-keyword)'] }}
+      \ 'commands' : {
+      \   'name' : "Ref",
+      \   'complete' : 'customlist,ref#complete',
+      \ },
+      \ 'unite_sources' : ["ref/erlang", "ref/man", "ref/perldoc", "ref/phpmanual", "ref/pydoc", "ref/redis", "ref/refe", "ref/webdict"],
+      \ 'mappings' : ['n', 'K', '<Plug>(ref-keyword)']
+      \ }}
 NeoBundleLazy 'tomtom/tcomment_vim', { 'autoload' : {
       \ 'commands' : ['TComment', 'TCommentAs', 'TCommentMaybeInline'] }}
 NeoBundleLazy 'tyru/caw.vim', {
@@ -706,9 +714,9 @@ NeoBundleLazy 'jiangmiao/simple-javascript-indenter', { 'autoload' : {
 NeoBundleLazy 'jelera/vim-javascript-syntax', { 'autoload' : {
       \ 'filetypes' : ['javascript', 'json'],
       \ }}
-NeoBundleLazy 'taichouchou2/vim-json', { 'autoload' : {
-      \ 'filetypes' : g:my.ft.js_files
-      \ }}
+" NeoBundleLazy 'taichouchou2/vim-json', { 'autoload' : {
+"       \ 'filetypes' : g:my.ft.js_files
+"       \ }}
 NeoBundleLazy 'teramako/jscomplete-vim', { 'autoload' : {
       \ 'filetypes' : g:my.ft.js_files
       \ }}
@@ -894,6 +902,23 @@ NeoBundleLazy 'andreypopp/ensime', { 'autoload' : {
 "       \ ],
 "       \ 'autoload' : { 'filetypes' : g:my.ft.scala_files }}
 
+" cpp / c
+NeoBundleLazy 'Rip-Rip/clang_complete', {
+      \ 'autoload' : {
+      \     'filetypes' : g:my.ft.c_files,
+      \    },
+      \ }
+NeoBundleLazy 'osyo-manga/neocomplcache-clang_complete', {
+      \ 'autoload' : {
+      \     'filetypes' : g:my.ft.c_files,
+      \    },
+      \ }
+NeoBundleLazy "vim-jp/cpp-vim", {
+      \ 'autoload' : {
+      \     'filetypes' : g:my.ft.c_files,
+      \    },
+      \ }
+
 " sh
 " ----------------------------------------
 NeoBundleLazy 'sh.vim', { 'autoload': {
@@ -949,7 +974,7 @@ filetype plugin indent on
 
 "----------------------------------------
 "StatusLine" {{{
-" source ~/.vim/config/.vimrc.statusline
+source ~/.vim/config/.vimrc.statusline
 " }}}
 
 "----------------------------------------
@@ -965,7 +990,6 @@ set textwidth=0
 " set splitbelow
 set previewheight=8
 set helpheight=12
-let s:default_filetype = 'ruby'
 
 " 開いているファイルのディレクトリに自動で移動
 aug MyAutoCmd
@@ -1005,29 +1029,45 @@ nnoremap <silent><Space><Space>w :wall!<CR>
 nnoremap <silent><Space>q :q!<CR>
 nnoremap <silent><Space>w :wq<CR>
 nnoremap <silent><Space>s :w sudo:%<CR>
-inoremap <silent><ESC> <Esc>:nohlsearch<CR>
-nnoremap <silent><ESC> <Esc>:nohlsearch<CR>
+
+" これをすると、矢印キーがバグるのはなぜ？
+" inoremap <silent><ESC> <Esc>:nohlsearch<CR>
+" nnoremap <silent><ESC> <Esc>:nohlsearch<CR>
+
 inoremap <C-D><C-A> <C-R>=g:my.info.author<CR>
 inoremap <C-D><C-D> <C-R>=alpaca#function#today()<CR>
 inoremap <C-D><C-R> <C-R>=<SID>current_git()<CR>
 nnoremap <Leader>s :call <SID>toggle_set_spell()<CR>
-inoremap <C-@> <Esc>[s1z=`]a
+" inoremap <C-@> <Esc>[s1z=`]a
 xnoremap <silent><C-p> "0p<CR>
 nnoremap re :%s!
 xnoremap re :s!
 xnoremap rep y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!g<Left><Left>
 xnoremap <Leader>c :s/./&/g
 nnoremap <Leader>f :setl filetype=
-aug MyAutoCmd
-  " au FileType ruby inoreabbrev req require
-  au FileType ruby,ruby.rspec
-        \| inoreabbrev sh should
-        \| inoreabbrev reqs require 'spec_helper'
-        \| inoreabbrev req require
-  au FileType scss
-        \| inoreabbrev @in @include
-        \| inoreabbrev @im @import
-aug END
+xmap <silent><C-A> :ContinuousNumber <C-A><CR>
+xmap <silent><C-X> :ContinuousNumber <C-X><CR>
+
+let s:alpaca_abbr_define = {
+      \ "vim" : [
+      \   "sh should",
+      \   "reqs require 'spec_helper'",
+      \   "req require",
+      \ ],
+      \ "ruby,ruby.rspec" : [
+      \   "sh should",
+      \   "reqs require 'spec_helper'",
+      \   "req require",
+      \ ],
+      \ "scss": [
+      \   "@in @include",
+      \   "@im @import",
+      \ ],
+      \ }
+" for [filetype, abbr_defines] in items(s:alpaca_abbr_define)
+"   call alpaca#initialize#define_abbrev(abbr_defines, filetype)
+" endfor
+
 function! s:toggle_set_spell() "{{{
   if &spell
     setl nospell
@@ -1037,6 +1077,8 @@ function! s:toggle_set_spell() "{{{
     echo "spell"
   endif
 endfunction"}}}
+
+command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <count>?<count>-line('.'):1)|exec 'normal! j' . n . <q-args>|call cursor('.', c)|endfor
 "}}}
 " コメントを書くときに便利 {{{
 inoremap <leader>* ****************************************
@@ -1044,7 +1086,7 @@ inoremap <leader>- ----------------------------------------
 inoremap <leader>h <!-- / --><left><left><left><Left>
 
 let g:end_tag_commant_format = '<!-- /%tag_name%id%class -->'
-nnoremap ,t :<C-u>call alpaca#endtag_comment()<CR>
+nnoremap ,t :<C-u>call alpaca#function#endtag_comment()<CR>
 "}}}
 " 変なマッピングを修正 "{{{
 nnoremap ¥ \
@@ -1923,27 +1965,32 @@ let g:Powerline_symbols='fancy'
 "------------------------------------
 "{{{
 nnoremap <silent><Leader>v  :<C-U>VimShell<CR>
+let g:vimshell_user_prompt  = '"(" . getcwd() . ")" '
+let g:vimshell_prompt       = '$ '
+let g:vimshell_ignore_case  = 1
+let g:vimshell_smart_case   = 1
+let g:vimshell_temporary_directory = g:my.dir.vimshell
+
 
 let bundle = neobundle#get('vimshell')
 function! bundle.hooks.on_source(bundle) "{{{
-  let g:vimshell_user_prompt  = '"(" . getcwd() . ")" '
-  let g:vimshell_prompt       = '$ '
-  let g:vimshell_ignore_case  = 1
-  let g:vimshell_smart_case   = 1
+  let s:vimshell_altercmd = [
+        \ 'vi vim',
+        \ 'g git',
+        \ 'r rails',
+        \ 'diff diff --unified',
+        \ 'du du -h',
+        \ 'free free -m -l -t',
+        \ 'll ls -lh',
+        \ 'la ls -a'
+        \ ]
+  call map(map(s:vimshell_altercmd, "split(v:val, ' ')"), '[v:val[0], join(v:val[1:], " ")]')
+  " => [['vi', 'vim'], ['la', 'ls -a']]
 
   function! s:vimshell_settings() "{{{
-    call vimshell#altercmd#define('vi', 'vim')
-    call vimshell#altercmd#define('v', 'vim')
-    call vimshell#altercmd#define('g', 'git')
-    call vimshell#altercmd#define('r', 'rails')
-    call vimshell#altercmd#define('diff', 'diff --unified')
-    call vimshell#altercmd#define('du', 'du -h')
-    call vimshell#altercmd#define('free', 'free -m -l -t')
-    call vimshell#altercmd#define('ll', 'ls -lh')
-    call vimshell#altercmd#define('la', 'ls -a')
-    " VimShellAlterCommand sudo iexe sudo
-    " VimShellAlterCommand ssh iexe ssh
-
+    for altercmd in s:vimshell_altercmd
+      call vimshell#altercmd#define(altercmd[0], altercmd[1])
+    endfor
     imap <buffer>! <Plug>(vimshell_zsh_complete)
   endfunction "}}}
 
@@ -2001,28 +2048,24 @@ noremap <silent><C-_>c :TComment<CR>
 nnoremap <silent>[plug]<C-B> :<C-U>CtrlPBuffer<CR>
 nnoremap <silent>[plug]<C-D> :<C-U>CtrlPDir<CR>
 nnoremap <silent>[plug]<C-F> :<C-U>CtrlPCurFile<CR>
-let bundle = neobundle#get('ctrlp.vim')
-function! bundle.hooks.on_source(bundle) "{{{
-  " let g:ctrlp_mruf_case_sensitive = 0
-  " let g:ctrlp_open_new_file = 't'
-  let g:ctrlp_cache_dir = g:my.dir.ctrlp
-  let g:ctrlp_clear_cache_on_exit = 1
-  let g:ctrlp_lazy_update = 1
-  let g:ctrlp_regexp = 1
-  let g:ctrlp_show_hidden = 1
-  let g:ctrlp_use_caching = 1
-  let g:ctrlp_custom_ignore = {
-        \ 'dir':  '\.\(hg\|git\|sass-cache\|svn|\~\)$',
-        \ 'file': '\.\(dll\|exe\|gif\|jpg\|png\|psd\|so\|woff\)$' }
-  let g:ctrlp_mruf_exclude = '\(\\\|/\)\(Temp\|Downloads\)\(\\\|/\)\|\(\\\|/\)\.\(hg\|git\|svn\|sass-cache\)'
-  let g:ctrlp_prompt_mappings = {
-        \ 'AcceptSelection("t")': ['<c-n>'],
-        \ }
+" let g:ctrlp_mruf_case_sensitive = 0
+" let g:ctrlp_open_new_file = 't'
+let g:ctrlp_cache_dir = g:my.dir.ctrlp
+let g:ctrlp_clear_cache_on_exit = 1
+let g:ctrlp_lazy_update = 1
+let g:ctrlp_regexp = 1
+let g:ctrlp_show_hidden = 1
+let g:ctrlp_use_caching = 1
+let g:ctrlp_custom_ignore = {
+      \ 'dir':  '\.\(hg\|git\|sass-cache\|svn|\~\)$',
+      \ 'file': '\.\(dll\|exe\|gif\|jpg\|png\|psd\|so\|woff\)$' }
+let g:ctrlp_mruf_exclude = '\(\\\|/\)\(Temp\|Downloads\)\(\\\|/\)\|\(\\\|/\)\.\(hg\|git\|svn\|sass-cache\)'
+let g:ctrlp_prompt_mappings = {
+      \ 'AcceptSelection("t")': ['<c-n>'],
+      \ }
 
-  " hi link CtrlPLinePre NonText
-  " hi link CtrlPMatch IncSearch
-endfunction"}}}
-unlet bundle
+" hi link CtrlPLinePre NonText
+" hi link CtrlPMatch IncSearch
 " }}}
 
 "------------------------------------
@@ -2426,14 +2469,16 @@ nmap <silent>k <Plug>(accelerated_jk_gk)
 " eskk.vim
 "------------------------------------
 " "{{{
-" let g:eskk#egg_like_newline = 1
-let g:eskk#revert_henkan_style = "okuri"
 let g:eskk#debug = 0
 let g:eskk#dictionary = { 'path': expand( "~/.eskk_jisyo" ), 'sorted': 0, 'encoding': 'utf-8', }
 let g:eskk#directory = "~/.eskk"
 let g:eskk#dont_map_default_if_already_mapped=1
 let g:eskk#enable_completion = 1
 let g:eskk#large_dictionary = { 'path':  expand("~/.eskk_dict/SKK-JISYO.L"), 'sorted': 1, 'encoding': 'euc-jp', }
+let g:eskk#max_candidates= 40
+let g:eskk#start_completion_length=3
+let g:eskk#no_default_mappings=1
+let g:eskk#revert_henkan_style = "okuri"
 let g:eskk#cursor_color = {
       \   'ascii': ['#8b8b83', '#bebebe'],
       \   'hira': ['#8b3e2f', '#ffc0cb'],
@@ -2447,7 +2492,8 @@ let g:eskk#marker_henkan=""
 let g:eskk#marker_henkan_select=""
 let g:eskk#marker_jisyo_touroku=""
 let g:eskk#marker_okuri=''
-imap <C-@> <Plug>(eskk:toggle)
+imap <C-J> <Plug>(eskk:toggle)
+lmap <C-J> <Plug>(eskk:toggle)
 " "}}}
 
 "------------------------------------
@@ -2740,7 +2786,7 @@ autocmd FileType *
 " neocomplcache / echodoc
 let g:neocomplcache_enable_at_startup = 1
 " default config"{{{
-" let g:neocomplcache_enable_auto_select=1
+let g:neocomplcache_enable_auto_select=0
 let g:neocomplcache#sources#rsense#home_directory = neobundle#get_neobundle_dir() . '/rsense-0.3'
 let g:neocomplcache_enable_camel_case_completion  = 1
 let g:neocomplcache_enable_underbar_completion    = 1
@@ -2750,6 +2796,22 @@ let g:neocomplcache_skip_auto_completion_time     = '0.3'
 let g:neocomplcache_caching_limit_file_size       = 0
 let g:neocomplcache_temporary_dir=g:my.dir.neocomplcache
 " let g:neocomplcache_enable_auto_close_preview = 1
+
+" for clang
+" libclang を使用して高速に補完を行う
+let g:neocomplcache_clang_use_library=1
+" clang.dll へのディレクトリパス
+let g:neocomplcache_clang_library_path='C:/llvm/bin'
+" clang のコマンドオプション
+" MinGW や Boost のパス周りの設定は手元の環境に合わせて下さい
+let g:neocomplcache_clang_user_options =
+    \ '-I C:/MinGW/lib/gcc/mingw32/4.5.3/include '.
+    \ '-I C:/lib/boost_1_47_0 '.
+    \ '-fms-extensions -fgnu-runtime '.
+    \ '-include malloc.h '
+" neocomplcache で表示される補完の数を増やす
+" これが少ないと候補が表示されない場合があります
+let g:neocomplcache_max_list=1000
 
 let g:neocomplcache_auto_completion_start_length = 2
 aug MyAutoCmd
@@ -2811,6 +2873,7 @@ function! bundle.hooks.on_source(bundle) "{{{
         \ 'cpp'     : '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::',
         \ 'python'  : '[^. \t]\.\w*',
         \ }
+
 
   " Define keyword pattern.
   let g:neocomplcache_keyword_patterns = {
@@ -2880,7 +2943,12 @@ unlet bundle
 " keymap {{{
 imap <expr><C-G>          neocomplcache#undo_completion()
 imap <expr><TAB>          neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
-imap <silent><expr><CR>   neocomplcache#smart_close_popup() . "<CR>" . "<Plug>DiscretionaryEnd"
+" imap <silent><expr><CR>   neocomplcache#smart_close_popup() . "<CR>" . "<Plug>DiscretionaryEnd"
+function! s:my_crinsert()
+    return pumvisible() ? neocomplcache#close_popup() : "\<Cr>"
+endfunction
+inoremap <silent> <CR> <C-R>=<SID>my_crinsert()<CR>
+
 inoremap <expr><C-n>      pumvisible() ? "\<C-n>" : "\<Down>"
 inoremap <expr><C-p>      pumvisible() ? "\<C-p>" : "\<Up>"
 inoremap <expr><C-x><C-f> neocomplcache#manual_filename_complete()
@@ -2925,20 +2993,22 @@ function! VimFilerExplorerGit() "{{{
 endfunction "}}}
 command! VimFilerExplorerGit call VimFilerExplorerGit()
 
+let g:vimfiler_data_directory = g:my.dir.vimfiler
+let g:vimfiler_safe_mode_by_default = 0
+let g:vimfiler_as_default_explorer = 1
+let g:vimfiler_sort_type = "filename"
+let g:vimfiler_preview_action = ""
+let g:vimfiler_enable_auto_cd= 1
+let g:vimfiler_file_icon = "-"
+let g:vimfiler_readonly_file_icon = "x"
+let g:vimfiler_tree_closed_icon = "‣"
+let g:vimfiler_tree_leaf_icon = " "
+let g:vimfiler_tree_opened_icon = "▾"
+let g:vimfiler_marked_file_icon = "✓"
+
+
 let bundle = neobundle#get('vimfiler')
 function! bundle.hooks.on_source(bundle) "{{{
-  let g:vimfiler_safe_mode_by_default = 0
-  let g:vimfiler_as_default_explorer = 1
-  let g:vimfiler_sort_type = "filename"
-  let g:vimfiler_preview_action = ""
-  let g:vimfiler_enable_auto_cd= 1
-  let g:vimfiler_file_icon = "-"
-  let g:vimfiler_readonly_file_icon = "x"
-  let g:vimfiler_tree_closed_icon = "‣"
-  let g:vimfiler_tree_leaf_icon = " "
-  let g:vimfiler_tree_opened_icon = "▾"
-  let g:vimfiler_marked_file_icon = "✓"
-
   function! s:vimfiler_is_active() "{{{
     return exists('b:vimfiler')
   endfunction"}}}
@@ -3083,6 +3153,7 @@ endfunction"}}}
 " 入力モードで開始する
 hi UniteCursorLine ctermbg=236   cterm=none
 let g:unite_cursor_line_highlight='UniteCursorLine'
+let g:unite_data_directory=g:my.dir.unite
 let g:unite_enable_split_vertically=1
 let g:unite_enable_start_insert=1
 let g:unite_source_directory_mru_limit = 200
@@ -3297,7 +3368,7 @@ augroup AutoMkdir
   autocmd BufWritePre * call s:auto_mkdir(expand('<afile>:p:h'), v:cmdbang)
   function! s:auto_mkdir(dir, force)
     if !isdirectory(a:dir) && (a:force ||
-          \    input(printf('"%s" does not exist. Create? [y/N]', a:dir)) =~? '^y\%[es]$')
+          \    input(printf('"%s" does not exist. Create? [y/n]', a:dir)) =~? '^y\%[es]$')
       call mkdir(a:dir, 'p')
     endif
   endfunction

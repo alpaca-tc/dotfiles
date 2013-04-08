@@ -1,0 +1,17 @@
+# Map
+bindkey "^J"  accept-line
+bindkey '^P' history-beginning-search-backward-end
+bindkey '^N' history-beginning-search-forward-end
+
+# Insert Mode
+bindkey -v "^H" backward-delete-char
+
+# Normal Mode
+bindkey -a '^Q' show_buffer_stack
+bindkey -a '^g' zaw-history
+bindkey -a 'q' push-line
+bindkey -a '^F' history-incremental-search-backward
+# bindkey -a "\r"  magic-abbrev-expand-and-accept # M-x RET はできなくなる
+# bindkey " "   magic-abbrev-expand-and-insert
+# bindkey "."   magic-abbrev-expand-and-insert
+# bindkey "^x " no-magic-abbrev-expand
