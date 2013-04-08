@@ -995,11 +995,6 @@ set helpheight=12
 aug MyAutoCmd
   au BufEnter * execute ":silent! lcd! " . expand("%:p:h")
 aug END
-
-" Disable paste.
-" autocmd MyAutoCmd InsertLeave * if &paste | set nopaste mouse=a | echo 'nopaste' | endif
-autocmd MyAutoCmd InsertLeave * if &paste | set nopaste | echo 'nopaste' | endif
-
 " 対応を補完 {{{
 inoremap { {}<Left>
 inoremap [ []<Left>
@@ -1064,9 +1059,9 @@ let s:alpaca_abbr_define = {
       \   "@im @import",
       \ ],
       \ }
-" for [filetype, abbr_defines] in items(s:alpaca_abbr_define)
-"   call alpaca#initialize#define_abbrev(abbr_defines, filetype)
-" endfor
+for [filetype, abbr_defines] in items(s:alpaca_abbr_define)
+  call alpaca#initialize#define_abbrev(abbr_defines, filetype)
+endfor
 
 function! s:toggle_set_spell() "{{{
   if &spell
@@ -1077,7 +1072,6 @@ function! s:toggle_set_spell() "{{{
     echo "spell"
   endif
 endfunction"}}}
-
 command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <count>?<count>-line('.'):1)|exec 'normal! j' . n . <q-args>|call cursor('.', c)|endfor
 "}}}
 " コメントを書くときに便利 {{{
@@ -1094,8 +1088,13 @@ inoremap ¥ \
 cmap ¥ \
 smap ¥ \
 
+" 嫌なマッピングを修正
 inoremap <C-R> <C-R><C-R>
 inoremap <C-R><C-R> <C-R>"
+
+cnoremap <C-R> <C-R><C-R>
+cnoremap <C-R><C-R> <C-R>"
+cnoremap <C-L> <Right>
 "}}}
 " htmlをescape {{{
 function! s:HtmlEscape()
@@ -2757,7 +2756,7 @@ unlet bundle
 "}}}
 
 "----------------------------------------
-"map 補完・履歴 neocomplcache "{{{
+" 補完・履歴 neocomplcache "{{{
 set complete=.,w,b,u,U,s,i,d,t
 set completeopt=menu,menuone,longest,preview
 set history=1000             " コマンド・検索パターンの履歴数
@@ -2768,6 +2767,7 @@ set wildoptions=tagfile
 set wildmode=longest:full,full
 set thesaurus+=~/.vim/thesaurus/mthes10/mthesaur.txt
 
+" tmuxに<C-T>が取られているため
 inoremap <C-X><C-F> <C-X><C-T>
 
 " command-lineはzsh風補完で使う
@@ -2784,8 +2784,8 @@ autocmd FileType *
 
 "----------------------------------------
 " neocomplcache / echodoc
-let g:neocomplcache_enable_at_startup = 1
 " default config"{{{
+let g:neocomplcache_enable_at_startup = 1
 let g:neocomplcache_enable_auto_select=0
 let g:neocomplcache#sources#rsense#home_directory = neobundle#get_neobundle_dir() . '/rsense-0.3'
 let g:neocomplcache_enable_camel_case_completion  = 1
@@ -2794,34 +2794,26 @@ let g:neocomplcache_force_overwrite_completefunc  = 1
 let g:neocomplcache_max_list                      = 80
 let g:neocomplcache_skip_auto_completion_time     = '0.3'
 let g:neocomplcache_caching_limit_file_size       = 0
-let g:neocomplcache_temporary_dir=g:my.dir.neocomplcache
+let g:neocomplcache_temporary_dir                 = g:my.dir.neocomplcache
 " let g:neocomplcache_enable_auto_close_preview = 1
 
 " for clang
 " libclang を使用して高速に補完を行う
 let g:neocomplcache_clang_use_library=1
 " clang.dll へのディレクトリパス
-let g:neocomplcache_clang_library_path='C:/llvm/bin'
+" let g:neocomplcache_clang_library_path='C:/llvm/bin'
 " clang のコマンドオプション
 " MinGW や Boost のパス周りの設定は手元の環境に合わせて下さい
-let g:neocomplcache_clang_user_options =
-    \ '-I C:/MinGW/lib/gcc/mingw32/4.5.3/include '.
-    \ '-I C:/lib/boost_1_47_0 '.
-    \ '-fms-extensions -fgnu-runtime '.
-    \ '-include malloc.h '
+" let g:neocomplcache_clang_user_options =
+"     \ '-I C:/MinGW/lib/gcc/mingw32/4.5.3/include '.
+"     \ '-I C:/lib/boost_1_47_0 '.
+"     \ '-fms-extensions -fgnu-runtime '.
+"     \ '-include malloc.h '
+
 " neocomplcache で表示される補完の数を増やす
 " これが少ないと候補が表示されない場合があります
 let g:neocomplcache_max_list=1000
-
 let g:neocomplcache_auto_completion_start_length = 2
-aug MyAutoCmd
-  " rubycomplete#Completeを消す
-  au FileType ruby,haml,eruby,ruby.rspec set omnifunc=
-aug END
-" let g:neocomplcache_disable_auto_select_buffer_name_pattern = '\[Command Line\]'
-" let g:neocomplcache_disable_caching_buffer_name_pattern = '[\[*]\%(unite\)[\]*]'
-" let g:neocomplcache_lock_buffer_name_pattern = '\.txt'
-" let g:neocomplcache_manual_completion_start_length = 0
 " let g:neocomplcache_min_keyword_length = 2
 " let g:neocomplcache_min_syntax_length = 2
 
@@ -2845,9 +2837,14 @@ aug END
 let bundle = neobundle#get('neocomplcache')
 function! bundle.hooks.on_source(bundle) "{{{
   " initialize "{{{
-  if $USER ==# 'root'
-    let g:neocomplcache_temporary_dir = g:my.dir.bundle
+  if $USER == 'root'
+    let g:neocomplcache_temporary_dir = '/tmp'
   endif
+
+  aug MyAutoCmd
+    " rubycomplete#Completeを消す
+    au FileType ruby,haml,eruby,ruby.rspec set omnifunc=
+  aug END
   let s:neocomplcache_initialize_lists = [
         \ 'neocomplcache_include_patterns',
         \ 'neocomplcache_wildcard_characters',
@@ -2873,7 +2870,6 @@ function! bundle.hooks.on_source(bundle) "{{{
         \ 'cpp'     : '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::',
         \ 'python'  : '[^. \t]\.\w*',
         \ }
-
 
   " Define keyword pattern.
   let g:neocomplcache_keyword_patterns = {
@@ -2945,14 +2941,13 @@ imap <expr><C-G>          neocomplcache#undo_completion()
 imap <expr><TAB>          neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
 " imap <silent><expr><CR>   neocomplcache#smart_close_popup() . "<CR>" . "<Plug>DiscretionaryEnd"
 function! s:my_crinsert()
-    return pumvisible() ? neocomplcache#close_popup() : "\<Cr>"
+    return pumvisible() ? neocomplcache#close_popup() : "\<CR>"
 endfunction
 inoremap <silent> <CR> <C-R>=<SID>my_crinsert()<CR>
 
 inoremap <expr><C-n>      pumvisible() ? "\<C-n>" : "\<Down>"
 inoremap <expr><C-p>      pumvisible() ? "\<C-p>" : "\<Up>"
 inoremap <expr><C-x><C-f> neocomplcache#manual_filename_complete()
-
 " }}}
 "}}}
 " }}}
@@ -3352,9 +3347,6 @@ aug MyAutoCmd
   " au FileType haml,ruby,eruby,yaml xnoremap <silent><buffer>H :s!:\(\w\+\)\s*=>!\1:!g
   au FileType haml,ruby,eruby call <SID>set_ruby_tags()
 aug END
-
-" 学習用
-imap <BS> <Nop>
 
 if has('vim_starting')
   call neobundle#call_hook('on_source')
