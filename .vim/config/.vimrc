@@ -3,7 +3,7 @@ augroup MyAutoCmd
 augroup END
 
 "----------------------------------------
-" utils"{{{
+" utils {{{
 function! s:include(target, value) "{{{
   let target_type = type(a:target)
 
@@ -123,7 +123,7 @@ let s:is_unix    = has('unix')
 "----------------------------------------
 " basic settings {{{
 let mapleader = ","
-exe "set directory=".g:my.dir.swap_dir
+execute "set directory=".g:my.dir.swap_dir
 set backspace=indent,eol,start
 set browsedir=buffer
 set clipboard+=autoselect
@@ -159,19 +159,15 @@ filetype plugin indent off     " required!
 let g:neobundle#types#git#default_protocol = 'https'
 
 " initialize"{{{
-if has('vim_starting')
-  let s:bundle_dir = g:my.dir.bundle
+let g:neobundle#types#git#default_protocol = 'https'
+let g:neobundle#install_max_processes = s:is_imac ? 50 : 10
 
-  let g:neobundle#types#git#default_protocol = 'https'
-  let g:neobundle#install_max_processes = s:is_imac ? 50 : 10
-
-  if g:my.conf.initialize && !isdirectory(s:bundle_dir.'/neobundle.vim')
-    call system( 'git clone https://github.com/Shougo/neobundle.vim.git '. s:bundle_dir . '/neobundle.vim' )
-  endif
-
-  exe 'set runtimepath+='.s:bundle_dir.'/neobundle.vim'
-  call neobundle#rc(s:bundle_dir)
+if g:my.conf.initialize && !isdirectory(g:my.dir.bundle.'/neobundle.vim')
+  call system( 'git clone https://github.com/Shougo/neobundle.vim.git '. g:my.dir.bundle . '/neobundle.vim' )
 endif
+
+execute 'set runtimepath+='.g:my.dir.bundle.'/neobundle.vim'
+call neobundle#rc(g:my.dir.bundle)
 "}}}
 function! s:bundle_load_depends(bundle_names) "{{{
   if !exists('s:loaded_bundles')
@@ -195,6 +191,7 @@ endfunction
 "}}}
 
 "----------------------------------------
+" {{{
 " 基本 / その他 {{{
 NeoBundle 'Shougo/neobundle.vim'
 
@@ -242,20 +239,9 @@ NeoBundleLazy 'scrooloose/syntastic', { 'autoload': {
       \   'mac' : ['brew install tidy', 'brew install csslint', 'gem install sass', 'brew install jslint']
       \ },
       \ 'filetypes' : g:my.ft.program_files }}
-NeoBundle 'Lokaltog/powerline'
-" powerlineの推奨設定(runtimepath)のままだと、swapfileを開いたときにフリーズするので。"{{{
-augroup LoadPowerline
-  au!
-  au VimEnter * call s:load_powerline()
-augroup END
-
-function! s:load_powerline()
-  au! LoadPowerline
-  source `=neobundle#get_neobundle_dir() . '/powerline/powerline/bindings/vim/plugin/powerline.vim'`
-endfunction"}}}
+NeoBundle 'Lokaltog/powerline', { 'rtp' : 'powerline/bindings/vim'}
 NeoBundleLazy 'mattn/webapi-vim'
 "}}}
-" {{{
 " vim拡張"{{{
 " NeoBundle 'taku-o/vim-toggle' "true<=>false など、逆の意味のキーワードを切り替えられる
 " NeoBundle 'yuroyoro/vimdoc_ja'
@@ -642,7 +628,6 @@ NeoBundleLazy 'taichouchou2/yanktmp.vim', { 'autoload': {
       \   "yanktmp#yank", "yanktmp#paste_p", "yanktmp#paste_P"
       \ ]
       \ }}
-
 NeoBundleLazy 'HybridText', { 'autoload' : {
       \ 'filetypes' : 'hybrid',
       \ }}
@@ -943,10 +928,10 @@ NeoBundleLazy 'vim-scripts/dbext.vim', {
       \     "DBSelectFromTableWithWhere", "DBSetOption", "DBVarRangeAssign",
       \     "Delete", "Drop", "Insert", "Select", "Update"]
       \ }}
-" NeoBundleLazy 'tsukkee/lingr-vim', {
-"       \ 'depends': 'mattn/webapi-vim',
-"       \ 'autoload': {
-"       \ 'commands': ['LingrLaunch', 'LingrExit']}}
+NeoBundleLazy 'tsukkee/lingr-vim', {
+      \ 'depends': 'mattn/webapi-vim',
+      \ 'autoload': {
+      \ 'commands': ['LingrLaunch', 'LingrExit']}}
 NeoBundleLazy 'mattn/excitetranslate-vim', {
       \ 'depends': 'mattn/webapi-vim',
       \ 'autoload' : { 'commands': ['ExciteTranslate']}
@@ -973,7 +958,7 @@ filetype plugin indent on
 "}}}
 
 "----------------------------------------
-"StatusLine" {{{
+"StatusLine / tabline {{{
 source ~/.vim/config/.vimrc.statusline
 " }}}
 
@@ -2493,7 +2478,7 @@ let g:eskk#marker_jisyo_touroku=""
 let g:eskk#marker_okuri=''
 imap <C-J> <Plug>(eskk:toggle)
 lmap <C-J> <Plug>(eskk:toggle)
-" "}}}
+" }}}
 
 "------------------------------------
 " alpaca_wordpress.vim
@@ -2558,31 +2543,31 @@ let g:jscomplete_use = ['dom', 'moz', 'ex6th']
 "------------------------------------
 "{{{
 " XXX 使えない..............・T・
-let g:lingr_vim_user = g:my.lingr.user
+" let g:lingr_vim_user = g:my.lingr.user
 let g:lingr_vim_command_to_open_url = 'open -g %s'
 let g:lingr_vim_time_format = "%Y/%m/%d %H:%M:%S"
-let g:lingr_vim_additional_rooms = [
-    \   'vim',
-    \   'emacs',
-    \   'editor',
-    \   'vim_users_en',
-    \   'vimperator',
-    \   'filer',
-    \   'completion',
-    \   'shell',
-    \   'git',
-    \   'termtter',
-    \   'lingr',
-    \   'ruby',
-    \   'few',
-    \   'gc',
-    \   'scala',
-    \   'lowlevel',
-    \   'lingr_vim',
-    \   'vimjolts',
-    \   'gentoo',
-    \   'LinuxKernel',
-    \]
+" let g:lingr_vim_additional_rooms = [
+"     \   'vim',
+"     \   'emacs',
+"     \   'editor',
+"     \   'vim_users_en',
+"     \   'vimperator',
+"     \   'filer',
+"     \   'completion',
+"     \   'shell',
+"     \   'git',
+"     \   'termtter',
+"     \   'lingr',
+"     \   'ruby',
+"     \   'few',
+"     \   'gc',
+"     \   'scala',
+"     \   'lowlevel',
+"     \   'lingr_vim',
+"     \   'vimjolts',
+"     \   'gentoo',
+"     \   'LinuxKernel',
+"     \]
 "}}}
 
 "------------------------------------
@@ -2732,7 +2717,22 @@ let g:alpaca_update_tags_config = {
 " let g:gitgutter_highlight_lines = 1
 " let g:gitgutter_on_bufenter = 0
 " let g:gitgutter_all_on_focusgained = 0
-nnoremap [space]g :<C-U>GitGutterToggle<CR>
+" augroup MyAutoCmd
+"   autocmd BufReadPost,BufWritePost * GitGutterEnable
+" augroup END
+
+function! GitGutterToggleForNeoBundlelazy() "{{{
+  let is_active = exists('g:gitgutter_enabled') && g:gitgutter_enabled
+  if is_active
+    echo "gitgutter disabled"
+    GitGutterDisable
+  else
+    echo "gitgutter enabled"
+    GitGutterEnable
+  endif
+endfunction"}}}
+nnoremap <silent>[space]g :<C-U>call GitGutterToggleForNeoBundlelazy()<CR>
+
 
 " ------------------------------------
 " yanktmp.vim

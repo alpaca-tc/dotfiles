@@ -1,7 +1,8 @@
 "-------------------------------------------------------------------------------
 " ステータスライン StatusLine
 "-------------------------------------------------------------------------------
-func! String2Hex(str)"{{{
+
+func! String2Hex(str) "{{{
   let out = ''
   let ix = 0
   while ix < strlen(a:str)
@@ -14,6 +15,7 @@ endfunc"}}}
 "statuslineの設定
 " set statusline=[FORMAT=%{&ff}]\ [ENC=%{&fileencoding}]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]\ %F%m%r%h%w\
 
+" TODO リファクタリング
 let s:to_powerline = [
       \ [
       \   '%#PassiveTabLine#', '%#PassiveTabLineBG# %#PassiveTabLineBG#',
@@ -26,9 +28,9 @@ let s:to_powerline = [
       \ ],
       \ ]
 
-function! s:columns()
+function! s:columns() "{{{
   return exists('&columns') ? &columns : '80'
-endfunction
+endfunction"}}}
 
 function! s:highlight() "{{{
   hi TabLine ctermfg=7 ctermbg=236 cterm=NONE
@@ -70,7 +72,6 @@ function! s:tabpage_label(n, powerline) "{{{
   let label = n is 0 ? '' : n . '  '
   " TODO lingr使わないから要らない..
   if getbufvar(curbufnr, '&filetype') =~# '^lingr-'
-    " lingr-vim
     let unread = lingr#unread_count()
     let status = lingr#status()
 
@@ -121,15 +122,14 @@ function! MakeTabLine() "{{{
   let space_len = space_len > 0 ? space_len : 1
 
   " XXX もっと賢い書き方ありそう
-  " 評価後の文字列が取得したいよ...><
   " 教えてエロい人
   let first = ""
   for i in range(1, space_len)
     let first .= " "
   endfor
-  let first   = s:tabname2powerline(first, 0)
 
-  let info .= fnamemodify(getcwd(), ":~") . ' '
+  let first   = s:tabname2powerline(first, 0)
+  " let info .= fnamemodify(getcwd(), ":~") . ' '
 
   " return first . tabs . '%=' . info
   return first . tabs
@@ -161,6 +161,7 @@ function! GetBufname(bufnr, tail) "{{{
     let bufname = matchstr(fullpath, '^\V\(' . escape(b:lcd, '\')
     \ . '\v)?[/\\]?\zs.*')
   endif
+
   return bufname
 endfunction"}}}
 
