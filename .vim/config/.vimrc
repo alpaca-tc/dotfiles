@@ -3,6 +3,7 @@ augroup MyAutoCmd
 augroup END
 
 "----------------------------------------
+" utils"{{{
 function! s:include(target, value) "{{{
   let target_type = type(a:target)
 
@@ -34,6 +35,7 @@ endfunction"}}}
 function! s:smart_close() "{{{
   if winnr('$') == 1 |quit| endif
 endfunction"}}}
+"}}}
 
 "----------------------------------------
 " initialize"{{{
@@ -104,6 +106,7 @@ let g:my.install = {
 " OS"{{{
 let s:is_windows = has('win32') || has('win64')
 let s:is_mac     = has('mac')
+let s:is_imac    = s:is_mac && match(substitute(system("echo $HOST"), "\n", "", "g"), "iMac") > -1
 let s:is_unix    = has('unix')
 "}}}
 " initialze functions {{{
@@ -119,7 +122,7 @@ endif"}}}
 "}}}
 
 "----------------------------------------
-"基本"{{{
+" basic settings {{{
 let mapleader = ","
 exe "set directory=".g:my.dir.swap_dir
 set backspace=indent,eol,start
@@ -130,9 +133,9 @@ set formatoptions+=lcqmM
 set helplang=ja,en
 set modelines=1
 set nomore
-set mouse=a
-set mousefocus
-set mousehide
+" set mouse=a
+" set mousefocus
+" set mousehide
 set guioptions+=a
 set ttymouse=xterm2
 set nobackup
@@ -159,13 +162,15 @@ nnoremap <Space><Space>v :<C-U>tabnew ~/.vim/config/.vimrc<CR>
 "}}}
 
 "----------------------------------------
-" neobundle initialize E
-filetype plugin indent off     " required!
-let g:neobundle#types#git#default_protocol = 'https'
+" neobundle"{{{
+filetype plugin indent off
 
 " initialize"{{{
 if has('vim_starting')
   let s:bundle_dir = g:my.dir.bundle
+
+  let g:neobundle#types#git#default_protocol = 'https'
+  let g:neobundle#install_max_processes = s:is_imac ? 50 : 10
 
   if g:my.conf.initialize && !isdirectory(s:bundle_dir.'/neobundle.vim')
     call system( 'git clone https://github.com/Shougo/neobundle.vim.git '. s:bundle_dir . '/neobundle.vim' )
@@ -213,14 +218,6 @@ let g:ricty_generate_command = join([
       \   neobundle#get_neobundle_dir().'/alpaca/fonts/migu-1m-regular.ttf',
       \   neobundle#get_neobundle_dir().'/alpaca/fonts/migu-1m-bold.ttf',
       \ ], ' ')
-NeoBundleFetch 'yascentur/Ricty', {
-      \ 'depends' : 'taichouchou2/alpaca',
-      \ 'autoload' : {
-      \   'build' : {
-      \     'mac'  : g:ricty_generate_command,
-      \     'unix' : g:ricty_generate_command,
-      \   }
-      \ }}
 " 保存と同時にタブ文字消す
 NeoBundleLazy 'taichouchou2/alpaca_remove_dust.vim', {
       \ 'autoload': {
@@ -648,8 +645,25 @@ NeoBundleLazy 'repeat.vim', { 'autoload' : {
       \ 'mappings' : '.',
       \ }}
 
+
 " NeoBundleLazy 'mattn/vdbi-vim', {
 "       \ 'depends': 'mattn/webapi-vim' }
+"}}}
+" リポジトリをクローンするのみ"{{{
+NeoBundleLazy 'github/gitignore'
+NeoBundleLazy 'taichouchou2/rsense-0.3', {
+      \ 'build' : {
+      \    'mac': 'ruby etc/config.rb > ~/.rsense',
+      \    'unix': 'ruby etc/config.rb > ~/.rsense',
+      \ } }
+NeoBundleFetch 'yascentur/Ricty', {
+      \ 'depends' : 'taichouchou2/alpaca',
+      \ 'autoload' : {
+      \   'build' : {
+      \     'mac'  : g:ricty_generate_command,
+      \     'unix' : g:ricty_generate_command,
+      \   }
+      \ }}
 "}}}
 " bundle.lang"{{{
 
@@ -832,19 +846,14 @@ NeoBundleLazy 'ujihisa/unite-rake', {
 " NeoBundleLazy 'Shougo/neocomplcache-rsense', {
 "       \ 'depends': 'Shougo/neocomplcache',
 "       \ 'autoload': { 'filetypes': 'ruby' }}
-NeoBundleLazy 'taichouchou2/rsense-0.3', {
-      \ 'build' : {
-      \    'mac': 'ruby etc/config.rb > ~/.rsense',
-      \    'unix': 'ruby etc/config.rb > ~/.rsense',
-      \ } }
 NeoBundleLazy 'rhysd/unite-ruby-require.vim', { 'autoload': {
       \ 'filetypes': g:my.ft.ruby_files }}
 NeoBundleLazy 'rhysd/vim-textobj-ruby', { 'depends': 'kana/vim-textobj-user' }
 
 NeoBundleLazy 'deris/vim-textobj-enclosedsyntax', { 'autoload': {
       \ 'filetypes': g:my.ft.ruby_files}}
-NeoBundleLazy 'rhysd/neco-ruby-keyword-args', { 'autoload': {
-      \ 'filetypes': g:my.ft.ruby_files }}
+" NeoBundleLazy 'rhysd/neco-ruby-keyword-args', { 'autoload': {
+"       \ 'filetypes': g:my.ft.ruby_files }}
 
 NeoBundleLazy 'ujihisa/unite-gem', {
       \ 'depends': 'mattn/webapi-vim',
@@ -936,6 +945,7 @@ endif
 "}}}
 filetype plugin indent on
 "}}}
+"}}}
 
 "----------------------------------------
 "StatusLine" {{{
@@ -963,7 +973,8 @@ aug MyAutoCmd
 aug END
 
 " Disable paste.
-autocmd MyAutoCmd InsertLeave * if &paste | set nopaste mouse=a | echo 'nopaste' | endif
+" autocmd MyAutoCmd InsertLeave * if &paste | set nopaste mouse=a | echo 'nopaste' | endif
+autocmd MyAutoCmd InsertLeave * if &paste | set nopaste | echo 'nopaste' | endif
 
 " 対応を補完 {{{
 inoremap { {}<Left>
@@ -1142,18 +1153,33 @@ nmap [tag_or_tab] <Nop>
 nmap t [tag_or_tab]
 nnoremap <silent>[tag_or_tab]n  :tabnext<CR>
 nnoremap <silent>[tag_or_tab]p  :tabprevious<CR>
-nmap <silent>[tag_or_tab]c      <Plug>(alpaca_window_tabnew)
 nnoremap <silent>[tag_or_tab]x  :tabclose<CR>
 nnoremap <silent>[tag_or_tab]o  <C-W>T
+nmap <silent>[tag_or_tab]c      <Plug>(alpaca_window_tabnew)
 nmap <silent>[tag_or_tab]w      <Plug>(alpaca_window_move_buffer_into_last_tab)
-" nnoremap <silent>[tag_or_tab]e  :execute 'tabnext' 1 + (tabpagenr() + v:count1 - 1) % tabpagenr('$')<CR>
 
-nnoremap <silent>[tag_or_tab]1  :tabnext 1<CR>
-nnoremap <silent>[tag_or_tab]2  :tabnext 2<CR>
-nnoremap <silent>[tag_or_tab]3  :tabnext 3<CR>
-nnoremap <silent>[tag_or_tab]4  :tabnext 4<CR>
-nnoremap <silent>[tag_or_tab]5  :tabnext 5<CR>
-nnoremap <silent>[tag_or_tab]6  :tabnext 6<CR>
+nnoremap <silent>[tag_or_tab]1  :<C-U>tabnext 1<CR>
+nnoremap <silent>[tag_or_tab]2  :<C-U>tabnext 2<CR>
+nnoremap <silent>[tag_or_tab]3  :<C-U>tabnext 3<CR>
+nnoremap <silent>[tag_or_tab]4  :<C-U>tabnext 4<CR>
+nnoremap <silent>[tag_or_tab]5  :<C-U>tabnext 5<CR>
+nnoremap <silent>[tag_or_tab]6  :<C-U>tabnext 6<CR>
+
+function! Move_tab(to) "{{{
+  let target_tab_nr = tabpagenr() + a:to -1
+  let last_tab_nr = tabpagenr("$") - 1
+
+  if target_tab_nr > last_tab_nr
+    let target_tab_nr = last_tab_nr
+  elseif target_tab_nr < 1
+    let target_tab_nr = 0
+  endif
+
+  execute 'tabmove ' target_tab_nr
+  echo target_tab_nr
+endfunction"}}}
+nnoremap <silent>[tag_or_tab]<C-L> :<C-U>call Move_tab(1)<CR>
+nnoremap <silent>[tag_or_tab]<C-H> :<C-U>call Move_tab(-1)<CR>
 " }}}
 
 " 前回終了したカーソル行に移動
@@ -2839,7 +2865,13 @@ function! bundle.hooks.on_source(bundle) "{{{
 
   aug MyAutoCmd
     " previewwindowを自動で閉じる
-    au BufReadPre * if &previewwindow |au BufEnter <buffer> call <SID>smart_close()| endif
+    au BufReadPre *
+          \  if &previewwindow
+          \| au BufEnter <buffer>
+          \|   if &previewwindow
+            \| call <SID>smart_close()
+            \| endif
+          \| endif
   aug END
 endfunction"}}}
 unlet bundle
@@ -3030,16 +3062,6 @@ nnoremap <silent>gs :<C-U>Unite -buffer-name=giti_status -no-start-insert giti/s
 nnoremap <silent>gh :<C-U>Unite -buffer-name=giti_branchall -no-start-insert giti/branch_all<CR>
 "}}}
 "}}}
-
-" lineなどsyntaxがあった方がいいものは、開いていたファイルのsyntaxを適応
-
-" function! s:line_fast_move_next_match()
-"   if bufexists('*unite* - line_fast') && exists('g:last_line_fast_buf_number')
-"     execute 'buf' g:last_line_fast_buf_number
-"     normal j
-"     call unite#do_action('open')
-"   endif
-" endfunction
 function! s:smart_unite_open(cmd) "{{{
   let file_syntax=&syntax
   " let rails_root = exists('b:rails_root')? b:rails_root : ''
@@ -3059,9 +3081,6 @@ endfunction"}}}
 
 " settings {{{
 " 入力モードで開始する
-" let g:unite_abbr_highlight = 'TabLine'
-" let g:unite_source_directory_mru_filename_format
-" let g:unite_cursor_line_highlight='LineNr'
 hi UniteCursorLine ctermbg=236   cterm=none
 let g:unite_cursor_line_highlight='UniteCursorLine'
 let g:unite_enable_split_vertically=1
@@ -3075,43 +3094,42 @@ let g:unite_winheight = 20
 let g:unite_source_history_yank_enable =1
 let s:unite_kuso_hooks = {}
 "}}}
-function! s:unite_my_settings() "{{{
-  aug MyAutoCmd
-    autocmd BufEnter <buffer> call s:smart_close()
-  aug END
-
-  highlight link uniteMarkedLine Identifier
-  highlight link uniteCandidateInputKeyword Statement
-
-  inoremap <buffer><C-J> <Down>
-  inoremap <buffer><C-K> <Up>
-  nmap     <buffer>f <Plug>(unite_toggle_mark_current_candidate)
-  xmap     <buffer>f <Plug>(unite_toggle_mark_selected_candidates)
-  nmap     <buffer><C-H> <Plug>(unite_toggle_transpose_window)
-  nmap     <buffer><C-J> <Plug>(unite_toggle_auto_preview)
-  nnoremap <silent><buffer><expr>S unite#do_action('split')
-  nnoremap <silent><buffer><expr>V unite#do_action('vsplit')
-  nnoremap <silent><buffer><expr><Leader><Leader> unite#do_action('vimfiler')
-
-  " hook
-  let unite = unite#get_current_unite()
-  let buffer_name = unite.buffer_name != '' ? unite.buffer_name : '_'
-
-  " バッファ名に基づいたフックを実行
-  if !exists('s:unite_kuso_hooks')
-    let s:unite_kuso_hooks = {}
-  endif
-  if has_key( s:unite_kuso_hooks, buffer_name )
-    call s:unite_kuso_hooks[buffer_name]()
-  endif
-endfunction
-aug MyUniteCmd
-  au FileType unite call <SID>unite_my_settings()
-aug END
-"}}}
 
 let bundle = neobundle#get('unite.vim')
 function! bundle.hooks.on_source(bundle) "{{{
+  function! s:unite_my_settings() "{{{
+    aug MyAutoCmd
+      autocmd BufEnter <buffer> call s:smart_close()
+    aug END
+
+    setl nolist
+
+    highlight link uniteMarkedLine Identifier
+    highlight link uniteCandidateInputKeyword Statement
+
+    inoremap <silent><buffer><C-J> <Down>
+    inoremap <silent><buffer><C-K> <Up>
+    nmap     <silent><buffer>f <Plug>(unite_toggle_mark_current_candidate)
+    xmap     <silent><buffer>f <Plug>(unite_toggle_mark_selected_candidates)
+    nmap     <silent><buffer><C-H> <Plug>(unite_toggle_transpose_window)
+    nmap     <silent><buffer><C-J> <Plug>(unite_toggle_auto_preview)
+    nnoremap <silent><buffer><expr>S unite#do_action('split')
+    nnoremap <silent><buffer><expr>V unite#do_action('vsplit')
+    nnoremap <silent><buffer><expr><Leader><Leader> unite#do_action('vimfiler')
+
+    " hook
+    let unite = unite#get_current_unite()
+    let buffer_name = unite.buffer_name != '' ? unite.buffer_name : '_'
+
+    " バッファ名に基づいたフックを実行
+    if has_key( s:unite_kuso_hooks, buffer_name )
+      call s:unite_kuso_hooks[buffer_name]()
+    endif
+  endfunction
+  aug MyUniteCmd
+    au FileType unite call <SID>unite_my_settings()
+  aug END
+  "}}}
   function! s:unite_kuso_hooks.file_mru() "{{{
     syntax match uniteSource__FileMru_Dir  /.*\// containedin=uniteSource__FileMru contains=uniteSource__FileMru_Time,uniteCandidateInputKeyword nextgroup=uniteSource__FileMru_Dir
 
@@ -3124,12 +3142,24 @@ function! bundle.hooks.on_source(bundle) "{{{
     highlight link uniteFileDirectory Directory
   endfunction"}}}
 
+  " command menu"{{{
+  let g:unite_source_menu_menus = {}
+  let g:unite_source_menu_menus.command = {
+        \     'description' : 'command alias',
+        \ }
+  let g:unite_source_menu_menus.command.command_candidates = {
+        \       'gitignore'  : 'Unite file_rec:' . neobundle#get_neobundle_dir() . "/gitignore",
+        \     }
+  "}}}
+
   "------------------------------------
   " vim-version
   "------------------------------------
+  "{{{
   let g:versions#type#git#log#first_parent=1
   let g:versions#source#git#log#revision_length=0
   let g:versions#type#git#branch#merge#ignore_all_space=1
+  "}}}
 
   "------------------------------------
   " unite-history
@@ -3255,15 +3285,7 @@ aug END
 " 学習用
 imap <BS> <Nop>
 
-" eccube用、即席
-function! s:setting_eccube()
-  nnoremap <Space>a :Edit /Users/taichou/project/kaika/html/user_data/packages/default/css<CR>
-  nnoremap <Space>c :Edit /Users/taichou/project/kaika/data/class_extends<CR>
-  nnoremap <Space>t :Edit /Users/taichou/project/kaika/data/Smarty/templates/default<CR>
-endfunction
-au FileType php,scss,phtml,tpl call <SID>setting_eccube()
-
-if !has('vim_starting')
+if has('vim_starting')
   call neobundle#call_hook('on_source')
 endif
 

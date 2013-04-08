@@ -1,5 +1,4 @@
 " cron
-let g:alpaca_cron = 1
 if exists('g:alpaca_cron') || !exists("*strftime")
   finish
 endif
@@ -52,17 +51,18 @@ function! s:localtime(year, month, day, hour, minute, second) "{{{
 endfunction"}}}
 
 function! s:easy_localtime(time_object) "{{{
+  let time_object = copy(a:time_object)
   let now = split(strftime("%Y:%m:%d:%H:%M:%S", localtime()), ":")
   let kind = ["year", "month", "day", "hour", "minutes", "second"]
 
   for key in kind
     let time_by_kind = now[index(kind, key)]
-    call s:set_default_value(a:time_object, key, time_by_kind)
+    call s:set_default_value(time_object, key, time_by_kind)
   endfor
-  let t = a:time_object
+  let t = time_object
   let localtime = s:localtime(t["year"], t["month"], t["day"], t["hour"], t["minutes"], t["second"])
 
-  return [a:time_object, localtime]
+  return [time_object, localtime]
 endfunction"}}}
 "}}}
 
@@ -96,9 +96,12 @@ function! s:cron_manager.do_cron_obj(cron_obj) "{{{
 
   call s:do_if_has_key(cron, "before")
 
-  let cron.done = 0
-  if self.now >= cron.time
+  if !has_key(cron, "done")
+    let cron.done = 0
+  endif
+  if !cron.done && self.now >= cron.time
     call s:do_if_has_key(cron, "run")
+    call cron.time_initialize()
     let cron.done = 1
   endif
 
@@ -132,9 +135,8 @@ function s:cron_obj_orig.save_cache() "{{{
 endfunction "}}}
 
 function! s:cron_obj_orig.time_initialize() "{{{
-  " XXX もっと綺麗な書き方があるはず
   let time_array = s:easy_localtime(self["time_object"])
-  let self.time_object = time_array[0]
+  " let self.time_object = time_array[0]
   let self.time = time_array[1]
 endfunction"}}}
 
@@ -144,7 +146,7 @@ function! s:cron_obj_orig.before() "{{{
   endif
 endfunction"}}}
 
-function! s:get_cron_obj(name) "{{{
+function! s:get_cron(name) "{{{
   let cron_obj = copy(s:cron_obj_orig)
   let cron_obj.name = a:name
   return cron_obj
@@ -156,24 +158,19 @@ au InsertLeave * call s:cron_manager.run()
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
-let cron_obj = s:get_cron_obj("test")
+let cron_obj = s:get_cron("test")
 let cron_obj.time_object = { "second": 40 }
 
 " cron {{{
 function! cron_obj.run() "{{{
   let res = ""
-  " while empty(res)
-  "   " let res = input("2時間たったので、休憩しません？")
-  " endwhile
-endfunction"}}}
-
-function! cron_obj.after() "{{{
-  if self.done
-    let time_object = self.time_object
-    let hour = time_object["hour"]
-    call alpaca#print_error(hour)
-    " call self.time_initialize()
-  endif
+  let time_array = s:easy_localtime(self.time_object)
+  let time_object = time_array[0]
+  echo "a"
+  while empty(res)
+    let res = input("2時間たったので、休憩しません？")
+    echo res
+  endwhile
 endfunction"}}}
 "}}}
 
