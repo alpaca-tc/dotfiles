@@ -70,9 +70,10 @@ function! s:tabpage_label(n, powerline) "{{{
   let curbufnr = bufnrs[tabpagewinnr(n) - 1]  " first window, first appears
 
   let label = n is 0 ? '' : n . '  '
-  " TODO lingr使わないから要らない..
+
   if getbufvar(curbufnr, '&filetype') =~# '^lingr-'
     let unread = lingr#unread_count()
+    let last_message = lingr#get_last_message()
     let status = lingr#status()
 
     let label .= 'lingr - ' . status

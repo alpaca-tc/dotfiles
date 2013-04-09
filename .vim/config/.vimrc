@@ -2565,6 +2565,11 @@ function! LingrLaunchNewTab() "{{{
   LingrLaunch
 endfunction"}}}
 nnoremap [space]l :<C-U>call LingrLaunchNewTab()<CR>
+
+function! s:lingr_settings()
+  nnoremap <buffer><Space>q :<C-U>LingrExit<CR>
+endfunction
+autocmd MyAutoCmd FileType lingr-* call s:lingr_settings()
 "}}}
 
 "------------------------------------
