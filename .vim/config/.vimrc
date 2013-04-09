@@ -1040,8 +1040,9 @@ let s:alpaca_abbr_define = {
       \   "req require",
       \ ],
       \ "scss": [
-      \   "@in @include",
-      \   "@im @import",
+      \   "in include",
+      \   "im import",
+      \   "mi mixin",
       \ ],
       \ }
 for [filetype, abbr_defines] in items(s:alpaca_abbr_define)
@@ -2543,31 +2544,27 @@ let g:jscomplete_use = ['dom', 'moz', 'ex6th']
 "------------------------------------
 "{{{
 " XXX 使えない..............・T・
-" let g:lingr_vim_user = g:my.lingr.user
+let g:lingr_vim_user = g:my.lingr.user
 let g:lingr_vim_command_to_open_url = 'open -g %s'
 let g:lingr_vim_time_format = "%Y/%m/%d %H:%M:%S"
-" let g:lingr_vim_additional_rooms = [
-"     \   'vim',
-"     \   'emacs',
-"     \   'editor',
-"     \   'vim_users_en',
-"     \   'vimperator',
-"     \   'filer',
-"     \   'completion',
-"     \   'shell',
-"     \   'git',
-"     \   'termtter',
-"     \   'lingr',
-"     \   'ruby',
-"     \   'few',
-"     \   'gc',
-"     \   'scala',
-"     \   'lowlevel',
-"     \   'lingr_vim',
-"     \   'vimjolts',
-"     \   'gentoo',
-"     \   'LinuxKernel',
-"     \]
+let g:lingr_vim_additional_rooms = [
+    \   'vim',
+    \   'emacs',
+    \   'vim_users_en',
+    \   'vimperator',
+    \   'completion',
+    \   'git',
+    \   'ruby',
+    \   'scala',
+    \   'lingr_vim',
+    \   'gentoo',
+    \   'LinuxKernel',
+    \]
+function! LingrLaunchNewTab() "{{{
+  tabnew
+  LingrLaunch
+endfunction"}}}
+nnoremap [space]l :<C-U>call LingrLaunchNewTab()<CR>
 "}}}
 
 "------------------------------------

@@ -1,6 +1,9 @@
+" initialize
+augroup AbbrDefine
+augroup END
+
 function! s:get_autcmd_with_filetype(filetype, cmd) "{{{
-  let autcmd = join(["autocmd FileType", a:filetype, a:cmd], " ")
-  return join(["augroup AbbrDefine", autcmd, "augroup END"], "|")
+  return join(["autocmd AbbrDefine FileType", a:filetype, a:cmd], " ")
 endfunction"}}}
 
 function! alpaca#initialize#directory(array) "{{{
@@ -17,13 +20,9 @@ function! alpaca#initialize#define_abbrev(define, ...) "{{{
   " a:1 => filetype
 
   let defines = []
-  " XXX 複雑になるかもしれないので、mapは使わない
-  for abbr in a:define
-    let abbrev = join(["inoreabbrev", "<buffer>", abbr], " ") " => inoreabbrev <buffer> sh should
-    call add(defines, abbrev)
-  endfor
+  call map(copy(a:define), 'add(defines, join(["inoreabbrev", "<buffer>", v:val], " "))')
 
   let command = join(defines, "|")
-  " a:1 => filetype
+
   execute a:0 > 0 ? s:get_autcmd_with_filetype(a:1, command) : command
 endfunction"}}}
