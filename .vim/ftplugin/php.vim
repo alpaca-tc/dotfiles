@@ -6,3 +6,14 @@ setl errorformat=%EPHP\ Parse\ error:\ %m\ in\ %f\ on\ line\ %l
                        \%-G%.%#
 setl omnifunc=phpcomplete#CompletePHP
 
+" php {{{
+let g:tagbar_type_php = {
+      \ 'kinds' : [
+      \ 'c:classes',
+      \ 'f:functions',
+      \ 'v:variables:1'
+      \ ]
+      \ }
+"}}}
+
+

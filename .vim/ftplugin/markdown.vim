@@ -19,3 +19,14 @@ if exists('b:undo_ftplugin')
 else
   let b:undo_ftplugin = "setl cms< com< fo< flp<"
 endif
+
+" markdown {{{
+let g:tagbar_type_markdown = {
+  \ 'ctagstype' : 'markdown',
+  \ 'kinds' : [
+    \ 'h:Heading_L1',
+    \ 'i:Heading_L2',
+    \ 'k:Heading_L3'
+  \ ]
+\ }
+"}}}

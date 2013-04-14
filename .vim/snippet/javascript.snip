@@ -35,9 +35,16 @@ snippet case
         ${2:// code}
         break;
     ${3}
+
 # for (...) {...}
 snippet for
   for ( var i = 0; i < ${1}; i += 1 ) {
+  }
+snippet     for
+abbr        for ( var i = 0; i < ...; i += 1 )
+options     word
+  for ( var i = 0; i < ${1}; i += 1 ) {
+    ${2}
   }
 
 # for (...) {...} (Improved Native For-Loop)
@@ -51,6 +58,7 @@ snippet wh
     while (${1:/* condition */}) {
         ${2:/* code */}
     }
+
 # do...while
 snippet do
     do {
