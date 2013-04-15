@@ -1,7 +1,8 @@
 # 環境変数
 # # {{{
 export EDITOR=vim
-export LANG=ja_JP.UTF-8
+# export LANG=ja_JP.UTF-8
+export LANG=en_US.UTF-8
 # export SHELL=/usr/local/bin/zsh
 export DOTFILES_DIR=$HOME/dotfiles_serclet
 export BROWSER=w3m
@@ -37,9 +38,7 @@ export PATH=$HOME/bin:$PATH
 export PATH=$HOME/.bundle/powerline/scripts:$PATH
 
 # rsense
-export PATH=$HOME/.vim/ref/rsense-0.3/bin:$PATH
-export PATH=$PATH:$HOME/.vim/ref/rsense-0.3/bin
-export RSENSE_HOME=$HOME/.vim/ref/rsense-0.3
+export RSENSE_HOME=$HOME/.bundle/rsense-0.3
 
 # node
 export NODE_PATH=/usr/local/lib/node
@@ -74,7 +73,11 @@ export PATH=/Applications/MacVim.app/Contents/MacOS:$PATH
 [[ -s "$HOME/.pythonbrew/etc/bashrc" ]] && source "$HOME/.pythonbrew/etc/bashrc"
 # }}}
 
-fpath=(~/.zsh/site-functions $fpath)
+
+# for tmux
+export PATH=$HOME/usr/bin:$PATH
+
+fpath=( $HOME/.zsh/site-functions $fpath)
 
 # 各種読み込み
 # {{{

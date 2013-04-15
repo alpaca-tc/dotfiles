@@ -2,6 +2,8 @@
 
 require 'active_support/all'
 
+Pry.config.editor="vim"
+
 # ininialize alias
 command_alias = {
   "show" => "show-method",
@@ -12,7 +14,6 @@ command_alias = {
 command_alias.each do |k, v|
   Pry.config.commands.alias_command k, v
 end
-Pry.config.editor="vim"
 
 # デフォルトがださいのでカスタマイズprompt
 module Prompt
@@ -46,7 +47,7 @@ Pry.config.prompt = [
   },
 
   proc { |target_self, nest_level, pry|
-    get_prompt(target_self, nest_level, pry)
+    Prompt.prompt(target_self, nest_level, pry)
   }
 ]
 

@@ -8,7 +8,7 @@ endfunction"}}}
 aug MyRubyAutoCmd
   au!
   au BufReadPost *_spec.rb call <SID>rspec_syntax()
-  au BufEnter * source ~/.vim/syntax/ruby.gem.vim
+  au ColorScheme <buffer> source ~/.vim/syntax/ruby.gem.vim
 aug END
 
 " ruby {{{
@@ -23,3 +23,5 @@ let g:tagbar_type_ruby = {
       \ ]
       \ }
 "}}}
+
+" setl foldmethod=syntax

@@ -2,6 +2,7 @@
 # basic#{{{
 snippet     con
 abbr        context "..." do
+alias       context
   context "${1}" do
     ${2}
   end
@@ -11,6 +12,11 @@ abbr        before do ... end
   before do
     ${1}
   end
+
+snippet     stub_model
+abbr        stub_model(...)
+options     word
+  stub_model(${1})
 
 snippet     itd
 abbr        it ... do
@@ -52,12 +58,16 @@ snippet     let
 abbr        let(:name) {}
   let(:${1:symbol}) { ${2} }
 
+snippet     let!
+abbr        let!(:name) {}
+  let!(:${1:symbol}) { ${2} }
+
 snippet     reqs
 abbr        require rspec
   require File.expand_path(File.dirname(__FILE__) + "/../spec_helper")
 
 snippet     its
-  its(${1}) { ${2} }
+  its(:${1}) { ${2} }
 
 snippet     raise_error
 abbr        raise_error(ErrorKlass)

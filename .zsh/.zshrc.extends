@@ -37,13 +37,6 @@ function google() {
 }
 # }}}
 
-# hub# {{{
-# if [ -f "$HOME/.zsh/hub.bash_completion.sh" ]; then
-#     source $HOME/.zsh/hub.bash_completion.sh
-#     alias git="hub"
-# fi
-# }}}
-
 # auto-fu.zsh# {{{
 # source ~/.zsh/auto-fu.zsh
 # function zle-line-init () {

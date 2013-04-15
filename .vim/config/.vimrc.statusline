@@ -15,11 +15,21 @@ endfunc"}}}
 "statuslineの設定
 " set statusline=[FORMAT=%{&ff}]\ [ENC=%{&fileencoding}]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]\ %F%m%r%h%w\
 
+if !exists('g:alpaca_powertabline_enable')
+  let g:alpaca_powertabline_enable = 1
+  let g:alpaca_powertabline_info = ""
+endif
+
+if !exists('s:initialize_time')
+  let s:initialize_time = localtime()
+endif
+let s:sep = ''
+
 " TODO リファクタリング
 let s:to_powerline = [
       \ [
       \   '%#PassiveTabLine#', '%#PassiveTabLineBG# %#PassiveTabLineBG#',
-      \   '%#PassiveTabLine#', '%#PassiveTabLineBGL# %#TabLineFill#',
+      \   '%#PassiveTabLine#', '%#PassiveTabLineBG# %#TabLineFill#',
       \   '%#PassiveTabLine#', '%#PassiveTabLineRightIsActive# %#ActiveTabLine#',
       \ ],
       \ [
@@ -28,22 +38,50 @@ let s:to_powerline = [
       \ ],
       \ ]
 
-function! s:columns() "{{{
-  return exists('&columns') ? &columns : '80'
+function! s:set_highlight(name, highlight) "{{{
+  let h = a:highlight
+  let highlight = ["highlight", a:name]
+
+  if has_key(h, "bg")
+    call add(highlight, "ctermbg=" . h["bg"])
+  endif
+  if has_key(h, "fg")
+    call add(highlight, "ctermfg=" . h["fg"])
+  endif
+
+  let cterm = "cterm="
+  let cterm .=  has_key(h, "cterm") ? h["cterm"] : "NONE"
+  call add(highlight, cterm)
+
+  " => highlight a:name ctermbg=highlight["bg"] ctermfg=highlight["fg"] cterm=highlight["cterm"]
+  execute join(highlight, " ")
 endfunction"}}}
 
 function! s:highlight() "{{{
-  hi TabLine ctermfg=7 ctermbg=236 cterm=NONE
-  hi TabLineSel ctermfg=231 ctermbg=031 cterm=bold
-  hi TabLineFill ctermfg=7 ctermbg=236 cterm=NONE
-
-  hi ActiveTabLine ctermfg=255 ctermbg=075 cterm=NONE
-  hi ActiveTabLineBG ctermfg=075 ctermbg=236 cterm=NONE
-  hi ActiveTabLineBGL ctermfg=075 ctermbg=236
-  hi PassiveTabLine ctermfg=245 ctermbg=236 cterm=NONE
-  hi PassiveTabLineBG ctermfg=236 ctermbg=236 cterm=NONE
-  hi PassiveTabLineBGL ctermfg=236 ctermbg=236 cterm=NONE
-  hi PassiveTabLineRightIsActive ctermfg=236 ctermbg=075 cterm=NONE
+  let colorscheme = {
+        \   "base" : {
+        \     "bg" : 240,
+        \     "fg" : 255,
+        \   },
+        \   "sel" : {
+        \     "bg": 75,
+        \     "fg": 255,
+        \   },
+        \   "passive": {
+        \     "bg": 236,
+        \     "fg": 245,
+        \   },
+        \ }
+  let c = colorscheme
+  call s:set_highlight("Tabline", {"bg": c.base.bg, "fg": c.base.fg, "cterm": "NONE"})
+  call s:set_highlight("TabLineSel", {"bg": c.sel.bg, "fg": c.sel.fg, "cterm": "bold"})
+  call s:set_highlight("TablineFill", {"bg": c.passive.bg, "fg": c.base.fg, "cterm": "NONE"})
+  call s:set_highlight("ActiveTabLine", {"bg": c.sel.bg, "fg": c.sel.fg, "cterm": "NONE"})
+  call s:set_highlight("ActiveTabLineBG", {"bg": c.passive.bg, "fg": c.sel.bg, "cterm": "NONE"})
+  call s:set_highlight("ActiveTabLineBGL", {"bg": c.passive.bg, "fg": c.sel.bg, "cterm": "NONE"})
+  call s:set_highlight("PassiveTabLine", {"bg": c.passive.bg, "fg": c.passive.fg, "cterm": "NONE"})
+  call s:set_highlight("PassiveTabLineBG", {"bg": c.passive.bg, "fg": c.passive.bg, "cterm": "NONE"})
+  call s:set_highlight("PassiveTabLineRightIsActive", {"bg": c.sel.bg, "fg": c.passive.bg, "cterm": "NONE"})
 endfunction"}}}
 autocmd ColorScheme * call s:highlight()
 
@@ -64,83 +102,21 @@ function! s:tabname2powerline(str, n) "{{{
   endif
 endfunction"}}}
 
-function! s:tabpage_label(n, powerline) "{{{
-  let n = a:n
-  let bufnrs = tabpagebuflist(n)
-  let curbufnr = bufnrs[tabpagewinnr(n) - 1]  " first window, first appears
-
-  let label = n is 0 ? '' : n . '  '
-
-  if getbufvar(curbufnr, '&filetype') =~# '^lingr-'
-    let unread = lingr#unread_count()
-    let last_message = lingr#get_last_message()
-    let status = lingr#status()
-
-    let label .= 'lingr - ' . status
-    if unread != 0
-      let label .= '(' . unread . ')'
-    endif
-
-  else
-    let no = len(bufnrs)
-    if no is 1
-      let no = ''
-    endif
-    let mod = len(filter(bufnrs, 'getbufvar(v:val, "&modified")')) ? '+' : ''
-    let sp = (no . mod) ==# '' ? '' : ' '
-    let fname = GetBufname(curbufnr, 1)
-
-    let label .= mod . sp . fname
-  endif
-
-  if a:powerline
-    let label = s:tabname2powerline(label, n)
-    return '%' . a:n . 'T' . label . '%T%#TabLineFill#'
-  else
-    return '%' . a:n . 'T' . label . '   '
-  endif
+" get info
+function! s:get_uptime() "{{{
+  " return Uptime()
+  let time = localtime() - s:initialize_time -32400
+  return strftime("%H:%M:%S", time)
 endfunction"}}}
 
-function! MakeTabLine() "{{{
-  let titles = map(range(1, tabpagenr('$')), 's:tabpage_label(v:val, 1)')
-  let titles_len = len(join(map(range(1, tabpagenr('$')), 's:tabpage_label(v:val, 0)'), ""))
-  let sep = ''
-
-  let tabs = join(titles, sep) . sep . '%#TabLineFill#%T'
-  let info = '%#TabLine#'
-  if exists('t:tabline_extra')
-    let info .= t:tabline_extra . sep
-  endif
-  if s:has_plugin('cfi')
-    let info .= cfi#format('%s()' . sep, '')
-  endif
-  if exists('*Uptime')
-    let info .= Uptime(2) . sep
-  endif
-
-  " 中央寄せ
-  let space_len = (s:columns() / 2) - (titles_len / 2)
-  let space_len = space_len > 0 ? space_len : 1
-
-  " XXX もっと賢い書き方ありそう
-  " 教えてエロい人
-  let first = ""
-  for i in range(1, space_len)
-    let first .= " "
-  endfor
-
-  let first   = s:tabname2powerline(first, 0)
-  " let info .= fnamemodify(getcwd(), ":~") . ' '
-
-  " return first . tabs . '%=' . info
-  return first . tabs
-endfunction"}}}
-
-function! GetBufname(bufnr, tail) "{{{
+" get bufname
+function! s:get_buffer_name(bufnr) "{{{
   let bufname = bufname(a:bufnr)
+
   if bufname =~# '^[[:alnum:].+-]\+:\\\\'
     let bufname = substitute(bufname, '\\', '/', 'g')
   endif
+
   let buftype = getbufvar(a:bufnr, '&buftype')
   if bufname ==# ''
     if buftype ==# ''
@@ -154,21 +130,85 @@ function! GetBufname(bufnr, tail) "{{{
   if buftype ==# 'nofile' || buftype ==# 'acwrite'
     return bufname
   endif
-  if a:tail
-    return fnamemodify(bufname, ':t')
-  endif
-  let fullpath = fnamemodify(bufname, ':p')
-  if exists('b:lcd') && b:lcd !=# ''
-    let bufname = matchstr(fullpath, '^\V\(' . escape(b:lcd, '\')
-    \ . '\v)?[/\\]?\zs.*')
-  endif
 
-  return bufname
+  return fnamemodify(bufname, ':t')
+endfunction"}}}
+function! s:get_lingr_buffer_name(n) "{{{
+  let bufnrs = tabpagebuflist(a:n)
+  let curbufnr = bufnrs[0]
+
+  return getbufvar(curbufnr, '&filetype')
+  if exists('g:loaded_lingr_vim') && getbufvar(curbufnr, '&filetype') =~# '^lingr-'
+    let unread = lingr#unread_count()
+    let status = lingr#status()
+    " let last_message = lingr#get_last_message()
+
+    let label = 'lingr - ' . status
+    if unread != 0
+      let label .= '(' . unread . ')'
+    endif
+
+    return label
+  else
+    0
+  endif
+endfunction"}}}
+function! s:get_buffer_name_abs(n) "{{{
+  let n = a:n
+  let lingr_buffer = s:get_lingr_buffer_name(n)
+  return lingr_buffer ? lingr_buffer : s:get_buffer_name(n)
 endfunction"}}}
 
-function! s:has_plugin(name) "{{{
-  return globpath(&runtimepath, 'plugin/' . a:name . '.vim') !=# ''
-  \   || globpath(&runtimepath, 'autoload/' . a:name . '.vim') !=# ''
+function! s:tabpage_label(n, is_powerline) "{{{
+  let title = s:get_buffer_name_abs(a:n)
+  let label = a:n is 0 || !a:is_powerline ? '' : a:n . '  '
+  let label .= title
+
+  " XXX 命名...orz
+  let mark  = '%' . a:n . 'T'
+  if a:is_powerline
+    let label = s:tabname2powerline(label, a:n)
+    return  mark.label.'%T%#TabLineFill#'
+  else
+    return mark.label
+  endif
+endfunction"}}}
+
+function! s:get_info() "{{{
+  if exists('g:alpaca_powertabline_info') && g:alpaca_powertabline_info != ""
+    return '%=' . g:alpaca_powertabline_info
+  endif
+
+  " let info = '%#TabLine#'
+  let info = ""
+  if exists('t:tabline_extra')
+    let info .= t:tabline_extra . sep
+  endif
+
+  let pwd = '%=' . fnamemodify(getcwd(), ":~") . '  '
+  let uptime = '%=' . s:get_uptime() . '  '
+
+  return info . pwd . uptime
+endfunction"}}}
+
+function! MakeTabLine() "{{{
+  let titles = map(range(1, tabpagenr('$')), 's:tabpage_label(v:val, 1)')
+  let titles_len = len(join(map(range(1, tabpagenr('$')), 's:tabpage_label(v:val, 0)'), ""))
+  let tabs = join(titles, s:sep) . s:sep . '%#TabLineFill#%T'
+
+  let info = s:get_info()
+
+  " 中央寄せ
+  let space_len = (&columns / 2) - (titles_len / 2)
+  let space_len = space_len > 0 ? space_len : 1
+
+  let first = "%#TabLineFill#"
+  for i in range(1, space_len)
+    let first .= " "
+  endfor
+  let fill_space   = s:tabname2powerline(first, 0)
+
+  return fill_space . tabs . '%=' . info
 endfunction"}}}
 
 set tabline=%!MakeTabLine()

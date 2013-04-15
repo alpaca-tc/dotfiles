@@ -23,6 +23,11 @@ options     word
 #}}}
 
 # for plugins#{{{
+snippet     email
+abbr        `g:my.info.email`
+options     word
+  `g:my.info.email`
+
 snippet     exists?
 abbr        if exists('...') | let ... | endif
 options     word
@@ -97,3 +102,54 @@ snippet   neobundle#get
   endfunction
 
 #}}}
+
+# for syntax#{{{
+snippet     keyword
+abbr        syntax keyword
+options     word
+  syntax keyword ${1:group-name} ${2:option} ${3:key[word]} ${4:option}
+
+snippet     match
+abbr        syntax match
+options     word
+  syntax match ${1:group-name} ${2:option} ${3:excludenl} ${4:pattern} ${5:options}
+
+snippet     region
+abbr        syntax region
+options     word
+  syntax region ${1:group-name} ${2:option}
+    ${3:matchgroup={group-name}}
+    ${4:keepend}
+    ${5:extend}
+    ${6:excludenl }
+    start=${7:start_pattern}
+    ${8:skip=${9:skip_pattern\} }
+    end=${10:end_pattern}
+    ${11:options}
+
+snippet     contains
+abbr        contains=groupname
+options     word
+  contains=${1:groupname}
+
+snippet     containedin
+abbr        containedin=groupname
+options     word
+  containedin=${1:groupname}
+
+snippet     nextgroup
+abbr        nextgroup=groupname
+options     word
+  nextgroup=${1:nextgroup}
+
+snippet     matchgroup
+abbr        matchgroup=groupname
+options     word
+  matchgroup=${1:groupname}
+
+snippet     contained
+abbr        contained
+options     word
+  contained
+#}}}
+

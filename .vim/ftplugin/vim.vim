@@ -10,6 +10,7 @@ let b:undo_ftplugin .= 'setl modeline<'
 
 " For gf.
 let &l:path = join(map(split(&runtimepath, ','), 'v:val."/autoload"'), ',')
+let &l:path = join(map(split(&runtimepath, ','), 'v:val.""'), ',')
 setl suffixesadd=.vim
 setl includeexpr=fnamemodify(substitute(v:fname,'#','/','g'),':h')
 let &keywordprg=':help'
