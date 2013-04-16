@@ -5,11 +5,6 @@
 " Last Change:  2010 Sep 05
 " Filenames:    Gemfile
 
-if version < 600
-    syntax clear
-endif
-
-
 " It's basically just Ruby
 runtime syntax/ruby.vim
 

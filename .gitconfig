@@ -31,6 +31,7 @@
   remove-branch-local = "!git branch -d $(git branch --merged | grep -v master | grep -v '*')"
   remove-branch-remote = "!git push origin $(git branch -r --merged | grep origin/ | grep -v master | sed s~origin/~:~)"
   remove-branch-all = "!git checkout master && git pull origin master && git fetch -p origin && git branch -d $(git branch --merged | grep -v master | grep -v '*') && git push origin $(git branch -r --merged | grep origin/ | grep -v master | sed s~origin/~:~)"
+  resett = !git commit -a -m 'Temporary commit for cancel' && git reset --hard HEAD~
 
 [push]
   default = tracking
