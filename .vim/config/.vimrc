@@ -466,9 +466,10 @@ NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
 NeoBundleLazy 'yomi322/vim-gitcomplete', { 'autoload' : {
       \ 'filetype' : 'vimshell'
       \ }}
-NeoBundleLazy 'ujihisa/neco-look', {
+NeoBundle 'ujihisa/neco-look', {
       \ 'depends' : 'Shougo/neocomplcache',
       \ 'autoload': {
+      \   'insert' : 1,
       \   'filetypes' : g:my.ft.program_files,
       \ }}
 " 勉強用に作成
@@ -639,6 +640,7 @@ NeoBundleLazy 'vim-scripts/LanguageTool', {
       \ 'autoload': {
       \   'commands' : ['LanguageToolCheck', 'LnaguageToolClear']
       \ }}
+NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundleFetch 'taichouchou2/language-tool-mirror'
 
 " NeoBundleLazy 'mattn/vdbi-vim', {
@@ -716,15 +718,16 @@ NeoBundleLazy 'teramako/jscomplete-vim', { 'autoload' : {
       \ 'filetypes' : g:my.ft.js_files
       \ }}
 " TODO こいつはすごい。気になる。時間がある時にneocomplcacheのsource作ろう
-NeoBundleLazy 'marijnh/tern', {
-      \ "rtp" : 'vim',
-      \ 'build' : {
-      \   'mac': 'npm install',
-      \   'unix': 'npm install'
-      \ },
-      \ 'autoload' : {
-      \   'filetypes': 'javascript'
-      \ }}
+" NeoBundleLazy 'marijnh/tern', {
+"       \ "rtp" : 'vim',
+"       \ 'build' : {
+"       \   'mac': 'npm install',
+"       \   'unix': 'npm install'
+"       \ },
+"       \ 'autoload' : {
+"       \   'filetypes': 'javascript'
+"       \ }}
+source ~/.bundle/tern/vim/tern.vim
 
 NeoBundleLazy 'leafgarland/typescript-vim', { 'autoload' : {
       \ 'filetypes' : ['typescript']
@@ -962,9 +965,9 @@ NeoBundleLazy 'taichouchou2/alpaca_update_tags', {
       \ 'autoload' : {
       \   'commands': ['AlpacaUpdateTags', 'AlpacaSetTags']
       \ }}
-" NeoBundleLazy 'thinca/vim-scouter', { 'autoload' : {
-"       \ 'commands' : 'Scouter'
-"       \ }}
+NeoBundleLazy 'thinca/vim-scouter', { 'autoload' : {
+      \ 'commands' : 'Scouter'
+      \ }}
 "}}}
 " Installation check. "{{{
 if g:my.conf.initialize && neobundle#exists_not_installed_bundles()
@@ -1185,7 +1188,7 @@ nnoremap <silent>k gk
 
 xnoremap H <Nop>
 inoremap <C-@> <Nop>
-xnoremap v G
+" xnoremap v G
 "}}}
 " 画面の移動 {{{
 " nnoremap <C-L> <C-T>
@@ -1436,8 +1439,8 @@ call arpeggio#map('c', 's', 0, 'jk', '<Esc>:nohlsearch<CR>')
 "------------------------------------
 "{{{
 let g:Align_xstrlen = 3
-xnoremap <C-N>      :Align<Space>
-xnoremap <C-N><C-N> :Align =<CR>
+xnoremap m      :Align<Space>
+xnoremap mm :Align =<CR>
 "}}}
 
 "------------------------------------
@@ -2370,13 +2373,17 @@ nmap <silent>k <Plug>(accelerated_jk_gk)
 let g:eskk#debug = 0
 let g:eskk#dictionary = { 'path': expand( "~/.eskk_jisyo" ), 'sorted': 0, 'encoding': 'utf-8', }
 let g:eskk#directory = "~/.eskk"
-let g:eskk#dont_map_default_if_already_mapped=1
-let g:eskk#enable_completion = 1
+" let g:eskk#dont_map_default_if_already_mapped=1
+" let g:eskk#enable_completion = 1
 let g:eskk#large_dictionary = { 'path':  expand("~/.eskk_dict/SKK-JISYO.L"), 'sorted': 1, 'encoding': 'euc-jp', }
-let g:eskk#max_candidates= 40
+" let g:eskk#max_candidates= 40
 let g:eskk#start_completion_length=3
-let g:eskk#no_default_mappings=1
-let g:eskk#revert_henkan_style = "okuri"
+" let g:eskk#no_default_mappings=1
+" let g:eskk#revert_henkan_style = "okuri"
+let g:eskk#show_annotation=1
+let g:eskk#kakutei_when_unique_candidate=1
+let g:eskk#register_completed_word=0
+let g:eskk#keep_state = 1
 let g:eskk#cursor_color = {
       \   'ascii': ['#8b8b83', '#bebebe'],
       \   'hira': ['#8b3e2f', '#ffc0cb'],
@@ -2751,21 +2758,22 @@ let g:neocomplcache_auto_completion_start_length = 2
 " let g:neocomplcache_min_syntax_length = 2
 
 " alpaca_complete.vim
-" let g:alpaca_complete_assets_dir = {
-"       \ 'img'   : 'app/assets/images',
-"       \ 'js'    : 'app/assets/javascripts',
-"       \ 'style' : 'app/assets/stylesheets',
-"       \ 'ctrl'  : 'app/controllers',
-"       \ 'mig'   : 'db/migrate',
-"       \ 'seed'  : 'db/seeds',
-"       \ 'lib'   : 'lib',
-"       \ 'spec'  : 'spec',
-"       \ 'model' : 'app/models',
-"       \ 'view'  : 'app/views',
-"       \ 'helper': 'app/helpers',
-"       \ 'admin' : 'app/admin',
-"       \ 'conf'  : 'config',
-"       \}
+let g:alpaca_complete_assets_dir = {
+      \ 'img'   : 'app/assets/images',
+      \ 'js'    : 'app/assets/javascripts',
+      \ 'style' : 'app/assets/stylesheets',
+     \}
+      " \ 'ctrl'  : 'app/controllers',
+      " \ 'mig'   : 'db/migrate',
+      " \ 'seed'  : 'db/seeds',
+      " \ 'lib'   : 'lib',
+      " \ 'spec'  : 'spec',
+      " \ 'model' : 'app/models',
+      " \ 'view'  : 'app/views',
+      " \ 'helper': 'app/helpers',
+      " \ 'admin' : 'app/admin',
+      " \ 'conf'  : 'config',
+
 
 let bundle = neobundle#get('neocomplcache')
 function! bundle.hooks.on_source(bundle) "{{{
@@ -2870,7 +2878,7 @@ imap <expr><C-G>          neocomplcache#undo_completion()
 imap <expr><TAB>          neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
 " imap <silent><expr><CR>   neocomplcache#smart_close_popup() . "<CR>" . "<Plug>DiscretionaryEnd"
 function! s:my_crinsert()
-  return pumvisible() ? neocomplcache#close_popup() : "\<CR>"
+  return pumvisible() ? neocomplcache#close_popup() . "\<CR>" : "\<CR>"
 endfunction
 inoremap <silent> <CR> <C-R>=<SID>my_crinsert()<CR>
 
@@ -3262,6 +3270,18 @@ aug END
 if has('vim_starting')
   call neobundle#call_hook('on_source')
 endif
+
+function! s:open_mi(...)
+  if !empty(a:1)
+    let args= split(a:1, " ")
+  else
+    let args = expand("%:p")
+  endif
+
+  echo "opening...MacVim"
+  call alpaca#system("mvim", args)
+endfunction
+command! -nargs=* Mi call s:open_mi(substitute(<q-args>, '\s"[^"]\+$', '', ''))
 
 " 人のvimrc
 " @see http://vim-users.jp/2011/02/hack202/
