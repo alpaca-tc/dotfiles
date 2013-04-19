@@ -1356,6 +1356,7 @@ augroup END
 
 let g:molokai_original=1
 colorscheme  desertEx
+" colorscheme  pyte
 "}}}
 
 "----------------------------------------
@@ -2581,18 +2582,21 @@ xmap A  <Plug>(niceblock-A)
 "{{{
 nnoremap ! :Switch<CR>
 let s:switch_define = {
-      \ "ruby" : {
-      \   "if": "unless",
-      \   "while": "until",
-      \ }
+      \ "ruby" : [
+      \   ["if", "unless"],
+      \   ["while", "until"],
+      \   [".blank?", ".present?"],
+      \ ],
       \ }
 
 function! s:define_switch_mappings()
-  call alpaca#let_b:('switch_definitions', [])
+  if exists('b:switch_custom_definitions')
+    unlet b:switch_custom_definitions
+  endif
 
   let filetype = <SID>filetype()
   if has_key(s:switch_define, filetype)
-    call add(b:switch_definitions, s:switch_define[filetype])
+    call alpaca#let_b:('switch_custom_definitions', s:switch_define[filetype])
   endif
 endfunction
 
