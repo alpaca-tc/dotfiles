@@ -716,7 +716,8 @@ NeoBundleLazy 'teramako/jscomplete-vim', { 'autoload' : {
       \ 'filetypes' : g:my.ft.js_files
       \ }}
 " TODO こいつはすごい。気になる。時間がある時にneocomplcacheのsource作ろう
-NeoBundleLazy 'marijnh/tern', {
+" NeoBundleLazy 'marijnh/tern', {
+NeoBundleLazy 'taichouchou2/tern', {
       \ "rtp" : 'vim',
       \ 'build' : {
       \   'mac': 'npm install',
@@ -3075,7 +3076,7 @@ let bundle = neobundle#get('unite.vim')
 function! bundle.hooks.on_source(bundle) "{{{
   function! s:unite_my_settings() "{{{
     aug MyAutoCmd
-      autocmd BufEnter <buffer> call s:smart_close()
+      autocmd BufEnter <buffer> if winnr('$') == 1 |quit| endif
     aug END
 
     setl nolist

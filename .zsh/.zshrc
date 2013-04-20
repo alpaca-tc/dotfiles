@@ -48,7 +48,7 @@ export PATH=/usr/local/mysql/bin:/usr/local/share/npm/bin:$PATH
 export PATH=/Applications/XAMPP/xamppfiles/bin:$PATH
 
 # homebrew
-export PATH=/usr/local/bin:$PATH
+export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 export MANPATH=/usr/local/share/man:$MANPATH
 
 # java 1.7.0
@@ -67,7 +67,7 @@ eval "$(rbenv init -)"
 export PATH=/Applications/MacVim.app/Contents/MacOS:$PATH
 
 # scala
-[[ -s "$HOME/.bundle/ensime" ]] && export PATH=$HOME/.bundle/ensime/lib_2.9.2/:$PATH
+[[ -s "$HOME/.bundle/ensime" ]] && export PATH=$HOME/.bundle/ensime/lib_2.9.2:$PATH
 
 # python
 [[ -s "$HOME/.pythonbrew/etc/bashrc" ]] && source "$HOME/.pythonbrew/etc/bashrc"
