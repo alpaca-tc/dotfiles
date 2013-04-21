@@ -195,9 +195,8 @@ nnoremap <Space><Space>v :<C-U>tabnew ~/.vim/config/.vimrc<CR>
 "}}}
 
 "----------------------------------------
-" neobundle initialize {{{
+" neobundle initialize
 filetype plugin indent off     " required!
-let g:neobundle#types#git#default_protocol = 'https'
 let g:neobundle#types#git#default_protocol = 'https'
 let g:neobundle#install_max_processes = s:is_mac ? 50 : 10
 
@@ -237,6 +236,8 @@ NeoBundle 'Lokaltog/powerline', {
       \ 'rtp' : 'powerline/bindings/vim',
       \ 'gui' : 1,
       \ }
+" NeoBundle 'taichouchou2/powerline', { 'directory': 'powerline', 'rev': 'master', 'rtp' : 'powerline/bindings/vim'}
+NeoBundle 'taichouchou2/alpaca_powertabline'
 " WebAPI utils
 NeoBundleLazy 'mattn/webapi-vim'
 " フォントとか。読み込むことは無い"{{{
@@ -332,6 +333,7 @@ NeoBundleLazy 'Shougo/vimfiler', {
       \   'explorer' : 1,
       \ }}
 NeoBundleLazy 'Shougo/neocomplcache', {
+      \ 'rev': 'ver.8',
       \ 'autoload' : {
       \   'insert' : 1,
       \ }}
@@ -467,9 +469,10 @@ NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
 NeoBundleLazy 'yomi322/vim-gitcomplete', { 'autoload' : {
       \ 'filetype' : 'vimshell'
       \ }}
-NeoBundleLazy 'ujihisa/neco-look', {
+NeoBundle 'ujihisa/neco-look', {
       \ 'depends' : 'Shougo/neocomplcache',
       \ 'autoload': {
+      \   'insert' : 1,
       \   'filetypes' : g:my.ft.program_files,
       \ }}
 " 勉強用に作成
@@ -558,7 +561,12 @@ NeoBundleLazy 'Shougo/unite-ssh', {
       \   'mappings' : ['n', '[unite]s'],
       \   'unite_sources' : 'ssh'
       \ }}
-" NeoBundleLazy 'choplin/unite-vim_hacks'
+NeoBundleLazy 'choplin/unite-vim_hacks', {
+      \ 'depends' : ['mattn/webapi-vim', 'thinca/vim-openbuf', 'mattn/wwwrenderer-vim'],
+      \ 'autoload': {
+      \   'unite_sources': 'vim_hacks'
+      \ }
+      \ }
 NeoBundleLazy 'kmnk/vim-unite-giti', {
       \ 'autoload': {
       \   'unite_sources': [
@@ -636,6 +644,7 @@ NeoBundleLazy 'vim-scripts/LanguageTool', {
       \ 'autoload': {
       \   'commands' : ['LanguageToolCheck', 'LnaguageToolClear']
       \ }}
+NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundleFetch 'taichouchou2/language-tool-mirror'
 
 " NeoBundleLazy 'mattn/vdbi-vim', {
@@ -713,14 +722,24 @@ NeoBundleLazy 'teramako/jscomplete-vim', { 'autoload' : {
       \ 'filetypes' : g:my.ft.js_files
       \ }}
 " TODO こいつはすごい。気になる。時間がある時にneocomplcacheのsource作ろう
-NeoBundleLazy 'marijnh/tern', {
-      \ 'build' : {
-      \   'mac': 'npm install',
-      \   'unix': 'npm install'
-      \ },
-      \ 'autoload' : {
-      \   'filetypes': 'javascript'
-      \ }}
+" NeoBundleLazy 'marijnh/tern', {
+" NeoBundleLazy 'taichouchou2/tern', {
+"       \ "rtp" : 'vim',
+"       \ 'build' : {
+"       \   'mac': 'npm install',
+"       \   'unix': 'npm install'
+"       \ },
+"       \ 'autoload' : {
+"       \   'filetypes': 'javascript'
+"       \ }}
+"       \ "rtp" : 'vim',
+"       \ 'build' : {
+"       \   'mac': 'npm install',
+"       \   'unix': 'npm install'
+"       \ },
+"       \ 'autoload' : {
+"       \   'filetypes': 'javascript'
+"       \ }}
 
 NeoBundleLazy 'leafgarland/typescript-vim', { 'autoload' : {
       \ 'filetypes' : ['typescript']
@@ -958,9 +977,9 @@ NeoBundleLazy 'taichouchou2/alpaca_update_tags', {
       \ 'autoload' : {
       \   'commands': ['AlpacaUpdateTags', 'AlpacaSetTags']
       \ }}
-" NeoBundleLazy 'thinca/vim-scouter', { 'autoload' : {
-"       \ 'commands' : 'Scouter'
-"       \ }}
+NeoBundleLazy 'thinca/vim-scouter', { 'autoload' : {
+      \ 'commands' : 'Scouter'
+      \ }}
 "}}}
 " Installation check. "{{{
 if g:my.conf.initialize && neobundle#exists_not_installed_bundles()
@@ -976,7 +995,7 @@ filetype plugin indent on
 
 "----------------------------------------
 "StatusLine / tabline {{{
-source ~/.vim/config/.vimrc.statusline
+" source ~/.vim/config/.vimrc.statusline
 " }}}
 
 "----------------------------------------
@@ -1002,9 +1021,9 @@ inoremap { {}<Left>
 inoremap [ []<Left>
 inoremap ( ()<Left>
 inoremap " ""<Left>
-inoremap ' ''<Left>
+" inoremap ' ''<Left>
 aug MyAutoCmd
-  au FileType scala inoremap <buffer>' '
+  " au FileType scala inoremap <buffer>' '
   au FileType ruby,eruby,haml,racc,racc.ruby inoremap <buffer>\| \|\|<Left>
         \| inoremap <buffer>,{ #{}<Left>
 aug END
@@ -1034,14 +1053,14 @@ nnoremap <silent><Space>s :w sudo:%<CR>
 inoremap <C-D><C-A> <C-R>=g:my.info.author<CR>
 inoremap <C-D><C-D> <C-R>=alpaca#function#today()<CR>
 inoremap <C-D><C-R> <C-R>=<SID>current_git()<CR>
-nnoremap [leader]s :call <SID>toggle_set_spell()<CR>
+nnoremap ,s :call <SID>toggle_set_spell()<CR>
 " inoremap <C-@> <Esc>[s1z=`]a
 xnoremap <silent><C-p> "0p<CR>
 nnoremap re :%s!
 xnoremap re :s!
 xnoremap rep y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!g<Left><Left>
-xnoremap [leader]c :s/./&/g
-nnoremap [leader]f :setl filetype=
+xnoremap ,c :s/./&/g
+nnoremap ,f :setl filetype=
 xmap <silent><C-A> :ContinuousNumber <C-A><CR>
 xmap <silent><C-X> :ContinuousNumber <C-X><CR>
 
@@ -1078,12 +1097,12 @@ endfunction"}}}
 command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <count>?<count>-line('.'):1)|exec 'normal! j' . n . <q-args>|call cursor('.', c)|endfor
 "}}}
 " コメントを書くときに便利 {{{
-inoremap <leader>* ****************************************
-inoremap <leader>- ----------------------------------------
-inoremap <leader>h <!-- / --><left><left><left><Left>
+inoremap ,* ****************************************
+inoremap ,- ----------------------------------------
+inoremap ,h <!-- / --><left><left><left><Left>
 
 let g:end_tag_commant_format = '<!-- /%tag_name%id%class -->'
-nnoremap [leader]t :<C-u>call alpaca#function#endtag_comment()<CR>
+nnoremap ,t :<C-u>call alpaca#function#endtag_comment()<CR>
 "}}}
 " 変なマッピングを修正 "{{{
 nnoremap ¥ \
@@ -1141,7 +1160,7 @@ endfunction
 command! -range -nargs=1 AddNumbers
       \ call <SID>add_numbers((<line2>-<line1>+1) * eval(<args>))
 "}}}
-au Filetype php nnoremap [leader]R :! phptohtml<CR>
+au Filetype php nnoremap ,R :! phptohtml<CR>
 "}}}
 
 "----------------------------------------
@@ -1181,7 +1200,7 @@ nnoremap <silent>k gk
 
 xnoremap H <Nop>
 inoremap <C-@> <Nop>
-xnoremap v G
+" xnoremap v G
 "}}}
 " 画面の移動 {{{
 " nnoremap <C-L> <C-T>
@@ -1202,12 +1221,10 @@ nnoremap <silent>[tag_or_tab]o  <C-W>T
 nmap <silent>[tag_or_tab]c      <Plug>(alpaca_window_tabnew)
 nmap <silent>[tag_or_tab]w      <Plug>(alpaca_window_move_buffer_into_last_tab)
 
-nnoremap <silent>[tag_or_tab]1  :<C-U>tabnext 1<CR>
-nnoremap <silent>[tag_or_tab]2  :<C-U>tabnext 2<CR>
-nnoremap <silent>[tag_or_tab]3  :<C-U>tabnext 3<CR>
-nnoremap <silent>[tag_or_tab]4  :<C-U>tabnext 4<CR>
-nnoremap <silent>[tag_or_tab]5  :<C-U>tabnext 5<CR>
-nnoremap <silent>[tag_or_tab]6  :<C-U>tabnext 6<CR>
+for num in range(1, 10)
+  execute 'nnoremap <silent>[tag_or_tab]'.num.'  :<C-U>tabnext '.num'<CR>'
+  execute 'nnoremap <silent>[tag_or_tab]m'.num.'  :<C-U>tabmove '.num'<CR>'
+endfor
 
 function! Move_tab(to) "{{{
   let target_tab_nr = tabpagenr() + a:to -1
@@ -1288,7 +1305,7 @@ set browsedir=buffer
 " set browsedir=current
 set list
 set listchars=tab:␣.,trail:›,extends:>,precedes:<
-set fillchars=stl:\ ,stlnc:\ ,vert:░,fold:-,diff:-
+set fillchars=stl:\ ,stlnc:\ ,fold:-,diff:-
 " set listchars=tab:▸\ ,trail:-,extends:»,precedes:«,nbsp:%
 " set listchars=tab:>-,trail:-,extends:>,precedes:<
 set matchpairs+=<:>
@@ -1351,7 +1368,7 @@ augroup END
 
 let g:molokai_original=1
 colorscheme  desertEx
-" colorscheme orig_molokai
+" colorscheme  pyte
 "}}}
 
 "----------------------------------------
@@ -1398,7 +1415,7 @@ function! s:auto_dict_setting() "{{{
   let b:dict_path = expand('~/.vim/dict/'.file_type_name.'.dict')
   execute "setl dictionary+=".b:dict_path
 
-  nnoremap <buffer><expr><Space>d ':<C-U>SmartEdit '.b:dict_path.'<CR>'
+  nnoremap <buffer><expr><Space>d ':<C-U>Edit '.b:dict_path.'<CR>'
 endfunc"}}}
 
 aug MyAutoCmd
@@ -1409,11 +1426,11 @@ aug END
 "----------------------------------------
 nnoremap [plug] <Nop>
 nnoremap <Space> <Nop>
-nnoremap [leader] <Nop>
+nnoremap , <Nop>
 nnoremap [minor] <Nop>
 nmap <C-H> [plug]
 nmap <Space> <Space>
-nmap , [leader]
+nmap , ,
 nmap ; [minor]
 
 "----------------------------------------
@@ -1435,8 +1452,8 @@ call arpeggio#map('c', 's', 0, 'jk', '<Esc>:nohlsearch<CR>')
 "------------------------------------
 "{{{
 let g:Align_xstrlen = 3
-xnoremap <C-N>      :Align<Space>
-xnoremap <C-N><C-N> :Align =<CR>
+xnoremap m      :Align<Space>
+xnoremap mm :Align =<CR>
 "}}}
 
 "------------------------------------
@@ -1580,9 +1597,9 @@ let g:tagbar_width = 30
 "------------------------------------
 "{{{
 " カーソル下のURLをブラウザで開く
-nmap [leader]o <Plug>(openbrowser-open)
-xmap [leader]o <Plug>(openbrowser-open)
-nnoremap [leader]g :<C-u>OpenBrowserSearch<Space><C-r><C-w><CR>
+nmap ,o <Plug>(openbrowser-open)
+xmap ,o <Plug>(openbrowser-open)
+nnoremap ,g :<C-u>OpenBrowserSearch<Space><C-r><C-w><CR>
 "}}}
 
 "------------------------------------
@@ -1591,7 +1608,7 @@ nnoremap [leader]g :<C-u>OpenBrowserSearch<Space><C-r><C-w><CR>
 "{{{
 let g:quickrun_config = {}
 let g:quickrun_no_default_key_mappings = 1
-nnoremap <silent>[leader]r :QuickRun<CR>
+nnoremap <silent>,r :QuickRun<CR>
 
 let bundle = neobundle#get('vim-quickrun')
 function! bundle.hooks.on_source(bundle) "{{{
@@ -1647,7 +1664,7 @@ aug QuickRunAutoCmd "{{{
 
   " au FileType quickrun au BufEnter <buffer> if winnr('$') == 1 |quit| endif
   au FileType quickrun au BufEnter <buffer> call s:smart_close()
-  au FileType racc.ruby,racc nnoremap <buffer>[leader]R :<C-U>QuickRun racc.run<CR>
+  au FileType racc.ruby,racc nnoremap <buffer>,R :<C-U>QuickRun racc.run<CR>
 aug END "}}}
 "}}}
 
@@ -1796,9 +1813,9 @@ syn match   htmlArg contained "\s*data-[-a-zA-Z0-9_]\+"
 " vim-smartword
 "------------------------------------
 "{{{
-map [leader]w  <Plug>(smartword-w)
-map [leader]b  <Plug>(smartword-b)
-map [leader]e  <Plug>(smartword-e)
+map ,w  <Plug>(smartword-w)
+map ,b  <Plug>(smartword-b)
+map ,e  <Plug>(smartword-e)
 "}}}
 
 "------------------------------------
@@ -1864,7 +1881,7 @@ xmap <silent>ie <Plug>CamelCaseMotion_ie
 " vimshell
 "------------------------------------
 "{{{
-nnoremap <silent>[leader]v  :<C-U>VimShell<CR>
+nnoremap <silent>,v  :<C-U>VimShell<CR>
 let g:vimshell_user_prompt  = '"(" . getcwd() . ")" '
 let g:vimshell_prompt       = '$ '
 let g:vimshell_ignore_case  = 1
@@ -1929,7 +1946,7 @@ function! AutoCoffeeCompile()
     autocmd BufWritePost *.coffee silent CoffeeMake! -cb | cwindow | redraw!
   aug END
 endfunction
-" nnoremap [leader]w :CoffeeCompile watch vert<CR>
+" nnoremap ,w :CoffeeCompile watch vert<CR>
 "}}}
 
 "------------------------------------
@@ -2001,29 +2018,8 @@ let g:rails_modelines=0
 let g:rails_syntax = 1
 let g:rails_url='http://localhost:3000'
 function! s:set_up_rails_setting() "{{{
-  nnoremap <buffer><Space>r :R<CR>
-  nnoremap <buffer><Space>a :A<CR>
-  nnoremap <buffer><Space>m :Rmodel<Space>
-  nnoremap <buffer><Space>c :Rcontroller<Space>
-  nnoremap <buffer><Space>v :Rview<Space>
-  nnoremap <buffer><Space>p :Rpreview<CR>
-
-  setl dict+=~/.vim/dict/ruby.rails.dict
-  for s:syntax in split(glob($HOME.'/.vim/syntax/ruby.rails.*.vim'))
-    execute 'source ' . s:syntax
-  endfor
-
-  if !exists('b:file_type_name') | return | endif
-
-  execute 'nnoremap <buffer><Space><Space>d  :<C-U>SmartEdit ~/.vim/dict/'. b:file_type_name .'.dict<CR>'
-  execute 'setl dict+=~/.vim/dict/' . b:file_type_name . '.dict'
-endfunction"}}}
-function! s:set_up_rails_setting() "{{{
   nnoremap <Space>r :R<CR>
   nnoremap <Space>a :A<CR>
-  nnoremap <Space>m :Rmodel<Space>
-  nnoremap <Space>c :Rcontroller<Space>
-  nnoremap <Space>v :Rview<Space>
   nnoremap <Space>p :Rpreview<CR>
 
   set dict+=~/.vim/dict/ruby.rails.dict
@@ -2033,25 +2029,42 @@ function! s:set_up_rails_setting() "{{{
 
   if !exists('b:file_type_name') | return | endif
 
-  execute 'nnoremap <buffer><Space><Space>d  :<C-U>SmartEdit ~/.vim/dict/'. b:file_type_name .'.dict<CR>'
+  execute 'nnoremap <buffer><Space><Space>d  :<C-U>Edit ~/.vim/dict/'. b:file_type_name .'.dict<CR>'
   execute 'set dict+=~/.vim/dict/' . b:file_type_name . '.dict'
 endfunction"}}}
-
-function! s:do_rails()
+function! s:do_rails() "{{{
   let git_dir = <SID>current_git()
 
   if isdirectory(git_dir) && filereadable(git_dir . '/config/environment.rb')
+    let b:rails_root = git_dir
     if <SID>include(g:my.ft.program_files, &filetype)
       silent doau User Rails
     endif
   endif
-endfunction
+endfunction"}}}
 
 aug MyAutoCmd
   au User Rails call <SID>set_up_rails_setting()
-  au BufEnter * call <SID>do_rails()
+  au BufEnter,FileReadPre * call <SID>do_rails()
 aug END
 
+function! UniteRailsSetting() "Unite-rails.vim {{{
+  nnoremap <buffer>[plug]<C-H><C-H>  :<C-U>Unite rails/view<CR>
+  nnoremap <buffer>[plug]<C-H>       :<C-U>Unite rails/model<CR>
+  nnoremap <buffer>[plug]            :<C-U>Unite rails/controller<CR>
+
+  nnoremap <buffer>[plug]c           :<C-U>Unite rails/config<CR>
+  nnoremap <buffer>[plug]j           :<C-U>Unite rails/javascript<CR>
+  nnoremap <buffer>[plug]a           :<C-U>Unite rails/stylesheet<CR>
+  nnoremap <buffer>[plug]s           :<C-U>Unite rails/spec<CR>
+  nnoremap <buffer>[plug]m           :<C-U>Unite rails/db -input=migrate<CR>
+  nnoremap <buffer>[plug]l           :<C-U>Unite rails/lib<CR>
+  nnoremap <buffer><expr>[plug]g     ':e '.b:rails_root.'/Gemfile<CR>'
+  nnoremap <buffer><expr>[plug]r     ':e '.b:rails_root.'/config/routes.rb<CR>'
+  nnoremap <buffer><expr>[plug]se    ':e '.b:rails_root.'/db/seeds.rb<CR>'
+  nnoremap <buffer>[plug]h           :<C-U>Unite rails/heroku<CR>
+endfunction
+"}}}
 aug RailsDictSetting "{{{
   au!
   " 別の関数に移そうか..
@@ -2075,8 +2088,8 @@ aug END"}}}
 "------------------------------------
 let g:RspecKeymap=0
 function! s:rspec_settings()
-  nnoremap <buffer>[leader]r :RunSpec<CR>
-  nnoremap <buffer>[leader]lr :RunSpecLine<CR>
+  nnoremap <buffer>,r :RunSpec<CR>
+  nnoremap <buffer>,lr :RunSpecLine<CR>
   au FileType RSpecOutput setl nofoldenable
 endfunction
 au bufNewFile,bufRead *_spec.rb call s:rspec_settings()
@@ -2158,8 +2171,8 @@ aug END
 " operator-camelize.vim
 "------------------------------------
 " camel-caseへの変換"{{{
-xmap [leader]u <Plug>(operator-camelize)
-xmap [leader]U <Plug>(operator-decamelize)
+xmap ,u <Plug>(operator-camelize)
+xmap ,U <Plug>(operator-decamelize)
 "}}}
 
 "------------------------------------
@@ -2281,7 +2294,7 @@ hi IndentGuidesEven ctermbg=233
 augroup MyAutoCmd
   " au BufEnter * let g:indent_guides_guide_size=&tabstop
 augroup END
-nnoremap <silent>[leader]i :<C-U>IndentGuidesToggle<CR>
+nnoremap <silent>,i :<C-U>IndentGuidesToggle<CR>
 "}}}
 
 "------------------------------------
@@ -2326,12 +2339,12 @@ let g:endwise_no_mappings=1
 "------------------------------------
 "{{{
 let g:jedi#auto_initialization = 1
-let g:jedi#get_definition_command = "<leader>d"
-let g:jedi#goto_command = "<leader>g"
+let g:jedi#get_definition_command = ",d"
+let g:jedi#goto_command = ",g"
 let g:jedi#popup_on_dot = 0
 let g:jedi#pydoc = "K"
-let g:jedi#related_names_command = "<leader>n"
-let g:jedi#rename_command = "<leader>R"
+let g:jedi#related_names_command = ",n"
+let g:jedi#rename_command = ",R"
 let g:jedi#use_tabs_not_buffers = 0
 let g:vinarise_objdump_command='gobjdump' " homebrew
 aug MyAutoCmd
@@ -2373,13 +2386,17 @@ nmap <silent>k <Plug>(accelerated_jk_gk)
 let g:eskk#debug = 0
 let g:eskk#dictionary = { 'path': expand( "~/.eskk_jisyo" ), 'sorted': 0, 'encoding': 'utf-8', }
 let g:eskk#directory = "~/.eskk"
-let g:eskk#dont_map_default_if_already_mapped=1
-let g:eskk#enable_completion = 1
+" let g:eskk#dont_map_default_if_already_mapped=1
+" let g:eskk#enable_completion = 1
 let g:eskk#large_dictionary = { 'path':  expand("~/.eskk_dict/SKK-JISYO.L"), 'sorted': 1, 'encoding': 'euc-jp', }
-let g:eskk#max_candidates= 40
+" let g:eskk#max_candidates= 40
 let g:eskk#start_completion_length=3
-let g:eskk#no_default_mappings=1
-let g:eskk#revert_henkan_style = "okuri"
+" let g:eskk#no_default_mappings=1
+" let g:eskk#revert_henkan_style = "okuri"
+let g:eskk#show_annotation=1
+let g:eskk#kakutei_when_unique_candidate=1
+let g:eskk#register_completed_word=0
+let g:eskk#keep_state = 1
 let g:eskk#cursor_color = {
       \   'ascii': ['#8b8b83', '#bebebe'],
       \   'hira': ['#8b3e2f', '#ffc0cb'],
@@ -2576,14 +2593,22 @@ xmap A  <Plug>(niceblock-A)
 " ------------------------------------
 "{{{
 nnoremap ! :Switch<CR>
-let s:switch_define = {}
+let s:switch_define = {
+      \ "ruby" : [
+      \   ["if", "unless"],
+      \   ["while", "until"],
+      \   [".blank?", ".present?"],
+      \ ],
+      \ }
 
 function! s:define_switch_mappings()
-  call alpaca#let_b:('switch_definitions', [])
+  if exists('b:switch_custom_definitions')
+    unlet b:switch_custom_definitions
+  endif
 
   let filetype = <SID>filetype()
   if has_key(s:switch_define, filetype)
-    call add(b:switch_definitions, s:switch_define[filetype])
+    call alpaca#let_b:('switch_custom_definitions', s:switch_define[filetype])
   endif
 endfunction
 
@@ -2672,8 +2697,7 @@ let g:languagetool_jar=neobundle#get_neobundle_dir() . "/language-tool-mirror/la
 " LanguageToolCmd
 " LanguageToolLabel
 " LanguageToolErrorCount
-
-
+xnoremap ,l :<C-U>LanguageToolCheck<CR>
 
 " ------------------------------------
 " tern
@@ -2762,21 +2786,22 @@ let g:neocomplcache_auto_completion_start_length = 2
 " let g:neocomplcache_min_syntax_length = 2
 
 " alpaca_complete.vim
-" let g:alpaca_complete_assets_dir = {
-"       \ 'img'   : 'app/assets/images',
-"       \ 'js'    : 'app/assets/javascripts',
-"       \ 'style' : 'app/assets/stylesheets',
-"       \ 'ctrl'  : 'app/controllers',
-"       \ 'mig'   : 'db/migrate',
-"       \ 'seed'  : 'db/seeds',
-"       \ 'lib'   : 'lib',
-"       \ 'spec'  : 'spec',
-"       \ 'model' : 'app/models',
-"       \ 'view'  : 'app/views',
-"       \ 'helper': 'app/helpers',
-"       \ 'admin' : 'app/admin',
-"       \ 'conf'  : 'config',
-"       \}
+let g:alpaca_complete_assets_dir = {
+      \ 'img'   : 'app/assets/images',
+      \ 'js'    : 'app/assets/javascripts',
+      \ 'style' : 'app/assets/stylesheets',
+     \}
+      " \ 'ctrl'  : 'app/controllers',
+      " \ 'mig'   : 'db/migrate',
+      " \ 'seed'  : 'db/seeds',
+      " \ 'lib'   : 'lib',
+      " \ 'spec'  : 'spec',
+      " \ 'model' : 'app/models',
+      " \ 'view'  : 'app/views',
+      " \ 'helper': 'app/helpers',
+      " \ 'admin' : 'app/admin',
+      " \ 'conf'  : 'config',
+
 
 let bundle = neobundle#get('neocomplcache')
 function! bundle.hooks.on_source(bundle) "{{{
@@ -2884,7 +2909,7 @@ imap <expr><C-G>          neocomplcache#undo_completion()
 imap <expr><TAB>          neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
 " imap <silent><expr><CR>   neocomplcache#smart_close_popup() . "<CR>" . "<Plug>DiscretionaryEnd"
 function! s:my_crinsert()
-  return pumvisible() ? neocomplcache#close_popup() : "\<CR>"
+  return pumvisible() ? neocomplcache#close_popup() . "\<CR>" : "\<CR>"
 endfunction
 inoremap <silent> <CR> <C-R>=<SID>my_crinsert()<CR>
 
@@ -2903,8 +2928,8 @@ let g:echodoc_enable_at_startup = 1
 "------------------------------------
 " VimFiler {{{
 nnoremap <silent>[plug]f          :<C-U>call VimFilerExplorerGit()<CR>
-nnoremap <silent>[leader],        :<C-U>VimFilerBufferDir<CR>
-nnoremap <silent>[leader]n        :<C-U>VimFilerCreate<CR>
+nnoremap <silent>,,        :<C-U>VimFilerBufferDir<CR>
+nnoremap <silent>,n        :<C-U>VimFilerCreate<CR>
 
 function! VimFilerExplorerGit() "{{{
   " TODO 開いているファイルのパスまで、Uniteも開く
@@ -2944,39 +2969,34 @@ let g:vimfiler_tree_leaf_icon = " "
 let g:vimfiler_tree_opened_icon = "▾"
 let g:vimfiler_marked_file_icon = "✓"
 
-
-let bundle = neobundle#get('vimfiler')
-function! bundle.hooks.on_source(bundle) "{{{
-  function! s:vimfiler_is_active() "{{{
-    return exists('b:vimfiler')
-  endfunction"}}}
-  function! s:vimfiler_local() "{{{
-    if !exists('b:vimfiler') | return | endif
-
-    let vimfiler = vimfiler#get_context()
-
-    if vimfiler.explorer
-      call <SID>vimfiler_explorer_local()
-    endif
-
-    " vimfiler common settings
-    setl nonumber
-    nmap <buffer><C-J> [unite]
-    nmap <buffer><CR> <Plug>(vimfiler_edit_file)
-    nmap <buffer>f <Plug>(vimfiler_toggle_mark_current_line)
-    nnoremap <buffer>b :<C-U>UniteBookmarkAdd<CR>
-    nnoremap <buffer><expr>p vimfiler#do_action('preview')
-    nnoremap <buffer>v v
-  endfunction"}}}
-  function! s:vimfiler_explorer_local() "{{{
-    " au BufEnter <buffer> if (winnr('$') == 1 && &filetype ==# 'vimfiler' && <SID>vimfiler_is_active()) | q | endif
-  endfunction"}}}
-  aug VimFilerKeyMapping "{{{
-    au!
-    au FileType vimfiler call <SID>vimfiler_local()
-  aug END "}}}
+function! s:vimfiler_is_active() "{{{
+  return exists('b:vimfiler')
 endfunction"}}}
-unlet bundle
+function! s:vimfiler_local() "{{{
+  if !exists('b:vimfiler') | return | endif
+
+  let vimfiler = vimfiler#get_context()
+
+  if vimfiler.explorer
+    call <SID>vimfiler_explorer_local()
+  endif
+
+  " vimfiler common settings
+  setl nonumber
+  nmap <buffer><C-J> [unite]
+  nmap <buffer><CR> <Plug>(vimfiler_edit_file)
+  nmap <buffer>f <Plug>(vimfiler_toggle_mark_current_line)
+  nnoremap <buffer>b :<C-U>UniteBookmarkAdd<CR>
+  nnoremap <buffer><expr>p vimfiler#do_action('preview')
+  nnoremap <buffer>v v
+endfunction"}}}
+function! s:vimfiler_explorer_local() "{{{
+  " au BufEnter <buffer> if (winnr('$') == 1 && &filetype ==# 'vimfiler' && <SID>vimfiler_is_active()) | q | endif
+endfunction"}}}
+aug VimFilerKeyMapping "{{{
+  au!
+  au FileType vimfiler call <SID>vimfiler_local()
+aug END "}}}
 "}}}
 
 "----------------------------------------
@@ -3044,26 +3064,6 @@ endfunction
 " デフォルトのunite file:は補完がないので。
 command! -nargs=? -complete=file UniteFile call <SID>unite_file(<q-args>)
 "}}}
-function! UniteRailsSetting() "Unite-rails.vim {{{
-  nnoremap <buffer>[plug]<C-H><C-H>  :<C-U>Unite rails/view<CR>
-  nnoremap <buffer>[plug]<C-H>       :<C-U>Unite rails/model<CR>
-  nnoremap <buffer>[plug]            :<C-U>Unite rails/controller<CR>
-
-  nnoremap <buffer>[plug]c           :<C-U>Unite rails/config<CR>
-  nnoremap <buffer>[plug]j           :<C-U>Unite rails/javascript<CR>
-  nnoremap <buffer>[plug]a           :<C-U>Unite rails/stylesheet<CR>
-  nnoremap <buffer>[plug]s           :<C-U>Unite rails/spec<CR>
-  nnoremap <buffer>[plug]m           :<C-U>Unite rails/db -input=migrate<CR>
-  nnoremap <buffer>[plug]l           :<C-U>Unite rails/lib<CR>
-  nnoremap <buffer><expr>[plug]g     ':e '.b:rails_root.'/Gemfile<CR>'
-  nnoremap <buffer><expr>[plug]r     ':e '.b:rails_root.'/config/routes.rb<CR>'
-  nnoremap <buffer><expr>[plug]se    ':e '.b:rails_root.'/db/seeds.rb<CR>'
-  nnoremap <buffer>[plug]h           :<C-U>Unite rails/heroku<CR>
-endfunction
-aug MyAutoCmd
-  au User Rails call UniteRailsSetting()
-aug END
-"}}}
 " unite_reek, unite_rails_best_practices"{{{
 nnoremap <silent> [unite]r      :<C-u>Unite -no-quit reek<CR>
 nnoremap <silent> [unite]rr :<C-u>Unite -no-quit rails_best_practices<CR>
@@ -3114,7 +3114,7 @@ let bundle = neobundle#get('unite.vim')
 function! bundle.hooks.on_source(bundle) "{{{
   function! s:unite_my_settings() "{{{
     aug MyAutoCmd
-      autocmd BufEnter <buffer> call s:smart_close()
+      autocmd BufEnter <buffer> if winnr('$') == 1 |quit| endif
     aug END
 
     setl nolist
@@ -3130,7 +3130,7 @@ function! bundle.hooks.on_source(bundle) "{{{
     nmap     <silent><buffer><C-J> <Plug>(unite_toggle_auto_preview)
     nnoremap <silent><buffer><expr>S unite#do_action('split')
     nnoremap <silent><buffer><expr>V unite#do_action('vsplit')
-    nnoremap <silent><buffer><expr>[leader][leader] unite#do_action('vimfiler')
+    nnoremap <silent><buffer><expr>,, unite#do_action('vimfiler')
 
     " hook
     let unite = unite#get_current_unite()
@@ -3256,7 +3256,7 @@ command! -nargs=* Dash call <SID>dash(<f-args>)
 
 nnoremap <C-K><C-K> :Dash <C-R><C-W><CR>
 au User Rails nnoremap <buffer><C-K><C-K><C-K> :Dash rails:<C-R><C-W><CR>
-nnoremap [leader]d :Dash<Space>
+nnoremap ,d :Dash<Space>
 "}}}
 
 function! s:get_ruby_root() "{{{
@@ -3301,6 +3301,18 @@ aug END
 if has('vim_starting')
   call neobundle#call_hook('on_source')
 endif
+
+function! s:open_mi(...)
+  if !empty(a:1)
+    let args= split(a:1, " ")
+  else
+    let args = expand("%:p")
+  endif
+
+  echo "opening...MacVim"
+  call alpaca#system("mvim", args)
+endfunction
+command! -nargs=* Mi call s:open_mi(substitute(<q-args>, '\s"[^"]\+$', '', ''))
 
 " 人のvimrc
 " @see http://vim-users.jp/2011/02/hack202/

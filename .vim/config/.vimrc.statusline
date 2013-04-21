@@ -2,16 +2,6 @@
 " ステータスライン StatusLine
 "-------------------------------------------------------------------------------
 
-func! String2Hex(str) "{{{
-  let out = ''
-  let ix = 0
-  while ix < strlen(a:str)
-    let out = out . Nr2Hex(char2nr(a:str[ix]))
-    let ix = ix + 1
-  endwhile
-  return out
-endfunc"}}}
-
 "statuslineの設定
 " set statusline=[FORMAT=%{&ff}]\ [ENC=%{&fileencoding}]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]\ %F%m%r%h%w\
 
@@ -211,4 +201,9 @@ function! MakeTabLine() "{{{
   return fill_space . tabs . '%=' . info
 endfunction"}}}
 
-set tabline=%!MakeTabLine()
+if !has("gui_running")
+  aug Tabline
+    autocmd!
+    autocmd VimEnter,CursorHold,CursorHoldI * set tabline=%!MakeTabLine()
+  aug END
+endif
