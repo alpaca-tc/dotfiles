@@ -233,7 +233,10 @@ NeoBundle 'Shougo/vimproc', {
       \   'unix' : 'make -f make_unix.mak',
       \ }}
 " An awesome improvement to the Vim status bar.
-NeoBundle 'Lokaltog/powerline', { 'rtp' : 'powerline/bindings/vim'}
+NeoBundle 'Lokaltog/powerline', {
+      \ 'rtp' : 'powerline/bindings/vim',
+      \ 'gui' : 1,
+      \ }
 " WebAPI utils
 NeoBundleLazy 'mattn/webapi-vim'
 " フォントとか。読み込むことは無い"{{{
@@ -596,6 +599,7 @@ NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
       \ 'filetypes' : g:my.ft.program_files,
       \ 'function_prefix' : "smartchr",
       \ }}
+NeoBundle 'taichouchou2/alpaca_english'
 NeoBundleLazy 'itchyny/thumbnail.vim', { 'autoload' : {
       \ 'commands' : 'Thumbnail'
       \ }}
@@ -2681,6 +2685,11 @@ function! bundle.hooks.on_source(bundle) "{{{
   autocmd FileType javascript call tern#Enable()
 endfunction"}}}
 unlet bundle
+
+" ------------------------------------
+" alpaca_english enable
+" ------------------------------------
+let g:alpaca_english_enable=1
 "}}}
 
 "----------------------------------------
@@ -2796,6 +2805,9 @@ function! bundle.hooks.on_source(bundle) "{{{
   "}}}
 
   " Define force omni patterns"{{{
+  let g:neocomplcache_force_omni_patterns = {
+        \ }
+
   let g:neocomplcache_source_rank = {
         \ 'c'       : '[^.[:digit:] *\t]\%(\.\|->\)',
         \ 'cpp'     : '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::',
