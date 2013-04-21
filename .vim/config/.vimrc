@@ -235,7 +235,7 @@ NeoBundle 'Shougo/vimproc', {
 "NeoBundle 'Lokaltog/powerline', {
 "     \ 'rtp' : 'powerline/bindings/vim',
 "     \ }
-NeoBundle 'taichouchou2/powerline', { 'directory': 'powerline', 'rev': 'master', 'rtp' : 'powerline/bindings/vim'}
+" NeoBundle 'taichouchou2/powerline', { 'directory': 'powerline', 'rev': 'master', 'rtp' : 'powerline/bindings/vim'}
 NeoBundle 'taichouchou2/alpaca_powertabline'
 " WebAPI utils
 NeoBundleLazy 'mattn/webapi-vim'
@@ -2715,6 +2715,7 @@ xnoremap ,l :<C-U>LanguageToolCheck<CR>
 " alpaca_english enable
 " ------------------------------------
 let g:alpaca_english_enable=1
+let g:alpaca_english_max_candidates=50
 "}}}
 
 "----------------------------------------
