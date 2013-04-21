@@ -232,11 +232,10 @@ NeoBundle 'Shougo/vimproc', {
       \   'unix' : 'make -f make_unix.mak',
       \ }}
 " An awesome improvement to the Vim status bar.
-NeoBundle 'Lokaltog/powerline', {
-      \ 'rtp' : 'powerline/bindings/vim',
-      \ 'gui' : 1,
-      \ }
-" NeoBundle 'taichouchou2/powerline', { 'directory': 'powerline', 'rev': 'master', 'rtp' : 'powerline/bindings/vim'}
+"NeoBundle 'Lokaltog/powerline', {
+"     \ 'rtp' : 'powerline/bindings/vim',
+"     \ }
+NeoBundle 'taichouchou2/powerline', { 'directory': 'powerline', 'rev': 'master', 'rtp' : 'powerline/bindings/vim'}
 NeoBundle 'taichouchou2/alpaca_powertabline'
 " WebAPI utils
 NeoBundleLazy 'mattn/webapi-vim'
@@ -467,12 +466,12 @@ NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
 NeoBundleLazy 'yomi322/vim-gitcomplete', { 'autoload' : {
       \ 'filetype' : 'vimshell'
       \ }}
-NeoBundle 'ujihisa/neco-look', {
-      \ 'depends' : 'Shougo/neocomplcache',
-      \ 'autoload': {
-      \   'insert' : 1,
-      \   'filetypes' : g:my.ft.program_files,
-      \ }}
+" NeoBundle 'ujihisa/neco-look', {
+"       \ 'depends' : 'Shougo/neocomplcache',
+"       \ 'autoload': {
+"       \   'insert' : 1,
+"       \   'filetypes' : g:my.ft.program_files,
+"       \ }}
 " 勉強用に作成
 " NeoBundleLazy 'taichouchou2/alpaca_look.git', {
 "       \ 'autoload' : {
@@ -1930,7 +1929,11 @@ let g:memolist_memo_date         = ""
 let g:memolist_vimfiler          = 1
 
 nnoremap <silent><Space>mn  :<C-U>MemoNew<CR>
-nnoremap <silent><Space>ml  :<C-U>VimFiler -buffer-name=file file:~/.memolist/<CR>
+function! Hoge()
+  lcd ~/.memolist
+  Unite file
+endfunction
+nnoremap <silent><Space>ml :call Hoge()<CR>
 nnoremap <Space>mg  :<C-U>MemoGrep<CR>
 "}}}
 
@@ -2820,7 +2823,10 @@ function! bundle.hooks.on_source(bundle) "{{{
         \ 'neocomplcache_same_filetype_lists',
         \ 'neocomplcache_delimiter_patterns',
         \ 'neocomplcache_dictionary_filetype_lists',
-        \ 'neocomplcache_disabled_sources_list']
+        \ 'neocomplcache_disabled_sources_list',
+        \ 'neocomplcache_text_mode_filetypes'
+        \ ]
+
 
   for initialize_variable in s:neocomplcache_initialize_lists
     call alpaca#let_g:(initialize_variable, {})
@@ -2829,6 +2835,12 @@ function! bundle.hooks.on_source(bundle) "{{{
 
   " Define force omni patterns"{{{
   let g:neocomplcache_force_omni_patterns = {
+        \ }
+
+  let g:neocomplcache_text_mode_filetypes = {
+        \ 'markdown' : 1,
+        \ 'text' : 1,
+        \ '_' : 1,
         \ }
 
   let g:neocomplcache_source_rank = {
@@ -3165,6 +3177,8 @@ function! bundle.hooks.on_source(bundle) "{{{
         \       'gitignore'  : 'Unite file_rec:' . neobundle#get_neobundle_dir() . "/gitignore",
         \     }
   "}}}
+  call unite#custom_source('line', 'max_candidates', 5000)
+  call unite#custom_source('line/fast', 'max_candidates', 5000)
 
   "------------------------------------
   " vim-version
