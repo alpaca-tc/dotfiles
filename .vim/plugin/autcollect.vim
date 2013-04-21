@@ -8149,3 +8149,5 @@ ia Yuo You
 ia yuor your
 ia Yuor Your
 ia Im I'm
+ia cant can't
+ia dont don't

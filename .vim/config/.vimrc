@@ -332,11 +332,9 @@ NeoBundleLazy 'Shougo/vimfiler', {
       \   'mappings' : ['<Plug>(vimfiler_switch)'],
       \   'explorer' : 1,
       \ }}
-NeoBundleLazy 'Shougo/neocomplcache', {
+NeoBundle 'Shougo/neocomplcache', {
       \ 'rev': 'ver.8',
-      \ 'autoload' : {
-      \   'insert' : 1,
-      \ }}
+      \ }
 NeoBundleLazy 'Shougo/neosnippet', {
       \ 'autoload' : {
       \   'commands' : ['NeoSnippetEdit'],
@@ -2702,13 +2700,13 @@ xnoremap ,l :<C-U>LanguageToolCheck<CR>
 " ------------------------------------
 " tern
 " ------------------------------------
-let bundle = neobundle#get('tern')
-function! bundle.hooks.on_source(bundle) "{{{
-  " source `neobundle#get_neobundle_dir() . '/tern/vim/tern.vim'`
-  execute 'source ' . neobundle#get_neobundle_dir() . '/tern/vim/tern.vim'
-  autocmd FileType javascript call tern#Enable()
-endfunction"}}}
-unlet bundle
+" let bundle = neobundle#get('tern')
+" function! bundle.hooks.on_source(bundle) "{{{
+"   " source `neobundle#get_neobundle_dir() . '/tern/vim/tern.vim'`
+"   execute 'source ' . neobundle#get_neobundle_dir() . '/tern/vim/tern.vim'
+"   autocmd FileType javascript call tern#Enable()
+" endfunction"}}}
+" unlet bundle
 
 " ------------------------------------
 " alpaca_english enable
@@ -2755,7 +2753,7 @@ let g:neocomplcache_enable_underbar_completion    = 1
 let g:neocomplcache_force_overwrite_completefunc  = 1
 let g:neocomplcache_max_list                      = 80
 let g:neocomplcache_skip_auto_completion_time     = '1'
-let g:neocomplcache_caching_limit_file_size       = 0
+" let g:neocomplcache_caching_limit_file_size       = 0
 let g:neocomplcache_temporary_dir                 = g:my.dir.neocomplcache
 " let g:neocomplcache_enable_auto_close_preview = 1
 
