@@ -331,8 +331,11 @@ NeoBundleLazy 'Shougo/vimfiler', {
       \   'mappings' : ['<Plug>(vimfiler_switch)'],
       \   'explorer' : 1,
       \ }}
-NeoBundle 'Shougo/neocomplcache', {
+NeoBundleLazy 'Shougo/neocomplcache', {
       \ 'rev': 'ver.8',
+      \ 'autoload' : {
+      \   'insert' : 1,
+      \ },
       \ }
 NeoBundleLazy 'Shougo/neosnippet', {
       \ 'autoload' : {
@@ -1242,9 +1245,9 @@ nnoremap <silent>[tag_or_tab]<C-H> :<C-U>call Move_tab(-1)<CR>
 
 " 前回終了したカーソル行に移動
 " kaoriyaだとdefaultらしい。
-" aug MyAutoCmd
-"   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute "normal g`\"" | endif
-" aug END
+aug MyAutoCmd
+  autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute "normal g`\"" | endif
+aug END
 "}}}
 
 "----------------------------------------
@@ -1365,6 +1368,7 @@ augroup END
 
 let g:molokai_original=1
 colorscheme  desertEx
+" colorscheme morning
 " colorscheme  pyte
 "}}}
 
@@ -3036,6 +3040,7 @@ nnoremap <silent> <Space>b       :<C-u>UniteBookmarkAdd<CR>
 nnoremap <silent> [unite]b       :<C-u>Unite buffer -buffer-name=buffer<CR>
 nnoremap <silent> [unite]j       :<C-u>Unite file_mru -buffer-name=file_mru<CR>
 nnoremap <silent> [unite]u       :<C-u>UniteWithBufferDir -buffer-name=file file<CR>
+nnoremap <silent> [unite]e       :<C-u>Unite english -buffer-name=english<CR>
 nnoremap <silent> [unite]B       :<C-u>Unite bookmark -buffer-name=bookmark<CR>
 nnoremap <silent> g/             :<C-U>call <SID>smart_unite_open('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast')<CR>
 nnoremap <silent> g#             :<C-U>call <SID>smart_unite_open('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast -input=<C-R><C-W>')<CR>

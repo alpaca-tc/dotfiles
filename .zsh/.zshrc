@@ -75,7 +75,7 @@ export PATH=/Applications/MacVim.app/Contents/MacOS:$PATH
 
 
 # for tmux
-export PATH=$PATH:$HOME/usr/bin
+export PATH=$HOME/usr/bin:$PATH
 
 # for vim
 # export DYLD_FORCE_FLAT_NAMESPACE=1 
