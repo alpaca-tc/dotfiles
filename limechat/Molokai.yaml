@@ -1,0 +1,60 @@
+# Colors:
+#
+# BG grey : 1b1d1e
+# White : f8f8f2
+#
+# Pink : f92672
+# Orange : fd971f
+# Green : a6e22e
+# Purple : ae81ff
+# Beige : e6db74
+# Blue : 66d9ef
+# Text Grey : #465457
+
+log-view:
+  nickname-format: '%n: '
+  scroller-highlight-color: '#e28964'
+input-text:
+  font-family: 'Menlo'
+  font-size: 13.0
+  background-color: '#1b1d1e'
+  color: '#f8f8f2'
+member-list:
+  font-family: 'Lucida Grande'
+  font-size: 13.0
+  color: '#465457'
+  background-color: '#1b1d1e'
+  operator:
+    color: '#f8f8f2'
+  selected:
+    color: '#f8f8f2'
+    background:
+      top-line-color: '#465457'
+      bottom-line-color: '#465457'
+      top-color: '#465457'
+      bottom-color: '#465457'
+server-tree:
+  font-family: 'Lucida Grande'
+  font-size: 13.0
+  background-color: '#1b1d1e'
+  highlight:
+    color: '#f92672'
+  newtalk:
+    color: '#f9ee98'
+  unread:
+    color: '#99cf50'
+  normal:
+    active:
+      color: '#f8f8f2'
+    inactive:
+      color: '#465457'
+  selected:
+    active:
+      color: '#f8f8f2'
+    inactive:
+      color: '#000'
+    background:
+      top-line-color: '#465457'
+      bottom-line-color: '#465457'
+      top-color: '#465457'
+      bottom-color: '#465457'

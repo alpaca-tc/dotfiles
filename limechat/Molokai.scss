@@ -1,0 +1,139 @@
+@import "compass";
+/*
+ * Colors:
+ *
+ * BG grey : 1b1d1e
+ * White : f8f8f2
+ *
+ * Pink : f92672
+ * Orange : fd971f
+ * Green : a6e22e
+ * Purple : ae81ff
+ * Beige : e6db74
+ * Blue : 66d9ef
+ * Text Grey : #465457
+ */
+
+html {// {{{
+  font-family: 'Menlo';
+  font-size: 9pt;
+  background-color: #1b1d1e;
+  color: #f8f8f2;
+}// }}}
+body {// {{{
+  .url {// {{{
+    color: #a6e22e;
+    font-weight:bold;
+    word-break: break-all;
+
+    &:hover{
+      color:#f92672;
+    }
+  }// }}}
+
+  .line {// {{{
+    @include clearfix;
+    $sender_width: 10%;
+    $place_width: 10%;
+    $time_widht: 5%;
+    min-width: 80em;
+
+    .time, .place, .sender, .message {
+      display:block;
+      float:left;
+    }
+
+    .time {
+      width: $time_widht;
+      color: #465457;
+    }
+
+    .place {
+      color: #465457;
+      width: $place_width;
+    }
+
+    .sender{// {{{
+      font-weight:bold;
+      width: $sender_width;
+      text-align: right;
+      display: inline-block;
+
+      &[type=normal] {
+        color: #66d9ef;
+      }
+
+      &[type=myself] {
+        color: #fd971f;
+      }
+
+      &[alternate=even] {}
+      &[alternate=odd] {}
+      &[highlight=true] {}
+      &[type=action] .sender:before {
+        content: "• ";
+        white-space: nowrap;
+      }
+    }// }}}
+
+    .message {// {{{
+      margin-left: 1em;
+      &[type=privmsg] {}
+      &[type=notice], &[type=action] {
+        color: #ae81ff;
+      }
+      &[type=system], .message[type=join], .message[type=kick],
+      &[type=quit], .message[type=kill], .message[type=nick], .message[type=mode],
+      &[type=topic], .message[type=invite], .message[type=wallops] {
+        color: #465457;
+      }
+      &[type=reply] {
+        color: #a6e22e;
+      }
+      &[type=reply] .url {
+        color: #e6db74;
+      }
+      &[type=part] {
+        color: #000;
+      }
+      &[type=error], .message[type=error_reply] {
+        color: #f67b37;
+      }
+      &[type=dcc_send_send] {
+        color: #c5af75;
+      }
+      &[type=dcc_send_receive] {
+        color: #f9ee98;
+      }
+      &[type=debug_send] {
+        color: #8996a8;
+      }
+      &[type=debug_receive] {
+        color: #afc4db;
+      }
+    }// }}}
+
+    .address {
+      text-decoration:none
+    }
+
+    .highlight {
+      font-weight: bold;
+      padding: 0 3px;
+      color: #f92672;
+    }
+
+    // for room area.
+    .sender + .message {
+      width: 100% - ($sender_width + $place_width + $time_widht);
+    }
+    .time + .message {
+      padding-left: $place_width;
+    }
+
+    // for log area.
+    .place + .sender + .message {
+      width: 80% - ($sender_width + $place_width + $time_widht);
+    }
+  }// }}}
+}// }}}
