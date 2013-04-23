@@ -416,12 +416,12 @@ NeoBundleLazy 'majutsushi/tagbar', {
       \ 'autoload' : {
       \   'commands': ["TagbarToggle", "TagbarTogglePause"],
       \   'fuctions': ['tagbar#currenttag'] }}
-" NeoBundleLazy 'yuratomo/w3m.vim', {
-"       \ 'build' : {
-"       \   'mac' : 'brew install w3m',
-"       \   'unix': 'sudo yum install w3m',
-"       \ },
-"       \ 'autoload' : { 'commands' : 'W3m' }}
+NeoBundleLazy 'yuratomo/w3m.vim', {
+      \ 'build' : {
+      \   'mac' : 'brew install w3m',
+      \   'unix': 'sudo yum install w3m',
+      \ },
+      \ 'autoload' : { 'commands' : 'W3m' }}
 NeoBundleLazy 'open-browser.vim', { 'autoload' : {
       \ 'mappings' : [ '<Plug>(open-browser-wwwsearch)', '<Plug>(openbrowser-open)',  ],
       \ 'commands' : ['OpenBrowserSearch'] }}
@@ -608,7 +608,12 @@ NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
       \ 'filetypes' : g:my.ft.program_files,
       \ 'function_prefix' : "smartchr",
       \ }}
-NeoBundle 'taichouchou2/alpaca_english'
+NeoBundle 'taichouchou2/alpaca_english', {
+      \ 'rev' : 'development',
+      \ }
+let g:alpaca_english_enable = 1
+let g:alpaca_english_max_candidates=50
+
 NeoBundleLazy 'itchyny/thumbnail.vim', { 'autoload' : {
       \ 'commands' : 'Thumbnail'
       \ }}
@@ -723,7 +728,7 @@ NeoBundleLazy 'teramako/jscomplete-vim', { 'autoload' : {
       \ 'filetypes' : g:my.ft.js_files
       \ }}
 " TODO こいつはすごい。気になる。時間がある時にneocomplcacheのsource作ろう
-" NeoBundleLazy 'marijnh/tern', {
+NeoBundleLazy 'marijnh/tern'
 " NeoBundleLazy 'taichouchou2/tern', {
 "       \ "rtp" : 'vim',
 "       \ 'build' : {
@@ -1089,11 +1094,11 @@ endfor
 function! s:toggle_set_spell() "{{{
   if &spell
     setl nospell
-    AlpacaEnglishDisable
+    " AlpacaEnglishDisable
     echo "nospell"
   else
     setl spell
-    AlpacaEnglishEnable
+    " AlpacaEnglishEnable
     echo "spell"
   endif
 endfunction"}}}
@@ -2721,8 +2726,6 @@ xnoremap ,l :<C-U>LanguageToolCheck<CR>
 " ------------------------------------
 " alpaca_english enable
 " ------------------------------------
-let g:alpaca_english_enable=1
-let g:alpaca_english_max_candidates=100
 "}}}
 
 "----------------------------------------

@@ -37,8 +37,8 @@ body .line {
   *zoom: 1;
   padding: 0 1em;
   margin: auto;
-  max-width: 68em;
-  min-width: 68em;
+  max-width: 63em;
+  min-width: 63em;
 }
 /* line 50, Molokai.scss */
 body .line .time, body .line .place, body .line .sender, body .line .message {
@@ -55,7 +55,7 @@ body .line .time {
 body .line .place {
   color: #465457;
   font-size: 85%;
-  width: 10em;
+  width: 9em;
   white-space: nowrap;
   overflow: hidden;
   -ms-text-overflow: ellipsis;
@@ -134,13 +134,13 @@ body .line .highlight {
 }
 /* line 139, Molokai.scss */
 body .line .message {
-  width: 45em;
+  width: 41em;
   background: #222;
   padding-left: 1em;
 }
 /* line 144, Molokai.scss */
 body .line .time + .message {
-  margin-left: 10em;
+  margin-left: 9em;
 }
 /* line 151, Molokai.scss */
 body .line .place + .message {

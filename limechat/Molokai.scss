@@ -34,9 +34,9 @@ body {// {{{
 
   .line {// {{{
     @include clearfix;
-    $max_width: 65em;
+    $max_width: 60em;
     $sender_width: 8em;
-    $place_width: 10em;
+    $place_width: 9em;
     $time_widht: 3em;
     $padding_width: 1em;
     $message_left: 1em;
@@ -153,3 +153,23 @@ body {// {{{
     }
   }// }}}
 }// }}}
+
+body.console {
+  .line, .text {
+    &[alternate="odd"], &[alternate="even"] {
+      .place {
+      }
+      .sender {
+      }
+      .message {
+      }
+    }
+
+    &.event {
+
+    }
+  }
+
+  &.normal {
+  }
+}
