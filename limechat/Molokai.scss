@@ -38,14 +38,13 @@ body {// {{{
     $sender_width: 8em;
     $place_width: 9em;
     $time_widht: 3em;
+
     $padding_width: 1em;
     $message_left: 1em;
     $message_width: ($max_width + $message_left) - ($sender_width + $place_width + $time_widht);
     padding: 0 $padding_width;
     margin: auto;
     max-width: $max_width + $message_left + ($padding_width * 2);
-    min-width: $max_width + $message_left + ($padding_width * 2);
-    $fs_small: 85%;
 
     .time, .place, .sender, .message {
       display:block;

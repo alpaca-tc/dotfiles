@@ -1098,7 +1098,12 @@ function! s:toggle_set_spell() "{{{
     echo "nospell"
   else
     setl spell
-    " AlpacaEnglishEnable
+    AlpacaEnglishEnable
+    AlpacaEnglishDisable
+    echo "nospell"
+  else
+    setl spell
+    AlpacaEnglishEnable
     echo "spell"
   endif
 endfunction"}}}
@@ -2726,6 +2731,8 @@ xnoremap ,l :<C-U>LanguageToolCheck<CR>
 " ------------------------------------
 " alpaca_english enable
 " ------------------------------------
+let g:alpaca_english_enable=1
+let g:alpaca_english_max_candidates=100
 "}}}
 
 "----------------------------------------
