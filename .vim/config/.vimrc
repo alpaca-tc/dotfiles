@@ -1,3 +1,4 @@
+let g:alpaca_hoge = expand("<sfile>:p:h")
 "              ,dPYb,
 "              IP'`Yb
 "              I8  8I
@@ -168,6 +169,7 @@ endif
 "----------------------------------------
 " basic settings {{{
 execute "set directory=".g:my.dir.swap_dir
+" set verbosefile=$HOME/.vim.trash/dump.log
 set backspace=indent,eol,start
 set clipboard+=autoselect,unnamed
 set formatoptions+=lcqmM
@@ -224,7 +226,6 @@ endfunction"}}}
 " Load plugins {{{
 " Basic {{{
 NeoBundleFetch 'Shougo/neobundle.vim'
-
 " For asynchronous communication
 NeoBundle 'Shougo/vimproc', {
       \ 'build' : {
@@ -1088,9 +1089,11 @@ endfor
 function! s:toggle_set_spell() "{{{
   if &spell
     setl nospell
+    AlpacaEnglishDisable
     echo "nospell"
   else
     setl spell
+    AlpacaEnglishEnable
     echo "spell"
   endif
 endfunction"}}}
@@ -2719,7 +2722,7 @@ xnoremap ,l :<C-U>LanguageToolCheck<CR>
 " alpaca_english enable
 " ------------------------------------
 let g:alpaca_english_enable=1
-let g:alpaca_english_max_candidates=50
+let g:alpaca_english_max_candidates=100
 "}}}
 
 "----------------------------------------
@@ -2844,8 +2847,8 @@ function! bundle.hooks.on_source(bundle) "{{{
 
   let g:neocomplcache_text_mode_filetypes = {
         \ 'markdown' : 1,
+        \ 'gitcommit' : 1,
         \ 'text' : 1,
-        \ '_' : 1,
         \ }
 
   let g:neocomplcache_source_rank = {
@@ -3183,6 +3186,7 @@ function! bundle.hooks.on_source(bundle) "{{{
         \       'gitignore'  : 'Unite file_rec:' . neobundle#get_neobundle_dir() . "/gitignore",
         \     }
   "}}}
+
   call unite#custom_source('line', 'max_candidates', 5000)
   call unite#custom_source('line/fast', 'max_candidates', 5000)
 

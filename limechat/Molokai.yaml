@@ -14,11 +14,13 @@
 log-view:
   nickname-format: '%n: '
   scroller-highlight-color: '#e28964'
+
 input-text:
   font-family: 'Menlo'
   font-size: 13.0
   background-color: '#1b1d1e'
   color: '#f8f8f2'
+
 member-list:
   font-family: 'Lucida Grande'
   font-size: 13.0
@@ -33,6 +35,7 @@ member-list:
       bottom-line-color: '#465457'
       top-color: '#465457'
       bottom-color: '#465457'
+
 server-tree:
   font-family: 'Lucida Grande'
   font-size: 13.0
