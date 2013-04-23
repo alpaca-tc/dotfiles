@@ -21,120 +21,128 @@ html {
   color: #f8f8f2;
 }
 
-/* line 24, Molokai.scss */
+/* line 25, Molokai.scss */
 body .url {
   color: #a6e22e;
   font-weight: bold;
   word-break: break-all;
 }
-/* line 29, Molokai.scss */
+/* line 30, Molokai.scss */
 body .url:hover {
   color: #f92672;
 }
-/* line 34, Molokai.scss */
+/* line 35, Molokai.scss */
 body .line {
   overflow: hidden;
   *zoom: 1;
-  min-width: 80em;
+  padding: 0 1em;
+  margin: auto;
+  max-width: 68em;
+  min-width: 68em;
 }
-/* line 41, Molokai.scss */
+/* line 50, Molokai.scss */
 body .line .time, body .line .place, body .line .sender, body .line .message {
   display: block;
   float: left;
 }
-/* line 46, Molokai.scss */
+/* line 55, Molokai.scss */
 body .line .time {
-  width: 5%;
+  width: 3em;
+  font-size: 85%;
   color: #465457;
 }
-/* line 51, Molokai.scss */
+/* line 61, Molokai.scss */
 body .line .place {
   color: #465457;
-  width: 10%;
+  font-size: 85%;
+  width: 10em;
+  white-space: nowrap;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
 }
-/* line 56, Molokai.scss */
+/* line 68, Molokai.scss */
 body .line .sender {
   font-weight: bold;
-  width: 10%;
+  width: 8em;
   text-align: right;
   display: inline-block;
 }
-/* line 62, Molokai.scss */
+/* line 74, Molokai.scss */
 body .line .sender[type=normal] {
   color: #66d9ef;
 }
-/* line 66, Molokai.scss */
+/* line 78, Molokai.scss */
 body .line .sender[type=myself] {
   color: #fd971f;
 }
-/* line 73, Molokai.scss */
+/* line 85, Molokai.scss */
 body .line .sender[type=action] .sender:before {
   content: "• ";
   white-space: nowrap;
 }
-/* line 79, Molokai.scss */
-body .line .message {
-  margin-left: 1em;
-}
-/* line 82, Molokai.scss */
+/* line 94, Molokai.scss */
 body .line .message[type=notice], body .line .message[type=action] {
   color: #ae81ff;
 }
-/* line 87, Molokai.scss */
+/* line 99, Molokai.scss */
 body .line .message[type=system], body .line .message .message[type=join], body .line .message .message[type=kick], body .line .message[type=quit], body .line .message .message[type=kill], body .line .message .message[type=nick], body .line .message .message[type=mode], body .line .message[type=topic], body .line .message .message[type=invite], body .line .message .message[type=wallops] {
   color: #465457;
 }
-/* line 90, Molokai.scss */
+/* line 102, Molokai.scss */
 body .line .message[type=reply] {
   color: #a6e22e;
 }
-/* line 93, Molokai.scss */
+/* line 105, Molokai.scss */
 body .line .message[type=reply] .url {
   color: #e6db74;
 }
-/* line 96, Molokai.scss */
+/* line 108, Molokai.scss */
 body .line .message[type=part] {
   color: #000;
 }
-/* line 99, Molokai.scss */
+/* line 111, Molokai.scss */
 body .line .message[type=error], body .line .message .message[type=error_reply] {
   color: #f67b37;
 }
-/* line 102, Molokai.scss */
+/* line 114, Molokai.scss */
 body .line .message[type=dcc_send_send] {
   color: #c5af75;
 }
-/* line 105, Molokai.scss */
+/* line 117, Molokai.scss */
 body .line .message[type=dcc_send_receive] {
   color: #f9ee98;
 }
-/* line 108, Molokai.scss */
+/* line 120, Molokai.scss */
 body .line .message[type=debug_send] {
   color: #8996a8;
 }
-/* line 111, Molokai.scss */
+/* line 123, Molokai.scss */
 body .line .message[type=debug_receive] {
   color: #afc4db;
 }
-/* line 116, Molokai.scss */
+/* line 128, Molokai.scss */
 body .line .address {
   text-decoration: none;
 }
-/* line 120, Molokai.scss */
+/* line 132, Molokai.scss */
 body .line .highlight {
   font-weight: bold;
   padding: 0 3px;
   color: #f92672;
 }
-/* line 127, Molokai.scss */
-body .line .sender + .message {
-  width: 75%;
+/* line 139, Molokai.scss */
+body .line .message {
+  width: 45em;
+  background: #222;
+  padding-left: 1em;
 }
-/* line 130, Molokai.scss */
+/* line 144, Molokai.scss */
 body .line .time + .message {
-  padding-left: 10%;
+  margin-left: 10em;
 }
-/* line 135, Molokai.scss */
-body .line .place + .sender + .message {
-  width: 55%;
+/* line 151, Molokai.scss */
+body .line .place + .message {
+  margin-left: 8em;
 }

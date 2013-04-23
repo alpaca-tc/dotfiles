@@ -21,6 +21,7 @@ html {// {{{
   color: #f8f8f2;
 }// }}}
 body {// {{{
+
   .url {// {{{
     color: #a6e22e;
     font-weight:bold;
@@ -33,10 +34,18 @@ body {// {{{
 
   .line {// {{{
     @include clearfix;
-    $sender_width: 10%;
-    $place_width: 10%;
-    $time_widht: 5%;
-    min-width: 80em;
+    $max_width: 65em;
+    $sender_width: 8em;
+    $place_width: 10em;
+    $time_widht: 3em;
+    $padding_width: 1em;
+    $message_left: 1em;
+    $message_width: ($max_width + $message_left) - ($sender_width + $place_width + $time_widht);
+    padding: 0 $padding_width;
+    margin: auto;
+    max-width: $max_width + $message_left + ($padding_width * 2);
+    min-width: $max_width + $message_left + ($padding_width * 2);
+    $fs_small: 85%;
 
     .time, .place, .sender, .message {
       display:block;
@@ -45,12 +54,15 @@ body {// {{{
 
     .time {
       width: $time_widht;
+      font-size: $fs_small;
       color: #465457;
     }
 
     .place {
       color: #465457;
+      font-size: $fs_small;
       width: $place_width;
+      @include ellipsis();
     }
 
     .sender{// {{{
@@ -77,7 +89,7 @@ body {// {{{
     }// }}}
 
     .message {// {{{
-      margin-left: 1em;
+      // margin-left: 1em;
       &[type=privmsg] {}
       &[type=notice], &[type=action] {
         color: #ae81ff;
@@ -124,16 +136,20 @@ body {// {{{
     }
 
     // for room area.
-    .sender + .message {
-      width: 100% - ($sender_width + $place_width + $time_widht);
+    .message {
+      width: $message_width;
+      background: #222;
+      padding-left: $message_left;
     }
     .time + .message {
-      padding-left: $place_width;
+      margin-left: $place_width;
     }
 
     // for log area.
-    .place + .sender + .message {
-      width: 80% - ($sender_width + $place_width + $time_widht);
+    //  margin-right: 1em;
+    // }
+    .place + .message {
+      margin-left: $sender_width;
     }
   }// }}}
 }// }}}
