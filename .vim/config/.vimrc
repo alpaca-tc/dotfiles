@@ -1,4 +1,3 @@
-let g:alpaca_hoge = expand("<sfile>:p:h")
 "              ,dPYb,
 "              IP'`Yb
 "              I8  8I
@@ -27,6 +26,12 @@ let g:alpaca_hoge = expand("<sfile>:p:h")
 augroup MyAutoCmd
   autocmd!
 augroup END
+
+" http://rubyforge.org/pipermail/vim-ruby-devel/2007q1/000698.html
+" Fix up ruby interface
+if has('ruby')
+  silent! ruby nil
+endif
 
 "----------------------------------------
 " utils {{{
@@ -175,7 +180,7 @@ set clipboard+=autoselect,unnamed
 set formatoptions+=lcqmM
 set helplang=ja,en
 
-set langmenu=en_US.UTF-8
+set langmenu=en_us.UTF-8
 language en_US.UTF-8
 set modelines=1
 set nomore
@@ -220,7 +225,7 @@ function! s:bundle_load_depends(bundle_names) "{{{
     execute 'NeoBundleSource '.a:bundle_names
     let s:loaded_bundles[a:bundle_names] = 1
   endif
-endfunction"}}}
+endfunction "}}}
 
 "----------------------------------------
 " Load plugins {{{
@@ -364,6 +369,11 @@ NeoBundleLazy 'taichouchou2/alpaca_remove_dust.vim', {
       \ 'autoload': {
       \   'insert' : 1,
       \   'commands': ['RemoveDustDisable', 'RemoveDustEnable', 'RemoveDustRun']
+      \ }}
+NeoBundleLazy 'taichouchou2/alpaca_update_tags', {
+      \ 'depends' : 'tpope/vim-fugitive',
+      \ 'autoload' : {
+      \   'commands': ['AlpacaUpdateTags', 'AlpacaSetTags']
       \ }}
 " window系script
 NeoBundleLazy 'taichouchou2/alpaca_window.vim', {
@@ -611,9 +621,7 @@ NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
 NeoBundle 'taichouchou2/alpaca_english', {
       \ 'rev' : 'development',
       \ }
-let g:alpaca_english_enable = 1
-let g:alpaca_english_max_candidates=50
-
+NeoBundle 'wadako111/say.vim'
 NeoBundleLazy 'itchyny/thumbnail.vim', { 'autoload' : {
       \ 'commands' : 'Thumbnail'
       \ }}
@@ -651,13 +659,13 @@ NeoBundleLazy 'vim-scripts/LanguageTool', {
       \   'commands' : ['LanguageToolCheck', 'LnaguageToolClear']
       \ }}
 NeoBundle 'terryma/vim-multiple-cursors'
-NeoBundleFetch 'taichouchou2/language-tool-mirror'
 
 " NeoBundleLazy 'mattn/vdbi-vim', {
 "       \ 'depends': 'mattn/webapi-vim' }
 "}}}
 " リポジトリをクローンするのみ"{{{
 NeoBundleFetch 'github/gitignore'
+NeoBundleFetch 'taichouchou2/language-tool-mirror'
 NeoBundleFetch 'taichouchou2/rsense-0.3', {
       \ 'build' : {
       \    'mac': 'ruby etc/config.rb > ~/.rsense',
@@ -715,29 +723,14 @@ NeoBundleLazy 'claco/jasmine.vim', { 'autoload' : {
 NeoBundleLazy 'jiangmiao/simple-javascript-indenter', { 'autoload' : {
       \ 'filetypes' : ['javascript', 'json'],
       \ }}
-" NeoBundleLazy 'taichouchou2/vim-javascript', { 'autoload' : {
-"       \ 'filetypes' : ['javascript']
-"       \ }}
 NeoBundleLazy 'jelera/vim-javascript-syntax', { 'autoload' : {
       \ 'filetypes' : ['javascript', 'json'],
       \ }}
-" NeoBundleLazy 'taichouchou2/vim-json', { 'autoload' : {
-"       \ 'filetypes' : g:my.ft.js_files
-"       \ }}
 NeoBundleLazy 'teramako/jscomplete-vim', { 'autoload' : {
       \ 'filetypes' : g:my.ft.js_files
       \ }}
-" TODO こいつはすごい。気になる。時間がある時にneocomplcacheのsource作ろう
 NeoBundleLazy 'marijnh/tern'
 " NeoBundleLazy 'taichouchou2/tern', {
-"       \ "rtp" : 'vim',
-"       \ 'build' : {
-"       \   'mac': 'npm install',
-"       \   'unix': 'npm install'
-"       \ },
-"       \ 'autoload' : {
-"       \   'filetypes': 'javascript'
-"       \ }}
 "       \ "rtp" : 'vim',
 "       \ 'build' : {
 "       \   'mac': 'npm install',
@@ -835,14 +828,14 @@ if has('vim_starting')
 endif
 
 " ruby全般
-NeoBundleLazy 'ruby-matchit', { 'autoload': {
-      \ 'filetypes': g:my.ft.ruby_files}}
-NeoBundleLazy 'skwp/vim-rspec', {
-      \ 'build': {
-      \   'mac': 'gem install hpricot',
-      \   'unix': 'gem install hpricot'
-      \ },
-      \ 'autoload': { 'filetypes': g:my.ft.ruby_files}}
+" NeoBundleLazy 'ruby-matchit', { 'autoload': {
+"       \ 'filetypes': g:my.ft.ruby_files}}
+" NeoBundleLazy 'skwp/vim-rspec', {
+"       \ 'build': {
+"       \   'mac': 'gem install hpricot',
+"       \   'unix': 'gem install hpricot'
+"       \ },
+"       \ 'autoload': { 'filetypes': g:my.ft.ruby_files}}
 NeoBundleLazy 'taka84u9/vim-ref-ri', {
       \ 'depends': ['Shougo/unite.vim', 'thinca/vim-ref'],
       \ 'autoload': { 'filetypes': g:my.ft.ruby_files } }
@@ -874,24 +867,24 @@ NeoBundleLazy 'ujihisa/unite-rake', {
 "       \   'filetypes' : 'ruby'
 "       \ }
 "       \ }
-NeoBundleLazy 'Shougo/neocomplcache-rsense', {
-      \ 'depends': 'Shougo/neocomplcache', }
-NeoBundleLazy 'rhysd/unite-ruby-require.vim', { 'autoload': {
-      \ 'filetypes': g:my.ft.ruby_files }}
-NeoBundleLazy 'rhysd/vim-textobj-ruby', { 'depends': 'kana/vim-textobj-user' }
+" NeoBundleLazy 'Shougo/neocomplcache-rsense', {
+"       \ 'depends': 'Shougo/neocomplcache', }
+" NeoBundleLazy 'rhysd/unite-ruby-require.vim', { 'autoload': {
+"       \ 'filetypes': g:my.ft.ruby_files }}
+" NeoBundleLazy 'rhysd/vim-textobj-ruby', { 'depends': 'kana/vim-textobj-user' }
 
-NeoBundleLazy 'deris/vim-textobj-enclosedsyntax', { 'autoload': {
-      \ 'filetypes': g:my.ft.ruby_files}}
+" NeoBundleLazy 'deris/vim-textobj-enclosedsyntax', { 'autoload': {
+"       \ 'filetypes': g:my.ft.ruby_files}}
 " NeoBundleLazy 'rhysd/neco-ruby-keyword-args', { 'autoload': {
 "       \ 'filetypes': g:my.ft.ruby_files }}
 
 NeoBundleLazy 'ujihisa/unite-gem', {
       \ 'depends': 'mattn/webapi-vim',
       \ 'autoload': { 'filetypes': g:my.ft.ruby_files }}
-NeoBundleLazy 'tpope/vim-cucumber', { 'autoload': {
-      \ 'filetypes': g:my.ft.ruby_files }}
-NeoBundleLazy 'mutewinter/nginx.vim', { 'autoload': {
-      \ 'filetypes': g:my.ft.ruby_files }}
+" NeoBundleLazy 'tpope/vim-cucumber', { 'autoload': {
+"       \ 'filetypes': g:my.ft.ruby_files }}
+" NeoBundleLazy 'mutewinter/nginx.vim', { 'autoload': {
+"       \ 'filetypes': g:my.ft.ruby_files }}
 
 " python
 " ----------------------------------------
@@ -949,27 +942,8 @@ NeoBundleLazy 'sh.vim', { 'autoload': {
       \ 'filetypes': g:my.ft.sh_files }}
 "}}}
 " 他のアプリを呼び出すetc "{{{
-" NeoBundle 'thinca/vim-openbuf'
 " NeoBundle 'yuroyoro/vimdoc_ja'
 " NeoBundle 'kana/vim-altr' " 関連するファイルを切り替えれる
-
-NeoBundleLazy 'vim-scripts/dbext.vim', {
-      \ 'autoload' : {
-      \   'commands': [
-      \     "Alter", "Call", "Create", "DBCheckModeline", "DBCommit",
-      \     "DBCompleteProcedure", "DBCompleteTable", "DBCompleteView",
-      \     "DBDescribeProcedure", "DBDescribeProcedureAskName",
-      \     "DBDescribeTable", "DBDescribeTableAskName", "DBExecRangeSQL",
-      \     "DBExecSQL", "DBExecSQLTopX", "DBExecSQLUnderCursor",
-      \     "DBExecVisualSQL", "DBGetOption", "DBHistory", "DBListColumn",
-      \     "DBListConnections", "DBListProcedure", "DBListTable", "DBListVar",
-      \     "DBListView", "DBOrientation", "DBPromptForBufferParameters",
-      \     "DBResultsClose", "DBResultsOpen", "DBResultsRefresh",
-      \     "DBResultsToggleResize", "DBRollback", "DBSelectFromTable",
-      \     "DBSelectFromTableAskName", "DBSelectFromTableTopX",
-      \     "DBSelectFromTableWithWhere", "DBSetOption", "DBVarRangeAssign",
-      \     "Delete", "Drop", "Insert", "Select", "Update"]
-      \ }}
 NeoBundleLazy 'tsukkee/lingr-vim', {
       \ 'depends': 'mattn/webapi-vim',
       \ 'autoload': {
@@ -978,11 +952,6 @@ NeoBundleLazy 'mattn/excitetranslate-vim', {
       \ 'depends': 'mattn/webapi-vim',
       \ 'autoload' : { 'commands': ['ExciteTranslate']}
       \ }
-NeoBundleLazy 'taichouchou2/alpaca_update_tags', {
-      \ 'depends' : 'tpope/vim-fugitive',
-      \ 'autoload' : {
-      \   'commands': ['AlpacaUpdateTags', 'AlpacaSetTags']
-      \ }}
 NeoBundleLazy 'thinca/vim-scouter', { 'autoload' : {
       \ 'commands' : 'Scouter'
       \ }}
@@ -1094,13 +1063,8 @@ endfor
 function! s:toggle_set_spell() "{{{
   if &spell
     setl nospell
-    " AlpacaEnglishDisable
     echo "nospell"
-  else
-    setl spell
-    AlpacaEnglishEnable
     AlpacaEnglishDisable
-    echo "nospell"
   else
     setl spell
     AlpacaEnglishEnable
@@ -1328,7 +1292,7 @@ set showcmd
 set showfulltag
 set showmatch
 set showtabline=2
-set spelllang=en-US,en
+set spelllang=en
 set nospell
 set t_Co=256
 set title
@@ -1726,10 +1690,11 @@ let g:user_zen_settings = {
 " vim-ref
 "----------------------------------------
 "{{{
-let g:ref_alc_start_linenumber    = 47
+" let g:ref_alc_start_linenumber    = 47
 let g:ref_open                    = 'split'
 let g:ref_cache_dir               = g:my.dir.vimref
-let g:ref_refe_cmd                = expand('~/.vim/ref/ruby-ref1.9.2/refe-1_9_2')
+" let g:ref_refe_cmd                = expand('~/.vim/ref/ruby-ref1.9.2/refe-1_9_2')
+let g:ref_refe_encoding           = 'euc-jp'
 let g:ref_phpmanual_path          = expand('~/.vim/ref/php-chunked-xhtml')
 let g:ref_ri_cmd                  = g:my.bin.ri
 let g:ref_no_default_key_mappings = 1
@@ -1744,14 +1709,41 @@ nnoremap rm  :<C-U>Unite ref/man -default-action=split -input=
 nnoremap rpy :<C-U>Unite ref/pydoc -default-action=split -input=
 nnoremap rpe :<C-U>Unite ref/perldoc -default-action=split -input=
 
+"webdictサイトの設定
+let mock = {}
+function! mock.filter(output)
+  return join(split(a:output, "\n")[15 :], "\n")
+endfunction
+
+let g:ref_source_webdict_sites = {
+      \   'thesaurus': {
+      \     "url" : 'http://ejje.weblio.jp/english-thesaurus/content/%s',
+      \     "keyword_encording": "utf-8",
+      \     'cache': 1,
+      \   },
+      \   'wiki': {
+      \     'url': 'http://ja.wikipedia.org/wiki/%s',
+      \   },
+      \ }
+function! SearchWithInfoseek(word)
+  if a:word =~ '^[a-zA-Z0-9]\+$'
+    execute 'Ref webdict je ' . a:word
+  else
+    execute 'Ref webdict ej ' . a:word
+  endif
+endfunction
+command! -nargs=1 SearchWithInfoseek call SearchWithInfoseek(<args>)
+
+nnoremap rj :<C-u>Ref webdict je<Space>
+nnoremap re :<C-u>Ref webdict ej<Space>
+
 aug MyAutoCmd
   au FileType ruby,eruby,ruby.rspec nnoremap <silent><buffer>KK :<C-U>Unite -no-start-insert ref/ri   -input=<C-R><C-W><CR>
   au FileType ruby,eruby,ruby.rspec nnoremap <silent><buffer>K  :<C-U>Unite -no-start-insert ref/refe -input=<C-R><C-W><CR>
-  au FileType vim if empty(&buftype) && &filetype != 'vim' |nnoremap <buffer>K <Plug>(ref-keyword)| endif
 aug END
 
 function! s:initialize_ref_viewer()
-  nmap <buffer><CR> <Plug>(ref-keyword)
+  " nmap <buffer><CR> <Plug>(ref-keyword)
   nmap <buffer>[tag_or_tab]t   <Plug>(ref-keyword)
   nmap <buffer>[tag_or_tab]h   <Plug>(ref-back)
   nmap <buffer>[tag_or_tab]l   <Plug>(ref-forward)
@@ -2733,6 +2725,7 @@ xnoremap ,l :<C-U>LanguageToolCheck<CR>
 " ------------------------------------
 let g:alpaca_english_enable=1
 let g:alpaca_english_max_candidates=100
+let g:alpaca_english_enable_duplicate_candidates=1
 "}}}
 
 "----------------------------------------
@@ -2748,7 +2741,6 @@ set wildmode=longest:full,full
 set thesaurus+=~/.vim/thesaurus/mthes10/mthesaur.txt
 
 " tmuxに<C-T>が取られているため
-" inoremap <C-D>t <C-X><C-T>
 " XXX 何故か、起動してからmappingしないと動かない...
 au MyAutoCmd VimEnter * inoremap <C-X><C-F> <C-X><C-T>
 
@@ -2844,7 +2836,6 @@ function! bundle.hooks.on_source(bundle) "{{{
         \ 'neocomplcache_disabled_sources_list',
         \ 'neocomplcache_text_mode_filetypes'
         \ ]
-
 
   for initialize_variable in s:neocomplcache_initialize_lists
     call alpaca#let_g:(initialize_variable, {})
