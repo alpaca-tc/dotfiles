@@ -238,13 +238,19 @@ NeoBundle 'Shougo/vimproc', {
       \   'unix' : 'make -f make_unix.mak',
       \ }}
 " An awesome improvement to the Vim status bar.
-"NeoBundle 'Lokaltog/powerline', {
-"     \ 'rtp' : 'powerline/bindings/vim',
-"     \ }
-" NeoBundle 'taichouchou2/powerline', { 'directory': 'powerline', 'rev': 'master', 'rtp' : 'powerline/bindings/vim'}
+if has('python')
+  "NeoBundle 'Lokaltog/powerline', {
+  "     \ 'rtp' : 'powerline/bindings/vim',
+  "     \ }
+  NeoBundle 'taichouchou2/powerline', { 'directory': 'powerline', 'rev': 'master', 'rtp' : 'powerline/bindings/vim'}
+endif
 NeoBundle 'taichouchou2/alpaca_powertabline'
 " WebAPI utils
-NeoBundleLazy 'mattn/webapi-vim'
+NeoBundleLazy 'mattn/webapi-vim', {
+      \ "autoload" : {
+      \   "function_prefix": "webapi"
+      \ }
+      \ }
 " フォントとか。読み込むことは無い"{{{
 let g:ricty_generate_command = join([
       \   'sh ricty_generator.sh',
@@ -619,8 +625,8 @@ NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
       \ 'function_prefix' : "smartchr",
       \ }}
 NeoBundle 'taichouchou2/alpaca_english', {
-      \ 'rev' : 'development',
       \ }
+      " \ 'rev' : 'development',
 NeoBundle 'wadako111/say.vim'
 NeoBundleLazy 'itchyny/thumbnail.vim', { 'autoload' : {
       \ 'commands' : 'Thumbnail'
@@ -893,13 +899,15 @@ NeoBundleLazy 'yuroyoro/vim-python', { 'autoload' : {
       \ 'filetypes' : g:my.ft.python_files }}
 NeoBundleLazy 'hynek/vim-python-pep8-indent', { 'autoload' : {
       \ 'filetypes' : g:my.ft.python_files }}
-NeoBundleLazy 'davidhalter/jedi-vim', {
-      \ 'build' : {
-      \     'mac' : 'git submodule update --init',
-      \     'unix' : 'git submodule update --init',
-      \    },
-      \ 'autoload' : { 'filetypes': g:my.ft.python_files }
-      \ }
+if has("python")
+  NeoBundleLazy 'davidhalter/jedi-vim', {
+        \ 'build' : {
+        \     'mac' : 'git submodule update --init',
+        \     'unix' : 'git submodule update --init',
+        \    },
+        \ 'autoload' : { 'filetypes': g:my.ft.python_files }
+        \ }
+endif
 " NeoBundleLazy 'kevinw/pyflakes-vim'
 
 " scala
@@ -1055,6 +1063,9 @@ let s:alpaca_abbr_define = {
       \   "im import",
       \   "mi mixin",
       \ ],
+      \ "python" : [
+      \   "im import"
+      \ ],
       \ }
 for [filetype, abbr_defines] in items(s:alpaca_abbr_define)
   call alpaca#initialize#define_abbrev(abbr_defines, filetype)
@@ -1065,10 +1076,14 @@ function! s:toggle_set_spell() "{{{
     setl nospell
     echo "nospell"
     AlpacaEnglishDisable
+    nunmap ;;
+    vunmap ;;
   else
     setl spell
     AlpacaEnglishEnable
     echo "spell"
+    nnoremap ;; :<C-U>AlpacaEnglishSay<CR>
+    xnoremap ;; :AlpacaEnglishSay<CR>
   endif
 endfunction"}}}
 command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <count>?<count>-line('.'):1)|exec 'normal! j' . n . <q-args>|call cursor('.', c)|endfor
@@ -1690,7 +1705,6 @@ let g:user_zen_settings = {
 " vim-ref
 "----------------------------------------
 "{{{
-" let g:ref_alc_start_linenumber    = 47
 let g:ref_open                    = 'split'
 let g:ref_cache_dir               = g:my.dir.vimref
 " let g:ref_refe_cmd                = expand('~/.vim/ref/ruby-ref1.9.2/refe-1_9_2')
@@ -1710,32 +1724,43 @@ nnoremap rpy :<C-U>Unite ref/pydoc -default-action=split -input=
 nnoremap rpe :<C-U>Unite ref/perldoc -default-action=split -input=
 
 "webdictサイトの設定
-let mock = {}
-function! mock.filter(output)
-  return join(split(a:output, "\n")[15 :], "\n")
-endfunction
-
 let g:ref_source_webdict_sites = {
-      \   'thesaurus': {
-      \     "url" : 'http://ejje.weblio.jp/english-thesaurus/content/%s',
-      \     "keyword_encording": "utf-8",
+      \   'wikipedia': {
+      \     'url': 'http://ja.wikipedia.org/wiki/%s',
       \     'cache': 1,
       \   },
-      \   'wiki': {
-      \     'url': 'http://ja.wikipedia.org/wiki/%s',
+      \   "en_example" : {
+      \     'key': 'ree',
+      \     'url': 'http://ejje.weblio.jp/sentence/content/%s',
+      \     'cache': 1,
+      \     'line': 67,
+      \   },
+      \   "en_thesaurus" : {
+      \     'key': 'ret',
+      \     'url': 'http://ejje.weblio.jp/english-thesaurus/content/%s',
+      \     'cache': 1,
+      \     'line': 53,
+      \   },
+      \   "en_word" : {
+      \     'key': 'rew',
+      \     'url': 'http://ejje.weblio.jp/content/%s',
+      \     'cache': 1,
+      \     'line': 79,
+      \   },
+      \   "alc" : {
+      \     'key': 'rea',
+      \     'url': 'http://eow.alc.co.jp/%s/UTF-8/',
+      \     'cache': 1,
+      \     'line': 52,
       \   },
       \ }
-function! SearchWithInfoseek(word)
-  if a:word =~ '^[a-zA-Z0-9]\+$'
-    execute 'Ref webdict je ' . a:word
-  else
-    execute 'Ref webdict ej ' . a:word
-  endif
-endfunction
-command! -nargs=1 SearchWithInfoseek call SearchWithInfoseek(<args>)
 
-nnoremap rj :<C-u>Ref webdict je<Space>
-nnoremap re :<C-u>Ref webdict ej<Space>
+for [name, dict] in items(g:ref_source_webdict_sites)
+  if has_key(dict, 'key')
+    execute "nnoremap " .dict["key"]. "  :<C-U>Ref webdict ". name ." <C-R><C-W><CR>"
+  endif
+endfor
+
 
 aug MyAutoCmd
   au FileType ruby,eruby,ruby.rspec nnoremap <silent><buffer>KK :<C-U>Unite -no-start-insert ref/ri   -input=<C-R><C-W><CR>
@@ -1747,7 +1772,7 @@ function! s:initialize_ref_viewer()
   nmap <buffer>[tag_or_tab]t   <Plug>(ref-keyword)
   nmap <buffer>[tag_or_tab]h   <Plug>(ref-back)
   nmap <buffer>[tag_or_tab]l   <Plug>(ref-forward)
-  setlocal nonumber
+  setlocal number
 endfunction
 aug MyAutoCmd
   autocmd FileType ref call s:initialize_ref_viewer()
@@ -2449,7 +2474,7 @@ let g:alpaca_wordpress_use_default_setting = 1
 " excitetranslate
 "------------------------------------
 " {{{
-xnoremap e :ExciteTranslate<CR>
+xnoremap ,e :ExciteTranslate<CR>
 " }}}
 
 "------------------------------------
@@ -2533,28 +2558,6 @@ let g:scala_use_default_keymappings = 0
 "}}}
 
 "------------------------------------
-"  alice.vim
-"------------------------------------
-"{{{
-function! s:URLEncodeORDecode(encode) "{{{
-  let l:line = getline('.')
-
-  if a:encode
-    let l:encoded = AL_urlencode(l:line)
-  else
-    let l:encoded = AL_urldecode(l:line)
-  endif
-
-  call setline('.', l:encoded)
-endfunction"}}}
-
-command! -nargs=0 -range URLEncode :call <SID>URLEncodeORDecode(1)
-command! -nargs=0 -range URLDecode :call <SID>URLEncodeORDecode(0)
-xnoremap ue :<C-U>URLEncode<CR>
-xnoremap ud :<C-U>URLDecode<CR>
-"}}}
-
-"------------------------------------
 "  fakeclip.vim
 "------------------------------------
 " fakeclip.vim"{{{
@@ -2634,13 +2637,6 @@ aug END
 let g:clever_f_not_overwrites_standard_mappings=1
 map f <Plug>(clever-f-f)
 map F <Plug>(clever-f-F)
-"}}}
-
-" ------------------------------------
-" evervim
-" ------------------------------------
-"{{{
-let g:evervim_devtoken='S=s36:U=3d4ae2:E=144cb576ba9:C=13d73a63fad:P=1cd:A=en-devtoken:V=2:H=ff00fa0e63346327d6d1a479ab1f1556'
 "}}}
 
 " ------------------------------------
@@ -2928,7 +2924,8 @@ imap <expr><C-G>          neocomplcache#undo_completion()
 imap <expr><TAB>          neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
 " imap <silent><expr><CR>   neocomplcache#smart_close_popup() . "<CR>" . "<Plug>DiscretionaryEnd"
 function! s:my_crinsert()
-  return pumvisible() ? neocomplcache#close_popup() . "\<CR>" : "\<CR>"
+  return neocomplcache#close_popup() . "\<CR>"
+  " return pumvisible() ? neocomplcache#close_popup() . "\<CR>" : "\<CR>"
 endfunction
 inoremap <silent> <CR> <C-R>=<SID>my_crinsert()<CR>
 
@@ -3363,3 +3360,36 @@ augroup TmuxSetPwd
 augroup END
 
 set secure
+
+" function! CompleteThesaurus() "{{{
+"   " let word = expand('<cword>')
+"   let [line, start] = [getline('.'), col('.') - 1]
+"   while start > 0 && line[start - 1] =~ '\a'
+"     let start -= 1
+"   endwhile
+"
+"   call complete(start, [{ "word": "hoge"}, {"word": "huga"} ])
+"
+"   return ''
+" endfunction"}}}
+" inoremap <C-F> <C-R>=CompleteThesaurus()<CR>
+
+" inoremap <C-K> <C-R>=ListMonths()<CR>
+" func! ListMonths() "{{{
+"   let [line, start] = [getline('.'), col('.') - 1]
+"   while start > 0 && line[start - 1] =~ '\a'
+"     let start -= 1
+"   endwhile
+"
+"   " let words = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+"
+"   " let candidates = map(words, '{ "word": v:val }')
+"   let current_word = getline(".")[start : col(".") - 1]
+"   let candidates = alpaca_english#sqlite#search_thesaurus_word(current_word)
+"
+"   if !empty(candidates)
+"     call complete(start + 1, candidates)
+"   endif
+"
+"   return ''
+" endfunc"}}}
