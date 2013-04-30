@@ -31,6 +31,18 @@ augroup END
 " Fix up ruby interface
 if has('ruby')
   silent! ruby nil
+
+  ruby << EOF
+  require 'json'
+  module VIM #{{{
+    # escape ruby object
+    def self.let(name, value)
+      enc = evaluate("&encoding")
+      parsed = value.to_json.to_s.encode(enc)
+      command("let #{name} = #{parsed}")
+    end
+  end #}}}
+EOF
 endif
 
 "----------------------------------------
@@ -625,8 +637,8 @@ NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
       \ 'function_prefix' : "smartchr",
       \ }}
 NeoBundle 'taichouchou2/alpaca_english', {
+      \ 'rev' : 'development',
       \ }
-      " \ 'rev' : 'development',
 NeoBundle 'wadako111/say.vim'
 NeoBundleLazy 'itchyny/thumbnail.vim', { 'autoload' : {
       \ 'commands' : 'Thumbnail'
@@ -1757,25 +1769,15 @@ let g:ref_source_webdict_sites = {
 
 for [name, dict] in items(g:ref_source_webdict_sites)
   if has_key(dict, 'key')
-    execute "nnoremap " .dict["key"]. "  :<C-U>Ref webdict ". name ." <C-R><C-W><CR>"
+    let command = join(['nnoremap', dict["key"], ':<C-U>Ref webdict', name, '<C-R><C-W><CR>'], " ")
+    execute command
   endif
 endfor
-
+unlet command
 
 aug MyAutoCmd
   au FileType ruby,eruby,ruby.rspec nnoremap <silent><buffer>KK :<C-U>Unite -no-start-insert ref/ri   -input=<C-R><C-W><CR>
   au FileType ruby,eruby,ruby.rspec nnoremap <silent><buffer>K  :<C-U>Unite -no-start-insert ref/refe -input=<C-R><C-W><CR>
-aug END
-
-function! s:initialize_ref_viewer()
-  " nmap <buffer><CR> <Plug>(ref-keyword)
-  nmap <buffer>[tag_or_tab]t   <Plug>(ref-keyword)
-  nmap <buffer>[tag_or_tab]h   <Plug>(ref-back)
-  nmap <buffer>[tag_or_tab]l   <Plug>(ref-forward)
-  setlocal number
-endfunction
-aug MyAutoCmd
-  autocmd FileType ref call s:initialize_ref_viewer()
 aug END
 "}}}
 
