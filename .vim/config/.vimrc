@@ -901,8 +901,9 @@ NeoBundleLazy 'ujihisa/unite-gem', {
       \ 'autoload': { 'filetypes': g:my.ft.ruby_files }}
 " NeoBundleLazy 'tpope/vim-cucumber', { 'autoload': {
 "       \ 'filetypes': g:my.ft.ruby_files }}
-" NeoBundleLazy 'mutewinter/nginx.vim', { 'autoload': {
-"       \ 'filetypes': g:my.ft.ruby_files }}
+NeoBundleLazy 'mutewinter/nginx.vim', {
+      \ 'autoload': {
+      \ 'filetypes': 'nginx' }}
 
 " python
 " ----------------------------------------
