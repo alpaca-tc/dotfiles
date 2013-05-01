@@ -478,7 +478,7 @@ NeoBundleLazy 'kana/vim-fakeclip', { 'autoload' : {
       \ }}
 NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
       \ 'autoload': {
-      \   'commands': 'IndentGuidesEnable',
+      \   'commands': ['IndentGuidesEnable', 'IndentGuidesToggle'],
       \   'filetypes': g:my.ft.program_files,
       \ }}
 "}}}
