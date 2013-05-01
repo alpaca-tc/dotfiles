@@ -31,18 +31,6 @@ augroup END
 " Fix up ruby interface
 if has('ruby')
   silent! ruby nil
-
-  ruby << EOF
-  require 'json'
-  module VIM #{{{
-    # escape ruby object
-    def self.let(name, value)
-      enc = evaluate("&encoding")
-      parsed = value.to_json.to_s.encode(enc)
-      command("let #{name} = #{parsed}")
-    end
-  end #}}}
-EOF
 endif
 
 "----------------------------------------
