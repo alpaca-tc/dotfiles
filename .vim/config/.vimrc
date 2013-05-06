@@ -31,18 +31,6 @@ augroup END
 " Fix up ruby interface
 if has('ruby')
   silent! ruby nil
-
-  ruby << EOF
-  require 'json'
-  module VIM #{{{
-    # escape ruby object
-    def self.let(name, value)
-      enc = evaluate("&encoding")
-      parsed = value.to_json.to_s.encode(enc)
-      command("let #{name} = #{parsed}")
-    end
-  end #}}}
-EOF
 endif
 
 "----------------------------------------
@@ -251,10 +239,10 @@ NeoBundle 'Shougo/vimproc', {
       \ }}
 " An awesome improvement to the Vim status bar.
 if has('python')
-  "NeoBundle 'Lokaltog/powerline', {
-  "     \ 'rtp' : 'powerline/bindings/vim',
-  "     \ }
-  NeoBundle 'taichouchou2/powerline', { 'directory': 'powerline', 'rev': 'master', 'rtp' : 'powerline/bindings/vim'}
+  NeoBundle 'Lokaltog/powerline', {
+      \ 'rtp' : 'powerline/bindings/vim',
+      \ }
+  " NeoBundle 'taichouchou2/powerline', { 'directory': 'powerline', 'rev': 'master', 'rtp' : 'powerline/bindings/vim'}
 endif
 NeoBundle 'taichouchou2/alpaca_powertabline'
 " WebAPI utils
@@ -263,18 +251,6 @@ NeoBundleLazy 'mattn/webapi-vim', {
       \   "function_prefix": "webapi"
       \ }
       \ }
-" フォントとか。読み込むことは無い"{{{
-let g:ricty_generate_command = join([
-      \   'sh ricty_generator.sh',
-      \   neobundle#get_neobundle_dir().'/alpaca/fonts/Inconsolata.otf',
-      \   neobundle#get_neobundle_dir().'/alpaca/fonts/migu-1m-regular.ttf',
-      \   neobundle#get_neobundle_dir().'/alpaca/fonts/migu-1m-bold.ttf',
-      \ ], ' ')
-NeoBundleFetch 'taichouchou2/alpaca', { 'build' : {
-      \ 'mac' : g:ricty_generate_command,
-      \ 'unix' : g:ricty_generate_command,
-      \ }}
-"}}}
 " 基本の拡張 {{{
 NeoBundleLazy 'rhysd/accelerated-jk', {
       \ 'autoload' : {
@@ -670,6 +646,7 @@ NeoBundleLazy 'repeat.vim', { 'autoload' : {
       \ 'mappings' : '.',
       \ }}
 NeoBundleLazy 'vim-scripts/LanguageTool', {
+      \ 'depends': 'taichouchou2/language-tool-mirror',
       \ 'build' : {
       \   'mac' : 'brew install languagetool'
       \ },
@@ -683,7 +660,6 @@ NeoBundle 'terryma/vim-multiple-cursors'
 "}}}
 " リポジトリをクローンするのみ"{{{
 NeoBundleFetch 'github/gitignore'
-NeoBundleFetch 'taichouchou2/language-tool-mirror'
 NeoBundleFetch 'taichouchou2/rsense-0.3', {
       \ 'build' : {
       \    'mac': 'ruby etc/config.rb > ~/.rsense',

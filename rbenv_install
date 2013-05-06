@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #rubyのインスコ #好きなバージョンでok
-RUBIES=( 1.9.3-p194 1.9.2-p290)
+RUBIES=( 1.8.7-p371 1.9.3-p392 2.0.0-p0)
 cd $HOME
 git clone git://github.com/sstephenson/rbenv.git ~/.rbenv
 
@@ -17,11 +17,10 @@ if [ -x `which rbenv` ];then
 
     for version in ${RUBIES[@]}
     do
-        rbenv install $version
+       CONFIGURE_OPTS="--with-arch=i386 --with-readline-dir=/usr/local/Cellar/readline/6.2.4 --with-openssl-dir=/usr/local --enable-shared" rbenv install $version
+       # CFLAGS="-arch i386" LDFLAGS="-arch i386" 
     done
 
-    #好きなバージョンでok
-    rbenv global 1.9.3-p194
     rbenv rehash
 fi
 

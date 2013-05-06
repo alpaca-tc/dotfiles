@@ -90,6 +90,7 @@ hi MatchParen guifg=#00ffff guibg=NONE guisp=NONE gui=bold ctermfg=14 ctermbg=NO
 "hi LocalVariable -- no settings --
 hi Repeat guifg=#ffa54f guibg=NONE guisp=NONE gui=NONE ctermfg=215 ctermbg=NONE cterm=NONE
 "hi SpellBad -- no settings --
+hi SpellBad cterm=underline ctermfg=210 ctermbg=NONE
 "hi CTagsClass -- no settings --
 hi Directory guifg=#008b8b guibg=NONE guisp=NONE gui=NONE ctermfg=30 ctermbg=NONE cterm=NONE
 hi Structure guifg=#ffa54f guibg=NONE guisp=NONE gui=NONE ctermfg=215 ctermbg=NONE cterm=NONE
