@@ -849,6 +849,11 @@ NeoBundleLazy 'taichouchou2/unite-reek', {
       \   'unite_sources': 'reek',
       \ },
       \ 'depends' : 'Shougo/unite.vim' }
+NeoBundleLazy "tpope/vim-rake", {
+      \ 'autoload': {
+      \   'filetypes' : g:my.ft.ruby_files,
+      \   'commands': 'Rake',
+      \ }}
 NeoBundleLazy 'ujihisa/unite-rake', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload': {
@@ -3284,7 +3289,6 @@ function! s:set_ruby_tags() "{{{
   execute 'setl tags+='.s:ruby_tags
 endfunction"}}}
 
-" あとでautoloaderへ移す
 function! s:update_ruby_ctags() "{{{
   call vimproc#system("rbenv ctags")
   call vimproc#system("gem ctags")
@@ -3293,14 +3297,14 @@ command! UpdateRubyTags call <SID>update_ruby_ctags()
 
 aug MyAutoCmd
   " au FileType haml,ruby,eruby,yaml xnoremap <silent><buffer>H :s!:\(\w\+\)\s*=>!\1:!g
-  au FileType haml,ruby,eruby call <SID>set_ruby_tags()
+  " au FileType haml,ruby,eruby call <SID>set_ruby_tags()
 aug END
 
 if has('vim_starting')
   call neobundle#call_hook('on_source')
 endif
 
-function! s:open_mi(...)
+function! s:open_mi(...) "{{{
   if !empty(a:1)
     let args= split(a:1, " ")
   else
@@ -3309,7 +3313,7 @@ function! s:open_mi(...)
 
   echo "opening...MacVim"
   call alpaca#system("mvim", args)
-endfunction
+endfunction"}}}
 command! -nargs=* Mi call s:open_mi(substitute(<q-args>, '\s"[^"]\+$', '', ''))
 
 " 人のvimrc

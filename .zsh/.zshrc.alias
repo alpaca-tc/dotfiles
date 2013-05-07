@@ -106,25 +106,6 @@ alias hp='hub pull-request'
 alias hn='hub --noop'
 # }}}
 
-# rtags# {{{
-alias ctags='/Applications/MacVim.app/Contents/MacOS/ctags --sort=yes --exclude=log --exclude=.git "$@"'
-_rtags() {
-    if [ -d ~/.rbenv ]; then
-        echo "rbenv"
-        export RUBIES_DIR=`rbenv which ruby | sed -e 's/\/bin\/ruby//'`
-        ctags -R -a --sort=yes --exclude=*.js --exclude=*.h --exclude=log --exclude=*.yml --exclude=.git --langmap=RUBY:.rb ~/.rbenv/versions/1.9.3-p125/lib/ruby/1.9.1 -f ~/rubyTags
-        ctags -R -a --sort=yes --exclude=*.js --exclude=*.h --exclude=log --exclude=*.yml --exclude=.git --langmap=RUBY:.rb ~/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems -f ~/gemTags
-    else if [ -d ~/.rvm ]
-        echo "rvm"
-        export RUBIES_DIR=`rbenv which ruby | sed -e 's/\/bin\/ruby//'`
-        ctags -R --sort=yes --exclude=*.js --exclude=*.h --exclude=log --exclude=*.yml --exclude=.git --langmap=RUBY:.rb $RUBIES_DIR $GEM_HOME -f ~/tags
-    fi
-}
-
-alias rtags='ctags -R -a --sort=yes --exclude=*.js --exclude=*.h --exclude=log --exclude=*.yml --exclude=.git --langmap=RUBY:.rb ~/.rbenv/versions/1.9.3-p125/lib/ruby/1.9.1 -f ~/rubyTags'
-alias gtags='ctags -R -f ~/gtags -a --sort=yes --exclude=*.c --exclude=*.js --exclude=*.exp  --exclude=*.am --exclude=*.in --exclude=*.m4--exclude=*.o --exclude=*.h --exclude=log --exclude=*.yml --exclude=.git --langmap=RUBY:.rb ~/.rbenv/versions/2.0.0-p0/lib/ruby/gems/2.0.0/gems'
-# }}}
-
 # rals# {{{
 alias r='rails'
 alias rg='rails generate'
@@ -157,6 +138,9 @@ _rakeDbSetUp() {
 alias rreset=_rakeDbSetUp
 alias y='yard'
 alias yg='yard server --gems'
+alias gemset="rbenv gemset"
+alias gemset_set="echo >.rbenv-gemsets"
+alias remove_all_gem='for gem in `gem list | cut -d " " -f 1`; do yes | gem uninstall $gem -a; done'
 # }}}
 
 # postgres {{{
