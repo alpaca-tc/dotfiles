@@ -1,7 +1,7 @@
 # 環境変数
 # # {{{
 export EDITOR=vim
-# export LANG=ja_JP.UTF-8
+export LC_CTYPE=en_US.UTF-8
 export LANG=en_US.UTF-8
 # export SHELL=/usr/local/bin/zsh
 export DOTFILES_DIR=$HOME/dotfiles_serclet

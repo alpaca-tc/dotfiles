@@ -94,6 +94,15 @@ function! Gencmd(...) "{{{
 
   return join(result, ' && ')
 endfunction"}}}
+function! s:get_cursor_word() "{{{
+  return expand("<cword>")
+
+  " let [line, start] = [getline('.'), col('.') - 1]
+  " while start > 0 && line[start - 1] =~ '\a'
+  "   let start -= 1
+  " endwhile
+  " return getline(".")[start : col(".") - 1]
+endfunction"}}}
 " }}}
 
 "----------------------------------------
@@ -715,7 +724,7 @@ NeoBundleLazy 'kchmck/vim-coffee-script', { 'autoload' : {
 NeoBundleLazy 'claco/jasmine.vim', { 'autoload' : {
       \ 'filetypes' : g:my.ft.js_files }}
 NeoBundleLazy 'jiangmiao/simple-javascript-indenter', { 'autoload' : {
-      \ 'filetypes' : ['javascript', 'json'],
+      \ 'filetypes' : ['javascript', 'json', 'nginx'],
       \ }}
 NeoBundleLazy 'jelera/vim-javascript-syntax', { 'autoload' : {
       \ 'filetypes' : ['javascript', 'json'],
@@ -882,8 +891,8 @@ NeoBundleLazy 'ujihisa/unite-gem', {
       \ 'autoload': { 'filetypes': g:my.ft.ruby_files }}
 " NeoBundleLazy 'tpope/vim-cucumber', { 'autoload': {
 "       \ 'filetypes': g:my.ft.ruby_files }}
-" NeoBundleLazy 'mutewinter/nginx.vim', { 'autoload': {
-"       \ 'filetypes': g:my.ft.ruby_files }}
+NeoBundleLazy 'mutewinter/nginx.vim', {
+      \ 'autoload' : { 'filetypes': "nginx" }}
 
 " python
 " ----------------------------------------
@@ -1698,12 +1707,10 @@ let g:user_zen_settings = {
 " vim-ref
 "----------------------------------------
 "{{{
-let g:ref_open                    = 'split'
+let g:ref_open                    = 'tabnew'
 let g:ref_cache_dir               = g:my.dir.vimref
-" let g:ref_refe_cmd                = expand('~/.vim/ref/ruby-ref1.9.2/refe-1_9_2')
-let g:ref_refe_encoding           = 'euc-jp'
 let g:ref_phpmanual_path          = expand('~/.vim/ref/php-chunked-xhtml')
-let g:ref_ri_cmd                  = g:my.bin.ri
+" let g:ref_ri_cmd                  = g:my.bin.ri
 let g:ref_no_default_key_mappings = 1
 
 nnoremap <C-K> :<C-U>Ref alc <Space><C-R><C-W><CR>
@@ -1719,6 +1726,7 @@ nnoremap rpe :<C-U>Unite ref/perldoc -default-action=split -input=
 "webdictサイトの設定
 let g:ref_source_webdict_sites = {
       \   'wikipedia': {
+      \     'key': 'rew',
       \     'url': 'http://ja.wikipedia.org/wiki/%s',
       \     'cache': 1,
       \   },
@@ -1735,7 +1743,7 @@ let g:ref_source_webdict_sites = {
       \     'line': 53,
       \   },
       \   "en_word" : {
-      \     'key': 'rew',
+      \     'key': 'rer',
       \     'url': 'http://ejje.weblio.jp/content/%s',
       \     'cache': 1,
       \     'line': 79,
@@ -1744,21 +1752,28 @@ let g:ref_source_webdict_sites = {
       \     'key': 'rea',
       \     'url': 'http://eow.alc.co.jp/%s/UTF-8/',
       \     'cache': 1,
-      \     'line': 52,
+      \     'line': 51,
       \   },
       \ }
 
-for [name, dict] in items(g:ref_source_webdict_sites)
+function! Search_text_or_input_text(dict_name) "{{{
+  let cursor_word = s:get_cursor_word()
+  if empty(cursor_word)
+    let cursor_word = input("search by ". a:dict_name .": ")
+  endif
+  execute join([':Ref webdict', a:dict_name, cursor_word], " ")
+endfunction"}}}
+for [name, dict] in items(g:ref_source_webdict_sites) "{{{
   if has_key(dict, 'key')
-    let command = join(['nnoremap', dict["key"], ':<C-U>Ref webdict', name, '<C-R><C-W><CR>'], " ")
+    let command = join(['nnoremap', dict["key"], ':call Search_text_or_input_text("' .name. '")', '<CR>'], " ")
     execute command
   endif
-endfor
+endfor"}}}
 unlet command
 
 aug MyAutoCmd
-  au FileType ruby,eruby,ruby.rspec nnoremap <silent><buffer>KK :<C-U>Unite -no-start-insert ref/ri   -input=<C-R><C-W><CR>
-  au FileType ruby,eruby,ruby.rspec nnoremap <silent><buffer>K  :<C-U>Unite -no-start-insert ref/refe -input=<C-R><C-W><CR>
+  au FileType ruby,eruby,ruby.rspec nnoremap <silent><buffer>K :<C-U>Unite -no-start-insert ref/ri   -input=<C-R><C-W><CR>
+  " au FileType ruby,eruby,ruby.rspec nnoremap <silent><buffer>K  :<C-U>Unite -no-start-insert ref/refe -input=<C-R><C-W><CR>
 aug END
 "}}}
 
