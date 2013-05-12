@@ -29,6 +29,7 @@ augroup END
 
 " http://rubyforge.org/pipermail/vim-ruby-devel/2007q1/000698.html
 " Fix up ruby interface
+" For vim > v932
 if has('ruby')
   silent! ruby nil
 endif
@@ -158,6 +159,7 @@ let g:my.ft = {
       \ "c_files"         : ["c", "cpp"],
       \ "style_files"     : ['css', 'scss', 'sass'],
       \ "markup_files"    : ['html', 'haml', 'erb', 'php'],
+      \ "english_files"   : ['markdown', 'help', 'text'],
       \ "program_files"   : ['ruby', 'php', 'python', 'eruby', 'vim', 'javascript', 'coffee', 'scala', 'java', 'go', 'cpp', 'haml'],
       \ "ignore_patterns" : ['vimfiler', 'unite'],
       \ }
@@ -190,6 +192,7 @@ set formatoptions+=lcqmM
 set helplang=ja,en
 
 set langmenu=en_us.UTF-8
+" language en_US.UTF-8
 language en_US.UTF-8
 set modelines=1
 set nomore
@@ -251,6 +254,7 @@ if has('python')
   NeoBundle 'Lokaltog/powerline', {
       \ 'rtp' : 'powerline/bindings/vim',
       \ }
+  " Not patch font for powerline.
   " NeoBundle 'taichouchou2/powerline', { 'directory': 'powerline', 'rev': 'master', 'rtp' : 'powerline/bindings/vim'}
 endif
 NeoBundle 'taichouchou2/alpaca_powertabline'
@@ -312,7 +316,7 @@ NeoBundleLazy 'thinca/vim-ref', { 'autoload' : {
       \ 'unite_sources' : ["ref/erlang", "ref/man", "ref/perldoc", "ref/phpmanual", "ref/pydoc", "ref/redis", "ref/refe", "ref/webdict"],
       \ 'mappings' : ['n', 'K', '<Plug>(ref-keyword)']
       \ }}
-" Shougo "{{{
+" 暗黒美夢王 "{{{
 NeoBundleLazy 'Shougo/unite.vim', {
       \ 'autoload' : {
       \   'commands' : [ {
@@ -341,7 +345,6 @@ NeoBundleLazy 'Shougo/vimfiler', {
       \   'explorer' : 1,
       \ }}
 NeoBundleLazy 'Shougo/neocomplcache', {
-      \ 'rev': 'ver.8',
       \ 'autoload' : {
       \   'insert' : 1,
       \ },
@@ -370,7 +373,6 @@ NeoBundleLazy 'Shougo/echodoc', {
 " Remove dust.
 NeoBundleLazy 'taichouchou2/alpaca_remove_dust.vim', {
       \ 'autoload': {
-      \   'insert' : 1,
       \   'commands': ['RemoveDustDisable', 'RemoveDustEnable', 'RemoveDustRun']
       \ }}
 NeoBundleLazy 'taichouchou2/alpaca_update_tags', {
@@ -429,12 +431,14 @@ NeoBundleLazy 'majutsushi/tagbar', {
       \ 'autoload' : {
       \   'commands': ["TagbarToggle", "TagbarTogglePause"],
       \   'fuctions': ['tagbar#currenttag'] }}
-NeoBundleLazy 'yuratomo/w3m.vim', {
-      \ 'build' : {
-      \   'mac' : 'brew install w3m',
-      \   'unix': 'sudo yum install w3m',
-      \ },
-      \ 'autoload' : { 'commands' : 'W3m' }}
+if executable("w3m")
+  NeoBundleLazy 'yuratomo/w3m.vim', {
+        \ 'build' : {
+        \   'mac' : 'brew install w3m',
+        \   'unix': 'sudo yum install w3m',
+        \ },
+        \ 'autoload' : { 'commands' : 'W3m' }}
+endif
 NeoBundleLazy 'open-browser.vim', { 'autoload' : {
       \ 'mappings' : [ '<Plug>(open-browser-wwwsearch)', '<Plug>(openbrowser-open)',  ],
       \ 'commands' : ['OpenBrowserSearch'] }}
@@ -621,10 +625,16 @@ NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
       \ 'filetypes' : g:my.ft.program_files,
       \ 'function_prefix' : "smartchr",
       \ }}
-NeoBundle 'taichouchou2/alpaca_english', {
-      \ 'rev' : 'development',
-      \ }
-NeoBundle 'wadako111/say.vim'
+if has("ruby")
+  NeoBundleLazy 'taichouchou2/alpaca_english', {
+        \ 'rev' : 'development',
+        \ 'autoload' : {
+        \   'filetypes' : g:my.ft.english_files,
+        \   'commands' : ["AlpacaEnglishDisable", "AlpacaEnglishEnable", "AlpacaEnglishSay"],
+        \   'unite_sources': 'english',
+        \ }
+        \ }
+endif
 NeoBundleLazy 'itchyny/thumbnail.vim', { 'autoload' : {
       \ 'commands' : 'Thumbnail'
       \ }}
@@ -833,18 +843,15 @@ endif
 " ruby全般
 " NeoBundleLazy 'ruby-matchit', { 'autoload': {
 "       \ 'filetypes': g:my.ft.ruby_files}}
-" NeoBundleLazy 'skwp/vim-rspec', {
-"       \ 'build': {
-"       \   'mac': 'gem install hpricot',
-"       \   'unix': 'gem install hpricot'
-"       \ },
-"       \ 'autoload': { 'filetypes': g:my.ft.ruby_files}}
+NeoBundleLazy 'skwp/vim-rspec', {
+      \ 'build': {
+      \   'mac': 'gem install hpricot',
+      \   'unix': 'gem install hpricot'
+      \ },
+      \ 'autoload': { 'filetypes': g:my.ft.ruby_files}}
 NeoBundleLazy 'taka84u9/vim-ref-ri', {
       \ 'depends': ['Shougo/unite.vim', 'thinca/vim-ref'],
       \ 'autoload': { 'filetypes': g:my.ft.ruby_files } }
-" NeoBundleLazy 'vim-ruby/vim-ruby', { 'autoload': {
-"       \ 'mappings' : '<Plug>(ref-keyword)',
-"       \ 'filetypes': g:my.ft.ruby_files}}
 NeoBundleLazy 'Shougo/unite-help', { 'autoload' : {
       \ 'unite_sources' : 'help'
       \ }}
@@ -993,7 +1000,7 @@ set nrformats+=alpha
 set textwidth=0
 " set gdefault
 " set splitright
-" set splitbelow
+set splitbelow
 set previewheight=8
 set helpheight=12
 
@@ -1030,6 +1037,12 @@ nnoremap <silent><Space><Space>w :wall!<CR>
 nnoremap <silent><Space>q :q!<CR>
 nnoremap <silent><Space>w :wq<CR>
 nnoremap <silent><Space>s :w sudo:%<CR>
+" For quickrun and as so on.
+nnoremap <silent><C-L> :call RedrawAndDoAutocmd()<CR>
+function! RedrawAndDoAutocmd()
+  doautocmd CursorHoldI <buffer>
+  redraw
+endfunction
 
 " これをすると、矢印キーがバグるのはなぜ？
 " inoremap <silent><ESC> <Esc>:nohlsearch<CR>
@@ -1073,21 +1086,21 @@ for [filetype, abbr_defines] in items(s:alpaca_abbr_define)
   call alpaca#initialize#define_abbrev(abbr_defines, filetype)
 endfor
 
+" for leaning english.
 function! s:toggle_set_spell() "{{{
   if &spell
     setl nospell
     echo "nospell"
     AlpacaEnglishDisable
-    nunmap ;;
-    vunmap ;;
   else
     setl spell
-    AlpacaEnglishEnable
     echo "spell"
-    nnoremap ;; :<C-U>AlpacaEnglishSay<CR>
-    xnoremap ;; :AlpacaEnglishSay<CR>
+    AlpacaEnglishEnable
   endif
 endfunction"}}}
+nnoremap ;; :<C-U>AlpacaEnglishSay<CR>
+xnoremap ;; :AlpacaEnglishSay<CR>
+
 command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <count>?<count>-line('.'):1)|exec 'normal! j' . n . <q-args>|call cursor('.', c)|endfor
 "}}}
 " コメントを書くときに便利 {{{
@@ -1191,6 +1204,8 @@ nnoremap <silent><Down> gj
 nnoremap <silent><Up>   gk
 nnoremap <silent>j gj
 nnoremap <silent>k gk
+nnoremap <silent>gj j
+nnoremap <silent>gk k
 
 xnoremap H <Nop>
 inoremap <C-@> <Nop>
@@ -3035,14 +3050,16 @@ smap <silent><C-F>                <Plug>(neosnippet_expand_or_jump)
 nmap [unite] <Nop>
 nmap <C-J> [unite]
 
-nnoremap <silent> <Space>b       :<C-u>UniteBookmarkAdd<CR>
-nnoremap <silent> [unite]b       :<C-u>Unite buffer -buffer-name=buffer<CR>
-nnoremap <silent> [unite]j       :<C-u>Unite file_mru -buffer-name=file_mru<CR>
-nnoremap <silent> [unite]u       :<C-u>UniteWithBufferDir -buffer-name=file file<CR>
-nnoremap <silent> [unite]e       :<C-u>Unite english -buffer-name=english<CR>
-nnoremap <silent> [unite]B       :<C-u>Unite bookmark -buffer-name=bookmark<CR>
-nnoremap <silent> g/             :<C-U>call <SID>smart_unite_open('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast')<CR>
-nnoremap <silent> g#             :<C-U>call <SID>smart_unite_open('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast -input=<C-R><C-W>')<CR>
+nnoremap <silent><Space>b       :<C-u>UniteBookmarkAdd<CR>
+nnoremap <silent>[unite]b       :<C-u>Unite buffer -buffer-name=buffer<CR>
+nnoremap <silent>[unite]j       :<C-u>Unite file_mru -buffer-name=file_mru<CR>
+nnoremap <silent>[unite]u       :<C-u>UniteWithBufferDir -buffer-name=file file<CR>
+nnoremap <silent>[unite]e       :<C-u>Unite english -buffer-name=english<CR>
+nnoremap [unite]x               :<C-u>Unite example -buffer-name=example -input=
+nnoremap [unite]t               :<C-u>Unite thesaurus -buffer-name=thesaurus -input=
+nnoremap <silent>[unite]B       :<C-u>Unite bookmark -buffer-name=bookmark<CR>
+nnoremap <silent>g/             :<C-U>call <SID>smart_unite_open('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast')<CR>
+nnoremap <silent>g#             :<C-U>call <SID>smart_unite_open('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast -input=<C-R><C-W>')<CR>
 
 cnoremap <expr><silent><C-g>     (getcmdtype() == '/') ?  "\<ESC>:Unite -buffer-name=search line -input=".getcmdline()."\<CR>" : "\<C-g>"
 " nnoremap <silent><expr>[unite]f ':Unite -buffer-name=file file:' . expand("%:p:h") . '<CR>'
@@ -3067,7 +3084,7 @@ nnoremap [unite]l                :<C-U>Unite locate -buffer-name=locate -input=
 
 " UniteFile
 " XXX Uniteのcustom補完が、-buffer-name=がある場合効かないため。
-" これは、むしろunite.vimのバグでは..{{{
+" これは、むしろunite.vimのバグ?というか仕様かな..{{{
 function! s:unite_file(path)
   let path=substitute(a:path, '^\s*', '', '')
   if isdirectory(path)
@@ -3312,7 +3329,7 @@ command! UpdateRubyTags call <SID>update_ruby_ctags()
 
 aug MyAutoCmd
   " au FileType haml,ruby,eruby,yaml xnoremap <silent><buffer>H :s!:\(\w\+\)\s*=>!\1:!g
-  " au FileType haml,ruby,eruby call <SID>set_ruby_tags()
+  au FileType haml,ruby,eruby call <SID>set_ruby_tags()
 aug END
 
 if has('vim_starting')
