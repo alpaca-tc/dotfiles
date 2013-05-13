@@ -3077,7 +3077,7 @@ nnoremap <silent>[unite]o        :<C-U>Unite -no-start-insert -horizontal -no-qu
 nnoremap <silent>[unite]q        :<C-U>Unite qiita -buffer-name=qiita<CR>
 nnoremap <silent>[unite]ra       :<C-U>Unite -buffer-name=rake rake<CR>
 nnoremap <silent>[unite]/        :<C-U>Unite -buffer-name=history_search -no-empty history/search<CR>
-nnoremap <silent>[unite]t        :<C-U>Unite tag -buffer-name=tag -no-empty<CR>
+nnoremap <silent>[unite]T        :<C-U>Unite tag -buffer-name=tag -no-empty<CR>
 nnoremap <silent>[unite]y        :<C-U>Unite -buffer-name=history_yank -no-empty history/yank<CR>
 nnoremap [unite]S                :<C-U>Unite -no-start-insert -buffer-name=ssh ssh://
 nnoremap [unite]l                :<C-U>Unite locate -buffer-name=locate -input=
