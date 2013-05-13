@@ -107,6 +107,11 @@ prev_word  '^'
 snippet req
     require '${1}'
 
+snippet     require_relational
+abbr        require File.expand_path(File.dirname(__FILE__) + '...')
+options     word
+  require File.expand_path(File.dirname(__FILE__) + '${1}')
+
 snippet end
     __END__
 

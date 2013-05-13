@@ -1,7 +1,5 @@
 #!/bin/sh
 
-#rubyのインスコ #好きなバージョンでok
-RUBIES=( 1.9.3-p194 1.9.2-p290)
 cd $HOME
 git clone git://github.com/sstephenson/rbenv.git ~/.rbenv
 
@@ -12,16 +10,24 @@ if [ -x `which rbenv` ];then
     git clone git://github.com/sstephenson/ruby-build.git
     git clone git://github.com/tpope/rbenv-ctags.git
     git clone git://github.com/jamis/rbenv-gemset.git
+
+    echo ""
+    echo "copy-paste this to ~/.zshrc"
     echo 'export PATH="$HOME/.rbenv/bin/:$HOME/.rbenv:$PATH"'
     echo 'eval "$(rbenv init -)"'
 
-    for version in ${RUBIES[@]}
-    do
-        rbenv install $version
-    done
+    # 1.8.7系
+    echo "install ruby 1.8.7"
+    CC=/usr/local/bin/gcc-4.2 CONFIGURE_OPTS="--without-tcl --without-tk --enable-shared" rbenv install 1.8.7-p371 &
 
-    #好きなバージョンでok
-    rbenv global 1.9.3-p194
+    # 1.9.3系
+    echo "install ruby 1.9.3"
+    CONFIGURE_OPTS="--with-arch=i386 --with-readline-dir=`brew --prefix readline` --with-openssl-dir=/usr/local --enable-shared" rbenv install 1.9.3-p392 &
+
+    # 2.0.0系
+    echo "install ruby 2.0.0"
+    CONFIGURE_OPTS="--with-openssl-dir=`brew --prefix openssl` --enable-shared" rbenv install 2.0.0-p0 &
+
     rbenv rehash
 fi
 

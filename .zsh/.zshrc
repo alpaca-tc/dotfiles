@@ -1,7 +1,7 @@
 # 環境変数
 # # {{{
 export EDITOR=vim
-# export LANG=ja_JP.UTF-8
+export LC_CTYPE=en_US.UTF-8
 export LANG=en_US.UTF-8
 # export SHELL=/usr/local/bin/zsh
 export DOTFILES_DIR=$HOME/dotfiles_serclet
@@ -52,7 +52,7 @@ export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 export MANPATH=/usr/local/share/man:$MANPATH
 
 # java 1.7.0
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_07.jdk/Contents/Home
 export PATH=$JAVA_HOME/bin:$PATH
 export CLASSPATH=$JAVA_HOME'/lib/ext'
 
