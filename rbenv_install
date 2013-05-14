@@ -22,7 +22,8 @@ if [ -x `which rbenv` ];then
 
     # 1.9.3系
     echo "install ruby 1.9.3"
-    CONFIGURE_OPTS="--with-arch=i386 --with-readline-dir=`brew --prefix readline` --with-openssl-dir=/usr/local --enable-shared" rbenv install 1.9.3-p392 &
+    # CONFIGURE_OPTS="--with-arch=i386 --with-readline-dir=`brew --prefix readline` --with-openssl-dir=/usr/local --enable-shared" rbenv install 1.9.3-p392 &
+    CONFIGURE_OPTS="--with-openssl-dir=`brew --prefix openssl` --enable-shared" rbenv install 1.9.3-p392 &
 
     # 2.0.0系
     echo "install ruby 2.0.0"

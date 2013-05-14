@@ -128,9 +128,9 @@ let g:my.conf = {
       \ }
 "}}}
 " path "{{{
+      " \ "ctags" : expand('~/usr/bin/ctags'),
 let g:my.bin = {
       \ "ri" : expand('/Users/taichou/.rbenv/shims/ri'),
-      \ "ctags" : expand('/Applications/MacVim.app/Contents/MacOS/ctags'),
       \ }
 
 let g:my.dir = {
@@ -251,11 +251,20 @@ NeoBundle 'Shougo/vimproc', {
       \ }}
 " An awesome improvement to the Vim status bar.
 if has('python')
+  " NeoBundle 'Lokaltog/powerline'
   NeoBundle 'Lokaltog/powerline', {
-      \ 'rtp' : 'powerline/bindings/vim',
-      \ }
+        \ 'name': 'powerline',
+        \ 'directory': 'powerline',
+        \ 'rtp' : 'powerline/bindings/vim',
+        \ }
   " Not patch font for powerline.
-  " NeoBundle 'taichouchou2/powerline', { 'directory': 'powerline', 'rev': 'master', 'rtp' : 'powerline/bindings/vim'}
+  " NeoBundle 'taichouchou2/powerline', { 
+  "       \ 'name': 'powerline',
+  "       \ 'directory': 'powerline', 
+  "       \ 'rev': 'master', 
+  "       \ 'rtp' : 'powerline/bindings/vim'
+  "       \ }
+  NeoBundle 'zhaocai/linepower.vim'
 endif
 NeoBundle 'taichouchou2/alpaca_powertabline'
 " WebAPI utils
@@ -566,7 +575,7 @@ NeoBundleLazy 'ujihisa/unite-colorscheme', {
 NeoBundleLazy 'tsukkee/unite-tag', {
       \ 'depends' : ['Shougo/unite.vim'],
       \ 'autoload' : {
-      \   'unite_sources' : 'tag'
+      \   'unite_sources' : 'tags'
       \ }}
 NeoBundleLazy 'mattn/qiita-vim', { 'depends' :
       \ ['Shougo/unite.vim', 'mattn/webapi-vim'],
@@ -623,15 +632,22 @@ NeoBundleLazy 'basyura/TweetVim', { 'depends' :
 NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
       \ 'insert' : 1,
       \ 'filetypes' : g:my.ft.program_files,
-      \ 'function_prefix' : "smartchr",
+      \ 'autoload': {
+      \   'function_prefix' : "smartchr",
+      \ }
       \ }}
 if has("ruby")
-  NeoBundleLazy 'taichouchou2/alpaca_english', {
+  NeoBundle 'taichouchou2/alpaca_english', {
         \ 'rev' : 'development',
+        \ 'build' : {
+        \   "mac" : "bundle",
+        \   "unix" : "bundle",
+        \   "other" : "bundle",
+        \ },
         \ 'autoload' : {
         \   'filetypes' : g:my.ft.english_files,
         \   'commands' : ["AlpacaEnglishDisable", "AlpacaEnglishEnable", "AlpacaEnglishSay"],
-        \   'unite_sources': 'english',
+        \   'unite_sources': ['english_dictionary', 'english_example', 'english_thesaurus'],
         \ }
         \ }
 endif
@@ -1051,7 +1067,7 @@ endfunction
 inoremap <C-D><C-A> <C-R>=g:my.info.author<CR>
 inoremap <C-D><C-D> <C-R>=alpaca#function#today()<CR>
 inoremap <C-D><C-R> <C-R>=<SID>current_git()<CR>
-nnoremap ,s :call <SID>toggle_set_spell()<CR>
+nnoremap <silent>,s :call <SID>toggle_set_spell()<CR>
 " inoremap <C-@> <Esc>[s1z=`]a
 xnoremap <silent><C-p> "0p<CR>
 nnoremap re :%s!
@@ -1109,6 +1125,7 @@ inoremap ,- ----------------------------------------
 inoremap ,h <!-- / --><left><left><left><Left>
 
 let g:end_tag_commant_format = '<!-- /%tag_name%id%class -->'
+" Generating comment tag
 nnoremap ,t :<C-u>call alpaca#function#endtag_comment()<CR>
 "}}}
 " 変なマッピングを修正 "{{{
@@ -1125,21 +1142,6 @@ cnoremap <C-R> <C-R><C-R>
 cnoremap <C-R><C-R> <C-R>"
 cnoremap <C-L> <Right>
 "}}}
-" htmlをescape {{{
-function! s:HtmlEscape()
-  silent s/&/\&amp;/eg
-  silent s/</\&lt;/eg
-  silent s/>/\&gt;/eg
-endfunction
-function! s:HtmlUnEscape()
-  silent s/&lt;/</eg
-  silent s/&gt;/>/eg
-  silent s/&amp;/\&/eg
-endfunction
-
-xmap <silent>eh :call <SID>HtmlEscape()<CR>
-xmap <silent>dh :call <SID>HtmlUnEscape()<CR>
-" }}}
 " Improved increment.{{{
 " nmap <C-A> <SID>(increment)
 " nmap <C-X> <SID>(decrement)
@@ -1230,12 +1232,12 @@ nnoremap <silent>[tag_or_tab]o  <C-W>T
 nmap <silent>[tag_or_tab]c      <Plug>(alpaca_window_tabnew)
 nmap <silent>[tag_or_tab]w      <Plug>(alpaca_window_move_buffer_into_last_tab)
 
-for num in range(1, 10)
+for num in range(0, 10)
   execute 'nnoremap <silent>[tag_or_tab]'.num.'  :<C-U>tabnext '.num'<CR>'
   execute 'nnoremap <silent>[tag_or_tab]m'.num.'  :<C-U>tabmove '.num'<CR>'
 endfor
 
-function! Move_tab(to) "{{{
+function! s:move_tab_to(to) "{{{
   let target_tab_nr = tabpagenr() + a:to -1
   let last_tab_nr = tabpagenr("$") - 1
 
@@ -1246,10 +1248,9 @@ function! Move_tab(to) "{{{
   endif
 
   execute 'tabmove ' target_tab_nr
-  echo target_tab_nr
 endfunction"}}}
-nnoremap <silent>[tag_or_tab]<C-L> :<C-U>call Move_tab(1)<CR>
-nnoremap <silent>[tag_or_tab]<C-H> :<C-U>call Move_tab(-1)<CR>
+nnoremap <silent>[tag_or_tab]<C-L> :<C-U>call <SID>move_tab_to(1)<CR>
+nnoremap <silent>[tag_or_tab]<C-H> :<C-U>call <SID>move_tab_to(-1)<CR>
 " }}}
 
 " 前回終了したカーソル行に移動
@@ -1339,23 +1340,23 @@ set foldlevelstart=1
 set foldminlines=2
 set foldnestmax=2
 
-function! s:fold_method_toggle(insertmode) "{{{
-  if !exists('b:fold_method')
-    return 0
-  endif
-
-  if a:insertmode
-    " setl foldmethod=marker
-  else
-    execute 'setl foldmethod=' . b:fold_method
-  endif
-endfunction"}}}
-augroup FoldMethod
-  autocmd!
-  autocmd BufReadPost * call alpaca#let_b:('fold_method', &foldmethod)
-  autocmd InsertEnter * call s:fold_method_toggle(1)
-  autocmd InsertLeave * call s:fold_method_toggle(0)
-augroup END
+" function! s:fold_method_toggle(insertmode) "{{{
+"   if !exists('b:fold_method')
+"     return 0
+"   endif
+" 
+"   if a:insertmode
+"     " setl foldmethod=marker
+"   else
+"     execute 'setl foldmethod=' . b:fold_method
+"   endif
+" endfunction"}}}
+" augroup FoldMethod
+"   autocmd!
+"   autocmd BufReadPost * call alpaca#let_b:('fold_method', &foldmethod)
+"   autocmd InsertEnter * call s:fold_method_toggle(1)
+"   autocmd InsertLeave * call s:fold_method_toggle(0)
+" augroup END
 " set foldlevel=5
 " set foldtext='v:foldstart v:foldend v:folddashes'
 " set foldnestmax=5
@@ -1386,6 +1387,7 @@ colorscheme  desertEx
 " http://vim-users.jp/2010/06/hack154/
 
 set tags-=tags
+set tags+=tags;
 
 aug MyUpdateTags
   au!
@@ -1425,9 +1427,8 @@ function! s:auto_dict_setting() "{{{
   let b:dict_path = expand('~/.vim/dict/'.file_type_name.'.dict')
   execute "setl dictionary+=".b:dict_path
 
-  nnoremap <buffer><expr><Space>d ':<C-U>Edit '.b:dict_path.'<CR>'
+  nnoremap <buffer><Space>d :execute join([alpaca_window#util#get_smart_split_command("split"), b:dict_path], " ")<CR>
 endfunc"}}}
-
 aug MyAutoCmd
   au FileType * call <SID>auto_dict_setting()
 aug END
@@ -1499,6 +1500,8 @@ if empty( s:surround_mapping )
         \   'Q':  "%Q!\r!",
         \   'r':  "%r!\r!",
         \   'R':  "%R!\r!",
+        \   '\"':  '\"\r\"',
+        \   "'":  "'\r'",
         \   '{':  "{ \r }",
         \   'd':  "do\n \r end",
         \ }
@@ -1542,6 +1545,7 @@ function! s:surround_mapping_filetype() "{{{
     endfor
     return
   endif "}}}
+
   " filetypeに当てはまる設定を追加 "{{{
   let memo = []
   for mapping_settings in s:surround_mapping
@@ -1559,7 +1563,7 @@ function! s:surround_mapping_filetype() "{{{
   let s:surround_mapping_memo[filetype] = memo
 endfunction"}}}
 
-augroup MyAutoCmd
+augroup MySurroundMapping
   autocmd FileType * call <SID>surround_mapping_filetype()
 augroup END
 "}}}
@@ -1591,7 +1595,9 @@ aug MyAutoCmd
         \|nnoremap <buffer><space>t :<C-U>TagbarToggle<CR>
 aug END
 
-let g:tagbar_ctags_bin  = g:my.bin.ctags
+if exists('g:my.bin.ctags')
+  let g:tagbar_ctags_bin  = g:my.bin.ctags
+endif
 let g:tagbar_compact    = 1
 let g:tagbar_autofocus  = 1
 let g:tagbar_autoshowtag= 1
@@ -1599,7 +1605,7 @@ let g:tagbar_iconchars  =  ['▸', '▾']
 let g:tagbar_width = 30
 " let g:tagbar_autoclose = 1
 " let g:tagbar_sort = 0
-
+" 個別の設定はftpluginに。
 "}}}
 
 "------------------------------------
@@ -1673,21 +1679,9 @@ aug QuickRunAutoCmd "{{{
   au!
 
   " au FileType quickrun au BufEnter <buffer> if winnr('$') == 1 |quit| endif
-  au FileType quickrun au BufEnter <buffer> call s:smart_close()
+  au FileType quickrun au BufEnter <buffer> call <SID>smart_close()
   au FileType racc.ruby,racc nnoremap <buffer>,R :<C-U>QuickRun racc.run<CR>
 aug END "}}}
-"}}}
-
-"------------------------------------
-" toggle.vim
-"------------------------------------
-"{{{
-"<C-T>で、true<->falseなど切り替えられる
-" inoremap <C-D> <Plug>ToggleI
-" nnoremap <C-D> <Plug>ToggleN
-" xnoremap <C-D> <Plug>ToggleV
-"
-" let g:toggle_pairs = { 'and':'or', 'or':'and', 'if':'unless', 'unless':'if', 'yes':'no', 'no':'yes', 'enable':'disable', 'disable':'enable', 'pick':'reword', 'reword':'fixup', 'fixup':'squash', 'squash':'edit', 'edit':'exec', 'exec':'pick'}
 "}}}
 
 "----------------------------------------
@@ -1725,7 +1719,6 @@ let g:user_zen_settings = {
 let g:ref_open                    = 'tabnew'
 let g:ref_cache_dir               = g:my.dir.vimref
 let g:ref_phpmanual_path          = expand('~/.vim/ref/php-chunked-xhtml')
-" let g:ref_ri_cmd                  = g:my.bin.ri
 let g:ref_no_default_key_mappings = 1
 
 nnoremap <C-K> :<C-U>Ref alc <Space><C-R><C-W><CR>
@@ -1771,7 +1764,7 @@ let g:ref_source_webdict_sites = {
       \   },
       \ }
 
-function! Search_text_or_input_text(dict_name) "{{{
+function! s:search_text_or_input_text(dict_name) "{{{
   let cursor_word = s:get_cursor_word()
   if empty(cursor_word)
     let cursor_word = input("search by ". a:dict_name .": ")
@@ -1780,14 +1773,14 @@ function! Search_text_or_input_text(dict_name) "{{{
 endfunction"}}}
 for [name, dict] in items(g:ref_source_webdict_sites) "{{{
   if has_key(dict, 'key')
-    let command = join(['nnoremap', dict["key"], ':call Search_text_or_input_text("' .name. '")', '<CR>'], " ")
+    let command = join(['nnoremap', dict["key"], ':call <SID>search_text_or_input_text("' .name. '")', '<CR>'], " ")
     execute command
   endif
 endfor"}}}
 unlet command
 
 aug MyAutoCmd
-  au FileType ruby,eruby,ruby.rspec nnoremap <silent><buffer>K :<C-U>Unite -no-start-insert ref/ri   -input=<C-R><C-W><CR>
+  au FileType ruby,eruby,ruby.rspec nnoremap <silent><buffer>K :<C-U>Unite -no-start-insert ref/ri -default-action=split -input=<C-R><C-W><CR>
   " au FileType ruby,eruby,ruby.rspec nnoremap <silent><buffer>K  :<C-U>Unite -no-start-insert ref/refe -input=<C-R><C-W><CR>
 aug END
 "}}}
@@ -1811,7 +1804,6 @@ aug END
 " vim-git
 "----------------------------------------
 " "{{{
-" let g:git_command_edit = 'rightbelow vnew'
 let g:git_command_edit = 'vnew'
 let g:git_no_default_mappings = 1
 
@@ -1932,7 +1924,6 @@ let g:vimshell_ignore_case  = 1
 let g:vimshell_smart_case   = 1
 let g:vimshell_temporary_directory = g:my.dir.vimshell
 
-
 let bundle = neobundle#get('vimshell')
 function! bundle.hooks.on_source(bundle) "{{{
   let s:vimshell_altercmd = [
@@ -1956,7 +1947,7 @@ function! bundle.hooks.on_source(bundle) "{{{
   endfunction "}}}
 
   aug MyAutoCmd
-    au FileType vimshell call s:vimshell_settings()
+    au FileType vimshell call <SID>vimshell_settings()
   aug END
 endfunction"}}}
 unlet bundle
@@ -1976,11 +1967,11 @@ let g:memolist_memo_date         = ""
 let g:memolist_vimfiler          = 1
 
 nnoremap <silent><Space>mn  :<C-U>MemoNew<CR>
-function! Hoge()
+function! s:edit_memolist()
   lcd ~/.memolist
   Unite file
 endfunction
-nnoremap <silent><Space>ml :call Hoge()<CR>
+nnoremap <silent><Space>ml :call <SID>edit_memolist()<CR>
 nnoremap <Space>mg  :<C-U>MemoGrep<CR>
 "}}}
 
@@ -1990,11 +1981,10 @@ nnoremap <Space>mg  :<C-U>MemoGrep<CR>
 "{{{
 " 保存するたびに、コンパイル
 function! AutoCoffeeCompile()
-  aug MyAutoCmd
+  aug MyCofeeSetting
     autocmd BufWritePost *.coffee silent CoffeeMake! -cb | cwindow | redraw!
   aug END
 endfunction
-" nnoremap ,w :CoffeeCompile watch vert<CR>
 "}}}
 
 "------------------------------------
@@ -2032,20 +2022,6 @@ let g:ctrlp_prompt_mappings = {
 " hi link CtrlPLinePre NonText
 " hi link CtrlPMatch IncSearch
 " }}}
-
-"------------------------------------
-" vim-ruby
-"------------------------------------
-"{{{
-" function! s:vimRuby()
-let g:rubycomplete_buffer_loading = 1
-let g:rubycomplete_classes_in_global = 0
-let g:rubycomplete_rails = 0
-" endfunction
-" aug MyAutoCmd
-"   au FileType ruby,eruby,ruby.rspec call s:vimRuby()
-" aug END
-"}}}
 
 "------------------------------------
 " vim-rails
@@ -2096,7 +2072,7 @@ aug MyAutoCmd
   au BufEnter,FileReadPre * call <SID>do_rails()
 aug END
 
-function! UniteRailsSetting() "Unite-rails.vim {{{
+function! s:unite_rails_setting() "Unite-rails.vim {{{
   nnoremap <buffer>[plug]<C-H><C-H>  :<C-U>Unite rails/view<CR>
   nnoremap <buffer>[plug]<C-H>       :<C-U>Unite rails/model<CR>
   nnoremap <buffer>[plug]            :<C-U>Unite rails/controller<CR>
@@ -2128,6 +2104,7 @@ aug RailsDictSetting "{{{
   au User Rails/config/locales/*      let b:file_type_name="ruby.locales"
   au User Rails/config/initializes    let b:file_type_name="ruby.initializes"
   au User Rails/config/environments/* let b:file_type_name="ruby.environments"
+  au User Rails call <SID>unite_rails_setting()
 aug END"}}}
 "}}}
 
@@ -2163,7 +2140,7 @@ let g:tweetvim_async_post = 1
 let g:tweetvim_display_source = 1
 let g:tweetvim_display_time = 1
 let g:tweetvim_open_buffer_cmd = 'tabnew'
-nnoremap <silent>[unite]T  :<C-U>Unite tweetvim -buffer-name=tweetvim -no-start-insert<CR>
+nnoremap <silent>[unite]w  :<C-U>Unite tweetvim -buffer-name=tweetvim -no-start-insert<CR>
 nnoremap <silent>tv :<C-U>TweetVimSay<CR>
 "}}}
 
@@ -2227,9 +2204,10 @@ xmap ,U <Plug>(operator-decamelize)
 " smartchr.vim
 "------------------------------------
 "{{{
-" let bundle = neobundle#get('vim-smartchr')
-" function! bundle.hooks.on_source(bundle)
-  augroup MyAutoCmd
+let bundle = neobundle#get('vim-smartchr')
+function! bundle.hooks.on_source(bundle)
+  augroup MySmarChr
+    au!
     " Substitute .. into -> .
     au FileType c,cpp    inoremap <buffer><expr> . smartchr#loop('.', '->', '...')
     au FileType perl,php inoremap <buffer><expr> - smartchr#loop('-', '->')
@@ -2257,7 +2235,7 @@ xmap ,U <Plug>(operator-decamelize)
     "       \| inoremap <buffer> <expr> : smartchr#loop(': ', ':', ' :: ')
     "       \| inoremap <buffer> <expr> . smartchr#loop('.', ' => ')
   augroup END
-" endfunction
+endfunction
 "}}}
 
 "------------------------------------
@@ -2625,6 +2603,11 @@ let s:switch_define = {
       \   ["while", "until"],
       \   [".blank?", ".present?"],
       \ ],
+      \ "haml" : [
+      \   ["if", "unless"],
+      \   ["while", "until"],
+      \   [".blank?", ".present?"],
+      \ ],
       \ }
 
 function! s:define_switch_mappings()
@@ -2735,6 +2718,20 @@ xnoremap ,l :<C-U>LanguageToolCheck<CR>
 let g:alpaca_english_enable=1
 let g:alpaca_english_max_candidates=100
 let g:alpaca_english_enable_duplicate_candidates=1
+
+" DEVELOPMENT VERSION
+let g:alpaca_english_web_search_url = 'http://eow.alc.co.jp/%s/UTF-8/'
+let g:alpaca_english_web_search_xpath = "div[@id='resultsList']/ul/li"
+
+let g:unite_force_overwrite_statusline = 0
+
+" ------------------------------------
+" linepower
+" ------------------------------------
+let g:vimshell_force_overwrite_statusline = 1
+let g:vimfiler_force_overwrite_statusline = 1
+let g:vimfiler_force_overwrite_statusline = 1
+
 "}}}
 
 "----------------------------------------
@@ -2956,11 +2953,11 @@ let g:echodoc_enable_at_startup = 1
 
 "------------------------------------
 " VimFiler {{{
-nnoremap <silent>[plug]f          :<C-U>call VimFilerExplorerGit()<CR>
+nnoremap <silent>[plug]f          :<C-U>call <SID>vim_filer_explorer_git()<CR>
 nnoremap <silent>,,        :<C-U>VimFilerBufferDir<CR>
 nnoremap <silent>,n        :<C-U>VimFilerCreate<CR>
 
-function! VimFilerExplorerGit() "{{{
+function! s:vim_filer_explorer_git() "{{{
   " TODO 開いているファイルのパスまで、Uniteも開く
   let cmd = bufname("%") != "" ? "2wincmd w" : ""
   let s:git_root = system('git rev-parse --show-cdup')
@@ -2983,7 +2980,7 @@ function! VimFilerExplorerGit() "{{{
 
   exe cmd
 endfunction "}}}
-command! VimFilerExplorerGit call VimFilerExplorerGit()
+command! VimFilerExplorerGit call <SID>vim_filer_explorer_git()
 
 let g:vimfiler_data_directory = g:my.dir.vimfiler
 let g:vimfiler_safe_mode_by_default = 0
@@ -3054,9 +3051,10 @@ nnoremap <silent><Space>b       :<C-u>UniteBookmarkAdd<CR>
 nnoremap <silent>[unite]b       :<C-u>Unite buffer -buffer-name=buffer<CR>
 nnoremap <silent>[unite]j       :<C-u>Unite file_mru -buffer-name=file_mru<CR>
 nnoremap <silent>[unite]u       :<C-u>UniteWithBufferDir -buffer-name=file file<CR>
-nnoremap <silent>[unite]e       :<C-u>Unite english -buffer-name=english<CR>
-nnoremap [unite]x               :<C-u>Unite example -buffer-name=example -input=
-nnoremap [unite]t               :<C-u>Unite thesaurus -buffer-name=thesaurus -input=
+nnoremap <silent>[unite]e       :<C-u>Unite english_dictionary -buffer-name=english_dictionary<CR>
+nnoremap [unite]x               :<C-u>Unite english_example -buffer-name=example<CR>
+nnoremap [unite]a               :<C-u>Unite web_search -buffer-name=web_search<CR>
+nnoremap [unite]t               :<C-u>Unite english_thesaurus -buffer-name=thesaurus<CR>
 nnoremap <silent>[unite]B       :<C-u>Unite bookmark -buffer-name=bookmark<CR>
 nnoremap <silent>g/             :<C-U>call <SID>smart_unite_open('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast')<CR>
 nnoremap <silent>g#             :<C-U>call <SID>smart_unite_open('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast -input=<C-R><C-W>')<CR>
@@ -3077,7 +3075,7 @@ nnoremap <silent>[unite]o        :<C-U>Unite -no-start-insert -horizontal -no-qu
 nnoremap <silent>[unite]q        :<C-U>Unite qiita -buffer-name=qiita<CR>
 nnoremap <silent>[unite]ra       :<C-U>Unite -buffer-name=rake rake<CR>
 nnoremap <silent>[unite]/        :<C-U>Unite -buffer-name=history_search -no-empty history/search<CR>
-nnoremap <silent>[unite]t        :<C-U>Unite tag -buffer-name=tag -no-empty<CR>
+nnoremap <silent>[unite]T        :<C-U>Unite tags -buffer-name=tag -no-empty<CR>
 nnoremap <silent>[unite]y        :<C-U>Unite -buffer-name=history_yank -no-empty history/yank<CR>
 nnoremap [unite]S                :<C-U>Unite -no-start-insert -buffer-name=ssh ssh://
 nnoremap [unite]l                :<C-U>Unite locate -buffer-name=locate -input=

@@ -4,10 +4,9 @@ export EDITOR=vim
 export LC_CTYPE=en_US.UTF-8
 export LANG=en_US.UTF-8
 # export SHELL=/usr/local/bin/zsh
-export DOTFILES_DIR=$HOME/dotfiles_serclet
 export BROWSER=w3m
-export ARCHFLAGS="-arch x86_64"
-export APXS2=/usr/sbin/apxs
+# export ARCHFLAGS="-arch x86_64"
+# export APXS2=/usr/sbin/apxs
 export GITHUB_HOST='github.com'
 export CONFIGURE_OPTS="--with-gcc=clang"
 
@@ -19,7 +18,6 @@ export CONFIGURE_OPTS="--with-gcc=clang"
 # rbenvの設定
 export CPPFLAGS="-I/usr/local/Cellar/readline/6.2.4/include"
 export LDFLAGS="-L/usr/local/Cellar/readline/6.2.4/lib"
-export CONFIGURE_OPTS="--with-gcc=clang"
 
 # PATH
 # {{{
@@ -71,14 +69,9 @@ export PATH=/Applications/MacVim.app/Contents/MacOS:$PATH
 
 # python
 # [[ -s "$HOME/.pythonbrew/etc/bashrc" ]] && source "$HOME/.pythonbrew/etc/bashrc"
-export PYTHONPATH=/usr/local/Cellar/python32/3.2.3/Frameworks/Python.framework/Versions/3.2
-alias python=python3.2
+# export PYTHONPATH=/usr/local/Cellar/python32/3.2.3/Frameworks/Python.framework/Versions/3.2
+# alias python=python3.2
 # }}}
-
-
-# for tmux
-# export PATH=$HOME/usr/bin:$PATH
-export PATH=$PATH:$HOME/usr/bin
 
 # for vim
 # export DYLD_FORCE_FLAT_NAMESPACE=1 

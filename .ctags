@@ -52,6 +52,8 @@
 --langmap=Ruby:.rb
 --regex-Ruby=/^[\t ]*([A-Z][-_A-Za-z0-9]*::)*([A-Z][-_A-Za-z0-9]*)[\t ]*=/\2/C,constant/
 --regex-Ruby=/^[ \t]*([A-Z_][A-Z0-9_]*)[ \t]*=/\1/C,constant/
+--regex-Ruby=/^[ \t]*describe (.*) do/\1/d,rspec describe/
+--regex-Ruby=/^[ \t]*context ['"](.*)['"] do/\1/C,rspec context/
 
 --langdef=scss
 --langmap=scss:.scss
