@@ -438,7 +438,7 @@ NeoBundleLazy 'majutsushi/tagbar', {
       \   'unix' : 'sudo npm install -g jsctags',
       \ },
       \ 'autoload' : {
-      \   'commands': ["TagbarToggle", "TagbarTogglePause"],
+      \   'commands': ["TagbarToggle", "TagbarTogglePause", "TagbarOpen"],
       \   'fuctions': ['tagbar#currenttag'] }}
 if executable("w3m")
   NeoBundleLazy 'yuratomo/w3m.vim', {
@@ -1603,6 +1603,7 @@ let g:tagbar_autofocus  = 1
 let g:tagbar_autoshowtag= 1
 let g:tagbar_iconchars  =  ['▸', '▾']
 let g:tagbar_width = 30
+
 " let g:tagbar_autoclose = 1
 " let g:tagbar_sort = 0
 " 個別の設定はftpluginに。
@@ -3405,3 +3406,9 @@ set secure
 "
 "   return ''
 " endfunc"}}}
+
+function! s:IDE()
+  TagbarOpen
+  VimFilerExplorerGit
+endfunction
+command! IDE call <SID>IDE()
