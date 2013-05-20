@@ -307,11 +307,11 @@ NeoBundleLazy 'kana/vim-smartword', { 'autoload' : {
 NeoBundleLazy 'thinca/vim-quickrun', { 'autoload' : {
       \   'mappings' : [['nxo', '<Plug>(quickrun)']],
       \   'commands' : 'QuickRun' }}
-NeoBundleLazy 'scrooloose/syntastic', { 'autoload': {
-      \ 'build' : {
-      \   'mac' : ['brew install tidy', 'brew install csslint', 'gem install sass', 'brew install jslint']
-      \ },
-      \ 'filetypes' : g:my.ft.program_files }}
+" NeoBundleLazy 'scrooloose/syntastic', { 'autoload': {
+"       \ 'build' : {
+"       \   'mac' : ['brew install tidy', 'brew install csslint', 'gem install sass', 'brew install jslint']
+"       \ },
+"       \ 'filetypes' : g:my.ft.program_files }}
 NeoBundleLazy 'vim-scripts/sudo.vim', {
       \ 'autoload': { 'commands': ['SudoRead', 'SudoWrite'], 'insert': 1 }}
 NeoBundleLazy 'tyru/eskk.vim', { 'autoload' : {
@@ -602,6 +602,7 @@ NeoBundleLazy 'kmnk/vim-unite-giti', {
       \   ]
       \ }}
 NeoBundleLazy 'hrsh7th/vim-versions', {
+      \ 'rev' : 'issue/5',
       \ 'autoload' : {
       \   'functions' : 'versions#info',
       \   'commands' : 'UniteVersions',
@@ -1225,12 +1226,12 @@ nmap <silent><C-W><C-N>   <Plug>(alpaca_window_smart_new)
 
 nmap [tag_or_tab] <Nop>
 nmap t [tag_or_tab]
+nmap <silent>[tag_or_tab]c      <Plug>(alpaca_window_tabnew)
+nmap <silent>[tag_or_tab]w      <Plug>(alpaca_window_move_buffer_into_last_tab)
 nnoremap <silent>[tag_or_tab]n  :tabnext<CR>
 nnoremap <silent>[tag_or_tab]p  :tabprevious<CR>
 nnoremap <silent>[tag_or_tab]x  :tabclose<CR>
 nnoremap <silent>[tag_or_tab]o  <C-W>T
-nmap <silent>[tag_or_tab]c      <Plug>(alpaca_window_tabnew)
-nmap <silent>[tag_or_tab]w      <Plug>(alpaca_window_move_buffer_into_last_tab)
 
 for num in range(0, 10)
   execute 'nnoremap <silent>[tag_or_tab]'.num.'  :<C-U>tabnext '.num'<CR>'
@@ -1376,6 +1377,10 @@ augroup cch
   autocmd WinEnter,BufRead * set cursorline
 augroup END
 
+if exists('+fuoptions')
+  set fuoptions=maxhorz,maxvert
+endif
+
 let g:molokai_original=1
 colorscheme  desertEx
 " colorscheme morning
@@ -1392,7 +1397,7 @@ set tags+=tags;
 aug MyUpdateTags
   au!
   au FileWritePost,BufWritePost * AlpacaUpdateTags
-  " au FileReadPost,BufEnter * AlpacaSetTags
+  au FileReadPost,BufEnter * AlpacaSetTags
 aug END
 
 "tags_jumpを使い易くする
@@ -2320,7 +2325,7 @@ hi IndentGuidesEven ctermbg=233
 augroup MyAutoCmd
   " au BufEnter * let g:indent_guides_guide_size=&tabstop
 augroup END
-nnoremap <silent>,i :<C-U>IndentGuidesToggle<CR>
+nnoremap <Space>i :<C-U>IndentGuidesToggle<CR>
 "}}}
 
 "------------------------------------
@@ -2772,6 +2777,7 @@ let g:neocomplcache_enable_underbar_completion    = 1
 let g:neocomplcache_force_overwrite_completefunc  = 1
 let g:neocomplcache_max_list                      = 80
 let g:neocomplcache_skip_auto_completion_time     = '1'
+let g:neocomplcache_enable_auto_close_preview = 0
 " let g:neocomplcache_caching_limit_file_size       = 0
 let g:neocomplcache_temporary_dir                 = g:my.dir.neocomplcache
 " let g:neocomplcache_enable_auto_close_preview = 1
@@ -2788,7 +2794,6 @@ let g:neocomplcache_clang_use_library=1
 " clang.dll へのディレクトリパス
 " let g:neocomplcache_clang_library_path='C:/llvm/bin'
 " clang のコマンドオプション
-" MinGW や Boost のパス周りの設定は手元の環境に合わせて下さい
 " let g:neocomplcache_clang_user_options =
 "     \ '-I C:/MinGW/lib/gcc/mingw32/4.5.3/include '.
 "     \ '-I C:/lib/boost_1_47_0 '.
@@ -3052,12 +3057,12 @@ nnoremap <silent>[unite]b       :<C-u>Unite buffer -buffer-name=buffer<CR>
 nnoremap <silent>[unite]j       :<C-u>Unite file_mru -buffer-name=file_mru<CR>
 nnoremap <silent>[unite]u       :<C-u>UniteWithBufferDir -buffer-name=file file<CR>
 nnoremap <silent>[unite]e       :<C-u>Unite english_dictionary -buffer-name=english_dictionary<CR>
-nnoremap [unite]x               :<C-u>Unite english_example -buffer-name=example<CR>
-nnoremap [unite]a               :<C-u>Unite web_search -buffer-name=web_search<CR>
-nnoremap [unite]t               :<C-u>Unite english_thesaurus -buffer-name=thesaurus<CR>
+nnoremap <silent>[unite]x       :<C-u>Unite english_example -horizontal -buffer-name=example<CR>
+nnoremap <silent>[unite]a       :<C-u>Unite web_search -horizontal -buffer-name=web_search<CR>
+nnoremap <silent>[unite]t       :<C-u>Unite english_thesaurus -horizontal -buffer-name=thesaurus<CR>
 nnoremap <silent>[unite]B       :<C-u>Unite bookmark -buffer-name=bookmark<CR>
-nnoremap <silent>g/             :<C-U>call <SID>smart_unite_open('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast')<CR>
-nnoremap <silent>g#             :<C-U>call <SID>smart_unite_open('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast -input=<C-R><C-W>')<CR>
+nnoremap <silent>g/             :<C-U>call <SID>unite_with_same_syntax('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast')<CR>
+nnoremap <silent>g#             :<C-U>call <SID>unite_with_same_syntax('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast -input=<C-R><C-W>')<CR>
 
 cnoremap <expr><silent><C-g>     (getcmdtype() == '/') ?  "\<ESC>:Unite -buffer-name=search line -input=".getcmdline()."\<CR>" : "\<C-g>"
 " nnoremap <silent><expr>[unite]f ':Unite -buffer-name=file file:' . expand("%:p:h") . '<CR>'
@@ -3065,8 +3070,8 @@ nnoremap [unite]f                :<C-U>Unite -buffer-name=file file:
 nnoremap [unite]<C-F>            :<C-u>Unite file:<C-R>=$PWD<CR>
 
 " TODO 調査
-" Unite file:が補完出来て
-" Unite -buffer-name=file file: が補完出来ないのってどうなの
+" Unite file:でファイル名補完出来て
+" Unite -buffer-name=file file: で補完効かないってどうなの
 
 nnoremap <silent>[unite]:        :<C-U>Unite -buffer-name=history_command -no-empty history/command<CR>
 nnoremap <silent>[unite]h        :<C-U>Unite help -no-quit -buffer-name=help<CR>
@@ -3099,14 +3104,14 @@ nnoremap <silent> [unite]r      :<C-u>Unite -no-quit reek<CR>
 nnoremap <silent> [unite]rr :<C-u>Unite -no-quit rails_best_practices<CR>
 "}}}
 " unite-giti {{{
-nnoremap <silent>gl :<C-U>Unite -buffer-name=giti_log -no-start-insert giti/log<CR>
-nnoremap <silent>gL :<C-U>Unite -buffer-name=versions_log -no-start-insert versions/git/log<CR>
-nnoremap <silent>gS :<C-U>Unite -buffer-name=versions_status -no-start-insert versions/git/status')<CR>
-nnoremap <silent>gs :<C-U>Unite -buffer-name=giti_status -no-start-insert giti/status<CR>
+nnoremap <silent>gl :<C-U>Unite -buffer-name=giti_log -no-start-insert -horizontal giti/log<CR>
+nnoremap <silent>gL :<C-U>Unite -buffer-name=versions_log -no-start-insert -horizontal versions/git/log<CR>
+nnoremap <silent>gS :<C-U>Unite -buffer-name=versions_status -no-start-insert -horizontal versions/git/status<CR>
+nnoremap <silent>gs :<C-U>Unite -buffer-name=giti_status -no-start-insert -horizontal giti/status<CR>
 nnoremap <silent>gh :<C-U>Unite -buffer-name=giti_branchall -no-start-insert giti/branch_all<CR>
 "}}}
 "}}}
-function! s:smart_unite_open(cmd) "{{{
+function! s:unite_with_same_syntax(cmd) "{{{
   let file_syntax=&syntax
   " let rails_root = exists('b:rails_root')? b:rails_root : ''
   " let rails_buffer = rails#buffer()
@@ -3186,6 +3191,16 @@ function! bundle.hooks.on_source(bundle) "{{{
     inoremap <buffer><Tab> <CR>
     syntax match uniteFileDirectory '.*\/'
     highlight link uniteFileDirectory Directory
+  endfunction"}}}
+  function! s:unite_kuso_hooks.versions_log() "{{{
+    nnoremap <silent><buffer><expr>c unite#do_action('changeset')
+    nnoremap <silent><buffer><expr>cp unite#do_action('changeset_prev')
+    nnoremap <silent><buffer><expr>d unite#do_action('diff')
+    nnoremap <silent><buffer><expr>diff_prev unite#do_action('diff_prev')
+    nnoremap <silent><buffer><expr>r unite#do_action('yank_revision')
+    nnoremap <silent><buffer><expr>rv unite#do_action('revert')
+    nnoremap <silent><buffer><expr>rsh unite#do_action('reset_hard')
+    nnoremap <silent><buffer><expr>rss unite#do_action('reset_soft')
   endfunction"}}}
 
   " command menu"{{{
