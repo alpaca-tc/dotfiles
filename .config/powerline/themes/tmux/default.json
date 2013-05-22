@@ -2,16 +2,16 @@
 	"default_module": "powerline.segments.common",
 	"segment_data": {
 		"uptime": {
-			"before": "↑"
+			"before": "⇑  "
 		},
 		"external_ip": {
-			"before": "w"
+			"before": "ⓦ  "
 		},
 		"date": {
-			"before": ""
+			"before": "⌚ "
 		},
 		"email_imap_alert": {
-			"before": "",
+			"before": "✉ ",
 			"args": {
 				"username": "",
 				"password": ""

@@ -1,7 +1,6 @@
 {
 	"common": {
 		"term_truecolor": true,
-    "ambiwidth": 2,
 		"dividers": {
 			"left": {
 				"hard": " ",
