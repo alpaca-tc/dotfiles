@@ -2603,6 +2603,9 @@ let s:switch_define = {
       \   ["if", "unless"],
       \   ["while", "until"],
       \   [".blank?", ".present?"],
+      \   ["include", "extend"],
+      \   ["class", "module"],
+      \   ["describe", "content"],
       \ ],
       \ "haml" : [
       \   ["if", "unless"],
@@ -3411,4 +3414,4 @@ function! s:IDE()
   TagbarOpen
   VimFilerExplorerGit
 endfunction
-command! IDE call <SID>IDE()
+command! -bar IDE call <SID>IDE()
