@@ -1337,7 +1337,7 @@ set ttyfast
 set foldenable
 set foldmethod=marker
 set foldlevel=1
-set foldlevelstart=1
+set foldlevelstart=0
 set foldminlines=2
 set foldnestmax=2
 
@@ -3067,7 +3067,6 @@ nnoremap <silent>g#             :<C-U>call <SID>unite_with_same_syntax('Unite -b
 cnoremap <expr><silent><C-g>     (getcmdtype() == '/') ?  "\<ESC>:Unite -buffer-name=search line -input=".getcmdline()."\<CR>" : "\<C-g>"
 " nnoremap <silent><expr>[unite]f ':Unite -buffer-name=file file:' . expand("%:p:h") . '<CR>'
 nnoremap [unite]f                :<C-U>Unite -buffer-name=file file:
-nnoremap [unite]<C-F>            :<C-u>Unite file:<C-R>=$PWD<CR>
 
 " TODO 調査
 " Unite file:でファイル名補完出来て
@@ -3375,13 +3374,14 @@ augroup AutoMkdir
   endfunction
 augroup END
 
-function! s:set_tmux_env()
+function! s:set_tmux_env() "{{{
   if !executable("tmux") | return -1 |endif
 
   if exists("$TMUX") && exists("$PWD")
     call system("tmux setenv TMUXPWD_$(tmux display -p '#D' | tr -d %) " . $PWD)
   endif
-endfunction
+endfunction"}}}
+
 augroup TmuxSetPwd
   autocmd FileReadPre,BufNewFile * call s:set_tmux_env()
 augroup END
