@@ -158,7 +158,7 @@ let g:my.ft = {
       \ "php_files"       : ['php', 'phtml'],
       \ "c_files"         : ["c", "cpp"],
       \ "style_files"     : ['css', 'scss', 'sass'],
-      \ "markup_files"    : ['html', 'haml', 'erb', 'php'],
+      \ "markup_files"    : ['html', 'haml', 'erb', 'php', 'xhtml'],
       \ "english_files"   : ['markdown', 'help', 'text'],
       \ "program_files"   : ['ruby', 'php', 'python', 'eruby', 'vim', 'javascript', 'coffee', 'scala', 'java', 'go', 'cpp', 'haml'],
       \ "ignore_patterns" : ['vimfiler', 'unite'],
@@ -264,7 +264,7 @@ if has('python')
   "       \ 'rev': 'master', 
   "       \ 'rtp' : 'powerline/bindings/vim'
   "       \ }
-  NeoBundle 'zhaocai/linepower.vim'
+  " NeoBundle 'zhaocai/linepower.vim'
 endif
 NeoBundle 'taichouchou2/alpaca_powertabline'
 " WebAPI utils
@@ -370,7 +370,7 @@ NeoBundleLazy 'Shougo/vimshell', {
       \   'commands' : [{
       \     'name' : 'VimShell',
       \     'complete' : 'customlist,vimshell#complete'},
-      \     'VimShellExecute', 'VimShellInteractive', 'VimShellTerminal', 'VimShellPop'],
+      \     'VimShellExecute', 'VimShellInteractive', 'VimShellTerminal', 'VimShellPop', 'VimShellBufferDir'],
       \   'mappings' : ['<Plug>(vimshell_switch)']
       \ }}
 NeoBundleLazy 'Shougo/echodoc', {
@@ -602,7 +602,6 @@ NeoBundleLazy 'kmnk/vim-unite-giti', {
       \   ]
       \ }}
 NeoBundleLazy 'hrsh7th/vim-versions', {
-      \ 'rev' : 'issue/5',
       \ 'autoload' : {
       \   'functions' : 'versions#info',
       \   'commands' : 'UniteVersions',
@@ -630,6 +629,7 @@ NeoBundleLazy 'basyura/TweetVim', { 'depends' :
 "       \ }}
 "}}}
 " その他 / テスト {{{
+" C# そのうち試す http://d.hatena.ne.jp/thinca/20130522/1369234427
 NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
       \ 'insert' : 1,
       \ 'filetypes' : g:my.ft.program_files,
@@ -730,6 +730,7 @@ NeoBundleLazy 'hail2u/vim-css3-syntax', { 'autoload' : {
 " ----------------------------------------
 NeoBundleLazy 'taichouchou2/html5.vim', { 'autoload' : {
       \   'filetypes' : g:my.ft.markup_files,
+      \   'functions' : ['HtmlIndentGet']
       \ }}
 
 " haml
@@ -1814,7 +1815,7 @@ let g:git_command_edit = 'vnew'
 let g:git_no_default_mappings = 1
 
 nnoremap gA :<C-U>GitAdd<Space>
-nnoremap <silent>ga :<C-U>GitAdd -A<CR>
+nnoremap <silent>ga :<C-U>GitAdd<CR>
 nnoremap <silent>gd :<C-U>GitDiff HEAD<CR>
 nnoremap gp :<C-U>Git push<Space>
 nnoremap gD :<C-U>GitDiff<Space>
@@ -1924,6 +1925,7 @@ xmap <silent>ie <Plug>CamelCaseMotion_ie
 "------------------------------------
 "{{{
 nnoremap <silent>,v  :<C-U>VimShell<CR>
+nnoremap <silent>,V  :<C-U>VimShellBufferDir<CR>
 let g:vimshell_user_prompt  = '"(" . getcwd() . ")" '
 let g:vimshell_prompt       = '$ '
 let g:vimshell_ignore_case  = 1
@@ -2617,7 +2619,12 @@ let s:switch_define = {
       \   ["while", "until"],
       \   [".blank?", ".present?"],
       \ ],
+      \ "css,scss,sass": [
+      \   ["collapse", "separate"],
+      \   ["margin", "padding"],
+      \ ],
       \ }
+let s:switch_define = alpaca#initialize#redefine_with_each_filetypes(s:switch_define)
 
 function! s:define_switch_mappings()
   if exists('b:switch_custom_definitions')
@@ -3426,6 +3433,7 @@ set secure
 " endfunc"}}}
 
 function! s:IDE()
+  silent!
   TagbarOpen
   VimFilerExplorerGit
 endfunction

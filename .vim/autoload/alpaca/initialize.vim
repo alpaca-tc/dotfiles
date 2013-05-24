@@ -5,7 +5,6 @@ augroup END
 function! s:get_autcmd_with_filetype(filetype, cmd) "{{{
   return join(["autocmd AbbrDefine FileType", a:filetype, a:cmd], " ")
 endfunction"}}}
-
 function! alpaca#initialize#directory(array) "{{{
   " initialize directory
   " create directory
@@ -26,3 +25,18 @@ function! alpaca#initialize#define_abbrev(define, ...) "{{{
 
   execute a:0 > 0 ? s:get_autcmd_with_filetype(a:1, command) : command
 endfunction"}}}
+function! alpaca#initialize#redefine_with_each_filetypes(ft_dictionary)
+  let result = {}
+
+  for [filetypes, value] in items(a:ft_dictionary)
+    for ft in split(filetypes, ",")
+      if !has_key(result, ft)
+        let result[ft] = []
+      endif
+
+      call extend(result[ft], copy(value))
+    endfor
+  endfor
+
+  return result
+endfunction
