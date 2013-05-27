@@ -32,6 +32,10 @@
   remove-branch-remote = "!git push origin $(git branch -r --merged | grep origin/ | grep -v master | sed s~origin/~:~)"
   remove-branch-all = "!git checkout master && git pull origin master && git fetch -p origin && git branch -d $(git branch --merged | grep -v master | grep -v '*') && git push origin $(git branch -r --merged | grep origin/ | grep -v master | sed s~origin/~:~)"
   resett = !git commit -a -m 'Temporary commit for cancel' && git reset --hard HEAD~
+  ignore = !"f() { local s=$1; shift; \
+           while [ $# -gt 0 ]; do s="$s,$1"; shift; done;\
+           curl "http://gitignore.io/api/$s"; }; f"
+  zip=archive --format=zip 
 
 [push]
   default = tracking

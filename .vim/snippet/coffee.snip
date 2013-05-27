@@ -166,15 +166,15 @@ snippet     ftoggle
 #}}}
 
 ###
-snippet     cMyError
-  class MyError
-      constructor: (@message)->
-          @name = @constructor.name
-      @:: = new Error()
-      @::constructor = @
+# よく使うお決まり{{{##
+snippet     beforeunload 
+abbr        ページ離脱者防止script
+options     word
+  $(window).on 'beforeunload', ->
+    'このページから移動しますか？'
+##}}}
 
-  myError = new MyError("This is my original error")
-
+###
 # rdoc /*{{{*/
 snippet     ##
   ##
