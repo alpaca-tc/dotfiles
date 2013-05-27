@@ -52,3 +52,5 @@
 	trustExitCode = true
 [issue]
 	type = github
+[branch]
+	autosetuprebase = always
