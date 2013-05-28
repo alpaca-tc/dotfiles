@@ -19,23 +19,34 @@
   ui = true
 
 [alias]
-  rs = reset
-  tr = log --graph --pretty='format:%C(yellow)%h%Creset %C(magenta)%cd%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset' --date=iso
-  st = !sh -c 'git ls-remote . | grep `git log -1 --grep="git-svn-id"`
-  dm = !git branch --merged | grep -v '*' | xargs -I % git branch -d %
-  sn = shortlog -sn
+  add-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
+  edit-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; vim `f`"
+
+  append-gitkeep = "!find . -type d -empty -not -path './.git*' -exec touch {}\\/.gitkeep \\;"
+  append-gitignore = !"f() { local s=$1; shift; while [ $# -gt 0 ]; do s="$s,$1"; shift; done; curl "http://gitignore.io/api/$s"; }; f"
+  branch-note = "!git config branch.$(git symbolic-ref HEAD|sed \"s/refs\\/heads\\///\").note $( if [ $# -gt 0 ]; then $1; fi)"
+
   assume = update-index --assume-unchanged
   no-assume = update-index --no-assume-unchanged
-  branch-note = "!git config branch.$(git symbolic-ref HEAD|sed \"s/refs\\/heads\\///\").note $( if [ $# -gt 0 ]; then $1; fi)"
-  append-gitkeep = "!find . -type d -empty -not -path './.git*' -exec touch {}\\/.gitkeep \\;"
+
+  remove-branch-all = "!git checkout master && git pull origin master && git fetch -p origin && git branch -d $(git branch --merged | grep -v master | grep -v '*') && git push origin $(git branch -r --merged | grep origin/ | grep -v master | sed s~origin/~:~)"
   remove-branch-local = "!git branch -d $(git branch --merged | grep -v master | grep -v '*')"
   remove-branch-remote = "!git push origin $(git branch -r --merged | grep origin/ | grep -v master | sed s~origin/~:~)"
-  remove-branch-all = "!git checkout master && git pull origin master && git fetch -p origin && git branch -d $(git branch --merged | grep -v master | grep -v '*') && git push origin $(git branch -r --merged | grep origin/ | grep -v master | sed s~origin/~:~)"
+
+  zip-from = !"f(){ git archive -o ~/src/latest.zip $1 $(git diff --name-only HEAD $1); }; f"
+  zip="!date=`date "+%y_%m_%d_%H%M%S"`; directory_name=`basename $(pwd)`; branch_name=`git symbolic-ref --short HEAD`; file_name="${directory_name}_${branch_name}_${date}.zip"; echo "creating... ${file_name}"; git archive HEAD --format=zip -o "${file_name}""
+
   resett = !git commit -a -m 'Temporary commit for cancel' && git reset --hard HEAD~
   ignore = !"f() { local s=$1; shift; \
            while [ $# -gt 0 ]; do s="$s,$1"; shift; done;\
            curl "http://gitignore.io/api/$s"; }; f"
-  zip="!date=`date "+%y_%m_%d_%H%M%S"`; directory_name=`basename $(pwd)`; branch_name=`git symbolic-ref --short HEAD`; file_name="${directory_name}_${branch_name}_${date}.zip"; echo "creating... ${file_name}"; git archive HEAD --format=zip -o "${file_name}""
+  dm = !git branch --merged | grep -v '*' | xargs -I % git branch -d %
+  rs = reset
+  sn = shortlog -sn
+  st = !sh -c 'git ls-remote . | grep `git log -1 --grep="git-svn-id"`
+  tr = log --graph --pretty='format:%C(yellow)%h%Creset %C(magenta)%cd%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset' --date=iso
+  empty-tree-sha1 = hash-object -t tree /dev/null
+  forkdiff = !bash -c 'git diff $(git merge-base "$1" "$2") "$2" "${@: 3}" ' -
 
 [push]
   default = tracking
@@ -49,10 +60,12 @@
 [receive]
   denyDeleteCurrent = false
 [difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
+  cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+  path =
 [mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
+  cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+  trustExitCode = true
 [issue]
-	type = github
+  type = github
+[branch]
+  autosetuprebase = always

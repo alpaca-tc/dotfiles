@@ -1061,8 +1061,8 @@ nnoremap <silent><Space>q :q!<CR>
 nnoremap <silent><Space>w :wq<CR>
 nnoremap <silent><Space>s :w sudo:%<CR>
 " For quickrun and as so on.
-nnoremap <silent><C-L> :call RedrawAndDoAutocmd()<CR>
-function! RedrawAndDoAutocmd()
+nnoremap <silent><C-L> :call <SID>redraw_with_doautocmd()<CR>
+function! s:redraw_with_doautocmd()
   doautocmd CursorHoldI <buffer>
   redraw
 endfunction
@@ -3409,7 +3409,7 @@ function! s:set_tmux_env() "{{{
 endfunction"}}}
 
 augroup TmuxSetPwd
-  autocmd FileReadPre,BufNewFile * call s:set_tmux_env()
+  autocmd FileReadPre,BufNewFile * call <SID>set_tmux_env()
 augroup END
 
 set secure
