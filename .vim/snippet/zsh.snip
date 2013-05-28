@@ -56,3 +56,13 @@ snippet fun
     function ${1:name} (${2:args}) {
         ${3:# body}
     }
+
+snippet     options
+abbr        while getopts ${1} OPT...
+options     word
+  while getopts ${1} OPT
+  do 
+    case $OPT in
+      "${2}" ) ${3};;
+    esac
+  done

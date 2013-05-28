@@ -652,6 +652,11 @@ if has("ruby")
         \ }
         \ }
 endif
+if has("clientserver")
+  NeoBundleLazy 'thinca/vim-singleton', { 'autoload' : {
+        \ 'functions' : 'singleton#enable'
+        \ }}
+end
 NeoBundleLazy 'itchyny/thumbnail.vim', { 'autoload' : {
       \ 'commands' : 'Thumbnail'
       \ }}
@@ -2748,6 +2753,16 @@ let g:vimshell_force_overwrite_statusline = 1
 let g:vimfiler_force_overwrite_statusline = 1
 let g:vimfiler_force_overwrite_statusline = 1
 
+" ----------------------------------------
+" vim-singleton.vim
+" ----------------------------------------
+let bundle = neobundle#get('vim-singleton')
+if !empty(bundle)
+  function! bundle.hooks.on_source(bundle)
+    call singleton#enable()
+  endfunction
+endif
+unlet bundle
 "}}}
 
 "----------------------------------------

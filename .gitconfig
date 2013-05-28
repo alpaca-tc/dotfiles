@@ -35,7 +35,7 @@
   ignore = !"f() { local s=$1; shift; \
            while [ $# -gt 0 ]; do s="$s,$1"; shift; done;\
            curl "http://gitignore.io/api/$s"; }; f"
-  zip=archive --format=zip 
+  zip="!date=`date "+%y_%m_%d_%H%M%S"`; directory_name=`basename $(pwd)`; branch_name=`git symbolic-ref --short HEAD`; file_name="${directory_name}_${branch_name}_${date}.zip"; echo "creating... ${file_name}"; git archive HEAD --format=zip -o "${file_name}""
 
 [push]
   default = tracking
