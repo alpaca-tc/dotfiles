@@ -33,6 +33,8 @@
   remove-branch-local = "!git branch -d $(git branch --merged | grep -v master | grep -v '*')"
   remove-branch-remote = "!git push origin $(git branch -r --merged | grep origin/ | grep -v master | sed s~origin/~:~)"
 
+  zip-from = !"f(){ git archive -o ~/src/latest.zip $1 $(git diff --name-only HEAD $1); }; f"
+
   resett = !git commit -a -m 'Temporary commit for cancel' && git reset --hard HEAD~
   dm = !git branch --merged | grep -v '*' | xargs -I % git branch -d %
   rs = reset

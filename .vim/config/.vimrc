@@ -3394,7 +3394,7 @@ function! s:set_tmux_env() "{{{
 endfunction"}}}
 
 augroup TmuxSetPwd
-  autocmd FileReadPre,BufNewFile * call s:set_tmux_env()
+  autocmd FileReadPre,BufNewFile * call <SID>set_tmux_env()
 augroup END
 
 set secure
