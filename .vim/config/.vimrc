@@ -2111,6 +2111,7 @@ endfunction
 aug RailsDictSetting "{{{
   au!
   " 別の関数に移そうか..
+  " TODO NeoSnippetSourceを追加
   au User Rails.controller*           let b:file_type_name="ruby.controller"
   au User Rails.view*erb              let b:file_type_name="ruby.view"
   au User Rails.view*haml             let b:file_type_name="haml.view"
@@ -2791,23 +2792,28 @@ autocmd FileType *
 "----------------------------------------
 " neocompelete / echodoc
 " default config"{{{
-let g:neocomplete_enable_at_startup = 1
-let g:neocomplete_enable_auto_select=0
-let g:neocomplete_enable_camel_case_completion  = 1
-let g:neocomplete_enable_underbar_completion    = 1
-let g:neocomplete_force_overwrite_completefunc  = 1
-let g:neocomplete_max_list                      = 80
-let g:neocomplete_skip_auto_completion_time     = '1'
-let g:neocomplete_enable_auto_close_preview = 0
+let g:neocomplete_enable_at_startup=1
+let g:neocomplete_max_list=30
+let g:neocomplete_max_keyword_width=120
+let g:neocomplete_auto_completion_start_length=2
+" let g:neocomplete_manual_completion_start_length=0
+let g:neocomplete_min_keyword_length=2
+let g:neocomplete_min_syntax_length=2
+" let g:neocomplete_disable_auto_complete=0
+" version 418
+" let g:neocomplete_enable_cursor_hold_i=0
+" let g:neocomplete_enable_auto_select=0
 let g:neocomplete_enable_fuzzy_completion=0
-" let g:neocomplete_caching_limit_file_size       = 0
-let g:neocomplete_temporary_dir                 = g:my.dir.neocomplete
-" let g:neocomplete_enable_auto_close_preview = 1
+" let g:neocomplete_caching_limit_file_size=500000
+let g:neocomplete_data_directory=g:my.dir.neocomplete
+let g:neocomplete_ctags_arguments_list=g:alpaca_update_tags_config
+let g:neocomplete_enable_auto_close_preview=0
 
 " for rsense
 " let g:neocomplete#sources#rsense#home_directory = neobundle#get_neobundle_dir() . '/rsense-0.3'
 let g:rsenseHome = expand("~/.bundle/rsense-0.3")
 let g:rsenseUseOmniFunc = 1
+" omnifuncいらねー。
 autocmd MyAutoCmd FileType ruby set omnifunc=
 
 " for clang
@@ -2821,13 +2827,6 @@ let g:neocomplete_clang_use_library=1
 "     \ '-I C:/lib/boost_1_47_0 '.
 "     \ '-fms-extensions -fgnu-runtime '.
 "     \ '-include malloc.h '
-
-" neocomplete で表示される補完の数を増やす
-" これが少ないと候補が表示されない場合があります
-let g:neocomplete_max_list=200
-let g:neocomplete_auto_completion_start_length = 2
-" let g:neocomplete_min_keyword_length = 2
-" let g:neocomplete_min_syntax_length = 2
 
 " alpaca_complete.vim
 let g:alpaca_complete_assets_dir = {
@@ -2866,8 +2865,10 @@ if has("lua")
           \ 'neocomplete_same_filetype_lists',
           \ 'neocomplete_delimiter_patterns',
           \ 'neocomplete_dictionary_filetype_lists',
+          \ 'neocomplete_sources_list',
           \ 'neocomplete_disabled_sources_list',
-          \ 'neocomplete_text_mode_filetypes'
+          \ 'neocomplete_text_mode_filetypes',
+          \ 'neocomplete_ignore_composite_filetype_lists'
           \ ]
 
     for initialize_variable in s:neocomplete_initialize_lists
@@ -2906,6 +2907,9 @@ if has("lua")
 
     " tags_completeはデフォルトでOFFでいい。。
     let g:neocomplete_disabled_sources_list._ = ['tags_complete']
+    let g:neocomplete_sources_list = {
+          \ 'unite': [],
+          \ }
     " let g:neocomplete_disabled_sources_list._ = ['tags_complete', 'omni_complete']
 
     " Define omni patterns
