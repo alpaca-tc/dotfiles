@@ -34,8 +34,7 @@ alias vi='vim'
 # }}}
 
 # vim# {{{
-alias sul='/Applications/Sublime\ Text\ 2.app/Contents/MacOS/Sublime\ Text\ 2 "$@"'
-alias sl='sul'
+alias st='/Applications/Sublime\ Text\ 2.app/Contents/MacOS/Sublime\ Text\ 2 "$@"'
 # }}}
 
 # 省略# {{{
@@ -159,6 +158,7 @@ function extract() {
     *.tar.gz|*.tgz) tar xzvf $1;;
     *.tar.xz) tar Jxvf $1;;
     *.zip) unzip $1;;
+    *.bzip2) bzip2 -d $1;;
     *.lzh) lha e $1;;
     *.tar.bz2|*.tbz) tar xjvf $1;;
     *.tar.Z) tar zxvf $1;;
@@ -171,7 +171,7 @@ function extract() {
     *.rb) ruby $1;;
   esac
 }
-alias -s {rb,sqlite3,gz,tgz,zip,lzh,bz2,tbz,Z,tar,arj,xz}=extract
+alias -s {rb,sqlite3,gz,tgz,zip,lzh,bz2,tbz,Z,tar,arj,xz,bzip2}=extract
 
 function runcpp () { g++ $1 && shift && ./a.out $@ }
 alias -s {c,cpp}=runcpp

@@ -77,6 +77,8 @@ export PATH=/Applications/MacVim.app/Contents/MacOS:$PATH
 # export DYLD_FORCE_FLAT_NAMESPACE=1 
 # export DYLD_INSERT_LIBRARIES=/Users/taichou/.pythonbrew/pythons/Python-2.7.2/lib/libpython2.7.dylib
 
+# http://stackoverflow.com/questions/13942443/error-installing-rmagick-on-mountain-lion
+
 fpath=( $HOME/dotfiles/.zsh/zsh-completions/src $HOME/.zsh/site-functions $fpath)
 
 # 各種読み込み

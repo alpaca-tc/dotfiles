@@ -41,7 +41,7 @@ options     word
   endif
 
 snippet     loaded
-abbr        loaded
+abbr        if exists('g:...') ${2:|| (v:version < 700)} ...
 options     word
   if exists('g:${1:variable}') ${2:|| (v:version < 700)}
     finish
