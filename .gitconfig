@@ -3,7 +3,7 @@
   name= Hiroyuki Ishii
 
 [core]
-  excludesfile = $HOME/.gitignore_global
+  excludesfile = ~/.gitignore_global
   ; autocrlf     = true ; input false
   trailing-space = false
   space-before-tab = false

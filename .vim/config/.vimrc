@@ -1070,7 +1070,7 @@ nnoremap <silent><Space>s :w sudo:%<CR>
 nnoremap <silent><C-L> :call <SID>redraw_with_doautocmd()<CR>
 function! s:redraw_with_doautocmd()
   doautocmd CursorHoldI <buffer>
-  redraw
+  redraw!
 endfunction
 
 " これをすると、矢印キーがバグるのはなぜ？
