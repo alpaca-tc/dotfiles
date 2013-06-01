@@ -951,7 +951,7 @@ options     word
 snippet     cache
 abbr        cache(name={}, options=nil, &block)
 options     word
-  cache ${1:name} do
+  cache ${1:name_or_routing_hash}${2:, action_suffix: "${3\}"} do
     ${2}
 
 snippet     atom_feed

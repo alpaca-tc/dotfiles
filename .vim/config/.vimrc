@@ -394,10 +394,10 @@ NeoBundle 'taichouchou2/alpaca_remove_dust.vim', {
       \ 'autoload': {
       \   'commands': ['RemoveDustDisable', 'RemoveDustEnable', 'RemoveDustRun']
       \ }}
-NeoBundleLazy 'taichouchou2/alpaca_update_tags', {
+NeoBundleLazy 'taichouchou2/alpaca_tags', {
       \ 'depends': 'Shougo/vimproc',
       \ 'autoload' : {
-      \   'commands': ['AlpacaTagsUpdate', 'AlpacaTagsSet', 'AlpacaTagsUpdateBundle']
+      \   'commands': ['AlpacaTagsUpdate', 'AlpacaTagsSet', 'AlpacaTagsBundle']
       \ }}
 " window系script
 NeoBundleLazy 'taichouchou2/alpaca_window.vim', {
@@ -1406,9 +1406,11 @@ colorscheme  desertEx
 set tags-=tags
 set tags+=tags;
 
+" 超絶便利
 aug AlpacaUpdateTags
   au!
-  au FileWritePost,BufWritePost * AlpacaTagsUpdate
+  au FileWritePost,BufWritePost * AlpacaTagsUpdate -style
+  au FileWritePost,BufWritePost Gemfile AlpacaTagsBundle -style
   au FileReadPost,BufEnter * AlpacaTagsSet
 aug END
 
@@ -2112,13 +2114,13 @@ aug RailsDictSetting "{{{
   au!
   " 別の関数に移そうか..
   " TODO NeoSnippetSourceを追加
-  au User Rails.controller*           let b:file_type_name="ruby.controller"
-  au User Rails.view*erb              let b:file_type_name="ruby.view"
-  au User Rails.view*haml             let b:file_type_name="haml.view"
-  au User Rails.model*                let b:file_type_name="ruby.model"
-  au User Rails/db/migrate/*          let b:file_type_name="ruby.migrate"
-  au User Rails/config/environment.rb let b:file_type_name="ruby.environment"
-  au User Rails/config/routes.rb      let b:file_type_name="ruby.routes"
+  au User Rails.controller*           let b:file_type_name="ruby.controller" | NeoSnippetSource ~/.vim/snippet/ruby.rails.controller.snip
+  au User Rails.view*erb              let b:file_type_name="ruby.view" | NeoSnippetSource ~/.vim/snippet/ruby.rails.view.snip
+  au User Rails.view*haml             let b:file_type_name="haml.view" | NeoSnippetSource ~/.vim/snippet/ruby.rails.view.snip
+  au User Rails.model*                let b:file_type_name="ruby.model" | NeoSnippetSource ~/.vim/snippet/ruby.rails.model.snip
+  au User Rails/db/migrate/*          let b:file_type_name="ruby.migrate" | NeoSnippetSource ~/.vim/snippet/ruby.rails.migrate.snip
+  au User Rails/config/environment.rb let b:file_type_name="ruby.environment" | NeoSnippetSource ~/.vim/snippet/ruby.rails.environment.snip
+  au User Rails/config/routes.rb      let b:file_type_name="ruby.routes" | NeoSnippetSource ~/.vim/snippet/ruby.rails.routes.snip
   au User Rails/config/database.rb    let b:file_type_name="ruby.database"
   au User Rails/config/boot.rb        let b:file_type_name="ruby.boot"
   au User Rails/config/locales/*      let b:file_type_name="ruby.locales"
@@ -2662,18 +2664,25 @@ map F <Plug>(clever-f-F)
 "}}}
 
 " ------------------------------------
-" alpaca_update_tags
+" alpaca_tags
 " ------------------------------------
 "{{{
       " \ '_' : '-R --sort=yes --languages=-css --languages=-scss --languages=-js',
 let g:alpaca_update_tags_config = {
-      \ '_' : '-R --sort=yes --languages-=js',
-      \ 'javascript' : '--languages+=js',
-      \ 'scss' : '--languages+=scss',
-      \ 'sass' : '--languages+=sass',
-      \ 'css' : '--languages+=css',
-      \ 'java' : '--languages+=java $JAVA_HOME/src',
-      \ 'ruby': '--languages=Ruby',
+      \ '_' : '-R --sort=yes --languages=-js,JavaScript',
+      \ 'js' : '--languages=+js',
+      \ '-js' : '--languages=-js,JavaScript',
+      \ 'vim' : '--languages=+Vim,vim',
+      \ '-vim' : '--languages=-Vim,vim',
+      \ '-style': '--languages=-css,sass,scss,js,JavaScript,html',
+      \ 'scss' : '--languages=+scss --languages=-css,sass',
+      \ 'sass' : '--languages=+sass --languages=-css,scss',
+      \ 'css' : '--languages=+css',
+      \ 'java' : '--languages=+java $JAVA_HOME/src',
+      \ 'ruby': '--languages=+Ruby',
+      \ 'coffee': '--languages=+coffee',
+      \ '-coffee': '--languages=-coffee',
+      \ 'bundle': '--languages=+Ruby --languages=-css,sass,scss,js,JavaScript,coffee',
       \ }
 "}}}
 
@@ -2775,7 +2784,7 @@ set thesaurus+=~/.vim/thesaurus/mthes10/mthesaur.txt
 
 " tmuxに<C-T>が取られているため
 " XXX 何故か、起動してからmappingしないと動かない...
-au MyAutoCmd VimEnter * inoremap <C-X><C-F> <C-X><C-T>
+" au MyAutoCmd VimEnter * inoremap <C-X><C-F> <C-X><C-T>
 
 " command-lineはzsh風補完で使う
 cnoremap <C-P> <UP>
@@ -3064,9 +3073,6 @@ let g:neosnippet#enable_preview = 1
 " let g:neosnippet#disable_runtime_snippets = {
 "       \ '_' : 1
 "       \ }
-augroup NeoSnippet
-  autocmd FileType haml :NeoSnippetSource ruby
-augroup END
 
 imap <silent><C-F>                <Plug>(neosnippet_expand_or_jump)
 inoremap <silent><C-U>            <ESC>:<C-U>Unite snippet<CR>
