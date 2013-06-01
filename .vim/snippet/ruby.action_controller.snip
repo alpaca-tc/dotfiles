@@ -116,10 +116,10 @@ options     word
 #}}}
 
 #ActionController::MimeResponds::ClassMethods#{{{
-snippet     respond_to
-abbr        respond_to(*mimes)
-options     word
-  respond_to :${1:extention ...}, ${2:except, only ...}
+#snippet     respond_to
+#abbr        respond_to(*mimes)
+#options     word
+#  respond_to :${1:extention ...}, ${2:except, only ...}
 
 snippet     clear_respond_to
 abbr        clear_respond_to
@@ -198,11 +198,6 @@ snippet     ActionControllerError
 abbr        ActionControllerError
 options     word
   ActionControllerError
-
-snippet     RenderError
-abbr        RenderError
-options     word
-  RenderError
 
 snippet     RoutingError
 abbr        RoutingError
@@ -284,16 +279,11 @@ abbr        authenticate_or_request_with_http_digest(realm = "Application", &pas
 options     word
   authenticate_or_request_with_http_digest ${1:realm}${2:&password_procedure}
 
-snippet     authenticate_with_http_basic
-abbr        authenticate_with_http_basic(&login_procedure)
-options     word
-  authenticate_with_http_basic ${1:&login_procedure}
-
 #ActionController::HttpAuthontication::Token::ControllerMethods
-snippet     authenticate_or_request_with_http_token
-abbr        authenticate_or_request_with_http_token(realm = "Application", &password_procedure)
-options     word
-  authenticate_or_request_with_http_token ${1:realm}${2:&password_procedure}
+#snippet     authenticate_or_request_with_http_token
+#abbr        authenticate_or_request_with_http_token(realm = "Application", &password_procedure)
+#options     word
+#  authenticate_or_request_with_http_token ${1:realm}${2:&password_procedure}
 
 snippet     authenticate_with_http_token
 abbr        authenticate_with_http_token(&login_procedure)
