@@ -878,12 +878,9 @@ NeoBundleLazy 'taichouchou2/unite-rails_best_practices', {
 "       \   }
 "       \ }
 
-let s:bundle_rails = 'unite-rails unite-rails_best_practices alpaca_complete'
-if has('vim_starting')
-  aug MyAutoCmd
-    au User Rails call <SID>bundle_load_depends(s:bundle_rails)
-  aug END
-endif
+" aug MyAutoCmd
+"   au User Rails call NeoBundleSource alpaca_complete
+" aug END
 
 " ruby全般
 " NeoBundleLazy 'ruby-matchit', { 'autoload': {
@@ -2084,20 +2081,27 @@ function! s:set_up_rails_setting() "{{{
   execute 'set dict+=~/.vim/dict/' . b:file_type_name . '.dict'
 endfunction"}}}
 function! s:do_rails() "{{{
-  let git_dir = <SID>current_git()
+  if !exists("s:rails_directries")
+    let s:rails_directries = []
+  endif
 
-  if isdirectory(git_dir) && filereadable(git_dir . '/config/environment.rb')
-    let b:rails_root = git_dir
-    " autocmd! DoRails
+  let rails_dir = filter(copy(s:rails_directries), 'getcwd() =~ v:val')
+  if empty(rails_dir)
+    let git_dir = <SID>current_git()
+    if isdirectory(git_dir) && filereadable(git_dir . '/config/environment.rb')
+      call add(s:rails_directries, git_dir)
+      let b:rails_dir = git_dir
+      silent doau User Rails
+    endif
+  else
+    let b:rails_dir = rails_dir[0]
     silent doau User Rails
   endif
 endfunction"}}}
 
 aug MyAutoCmd
   au User Rails call <SID>set_up_rails_setting()
-aug END
-aug DoRails
-  au BufEnter,FileReadPre * call <SID>do_rails()
+  au BufEnter,FileReadPost * call <SID>do_rails()
 aug END
 
 function! s:unite_rails_setting() "Unite-rails.vim {{{
@@ -2779,7 +2783,7 @@ let g:vimfiler_force_overwrite_statusline = 1
 "----------------------------------------
 " 補完・履歴 neocomplete "{{{
 set complete=.,w,b,u,U,s,i,d,t
-set completeopt=menu,menuone,longest,preview
+set completeopt=menu,menuone,preview
 set history=1000             " コマンド・検索パターンの履歴数
 set infercase
 set wildchar=<tab>           " コマンド補完を開始するキー
