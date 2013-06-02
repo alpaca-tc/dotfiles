@@ -53,12 +53,21 @@ function! s:include(target, value) "{{{
   return 0
 endfunction"}}}
 function! s:current_git() "{{{
-  " figutive依存
-  if !exists('b:git_dir')
-    return ''
+  let current_dir = getcwd()
+  if !exists("s:git_root_cache") | let s:git_root_cache = {} | endif
+  if has_key(s:git_root_cache, current_dir)
+    return s:git_root_cache[current_dir]
   endif
 
-  return substitute(b:git_dir, '/.git$', '', 'g')
+  let git_root = system("git rev-parse --show-toplevel")
+  if git_root =~ "fatal: Not a git repository"
+    " throw "No a git repository."
+    return ""
+  endif
+
+  let s:git_root_cache[current_dir] = substitute(git_root, '\n', '', 'g')
+
+  return s:git_root_cache[current_dir]
 endfunction"}}}
 function! s:filetype() "{{{
   if empty(&filetype) | return '' | endif
@@ -2079,14 +2088,15 @@ function! s:do_rails() "{{{
 
   if isdirectory(git_dir) && filereadable(git_dir . '/config/environment.rb')
     let b:rails_root = git_dir
-    if <SID>include(g:my.ft.program_files, &filetype)
-      silent doau User Rails
-    endif
+    " autocmd! DoRails
+    silent doau User Rails
   endif
 endfunction"}}}
 
 aug MyAutoCmd
   au User Rails call <SID>set_up_rails_setting()
+aug END
+aug DoRails
   au BufEnter,FileReadPre * call <SID>do_rails()
 aug END
 
@@ -2112,8 +2122,7 @@ aug RailsDictSetting "{{{
   " 別の関数に移そうか..
   " TODO NeoSnippetSourceを追加
   au User Rails.controller*           let b:file_type_name="ruby.controller" | NeoSnippetSource ~/.vim/snippet/ruby.rails.controller.snip
-  au User Rails.view*erb              let b:file_type_name="ruby.view" | NeoSnippetSource ~/.vim/snippet/ruby.rails.view.snip
-  au User Rails.view*haml             let b:file_type_name="haml.view" | NeoSnippetSource ~/.vim/snippet/ruby.rails.view.snip
+  au User Rails.view                  let b:file_type_name="haml.view" | NeoSnippetSource ~/.vim/snippet/ruby.rails.view.snip
   au User Rails.model*                let b:file_type_name="ruby.model" | NeoSnippetSource ~/.vim/snippet/ruby.rails.model.snip
   au User Rails/db/migrate/*          let b:file_type_name="ruby.migrate" | NeoSnippetSource ~/.vim/snippet/ruby.rails.migrate.snip
   au User Rails/config/environment.rb let b:file_type_name="ruby.environment" | NeoSnippetSource ~/.vim/snippet/ruby.rails.environment.snip
@@ -2266,7 +2275,7 @@ let g:syntastic_auto_jump=1
 let g:syntastic_auto_loc_list=1
 let g:syntastic_check_on_open=0
 let g:syntastic_echo_current_error=1
-let g:syntastic_enable_balloons = 1
+let g:syntastic_enable_balloons = has("balloon_eval")
 let g:syntastic_enable_highlighting = 1
 let g:syntastic_enable_signs = 1
 let g:syntastic_loc_list_height=3
@@ -2782,7 +2791,7 @@ set wildmode=longest:full,full
 " command-lineはzsh風補完で使う
 cnoremap <C-P> <UP>
 cnoremap <C-N> <Down>
-
+" }}}
 " set pumheight=10
 
 "----------------------------------------
@@ -2812,19 +2821,21 @@ let bundle = NeoBundleGet('neocomplete')
 function! bundle.hooks.on_source(bundle)
   let g:neocomplete_max_list=30
   " let g:neocomplete_max_keyword_width=120
-  let g:neocomplete_auto_completion_start_length=2
+  " let g:neocomplete_auto_completion_start_length=2
   " let g:neocomplete_manual_completion_start_length=0
-  let g:neocomplete_min_keyword_length=2
-  let g:neocomplete_min_syntax_length=2
-  " let g:neocomplete_disable_auto_complete=0
-  " let g:neocomplete_enable_cursor_hold_i=0
-  let g:neocomplete_enable_auto_select=1
-  let g:neocomplete_force_overwrite_completefunc = 1
-  let g:neocomplete_enable_fuzzy_completion=0
-  " let g:neocomplete_caching_limit_file_size=500000
-  let g:neocomplete_data_directory=g:my.dir.neocomplete
-  let g:neocomplete_ctags_arguments_list=g:alpaca_update_tags_config
-  let g:neocomplete_enable_auto_close_preview=0
+  " let g:neocomplete_min_keyword_length=2
+  " let g:neocomplete_min_syntax_length=2
+  " " let g:neocomplete_disable_auto_complete=0
+  " " let g:neocomplete_enable_cursor_hold_i=0
+  let g:neocomplete_disable_auto_select=1
+  " let g:neocomplete_enable_auto_select=0
+  " let g:neocomplete_skip_auto_completion_time='0.2'
+  " let g:neocomplete_force_overwrite_completefunc = 1
+  " let g:neocomplete_enable_fuzzy_completion=0
+  " " let g:neocomplete_caching_limit_file_size=500000
+  " let g:neocomplete_data_directory=g:my.dir.neocomplete
+  " let g:neocomplete_ctags_arguments_list=g:alpaca_update_tags_config
+  " let g:neocomplete_enable_auto_close_preview=0
 
   let g:neocomplete_enable_at_startup=1
   " for rsense
@@ -2875,7 +2886,10 @@ function! bundle.hooks.on_source(bundle)
   "}}}
 
   " Define force omni patterns"{{{
-  " let g:neocomplete_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
+  let g:neocomplete_force_omni_patterns.c      = '[^.[:digit:] *\t]\%(\.\|->\)'
+  let g:neocomplete_force_omni_patterns.cpp    = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+  let g:neocomplete_force_omni_patterns.objc   = '[^.[:digit:] *\t]\%(\.\|->\)'
+  let g:neocomplete_force_omni_patterns.objcpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 
   let g:neocomplete_text_mode_filetypes = {
         \ 'markdown' : 1,
@@ -2959,6 +2973,7 @@ function! bundle.hooks.on_source(bundle)
             \|endif
   aug END
 
+endfunction
   " keymap {{{
   imap <expr><C-G>          neocomplete#undo_completion()
   imap <C-K>  <Plug>(neocomplete_start_unite_complete)
@@ -2982,6 +2997,7 @@ function! bundle.hooks.on_source(bundle)
   inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
   inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
   inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
+  command! Clean NeoCompleteClean
 
   " test
   inoremap <expr><TAB>  pumvisible() ? "\<C-n>" :
@@ -2992,7 +3008,6 @@ function! bundle.hooks.on_source(bundle)
     return !col || getline('.')[col - 1]  =~ '\s'
   endfunction"}}}
   " }}}
-endfunction
 "}}}
 unlet bundle
 
@@ -3055,7 +3070,7 @@ unlet bundle
 "}}}
 
 "----------------------------------------
-" neosnippet
+" neosnippet"{{{
 nnoremap <silent><Space>e         :<C-U>NeoSnippetEdit -split<CR>
 nnoremap <silent><Space><Space>e  :<C-U>Unite neosnippet/user neosnippet/runtime<CR>
 
@@ -3072,6 +3087,7 @@ function! bundle.hooks.on_source(bundle) "{{{
   " inoremap <silent><C-U>            <ESC>:<C-U>Unite snippet<CR>
 endfunction "}}}
 unlet bundle
+"}}}
 
 "----------------------------------------
 " unite.vim"{{{

@@ -1,6 +1,7 @@
 [user]
   email= alprhcp666@gmail.com
-  name= Hiroyuki Ishii
+  ; name= Hiroyuki Ishii
+  name= alpaca_taichou
 
 [core]
   excludesfile = ~/.gitignore_global
