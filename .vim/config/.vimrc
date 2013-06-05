@@ -1217,7 +1217,7 @@ nnoremap <silent>[tag_or_tab]p  :tabprevious<CR>
 nnoremap <silent>[tag_or_tab]x  :tabclose<CR>
 nnoremap <silent>[tag_or_tab]o  <C-W>T
 
-for num in range(0, 10)
+for num in range(0, 9)
   execute 'nnoremap <silent>[tag_or_tab]'.num.'  :<C-U>tabnext '.num'<CR>'
   execute 'nnoremap <silent>[tag_or_tab]m'.num.'  :<C-U>tabmove '.num'<CR>'
 endfor
@@ -2022,15 +2022,12 @@ function! s:set_up_rails_setting() "{{{
   execute 'set dict+=~/.vim/dict/' . dict_name . '.dict'
 endfunction"}}}
 
-aug MyAutoCmd
-  au User Rails call <SID>set_up_rails_setting()
-aug END
-
 function! s:unite_rails_setting() "Unite-rails.vim {{{
   call s:do_rails_autocmd()
+  call <SID>set_up_rails_setting()
+  nnoremap <buffer>[plug]            :<C-U>Unite rails/model<CR>
+  nnoremap <buffer>[plug]<C-H>       :<C-U>Unite rails/controller<CR>
   nnoremap <buffer>[plug]<C-H><C-H>  :<C-U>Unite rails/view<CR>
-  nnoremap <buffer>[plug]<C-H>       :<C-U>Unite rails/model<CR>
-  nnoremap <buffer>[plug]            :<C-U>Unite rails/controller<CR>
 
   nnoremap <buffer>[plug]c           :<C-U>Unite rails/config<CR>
   nnoremap <buffer>[plug]j           :<C-U>Unite rails/javascript<CR>
@@ -2040,8 +2037,8 @@ function! s:unite_rails_setting() "Unite-rails.vim {{{
   nnoremap <buffer>[plug]l           :<C-U>Unite rails/lib<CR>
   nnoremap <buffer><expr>[plug]g     ':e '.b:rails_root.'/Gemfile<CR>'
   nnoremap <buffer><expr>[plug]r     ':e '.b:rails_root.'/config/routes.rb<CR>'
-  nnoremap <buffer><expr>[plug]se    ':e '.b:rails_root.'/db/seeds.rb<CR>'
   nnoremap <buffer>[plug]h           :<C-U>Unite rails/heroku<CR>
+  " nnoremap <buffer><expr>[plug]se    ':e '.b:rails_root.'/db/seeds.rb<CR>'
 endfunction
 "}}}
 function! s:do_rails_autocmd() "{{{
@@ -3135,7 +3132,8 @@ function! bundle.hooks.on_source(bundle) "{{{
   "}}}
 
   function! s:unite_my_settings() "{{{
-    aug MyUniteCmd
+    echomsg "load unite"
+    aug MyUniteBufferCmd
       autocmd!
       autocmd BufEnter <buffer> if winnr('$') == 1 |quit| endif
     aug END
