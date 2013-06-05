@@ -1,4 +1,29 @@
-# Prototype#{{{
+# Prototype
+snippet     try
+abbr        try {} catch
+options     word
+  try {
+    ${1}
+  } catch(e) {
+    ${2}
+  } 
+
+snippet     tryf
+abbr        try {} catch {} finary
+options     word
+  try {
+    ${1}
+  } catch(e) {
+    ${2}
+  } finally {
+    ${3}
+  }
+
+snippet     throw
+abbr        throw
+options     word
+  throw "${1}";
+
 snippet proto
     ${1:class_name}.prototype.${2:method_name} =
     function(${3:first_argument}) {
@@ -84,5 +109,4 @@ snippet log
 
 snippet warn
     console.warn(${1});
-#}}}
 

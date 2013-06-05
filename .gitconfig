@@ -37,8 +37,14 @@
   remove-branch-remote = "!git push origin $(git branch -r --merged | grep origin/ | grep -v master | sed s~origin/~:~)"
 
   zip-from = !"f(){ git archive --format=zip HEAD $(git diff --name-only HEAD $1) -o $2 ; }; f"
+  zip="!date=`date "+%y_%m_%d_%H%M%S"`; directory_name=`basename $(pwd)`; branch_name=`git symbolic-ref --short HEAD`; file_name="${directory_name}_${branch_name}_${date}.zip"; echo "creating... ${file_name}"; git archive HEAD --format=zip -o "${file_name}""
 
   resett = !git commit -a -m 'Temporary commit for cancel' && git reset --hard HEAD~
+  ignore = !"f() { local s=$1; shift; \
+           while [ $# -gt 0 ]; do s="$s,$1"; shift; done;\
+           curl "http://gitignore.io/api/$s"; }; f"
+
+
   dm = !git branch --merged | grep -v '*' | xargs -I % git branch -d %
   rs = reset
   sn = shortlog -sn
