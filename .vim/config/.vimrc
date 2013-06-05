@@ -2004,15 +2004,17 @@ function! s:set_up_rails_setting() "{{{
   nnoremap <Space>a :A<CR>
   nnoremap <Space>p :Rpreview<CR>
 
+  let buf = rails#buffer()
+  let type_name = buf.calculate_file_type()
+  let dict_name = "rails." . type_name
+
   set dict+=~/.vim/dict/ruby.rails.dict
   for s:syntax in split(glob($HOME.'/.vim/syntax/ruby.rails.*.vim'))
     execute 'source ' . s:syntax
   endfor
 
-  if !exists('b:file_type_name') | return | endif
-
-  execute 'nnoremap <buffer><Space><Space>d  :<C-U>Edit ~/.vim/dict/'. b:file_type_name .'.dict<CR>'
-  execute 'set dict+=~/.vim/dict/' . b:file_type_name . '.dict'
+  execute 'nnoremap <buffer><Space><Space>d  :<C-U>Edit ~/.vim/dict/' . dict_name .'.dict<CR>'
+  execute 'set dict+=~/.vim/dict/' . dict_name . '.dict'
 endfunction"}}}
 
 aug MyAutoCmd
@@ -2020,6 +2022,7 @@ aug MyAutoCmd
 aug END
 
 function! s:unite_rails_setting() "Unite-rails.vim {{{
+  call s:do_rails_autocmd()
   nnoremap <buffer>[plug]<C-H><C-H>  :<C-U>Unite rails/view<CR>
   nnoremap <buffer>[plug]<C-H>       :<C-U>Unite rails/model<CR>
   nnoremap <buffer>[plug]            :<C-U>Unite rails/controller<CR>
@@ -2059,19 +2062,18 @@ endfunction"}}}
 aug RailsDictSetting "{{{
   autocmd!
   " 別の関数に移そうか..
-  autocmd User Rails call s:do_rails_autocmd()
+  autocmd User Rails call <SID>unite_rails_setting()
   autocmd User Rails.controller*           NeoSnippetSource ~/.vim/snippet/ruby.rails.controller.snip
-  autocmd User Rails.view*                  NeoSnippetSource ~/.vim/snippet/ruby.rails.view.snip
+  autocmd User Rails.view*                 NeoSnippetSource ~/.vim/snippet/ruby.rails.view.snip
   autocmd User Rails.model*                NeoSnippetSource ~/.vim/snippet/ruby.rails.model.snip
   autocmd User Rails/db/migrate/*          NeoSnippetSource ~/.vim/snippet/ruby.rails.migrate.snip
   autocmd User Rails/config/environment.rb NeoSnippetSource ~/.vim/snippet/ruby.rails.environment.snip
   autocmd User Rails/config/routes.rb      NeoSnippetSource ~/.vim/snippet/ruby.rails.routes.snip
-  autocmd User Rails/config/database.rb    let b:file_type_name="ruby.database"
-  autocmd User Rails/config/boot.rb        let b:file_type_name="ruby.boot"
-  autocmd User Rails/config/locales/*      let b:file_type_name="ruby.locales"
-  autocmd User Rails/config/initializes    let b:file_type_name="ruby.initializes"
-  autocmd User Rails/config/environments/* let b:file_type_name="ruby.environments"
-  autocmd User Rails call <SID>unite_rails_setting()
+  " autocmd User Rails/config/database.rb    let b:file_type_name="ruby.database"
+  " autocmd User Rails/config/boot.rb        let b:file_type_name="ruby.boot"
+  " autocmd User Rails/config/locales/*      let b:file_type_name="ruby.locales"
+  " autocmd User Rails/config/initializes    let b:file_type_name="ruby.initializes"
+  " autocmd User Rails/config/environments/* let b:file_type_name="ruby.environments"
 aug END"}}}
 "}}}
 

@@ -1,7 +1,0 @@
-project_name: enfac
-project_root: ~/project/enfac_wordpress/
-pre: sudo apachectl start
-
-tabs:
-  - editor: vim
-  - guard: guard
