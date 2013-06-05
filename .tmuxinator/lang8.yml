@@ -1,0 +1,21 @@
+# ~/.tmuxinator/gift.yml
+# you can make as many tabs as you wish...
+
+project_name: lang8
+project_root: ~/project/lang-8
+pre: rbenv global 1.8.7-p371
+
+tabs:
+  - editor: vim
+  - guard: guard
+  - console: rails c
+  - ass: 
+      panes:
+        - memcached -p 7168
+        - resque -p 6379
+        - rails s
+  - setup:
+      panes:
+        - mysql.server start
+        - redis
+        - QUEUE=default rake environment resque:work

@@ -20,6 +20,7 @@
   ui = true
 
 [alias]
+  b = bisect
   assume = !"fun() { str=''; for arg in $@; do str=\"${str} $(find $arg -type f)\"; done; git update-index --assume-unchanged $str; }; fun"
   no-assume = !"fun() { str=''; for arg in $@; do str=\"${str} $(find $arg -type f)\"; done; git update-index --no-assume-unchanged $str; }; fun"
   assume-list = !"git ls-files -v | grep -e "^[a-z]""
