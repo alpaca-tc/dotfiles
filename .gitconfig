@@ -21,8 +21,8 @@
 
 [alias]
   b = bisect
-  assume = !"fun() { str=''; for arg in $@; do str=\"${str} $(find $arg -type f)\"; done; git update-index --assume-unchanged $str; }; fun"
-  no-assume = !"fun() { str=''; for arg in $@; do str=\"${str} $(find $arg -type f)\"; done; git update-index --no-assume-unchanged $str; }; fun"
+  assume = !"fun() { git update-index --assume-unchanged `git ls-files $@ --no-empty-directory`; }; fun"
+  no-assume = !"fun() { git update-index --no-assume-unchanged `git ls-files $@ --no-empty-directory`; }; fun"
   assume-list = !"git ls-files -v | grep -e "^[a-z]""
 
   add-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
@@ -36,14 +36,11 @@
   remove-branch-local = "!git branch -d $(git branch --merged | grep -v master | grep -v '*')"
   remove-branch-remote = "!git push origin $(git branch -r --merged | grep origin/ | grep -v master | sed s~origin/~:~)"
 
-  zip-from = !"f(){ git archive --format=zip HEAD $(git diff --name-only HEAD $1) -o $2 ; }; f"
   zip="!date=`date "+%y_%m_%d_%H%M%S"`; directory_name=`basename $(pwd)`; branch_name=`git symbolic-ref --short HEAD`; file_name="${directory_name}_${branch_name}_${date}.zip"; echo "creating... ${file_name}"; git archive HEAD --format=zip -o "${file_name}""
+  zip-from="!f() { date=`date \"+%y_%m_%d_%H%M%S\"`; directory_name=`basename $(pwd)`; from_hash=`git log --format=\"%h\" -1 ${1}`; to_hash=`git log --format=\"%h\" -1 HEAD`; file_name=\"${directory_name}_diff_${to_hash}_from_${from_hash}_${date}.zip\"; echo \"creating... ${file_name}\"; git archive --format=zip HEAD $(git diff --name-only HEAD ${1}) -o \"${file_name}\"; }; f"
 
   resett = !git commit -a -m 'Temporary commit for cancel' && git reset --hard HEAD~
-  ignore = !"f() { local s=$1; shift; \
-           while [ $# -gt 0 ]; do s="$s,$1"; shift; done;\
-           curl "http://gitignore.io/api/$s"; }; f"
-
+  ignore = !"f() { local s=$1; shift; while [ $# -gt 0 ]; do s="$s,$1"; shift; done; curl "http://gitignore.io/api/$s"; }; f"
 
   dm = !git branch --merged | grep -v '*' | xargs -I % git branch -d %
   rs = reset
@@ -64,13 +61,17 @@
 
 [receive]
   denyDeleteCurrent = false
+
 [difftool "sourcetree"]
   cmd = opendiff \"$LOCAL\" \"$REMOTE\"
   path =
+
 [mergetool "sourcetree"]
   cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
   trustExitCode = true
+
 [issue]
   type = github
+
 [branch]
   autosetuprebase = always
