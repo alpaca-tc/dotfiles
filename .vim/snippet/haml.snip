@@ -45,3 +45,29 @@ abbr        enctype: "multipart/form-data"
 options     word
   enctype: "multipart/form-data"
 
+# for IE
+snippet     css3
+abbr        %script{ src: "http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js" }
+options     word
+  /[if lt IE 9]
+    %script{ src: "http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js" }
+
+snippet     ie8
+abbr        %script{ src: "http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE8.js" }
+options     word
+  /[if lt IE 8]
+    %script{ src: "http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE8.js" }
+
+snippet     ie7
+abbr        %script{ src: "http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE7.js" }
+options     word
+  /[if lt IE 7]
+    %script{ src: "http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE7.js" }
+
+snippet     ie9
+abbr        %script{ src: "http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js" }
+options     word
+  /[if lt IE 9]
+    %script{ src: "http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js" }
+  
+  

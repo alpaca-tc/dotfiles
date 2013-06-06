@@ -87,10 +87,11 @@ function! s:get_cursor_word() "{{{
   " return getline(".")[start : col(".") - 1]
 endfunction"}}}
 function! s:buffer_auto_fold(to_close) "{{{
-  if !exists("b:__unite_winheight")
+  if !exists("b:__buffer_winheight")
     let b:__buffer_winheight = winheight("1")
     let b:__buffer_winwidth = winwidth("1")
   endif
+
   if a:to_close
     1 wincmd _
   else
@@ -650,19 +651,19 @@ NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
       \ }
       \ }}
 if has("ruby")
-  NeoBundle 'taichouchou2/alpaca_english', {
-        \ 'rev' : 'development',
-        \ 'build' : {
-        \   "mac" : "bundle",
-        \   "unix" : "bundle",
-        \   "other" : "bundle",
-        \ },
-        \ 'autoload' : {
-        \   'filetypes' : g:my.ft.english_files,
-        \   'commands' : ["AlpacaEnglishDisable", "AlpacaEnglishEnable", "AlpacaEnglishSay"],
-        \   'unite_sources': ['english_dictionary', 'english_example', 'english_thesaurus'],
-        \ }
-        \ }
+  " NeoCompleteに対応していない
+  " NeoBundleLazy 'taichouchou2/alpaca_english', {
+  "       \ 'rev' : 'development',
+  "       \ 'build' : {
+  "       \   "mac" : "bundle",
+  "       \   "unix" : "bundle",
+  "       \   "other" : "bundle",
+  "       \ },
+  "       \ 'autoload' : {
+  "       \   'commands' : ["AlpacaEnglishDisable", "AlpacaEnglishEnable", "AlpacaEnglishSay"],
+  "       \   'unite_sources': ['english_dictionary', 'english_example', 'english_thesaurus'],
+  "       \ }
+  "       \ }
 endif
 if has("clientserver")
   NeoBundleLazy 'thinca/vim-singleton', { 'autoload' : {
@@ -1381,7 +1382,7 @@ set tags+=tags;
 " 超絶便利
 aug AlpacaUpdateTags
   au!
-  au FileWritePost,BufWritePost * AlpacaTagsUpdate -style
+  " au FileWritePost,BufWritePost * AlpacaTagsUpdate -style
   au FileWritePost,BufWritePost Gemfile AlpacaTagsBundle -style
   au FileReadPost,BufEnter * AlpacaTagsSet
 aug END
@@ -2071,6 +2072,7 @@ aug RailsDictSetting "{{{
   autocmd User Rails/db/migrate/*          NeoSnippetSource ~/.vim/snippet/ruby.rails.migrate.snip
   autocmd User Rails/config/environment.rb NeoSnippetSource ~/.vim/snippet/ruby.rails.environment.snip
   autocmd User Rails/config/routes.rb      NeoSnippetSource ~/.vim/snippet/ruby.rails.routes.snip
+  autocmd User Rails autocmd BufWrite <buffer> AlpacaTagsUpdate
   " autocmd User Rails/config/database.rb    let b:file_type_name="ruby.database"
   " autocmd User Rails/config/boot.rb        let b:file_type_name="ruby.boot"
   " autocmd User Rails/config/locales/*      let b:file_type_name="ruby.locales"
@@ -2724,7 +2726,8 @@ unlet bundle
 "----------------------------------------
 " 補完・履歴 neocomplete "{{{
 set complete=.,w,b,u,U,s,i,d,t
-set completeopt=menu,menuone,preview
+" set completeopt=menu,menuone,preview
+set completeopt=menu,menuone
 set history=1000             " コマンド・検索パターンの履歴数
 set infercase
 set wildchar=<tab>           " コマンド補完を開始するキー
@@ -2763,25 +2766,24 @@ unlet bundle
 "----------------------------------------
 let bundle = NeoBundleGet(has("lua") ? 'neocomplete' : 'nothing!!!!')
 "{{{
+let g:neocomplete_enable_at_startup=1
 function! bundle.hooks.on_source(bundle)
-  let g:neocomplete_max_list=10
-  " let g:neocomplete_max_keyword_width=120
+  " " let g:neocomplete_enable_cursor_hold_i=0
   " let g:neocomplete_auto_completion_start_length=2
+  " let g:neocomplete_caching_limit_file_size=500000
+  " let g:neocomplete_max_keyword_width=120
+  let g:neocomplete_ctags_arguments_list=g:alpaca_update_tags_config
+  let g:neocomplete_data_directory=g:my.dir.neocomplete
+  let g:neocomplete_disable_auto_select=1
+  let g:neocomplete_enable_auto_close_preview=0
+  let g:neocomplete_enable_auto_select=0
+  let g:neocomplete_enable_fuzzy_completion=0
+  let g:neocomplete_force_overwrite_completefunc = 1
   let g:neocomplete_manual_completion_start_length=0
+  let g:neocomplete_max_list=10
   let g:neocomplete_min_keyword_length=3
   let g:neocomplete_min_syntax_length=3
-  " " let g:neocomplete_enable_cursor_hold_i=0
-  let g:neocomplete_disable_auto_select=1
-  let g:neocomplete_enable_auto_select=0
   let g:neocomplete_skip_auto_completion_time='0.1'
-  let g:neocomplete_force_overwrite_completefunc = 1
-  let g:neocomplete_enable_fuzzy_completion=0
-  " let g:neocomplete_caching_limit_file_size=500000
-  let g:neocomplete_data_directory=g:my.dir.neocomplete
-  let g:neocomplete_ctags_arguments_list=g:alpaca_update_tags_config
-  let g:neocomplete_enable_auto_close_preview=0
-
-  let g:neocomplete_enable_at_startup=1
   " for rsense
   " let g:neocomplete#sources#rsense#home_directory = neobundle#get_neobundle_dir() . '/rsense-0.3'
   " let g:rsenseHome = expand("~/.bundle/rsense-0.3")
@@ -2865,6 +2867,9 @@ function! bundle.hooks.on_source(bundle)
   " tags_completeはデフォルトでOFFでいい。。
   " 使えるレベルで高速化するのかなぁ
   let g:neocomplete_disabled_sources_list._ = ['tags_complete']
+  let g:neocomplete_disabled_sources_list.vim = ['vimshell']
+  let g:neocomplete_disabled_sources_list.ruby = ['syntax', 'include', 'omni', 'file/include', 'member']
+  let g:neocomplete_disabled_sources_list.haml = g:neocomplete_disabled_sources_list.ruby 
   let g:neocomplete_sources_list = {
         \ 'unite': [],
         \ }
