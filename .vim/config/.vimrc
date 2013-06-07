@@ -106,6 +106,30 @@ endfunction"}}}
 function! s:gsub(str,pat,rep) "{{{
   return substitute(a:str,'\v\C'.a:pat,a:rep,'g')
 endfunction"}}}
+function! s:set_default(var, val) "{{{
+  if !exists(a:var) || type({a:var}) != type(a:val)
+    silent! unlet {a:var}
+    let {a:var} = a:val
+  endif
+endfunction"}}}
+function! s:SID_PREFIX() "{{{
+  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
+endfunction"}}}
+function! s:strwidthpart(str, width) "{{{
+  if a:width <= 0
+    return ''
+  endif
+  let ret = a:str
+  let width = strwidth(a:str)
+  while width > a:width
+    let char = matchstr(ret, '.$')
+    let ret = ret[: -1 - len(char)]
+    let width -= strwidth(char)
+  endwhile
+
+  return ret
+endfunction"}}}
+
 " }}}
 
 "----------------------------------------
@@ -199,9 +223,11 @@ set modelines=1
 set nomore
 set ttymouse=xterm2
 set nobackup
+set nowritebackup
 set norestorescreen
-set showmode
-set timeout timeoutlen=300 ttimeoutlen=100
+set noshowmode
+set timeout timeoutlen=300 ttimeoutlen=90
+set updatetime=500
 set viminfo='1000,<800,s300,\"1000,f1,:1000,/1000
 set visualbell t_vb=
 
@@ -215,7 +241,7 @@ nnoremap <Space><Space>v :<C-U>tabnew ~/.vim/config/.vimrc<CR>
 "}}}
 
 "----------------------------------------
-" neobundle initialize
+" neobundle initialize"{{{
 filetype plugin indent off     " required!
 let g:neobundle#types#git#default_protocol = 'https'
 let g:neobundle#install_max_processes = s:is_mac ? 50 : 10
@@ -275,6 +301,7 @@ function! NeoBundleGet(name)
   let bundle = neobundle#get(a:name)
   return empty(bundle) ? s:dummy : bundle
 endfunction"}}}
+"}}}
 
 "----------------------------------------
 " Basic {{{
@@ -515,11 +542,18 @@ NeoBundleLazy 't9md/vim-textmanip', { 'autoload' : {
 "       \   'mappings': [
 "       \     ['nx', '<C-A>'], ['nx', '<C-X>']
 "       \ ] }}
-NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
-      \ 'autoload': {
-      \   'commands': ['IndentGuidesEnable', 'IndentGuidesToggle'],
-      \   'filetypes': g:my.ft.program_files,
-      \ }}
+if has("conceal")
+  NeoBundleLazy 'Yggdroot/indentLine', { 'autoload' : {
+        \   'commands' : ["IndentLinesReset", "IndentLinesToggle"],
+        \   'filetypes': g:my.ft.program_files,
+        \ }}
+else
+  NeoBundleLazy 'nathanaelkane/vim-indent-guides', {
+        \ 'autoload': {
+        \   'commands': ['IndentGuidesEnable', 'IndentGuidesToggle'],
+        \   'filetypes': g:my.ft.program_files,
+        \ }}
+endif
 "}}}
 " 補完"{{{
 " NeoBundle 'ujihisa/neco-look', {
@@ -572,10 +606,9 @@ NeoBundleLazy 'operator-camelize', {
 "}}}
 "}}}
 " unite"{{{
-" NeoBundleLazy 'thinca/vim-qfreplace', { 'autoload' : {
-"       \ 'filetypes' : ['unite'],
-"       \ 'commands' : ['Qfreplace']
-"       \ }}
+NeoBundleLazy 'thinca/vim-qfreplace', { 'autoload' : {
+      \ 'filetypes' : ['unite', 'quickfix'],
+      \ }}
 NeoBundleLazy 'Shougo/unite-build', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload': {
@@ -778,7 +811,13 @@ NeoBundleLazy 'jelera/vim-javascript-syntax', { 'autoload' : {
 NeoBundleLazy 'teramako/jscomplete-vim', { 'autoload' : {
       \ 'filetypes' : g:my.ft.js_files
       \ }}
-" NeoBundleLazy 'marijnh/tern'
+if has("python")
+  NeoBundleLazy 'marijnh/tern_for_vim', {
+        \ 'autoload' : {
+        \   'filetypes' : 'javascript'
+        \ }}
+  NeoBundleLazy 'marijnh/tern'
+endif
 
 NeoBundleLazy 'leafgarland/typescript-vim', { 'autoload' : {
       \ 'filetypes' : ['typescript']
@@ -993,6 +1032,7 @@ filetype plugin indent on
 "編集"{{{
 " set textwidth=100
 set autoread
+set nostartofline
 set hidden
 set nrformats-=octal
 set nrformats+=alpha
@@ -1002,7 +1042,11 @@ set textwidth=0
 set splitbelow
 set previewheight=5
 set helpheight=12
+set matchtime=2
 
+if has('multi_byte_ime')
+  set iminsert=0 imsearch=0
+endif
 " 開いているファイルのディレクトリに自動で移動
 aug MyAutoCmd
   au BufEnter * execute ":silent! lcd! " . expand("%:p:h")
@@ -1285,7 +1329,8 @@ filetype indent on
 " set noequalalways     " 画面の自動サイズ調整解除
 " set relativenumber    " 相対表示
 set pumheight=20
-set breakat=\\;:,!?
+" set breakat=\\;:,!?
+set breakat=\ \	;:,!?
 set cdpath+=~
 set cmdheight=2
 set cmdwinheight=2
@@ -1307,7 +1352,7 @@ set fillchars=stl:\ ,stlnc:\ ,fold:-,diff:-
 set matchpairs+=<:>
 set number
 set scrolloff=5
-set showcmd
+set noshowcmd
 set showfulltag
 set showmatch
 set showtabline=2
@@ -1317,6 +1362,14 @@ set t_Co=256
 set title
 set titlelen=95
 set ttyfast
+set shortmess=aTI
+" let &titlestring="
+"   \ %{(&filetype ==# 'lingr-messages' && lingr#unread_count() > 0 )?
+"   \ '('.lingr#unread_count().')' : ''}%{expand('%:p:.:~')}%(%m%r%w%)
+"   \ %<\(%{".s:SID_PREFIX()."strwidthpart(
+"   \ fnamemodify(&filetype ==# 'vimfiler' ?
+"   \ substitute(b:vimfiler.current_dir, '.\\zs/$', '', '') : getcwd(), ':~'),
+"   \ &columns-len(expand('%:p:.:~')))}\) - VIM"
 
 "折り畳み
 set foldenable
@@ -1337,15 +1390,6 @@ set foldnestmax=2
 "     execute 'setl foldmethod=' . b:fold_method
 "   endif
 " endfunction"}}}
-" augroup FoldMethod
-"   autocmd!
-"   autocmd BufReadPost * call alpaca#let_b:('fold_method', &foldmethod)
-"   autocmd InsertEnter * call s:fold_method_toggle(1)
-"   autocmd InsertLeave * call s:fold_method_toggle(0)
-" augroup END
-" set foldlevel=5
-" set foldtext='v:foldstart v:foldend v:folddashes'
-" set foldnestmax=5
 
 if v:version >= 703
   highlight ColorColumn guibg=#012345
@@ -1378,6 +1422,10 @@ colorscheme  desertEx
 
 set tags-=tags
 set tags+=tags;
+if v:version < 703 || (v:version == 7.3 && !has('patch336'))
+  " Vim's bug.
+  set notagbsearch
+endif
 
 " 超絶便利
 aug AlpacaUpdateTags
@@ -1421,12 +1469,10 @@ aug MyAutoCmd
 aug END
 "}}}
 
-"----------------------------------------
 nnoremap [plug] <Nop>
 nnoremap [minor] <Nop>
 nmap <C-H> [plug]
 nmap ; [minor]
-
 "----------------------------------------
 "個別のプラグイン " {{{
 
@@ -2289,10 +2335,11 @@ function! bundle.hooks.on_source(bundle) "{{{
   let g:indent_guides_start_level = 2
   hi IndentGuidesOdd  ctermbg=235
   hi IndentGuidesEven ctermbg=233
-  augroup MyAutoCmd
-    " au BufEnter * let g:indent_guides_guide_size=&tabstop
-  augroup END
   nnoremap <Space>i :<C-U>IndentGuidesToggle<CR>
+
+  augroup MyAutoCmd
+    au BufEnter * let g:indent_guides_guide_size=&tabstop
+  augroup END
 endfunction"}}}
 unlet bundle
 "}}}
@@ -2683,13 +2730,13 @@ xnoremap ,l :<C-U>LanguageToolCheck<CR>
 " ------------------------------------
 " tern
 " ------------------------------------
-" let bundle = neobundle#get('tern')
-" function! bundle.hooks.on_source(bundle) "{{{
-"   " source `neobundle#get_neobundle_dir() . '/tern/vim/tern.vim'`
-"   execute 'source ' . neobundle#get_neobundle_dir() . '/tern/vim/tern.vim'
-"   autocmd FileType javascript call tern#Enable()
-" endfunction"}}}
-" unlet bundle
+let bundle = NeoBundleGet('tern')
+function! bundle.hooks.on_source(bundle) "{{{
+  " source `neobundle#get_neobundle_dir() . '/tern/vim/tern.vim'`
+  execute 'source ' . neobundle#get_neobundle_dir() . '/tern/vim/tern.vim'
+  autocmd FileType javascript call tern#Enable()
+endfunction"}}}
+unlet bundle
 
 " ------------------------------------
 " alpaca_english enable
@@ -2714,33 +2761,27 @@ let g:vimfiler_force_overwrite_statusline = 1
 " ----------------------------------------
 " vim-singleton.vim
 " ----------------------------------------
-let bundle = neobundle#get('vim-singleton')
-if !empty(bundle)
-  function! bundle.hooks.on_source(bundle)
-    call singleton#enable()
-  endfunction
-endif
+let bundle = NeoBundleGet('vim-singleton')
+function! bundle.hooks.on_source(bundle) "{{{
+  call singleton#enable()
+endfunction"}}}
 unlet bundle
-"}}}
 
-"----------------------------------------
-" 補完・履歴 neocomplete "{{{
-set complete=.,w,b,u,U,s,i,d,t
-" set completeopt=menu,menuone,preview
-set completeopt=menu,menuone
-set history=1000             " コマンド・検索パターンの履歴数
-set infercase
-set wildchar=<tab>           " コマンド補完を開始するキー
-set wildmenu                 " コマンド補完を強化
-set wildoptions=tagfile
-set wildmode=longest:full,full
-" set thesaurus+=~/.vim/thesaurus/mthes10/mthesaur.txt
-
-" command-lineはzsh風補完で使う
-cnoremap <C-P> <UP>
-cnoremap <C-N> <Down>
-" }}}
-" set pumheight=10
+" ----------------------------------------
+" indentLine
+" ----------------------------------------
+let bundle = NeoBundleGet("indentLine")
+function! bundle.hooks.on_source(bundle) "{{{
+  " let g:indentLine_color_term = 239 
+  " let g:indentLine_color_gui = '#A4E57E'
+  " let g:indentLine_char = 'c'
+  let g:indentLine_fileType=g:my.ft.program_files
+  " let g:indentLine_noConcealCursor=
+  nnoremap <Space>i :<C-U>IndentLinesToggle<CR>
+  " hi Conceal ctermfg=239 ctermbg=NONE
+  " ¦┆│
+endfunction"}}}
+unlet bundle
 
 "----------------------------------------
 let bundle = NeoBundleGet('alpaca_complete')
@@ -3062,7 +3103,7 @@ nnoremap <silent>[unite]<C-F>    :<C-U>call <SID>unite_git_root()<CR>
 function! s:unite_git_root() "{{{
   let git_root = s:current_git()
 
-  execute 'lcd' git_root
+  lcd `=git_root`
   execute "Unite -buffer-name=file file_rec:".git_root
 endfunction"}}}
 
@@ -3280,6 +3321,30 @@ endfunction"}}}
 unlet bundle
 "}}}
 
+
+
+"}}}
+
+"----------------------------------------
+" 補完・履歴 "{{{
+set complete=.,w,b,u,U,s,i,d,t
+" set completeopt=menu,menuone,preview
+set completeopt=menu,menuone
+set history=1000             " コマンド・検索パターンの履歴数
+set infercase
+set wildchar=<tab>           " コマンド補完を開始するキー
+" set wildmenu                 " コマンド補完を強化
+set nowildmenu
+set showfulltag
+set wildoptions=tagfile
+set wildmode=longest:full,full
+" set thesaurus+=~/.vim/thesaurus/mthes10/mthesaur.txt
+
+" command-lineはzsh風補完で使う
+cnoremap <C-P> <UP>
+cnoremap <C-N> <Down>
+" }}}
+
 "----------------------------------------
 " Dash"{{{
 function! s:dash(...) "{{{
@@ -3325,6 +3390,6 @@ endfunction"}}}
 command! -bar IDE call <SID>IDE()
 
 set secure
-if has('vim_starting')
-  call neobundle#call_hook('on_source')
-endif
+call neobundle#call_hook('on_source')
+
+
