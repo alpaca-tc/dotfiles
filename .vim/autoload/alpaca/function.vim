@@ -1,4 +1,4 @@
-function! alpaca#function#today()"{{{
+function! alpaca#function#today() "{{{
   return strftime("%Y-%m-%d")
 endfunction"}}}
 function! alpaca#function#convert_haml_to_html(fileType) "{{{

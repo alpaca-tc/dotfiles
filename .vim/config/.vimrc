@@ -129,7 +129,6 @@ function! s:strwidthpart(str, width) "{{{
 
   return ret
 endfunction"}}}
-
 " }}}
 
 "----------------------------------------
@@ -338,11 +337,11 @@ NeoBundleLazy 'mattn/webapi-vim', {
       \   "function_prefix": "webapi"
       \ }}
 " 基本の拡張 {{{
-NeoBundleLazy 'rhysd/accelerated-jk', {
-      \ 'autoload' : {
-      \   'mappings' : [
-      \     ['n', '<Plug>(accelerated_jk_gj)'], ['n', '<Plug>(accelerated_jk_gk)']
-      \ ] }}
+" NeoBundle 'rhysd/accelerated-jk', {
+"       \ 'autoload' : {
+"       \   'mappings' : [
+"       \     ['n', '<Plug>(accelerated_jk_gj)'], ['n', '<Plug>(accelerated_jk_gk)']
+"       \ ] }}
 NeoBundleLazy 'edsono/vim-matchit', { 'autoload' : {
       \ 'filetypes': g:my.ft.program_files,
       \ 'mappings' : ['nx', '%'] }}
@@ -606,9 +605,10 @@ NeoBundleLazy 'operator-camelize', {
 "}}}
 "}}}
 " unite"{{{
-NeoBundleLazy 'thinca/vim-qfreplace', { 'autoload' : {
-      \ 'filetypes' : ['unite', 'quickfix'],
-      \ }}
+" NeoBundleLazy 'thinca/vim-qfreplace', { 'autoload' : {
+"       \ 'filetypes' : ['unite', 'quickfix'],
+"       \ 'commands' : ["Qfreplace"],
+"       \ }}
 NeoBundleLazy 'Shougo/unite-build', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload': {
@@ -812,11 +812,11 @@ NeoBundleLazy 'teramako/jscomplete-vim', { 'autoload' : {
       \ 'filetypes' : g:my.ft.js_files
       \ }}
 if has("python")
-  NeoBundleLazy 'marijnh/tern_for_vim', {
-        \ 'autoload' : {
-        \   'filetypes' : 'javascript'
-        \ }}
-  NeoBundleLazy 'marijnh/tern'
+  " NeoBundleLazy 'marijnh/tern_for_vim', {
+  "       \ 'autoload' : {
+  "       \   'filetypes' : 'javascript'
+  "       \ }}
+  " NeoBundleLazy 'marijnh/tern'
 endif
 
 NeoBundleLazy 'leafgarland/typescript-vim', { 'autoload' : {
@@ -1333,13 +1333,15 @@ set pumheight=20
 set breakat=\ \	;:,!?
 set cdpath+=~
 set cmdheight=2
-set cmdwinheight=2
 set cursorline
 set equalalways       " 画面の自動サイズ調整
-set laststatus=2
+
+" ここら辺を設定すると、描写が遅くなる
+set laststatus=0
 set lazyredraw
-set linebreak
+" set linebreak
 " set balloondelay=300
+
 set browsedir=buffer
 " http://www15.ocn.ne.jp/~tusr/vim/options_help.html#highlight
 " set highlight=8:SpecialKey,@:NonText,d:Directory,e:ErrorMsg,i:IncSearch,l:Search, m:MoreMsg,M:ModeMsg,n:LineNr,r:Question,s:StatusLine,S:StatusLineNC,c:VertSplit,t:Title,v:Visual,w:WarningMsg,W:WildMenu,f:Folded,F:FoldColumn
@@ -2422,8 +2424,11 @@ nnoremap U      :<C-u>GundoToggle<CR>
 " accelerated-jk
 "------------------------------------
 "{{{
-nmap <silent>j <Plug>(accelerated_jk_gj)
-nmap <silent>k <Plug>(accelerated_jk_gk)
+let bundle = NeoBundleGet("accelerated-jk")
+function! bundle.hooks.on_source(bundle) "{{{
+  nmap <silent>j <Plug>(accelerated_jk_gj)
+  nmap <silent>k <Plug>(accelerated_jk_gk)
+endfunction"}}}
 "}}}
 
 "------------------------------------
@@ -2749,7 +2754,6 @@ let g:alpaca_english_enable_duplicate_candidates=1
 let g:alpaca_english_web_search_url = 'http://eow.alc.co.jp/%s/UTF-8/'
 let g:alpaca_english_web_search_xpath = "div[@id='resultsList']/ul/li"
 
-let g:unite_force_overwrite_statusline = 0
 
 " ------------------------------------
 " linepower
@@ -2757,6 +2761,7 @@ let g:unite_force_overwrite_statusline = 0
 let g:vimshell_force_overwrite_statusline = 1
 let g:vimfiler_force_overwrite_statusline = 1
 let g:vimfiler_force_overwrite_statusline = 1
+let g:unite_force_overwrite_statusline = 0
 
 " ----------------------------------------
 " vim-singleton.vim
@@ -2772,7 +2777,7 @@ unlet bundle
 " ----------------------------------------
 let bundle = NeoBundleGet("indentLine")
 function! bundle.hooks.on_source(bundle) "{{{
-  " let g:indentLine_color_term = 239 
+  let g:indentLine_color_term = 239 
   " let g:indentLine_color_gui = '#A4E57E'
   " let g:indentLine_char = 'c'
   let g:indentLine_fileType=g:my.ft.program_files
@@ -2813,6 +2818,8 @@ function! bundle.hooks.on_source(bundle)
   " let g:neocomplete_auto_completion_start_length=2
   " let g:neocomplete_caching_limit_file_size=500000
   " let g:neocomplete_max_keyword_width=120
+  let g:neocomplete_min_syntax_length=3
+  let g:neocomplete#auto_completion_start_length=g:neocomplete_min_syntax_length
   let g:neocomplete_ctags_arguments_list=g:alpaca_update_tags_config
   let g:neocomplete_data_directory=g:my.dir.neocomplete
   let g:neocomplete_disable_auto_select=1
@@ -2823,8 +2830,7 @@ function! bundle.hooks.on_source(bundle)
   let g:neocomplete_manual_completion_start_length=0
   let g:neocomplete_max_list=10
   let g:neocomplete_min_keyword_length=3
-  let g:neocomplete_min_syntax_length=3
-  let g:neocomplete_skip_auto_completion_time='0.1'
+  " let g:neocomplete_skip_auto_completion_time='0.1'
   " for rsense
   " let g:neocomplete#sources#rsense#home_directory = neobundle#get_neobundle_dir() . '/rsense-0.3'
   " let g:rsenseHome = expand("~/.bundle/rsense-0.3")
@@ -3178,7 +3184,6 @@ function! bundle.hooks.on_source(bundle) "{{{
   "}}}
 
   function! s:unite_my_settings() "{{{
-    echomsg "load unite"
     aug MyUniteBufferCmd
       autocmd!
       autocmd BufEnter <buffer> if winnr('$') == 1 |quit| endif
@@ -3320,9 +3325,6 @@ function! bundle.hooks.on_source(bundle) "{{{
 endfunction"}}}
 unlet bundle
 "}}}
-
-
-
 "}}}
 
 "----------------------------------------
@@ -3333,8 +3335,7 @@ set completeopt=menu,menuone
 set history=1000             " コマンド・検索パターンの履歴数
 set infercase
 set wildchar=<tab>           " コマンド補完を開始するキー
-" set wildmenu                 " コマンド補完を強化
-set nowildmenu
+set wildmenu                 " コマンド補完を強化
 set showfulltag
 set wildoptions=tagfile
 set wildmode=longest:full,full
@@ -3389,7 +3390,6 @@ function! s:IDE() "{{{
 endfunction"}}}
 command! -bar IDE call <SID>IDE()
 
-set secure
 call neobundle#call_hook('on_source')
 
-
+set secure

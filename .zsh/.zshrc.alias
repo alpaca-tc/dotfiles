@@ -1,3 +1,5 @@
+alias cdr='cd $(git rev-parse --show-toplevel)'
+
 # ls# {{{
 alias la="ls -a"
 alias lf="ls -F"
