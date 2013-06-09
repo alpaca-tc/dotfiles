@@ -685,19 +685,19 @@ NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
       \ }}
 if has("ruby")
   " NeoCompleteに対応していない
-  " NeoBundleLazy 'taichouchou2/alpaca_english', {
-  "       \ 'rev' : 'development',
-  "       \ 'build' : {
-  "       \   "mac" : "bundle",
-  "       \   "unix" : "bundle",
-  "       \   "other" : "bundle",
-  "       \ },
-  "       \ 'autoload' : {
-  "       \   'commands' : ["AlpacaEnglishDisable", "AlpacaEnglishEnable", "AlpacaEnglishSay"],
-  "       \   'unite_sources': ['english_dictionary', 'english_example', 'english_thesaurus'],
-  "       \ }
-  "       \ }
+  NeoBundleLazy 'taichouchou2/alpaca_english', {
+        \ 'build' : {
+        \   "mac" : "bundle",
+        \   "unix" : "bundle",
+        \   "other" : "bundle",
+        \ },
+        \ 'autoload' : {
+        \   'commands' : ["AlpacaEnglishDisable", "AlpacaEnglishEnable", "AlpacaEnglishSay"],
+        \   'unite_sources': ['english_dictionary', 'english_example', 'english_thesaurus'],
+        \ }
+        \ }
 endif
+
 if has("clientserver")
   NeoBundleLazy 'thinca/vim-singleton', { 'autoload' : {
         \ 'functions' : 'singleton#enable'
@@ -934,6 +934,10 @@ NeoBundleLazy 'taichouchou2/unite-reek', {
 " NeoBundleLazy 'tpope/vim-cucumber', { 'autoload': {
 "       \ 'filetypes': g:my.ft.ruby_files }}
 
+NeoBundleLazy "depuracao/vim-rdoc", { "autoload" : {
+      \   "filetypes" : "rdoc"
+      \ }}
+
 " nginx
 " ----------------------------------------
 NeoBundleLazy 'mutewinter/nginx.vim', {
@@ -1127,6 +1131,9 @@ let s:alpaca_abbr_define = {
       \ "python" : [
       \   "im import"
       \ ],
+      \ "gitcommit" : [
+      \   "wip [WIP]"
+      \ ]
       \ }
 for [filetype, abbr_defines] in items(s:alpaca_abbr_define)
   call alpaca#initialize#define_abbrev(abbr_defines, filetype)
