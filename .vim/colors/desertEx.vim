@@ -22,9 +22,7 @@ hi PreCondit guifg=#ee799f guibg=NONE guisp=NONE gui=NONE ctermfg=211 ctermbg=NO
 hi Include guifg=#ee799f guibg=NONE guisp=NONE gui=NONE ctermfg=211 ctermbg=NONE cterm=NONE
 "hi TabLineSel -- no settings --
 hi StatusLineNC guifg=#bebebe guibg=#666666 guisp=#666666 gui=NONE ctermfg=7 ctermbg=241 cterm=NONE
-"hi CTagsMember -- no settings --
 hi NonText guifg=#00ffff guibg=NONE guisp=NONE gui=NONE ctermfg=14 ctermbg=NONE cterm=NONE
-"hi CTagsGlobalConstant -- no settings --
 hi DiffText guifg=#000000 guibg=#ff6eb4 guisp=#ff6eb4 gui=NONE ctermfg=NONE ctermbg=205 cterm=NONE
 hi ErrorMsg guifg=#ffffff guibg=#ff0000 guisp=#ff0000 gui=NONE ctermfg=15 ctermbg=196 cterm=NONE
 hi Ignore guifg=#666666 guibg=NONE guisp=NONE gui=NONE ctermfg=241 ctermbg=NONE cterm=NONE
@@ -36,14 +34,19 @@ hi Conditional guifg=#ffa54f guibg=NONE guisp=NONE gui=NONE ctermfg=215 ctermbg=
 hi StorageClass guifg=#ffa54f guibg=NONE guisp=NONE gui=NONE ctermfg=215 ctermbg=NONE cterm=NONE
 hi Todo guifg=#ff4500 guibg=#eeee00 guisp=#eeee00 gui=NONE ctermfg=202 ctermbg=11 cterm=NONE
 hi Special guifg=#76eec6 guibg=NONE guisp=NONE gui=NONE ctermfg=122 ctermbg=NONE cterm=NONE
-hi LineNr guifg=#cdaa7d guibg=NONE guisp=NONE gui=NONE ctermfg=180 ctermbg=NONE cterm=NONE
+" hi LineNr guifg=#cdaa7d guibg=NONE guisp=NONE gui=NONE ctermfg=180 ctermbg=NONE cterm=NONE
+hi LineNr guifg=#cdaa7d guibg=NONE guisp=NONE gui=NONE ctermfg=008 ctermbg=NONE cterm=NONE
 hi StatusLine guifg=#000000 guibg=#c2bfa5 guisp=#c2bfa5 gui=bold ctermfg=NONE ctermbg=187 cterm=bold
 hi Normal guifg=#bebebe guibg=#2b2b2b guisp=#2b2b2b gui=NONE ctermfg=7 ctermbg=235 cterm=NONE
 hi Label guifg=#ffa54f guibg=NONE guisp=NONE gui=NONE ctermfg=215 ctermbg=NONE cterm=NONE
+hi CTagsClass guifg=#e4bc38 guibg=NONE guisp=NONE gui=NONE ctermfg=179 ctermbg=NONE cterm=NONE
+"hi CTagsClass -- no settings --
+"hi CTagsMember -- no settings --
+"hi CTagsGlobalConstant -- no settings --
 "hi CTagsImport -- no settings --
+"hi CTagsGlobalVariable -- no settings --
 hi PMenuSel guifg=#445599 guibg=#bebebe guisp=#bebebe gui=NONE ctermfg=61 ctermbg=7 cterm=NONE
 hi Search guifg=#cccccc guibg=#445599 guisp=#445599 gui=NONE ctermfg=252 ctermbg=61 cterm=NONE
-"hi CTagsGlobalVariable -- no settings --
 hi Delimiter guifg=#76eec6 guibg=NONE guisp=NONE gui=NONE ctermfg=122 ctermbg=NONE cterm=NONE
 hi Statement guifg=#eedc82 guibg=NONE guisp=NONE gui=NONE ctermfg=222 ctermbg=NONE cterm=NONE
 "hi SpellRare -- no settings --
@@ -91,7 +94,6 @@ hi MatchParen guifg=#00ffff guibg=NONE guisp=NONE gui=bold ctermfg=14 ctermbg=NO
 hi Repeat guifg=#ffa54f guibg=NONE guisp=NONE gui=NONE ctermfg=215 ctermbg=NONE cterm=NONE
 "hi SpellBad -- no settings --
 hi SpellBad cterm=underline ctermfg=210 ctermbg=NONE
-"hi CTagsClass -- no settings --
 hi Directory guifg=#008b8b guibg=NONE guisp=NONE gui=NONE ctermfg=30 ctermbg=NONE cterm=NONE
 hi Structure guifg=#ffa54f guibg=NONE guisp=NONE gui=NONE ctermfg=215 ctermbg=NONE cterm=NONE
 hi Macro guifg=#ee799f guibg=NONE guisp=NONE gui=NONE ctermfg=211 ctermbg=NONE cterm=NONE

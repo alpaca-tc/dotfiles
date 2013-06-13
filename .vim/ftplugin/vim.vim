@@ -16,8 +16,9 @@ setl includeexpr=fnamemodify(substitute(v:fname,'#','/','g'),':h')
 let &keywordprg=':help'
 
 " colorschemeの編集時は自動で読み込む
-if expand("%:p:h") =~ 'colors'
-  augroup MyAutoCmd
+if expand("%:p:h") =~ '.vim/colors'
+  augroup MySyntaxCmd
+    autocmd!
     autocmd FileWritePost,InsertLeave <buffer> write | source `=expand("%")`
   augroup END
 endif

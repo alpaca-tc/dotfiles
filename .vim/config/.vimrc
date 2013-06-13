@@ -153,7 +153,7 @@ let g:my.conf = {
       \ }
 "}}}
 " path "{{{
-      " \ "ctags" : expand('~/usr/bin/ctags'),
+      " \ "ctags" : expand('/Applications'),
 let g:my.bin = {
       \ "ri" : expand('/Users/taichou/.rbenv/shims/ri'),
       \ }
@@ -303,7 +303,7 @@ endfunction"}}}
 "}}}
 
 "----------------------------------------
-" Basic {{{
+" NeoBundle {{{
 NeoBundleFetch 'Shougo/neobundle.vim'
 " For asynchronous communication
 NeoBundle 'Shougo/vimproc', {
@@ -419,11 +419,9 @@ NeoBundleLazy 'Shougo/vimfiler', {
       \   'explorer' : 1,
       \ }}
 if has("lua")
-  NeoBundleLazy 'Shougo/neocomplete', {
-        \ 'autoload' : {
+  NeoBundleLazy 'Shougo/neocomplete', { 'autoload' : {
         \   'insert' : 1,
-        \ },
-        \ }
+        \ }}
 else
   NeoBundleLazy 'Shougo/neocomplcache', {
         \ 'autoload' : {
@@ -676,6 +674,9 @@ NeoBundleLazy 'basyura/TweetVim', { 'depends' :
 "}}}
 " その他 / テスト {{{
 " C# そのうち試す http://d.hatena.ne.jp/thinca/20130522/1369234427
+NeoBundleLazy 'https://bitbucket.org/abudden/taghighlight', { 'autoload' : {
+      \   'filetypes' : g:my.ft.program_files
+      \ }}
 NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
       \ 'insert' : 1,
       \ 'filetypes' : g:my.ft.program_files,
@@ -1046,7 +1047,7 @@ set textwidth=0
 set splitbelow
 set previewheight=5
 set helpheight=12
-set matchtime=2
+set matchtime=1
 
 if has('multi_byte_ime')
   set iminsert=0 imsearch=0
@@ -1344,6 +1345,7 @@ set cursorline
 set equalalways       " 画面の自動サイズ調整
 
 " ここら辺を設定すると、描写が遅くなる
+" set laststatus=2
 set laststatus=0
 set lazyredraw
 " set linebreak
@@ -1355,12 +1357,12 @@ set browsedir=buffer
 " set browsedir=current
 set list
 set listchars=tab:␣.,trail:›,extends:>,precedes:<
-set fillchars=stl:\ ,stlnc:\ ,fold:-,diff:-
+set fillchars=stl:\ ,stlnc:\ ,fold:\ ,diff:-
 " set listchars=tab:▸\ ,trail:-,extends:»,precedes:«,nbsp:%
 " set listchars=tab:>-,trail:-,extends:>,precedes:<
 set matchpairs+=<:>
 set number
-set scrolloff=5
+set scrolloff=8
 set noshowcmd
 set showfulltag
 set showmatch
@@ -1369,36 +1371,17 @@ set spelllang=en
 set nospell
 set t_Co=256
 set title
-set titlelen=95
+" set titlelen=95
 set ttyfast
 set shortmess=aTI
-" let &titlestring="
-"   \ %{(&filetype ==# 'lingr-messages' && lingr#unread_count() > 0 )?
-"   \ '('.lingr#unread_count().')' : ''}%{expand('%:p:.:~')}%(%m%r%w%)
-"   \ %<\(%{".s:SID_PREFIX()."strwidthpart(
-"   \ fnamemodify(&filetype ==# 'vimfiler' ?
-"   \ substitute(b:vimfiler.current_dir, '.\\zs/$', '', '') : getcwd(), ':~'),
-"   \ &columns-len(expand('%:p:.:~')))}\) - VIM"
 
 "折り畳み
 set foldenable
 set foldmethod=marker
-set foldlevel=1
+set foldlevel=0
 set foldlevelstart=0
 set foldminlines=2
 set foldnestmax=2
-
-" function! s:fold_method_toggle(insertmode) "{{{
-"   if !exists('b:fold_method')
-"     return 0
-"   endif
-"
-"   if a:insertmode
-"     " setl foldmethod=marker
-"   else
-"     execute 'setl foldmethod=' . b:fold_method
-"   endif
-" endfunction"}}}
 
 if v:version >= 703
   highlight ColorColumn guibg=#012345
@@ -1634,7 +1617,7 @@ aug MyAutoCmd
 aug END
 
 if exists('g:my.bin.ctags')
-  let g:tagbar_ctags_bin  = g:my.bin.ctags
+let g:tagbar_ctags_bin  = g:my.bin.ctags
 endif
 let g:tagbar_compact    = 1
 let g:tagbar_autofocus  = 1
@@ -2099,7 +2082,7 @@ endfunction
 "}}}
 function! s:do_rails_autocmd() "{{{
   if !exists("b:rails_root")
-    return 
+    return
   endif
 
   let buf = rails#buffer()
@@ -2784,7 +2767,7 @@ unlet bundle
 " ----------------------------------------
 let bundle = NeoBundleGet("indentLine")
 function! bundle.hooks.on_source(bundle) "{{{
-  let g:indentLine_color_term = 239 
+  let g:indentLine_color_term = 239
   " let g:indentLine_color_gui = '#A4E57E'
   " let g:indentLine_char = 'c'
   let g:indentLine_fileType=g:my.ft.program_files
@@ -2819,25 +2802,42 @@ unlet bundle
 "----------------------------------------
 let bundle = NeoBundleGet(has("lua") ? 'neocomplete' : 'nothing!!!!')
 "{{{
-let g:neocomplete_enable_at_startup=1
 function! bundle.hooks.on_source(bundle)
   " " let g:neocomplete_enable_cursor_hold_i=0
-  " let g:neocomplete_auto_completion_start_length=2
+  " let g:neocomplete#enable_smart_case = 1
+  let g:neocomplete#enable_at_startup = 1
+  let g:neocomplete#sources#syntax#min_keyword_length = 3
+  let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+
+  let g:neocomplete#auto_completion_start_length=2
   " let g:neocomplete_caching_limit_file_size=500000
   " let g:neocomplete_max_keyword_width=120
-  let g:neocomplete_min_syntax_length=3
-  let g:neocomplete#auto_completion_start_length=g:neocomplete_min_syntax_length
-  let g:neocomplete_ctags_arguments_list=g:alpaca_update_tags_config
-  let g:neocomplete_data_directory=g:my.dir.neocomplete
-  let g:neocomplete_disable_auto_select=1
-  let g:neocomplete_enable_auto_close_preview=0
-  let g:neocomplete_enable_auto_select=0
-  let g:neocomplete_enable_fuzzy_completion=0
-  let g:neocomplete_force_overwrite_completefunc = 1
-  let g:neocomplete_manual_completion_start_length=0
-  let g:neocomplete_max_list=10
-  let g:neocomplete_min_keyword_length=3
-  " let g:neocomplete_skip_auto_completion_time='0.1'
+  let g:neocomplete#auto_completion_start_length=g:neocomplete#sources#syntax#min_keyword_length
+  let g:neocomplete#ctags_arguments=g:alpaca_update_tags_config
+  let g:neocomplete#data_directory=g:my.dir.neocomplete
+  let g:neocomplete#enable_auto_close_preview=0
+  let g:neocomplete#enable_auto_select=0
+
+  " let g:neocomplete#enable_refresh_always = 0
+  " For auto select.
+  let g:neocomplete#enable_complete_select = 0
+  let g:neocomplete#enable_fuzzy_completion=0
+  let g:neocomplete#force_overwrite_completefunc = 1
+  let g:neocomplete#manual_completion_start_length=0
+
+  let g:neocomplete#sources#buffer#cache_limit_size=700000
+  let g:neocomplete#sources#tags#cache_limit_size=1000000
+  let g:neocomplete#sources#include#max_proceslses = 30
+  let g:neocomplete#max_list=100
+  let g:neocomplete#skip_auto_completion_time='0.1'
+
+  " if g:neocomplete#enable_complete_select
+  "   set completeopt-=noselect
+  "   set completeopt+=noinsert
+  " endif
+
+  let g:neocomplete#disable_auto_select_buffer_name_pattern =
+        \ '\[Command Line\]'
   " for rsense
   " let g:neocomplete#sources#rsense#home_directory = neobundle#get_neobundle_dir() . '/rsense-0.3'
   " let g:rsenseHome = expand("~/.bundle/rsense-0.3")
@@ -2847,7 +2847,7 @@ function! bundle.hooks.on_source(bundle)
 
   " for clang
   " libclang を使用して高速に補完を行う
-  let g:neocomplete_clang_use_library=1
+  " let g:neocomplete_clang_use_library=1
   " clang.dll へのディレクトリパス
   " let g:neocomplete_clang_library_path='C:/llvm/bin'
   " clang のコマンドオプション
@@ -2859,25 +2859,20 @@ function! bundle.hooks.on_source(bundle)
 
   " initialize "{{{
   if $USER == 'root'
-    let g:neocomplete_temporary_dir = '/tmp'
+    let g:neocomplete#data_directory = '/tmp'
   endif
 
   let s:neocomplete_initialize_lists = [
-        \ 'neocomplete_include_patterns',
-        \ 'neocomplete_wildcard_characters',
-        \ 'neocomplete_omni_patterns',
-        \ 'neocomplete_force_omni_patterns',
-        \ 'neocomplete_keyword_patterns',
-        \ 'neocomplete_source_completion_length',
-        \ 'neocomplete_source_rank',
-        \ 'neocomplete_vim_completefuncs',
-        \ 'neocomplete_same_filetype_lists',
-        \ 'neocomplete_delimiter_patterns',
-        \ 'neocomplete_dictionary_filetype_lists',
-        \ 'neocomplete_sources_list',
-        \ 'neocomplete_disabled_sources_list',
-        \ 'neocomplete_text_mode_filetypes',
-        \ 'neocomplete_ignore_composite_filetype_lists'
+        \ 'neocomplete#sources#include#patterns',
+        \ 'neocomplete#sources#omni#functions',
+        \ 'neocomplete#sources#omni#input_patterns',
+        \ 'neocomplete#force_omni_input_patterns',
+        \ 'neocomplete#keyword_patterns',
+        \ 'neocomplete#sources#vim#complete_functions',
+        \ 'neocomplete#delimiter_patterns',
+        \ 'neocomplete#sources#dictionary#dictionaries',
+        \ 'neocomplete#sources',
+        \ 'neocomplete#text_mode_filetypes',
         \ ]
 
   for initialize_variable in s:neocomplete_initialize_lists
@@ -2885,54 +2880,60 @@ function! bundle.hooks.on_source(bundle)
   endfor
   "}}}
 
-  " Define force omni patterns"{{{
-  let g:neocomplete_force_omni_patterns.c      = '[^.[:digit:] *\t]\%(\.\|->\)'
-  let g:neocomplete_force_omni_patterns.cpp    = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-  let g:neocomplete_force_omni_patterns.objc   = '[^.[:digit:] *\t]\%(\.\|->\)'
-  let g:neocomplete_force_omni_patterns.objcpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-
-  let g:neocomplete_text_mode_filetypes = {
+  let g:neocomplete#text_mode_filetypes = {
         \ 'markdown' : 1,
         \ 'gitcommit' : 1,
         \ 'text' : 1,
         \ }
 
-  let g:neocomplete_source_rank = {
-        \ 'c'       : '[^.[:digit:] *\t]\%(\.\|->\)',
-        \ 'cpp'     : '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::',
-        \ 'python'  : '[^. \t]\.\w*',
-        \ }
-
   " Define keyword pattern.
-  let g:neocomplete_keyword_patterns = {
-        \ 'default' : '[0-9a-zA-Z:#_]\+',
-        \ 'c'         : '[^.[:digit:]*\t]\%(\.\|->\)',
-        \ 'mail'      : '^\s*\w\+',
+  let g:neocomplete#keyword_patterns = {
+        \ '_' : '[0-9a-zA-Z:#_]\+',
+        \ 'c' : '[^.[:digit:]*\t]\%(\.\|->\)',
+        \ 'mail' : '^\s*\w\+',
         \ 'perl' : '\h\w*->\h\w*\|\h\w*::',
         \ }
 
   " Define include pattern.
-  let g:neocomplete_include_patterns = {
+  let g:neocomplete#sources#include#patterns = {
         \ 'scala' : '^import',
         \ 'scss'  : '^\s*\<\%(@import\)\>',
         \ 'php'   : '^\s*\<\%(inlcude\|\|include_once\|require\|require_once\)\>',
         \ }
 
+  " Define omni input patterns
+  let g:neocomplete#sources#omni#input_patterns.ruby =
+        \ '[^. *\t]\.\w*\|\h\w*::'
+  let g:neocomplete#sources#omni#input_patterns.php =
+        \ '[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+  let g:neocomplete#sources#omni#input_patterns.c =
+    \ '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?'
+  let g:neocomplete#sources#omni#input_patterns.cpp =
+    \ '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+
+  " Define force omni patterns"{{{
+  let g:neocomplete#force_omni_input_patterns.c      =
+        \ '[^.[:digit:] *\t]\%(\.\|->\)'
+  let g:neocomplete#force_omni_input_patterns.cpp    =
+        \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+  let g:neocomplete#force_omni_input_patterns.objc   =
+        \ '[^.[:digit:] *\t]\%(\.\|->\)'
+  let g:neocomplete#force_omni_input_patterns.objcpp =
+        \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+
   " tags_completeはデフォルトでOFFでいい。。
-  " 使えるレベルで高速化するのかなぁ
-  let g:neocomplete_disabled_sources_list._ = ['tags_complete']
-  let g:neocomplete_disabled_sources_list.vim = ['vimshell']
-  let g:neocomplete_disabled_sources_list.ruby = ['syntax', 'include', 'omni', 'file/include', 'member']
-  let g:neocomplete_disabled_sources_list.haml = g:neocomplete_disabled_sources_list.ruby 
-  let g:neocomplete_sources_list = {
-        \ 'unite': [],
-        \ }
+  " keys(neocomplete#variables#get_sources())
+  " let g:neocomplete#sources._ = ['file', 'tag', 'neosnippet', 'vim', 'dictionary', 'omni', 'member', 'syntax', 'include', 'buffer', 'file/include']
+  " let g:neocomplete_disabled_sources_list._ = ['tags_complete']
+  " let g:neocomplete_disabled_sources_list.vim = ['vimshell']
+  " let g:neocomplete_disabled_sources_list.ruby = ['syntax', 'include', 'omni', 'file/include', 'member']
+  " let g:neocomplete_disabled_sources_list.haml = g:neocomplete_disabled_sources_list.ruby
+  " let g:neocomplete_sources_list = {
+  "       \ 'unite': [],
+  "       \ }
   " let g:neocomplete_disabled_sources_list._ = ['tags_complete', 'omni_complete']
 
-  " Define omni patterns
-  let g:neocomplete_omni_patterns = {
-        \ 'php' : '[^. *\t]\.\w*\|\h\w*::'
-        \ }
+  " neocomplete#custom#source(
 
   " let g:neocomplete_delimiter_patterns = {
   "       \ 'ruby' : []
@@ -2940,19 +2941,22 @@ function! bundle.hooks.on_source(bundle)
 
 
   " Define completefunc"{{{
-  let g:neocomplete_vim_completefuncs = {
-        \ "Ref"                 : 'ref#complete',
-        \ "Unite"               : 'unite#complete_source',
-        \ "VimFiler"            : 'vimfiler#complete',
-        \ "VimShell"            : 'vimshell#complete',
-        \ "VimShellExecute"     : 'vimshell#vimshell_execute_complete',
-        \ "VimShellInteractive" : 'vimshell#vimshell_execute_complete',
-        \ "VimShellTerminal"    : 'vimshell#vimshell_execute_complete',
-        \ "Vinarise"            : 'vinarise#complete',
-        \ }
+  let g:neocomplete#sources#vim#complete_functions = {
+        \ 'Ref' : 'ref#complete',
+        \ 'Unite' : 'unite#complete_source',
+        \ 'VimShellExecute' :
+        \      'vimshell#vimshell_execute_complete',
+        \ 'VimShellInteractive' :
+        \      'vimshell#vimshell_execute_complete',
+        \ 'VimShellTerminal' :
+        \      'vimshell#vimshell_execute_complete',
+        \ 'VimShell' : 'vimshell#complete',
+        \ 'VimFiler' : 'vimfiler#complete',
+        \ 'Vinarise' : 'vinarise#complete',
+        \}
   "}}}
   " ファイルタイプ毎の辞書ファイルの場所 {{{
-  let g:neocomplete_dictionary_filetype_lists = {
+  let neocomplete#sources#dictionary#dictionaries = {
         \ 'default'             : '',
         \ 'javascript.timobile' : $HOME.'/.vim/dict/timobile.dict',
         \ 'coffee.timobile'     : $HOME.'/.vim/dict/timobile.dict',
@@ -2960,7 +2964,7 @@ function! bundle.hooks.on_source(bundle)
 
   for s:dict in split(glob($HOME.'/.vim/dict/*.dict'))
     let s:ft = matchstr(s:dict, '[a-zA-Z0-9.]\+\ze\.dict$')
-    let g:neocomplete_dictionary_filetype_lists[s:ft] = s:dict
+    let neocomplete#sources#dictionary#dictionaries[s:ft] = s:dict
   endfor
   "}}}
   " }}}
@@ -3186,7 +3190,7 @@ function! bundle.hooks.on_source(bundle) "{{{
   let g:unite_source_file_mru_filename_format=":~:."
   let g:unite_source_file_mru_limit = 300
   let g:unite_winheight = 20
-  let g:unite_source_history_yank_enable =1
+  let g:unite_source_history_yank_enable = 0
   let s:unite_kuso_hooks = {}
   "}}}
 
@@ -3213,7 +3217,7 @@ function! bundle.hooks.on_source(bundle) "{{{
     " hook
     let unite = unite#get_current_unite()
     let buffer_name = unite.buffer_name != '' ? unite.buffer_name : '_'
-    
+
     " バッファ名に基づいたフックを実行
     if has_key( s:unite_kuso_hooks, buffer_name )
       call s:unite_kuso_hooks[buffer_name]()
