@@ -3,6 +3,7 @@
 require 'active_support/all'
 
 Pry.config.editor="vim"
+if Pry::VERSION.to_f > 0.9
 
 # ininialize alias
 command_alias = {
@@ -64,3 +65,4 @@ Pry.config.prompt = [
 #   Hirb.enable
 # end
 # hirb_enable
+end
