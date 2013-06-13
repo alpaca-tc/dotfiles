@@ -202,3 +202,17 @@ snippet     @ra
 abbr        @throw [${1:Class}] ...
   @raise [${1:Class}] ${2:...}
 #}}}
+
+# IE hack
+snippet     if_ie
+abbr        if $.browser.msie and $.browser.version <= ...
+options     word
+  if $.browser.msie and $.browser.version <= ${1:8}
+    ${2}
+
+snippet     fix_ie_click_image_into_label
+abbr        fix_ie_click_image_into_label
+options     word
+  if $.browser.msie and $.browser.version <= 8
+    $('label > img').click ->
+      $('#'+$(this).parent().attr('for')).focus().click()

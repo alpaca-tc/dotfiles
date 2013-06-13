@@ -6,5 +6,5 @@ export TMUX_POWERLINE_THEME=default
 
 #if not inside a tmux session, and if no session is started, start a new session
 if which tmux 2>&1 >/dev/null; then
-  test -z "$TMUX" && (tmux attach || mux default)
+  test -z "$TMUX" && tmux attach
 fi
