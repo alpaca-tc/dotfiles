@@ -12,7 +12,7 @@ tabs:
   - server: script/server
   - setup:
       panes:
-        - memcached -p 7168
+        - memcached
         - mysql.server start
         - redis
         - QUEUE=default rake environment resque:work
