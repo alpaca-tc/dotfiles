@@ -420,7 +420,7 @@ NeoBundleLazy 'Shougo/vimfiler', {
       \   'explorer' : 1,
       \ }}
 if has("lua")
-  NeoBundleLazy 'Shougo/neocomplete', { 'autoload' : {
+  NeoBundle 'Shougo/neocomplete', { 'autoload' : {
         \   'insert' : 1,
         \ }}
 else
@@ -923,8 +923,11 @@ NeoBundleLazy 'taichouchou2/unite-reek', {
 "       \   'filetypes' : 'ruby'
 "       \ }
 "       \ }
-" NeoBundleLazy 'Shougo/neocomplete-rsense', {
-"       \ 'depends': 'Shougo/neocomplete', }
+NeoBundle 'Shougo/neocomplcache-rsense.vim', {
+      \ 'depends': 'Shougo/neocomplete', 
+      \ 'autoload' : {
+      \   'filetype' : ['ruby']
+      \ }}
 " NeoBundleLazy 'rhysd/unite-ruby-require.vim', { 'autoload': {
 "       \ 'filetypes': g:my.ft.ruby_files }}
 " NeoBundleLazy 'rhysd/vim-textobj-ruby', { 'depends': 'kana/vim-textobj-user' }
@@ -2623,7 +2626,6 @@ let s:switch_define = {
       \   [".blank?", ".present?"],
       \   ["include", "extend"],
       \   ["class", "module"],
-      \   ["describe", "content"],
       \ ],
       \ "haml" : [
       \   ["if", "unless"],
@@ -2634,7 +2636,15 @@ let s:switch_define = {
       \   ["collapse", "separate"],
       \   ["margin", "padding"],
       \ ],
+      \ "rspec": [
+      \   ["describe", "context", "specific", "example"],
+      \   { '\.should_not': '\.should' },
+      \   ['\.to_not', '\.to'],
+      \   { '\([^. ]\+\)\.should\(_not\|\)': 'expect(\1)\.to\2' },
+      \   { 'expect(\([^. ]\+\))\.to\(_not\|\)': '\1.should\2' },
+      \ ]
       \ }
+
 let s:switch_define = alpaca#initialize#redefine_with_each_filetypes(s:switch_define)
 
 function! s:define_switch_mappings()
@@ -2642,14 +2652,20 @@ function! s:define_switch_mappings()
     unlet b:switch_custom_definitions
   endif
 
-  let filetype = <SID>filetype()
-  if has_key(s:switch_define, filetype)
-    call alpaca#let_b:('switch_custom_definitions', s:switch_define[filetype])
+  for filetype in split(&ft, '\.')
+    if has_key(s:switch_define, filetype)
+      let ft_define = s:switch_define[filetype]
+      let defines = !exists("defines") ? ft_define : extend(defines, ft_define)
+    endif
+  endfor
+
+  if exists('defines')
+    call alpaca#let_b:('switch_custom_definitions', defines)
   endif
 endfunction
 
 aug MyAutoCmd
-  au Filetype * if !empty( <SID>filetype() ) | call <SID>define_switch_mappings() | endif
+  au Filetype * if !empty(<SID>filetype()) | call <SID>define_switch_mappings() | endif
 aug END
 
 
@@ -2665,11 +2681,9 @@ function! bundle.hooks.on_source(bundle)
 endfunction
 unlet bundle
 
-
 " ------------------------------------
 " alpaca_tags
 " ------------------------------------
-
       " \ '_' : '-R --sort=yes --languages=-css --languages=-scss --languages=-js',
 let g:alpaca_update_tags_config = {
       \ '_' : '-R --sort=yes --languages=-js,JavaScript',
@@ -2687,7 +2701,6 @@ let g:alpaca_update_tags_config = {
       \ '-coffee': '--languages=-coffee',
       \ 'bundle': '--languages=+Ruby --languages=-css,sass,scss,js,JavaScript,coffee',
       \ }
-
 
 " ------------------------------------
 " vim-gitgutter
@@ -2717,16 +2730,13 @@ function! GitGutterToggleForNeoBundlelazy()
 endfunction
 nnoremap <silent><Space>g :<C-U>call GitGutterToggleForNeoBundlelazy()<CR>
 
-
 " ------------------------------------
 " yanktmp.vim
 " ------------------------------------
-
 nnoremap YY :<C-U>call yanktmp#yank()<CR>
 xnoremap Y :<C-U>call yanktmp#yank()<CR>
 nnoremap [minor]p :<C-U>call yanktmp#paste_p()<CR>
 nnoremap [minor]P :<C-U>call yanktmp#paste_P()<CR>
-
 
 " ------------------------------------
 " LanguageTool
@@ -2761,7 +2771,6 @@ let g:alpaca_english_enable_duplicate_candidates=1
 " DEVELOPMENT VERSION
 let g:alpaca_english_web_search_url = 'http://eow.alc.co.jp/%s/UTF-8/'
 let g:alpaca_english_web_search_xpath = "div[@id='resultsList']/ul/li"
-
 
 " ------------------------------------
 " linepower
@@ -2817,9 +2826,16 @@ function! bundle.hooks.on_source(bundle)
 endfunction
 unlet bundle
 
-"----------------------------------------
-let bundle = NeoBundleGet(has("lua") ? 'neocomplete' : 'nothing!!!!')
 
+let bundle = NeoBundleGet('neocomplcache-rsense')
+function! bundle.hooks.on_source(bundle)
+  " let g:neocomplete#sources#rsense#home_directory = neobundle#get_neobundle_dir() . '/rsense-0.3'
+  let g:neocomplete#sources#rsense#home_directory = "/usr/local/Cellar/rsense/0.3"
+endfunction
+unlet bundle
+
+"----------------------------------------
+let bundle = NeoBundleGet(has("lua") ? 'neocomplete' : 'nothing!!')
 function! bundle.hooks.on_source(bundle)
   " " let g:neocomplete_enable_cursor_hold_i=0
   " let g:neocomplete#enable_smart_case = 1
@@ -2847,7 +2863,7 @@ function! bundle.hooks.on_source(bundle)
   let g:neocomplete#sources#tags#cache_limit_size=1000000
   let g:neocomplete#sources#include#max_proceslses = 30
   let g:neocomplete#max_list=100
-  let g:neocomplete#skip_auto_completion_time='0.1'
+  " let g:neocomplete#skip_auto_completion_time='0.1'
 
   " if g:neocomplete#enable_complete_select
   "   set completeopt-=noselect
@@ -2856,8 +2872,21 @@ function! bundle.hooks.on_source(bundle)
 
   let g:neocomplete#disable_auto_select_buffer_name_pattern =
         \ '\[Command Line\]'
+
+  call neocomplete#custom#source('tag', 'disabled', 1)
+  " file         
+  " file/include 
+  " dictionary   
+  " member       
+  " buffer       
+  " syntax       
+  " include      
+  " neosnippet   
+  " vim          
+  " omni         
+  " tag
+
   " for rsense
-  " let g:neocomplete#sources#rsense#home_directory = neobundle#get_neobundle_dir() . '/rsense-0.3'
   " let g:rsenseHome = expand("~/.bundle/rsense-0.3")
   " let g:rsenseUseOmniFunc = 1
   " omnifuncいらねー。
@@ -2897,7 +2926,6 @@ function! bundle.hooks.on_source(bundle)
     call alpaca#let_g:(initialize_variable, {})
   endfor
   
-
   let g:neocomplete#text_mode_filetypes = {
         \ 'markdown' : 1,
         \ 'gitcommit' : 1,
@@ -2920,8 +2948,8 @@ function! bundle.hooks.on_source(bundle)
         \ }
 
   " Define omni input patterns
-  let g:neocomplete#sources#omni#input_patterns.ruby =
-        \ '[^. *\t]\.\w*\|\h\w*::'
+  " let g:neocomplete#sources#omni#input_patterns.ruby =
+  "       \ '[^. *\t]\.\w*\|\h\w*::'
   let g:neocomplete#sources#omni#input_patterns.php =
         \ '[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
   let g:neocomplete#sources#omni#input_patterns.c =

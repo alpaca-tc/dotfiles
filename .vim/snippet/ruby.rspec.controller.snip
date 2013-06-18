@@ -28,12 +28,12 @@ options     word
 snippet     assigns
 abbr        assigns(:name)
 options     word
-  expect(assigns(${1:variable_name})).to eq(${2:expect_var})
+  expect(assigns(${1:variable_name})).to eql(${2:expect_var})
 
 snippet     status
-abbr        expect(response.status).to eq(n)
+abbr        expect(response.status).to eql(n)
 options     word
-  expect(response.status).to eq(${1:status_code})
+  expect(response.status).to eql(${1:status_code})
 
 snippet     controller_do
 abbr        controller do ... end
@@ -47,7 +47,7 @@ options     word
 snippet     body
 abbr        body
 options     word
-  expect(response.body).to${1:_not} ${2:matcher eq(), match()}
+  expect(response.body).to${1:_not} ${2:matcher eql(), match()}
 
 snippet     routes.draw
 abbr        routes.draw { routing_hash }
