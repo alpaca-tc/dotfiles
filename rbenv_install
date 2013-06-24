@@ -18,7 +18,7 @@ if [ -x `which rbenv` ];then
 
     # 1.8.7系
     echo "install ruby 1.8.7"
-    CC=/usr/local/bin/gcc-4.2 CONFIGURE_OPTS="--without-tcl --without-tk --enable-shared" rbenv install 1.8.7-p371 &
+    CC=/usr/local/bin/gcc-4.2 CONFIGURE_OPTS="--without-tcl --without-tk --enable-shared --with-openssl-dir=/usr/local/opt/openssl" rbenv install 1.8.7-p371 &
 
     # 1.9.3系
     echo "install ruby 1.9.3"
@@ -26,8 +26,8 @@ if [ -x `which rbenv` ];then
     CONFIGURE_OPTS="--with-openssl-dir=`brew --prefix openssl` --enable-shared" rbenv install 1.9.3-p392 &
 
     # 2.0.0系
-    echo "install ruby 2.0.0"
-    CONFIGURE_OPTS="--with-openssl-dir=`brew --prefix openssl` --enable-shared" rbenv install 2.0.0-p0 &
+    echo "install ruby 2.0.0p195"
+    CONFIGURE_OPTS="--with-openssl-dir=`brew --prefix openssl` --enable-shared" rbenv install 2.0.0-p195 &
 
     rbenv rehash
 fi
