@@ -1,6 +1,7 @@
 # 環境変数
 # # {{{
 export EDITOR=vim
+export GIT_EDITOR=/usr/local/bin/vim
 export LC_CTYPE=en_US.UTF-8
 export LANG=en_US.UTF-8
 # export SHELL=/usr/local/bin/zsh
@@ -68,7 +69,8 @@ export PATH=/Applications/MacVim.app/Contents/MacOS:$PATH
 [[ -s "$HOME/.bundle/ensime" ]] && export PATH=$HOME/.bundle/ensime/lib_2.9.2:$PATH
 
 # python
-# [[ -s "$HOME/.pythonbrew/etc/bashrc" ]] && source "$HOME/.pythonbrew/etc/bashrc"
+[[ -s "$HOME/.pythonbrew/etc/bashrc" ]] && source "$HOME/.pythonbrew/etc/bashrc"
+
 # export PYTHONPATH=/usr/local/Cellar/python32/3.2.3/Frameworks/Python.framework/Versions/3.2
 # alias python=python3.2
 # }}}
@@ -76,6 +78,7 @@ export PATH=/Applications/MacVim.app/Contents/MacOS:$PATH
 # for vim
 # export DYLD_FORCE_FLAT_NAMESPACE=1 
 # export DYLD_INSERT_LIBRARIES=/Users/taichou/.pythonbrew/pythons/Python-2.7.2/lib/libpython2.7.dylib
+
 
 # http://stackoverflow.com/questions/13942443/error-installing-rmagick-on-mountain-lion
 

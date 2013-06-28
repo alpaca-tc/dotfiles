@@ -1,9 +1,9 @@
 # rspec#{{{
 # basic#{{{
 snippet     con
-abbr        context "..." do
+abbr        context '...' do
 alias       context
-  context "${1}" do
+  context ${1} do
     ${2}
   end
 
@@ -20,7 +20,7 @@ options     word
 
 snippet     itd
 abbr        it ... do
-  it "${1}" do
+  it ${1} do
     ${2}
   end
 
@@ -30,7 +30,7 @@ abbr        it { ... }
 
 snippet     des
 abbr        describe do
-  describe "${1}" do
+  describe '${1}' do
       ${2}
   end
 
@@ -43,6 +43,11 @@ abbr        shared_examples_for
   shared_examples_for "${1:name}" do
     ${2}
   end
+
+snippet     pend
+abbr        pending '...'
+options     word
+  pending '${1}'
 
 snippet     behave
 abbr        it_should_behave_like "..."

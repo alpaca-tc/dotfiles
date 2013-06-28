@@ -445,10 +445,10 @@ NeoBundleLazy 'Shougo/vimshell', {
       \     'VimShellExecute', 'VimShellInteractive', 'VimShellTerminal', 'VimShellPop', 'VimShellBufferDir'],
       \   'mappings' : ['<Plug>(vimshell_switch)']
       \ }}
-NeoBundleLazy 'Shougo/echodoc', {
-      \ 'autoload' : {
-      \   'insert' : 1,
-      \ }}
+" NeoBundleLazy 'Shougo/echodoc', {
+"       \ 'autoload' : {
+"       \   'insert' : 1,
+"       \ }}
 
 " commands 
 " Remove dust.
@@ -675,9 +675,9 @@ NeoBundleLazy 'basyura/TweetVim', { 'depends' :
 
 " その他 / テスト 
 " C# そのうち試す http://d.hatena.ne.jp/thinca/20130522/1369234427
-NeoBundleLazy 'https://bitbucket.org/abudden/taghighlight', { 'autoload' : {
-      \   'filetypes' : g:my.ft.program_files
-      \ }}
+" NeoBundleLazy 'https://bitbucket.org/abudden/taghighlight', { 'autoload' : {
+"       \   'filetypes' : g:my.ft.program_files
+"       \ }}
 NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
       \ 'insert' : 1,
       \ 'filetypes' : g:my.ft.program_files,
@@ -813,6 +813,9 @@ NeoBundleLazy 'jelera/vim-javascript-syntax', { 'autoload' : {
 NeoBundleLazy 'teramako/jscomplete-vim', { 'autoload' : {
       \ 'filetypes' : g:my.ft.js_files
       \ }}
+NeoBundleLazy 'mklabs/vim-backbone', { 'autoload' : {
+      \ 'filetypes' : ['javascript']
+      \ }}
 if has("python")
   " NeoBundleLazy 'marijnh/tern_for_vim', {
   "       \ 'autoload' : {
@@ -886,13 +889,13 @@ NeoBundleLazy 'taichouchou2/unite-rails_best_practices', {
       \ 'autoload': {
       \   'unite_sources': 'rails_best_practices'
       \ }}
-" NeoBundleLazy 'taichouchou2/alpaca_complete', {
-"       \ 'depends' : 'taichouchou2/vim-rails',
-"       \ 'build' : {
-"       \    'mac':  'gem install alpaca_complete',
-"       \    'unix': 'gem install alpaca_complete',
-"       \   }
-"       \ }
+NeoBundleLazy 'taichouchou2/alpaca_complete', {
+      \ 'depends' : 'taichouchou2/vim-rails',
+      \ 'build' : {
+      \    'mac':  'gem install alpaca_complete',
+      \    'unix': 'gem install alpaca_complete',
+      \   }
+      \ }
 
 " aug MyAutoCmd
 "   au User Rails call NeoBundleSource alpaca_complete
@@ -2270,38 +2273,38 @@ endfunction
 
 
 "------------------------------------
-" Syntastic
-"------------------------------------
+let bundle = NeoBundleGet('syntastic')
+function bundle.hooks.on_source(bundle) "{{{
+  "loadのときに、syntaxCheckをする
+  let g:syntastic_auto_jump=1
+  let g:syntastic_auto_loc_list=1
+  let g:syntastic_check_on_open=0
+  let g:syntastic_echo_current_error=1
+  let g:syntastic_enable_balloons = has("balloon_eval")
+  let g:syntastic_enable_highlighting = 1
+  let g:syntastic_enable_signs = 1
+  let g:syntastic_loc_list_height=3
+  let g:syntastic_quiet_warnings=0
+  let g:syntastic_error_symbol='>'
+  let g:syntastic_warning_symbol='X'
+  " let g:syntastic_error_symbol='✗'
+  " let g:syntastic_warning_symbol='⚠'
 
-"loadのときに、syntaxCheckをする
-let g:syntastic_auto_jump=1
-let g:syntastic_auto_loc_list=1
-let g:syntastic_check_on_open=0
-let g:syntastic_echo_current_error=1
-let g:syntastic_enable_balloons = has("balloon_eval")
-let g:syntastic_enable_highlighting = 1
-let g:syntastic_enable_signs = 1
-let g:syntastic_loc_list_height=3
-let g:syntastic_quiet_warnings=0
-let g:syntastic_error_symbol='>'
-let g:syntastic_warning_symbol='X'
-" let g:syntastic_error_symbol='✗'
-" let g:syntastic_warning_symbol='⚠'
+  " racc.rubyのftで編集すると、保存時に怒られるので除外する。
+  " au FileType ruby let g:syntastic_mode_map.passive_filetypes = copy( s:passive_filetypes )
+  " au BufEnter *.y call <SID>remove_ruby_syntastic()
+  " function! s:remove_ruby_syntastic() 
+  "   call add( g:syntastic_mode_map.passive_filetypes, "ruby" )
+  " endfunction
 
-" racc.rubyのftで編集すると、保存時に怒られるので除外する。
-au FileType ruby let g:syntastic_mode_map.passive_filetypes = copy( s:passive_filetypes )
-au BufEnter *.y call <SID>remove_ruby_syntastic()
-function! s:remove_ruby_syntastic() 
-  call add( g:syntastic_mode_map.passive_filetypes, "ruby" )
-endfunction
-
-let s:passive_filetypes = ["html", "yaml", "racc.ruby"]
-let g:syntastic_mode_map = {
-      \ 'mode'              : 'active',
-      \ 'active_filetypes'  : g:my.ft.program_files,
-      \ 'passive_filetypes' : copy(s:passive_filetypes),
-      \}
-
+  let s:passive_filetypes = ["html", "yaml", "racc.ruby"]
+  let g:syntastic_mode_map = {
+        \ 'mode'              : 'active',
+        \ 'active_filetypes'  : g:my.ft.program_files,
+        \ 'passive_filetypes' : copy(s:passive_filetypes),
+        \}
+endfunction "}}}
+unlet bundle
 
 "------------------------------------
 " w3m.vim
@@ -2337,7 +2340,6 @@ aug END
 "------------------------------------
 " vim-indent-guides
 "------------------------------------
-
 let bundle = NeoBundleGet("vim-indent-guides")
 function! bundle.hooks.on_source(bundle) 
   let g:indent_guides_auto_colors=0
@@ -2874,6 +2876,7 @@ function! bundle.hooks.on_source(bundle)
         \ '\[Command Line\]'
 
   call neocomplete#custom#source('tag', 'disabled', 1)
+  " call neocomplete#custom#source('vim', 'filetype', { 'vim' : 1, 'vimconsole': 1})
   " file         
   " file/include 
   " dictionary   
@@ -2985,7 +2988,6 @@ function! bundle.hooks.on_source(bundle)
   "       \ 'ruby' : []
   "       \ }
 
-
   " Define completefunc
   let g:neocomplete#sources#vim#complete_functions = {
         \ 'Ref' : 'ref#complete',
@@ -3000,7 +3002,7 @@ function! bundle.hooks.on_source(bundle)
         \ 'VimFiler' : 'vimfiler#complete',
         \ 'Vinarise' : 'vinarise#complete',
         \}
-  
+
   " ファイルタイプ毎の辞書ファイルの場所 
   let neocomplete#sources#dictionary#dictionaries = {
         \ 'default'             : '',
@@ -3012,8 +3014,6 @@ function! bundle.hooks.on_source(bundle)
     let s:ft = matchstr(s:dict, '[a-zA-Z0-9.]\+\ze\.dict$')
     let neocomplete#sources#dictionary#dictionaries[s:ft] = s:dict
   endfor
-  
-  " 
 
   aug MyAutoCmd
     " previewwindowを自動で閉じる
@@ -3197,7 +3197,6 @@ nnoremap <silent>gS :<C-U>Unite -buffer-name=versions_status -no-start-insert -h
 nnoremap <silent>gs :<C-U>Unite -buffer-name=giti_status -no-start-insert -horizontal giti/status<CR>
 nnoremap <silent>gh :<C-U>Unite -buffer-name=giti_branchall -no-start-insert giti/branch_all<CR>
 
-
 function! s:unite_with_same_syntax(cmd) 
   let file_syntax=&syntax
   " let rails_root = exists('b:rails_root')? b:rails_root : ''
@@ -3299,7 +3298,6 @@ function! bundle.hooks.on_source(bundle)
   let g:unite_source_menu_menus.command.command_candidates = {
         \       'gitignore'  : 'Unite file_rec:' . neobundle#get_neobundle_dir() . "/gitignore",
         \     }
-  
   function! s:unite_kuso_hooks.line_fast() 
     autocmd WinLeave <buffer> call <SID>buffer_auto_fold(1)
     autocmd WinEnter <buffer> call <SID>buffer_auto_fold(0)
@@ -3310,23 +3308,18 @@ function! bundle.hooks.on_source(bundle)
 
   "------------------------------------
   " vim-version
-  
   let g:versions#type#git#log#first_parent=1
   let g:versions#source#git#log#revision_length=0
   let g:versions#type#git#branch#merge#ignore_all_space=1
-  
 
   "------------------------------------
   " unite-history
-  
   function! s:unite_kuso_hooks.history_command()
     setl syntax=vim
   endfunction
-  
 
   "------------------------------------
   " Unite-grep.vim
-  
   if executable("ag")
     let g:unite_source_grep_command =  "ag"
     let g:unite_source_grep_default_opts = "--nocolor --nogroup"
@@ -3339,11 +3332,9 @@ function! bundle.hooks.on_source(bundle)
   function! s:unite_kuso_hooks.grep()
     nnoremap <expr><buffer>re unite#do_action('replace')
   endfunction
-  
 
   "------------------------------------
   " Unite-outline
-  
   " let g:unite_source_outline_filetype_options
   " let g:unite_source_outline_info
   " let g:unite_source_outline_indent_width
@@ -3355,18 +3346,14 @@ function! bundle.hooks.on_source(bundle)
     let unite.auto_preview = 0
     nnoremap <buffer><C-J> gj
   endfunction
-  
 
   "------------------------------------
   " Unite-reek, Unite-rails_best_practices
   "------------------------------------
-  " 
-  " 
 
   "----------------------------------------
   " unite-giti / vim-versions
   "----------------------------------------
-  
   function! s:unite_kuso_hooks.giti_status()
     " nnoremap <silent><buffer><expr>gM unite#do_action('ammend')
     nnoremap <silent><buffer><expr>ga unite#do_action('stage')
@@ -3379,11 +3366,8 @@ function! bundle.hooks.on_source(bundle)
     nnoremap <silent><buffer><expr>gd unite#do_action('diff')
     nnoremap <silent><buffer><expr>d unite#do_action('diff')
   endfunction
-  
 endfunction
 unlet bundle
-
-
 
 "----------------------------------------
 " 補完・履歴 
@@ -3402,7 +3386,6 @@ set wildmode=longest:full,full
 " command-lineはzsh風補完で使う
 cnoremap <C-P> <UP>
 cnoremap <C-N> <Down>
-" 
 
 "----------------------------------------
 " Dash
@@ -3450,5 +3433,20 @@ endfunction
 command! -bar IDE call <SID>IDE()
 
 call neobundle#call_hook('on_source')
+
+
+" ----------------------------------------
+" for lang-8
+function! s:set_lang8_settings() "{{{
+  let pwd = getcwd()
+  if pwd =~ 'lang-8'
+    let g:syntastic_ruby_checkers = ['mri', 'rubocop']
+  else
+    let g:syntastic_ruby_checkers = ['mri']
+  endif
+endfunction"}}}
+augroup MyAutoCmd
+  autocmd BufEnter *.rb call <SID>set_lang8_settings()
+augroup END
 
 set secure
