@@ -4,31 +4,31 @@ aug MyRubyAutoCmd
 aug END
 
 " ruby {{{
-if expand("%:p") =~ '_spec\.rb$'
-  let g:tagbar_type_ruby = {
-        \ 'ctagstype' : 'RubySpec',
-        \ 'kinds' : [
-        \   'm:modules',
-        \   'c:classes',
-        \   'd:describes',
-        \   'C:contexts',
-        \   'f:methods',
-        \   'F:singleton methods'
-        \ ]
-        \ }
-else
   let g:tagbar_type_ruby = {
         \ 'ctagstype' : 'Ruby',
         \ 'kinds' : [
         \   'm:modules',
         \   'c:classes',
-        \   'd:describes',
-        \   'C:contexts',
         \   'f:methods',
-        \   'F:singleton methods'
-        \ ]
+        \   'F:singleton methods',
+        \   'd:describes',
+        \   'e:contexts',
+        \   'i:it',
+        \   's:its',
+        \ ],
+        \ 'sro' : '.',
         \ }
-endif
+  " let g:tagbar_type_ruby = {
+  "       \ 'ctagstype' : 'Ruby',
+  "       \ 'kinds' : [
+  "       \   'm:modules',
+  "       \   'c:classes',
+  "       \   'd:describes',
+  "       \   'C:contexts',
+  "       \   'f:methods',
+  "       \   'F:singleton methods'
+  "       \ ]
+  "       \ }
 "}}}
 
 " setl foldmethod=syntax

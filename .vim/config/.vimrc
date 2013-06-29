@@ -845,7 +845,10 @@ NeoBundleLazy 'skwp/vim-rspec', {
       \   'mac': 'gem install hpricot',
       \   'unix': 'gem install hpricot'
       \ },
-      \ 'autoload': { 'filetypes': "ruby.rspec" }}
+      \ 'autoload': { 
+      \   'filetypes': "ruby.rspec",
+      \   'commands' : 'RunSpec',
+      \ }}
 NeoBundleLazy 'taka84u9/vim-ref-ri', {
       \ 'depends': ['Shougo/unite.vim', 'thinca/vim-ref'],
       \ 'autoload': { 'filetypes': g:my.ft.ruby_files } }
@@ -1354,7 +1357,7 @@ colorscheme  desertEx
 "}}}
 
 "----------------------------------------
-" Tags
+" Tags"{{{
 " http://vim-users.jp/2010/06/hack154/
 
 set tags-=tags
@@ -1379,6 +1382,7 @@ nnoremap [tag_or_tab]l  :<C-u>tag<CR>
 nnoremap [tag_or_tab]j  :<C-u>tprevious<CR>
 nnoremap [tag_or_tab]k  :<C-u>tags<CR>
 nnoremap [tag_or_tab]s  :<C-u>tselect<CR>
+"}}}
 
 "----------------------------------------
 " 辞書:dict "{{{
@@ -1569,13 +1573,10 @@ endfunction "}}}
 unlet bundle
 
 "------------------------------------
-let bundle = NeoBundleGet('open-browser.vim')
-function bundle.hooks.on_source(bundle) "{{{
-  nmap ,o <Plug>(openbrowser-open)
-  xmap ,o <Plug>(openbrowser-open)
-  nnoremap ,g :<C-u>OpenBrowserSearch<Space><C-r><C-w><CR>
-endfunction "}}}
-unlet bundle
+" let bundle = NeoBundleGet('open-browser.vim')
+nmap ,o <Plug>(openbrowser-open)
+xmap ,o <Plug>(openbrowser-open)
+nnoremap ,g :<C-u>OpenBrowserSearch<Space><C-r><C-w><CR>
 
 "------------------------------------
 nnoremap <silent>,r :QuickRun<CR>
@@ -1733,7 +1734,7 @@ function bundle.hooks.on_source(bundle) "{{{
 
   aug VimRef
     autocmd!
-    autocmd FileType ruby,eruby,ruby.rspec nnoremap <silent><buffer>K :<C-U>Unite -no-start-insert ref/ri -default-action=split -input=<C-R><C-W><CR>
+    " autocmd FileType ruby,eruby,ruby.rspec nnoremap <silent><buffer>K :<C-U>Unite -no-start-insert ref/ri -default-action=split -input=<C-R><C-W><CR>
     " au FileType ruby,eruby,ruby.rspec nnoremap <silent><buffer>K  :<C-U>Unite -no-start-insert ref/refe -input=<C-R><C-W><CR>
   aug END
 endfunction "}}}
@@ -2488,19 +2489,15 @@ function bundle.hooks.on_source(bundle)
   augroup END
 endfunction
 
-
 " ------------------------------------
 " vim-niceblock
 " ------------------------------------
-
 xmap I  <Plug>(niceblock-I)
 xmap A  <Plug>(niceblock-A)
-
 
 " ------------------------------------
 " switch.vim
 " ------------------------------------
-
 nnoremap ! :Switch<CR>
 let s:switch_define = {
       \ "ruby" : [
@@ -2521,6 +2518,7 @@ let s:switch_define = {
       \ ],
       \ "rspec": [
       \   ["describe", "context", "specific", "example"],
+      \   ['before', 'after'],
       \   { '\.should_not': '\.should' },
       \   ['\.to_not', '\.to'],
       \   { '\([^. ]\+\)\.should\(_not\|\)': 'expect(\1)\.to\2' },
@@ -2529,8 +2527,7 @@ let s:switch_define = {
       \ }
 
 let s:switch_define = alpaca#initialize#redefine_with_each_filetypes(s:switch_define)
-
-function! s:define_switch_mappings()
+function! s:define_switch_mappings()"{{{
   if exists('b:switch_custom_definitions')
     unlet b:switch_custom_definitions
   endif
@@ -2545,20 +2542,19 @@ function! s:define_switch_mappings()
   if exists('defines')
     call alpaca#let_b:('switch_custom_definitions', defines)
   endif
-endfunction
+endfunction"}}}
 
 aug MyAutoCmd
   au Filetype * if !empty(<SID>filetype()) | call <SID>define_switch_mappings() | endif
 aug END
 
-
 " ------------------------------------
+map f <Plug>(clever-f-f)
+map F <Plug>(clever-f-F)
 let bundle = NeoBundleGet("clever-f.vim")
-function! bundle.hooks.on_source(bundle) 
+function! bundle.hooks.on_source(bundle) "{{{
   let g:clever_f_not_overwrites_standard_mappings=1
-  map f <Plug>(clever-f-f)
-  map F <Plug>(clever-f-F)
-endfunction
+endfunction"}}}
 unlet bundle
 
 " ------------------------------------
@@ -2598,7 +2594,7 @@ let g:alpaca_update_tags_config = {
 "   autocmd BufReadPost,BufWritePost * GitGutterEnable
 " augroup END
 
-function! GitGutterToggleForNeoBundlelazy() 
+function! GitGutterToggleForNeoBundlelazy() "{{{
   let is_active = exists('g:gitgutter_enabled') && g:gitgutter_enabled
   if is_active
     echo "gitgutter disabled"
@@ -2607,7 +2603,7 @@ function! GitGutterToggleForNeoBundlelazy()
     echo "gitgutter enabled"
     GitGutterEnable
   endif
-endfunction
+endfunction"}}}
 nnoremap <silent><Space>g :<C-U>call GitGutterToggleForNeoBundlelazy()<CR>
 
 " ------------------------------------
@@ -2634,11 +2630,11 @@ xnoremap ,l :<C-U>LanguageToolCheck<CR>
 " tern
 " ------------------------------------
 let bundle = NeoBundleGet('tern')
-function! bundle.hooks.on_source(bundle) 
+function! bundle.hooks.on_source(bundle) "{{{
   " source `neobundle#get_neobundle_dir() . '/tern/vim/tern.vim'`
   execute 'source ' . neobundle#get_neobundle_dir() . '/tern/vim/tern.vim'
   autocmd FileType javascript call tern#Enable()
-endfunction
+endfunction"}}}
 unlet bundle
 
 " ------------------------------------
@@ -2664,30 +2660,30 @@ let g:unite_force_overwrite_statusline = 0
 " vim-singleton.vim
 " ----------------------------------------
 let bundle = NeoBundleGet('vim-singleton')
-function! bundle.hooks.on_source(bundle) 
+function! bundle.hooks.on_source(bundle) "{{{
   call singleton#enable()
-endfunction
+endfunction"}}}
 unlet bundle
 
 " ----------------------------------------
 " indentLine
 " ----------------------------------------
+nnoremap <Space>i :<C-U>IndentLinesToggle<CR>
 let bundle = NeoBundleGet("indentLine")
-function! bundle.hooks.on_source(bundle) 
+function! bundle.hooks.on_source(bundle) "{{{
   let g:indentLine_color_term = 239
   " let g:indentLine_color_gui = '#A4E57E'
   " let g:indentLine_char = 'c'
   let g:indentLine_fileType=g:my.ft.program_files
   " let g:indentLine_noConcealCursor=
-  nnoremap <Space>i :<C-U>IndentLinesToggle<CR>
   " hi Conceal ctermfg=239 ctermbg=NONE
   " ¦┆│
-endfunction
+endfunction"}}}
 unlet bundle
 
 "----------------------------------------
 let bundle = NeoBundleGet('alpaca_complete')
-function! bundle.hooks.on_source(bundle) 
+function! bundle.hooks.on_source(bundle) "{{{
   let g:alpaca_complete_assets_dir = {
         \ 'img'   : 'app/assets/images',
         \ 'js'    : 'app/assets/javascripts',
@@ -2703,20 +2699,20 @@ function! bundle.hooks.on_source(bundle)
   " \ 'helper': 'app/helpers',
   " \ 'admin' : 'app/admin',
   " \ 'conf'  : 'config',
-endfunction
+endfunction"}}}
 unlet bundle
 
 
 let bundle = NeoBundleGet('neocomplcache-rsense')
-function! bundle.hooks.on_source(bundle)
+function! bundle.hooks.on_source(bundle)"{{{
   " let g:neocomplete#sources#rsense#home_directory = neobundle#get_neobundle_dir() . '/rsense-0.3'
   let g:neocomplete#sources#rsense#home_directory = "/usr/local/Cellar/rsense/0.3"
-endfunction
+endfunction"}}}
 unlet bundle
 
 "----------------------------------------
 let bundle = NeoBundleGet(has("lua") ? 'neocomplete' : 'nothing!!')
-function! bundle.hooks.on_source(bundle)
+function! bundle.hooks.on_source(bundle) "{{{
   " " let g:neocomplete_enable_cursor_hold_i=0
   " let g:neocomplete#enable_smart_case = 1
   let g:neocomplete#enable_at_startup = 1
@@ -2939,17 +2935,15 @@ function! bundle.hooks.on_source(bundle)
     return !col || getline('.')[col - 1]  =~ '\s'
   endfunction
   " 
-endfunction
-
+endfunction"}}}
 unlet bundle
 
 "----------------------------------------
 " echodoc
 let g:echodoc_enable_at_startup = 1
 
-
 "------------------------------------
-" VimFiler 
+" VimFiler "{{{
 nnoremap <silent>[plug]f   :<C-U>call <SID>vim_filer_explorer_git()<CR>
 nnoremap <silent>,,        :<C-U>VimFilerBufferDir<CR>
 nnoremap <silent>,n        :<C-U>VimFilerCreate<CR>
@@ -2962,7 +2956,7 @@ endfunction
 command! VimFilerExplorerGit call <SID>vim_filer_explorer_git()
 
 let bundle = NeoBundleGet('vimfiler')
-function! bundle.hooks.on_source(bundle) 
+function! bundle.hooks.on_source(bundle) "{{{
   " Settings
   let g:vimfiler_data_directory = g:my.dir.vimfiler
   let g:vimfiler_safe_mode_by_default = 0
@@ -2997,9 +2991,9 @@ function! bundle.hooks.on_source(bundle)
     au!
     au FileType vimfiler call <SID>vimfiler_local()
   aug END 
-endfunction
+endfunction"}}}
 unlet bundle
-
+"}}}
 
 "----------------------------------------
 " neosnippet
@@ -3007,7 +3001,7 @@ nnoremap <silent><Space>e         :<C-U>NeoSnippetEdit -split<CR>
 nnoremap <silent><Space><Space>e  :<C-U>Unite neosnippet/user neosnippet/runtime<CR>
 
 let bundle = NeoBundleGet('neosnippet')
-function! bundle.hooks.on_source(bundle) 
+function! bundle.hooks.on_source(bundle) "{{{
   let g:neosnippet#snippets_directory = g:my.dir.snippets
   let g:neosnippet#enable_preview = 1
   " let g:neosnippet#disable_runtime_snippets = {
@@ -3017,12 +3011,11 @@ function! bundle.hooks.on_source(bundle)
   imap <silent><C-F>                <Plug>(neosnippet_expand_or_jump)
   smap <silent><C-F>                <Plug>(neosnippet_expand_or_jump)
   inoremap <silent><C-U>            <ESC>:<C-U>Unite snippet<CR>
-endfunction 
+endfunction "}}}
 unlet bundle
 
-
 "----------------------------------------
-" unite.vim
+" unite.vim"{{{
 " keymappings
 nmap [unite] <Nop>
 nmap <C-J> [unite]
@@ -3076,7 +3069,7 @@ nnoremap <silent>gS :<C-U>Unite -buffer-name=versions_status -no-start-insert -h
 nnoremap <silent>gs :<C-U>Unite -buffer-name=giti_status -no-start-insert -horizontal giti/status<CR>
 nnoremap <silent>gh :<C-U>Unite -buffer-name=giti_branchall -no-start-insert giti/branch_all<CR>
 
-function! s:unite_with_same_syntax(cmd) 
+function! s:unite_with_same_syntax(cmd) "{{{
   let file_syntax=&syntax
   " let rails_root = exists('b:rails_root')? b:rails_root : ''
   " let rails_buffer = rails#buffer()
@@ -3091,10 +3084,10 @@ function! s:unite_with_same_syntax(cmd)
   "   let b:rails_root = rails_root
   "   call rails#set_syntax(rails_buffer)
   " endif
-endfunction
+endfunction"}}}
 
 let bundle = NeoBundleGet('unite.vim')
-function! bundle.hooks.on_source(bundle) 
+function! bundle.hooks.on_source(bundle) "{{{
   aug MyUniteCmd
     autocmd!
     autocmd FileType unite call <SID>unite_my_settings()
@@ -3251,11 +3244,12 @@ function! bundle.hooks.on_source(bundle)
     nnoremap <silent><buffer><expr>gd unite#do_action('diff')
     nnoremap <silent><buffer><expr>d unite#do_action('diff')
   endfunction
-endfunction
+endfunction"}}}
 unlet bundle
+"}}}
 
 "----------------------------------------
-" 補完・履歴 
+" 補完・履歴 "{{{
 set complete=.,w,b,u,U,s,i,d,t
 " set completeopt=menu,menuone,preview
 set completeopt=menu,menuone
@@ -3271,9 +3265,10 @@ set wildmode=longest:full,full
 " command-lineはzsh風補完で使う
 cnoremap <C-P> <UP>
 cnoremap <C-N> <Down>
+"}}}
 
 "----------------------------------------
-" Dash
+" Dash"{{{
 function! s:dash(...) 
   let ft = <SID>filetype()
   if ft == 'python' |let ft = ft.'2'| endif
@@ -3289,7 +3284,7 @@ nnoremap <C-K><C-K> :Dash <C-R><C-W><CR>
 augroup MyAutoCmd
   au User Rails nnoremap <buffer><C-K><C-K><C-K> :Dash rails:<C-R><C-W><CR>
 augroup END
-
+"}}}
 
 function! s:update_ruby_ctags() 
   echo vimproc#system("rbenv ctags")

@@ -36,6 +36,8 @@ setlocal formatoptions-=t formatoptions+=croql
 setlocal include=^\\s*\\<\\(load\\\|\w*require\\)\\>
 setlocal includeexpr=substitute(substitute(v:fname,'::','/','g'),'$','.rb','')
 
-" au BufWritePost <buffer> call vimproc#system_bg('rbenv ctags')
-au BufWritePost <buffer> call vimproc#system_bg('gem ctags')
+augroup Gemfile
+  autocmd!
+  autocmd BufWritePost <buffer> call vimproc#system_bg('gem ctags')
+augroup END
 
