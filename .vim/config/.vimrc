@@ -35,7 +35,7 @@ if has('ruby')
 endif
 
 "----------------------------------------
-" utils 
+" Utils "{{{
 function! s:include(target, value) 
   let target_type = type(a:target)
 
@@ -129,10 +129,20 @@ function! s:strwidthpart(str, width)
 
   return ret
 endfunction
-" 
+function! NeoBundleGet(name) 
+  if !exists('s:dummy')
+    let s:dummy = { "hooks" : {} }
+    function! s:dummy.hooks.on_source(_)
+    endfunction
+  endif
+
+  let bundle = neobundle#get(a:name)
+  return empty(bundle) ? s:dummy : bundle
+endfunction 
+"}}}
 
 "----------------------------------------
-" initialize 
+" initialize "{{{
 let g:my = {}
 " OS 
 let s:is_windows = has('win32') || has('win64')
@@ -204,13 +214,11 @@ if g:my.conf.initialize
   call map(copy(g:my.dir), 'add(dir_list, v:val)')
   call alpaca#initialize#directory(dir_list)
 endif
-
-
+"}}}
 
 "----------------------------------------
-" basic settings 
+" basic settings "{{{
 execute "set directory=".g:my.dir.swap_dir
-" set verbosefile=$HOME/.vim.trash/dump.log
 set backspace=indent,eol,start
 set clipboard+=autoselect,unnamed
 set formatoptions+=lcqmM
@@ -237,73 +245,24 @@ endif
 
 nnoremap <Space><Space>s :<C-U>source ~/.vimrc<CR>
 nnoremap <Space><Space>v :<C-U>tabnew ~/.vim/config/.vimrc<CR>
-
+"}}}
 
 "----------------------------------------
-" neobundle initialize
+" Neobundle Initialize "{{{
 filetype plugin indent off     " required!
 let g:neobundle#types#git#default_protocol = 'https'
 let g:neobundle#install_max_processes = s:is_mac ? 50 : 10
 
-" initialize
 if g:my.conf.initialize && !isdirectory(g:my.dir.neobundle.'/neobundle.vim')
   call system( 'git clone https://github.com/Shougo/neobundle.vim.git '. g:my.dir.neobundle . '/neobundle.vim' )
 endif
 
 execute 'set runtimepath+='.g:my.dir.neobundle.'/neobundle.vim'
 call neobundle#rc(g:my.dir.neobundle)
-
-function! s:bundle_load_depends(bundle_names) 
-  if !exists('s:loaded_bundles')
-    let s:loaded_bundles = {}
-  endif
-
-  " bundleの読み込み
-  if !has_key( s:loaded_bundles, a:bundle_names )
-    execute 'NeoBundleSource' a:bundle_names
-    let s:loaded_bundles[a:bundle_names] = 1
-  endif
-endfunction 
-function! Gencmd(...) 
-  if !exists('s:generate_command')
-    let s:generate_command = {
-          \ 'brew' : 'brew install',
-          \ 'gem' : 'gem install',
-          \ 'npm' : 'sudo npm install -g',
-          \ }
-  endif
-
-  let result = []
-
-  if a:0 > 1 && type(a:1) == type('') && type(a:2) == type([])
-    let command = s:generate_command[a:1]
-    call map(a:2, 'add(result, join([command, v:val], " "))')
-
-  elseif a:0 == 1 && type(a:1) == type({})
-    for [command_key, list] in items(a:1)
-      let command = s:generate_command[command_key]
-      if type(list) == type('')
-        call add(result, join([command, list], " "))
-      else
-        call map(list, 'add(result, join([command, v:val], " "))')
-      endif
-    endfor
-  endif
-
-  return join(result, ' && ')
-endfunction
-
-let s:dummy = { "hooks" : {}}
-function! s:dummy.hooks.on_source(_)
-endfunction
-function! NeoBundleGet(name)
-  let bundle = neobundle#get(a:name)
-  return empty(bundle) ? s:dummy : bundle
-endfunction
-
+"}}}
 
 "----------------------------------------
-" NeoBundle 
+" NeoBundle  "{{{
 NeoBundleFetch 'Shougo/neobundle.vim'
 " For asynchronous communication
 NeoBundle 'Shougo/vimproc', {
@@ -320,15 +279,9 @@ if has('python')
         \ 'directory': 'powerline',
         \ 'rtp' : 'powerline/bindings/vim',
         \ }
-  " Not patch font for powerline.
-  " NeoBundle 'taichouchou2/powerline', {
-  "       \ 'name': 'powerline',
-  "       \ 'directory': 'powerline',
-  "       \ 'rev': 'master',
-  "       \ 'rtp' : 'powerline/bindings/vim'
-  "       \ }
   " NeoBundle 'zhaocai/linepower.vim'
 endif
+
 " An awesome improvement to the Vim tabline.
 " NeoBundle 'taichouchou2/alpaca_powertabline'
 
@@ -337,12 +290,13 @@ NeoBundleLazy 'mattn/webapi-vim', {
       \ "autoload" : {
       \   "function_prefix": "webapi"
       \ }}
-" 基本の拡張 
-" NeoBundle 'rhysd/accelerated-jk', {
-"       \ 'autoload' : {
-"       \   'mappings' : [
-"       \     ['n', '<Plug>(accelerated_jk_gj)'], ['n', '<Plug>(accelerated_jk_gk)']
-"       \ ] }}
+
+" Basic
+NeoBundle 'rhysd/accelerated-jk', {
+      \ 'autoload' : {
+      \   'mappings' : [
+      \     ['n', '<Plug>(accelerated_jk_gj)'], ['n', '<Plug>(accelerated_jk_gk)']
+      \ ] }}
 NeoBundleLazy 'edsono/vim-matchit', { 'autoload' : {
       \ 'filetypes': g:my.ft.program_files,
       \ 'mappings' : ['nx', '%'] }}
@@ -355,26 +309,28 @@ NeoBundleLazy 'tpope/vim-surround', {
       \     ['nx', '<Plug>YSsurround'], ['nx', '<Plug>VgSurround'],
       \     ['nx', '<Plug>VSurround']
       \ ] }}
-NeoBundleLazy 'camelcasemotion', { 'autoload' : {
+NeoBundle 'camelcasemotion', { 'autoload' : {
       \ 'mappings' : ['<Plug>CamelCaseMotion_w', '<Plug>CamelCaseMotion_b', '<Plug>CamelCaseMotion_e', '<Plug>CamelCaseMotion_iw', '<Plug>CamelCaseMotion_ib', '<Plug>CamelCaseMotion_ie']
       \ }}
-NeoBundleLazy 'kana/vim-arpeggio', { 'autoload':
-      \ { 'functions': ['arpeggio#map'] }}
-" NeoBundleLazy 'rhysd/clever-f.vim', { 'autoload' : {
-"       \   'mappings' : ['f', '<Plug>(clever-f-f)'],
-"       \ }}
-NeoBundleLazy 'kana/vim-smartword', { 'autoload' : {
+NeoBundleLazy 'kana/vim-arpeggio', { 'autoload': { 
+      \ 'functions': ['arpeggio#map'],
+      \ 'insert' : 1,
+      \ }}
+NeoBundleLazy 'rhysd/clever-f.vim', { 'autoload' : {
+      \   'mappings' : ['f', '<Plug>(clever-f-f)'],
+      \ }}
+NeoBundle 'kana/vim-smartword', { 'autoload' : {
       \ 'mappings' : [
       \   '<Plug>(smartword-w)', '<Plug>(smartword-b)', '<Plug>(smartword-ge)']
       \ }}
-" 
+
 " vim必須 
 NeoBundleLazy 'thinca/vim-quickrun', { 'autoload' : {
       \   'mappings' : [['nxo', '<Plug>(quickrun)']],
       \   'commands' : 'QuickRun' }}
 NeoBundleLazy 'scrooloose/syntastic', { 'autoload': {
       \ 'build' : {
-      \   'mac' : ['brew install tidy', 'brew install csslint', 'gem install sass', 'brew install jslint']
+      \   'mac' : join(['brew install tidy', 'brew install csslint', 'gem install sass', 'brew install jslint'], ' && ')
       \ },
       \ 'filetypes' : g:my.ft.program_files }}
 NeoBundleLazy 'vim-scripts/sudo.vim', {
@@ -451,11 +407,12 @@ NeoBundleLazy 'Shougo/vimshell', {
 "       \ }}
 
 " commands 
-" Remove dust.
+" Removing dust.
 NeoBundleLazy 'taichouchou2/alpaca_remove_dust.vim', {
       \ 'autoload': {
       \   'commands': ['RemoveDustDisable', 'RemoveDustEnable', 'RemoveDust']
       \ }}
+" Asynchronous updating tags
 NeoBundleLazy 'taichouchou2/alpaca_tags', {
       \ 'depends': 'Shougo/vimproc',
       \ 'autoload' : {
@@ -499,11 +456,10 @@ NeoBundleLazy 'grep.vim', {
       \ 'autoload' : { 'commands': ["Grep", "Rgrep", "GrepBuffer"] }}
 NeoBundleLazy 'sjl/gundo.vim', {
       \ 'autoload' : { 'commands': ["GundoToggle", 'GundoRenderGraph'] }}
-" https://github.com/fishman/ctags.git
 NeoBundleLazy 'majutsushi/tagbar', {
       \ 'build' : {
-      \   'mac' : Gencmd({ 'npm': 'jsctags', 'gem': 'CoffeeTags', }),
-      \   'unix' : 'sudo npm install -g jsctags',
+      \   'mac' : 'npm install jsctags && gem ins CoffeeTags',
+      \   'unix' : 'npm install -g jsctags',
       \ },
       \ 'autoload' : {
       \   'commands': ["TagbarToggle", "TagbarTogglePause", "TagbarOpen"],
@@ -554,18 +510,6 @@ else
 endif
 
 " 補完
-" NeoBundle 'ujihisa/neco-look', {
-"       \ 'depends' : 'Shougo/neocomplete',
-"       \ 'autoload': {
-"       \   'insert' : 1,
-"       \   'filetypes' : g:my.ft.program_files,
-"       \ }}
-" 勉強用に作成
-" NeoBundleLazy 'taichouchou2/alpaca_look.git', {
-"       \ 'autoload' : {
-"       \   'insert' : 1,
-"       \ }}
-
 " text-object拡張
 " NeoBundle 'emonkak/vim-operator-comment'
 " NeoBundle 'kana/vim-textobj-jabraces'
@@ -686,7 +630,6 @@ NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
       \ }
       \ }}
 if has("ruby")
-  " NeoCompleteに対応していない
   NeoBundleLazy 'taichouchou2/alpaca_english', {
         \ 'build' : {
         \   "mac" : "bundle",
@@ -835,7 +778,6 @@ NeoBundleLazy 'fsouza/go.vim', { 'autoload' : {
 
 "  markdown
 " ----------------------------------------
-" markdownでの入力をリアルタイムでチェック
 NeoBundleLazy 'tpope/vim-markdown', { 'autoload' : {
       \ 'filetypes' : ['markdown'] }}
 
@@ -896,10 +838,6 @@ NeoBundleLazy 'taichouchou2/alpaca_complete', {
       \    'unix': 'gem install alpaca_complete',
       \   }
       \ }
-
-" aug MyAutoCmd
-"   au User Rails call NeoBundleSource alpaca_complete
-" aug END
 
 " ruby全般
 NeoBundleLazy 'skwp/vim-rspec', {
@@ -1033,15 +971,15 @@ NeoBundleLazy 'thinca/vim-scouter', { 'autoload' : {
 " endif
 
 filetype plugin indent on
-
+"}}}
 
 "----------------------------------------
-"StatusLine / tabline 
+" StatusLine / tabline "{{{
 " source ~/.vim/config/.vimrc.statusline
-" 
+"}}}
 
 "----------------------------------------
-"編集
+" Editing"{{{
 " set textwidth=100
 set autoread
 set nostartofline
@@ -1215,10 +1153,10 @@ command! -range -nargs=1 AddNumbers
       \ call <SID>add_numbers((<line2>-<line1>+1) * eval(<args>))
 
 au Filetype php nnoremap ,R :! phptohtml<CR>
-
+"}}}
 
 "----------------------------------------
-"検索
+" Searching"{{{
 set hlsearch
 set ignorecase
 set incsearch
@@ -1232,10 +1170,10 @@ nnoremap <silent> N Nvv
 nnoremap <silent>mc :<C-u>call alpaca#function#macdict#close()<CR>
 nnoremap <silent>mf :<C-u>call alpaca#function#macdict#focus()<CR>
 nnoremap <silent>mo :<C-u>call alpaca#function#macdict#with_cursor_word()<CR>
-
+"}}}
 
 "----------------------------------------
-"移動
+" Moving"{{{
 set virtualedit+=block
 set whichwrap=b,s,h,l,~,<,>,[,]
 " set virtualedit=all " 仮想端末
@@ -1303,10 +1241,10 @@ nnoremap <silent>[tag_or_tab]<C-H> :<C-U>call <SID>move_tab_to(-1)<CR>
 aug MyAutoCmd
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute "normal g`\"" | endif
 aug END
-
+"}}}
 
 "----------------------------------------
-"encoding
+" Encoding"{{{
 set ambiwidth=double
 set encoding=utf-8
 set fileencodings=utf-8,sjis,shift-jis,euc-jp,utf-16,ascii,ucs-bom,cp932,iso-2022-jp
@@ -1324,10 +1262,10 @@ command! -bang -bar -complete=file -nargs=? Unicode Utf16<bang> <args>
 command! -bang -bar -complete=file -nargs=? Utf16 edit<bang> ++enc=ucs-2le <args>
 command! -bang -bar -complete=file -nargs=? Utf16be edit<bang> ++enc=ucs-2 <args>
 command! -bang -bar -complete=file -nargs=? Utf8 edit<bang> ++enc=utf-8 <args>
-
+"}}}
 
 "----------------------------------------
-"インデント
+" Indent"{{{
 set autoindent
 set expandtab
 set shiftwidth=2
@@ -1336,10 +1274,10 @@ set smarttab
 set softtabstop=2
 set tabstop=2
 filetype indent on
-
+"}}}
 
 "----------------------------------------
-"表示
+" Display"{{{
 " set cmdheight=1
 " set noequalalways     " 画面の自動サイズ調整解除
 " set relativenumber    " 相対表示
@@ -1413,10 +1351,10 @@ let g:molokai_original=1
 colorscheme  desertEx
 " colorscheme morning
 " colorscheme  pyte
-
+"}}}
 
 "----------------------------------------
-" Tags関連 cTags使う場合は有効化 
+" Tags
 " http://vim-users.jp/2010/06/hack154/
 
 set tags-=tags
@@ -1442,9 +1380,8 @@ nnoremap [tag_or_tab]j  :<C-u>tprevious<CR>
 nnoremap [tag_or_tab]k  :<C-u>tags<CR>
 nnoremap [tag_or_tab]s  :<C-u>tselect<CR>
 
-
 "----------------------------------------
-" 辞書:dict 
+" 辞書:dict "{{{
 " カスタムファイルタイプでも、自動でdictを読み込む
 " そして、編集画面までさくっと移動。
 function! s:auto_dict_setting() 
@@ -1472,33 +1409,32 @@ nnoremap [plug] <Nop>
 nnoremap [minor] <Nop>
 nmap <C-H> [plug]
 nmap ; [minor]
+"}}}
+
 "----------------------------------------
-"個別のプラグイン " 
+" Setting of each plugin
 
 "------------------------------------
-" arpeggio
+let bundle = NeoBundleGet('vim-arpeggio')
+function bundle.hooks.on_source(bundle) "{{{
+  call arpeggio#map('i', 's', 0, 'jk', '<Esc>:nohlsearch<CR>')
+  call arpeggio#map('v', 's', 0, 'jk', '<Esc>:nohlsearch<CR>')
+  call arpeggio#map('x', 's', 0, 'jk', '<Esc>:nohlsearch<CR>')
+  call arpeggio#map('c', 's', 0, 'jk', '<Esc>:nohlsearch<CR>')
+endfunction "}}}
+unlet bundle
+
 "------------------------------------
-
-" nofの表示を無くして、カーソル移動も無くしたかったので、大分ださい
-call arpeggio#map('i', 's', 0, 'jk', '<Esc>:nohlsearch<CR>')
-call arpeggio#map('v', 's', 0, 'jk', '<Esc>:nohlsearch<CR>')
-call arpeggio#map('x', 's', 0, 'jk', '<Esc>:nohlsearch<CR>')
-call arpeggio#map('c', 's', 0, 'jk', '<Esc>:nohlsearch<CR>')
-
-
-"------------------------------------
-" vim-alignta
-"------------------------------------
-
-let g:Align_xstrlen = 3
 xnoremap m      :Align<Space>
 xnoremap mm :Align =<CR>
-
+let bundle = NeoBundleGet('vim-alignta')
+function bundle.hooks.on_source(bundle) "{{{
+  let g:Align_xstrlen = 3
+endfunction "}}}
+unlet bundle
 
 "------------------------------------
-" vim-surround
-"------------------------------------
-" 
+" surround.vim"{{{
 let g:surround_no_mappings = 1
 nmap cs  <Plug>Csurround
 nmap ds  <Plug>Dsurround
@@ -1594,70 +1530,60 @@ endfunction
 augroup MySurroundMapping
   autocmd FileType * call <SID>surround_mapping_filetype()
 augroup END
-
-" 
+"}}}
 
 " ------------------------------------
-" grep.vim
-"------------------------------------
-
-" カーソル下の単語をgrepする
 nnoremap <silent><C-G><C-g> :<C-u>Rgrep<Space><C-r><C-w> *<CR><CR>
 nnoremap <silent><C-G><C-b> :<C-u>GrepBuffer<Space><C-r><C-w><CR>
-
-let Grep_Skip_Dirs = '.svn .git .swp .hg cache compile'
-let Grep_Skip_Files = '*.bak *~ .swp .swa .swo'
-let Grep_Find_Use_Xargs = 0
-let Grep_Xargs_Options = '--print0'
-
+let bundle = NeoBundleGet('grep.vim')
+function bundle.hooks.on_source(bundle) "{{{
+  let Grep_Skip_Dirs = '.svn .git .swp .hg cache compile'
+  let Grep_Skip_Files = '*.bak *~ .swp .swa .swo'
+  let Grep_Find_Use_Xargs = 0
+  let Grep_Xargs_Options = '--print0'
+endfunction "}}}
+unlet bundle
 
 "------------------------------------
-" tagbar.vim
-"------------------------------------
-
 nnoremap <Space>t :<C-U>TagbarToggle<CR>
+let bundle = NeoBundleGet('tagbar')
+function bundle.hooks.on_source(bundle) "{{{
+  aug MyTagbarCmd
+    autocmd!
+    autocmd FileType tagbar
+          \ nnoremap <buffer><Space> <Space>
+          \|nnoremap <buffer><space>t :<C-U>TagbarToggle<CR>
+  aug END
 
-aug MyAutoCmd
-  au FileType tagbar
-        \ nnoremap <buffer><Space> <Space>
-        \|nnoremap <buffer><space>t :<C-U>TagbarToggle<CR>
-aug END
-
-if exists('g:my.bin.ctags')
-let g:tagbar_ctags_bin  = g:my.bin.ctags
-endif
-let g:tagbar_compact    = 1
-let g:tagbar_autofocus  = 1
-let g:tagbar_autoshowtag= 1
-let g:tagbar_iconchars  =  ['▸', '▾']
-let g:tagbar_width = 30
-
-" let g:tagbar_autoclose = 1
-" let g:tagbar_sort = 0
-" 個別の設定はftpluginに。
-
-
-"------------------------------------
-" open-blowser.vim
-"------------------------------------
-
-" カーソル下のURLをブラウザで開く
-nmap ,o <Plug>(openbrowser-open)
-xmap ,o <Plug>(openbrowser-open)
-nnoremap ,g :<C-u>OpenBrowserSearch<Space><C-r><C-w><CR>
-
+  if exists('g:my.bin.ctags')
+    let g:tagbar_ctags_bin  = g:my.bin.ctags
+  endif
+  " let g:tagbar_autoclose = 1
+  " let g:tagbar_sort = 0
+  let g:tagbar_compact    = 1
+  let g:tagbar_autofocus  = 1
+  let g:tagbar_autoshowtag= 1
+  let g:tagbar_iconchars  =  ['▸', '▾']
+  let g:tagbar_width = 30
+endfunction "}}}
+unlet bundle
 
 "------------------------------------
-" quickrun.vim
-"------------------------------------
+let bundle = NeoBundleGet('open-browser.vim')
+function bundle.hooks.on_source(bundle) "{{{
+  nmap ,o <Plug>(openbrowser-open)
+  xmap ,o <Plug>(openbrowser-open)
+  nnoremap ,g :<C-u>OpenBrowserSearch<Space><C-r><C-w><CR>
+endfunction "}}}
+unlet bundle
 
-let g:quickrun_config = {}
-let g:quickrun_no_default_key_mappings = 1
+"------------------------------------
 nnoremap <silent>,r :QuickRun<CR>
-
 let bundle = NeoBundleGet('vim-quickrun')
-function! bundle.hooks.on_source(bundle) 
-  " quickrun config 
+function! bundle.hooks.on_source(bundle) "{{{
+  let g:quickrun_config = {}
+  let g:quickrun_no_default_key_mappings = 1
+
   let g:quickrun_config._ = {
         \ 'runner' : 'vimproc',
         \ }
@@ -1700,25 +1626,18 @@ function! bundle.hooks.on_source(bundle)
         \ 'command': 'rspec',
         \ 'exec': 'bundle exec %c %o %s', }
 
-  
-endfunction
+  aug QuickRunAutoCmd 
+    autocmd!
+    " au FileType quickrun au BufEnter <buffer> if winnr('$') == 1 |quit| endif
+    autocmd FileType quickrun au BufEnter <buffer> call <SID>smart_close()
+    autocmd FileType racc.ruby,racc nnoremap <buffer>,R :<C-U>QuickRun racc.run<CR>
+  aug END 
+endfunction"}}}
 unlet bundle
 
-aug QuickRunAutoCmd 
-  au!
-
-  " au FileType quickrun au BufEnter <buffer> if winnr('$') == 1 |quit| endif
-  au FileType quickrun au BufEnter <buffer> call <SID>smart_close()
-  au FileType racc.ruby,racc nnoremap <buffer>,R :<C-U>QuickRun racc.run<CR>
-aug END 
-
-
 "----------------------------------------
-" zencoding-vim
-"----------------------------------------
-
 let bundle = NeoBundleGet("zencoding-vim")
-function bundle.hooks.on_source(bundle) 
+function bundle.hooks.on_source(bundle) "{{{
   let g:user_zen_complete_tag = 1
   let g:user_zen_expandabbr_key = '<C-E>'
   let g:user_zen_leader_key = '<c-y>'
@@ -1743,19 +1662,11 @@ function bundle.hooks.on_source(bundle)
         \   'filters' : 'html,c',
         \ },
         \}
-endfunction
+endfunction "}}}
 unlet bundle
 
-
 "----------------------------------------
-" vim-ref
-"----------------------------------------
-
-let g:ref_open                    = 'tabnew'
-let g:ref_cache_dir               = g:my.dir.vimref
-let g:ref_phpmanual_path          = expand('~/.vim/ref/php-chunked-xhtml')
-let g:ref_no_default_key_mappings = 1
-
+let bundle = NeoBundleGet('vim-ref')
 nnoremap <C-K> :<C-U>Ref alc <Space><C-R><C-W><CR>
 xnoremap <C-K> :<C-U>Ref alc <Space><C-R><C-W><CR>
 nnoremap ra  :<C-U>Ref alc<Space>
@@ -1766,93 +1677,99 @@ nnoremap rm  :<C-U>Unite ref/man -default-action=split -input=
 nnoremap rpy :<C-U>Unite ref/pydoc -default-action=split -input=
 nnoremap rpe :<C-U>Unite ref/perldoc -default-action=split -input=
 
-"webdictサイトの設定
-let g:ref_source_webdict_sites = {
-      \   'wikipedia': {
-      \     'key': 'rew',
-      \     'url': 'http://ja.wikipedia.org/wiki/%s',
-      \     'cache': 1,
-      \   },
-      \   "en_example" : {
-      \     'key': 'ree',
-      \     'url': 'http://ejje.weblio.jp/sentence/content/%s',
-      \     'cache': 1,
-      \     'line': 67,
-      \   },
-      \   "en_thesaurus" : {
-      \     'key': 'ret',
-      \     'url': 'http://ejje.weblio.jp/english-thesaurus/content/%s',
-      \     'cache': 1,
-      \     'line': 53,
-      \   },
-      \   "en_word" : {
-      \     'key': 'rer',
-      \     'url': 'http://ejje.weblio.jp/content/%s',
-      \     'cache': 1,
-      \     'line': 79,
-      \   },
-      \   "alc" : {
-      \     'key': 'rea',
-      \     'url': 'http://eow.alc.co.jp/%s/UTF-8/',
-      \     'cache': 1,
-      \     'line': 51,
-      \   },
-      \ }
+function bundle.hooks.on_source(bundle) "{{{
+  let g:ref_open                    = 'tabnew'
+  let g:ref_cache_dir               = g:my.dir.vimref
+  let g:ref_phpmanual_path          = expand('~/.vim/ref/php-chunked-xhtml')
+  let g:ref_no_default_key_mappings = 1
 
-function! s:search_text_or_input_text(dict_name) 
-  let cursor_word = s:get_cursor_word()
-  if empty(cursor_word)
-    let cursor_word = input("search by ". a:dict_name .": ")
-  endif
-  execute join([':Ref webdict', a:dict_name, cursor_word], " ")
-endfunction
-for [name, dict] in items(g:ref_source_webdict_sites) 
-  if has_key(dict, 'key')
-    let command = join(['nnoremap', dict["key"], ':call <SID>search_text_or_input_text("' .name. '")', '<CR>'], " ")
-    execute command
-  endif
-endfor
-unlet command
+  "webdictサイトの設定
+  let g:ref_source_webdict_sites = {
+        \   'wikipedia': {
+        \     'key': 'rew',
+        \     'url': 'http://ja.wikipedia.org/wiki/%s',
+        \     'cache': 1,
+        \   },
+        \   "en_example" : {
+        \     'key': 'ree',
+        \     'url': 'http://ejje.weblio.jp/sentence/content/%s',
+        \     'cache': 1,
+        \     'line': 67,
+        \   },
+        \   "en_thesaurus" : {
+        \     'key': 'ret',
+        \     'url': 'http://ejje.weblio.jp/english-thesaurus/content/%s',
+        \     'cache': 1,
+        \     'line': 53,
+        \   },
+        \   "en_word" : {
+        \     'key': 'rer',
+        \     'url': 'http://ejje.weblio.jp/content/%s',
+        \     'cache': 1,
+        \     'line': 79,
+        \   },
+        \   "alc" : {
+        \     'key': 'rea',
+        \     'url': 'http://eow.alc.co.jp/%s/UTF-8/',
+        \     'cache': 1,
+        \     'line': 51,
+        \   },
+        \ }
 
-aug MyAutoCmd
-  au FileType ruby,eruby,ruby.rspec nnoremap <silent><buffer>K :<C-U>Unite -no-start-insert ref/ri -default-action=split -input=<C-R><C-W><CR>
-  " au FileType ruby,eruby,ruby.rspec nnoremap <silent><buffer>K  :<C-U>Unite -no-start-insert ref/refe -input=<C-R><C-W><CR>
-aug END
+  function! s:search_text_or_input_text(dict_name) 
+    let cursor_word = s:get_cursor_word()
+    if empty(cursor_word)
+      let cursor_word = input("search by ". a:dict_name .": ")
+    endif
+    execute join([':Ref webdict', a:dict_name, cursor_word], " ")
+  endfunction
+  for [name, dict] in items(g:ref_source_webdict_sites) 
+    if has_key(dict, 'key')
+      let command = join(['nnoremap', dict["key"], ':call <SID>search_text_or_input_text("' .name. '")', '<CR>'], " ")
+      execute command
+    endif
+  endfor
+  unlet command
 
+  aug VimRef
+    autocmd!
+    autocmd FileType ruby,eruby,ruby.rspec nnoremap <silent><buffer>K :<C-U>Unite -no-start-insert ref/ri -default-action=split -input=<C-R><C-W><CR>
+    " au FileType ruby,eruby,ruby.rspec nnoremap <silent><buffer>K  :<C-U>Unite -no-start-insert ref/refe -input=<C-R><C-W><CR>
+  aug END
+endfunction "}}}
+unlet bundle
 
 "----------------------------------------
-" vim-fugitive
-"----------------------------------------
-
 nnoremap <silent>gM :<C-U>Gcommit --amend<CR>
 nnoremap <silent>gb :<C-U>Gblame<CR>
 nnoremap <silent>gm :<C-U>Gcommit<CR>
-
-aug MyGitCmd
-  au!
-  au FileType fugitiveblame vertical res 25
-  au FileType gitcommit,git-diff nnoremap <buffer>q :q<CR>
-aug END
-
+let bundle = NeoBundleGet('vim-fugitive')
+function bundle.hooks.on_source(bundle) "{{{
+  aug MyGitCmd
+    autocmd!
+    autocmd FileType fugitiveblame vertical res 25
+    autocmd FileType gitcommit,git-diff nnoremap <buffer>q :q<CR>
+  aug END
+endfunction "}}}
+unlet bundle
 
 "----------------------------------------
-" vim-git
-"----------------------------------------
-" 
-let g:git_command_edit = 'vnew'
-let g:git_no_default_mappings = 1
-
 nnoremap gA :<C-U>GitAdd<Space>
 nnoremap <silent>ga :<C-U>GitAdd<CR>
 nnoremap <silent>gd :<C-U>GitDiff HEAD<CR>
 nnoremap gp :<C-U>Git push<Space>
 nnoremap gD :<C-U>GitDiff<Space>
 
+let bundle = NeoBundleGet('git-vim')
+function bundle.hooks.on_source(bundle) "{{{
+  let g:git_command_edit = 'vnew'
+  let g:git_no_default_mappings = 1
+endfunction "}}}
+unlet bundle
 
 "----------------------------------------
 " html5.vim
 "----------------------------------------
-
 "html5のシンタックスを有効化
 "Disable event-handler attributes support:
 let g:html5_event_handler_attributes_complete = 0
@@ -1879,89 +1796,54 @@ syn keyword htmlArg contained hidden role
 syn match   htmlArg "\<\(aria-[\-a-zA-Z0-9_]\+\)=" contained
 syn match   htmlArg contained "\s*data-[-a-zA-Z0-9_]\+"
 
+"------------------------------------
+let bundle = NeoBundleGet('vim-smartword')
+function bundle.hooks.on_source(bundle) "{{{
+  map ,w  <Plug>(smartword-w)
+  map ,b  <Plug>(smartword-b)
+  map ,e  <Plug>(smartword-e)
+endfunction "}}}
+unlet bundle
 
 "------------------------------------
-" vim-smartword
-"------------------------------------
+let bundle = NeoBundleGet('camelcasemotion')
+function bundle.hooks.on_source(bundle) "{{{
+  " <Shift-wbe>でCameCaseやsnake_case単位での単語移動
+  map <silent> w <Plug>CamelCaseMotion_w
+  map <silent> b <Plug>CamelCaseMotion_b
+  map <silent> e <Plug>CamelCaseMotion_e
+  sunmap w
+  sunmap b
+  sunmap e
 
-map ,w  <Plug>(smartword-w)
-map ,b  <Plug>(smartword-b)
-map ,e  <Plug>(smartword-e)
+  nnoremap diw di,w
+  nnoremap dib di,b
+  nnoremap die di,e
 
+  nnoremap ciw ci,w
+  nnoremap cib ci,b
+  nnoremap cie ci,e
 
-"------------------------------------
-" camelcasemotion.vim
-"------------------------------------
-
-" <Shift-wbe>でCameCaseやsnake_case単位での単語移動
-map <silent> w <Plug>CamelCaseMotion_w
-map <silent> b <Plug>CamelCaseMotion_b
-map <silent> e <Plug>CamelCaseMotion_e
-sunmap w
-sunmap b
-sunmap e
-
-nnoremap diw di,w
-nnoremap dib di,b
-nnoremap die di,e
-
-nnoremap ciw ci,w
-nnoremap cib ci,b
-nnoremap cie ci,e
-
-omap <silent>iw <Plug>CamelCaseMotion_iw
-xmap <silent>iw <Plug>CamelCaseMotion_iw
-omap <silent>ib <Plug>CamelCaseMotion_ib
-xmap <silent>ib <Plug>CamelCaseMotion_ib
-omap <silent>ie <Plug>CamelCaseMotion_ie
-xmap <silent>ie <Plug>CamelCaseMotion_ie
-
+  omap <silent>iw <Plug>CamelCaseMotion_iw
+  xmap <silent>iw <Plug>CamelCaseMotion_iw
+  omap <silent>ib <Plug>CamelCaseMotion_ib
+  xmap <silent>ib <Plug>CamelCaseMotion_ib
+  omap <silent>ie <Plug>CamelCaseMotion_ie
+  xmap <silent>ie <Plug>CamelCaseMotion_ie
+endfunction "}}}
+unlet bundle
 
 "------------------------------------
-" matchit.zip
-"------------------------------------
-
-" source $VIMRUNTIME/macros/matchit.vim
-" % での移動出来るタグを増やす
-" let b:match_ignorecase = 1
-" let s:match_words = {}
-"
-" function! s:set_match_words() 
-"   let ft = &ft
-"   if ft == '' || !has_key(s:match_words, ft)
-"     return
-"   endif
-"
-"   if !exists('b:match_words')
-"     let b:match_words = ''
-"   endif
-"
-"   if b:match_words != '' && b:match_words !~ ':$'
-"     let b:match_words = b:match_words . ''
-"   endif
-"
-"   let b:match_words = b:match_words . s:match_words[ft]
-" endfunction
-
-" aug MyAutoCmd
-"   au Filetype * call <SID>set_match_words()
-" aug END
-
-
-"------------------------------------
-" vimshell
-"------------------------------------
-
 nnoremap <silent>,v  :<C-U>VimShell<CR>
 nnoremap <silent>,V  :<C-U>VimShellBufferDir<CR>
-let g:vimshell_user_prompt  = '"(" . getcwd() . ")" '
-let g:vimshell_prompt       = '$ '
-let g:vimshell_ignore_case  = 1
-let g:vimshell_smart_case   = 1
-let g:vimshell_temporary_directory = g:my.dir.vimshell
-
 let bundle = NeoBundleGet('vimshell')
-function! bundle.hooks.on_source(bundle) 
+function! bundle.hooks.on_source(bundle) "{{{
+  let g:vimshell_user_prompt  = '"(" . getcwd() . ")" '
+  let g:vimshell_prompt       = '$ '
+  let g:vimshell_ignore_case  = 1
+  let g:vimshell_smart_case   = 1
+  let g:vimshell_temporary_directory = g:my.dir.vimshell
+
   let s:vimshell_altercmd = [
         \ 'vi vim',
         \ 'g git',
@@ -1985,9 +1867,8 @@ function! bundle.hooks.on_source(bundle)
   aug MyAutoCmd
     au FileType vimshell call <SID>vimshell_settings()
   aug END
-endfunction
+endfunction "}}}
 unlet bundle
-
 
 "------------------------------------
 " memolist.vim
@@ -2672,9 +2553,6 @@ aug END
 
 
 " ------------------------------------
-" clever-f
-" ------------------------------------
-
 let bundle = NeoBundleGet("clever-f.vim")
 function! bundle.hooks.on_source(bundle) 
   let g:clever_f_not_overwrites_standard_mappings=1
@@ -2876,7 +2754,7 @@ function! bundle.hooks.on_source(bundle)
         \ '\[Command Line\]'
 
   call neocomplete#custom#source('tag', 'disabled', 1)
-  " call neocomplete#custom#source('vim', 'filetype', { 'vim' : 1, 'vimconsole': 1})
+  call neocomplete#custom#source('vim', 'filetypes', { 'vim' : 1, 'vimconsole': 1})
   " file         
   " file/include 
   " dictionary   
@@ -3008,6 +2886,7 @@ function! bundle.hooks.on_source(bundle)
         \ 'default'             : '',
         \ 'javascript.timobile' : $HOME.'/.vim/dict/timobile.dict',
         \ 'coffee.timobile'     : $HOME.'/.vim/dict/timobile.dict',
+        \ 'vimshell' : g:my.dir.vimshell . '/command-history',
         \ }
 
   for s:dict in split(glob($HOME.'/.vim/dict/*.dict'))
@@ -3020,10 +2899,10 @@ function! bundle.hooks.on_source(bundle)
     au BufReadPre *
           \ if &previewwindow
           \|  au BufEnter <buffer>
-          \|    if &previewwindow
-            \|      call <SID>smart_close()
-            \|    endif
-            \|endif
+          \|  if &previewwindow
+          \|    call <SID>smart_close()
+          \|  endif
+          \|endif
   aug END
 
   " keymap 
@@ -3203,7 +3082,7 @@ function! s:unite_with_same_syntax(cmd)
   " let rails_buffer = rails#buffer()
 
   " uniteを起動
-  exe a:cmd
+  execute a:cmd
 
   if file_syntax != ''
     exe 'setl syntax='.file_syntax
@@ -3227,6 +3106,7 @@ function! bundle.hooks.on_source(bundle)
   let g:unite_cursor_line_highlight='UniteCursorLine'
   let g:unite_data_directory=g:my.dir.unite
   let g:unite_enable_split_vertically=1
+  let g:unite_update_time=50
   let g:unite_enable_start_insert=1
   let g:unite_source_directory_mru_limit = 200
   let g:unite_source_directory_mru_time_format="(%m-%d %H:%M) "
@@ -3235,10 +3115,11 @@ function! bundle.hooks.on_source(bundle)
   let g:unite_source_file_mru_filename_format=":~:."
   let g:unite_source_file_mru_limit = 300
   let g:unite_winheight = 20
+  let g:unite_marked_icon = "✓"
+  let g:unite_force_overwrite_statusline=1
   let g:unite_source_history_yank_enable = 0
   let s:unite_kuso_hooks = {}
   
-
   function! s:unite_my_settings() 
     aug MyUniteBufferCmd
       autocmd!
@@ -3259,6 +3140,7 @@ function! bundle.hooks.on_source(bundle)
     nnoremap <silent><buffer><expr>S unite#do_action('split')
     nnoremap <silent><buffer><expr>V unite#do_action('vsplit')
     nnoremap <silent><buffer><expr>,, unite#do_action('vimfiler')
+    nnoremap <silent><buffer>C gg0wC
 
     " hook
     let unite = unite#get_current_unite()
@@ -3304,6 +3186,9 @@ function! bundle.hooks.on_source(bundle)
   endfunction
 
   call unite#custom_source('line', 'max_candidates', 5000)
+  call unite#custom_source('giti/log', 'max_candidates', 5000)
+  let g:giti_log_default_line_count = 500
+  call unite#custom_source('giti/branch_all', 'max_candidates', 5000)
   call unite#custom_source('line/fast', 'max_candidates', 5000)
 
   "------------------------------------
@@ -3433,7 +3318,6 @@ endfunction
 command! -bar IDE call <SID>IDE()
 
 call neobundle#call_hook('on_source')
-
 
 " ----------------------------------------
 " for lang-8
