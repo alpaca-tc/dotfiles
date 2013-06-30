@@ -330,7 +330,7 @@ NeoBundleLazy 'thinca/vim-quickrun', { 'autoload' : {
       \   'commands' : 'QuickRun' }}
 NeoBundleLazy 'scrooloose/syntastic', { 'autoload': {
       \ 'build' : {
-      \   'mac' : join(['brew install tidy', 'brew install csslint', 'gem install sass', 'brew install jslint'], ' && ')
+      \   'mac' : join(['brew install tidy', 'brew install csslint', 'gem install sass', 'npm install -g jslint', 'gem install rubocop'], ' && ')
       \ },
       \ 'filetypes' : g:my.ft.program_files }}
 NeoBundleLazy 'vim-scripts/sudo.vim', {
@@ -1416,7 +1416,26 @@ nmap ; [minor]
 "}}}
 
 "----------------------------------------
-" Setting of each plugin
+" 補完・履歴 "{{{
+set complete=.,w,b,u,U,s,i,d,t
+" set completeopt=menu,menuone,preview
+set completeopt=menu,menuone
+set history=1000             " コマンド・検索パターンの履歴数
+set infercase
+set wildchar=<tab>           " コマンド補完を開始するキー
+set wildmenu                 " コマンド補完を強化
+set showfulltag
+set wildoptions=tagfile
+set wildmode=longest:full,full
+" set thesaurus+=~/.vim/thesaurus/mthes10/mthesaur.txt
+
+" command-lineはzsh風補完で使う
+cnoremap <C-P> <UP>
+cnoremap <C-N> <Down>
+"}}}
+
+"----------------------------------------
+" Setting of each plugin"{{{
 
 "------------------------------------
 let bundle = NeoBundleGet('vim-arpeggio')
@@ -2527,7 +2546,7 @@ let s:switch_define = {
       \ }
 
 let s:switch_define = alpaca#initialize#redefine_with_each_filetypes(s:switch_define)
-function! s:define_switch_mappings()"{{{
+function! s:define_switch_mappings() "{{{
   if exists('b:switch_custom_definitions')
     unlet b:switch_custom_definitions
   endif
@@ -3249,25 +3268,6 @@ unlet bundle
 "}}}
 
 "----------------------------------------
-" 補完・履歴 "{{{
-set complete=.,w,b,u,U,s,i,d,t
-" set completeopt=menu,menuone,preview
-set completeopt=menu,menuone
-set history=1000             " コマンド・検索パターンの履歴数
-set infercase
-set wildchar=<tab>           " コマンド補完を開始するキー
-set wildmenu                 " コマンド補完を強化
-set showfulltag
-set wildoptions=tagfile
-set wildmode=longest:full,full
-" set thesaurus+=~/.vim/thesaurus/mthes10/mthesaur.txt
-
-" command-lineはzsh風補完で使う
-cnoremap <C-P> <UP>
-cnoremap <C-N> <Down>
-"}}}
-
-"----------------------------------------
 " Dash"{{{
 function! s:dash(...) 
   let ft = <SID>filetype()
@@ -3285,7 +3285,9 @@ augroup MyAutoCmd
   au User Rails nnoremap <buffer><C-K><C-K><C-K> :Dash rails:<C-R><C-W><CR>
 augroup END
 "}}}
+"}}}
 
+"----------------------------------------
 function! s:update_ruby_ctags() 
   echo vimproc#system("rbenv ctags")
   echo vimproc#system("gem ctags")
@@ -3312,7 +3314,6 @@ function! s:IDE()
 endfunction
 command! -bar IDE call <SID>IDE()
 
-call neobundle#call_hook('on_source')
 
 " ----------------------------------------
 " for lang-8
@@ -3327,5 +3328,10 @@ endfunction"}}}
 augroup MyAutoCmd
   autocmd BufEnter *.rb call <SID>set_lang8_settings()
 augroup END
+
+if !has('vim_starting')
+  " Call on_source hook when reloading .vimrc.
+  call neobundle#call_hook('on_source')
+endif
 
 set secure
