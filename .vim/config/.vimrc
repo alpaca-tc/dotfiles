@@ -548,10 +548,10 @@ NeoBundleLazy 'operator-camelize', {
 
 
 " unite
-" NeoBundleLazy 'thinca/vim-qfreplace', { 'autoload' : {
-"       \ 'filetypes' : ['unite', 'quickfix'],
-"       \ 'commands' : ["Qfreplace"],
-"       \ }}
+NeoBundleLazy 'thinca/vim-qfreplace', { 'autoload' : {
+      \ 'filetypes' : ['unite', 'quickfix'],
+      \ 'commands' : ["Qfreplace"],
+      \ }}
 NeoBundleLazy 'Shougo/unite-build', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload': {
@@ -3309,14 +3309,16 @@ augroup END
 
 function! s:IDE() 
   silent!
+
   TagbarOpen
+  hogehoge
   VimFilerExplorerGit
 endfunction
 command! -bar IDE call <SID>IDE()
 
 
 " ----------------------------------------
-" for lang-8
+" for lang-8"{{{
 function! s:set_lang8_settings() "{{{
   let pwd = getcwd()
   if pwd =~ 'lang-8'
@@ -3328,6 +3330,7 @@ endfunction"}}}
 augroup MyAutoCmd
   autocmd BufEnter *.rb call <SID>set_lang8_settings()
 augroup END
+"}}}
 
 if !has('vim_starting')
   " Call on_source hook when reloading .vimrc.
