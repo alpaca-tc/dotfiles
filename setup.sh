@@ -29,32 +29,29 @@ if [ $yn = "y" -o $yn = "Y" ]; then
         fi
     done
 
-    DOT_FILES=( .vim.swapfile .bundle .yankring )
+    DOT_FILES=(.bundle)
     # viで使用するフォルダ生成
     for file in ${DOT_FILES[@]}
     do
         echo "...create folder: ~/$file"
         mkdir -p $HOME/$file
     done
-
 fi
 
 # finderで隠しファイルを表示する
 read -p "Do you wish to show hidden files with Finder? y/n " yn
 if [ $yn = "y" -o $yn = "Y" ]; then
     defaults write com.apple.finder AppleShowAllFiles TRUE
-    echo "done!! change setting about finder"
+    echo "done!!"
     echo "...restart finder\n"
     killall Finder
 fi
 
-read -p "never create .DS_Store? y/n" yn
+read -p "Never create .DS_Store? y/n" yn
 if [ $yn = "y" -o $yn = "Y" ]; then
     defaults write com.apple.desktopservices DSDontWriteNetworkStores true
     echo "...success"
 fi
-
-
 
 # default shell を変更
 read -p "Do you wish to change default shell? zsh y/n " yn
@@ -121,4 +118,3 @@ else
     sleep 1.5
     kill -KILL `ps -ef | grep ".*" |grep -v "grep" |awk '{print $2}'`
 fi
-

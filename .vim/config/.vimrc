@@ -376,7 +376,7 @@ NeoBundleLazy 'Shougo/vimfiler', {
       \   'explorer' : 1,
       \ }}
 if has("lua")
-  NeoBundle 'Shougo/neocomplete', { 'autoload' : {
+  NeoBundleLazy 'Shougo/neocomplete', { 'autoload' : {
         \   'insert' : 1,
         \ }}
 else
@@ -721,6 +721,12 @@ NeoBundleFetch 'yascentur/Ricty', {
 NeoBundleLazy 'hail2u/vim-css3-syntax', { 'autoload' : {
       \   'filetypes' : g:my.ft.style_files,
       \ }}
+" sassのコンパイル
+NeoBundleLazy 'AtsushiM/sass-compile.vim', {
+      \ 'autoload': { 'filetypes': ['sass', 'scss'] }}
+NeoBundleLazy 'vim-less', {
+      \ 'autoload': { 'filetypes': ['less'] }
+      \ }
 
 " html
 " ----------------------------------------
@@ -781,10 +787,6 @@ NeoBundleLazy 'fsouza/go.vim', { 'autoload' : {
 NeoBundleLazy 'tpope/vim-markdown', { 'autoload' : {
       \ 'filetypes' : ['markdown'] }}
 
-" sassのコンパイル
-NeoBundleLazy 'AtsushiM/sass-compile.vim', {
-      \ 'autoload': { 'filetypes': ['sass', 'scss'] }}
-
 "  php
 " ----------------------------------------
 NeoBundleLazy 'taichouchou2/alpaca_wordpress.vim', { 'autoload' : {
@@ -808,6 +810,8 @@ NeoBundleLazy 'taichouchou2/vim-endwise.git', {
       \ 'autoload' : {
       \   'insert' : 1,
       \ }}
+NeoBundleLazy 'vim-ruby/vim-ruby', { 'autoload' : {
+      \ 'filetypes': ['ruby'] } }
 
 " rails
 NeoBundleLazy 'basyura/unite-rails', {
@@ -868,7 +872,6 @@ NeoBundleLazy 'taichouchou2/unite-reek', {
 "       \ }
 "       \ }
 NeoBundle 'Shougo/neocomplcache-rsense.vim', {
-      \ 'depends': 'Shougo/neocomplete', 
       \ 'autoload' : {
       \   'filetype' : ['ruby']
       \ }}
@@ -2721,20 +2724,19 @@ function! bundle.hooks.on_source(bundle) "{{{
 endfunction"}}}
 unlet bundle
 
-
 let bundle = NeoBundleGet('neocomplcache-rsense')
 function! bundle.hooks.on_source(bundle)"{{{
-  " let g:neocomplete#sources#rsense#home_directory = neobundle#get_neobundle_dir() . '/rsense-0.3'
-  let g:neocomplete#sources#rsense#home_directory = "/usr/local/Cellar/rsense/0.3"
+  let g:neocomplete#sources#rsense#home_directory = neobundle#get_neobundle_dir() . '/rsense-0.3'
+  " let g:neocomplete#sources#rsense#home_directory = "/usr/local/Cellar/rsense/0.3"
 endfunction"}}}
 unlet bundle
 
 "----------------------------------------
+let g:neocomplete#enable_at_startup = 1
 let bundle = NeoBundleGet(has("lua") ? 'neocomplete' : 'nothing!!')
 function! bundle.hooks.on_source(bundle) "{{{
   " " let g:neocomplete_enable_cursor_hold_i=0
   " let g:neocomplete#enable_smart_case = 1
-  let g:neocomplete#enable_at_startup = 1
   let g:neocomplete#sources#syntax#min_keyword_length = 3
   let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
 
@@ -2783,8 +2785,8 @@ function! bundle.hooks.on_source(bundle) "{{{
   " tag
 
   " for rsense
-  " let g:rsenseHome = expand("~/.bundle/rsense-0.3")
-  " let g:rsenseUseOmniFunc = 1
+  let g:rsenseHome = expand("~/.bundle/rsense-0.3")
+  let g:rsenseUseOmniFunc = 1
   " omnifuncいらねー。
   " autocmd MyAutoCmd FileType ruby set omnifunc=
 
@@ -2936,7 +2938,7 @@ function! bundle.hooks.on_source(bundle) "{{{
   inoremap <expr><C-n>  pumvisible() ? "\<C-n>" : "\<C-x>\<C-u>\<C-p>\<Down>"
   inoremap <expr><C-p>  pumvisible() ? "\<C-p>" : "\<C-p>\<C-n>"
   inoremap <expr>'  pumvisible() ? neocomplete#close_popup() . "'" : "'"
-  inoremap <expr><C-x><C-f>  neocomplete#start_manual_complete('filename_complete')
+  inoremap <expr><C-x><C-f>  neocomplete#start_manual_complete('file')
   inoremap <expr><C-g>     neocomplete#undo_completion()
 
   inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
@@ -3143,16 +3145,17 @@ function! bundle.hooks.on_source(bundle) "{{{
     highlight link uniteMarkedLine Identifier
     highlight link uniteCandidateInputKeyword Statement
 
-    inoremap <silent><buffer><C-J> <Down>
-    inoremap <silent><buffer><C-K> <Up>
+    inoremap <silent><buffer><C-J> <Plug>(unite_loop_cursor_down)
+    inoremap <silent><buffer><C-K> <Plug>(unite_loop_cursor_up)
     nmap     <silent><buffer>f <Plug>(unite_toggle_mark_current_candidate)
     xmap     <silent><buffer>f <Plug>(unite_toggle_mark_selected_candidates)
     nmap     <silent><buffer><C-H> <Plug>(unite_toggle_transpose_window)
-    nmap     <silent><buffer><C-J> <Plug>(unite_toggle_auto_preview)
+    nmap     <silent><buffer>p <Plug>(unite_toggle_auto_preview)
     nnoremap <silent><buffer><expr>S unite#do_action('split')
     nnoremap <silent><buffer><expr>V unite#do_action('vsplit')
     nnoremap <silent><buffer><expr>,, unite#do_action('vimfiler')
     nnoremap <silent><buffer>C gg0wC
+    nnoremap <expr><buffer>re unite#do_action('replace')
 
     " hook
     let unite = unite#get_current_unite()
@@ -3187,11 +3190,11 @@ function! bundle.hooks.on_source(bundle) "{{{
   " command menu
   let g:unite_source_menu_menus = {}
   let g:unite_source_menu_menus.command = {
-        \     'description' : 'command alias',
+        \ 'description' : 'command alias',
         \ }
   let g:unite_source_menu_menus.command.command_candidates = {
-        \       'gitignore'  : 'Unite file_rec:' . neobundle#get_neobundle_dir() . "/gitignore",
-        \     }
+        \ 'gitignore'  : 'Unite file_rec:' . neobundle#get_neobundle_dir() . "/gitignore",
+        \ }
   function! s:unite_kuso_hooks.line_fast() 
     autocmd WinLeave <buffer> call <SID>buffer_auto_fold(1)
     autocmd WinEnter <buffer> call <SID>buffer_auto_fold(0)
@@ -3239,8 +3242,6 @@ function! bundle.hooks.on_source(bundle) "{{{
   " let g:unite_source_outline_cache_limit
   " let g:unite_source_outline_highlight
   function! s:unite_kuso_hooks.outline()
-    let unite = unite#get_context()
-    let unite.auto_preview = 0
     nnoremap <buffer><C-J> gj
   endfunction
 
@@ -3285,6 +3286,15 @@ augroup MyAutoCmd
   au User Rails nnoremap <buffer><C-K><C-K><C-K> :Dash rails:<C-R><C-W><CR>
 augroup END
 "}}}
+
+"----------------------------------------
+let bundle = NeoBundleGet('vim-ruby')
+function bundle.hooks.on_source(bundle) "{{{
+  let g:rubycomplete_buffer_loading = 1
+  let g:rubycomplete_classes_in_global = 1
+  let g:rubycomplete_rails = 1
+endfunction "}}}
+unlet bundle
 "}}}
 
 "----------------------------------------
@@ -3315,7 +3325,6 @@ function! s:IDE()
   VimFilerExplorerGit
 endfunction
 command! -bar IDE call <SID>IDE()
-
 
 " ----------------------------------------
 " for lang-8"{{{
