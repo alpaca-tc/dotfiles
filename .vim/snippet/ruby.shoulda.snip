@@ -120,27 +120,27 @@ abbr        have_readonly_attributes(field)
 snippet     belong
 abbr        belong_to(...)
 options     word
-  belong_to(${1:table})
+  should belong_to(${1:table})
 
 snippet     have_many
 abbr        have_many(...)
 options     word
-  have_many(${1:table})${2:.dependent(${3::destroy\})}
+  should have_many(${1:table})${2:.dependent(${3::destroy\})}
 
 snippet     have_one
 abbr        have_one(...)
 options     word
-  have_one(${1:table})${2:.dependent(${3::destroy\})}
+  should have_one(${1:table})${2:.dependent(${3::destroy\})}
 
 snippet     have_manyt
 abbr        have_many(...).through(...)
 options     word
-  have_many(${1:table}).through(${2:table})${3:.dependent(${4::destroy\})}
+  should have_many(${1:table}).through(${2:table})${3:.dependent(${4::destroy\})}
 
 snippet     have_and_belong_to_many
 abbr        have_and_belong_to_many(association)
 options     word
-  have_and_belong_to_many(${1:table})
+  should have_and_belong_to_many(${1:table})
 #}}}
 #}}}
 # Module: Shoulda::Matchers::ActiveRecord#{{{
@@ -184,32 +184,32 @@ options     word
 snippet     filter_param
 abbr        filter_param(key)
 options     word
-  filter_param(${1:key})
+  should filter_param(${1:key})
 
 snippet     render_template
 abbr        render_template(options={}, message=nil)
 options     word
-  render_template(${1:templete})
+  should render_template(${1:templete})
 
 snippet     render_with_layout
 abbr        render_with_layout(name)
 options     word
-  render_with_layout${1:(${name\})}
+  should render_with_layout${1:(${name\})}
 
 snippet     respond_with
 abbr        respond_with(status)
 options     word
-  respond_with(${1::success|:redirect|:missing|:error|404})
+  expect(response).to${1:_not} respond_with(${2::success|:redirect|:missing|:error|404})
 
 snippet     resopnd_with_content_type
 abbr        resopnd_with_content_type(content_type)
 options     word
-  resopnd_with_content_type(${1::text|:csv|/json/|'application/rss'})
+  should resopnd_with_content_type(${1::text|:csv|/json/|'application/rss'})
 
 snippet     route
 abbr        route(method, path).to(...)
 options     word
-  route(${1:method}, ${2:path}).to(action: ${3:action_name}, ${4:id: 4}})
+  should route(${1:method}, ${2:path}).to(action: ${3:action_name}, ${4:id: 4}})
 
 snippet     flash
 abbr        set_the_flash.to(message)

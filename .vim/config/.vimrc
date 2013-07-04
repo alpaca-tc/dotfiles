@@ -139,6 +139,27 @@ function! NeoBundleGet(name)
   let bundle = neobundle#get(a:name)
   return empty(bundle) ? s:dummy : bundle
 endfunction 
+
+
+function! s:compare_asc(me, target) "{{{
+  if a:me > a:target
+    1
+  else
+    0
+  endif
+endfunction "}}}
+function! s:buffer_nr_list() "{{{
+  redir => output
+  silent! ls
+  redir END
+
+  let buffer_nr_list = []
+  for line in map(split(output, '\n'), 'split(v:val)')
+    call add(buffer_nr_list, line[0])
+  endfor
+
+  return sort(buffer_nr_list, 's:compare_asc')
+endfunction "}}}
 "}}}
 
 "----------------------------------------
@@ -219,6 +240,7 @@ endif
 "----------------------------------------
 " basic settings "{{{
 execute "set directory=".g:my.dir.swap_dir
+set nocompatible
 set backspace=indent,eol,start
 set clipboard+=autoselect,unnamed
 set formatoptions+=lcqmM
@@ -641,6 +663,10 @@ if has("ruby")
         \   'unite_sources': ['english_dictionary', 'english_example', 'english_thesaurus'],
         \ }
         \ }
+  " l8のバイトの金額求める
+  NeoBundle 'taichouchou2/snail_csv2google_sheet', { 'autoload': {
+        \ 'commands' : [],
+        \ }}
 endif
 
 if has("clientserver")
@@ -802,6 +828,13 @@ NeoBundleLazy 'Shougo/vinarise', {
 " ----------------------------------------
 " NeoBundle 'msanders/cocoa.vim'
 
+" eclim
+" ----------------------------------------
+NeoBundleLazy 'taichouchou2/eclim', { 'autoload' : {
+      \ 'commands' : ['ProjectCreate', 'PingEclim'],
+      \ 'function_prefix': 'eclim'
+      \ }}
+
 " ruby
 " ----------------------------------------
 NeoBundle 'taichouchou2/vim-rails', { 'autoload' : {
@@ -871,10 +904,10 @@ NeoBundleLazy 'taichouchou2/unite-reek', {
 "       \   'filetypes' : 'ruby'
 "       \ }
 "       \ }
-NeoBundle 'Shougo/neocomplcache-rsense.vim', {
-      \ 'autoload' : {
-      \   'filetype' : ['ruby']
-      \ }}
+" NeoBundle 'Shougo/neocomplcache-rsense.vim', {
+"       \ 'autoload' : {
+"       \   'filetype' : ['ruby']
+"       \ }}
 " NeoBundleLazy 'rhysd/unite-ruby-require.vim', { 'autoload': {
 "       \ 'filetypes': g:my.ft.ruby_files }}
 " NeoBundleLazy 'rhysd/vim-textobj-ruby', { 'depends': 'kana/vim-textobj-user' }
@@ -1773,6 +1806,7 @@ function bundle.hooks.on_source(bundle) "{{{
     autocmd FileType fugitiveblame vertical res 25
     autocmd FileType gitcommit,git-diff nnoremap <buffer>q :q<CR>
   aug END
+  let g:fugitive_git_executable = executable('hub') ? 'hub' : 'git'
 endfunction "}}}
 unlet bundle
 
@@ -1786,6 +1820,7 @@ nnoremap gD :<C-U>GitDiff<Space>
 let bundle = NeoBundleGet('git-vim')
 function bundle.hooks.on_source(bundle) "{{{
   let g:git_command_edit = 'vnew'
+  let g:git_bin = executable('hub') ? 'hub' : 'git'
   let g:git_no_default_mappings = 1
 endfunction "}}}
 unlet bundle
@@ -2411,9 +2446,7 @@ let g:alpaca_wordpress_use_default_setting = 1
 "------------------------------------
 " excitetranslate
 "------------------------------------
-" 
-xnoremap ,e :ExciteTranslate<CR>
-" 
+xnoremap E :ExciteTranslate<CR>
 
 "------------------------------------
 " qtmplsel.vim
@@ -2529,6 +2562,62 @@ let s:switch_define = {
       \   ["include", "extend"],
       \   ["class", "module"],
       \ ],
+      \ 'rails' : [
+      \   [100, ':continue', ':information'],
+      \   [101, ':switching_protocols'],
+      \   [102, ':processing'],
+      \   [200, ':ok', ':success'],
+      \   [201, ':created'],
+      \   [202, ':accepted'],
+      \   [203, ':non_authoritative_information'],
+      \   [204, ':no_content'],
+      \   [205, ':reset_content'],
+      \   [206, ':partial_content'],
+      \   [207, ':multi_status'],
+      \   [208, ':already_reported'],
+      \   [226, ':im_used'],
+      \   [300, ':multiple_choices'],
+      \   [301, ':moved_permanently'],
+      \   [302, ':found'],
+      \   [303, ':see_other'],
+      \   [304, ':not_modified'],
+      \   [305, ':use_proxy'],
+      \   [306, ':reserved'],
+      \   [307, ':temporary_redirect'], 
+      \   [308, ':permanent_redirect'], 
+      \   [400, ':bad_request'], 
+      \   [401, ':unauthorized'], 
+      \   [402, ':payment_required'], 
+      \   [403, ':forbidden'], 
+      \   [404, ':not_found'], 
+      \   [405, ':method_not_allowed'], 
+      \   [406, ':not_acceptable'], 
+      \   [407, ':proxy_authentication_required'], 
+      \   [408, ':request_timeout'], 
+      \   [409, ':conflict'], 
+      \   [410, ':gone'], 
+      \   [411, ':length_required'], 
+      \   [412, ':precondition_failed'], 
+      \   [413, ':request_entity_too_large'], 
+      \   [414, ':request_uri_too_long'], 
+      \   [415, ':unsupported_media_type'], 
+      \   [416, ':requested_range_not_satisfiable'], 
+      \   [417, ':expectation_failed'], 
+      \   [422, ':unprocessable_entity'], 
+      \   [423, ':precondition_required'], 
+      \   [424, ':too_many_requests'], 
+      \   [426, ':request_header_fields_too_large'], 
+      \   [501, ':not_implemented'], 
+      \   [502, ':bad_gateway'], 
+      \   [503, ':service_unavailable'], 
+      \   [504, ':gateway_timeout'], 
+      \   [505, ':http_version_not_supported'], 
+      \   [506, ':variant_also_negotiates'], 
+      \   [507, ':insufficient_storage'], 
+      \   [508, ':loop_detected'], 
+      \   [510, ':not_extended'], 
+      \   [511, ':network_authentication_required'], 
+      \ ],
       \ "haml" : [
       \   ["if", "unless"],
       \   ["while", "until"],
@@ -2560,6 +2649,11 @@ function! s:define_switch_mappings() "{{{
       let defines = !exists("defines") ? ft_define : extend(defines, ft_define)
     endif
   endfor
+
+  if exists('b:rails_root')
+    let ft_define = s:switch_define['rails']
+    let defines = !exists("defines") ? ft_define : extend(defines, ft_define)
+  endif
 
   if exists('defines')
     call alpaca#let_b:('switch_custom_definitions', defines)
@@ -2830,6 +2924,8 @@ function! bundle.hooks.on_source(bundle) "{{{
         \ 'text' : 1,
         \ }
 
+  let g:neocomplete#sources#omni#functions.java = 'eclim#java#complete#CodeComplete'
+
   " Define keyword pattern.
   let g:neocomplete#keyword_patterns = {
         \ '_' : '[0-9a-zA-Z:#_]\+',
@@ -2945,7 +3041,6 @@ function! bundle.hooks.on_source(bundle) "{{{
   inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
   inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
   inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
-  command! Clean NeoCompleteClean
 
   " test
   inoremap <expr><TAB>  pumvisible() ? "\<C-n>" :
@@ -3298,6 +3393,12 @@ unlet bundle
 "}}}
 
 "----------------------------------------
+let bundle = NeoBundleGet('eclim')
+function! bundle.hooks.on_source(bundle)
+  let g:EclimCompletionMethod = 'omnifunc'
+endfunction
+
+"----------------------------------------
 function! s:update_ruby_ctags() 
   echo vimproc#system("rbenv ctags")
   echo vimproc#system("gem ctags")
@@ -3321,10 +3422,55 @@ function! s:IDE()
   silent!
 
   TagbarOpen
-  hogehoge
   VimFilerExplorerGit
 endfunction
 command! -bar IDE call <SID>IDE()
+
+" ----------------------------------------
+" for eclim
+function! s:kill_eclimd() "{{{
+  " s:eclimd_process
+  let answer = input('Kill eclimd? y/n ') 
+  if answer =~ 'y'
+    call system('kill -QUIT '. s:eclimd_process.pid) 
+    call system('pkill -f eclimd') 
+    call system('pkill -f eclipse') 
+    break
+  endif
+endfunction "}}}
+
+function! s:load_eclim(...) "{{{
+  let git_root = s:current_git()
+  if filereadable(git_root . '/.project') || !empty(a:000)
+    let eclimd = $ECLIPSE_HOME . "/eclimd"
+    if executable(eclimd)
+      let s:eclimd_process = vimproc#popen2(eclimd)
+      autocmd VimLeave * call <SID>kill_eclimd()
+    endif
+
+    NeoBundleSource eclim
+    autocmd! EclimLoader
+  endif
+endfunction"}}}
+command! EclimLoader call <SID>load_eclim(1)
+
+augroup EclimLoader
+  autocmd BufEnter,FileReadPost * call s:load_eclim()
+augroup END
+
+" ----------------------------------------
+" clean memory
+function! s:clear_memory() "{{{
+  if executable('NeoCompleteClean')
+    NeoCompleteClean
+    NeoCompleteDisable
+    NeoCompleteEnable
+  endif
+  " execute 'bwipeout' join(s:buffer_nr_list(), ' ')
+  " execute 'bunload' join(s:buffer_nr_list(), ' ')
+  execute 'bdelete' join(s:buffer_nr_list(), ' ')
+endfunction "}}}
+command! Clean call <SID>clear_memory()
 
 " ----------------------------------------
 " for lang-8"{{{

@@ -3,7 +3,9 @@
 
 project_name: lang8
 project_root: ~/project/lang-8
-pre: rbenv global 1.8.7-p371
+pre: 
+  - rbenv global 1.8.7-p371
+  - mysql.server start
 
 tabs:
   - editor: vim
@@ -12,8 +14,6 @@ tabs:
   - server: script/server
   - setup:
       panes:
-        - memcached -p 11211
-        # - mysql.server start
+        - memcached
         - redis
         - QUEUE=default rake environment resque:work
-        - mysqld
