@@ -20,7 +20,6 @@
   ui = true
 
 [alias]
-  b = bisect
   assume = !"fun() { git update-index --assume-unchanged `git ls-files $@ --no-empty-directory`; }; fun"
   no-assume = !"fun() { git update-index --no-assume-unchanged `git ls-files $@ --no-empty-directory`; }; fun"
   assume-list = !"git ls-files -v | grep -e "^[a-z]""
@@ -41,6 +40,7 @@
 
   resett = !git commit -a -m 'Temporary commit for cancel' && git reset --hard HEAD~
   ignore = !"f() { local s=$1; shift; while [ $# -gt 0 ]; do s="$s,$1"; shift; done; curl "http://gitignore.io/api/$s"; }; f"
+  soft=reset --soft
 
   dm = !git branch --merged | grep -v '*' | xargs -I % git branch -d %
   rs = reset

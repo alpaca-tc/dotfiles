@@ -2022,10 +2022,17 @@ function! s:unite_rails_setting() "Unite-rails.vim
   nnoremap <buffer>[plug]f           :<C-U>Unite rails/db -input=fixtures<CR>
   nnoremap <buffer>[plug]m           :<C-U>Unite rails/mailer<CR>
   nnoremap <buffer>[plug]l           :<C-U>Unite rails/lib<CR>
+  nnoremap <buffer>[plug]p           :<C-U>call <SID>unite_git_root('/public')<CR>
   nnoremap <buffer><expr>[plug]g     ':e '.b:rails_root.'/Gemfile<CR>'
   nnoremap <buffer><expr>[plug]r     ':e '.b:rails_root.'/config/routes.rb<CR>'
   nnoremap <buffer>[plug]h           :<C-U>Unite rails/heroku<CR>
   " nnoremap <buffer><expr>[plug]se    ':e '.b:rails_root.'/db/seeds.rb<CR>'
+  function! s:rails_public(path)
+    let path = b:git_dir . '/' . a:path
+    let current_dir
+    lcd path
+    execute 'Unite file_rec:'.path
+  endfunction
 endfunction
 
 function! s:do_rails_autocmd() 
@@ -2607,6 +2614,7 @@ let s:switch_define = {
       \   [423, ':precondition_required'], 
       \   [424, ':too_many_requests'], 
       \   [426, ':request_header_fields_too_large'], 
+      \   [500, ':internal_server_error'],
       \   [501, ':not_implemented'], 
       \   [502, ':bad_gateway'], 
       \   [503, ':service_unavailable'], 
@@ -3151,11 +3159,13 @@ nnoremap <silent>g#             :<C-U>call <SID>unite_with_same_syntax('Unite -b
 cnoremap <expr><silent><C-g>     (getcmdtype() == '/') ?  "\<ESC>:Unite -buffer-name=search line -input=".getcmdline()."\<CR>" : "\<C-g>"
 nnoremap [unite]f                :<C-U>Unite -buffer-name=file file_rec:
 nnoremap <silent>[unite]<C-F>    :<C-U>call <SID>unite_git_root()<CR>
-function! s:unite_git_root() 
+function! s:unite_git_root(...) 
   let git_root = s:current_git()
+  let path = empty(a:000) ? '' : a:1
+  let relative_path = git_root . path
 
-  lcd `=git_root`
-  execute "Unite -buffer-name=file file_rec:".git_root
+  execute "Unite -buffer-name=file file_rec:".relative_path
+  lcd `=relative_path`
 endfunction
 
 nnoremap <silent>[unite]:        :<C-U>Unite -buffer-name=history_command -no-empty history/command<CR>
@@ -3483,8 +3493,9 @@ function! s:set_lang8_settings() "{{{
   endif
 endfunction"}}}
 augroup MyAutoCmd
-  autocmd BufEnter *.rb call <SID>set_lang8_settings()
+  autocmd BufEnter,FileType ruby call <SID>set_lang8_settings()
 augroup END
+command! -nargs=? L8SendPullRequest call alpaca#function#send_pullrequest(<args>)
 "}}}
 
 if !has('vim_starting')
