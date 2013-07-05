@@ -69,6 +69,14 @@ function! s:current_git()
 
   return s:git_root_cache[current_dir]
 endfunction
+function! s:convert_bufname(name)
+  let bufname = a:name
+  if bufname =~# '^[[:alnum:].+-]\+:\\\\'
+    let bufname = substitute(bufname, '\\', '/', 'g')
+  endif
+  
+  return bufname
+endfunction
 function! s:filetype() 
   if empty(&filetype) | return '' | endif
 
@@ -114,6 +122,12 @@ function! s:set_default(var, val)
 endfunction
 function! s:SID_PREFIX() 
   return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
+endfunction
+function! s:directory_delimiter_complete(path)
+  return isdirectory(a:path) ? a:path . '/' : a:path
+endfunction
+function! s:directory(path)
+  return strpart(a:path, 0, strridx(a:path, '/'))
 endfunction
 function! s:strwidthpart(str, width) 
   if a:width <= 0
@@ -2010,29 +2024,23 @@ endfunction
 function! s:unite_rails_setting() "Unite-rails.vim 
   call s:do_rails_autocmd()
   call <SID>set_up_rails_setting()
-  nnoremap <buffer>[plug]            :<C-U>Unite rails/model<CR>
-  nnoremap <buffer>[plug]<C-H>       :<C-U>Unite rails/controller<CR>
-  nnoremap <buffer>[plug]<C-H><C-H>  :<C-U>Unite rails/view<CR>
+  nnoremap <buffer>[plug]            :<C-U>UniteGit app/models<CR>
+  nnoremap <buffer>[plug]<C-H>       :<C-U>UniteGit app/controllers<CR>
+  nnoremap <buffer>[plug]<C-H><C-H>  :<C-U>UniteGit app/views<CR>
 
-  nnoremap <buffer>[plug]c           :<C-U>Unite rails/config<CR>
-  nnoremap <buffer>[plug]j           :<C-U>Unite rails/javascript<CR>
-  nnoremap <buffer>[plug]a           :<C-U>Unite rails/stylesheet<CR>
-  nnoremap <buffer>[plug]s           :<C-U>Unite rails/spec<CR>
-  nnoremap <buffer>[plug]i           :<C-U>Unite rails/db -input=migrate<CR>
-  nnoremap <buffer>[plug]f           :<C-U>Unite rails/db -input=fixtures<CR>
-  nnoremap <buffer>[plug]m           :<C-U>Unite rails/mailer<CR>
-  nnoremap <buffer>[plug]l           :<C-U>Unite rails/lib<CR>
-  nnoremap <buffer>[plug]p           :<C-U>call <SID>unite_git_root('/public')<CR>
-  nnoremap <buffer><expr>[plug]g     ':e '.b:rails_root.'/Gemfile<CR>'
-  nnoremap <buffer><expr>[plug]r     ':e '.b:rails_root.'/config/routes.rb<CR>'
-  nnoremap <buffer>[plug]h           :<C-U>Unite rails/heroku<CR>
-  " nnoremap <buffer><expr>[plug]se    ':e '.b:rails_root.'/db/seeds.rb<CR>'
-  function! s:rails_public(path)
-    let path = b:git_dir . '/' . a:path
-    let current_dir
-    lcd path
-    execute 'Unite file_rec:'.path
-  endfunction
+  nnoremap <buffer>[plug]c           :<C-U>UniteGit config<CR>
+  nnoremap <buffer>[plug]j           :<C-U>UniteGit app/assets/javascripts<CR>
+  nnoremap <buffer>[plug]a           :<C-U>UniteGit app/assets/stylesheets<CR>
+  nnoremap <buffer>[plug]s           :<C-U>UniteGit spec<CR>
+  nnoremap <buffer>[plug]d           :<C-U>UniteGit db<CR>
+  nnoremap <buffer>[plug]i           :<C-U>UniteGit db/migrate<CR>
+  nnoremap <buffer>[plug]f           :<C-U>UniteGit db/fixtures<CR>
+  nnoremap <buffer>[plug]m           :<C-U>UniteGit app/mailers<CR>
+  nnoremap <buffer>[plug]l           :<C-U>UniteGit lib<CR>
+  nnoremap <buffer>[plug]p           :<C-U>UniteGit public<CR>
+  nnoremap <buffer>[plug]g           :<C-U>UniteGit Gemfile<CR>
+  nnoremap <buffer>[plug]r           :<C-U>UniteGit config/routes.rb<CR>
+  nnoremap <buffer>[plug]h           :<C-U>UniteGit rails/heroku<CR>
 endfunction
 
 function! s:do_rails_autocmd() 
@@ -3159,14 +3167,31 @@ nnoremap <silent>g#             :<C-U>call <SID>unite_with_same_syntax('Unite -b
 cnoremap <expr><silent><C-g>     (getcmdtype() == '/') ?  "\<ESC>:Unite -buffer-name=search line -input=".getcmdline()."\<CR>" : "\<C-g>"
 nnoremap [unite]f                :<C-U>Unite -buffer-name=file file_rec:
 nnoremap <silent>[unite]<C-F>    :<C-U>call <SID>unite_git_root()<CR>
-function! s:unite_git_root(...) 
+function! s:unite_git_root(...) "{{{
   let git_root = s:current_git()
   let path = empty(a:000) ? '' : a:1
-  let relative_path = git_root . path
+  let absolute_path = s:directory_delimiter_complete(git_root) . path
 
-  execute "Unite -buffer-name=file file_rec:".relative_path
-  lcd `=relative_path`
-endfunction
+  if isdirectory(absolute_path)
+    execute "Unite -buffer-name=file file_rec/async:".absolute_path
+    lcd `=absolute_path`
+    file `='*unite* - ' . path`
+  elseif filereadable(absolute_path)
+    edit `=absolute_path`
+  else
+    echomsg path . ' is not exists!'
+  endif
+endfunction"}}}
+function! s:unite_git_complete(arg_lead, cmd_line, cursor_pos) "{{{
+  let git_root = s:directory_delimiter_complete(s:current_git())
+  let files = globpath(git_root, a:arg_lead . '*')
+  let file_list = split(files, '\n')
+  let file_list = map(file_list, 's:directory_delimiter_complete(v:val)')
+  let file_list = map(file_list, "substitute(v:val, git_root, '', 'g')")
+
+  return file_list
+endfunction "}}}
+command! -nargs=? -complete=customlist,s:unite_git_complete UniteGit call <SID>unite_git_root(<f-args>)
 
 nnoremap <silent>[unite]:        :<C-U>Unite -buffer-name=history_command -no-empty history/command<CR>
 nnoremap <silent>[unite]h        :<C-U>Unite help -no-quit -buffer-name=help<CR>
@@ -3272,7 +3297,7 @@ function! bundle.hooks.on_source(bundle) "{{{
     endif
   endfunction 
   function! s:unite_kuso_hooks.file_mru() 
-    syntax match uniteSource__FileMru_Dir  /.*\// containedin=uniteSource__FileMru contains=uniteSource__FileMru_Time,uniteCandidateInputKeyword nextgroup=uniteSource__FileMru_Dir
+    syntax match uniteSource__FileMru_Dir /.*\// containedin=uniteSource__FileMru contains=uniteSource__FileMru_Time,uniteCandidateInputKeyword nextgroup=uniteSource__FileMru_Dir
 
     highlight link uniteSource__FileMru_Dir Directory
     highlight link uniteSource__FileMru_Time Comment
@@ -3306,6 +3331,8 @@ function! bundle.hooks.on_source(bundle) "{{{
   endfunction
 
   call unite#custom_source('line', 'max_candidates', 5000)
+  call unite#custom_source('file_rec', 'max_candidates', 5000)
+  call unite#custom_source('file_rec/async', 'max_candidates', 5000)
   call unite#custom_source('giti/log', 'max_candidates', 5000)
   let g:giti_log_default_line_count = 500
   call unite#custom_source('giti/branch_all', 'max_candidates', 5000)
@@ -3484,16 +3511,23 @@ command! Clean call <SID>clear_memory()
 
 " ----------------------------------------
 " for lang-8"{{{
-function! s:set_lang8_settings() "{{{
+function! s:do_lang8_autocmd() "{{{
   let pwd = getcwd()
   if pwd =~ 'lang-8'
-    let g:syntastic_ruby_checkers = ['mri', 'rubocop']
-  else
-    let g:syntastic_ruby_checkers = ['mri']
+    call s:lang8_settings()
   endif
 endfunction"}}}
+function! s:lang8_settings()
+  let g:syntastic_ruby_checkers = ['mri', 'rubocop']
+
+  nnoremap <buffer>[plug]c           :<C-U>UniteGit config<CR>
+  nnoremap <buffer>[plug]j           :<C-U>UniteGit public/static/javascripts<CR>
+  nnoremap <buffer>[plug]a           :<C-U>UniteGit public/static/sass<CR>
+  nnoremap <buffer>[plug]m           :<C-U>UniteGit app/models/mailer<CR>
+endfunction
 augroup MyAutoCmd
-  autocmd BufEnter,FileType ruby call <SID>set_lang8_settings()
+  autocmd User Rails call <SID>do_lang8_autocmd()
+  autocmd FileType ruby let g:syntastic_ruby_checkers = ['mri']
 augroup END
 command! -nargs=? L8SendPullRequest call alpaca#function#send_pullrequest(<args>)
 "}}}
