@@ -606,6 +606,7 @@ NeoBundleLazy 'tacroe/unite-mark', {
       \ 'autoload': {
       \   'unite_sources' : 'mark'
       \ }}
+NeoBundle 'taichouchou2/unite-converter'
 NeoBundleLazy 'ujihisa/unite-colorscheme', {
       \ 'autoload': {
       \   'unite_sources': 'colorscheme'
@@ -717,6 +718,8 @@ NeoBundleLazy 'DirDiff.vim', { 'autoload' : {
 NeoBundleLazy 'repeat.vim', { 'autoload' : {
       \ 'mappings' : '.',
       \ }}
+NeoBundle 'jiangmiao/auto-pairs' 
+
 " NeoBundleLazy 'vim-scripts/LanguageTool', {
 "       \ 'depends': 'taichouchou2/language-tool-mirror',
 "       \ 'build' : {
@@ -897,8 +900,16 @@ NeoBundleLazy 'skwp/vim-rspec', {
       \   'unix': 'gem install hpricot'
       \ },
       \ 'autoload': { 
-      \   'filetypes': "ruby.rspec",
-      \   'commands' : 'RunSpec',
+      \   'filetypes': ['ruby.rspec', 'ruby'],
+      \   'commands' : ['RunSpec'],
+      \ }}
+NeoBundleLazy 'taichouchou2/neorspec.vim', {
+      \ 'depends' : 'taichouchou2/vim-rails',
+      \ 'autoload' : {
+      \   'commands' : ['RSpec', 'RSpecAll', 'RSpecCurrent', 'RSpecNearest', 'RSpecRetry']
+      \ }}
+NeoBundleLazy 'tpope/vim-dispatch', { 'autoload' : {
+      \ 'commands' : ['Dispatch', 'FocusDispatch', 'Start']
       \ }}
 NeoBundleLazy 'taka84u9/vim-ref-ri', {
       \ 'depends': ['Shougo/unite.vim', 'thinca/vim-ref'],
@@ -1707,6 +1718,7 @@ unlet bundle
 
 "----------------------------------------
 let bundle = NeoBundleGet("zencoding-vim")
+imap <C-E> <C-Y>,<Space>
 function bundle.hooks.on_source(bundle) "{{{
   let g:user_zen_complete_tag = 1
   let g:user_zen_expandabbr_key = '<C-E>'
@@ -1988,7 +2000,7 @@ noremap <silent><C-_>c :TComment<CR>
 "------------------------------------
 " vim-rails
 "------------------------------------
-"
+""{{{
 "有効化
 " let g:rails_ctags_arguments = ''
 " let g:rails_ctags_arguments='--languages=-javascript'
@@ -2021,9 +2033,8 @@ function! s:set_up_rails_setting()
   execute 'set dict+=~/.vim/dict/' . dict_name . '.dict'
 endfunction
 
-function! s:unite_rails_setting() "Unite-rails.vim 
+function! s:unite_rails_setting()
   call s:do_rails_autocmd()
-  call <SID>set_up_rails_setting()
   nnoremap <buffer>[plug]            :<C-U>UniteGit app/models<CR>
   nnoremap <buffer>[plug]<C-H>       :<C-U>UniteGit app/controllers<CR>
   nnoremap <buffer>[plug]<C-H><C-H>  :<C-U>UniteGit app/views<CR>
@@ -2041,6 +2052,11 @@ function! s:unite_rails_setting() "Unite-rails.vim
   nnoremap <buffer>[plug]g           :<C-U>UniteGit Gemfile<CR>
   nnoremap <buffer>[plug]r           :<C-U>UniteGit config/routes.rb<CR>
   nnoremap <buffer>[plug]h           :<C-U>UniteGit rails/heroku<CR>
+
+  nnoremap <buffer><silent>,cr  :<C-U>RSpecCurrent<CR>
+  nnoremap <buffer><silent>,nr :<C-U>RSpecNearest<CR>
+  nnoremap <buffer><silent>,lr :<C-U>RSpecRetry<CR>
+  nnoremap <buffer><silent>,ar :<C-U>RSpecAll<CR>
 endfunction
 
 function! s:do_rails_autocmd() 
@@ -2086,15 +2102,13 @@ aug RailsDictSetting
   " autocmd User Rails/config/initializes    let b:file_type_name="ruby.initializes"
   " autocmd User Rails/config/environments/* let b:file_type_name="ruby.environments"
 aug END
-
+"}}}
 
 "------------------------------------
 " vim-rspec
 "------------------------------------
 let g:RspecKeymap=0
 function! s:rspec_settings() "{{{
-  nnoremap <buffer>,r :RunSpec<CR>
-  nnoremap <buffer>,lr :RunSpecLine<CR>
   setl foldmethod=syntax
   setl foldlevel=2
   setl foldlevelstart=1
@@ -2106,7 +2120,10 @@ function! s:rspec_settings() "{{{
     autocmd FileType RSpecOutput setl nofoldenable
   augroup END
 endfunction "}}}
-au FileType ruby.rspec call s:rspec_settings()
+
+augroup MyAutoCmd
+  autocmd FileType ruby.rspec call <SID>rspec_settings()
+augroup END
 
 "------------------------------------
 " gist.vim
@@ -3102,7 +3119,7 @@ function! bundle.hooks.on_source(bundle) "{{{
   let g:vimfiler_tree_leaf_icon = " "
   let g:vimfiler_tree_opened_icon = "▾"
   let g:vimfiler_marked_file_icon = "✓"
-  
+  let g:vimfiler_ignore_pattern = '\.git'
 
   function! s:vimfiler_is_active() 
     return exists('b:vimfiler')
@@ -3119,10 +3136,10 @@ function! bundle.hooks.on_source(bundle) "{{{
     nnoremap <buffer><expr>p vimfiler#do_action('preview')
     nnoremap <buffer>v v
   endfunction
-  aug VimFilerKeyMapping 
-    au!
-    au FileType vimfiler call <SID>vimfiler_local()
-  aug END 
+  augroup VimFilerKeyMapping 
+    autocmd!
+    autocmd FileType vimfiler call <SID>vimfiler_local()
+  augroup END 
 endfunction"}}}
 unlet bundle
 "}}}
@@ -3515,10 +3532,13 @@ function! s:do_lang8_autocmd() "{{{
   let pwd = getcwd()
   if pwd =~ 'lang-8'
     call s:lang8_settings()
+  else
+    let g:rspec_command = 'Dispatch rspec {spec}'
   endif
 endfunction"}}}
 function! s:lang8_settings()
   let g:syntastic_ruby_checkers = ['mri', 'rubocop']
+  let g:rspec_command = 'Dispatch spec {spec}'
 
   nnoremap <buffer>[plug]c           :<C-U>UniteGit config<CR>
   nnoremap <buffer>[plug]j           :<C-U>UniteGit public/static/javascripts<CR>
