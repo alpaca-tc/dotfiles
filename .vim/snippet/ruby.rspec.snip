@@ -52,14 +52,14 @@ options     word
   pending '${1}'
 
 snippet     behave
-abbr        it_should_behave_like "..."
+abbr        it_should_behave_like '...'
 options     word
-  it_should_behave_like "${1:name}"
+  it_should_behave_like '${1:name}'
 
 snippet     behaves
-abbr        it_behaves_like "..."
+abbr        it_behaves_like '...'
 options     word
-  it_behaves_like "${1:name}"
+  it_behaves_like '${1:name}'
 
 snippet     let
 abbr        let(:name) {}
@@ -269,4 +269,14 @@ abbr        slow: true
 options     word
   slow: true
 #}}}
+
+snippet     when
+abbr        context 'when'
+options     word
+  context 'when ${1}'
+
+snippet     given
+abbr        context 'given'
+options     word
+  context 'given ${1}'
 #}}}
