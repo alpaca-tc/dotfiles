@@ -59,7 +59,7 @@ function! s:current_git()
     return s:git_root_cache[current_dir]
   endif
 
-  let git_root = system("git rev-parse --show-toplevel")
+  let git_root = system('git rev-parse --show-toplevel')
   if git_root =~ "fatal: Not a git repository"
     " throw "No a git repository."
     return ""
@@ -204,17 +204,18 @@ let g:my.bin = {
       \ }
 
 let g:my.dir = {
-      \ "neobundle"    : expand('~/.bundle'),
-      \ "ctrlp"     : expand('~/.vim.trash/ctrlp'),
-      \ "memolist"  : expand('~/.memolist'),
-      \ "snippets"  : expand('~/.vim/snippet'),
-      \ "swap_dir"  : expand('~/.vim.trash/vimswap'),
-      \ "trash_dir" : expand('~/.vim.trash/'),
-      \ "unite"     : expand('~/.vim.trash/unite'),
-      \ "vimref"    : expand('~/.vim.trash/vim-ref'),
-      \ "vimfiler"  : expand('~/.vim.trash/vimfiler'),
-      \ "vimshell"  : expand('~/.vim.trash/vimshell'),
-      \ "neocomplete"  : expand('~/.vim.trash/neocomplete'),
+      \ 'neobundle'    : expand('~/.bundle'),
+      \ 'ctrlp'     : expand('~/.vim.trash/ctrlp'),
+      \ 'memolist'  : expand('~/.memolist'),
+      \ 'snippets'  : expand('~/.vim/snippet'),
+      \ 'swap_dir'  : expand('~/.vim.trash/vimswap'),
+      \ 'trash_dir' : expand('~/.vim.trash/'),
+      \ 'unite'     : expand('~/.vim.trash/unite'),
+      \ 'vimref'    : expand('~/.vim.trash/vim-ref'),
+      \ 'vimfiler'  : expand('~/.vim.trash/vimfiler'),
+      \ 'vimshell'  : expand('~/.vim.trash/vimshell'),
+      \ 'neocomplete' : expand('~/.vim.trash/neocomplete'),
+      \ 'vim-session' : expand('~/.vim.trash/vimsession'),
       \ }
 
 " other settings
@@ -3549,9 +3550,78 @@ augroup END
 command! -nargs=? L8SendPullRequest call alpaca#function#send_pullrequest(<args>)
 "}}}
 
+" ----------------------------------------
+" session"{{{
+function! s:session_path() "{{{
+  if !empty(s:current_git())
+    return s:current_git() . '/.git/.vimsession'
+  else
+    return ''
+  endif
+endfunction"}}}
+function! s:load_session() "{{{
+  if filereadable(s:session_path())
+    echomsg 'Load session ' . s:session_path()
+    source `=s:session_path()`
+    call system('rm ' . s:session_path())
+  else
+    echomsg 'No session'
+  endif
+endfunction"}}}
+function! s:save_session() "{{{
+  if !empty(s:session_path())
+    if !filereadable(s:session_path()) || input('Overwrite ' . s:session_path() . '? y/n ') =~ 'y'
+      redraw 
+      echomsg 'Save session ' . s:session_path()
+      mksession! `=s:session_path()`
+    endif
+  endif
+endfunction"}}}
+command! -nargs=0 Load call s:load_session()
+command! -nargs=0 Save call s:save_session()
+"}}}
+
+" ----------------------------------------
+" Git
+if has('ruby')
+  function! s:git_work_info() "{{{
+    let since = input('Since: ', alpaca#function#today())
+    let until = input('Until: ', alpaca#function#today())
+    let author = input('Author: ', 'alpaca_taichou') 
+    let result = system("git log --since=".since." --until=".until." --author='".author."' --oneline --shortstat --no-merges | grep 'deletions(-)'")
+    redraw
+    if empty(result)
+      echomsg 'Nothing'
+      return 
+    endif
+
+    ruby << EOF
+    git_result = VIM.evaluate('result')
+    result = { :insertions => 0, :deletions => 0 }
+    git_result.split(/\n/).each do |line|
+      if line.match /^\s*(\d+) files changed, (\d+) insertions\(\+\), (\d+) deletions\(-\)\s*$/
+        result[:insertions] += $2.to_i
+        result[:deletions] += $3.to_i
+      end
+    end
+
+    puts "insertions: #{result[:insertions]}"
+    puts "deletions : #{result[:deletions]}"
+    puts "real      : #{result[:insertions] - result[:deletions]}"
+EOF
+    " echomsg 'Add :'.append . ', Remove: '. remove . ', Real: ' . append - remove 
+  endfunction"}}}
+  command! Contribution call s:git_work_info()
+endif
+
 if !has('vim_starting')
   " Call on_source hook when reloading .vimrc.
   call neobundle#call_hook('on_source')
+else
+  augroup SessionLoad
+    autocmd!
+    autocmd VimEnter * Load
+  augroup END
 endif
 
 set secure
