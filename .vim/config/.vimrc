@@ -188,7 +188,7 @@ let s:is_unix    = has('unix')
 let g:my.info = {
       \ "author": 'Ishii Hiroyuki',
       \ "email": 'alprhcp666@gmail.com',
-      \ "github" : "taichouchou2",
+      \ "github" : "alpaca-tc",
       \ "lingr" : 'alpaca_taichou'
       \ }
 
@@ -309,7 +309,7 @@ NeoBundle 'Shougo/vimproc', {
 " An awesome improvement to the Vim status bar.
 if has('python')
   " NeoBundle 'Lokaltog/powerline'
-  NeoBundle 'taichouchou2/powerline', {
+  NeoBundle 'alpaca-tc/powerline', {
         \ 'name': 'powerline',
         \ 'branch': 'develop',
         \ 'directory': 'powerline',
@@ -319,7 +319,7 @@ if has('python')
 endif
 
 " An awesome improvement to the Vim tabline.
-" NeoBundle 'taichouchou2/alpaca_powertabline'
+" NeoBundle 'alpaca-tc/alpaca_powertabline'
 
 " WebAPI utils
 NeoBundleLazy 'mattn/webapi-vim', {
@@ -444,18 +444,18 @@ NeoBundleLazy 'Shougo/vimshell', {
 
 " commands
 " Removing dust.
-NeoBundleLazy 'taichouchou2/alpaca_remove_dust.vim', {
+NeoBundleLazy 'alpaca-tc/alpaca_remove_dust.vim', {
       \ 'autoload': {
-      \   'commands': ['RemoveDustDisable', 'RemoveDustEnable', 'RemoveDust']
+      \   'commands': ['RemoveDustDisable', 'RemoveDustEnable', 'RemoveDust', 'RemoveDustForce']
       \ }}
 " Asynchronous updating tags
-NeoBundleLazy 'taichouchou2/alpaca_tags', {
+NeoBundleLazy 'alpaca-tc/alpaca_tags', {
       \ 'depends': 'Shougo/vimproc',
       \ 'autoload' : {
       \   'commands': ['AlpacaTagsUpdate', 'AlpacaTagsSet', 'AlpacaTagsBundle']
       \ }}
 " window系script
-NeoBundleLazy 'taichouchou2/alpaca_window.vim', {
+NeoBundleLazy 'alpaca-tc/alpaca_window.vim', {
       \ 'autoload': {
       \   'mappings' : [
       \     '<Plug>(alpaca_window_new)', '<Plug>(alpaca_window_smart_new)',
@@ -606,7 +606,7 @@ NeoBundleLazy 'tacroe/unite-mark', {
       \ 'autoload': {
       \   'unite_sources' : 'mark'
       \ }}
-NeoBundle 'taichouchou2/unite-converter'
+" NeoBundle 'alpaca-tc/unite-converter'
 NeoBundleLazy 'ujihisa/unite-colorscheme', {
       \ 'autoload': {
       \   'unite_sources': 'colorscheme'
@@ -667,7 +667,7 @@ NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
       \ }
       \ }}
 if has("ruby")
-  NeoBundleLazy 'taichouchou2/alpaca_english', {
+  NeoBundleLazy 'alpaca-tc/alpaca_english', {
         \ 'build' : {
         \   "mac" : "bundle",
         \   "unix" : "bundle",
@@ -679,7 +679,7 @@ if has("ruby")
         \ }
         \ }
   " l8のバイトの金額求める
-  NeoBundle 'taichouchou2/snail_csv2google_sheet', { 'autoload': {
+  NeoBundle 'alpaca-tc/snail_csv2google_sheet', { 'autoload': {
         \ 'commands' : [],
         \ }}
 endif
@@ -706,7 +706,7 @@ NeoBundleLazy 'airblade/vim-gitgutter', {
       \     'GitGutterDisable', 'GitGutterEnable', 'GitGutterToggle', 'GitGutter',
       \     'GitGutterAll', 'GitGutterNextHunk', 'GitGutterPrevHunk', ''
       \ ]}}
-NeoBundleLazy 'taichouchou2/yanktmp.vim', { 'autoload': {
+NeoBundleLazy 'alpaca-tc/yanktmp.vim', { 'autoload': {
       \ 'function_prefix': "yanktmp",
       \ }}
 NeoBundleLazy 'HybridText', { 'autoload' : {
@@ -721,7 +721,7 @@ NeoBundleLazy 'repeat.vim', { 'autoload' : {
 NeoBundle 'jiangmiao/auto-pairs'
 
 " NeoBundleLazy 'vim-scripts/LanguageTool', {
-"       \ 'depends': 'taichouchou2/language-tool-mirror',
+"       \ 'depends': 'alpaca-tc/language-tool-mirror',
 "       \ 'build' : {
 "       \   'mac' : 'brew install languagetool'
 "       \ },
@@ -735,11 +735,11 @@ NeoBundle 'terryma/vim-multiple-cursors'
 
 " リポジトリをクローンするのみ
 NeoBundleFetch 'github/gitignore'
-NeoBundleFetch 'taichouchou2/rsense-0.3', {
-      \ 'build' : {
-      \    'mac': 'ruby etc/config.rb > ~/.rsense',
-      \    'unix': 'ruby etc/config.rb > ~/.rsense',
-      \ } }
+" NeoBundleFetch 'alpaca-tc/rsense-0.3', {
+"       \ 'build' : {
+"       \    'mac': 'ruby etc/config.rb > ~/.rsense',
+"       \    'unix': 'ruby etc/config.rb > ~/.rsense',
+"       \ } }
 " Generating Ricty Font.
 let g:ricty_generate_command = join([
       \   'sh ricty_generator.sh',
@@ -749,7 +749,7 @@ let g:ricty_generate_command = join([
       \ ], ' ')
 
 NeoBundleFetch 'yascentur/Ricty', {
-      \ 'depends' : 'taichouchou2/alpaca',
+      \ 'depends' : 'alpaca-tc/alpaca',
       \ 'autoload' : {
       \   'build' : {
       \     'mac'  : g:ricty_generate_command,
@@ -773,7 +773,7 @@ NeoBundleLazy 'vim-less', {
 
 " html
 " ----------------------------------------
-NeoBundleLazy 'taichouchou2/html5.vim', { 'autoload' : {
+NeoBundleLazy 'alpaca-tc/html5.vim', { 'autoload' : {
       \   'filetypes' : g:my.ft.markup_files,
       \   'functions' : ['HtmlIndentGet']
       \ }}
@@ -832,7 +832,7 @@ NeoBundleLazy 'tpope/vim-markdown', { 'autoload' : {
 
 "  php
 " ----------------------------------------
-NeoBundleLazy 'taichouchou2/alpaca_wordpress.vim', { 'autoload' : {
+NeoBundleLazy 'alpaca-tc/alpaca_wordpress.vim', { 'autoload' : {
       \ 'filetypes': 'php' }}
 
 "  binary
@@ -847,21 +847,21 @@ NeoBundleLazy 'Shougo/vinarise', {
 
 " eclim
 " ----------------------------------------
-NeoBundleLazy 'taichouchou2/eclim', { 'autoload' : {
+NeoBundleLazy 'alpaca-tc/eclim', { 'autoload' : {
       \ 'commands' : ['ProjectCreate', 'PingEclim'],
       \ 'function_prefix': 'eclim'
       \ }}
 
 " ruby
 " ----------------------------------------
-NeoBundle 'taichouchou2/vim-rails', { 'autoload' : {
+NeoBundle 'tpope/vim-rails', { 'autoload' : {
       \ 'filetypes' : g:my.ft.ruby_files }}
-NeoBundleLazy 'taichouchou2/vim-endwise.git', {
+NeoBundleLazy 'alpaca-tc/vim-endwise.git', {
       \ 'autoload' : {
       \   'insert' : 1,
       \ }}
-NeoBundleLazy 'vim-ruby/vim-ruby', { 'autoload' : {
-      \ 'filetypes': ['ruby'] } }
+" NeoBundleLazy 'vim-ruby/vim-ruby', { 'autoload' : {
+"       \ 'filetypes': ['ruby'] } }
 
 " rails
 NeoBundleLazy 'basyura/unite-rails', {
@@ -876,7 +876,7 @@ NeoBundleLazy 'basyura/unite-rails', {
       \     'rails/stylesheet', 'rails/view'
       \   ]
       \ }}
-NeoBundleLazy 'taichouchou2/unite-rails_best_practices', {
+NeoBundleLazy 'alpaca-tc/unite-rails_best_practices', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'build' : {
       \    'mac': 'gem install rails_best_practices',
@@ -885,36 +885,33 @@ NeoBundleLazy 'taichouchou2/unite-rails_best_practices', {
       \ 'autoload': {
       \   'unite_sources': 'rails_best_practices'
       \ }}
-NeoBundleLazy 'taichouchou2/alpaca_complete', {
-      \ 'depends' : 'taichouchou2/vim-rails',
-      \ 'build' : {
-      \    'mac':  'gem install alpaca_complete',
-      \    'unix': 'gem install alpaca_complete',
-      \   }
-      \ }
+" NeoBundleLazy 'alpaca-tc/alpaca_complete', {
+"       \ 'depends' : 'alpaca-tc/vim-rails',
+"       \ 'build' : {
+"       \    'mac':  'gem install alpaca_complete',
+"       \    'unix': 'gem install alpaca_complete',
+"       \   }
+"       \ }
 
 " ruby全般
-NeoBundleLazy 'skwp/vim-rspec', {
-      \ 'build': {
-      \   'mac': 'gem install hpricot',
-      \   'unix': 'gem install hpricot'
-      \ },
-      \ 'autoload': {
-      \   'filetypes': ['ruby.rspec', 'ruby'],
-      \   'commands' : ['RunSpec'],
-      \ }}
-NeoBundleLazy 'taichouchou2/neorspec.vim', {
-      \ 'depends' : 'taichouchou2/vim-rails',
+" NeoBundleLazy 'skwp/vim-rspec', {
+"       \ 'build': {
+"       \   'mac': 'gem install hpricot',
+"       \   'unix': 'gem install hpricot'
+"       \ },
+"       \ 'autoload': {
+"       \   'filetypes': ['ruby.rspec', 'ruby'],
+"       \   'commands' : ['RunSpec'],
+"       \ }}
+NeoBundleLazy 'alpaca-tc/neorspec.vim', {
+      \ 'depends' : ['alpaca-tc/vim-rails', 'tpope/vim-dispatch'],
       \ 'autoload' : {
       \   'commands' : ['RSpec', 'RSpecAll', 'RSpecCurrent', 'RSpecNearest', 'RSpecRetry']
-      \ }}
-NeoBundleLazy 'tpope/vim-dispatch', { 'autoload' : {
-      \ 'commands' : ['Dispatch', 'FocusDispatch', 'Start']
       \ }}
 NeoBundleLazy 'taka84u9/vim-ref-ri', {
       \ 'depends': ['Shougo/unite.vim', 'thinca/vim-ref'],
       \ 'autoload': { 'filetypes': g:my.ft.ruby_files } }
-NeoBundleLazy 'taichouchou2/unite-reek', {
+NeoBundleLazy 'alpaca-tc/unite-reek', {
       \ 'build' : {
       \   'mac': 'gem install reek',
       \   'unix': 'gem install reek',
@@ -923,27 +920,13 @@ NeoBundleLazy 'taichouchou2/unite-reek', {
       \   'unite_sources': 'reek',
       \ },
       \ 'depends' : 'Shougo/unite.vim' }
-" NeoBundleLazy 'taichouchou2/vim-rsense', {
-"       \ 'depends': 'Shougo/neocomplete',
-"       \ 'autoload' : {
-"       \   'filetypes' : 'ruby'
-"       \ }
-"       \ }
-" NeoBundle 'Shougo/neocomplcache-rsense.vim', {
-"       \ 'autoload' : {
-"       \   'filetype' : ['ruby']
-"       \ }}
-" NeoBundleLazy 'rhysd/unite-ruby-require.vim', { 'autoload': {
-"       \ 'filetypes': g:my.ft.ruby_files }}
 " NeoBundleLazy 'rhysd/vim-textobj-ruby', { 'depends': 'kana/vim-textobj-user' }
-
 " NeoBundleLazy 'deris/vim-textobj-enclosedsyntax', { 'autoload': {
 "       \ 'filetypes': g:my.ft.ruby_files}}
 " NeoBundleLazy 'rhysd/neco-ruby-keyword-args', { 'autoload': {
 "       \ 'filetypes': g:my.ft.ruby_files }}
 " NeoBundleLazy 'tpope/vim-cucumber', { 'autoload': {
 "       \ 'filetypes': g:my.ft.ruby_files }}
-
 NeoBundleLazy "depuracao/vim-rdoc", { "autoload" : {
       \   "filetypes" : "rdoc"
       \ }}
@@ -973,14 +956,14 @@ endif
 
 " scala
 " ----------------------------------------
-" NeoBundleLazy 'taichouchou2/vim-scala', { 'autoload': {
+" NeoBundleLazy 'alpaca-tc/vim-scala', { 'autoload': {
 "       \ 'filetypes' : g:my.ft.scala_files }}
 NeoBundleLazy 'andreypopp/ensime', { 'autoload' : {
       \ 'filetypes' : g:my.ft.scala_files }}
 " NeoBundleLazy 'aemoncannon/ensime', {
 "       \ "branch" : "scala-2.9",
 "       \ 'autoload' : { 'filetypes' : g:my.ft.scala_files }}
-" NeoBundleLazy 'taichouchou2/vimside', {
+" NeoBundleLazy 'alpaca-tc/vimside', {
 "       \ 'depends': [
 "       \   'megaannum/self', 'megaannum/forms',
 "       \   'Shougo/vimproc', 'Shougo/vimshell',
@@ -1429,12 +1412,12 @@ if v:version < 703 || (v:version == 7.3 && !has('patch336'))
 endif
 
 " 超絶便利
-aug AlpacaUpdateTags
+augroup AlpacaUpdateTags
   au!
   " au FileWritePost,BufWritePost * AlpacaTagsUpdate -style
   au FileWritePost,BufWritePost Gemfile AlpacaTagsBundle -style
   au FileReadPost,BufEnter * AlpacaTagsSet
-aug END
+augroup END
 
 "tags_jumpを使い易くする
 nnoremap [tag_or_tab]t  <C-]>
@@ -2018,7 +2001,6 @@ let g:rails_url='http://localhost:3000'
 function! s:set_up_rails_setting()
   nnoremap <Space>r :R<CR>
   nnoremap <Space>a :A<CR>
-  nnoremap <Space>p :Rpreview<CR>
 
   let buf = rails#buffer()
   let type_name = buf.calculate_file_type()
@@ -2080,7 +2062,7 @@ function! s:do_rails_autocmd()
     execute "silent doautocmd User Rails" . path
   endif
 endfunction
-aug RailsDictSetting
+augroup RailsDictSetting
   autocmd!
   " 別の関数に移そうか..
   autocmd User Rails call <SID>unite_rails_setting()
@@ -2091,18 +2073,19 @@ aug RailsDictSetting
   autocmd User Rails/config/environment.rb NeoSnippetSource ~/.vim/snippet/ruby.rails.environment.snip
   autocmd User Rails/config/routes.rb      NeoSnippetSource ~/.vim/snippet/ruby.rails.routes.snip
   autocmd User Rails/spec/controllers/*    NeoSnippetSource ~/.vim/snippet/ruby.rspec.controller.snip
-  autocmd User Rails/spec/models/*    NeoSnippetSource ~/.vim/snippet/ruby.rspec.controller.snip
+  autocmd User Rails/spec/models/*         NeoSnippetSource ~/.vim/snippet/ruby.rspec.controller.snip
+  autocmd User Rails/spec/features/*       NeoSnippetSource ~/.vim/snippet/ruby.capybara.snip
   " autocmd User Rails/spec/views/*    NeoSnippetSource ~/.vim/snippet/ruby.rspec.controller.snip
   " autocmd User Rails/spec/features/*    NeoSnippetSource ~/.vim/snippet/ruby.rspec.controller.snip
   " autocmd User Rails/spec/routes/*    NeoSnippetSource ~/.vim/snippet/ruby.rspec.controller.snip
 
-  autocmd User Rails autocmd BufWrite <buffer> AlpacaTagsUpdate
+  autocmd User Rails autocmd BufWrite      <buffer> AlpacaTagsUpdate
   " autocmd User Rails/config/database.rb    let b:file_type_name="ruby.database"
   " autocmd User Rails/config/boot.rb        let b:file_type_name="ruby.boot"
   " autocmd User Rails/config/locales/*      let b:file_type_name="ruby.locales"
   " autocmd User Rails/config/initializes    let b:file_type_name="ruby.initializes"
   " autocmd User Rails/config/environments/* let b:file_type_name="ruby.environments"
-aug END
+augroup END
 "}}}
 
 "------------------------------------
@@ -2670,7 +2653,7 @@ let s:switch_define = {
       \   ['^f', 'fixup '],
       \   ['^e', 'exec '],
       \ ],
-      \ "rspec": [
+      \ 'rspec': [
       \   ["describe", "context", "specific", "example"],
       \   ['before', 'after'],
       \   ['be_true', 'be_false'],
@@ -3160,6 +3143,7 @@ unlet bundle
 "----------------------------------------
 " neosnippet
 nnoremap <silent><Space>e         :<C-U>NeoSnippetEdit -split<CR>
+nnoremap <Space>ns        :<C-U>NeoSnippetSource ~/.vim/snippet
 nnoremap <silent><Space><Space>e  :<C-U>Unite neosnippet/user neosnippet/runtime<CR>
 
 let bundle = NeoBundleGet('neosnippet')
@@ -3305,8 +3289,8 @@ function! bundle.hooks.on_source(bundle) "{{{
     highlight link uniteMarkedLine Identifier
     highlight link uniteCandidateInputKeyword Statement
 
-    inoremap <silent><buffer><C-J> <Plug>(unite_loop_cursor_down)
-    inoremap <silent><buffer><C-K> <Plug>(unite_loop_cursor_up)
+    " inoremap <silent><buffer><C-J> <Plug>(unite_loop_cursor_down)
+    " inoremap <silent><buffer><C-K> <Plug>(unite_loop_cursor_up)
     nmap     <silent><buffer>f <Plug>(unite_toggle_mark_current_candidate)
     xmap     <silent><buffer>f <Plug>(unite_toggle_mark_selected_candidates)
     nmap     <silent><buffer><C-H> <Plug>(unite_toggle_transpose_window)
@@ -3451,10 +3435,10 @@ augroup END
 
 "----------------------------------------
 let bundle = NeoBundleGet('vim-ruby')
-function bundle.hooks.on_source(bundle) "{{{
-  let g:rubycomplete_buffer_loading = 1
-  let g:rubycomplete_classes_in_global = 1
-  let g:rubycomplete_rails = 1
+function! bundle.hooks.on_source(bundle) "{{{
+  let g:rubycomplete_buffer_loading = 0
+  let g:rubycomplete_classes_in_global = 0
+  let g:rubycomplete_rails = 0
 endfunction "}}}
 unlet bundle
 "}}}

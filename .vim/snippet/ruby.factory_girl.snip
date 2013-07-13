@@ -1,3 +1,14 @@
+# Factorygirl for rspec#{{{
+snippet     build
+abbr        build(:model_name)
+options     word
+  build(:${1:model_name})
+
+snippet     create
+abbr        create(:model_name)
+options     word
+  create(:${1:model_name})
+##}}}
 
 snippet     association
 abbr        association ..., factory: ...
@@ -168,5 +179,4 @@ options     word
 #}}}
 #FactoryGirl::attribute#{{{
 #}}}
-
 

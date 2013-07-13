@@ -2,6 +2,31 @@ include ~/.vim/snippet/ruby.rspec.snip
 include ~/.vim/snippet/ruby.rspec.rails.snip
 include ~/.vim/snippet/ruby.rails.controller.snip
 
+snippet     get
+abbr        get *opts
+options     word
+  get ${1::controller => :${2\}, :action => :${3\}}
+
+snippet     put
+abbr        put *opts
+options     word
+  put ${1::controller => :${2\}, :action => :${3\}}
+
+snippet     post
+abbr        post *opts
+options     word
+  post ${1::controller => :${2\}, :action => :${3\}}
+
+snippet     delete
+abbr        delete *opts
+options     word
+  delete ${1::controller => :${2\}, :action => :${3\}}
+
+snippet     flash
+abbr        flash[:name].should eql name
+options     word
+  flash[:${1:name}].should ${2:eql} ${3:value}
+
 # RSpec::Rails::Matchers#{{{
 snippet     render_template
 abbr        expect(response).to render_template(template_name)
@@ -38,7 +63,7 @@ options     word
 snippet     controller_do
 abbr        controller do ... end
 options     word
-  controller${1:(ControllerClass)} do 
+  controller${1:(ControllerClass)} do
     def ${2:action_name}
       ${3}
     end

@@ -42,7 +42,7 @@ abbr        subject
 
 snippet     share
 abbr        shared_examples_for
-  shared_examples_for "${1:name}" do
+  shared_examples_for '${1:name}' do
     ${2}
   end
 
@@ -71,7 +71,7 @@ abbr        let!(:name) {}
 
 snippet     reqs
 abbr        require rspec
-  require File.expand_path(File.dirname(__FILE__) + "/../spec_helper")
+  require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 snippet     its
   its(:${1}) { ${2} }
@@ -116,25 +116,25 @@ options     word
 snippet     controller_request
 abbr        controller.request.path_parameters[...].should ...
 options     word
-  controller.request.path_parameters["${1:action|controller}"].should ${2:eq("${3:new\}")}
+  controller.request.path_parameters['${1:action|controller}'].should ${2:eq('${3:new\}')}
 
 snippet     have_tag
 abbr        have_tag(name, attributes={}, &bloc)
 alias       match_tag
 options     word
-  have_tag("${1:selector}", ${2:value})
+  have_tag('${1:selector}', ${2:value})
 
 snippet     assert_have_tag
 abbr        assert_have_tag(name, attributes={}, &bloc)
 alias       assert_have_sselector
 options     word
-  assert_have_tag("${1:selector}", ${2:value})
+  assert_have_tag('${1:selector}', ${2:value})
 
 snippet     have_selector
 abbr        have_selector(name, attributes={}, &block)
 alias       match_selector
 options     word
-  have_selector("${1:selector}", ${2})
+  have_selector('${1:selector}', ${2})
 
 snippet     contain
 abbr        contain(content)
@@ -197,15 +197,15 @@ options     word
   unstub(:${1:method})
 
 snippet     stub_const
-abbr        stub_const("Klass", var) クラスを偽装
+abbr        stub_const('Klass', var) クラスを偽装
 alias       stub_klass
 options     word
-  stub_const("${1:Klass}", ${2:alias})
+  stub_const('${1:Klass}', ${2:alias})
 
 snippet     hide_const
-abbr        hide_const("Klass") クラスを隠す
+abbr        hide_const('Klass') クラスを隠す
 options     word
-  hide_const("${1:Klass}")
+  hide_const('${1:Klass}')
 
 snippet     as_null_object
 abbr        as_null_object
@@ -245,6 +245,21 @@ snippet     should_receive_at_most
 abbr        should_receive(:method).at_most(n).times
 options     word
   should_receive(${1:method}).at_most(${2:n}).times
+
+snippet     .at_most
+abbr        .at_most(n)
+options     word
+  .at_most(${1::once, :twice, n})
+
+snippet     .at_least
+abbr        .at_least(n)
+options     word
+  .at_least(${1::once, :twice, n})
+
+snippet     .ordered
+abbr        .ordered
+options     word
+  .ordered
 #}}}
 
 # filter {{{
