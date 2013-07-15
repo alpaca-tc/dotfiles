@@ -656,10 +656,14 @@ NeoBundleLazy 'basyura/TweetVim', { 'depends' :
       \ }}
 
 " その他 / テスト
+NeoBundle 'alpaca-tc/unite-git-aliases'
 " C# そのうち試す http://d.hatena.ne.jp/thinca/20130522/1369234427
 " NeoBundleLazy 'https://bitbucket.org/abudden/taghighlight', { 'autoload' : {
 "       \   'filetypes' : g:my.ft.program_files
 "       \ }}
+NeoBundleLazy 'alpaca-tc/alpaca_session.vim', { 'autoload' : {
+      \ 'commands' : ['Load', 'Save']
+      \ }}
 NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
       \ 'insert' : 1,
       \ 'filetypes' : g:my.ft.program_files,
@@ -680,8 +684,8 @@ if has("ruby")
         \ }
         \ }
   " l8のバイトの金額求める
-  NeoBundle 'alpaca-tc/snail_csv2google_sheet', { 'autoload': {
-        \ 'commands' : [],
+  NeoBundleLazy 'alpaca-tc/snail_csv2google_sheet', { 'autoload': {
+        \ 'commands' : ['Snail'],
         \ }}
 endif
 
@@ -719,17 +723,11 @@ NeoBundleLazy 'DirDiff.vim', { 'autoload' : {
 NeoBundleLazy 'repeat.vim', { 'autoload' : {
       \ 'mappings' : '.',
       \ }}
-NeoBundle 'jiangmiao/auto-pairs'
-
-" NeoBundleLazy 'vim-scripts/LanguageTool', {
-"       \ 'depends': 'alpaca-tc/language-tool-mirror',
-"       \ 'build' : {
-"       \   'mac' : 'brew install languagetool'
-"       \ },
-"       \ 'autoload': {
-"       \   'commands' : ['LanguageToolCheck', 'LnaguageToolClear']
-"       \ }}
-NeoBundle 'terryma/vim-multiple-cursors'
+NeoBundleLazy 'jiangmiao/auto-pairs', { 'autoload' : {
+      \ 'insert': 1 }}
+NeoBundle 'terryma/vim-multiple-cursors', { 'autload': {
+      \ 'function_prefix': 'multiple_cursors',
+      \ } }
 
 " NeoBundleLazy 'mattn/vdbi-vim', {
 "       \ 'depends': 'mattn/webapi-vim' }
@@ -2035,7 +2033,8 @@ function! s:unite_rails_setting()
   nnoremap <buffer>[plug]p           :<C-U>UniteGit public<CR>
   nnoremap <buffer>[plug]g           :<C-U>UniteGit Gemfile<CR>
   nnoremap <buffer>[plug]r           :<C-U>UniteGit config/routes.rb<CR>
-  nnoremap <buffer>[plug]h           :<C-U>UniteGit rails/heroku<CR>
+  " nnoremap <buffer>[plug]h           :<C-U>UniteGit rails/heroku<CR>
+  nnoremap <buffer>[plug]h           :<C-U>UniteGit app/helpers<CR>
 
   nnoremap <buffer><silent>,cr  :<C-U>RSpecCurrent<CR>
   nnoremap <buffer><silent>,nr :<C-U>RSpecNearest<CR>
@@ -2794,13 +2793,9 @@ let g:alpaca_english_enable_duplicate_candidates=1
 let g:alpaca_english_web_search_url = 'http://eow.alc.co.jp/%s/UTF-8/'
 let g:alpaca_english_web_search_xpath = "div[@id='resultsList']/ul/li"
 
-" ------------------------------------
-" linepower
-" ------------------------------------
-let g:vimshell_force_overwrite_statusline = 1
-let g:vimfiler_force_overwrite_statusline = 1
-let g:vimfiler_force_overwrite_statusline = 1
-let g:unite_force_overwrite_statusline = 0
+" ----------------------------------------
+" vim-multiple-cursors
+nnoremap <C-N> :<C-N>call multiple_cursors#new("n")<CR>
 
 " ----------------------------------------
 " vim-singleton.vim
@@ -3333,7 +3328,7 @@ function! bundle.hooks.on_source(bundle) "{{{
     nnoremap <silent><buffer><expr>rss unite#do_action('reset_soft')
   endfunction
   " command menu
-  let g:unite_source_menu_menus = {}
+  call alpaca#let_g:('unite_source_menu_menus', {})
   let g:unite_source_menu_menus.command = {
         \ 'description' : 'command alias',
         \ }
@@ -3442,44 +3437,35 @@ function! bundle.hooks.on_source(bundle) "{{{
   let g:rubycomplete_rails = 0
 endfunction "}}}
 unlet bundle
-"}}}
 
 "----------------------------------------
 let bundle = NeoBundleGet('eclim')
-function! bundle.hooks.on_source(bundle)
+function! bundle.hooks.on_source(bundle) "{{{
   let g:EclimCompletionMethod = 'omnifunc'
-endfunction
+endfunction"}}}
+"}}}
 
 "----------------------------------------
-function! s:update_ruby_ctags()
+function! s:update_ruby_ctags() "{{{
   echo vimproc#system("rbenv ctags")
   echo vimproc#system("gem ctags")
-endfunction
+endfunction"}}}
 command! UpdateRubyTags call <SID>update_ruby_ctags()
 
-function! s:set_tmux_env()
+function! s:set_tmux_env() "{{{
   if !executable("tmux") | return -1 |endif
 
   if exists("$TMUX") && exists("$PWD")
     call system("tmux setenv TMUXPWD_$(tmux display -p '#D' | tr -d %) " . $PWD)
   endif
-endfunction
-
+endfunction"}}}
 augroup TmuxSetPwd
   autocmd!
   autocmd FileReadPre,BufNewFile * call <SID>set_tmux_env()
 augroup END
 
-function! s:IDE()
-  silent!
-
-  TagbarOpen
-  VimFilerExplorerGit
-endfunction
-command! -bar IDE call <SID>IDE()
-
 " ----------------------------------------
-" for eclim
+" for eclim"{{{
 function! s:kill_eclimd() "{{{
   " s:eclimd_process
   let answer = input('Kill eclimd? y/n ')
@@ -3509,9 +3495,10 @@ command! EclimLoader call <SID>load_eclim(1)
 augroup EclimLoader
   autocmd BufEnter,FileReadPost * call s:load_eclim()
 augroup END
+"}}}
 
 " ----------------------------------------
-" clean memory
+" clean memory"{{{
 function! s:clear_memory() "{{{
   if executable('NeoCompleteClean')
     NeoCompleteClean
@@ -3523,6 +3510,18 @@ function! s:clear_memory() "{{{
   execute 'bdelete' join(s:buffer_nr_list(), ' ')
 endfunction "}}}
 command! Clean call <SID>clear_memory()
+"}}}
+
+" ----------------------------------------
+" Open macvim"{{{
+function! s:open_macvim() "{{{
+  Save
+  let current_dir = getcwd()
+  Clean
+  call alpaca#system_bg('mvim', current_dir)
+endfunction"}}}
+command! -nargs=0 Mvim call s:open_macvim()
+"}}}
 
 " ----------------------------------------
 " for lang-8"{{{
@@ -3550,78 +3549,11 @@ augroup END
 command! -nargs=? L8SendPullRequest call alpaca#function#send_pullrequest(<args>)
 "}}}
 
-" ----------------------------------------
-" session"{{{
-function! s:session_path() "{{{
-  if !empty(s:current_git())
-    return s:current_git() . '/.git/.vimsession'
-  else
-    return ''
-  endif
-endfunction"}}}
-function! s:load_session() "{{{
-  if filereadable(s:session_path())
-    echomsg 'Load session ' . s:session_path()
-    source `=s:session_path()`
-    call system('rm ' . s:session_path())
-  else
-    echomsg 'No session'
-  endif
-endfunction"}}}
-function! s:save_session() "{{{
-  if !empty(s:session_path())
-    if !filereadable(s:session_path()) || input('Overwrite ' . s:session_path() . '? y/n ') =~ 'y'
-      redraw 
-      echomsg 'Save session ' . s:session_path()
-      mksession! `=s:session_path()`
-    endif
-  endif
-endfunction"}}}
-command! -nargs=0 Load call s:load_session()
-command! -nargs=0 Save call s:save_session()
-"}}}
-
-" ----------------------------------------
-" Git
-if has('ruby')
-  function! s:git_work_info() "{{{
-    let since = input('Since: ', alpaca#function#today())
-    let until = input('Until: ', alpaca#function#today())
-    let author = input('Author: ', 'alpaca_taichou') 
-    let result = system("git log --since=".since." --until=".until." --author='".author."' --oneline --shortstat --no-merges | grep 'deletions(-)'")
-    redraw
-    if empty(result)
-      echomsg 'Nothing'
-      return 
-    endif
-
-    ruby << EOF
-    git_result = VIM.evaluate('result')
-    result = { :insertions => 0, :deletions => 0 }
-    git_result.split(/\n/).each do |line|
-      if line.match /^\s*(\d+) files changed, (\d+) insertions\(\+\), (\d+) deletions\(-\)\s*$/
-        result[:insertions] += $2.to_i
-        result[:deletions] += $3.to_i
-      end
-    end
-
-    puts "insertions: #{result[:insertions]}"
-    puts "deletions : #{result[:deletions]}"
-    puts "real      : #{result[:insertions] - result[:deletions]}"
-EOF
-    " echomsg 'Add :'.append . ', Remove: '. remove . ', Real: ' . append - remove 
-  endfunction"}}}
-  command! Contribution call s:git_work_info()
-endif
+let g:git_aliases#author_name = 'alpaca_taichou'
 
 if !has('vim_starting')
   " Call on_source hook when reloading .vimrc.
   call neobundle#call_hook('on_source')
-else
-  augroup SessionLoad
-    autocmd!
-    autocmd VimEnter * Load
-  augroup END
 endif
 
 set secure
