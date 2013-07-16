@@ -10,32 +10,32 @@ options     word
 snippet     click_link
 abbr        click_link(locator)
 options     word
-  click_link("${1:locator}")
+  click_link('${1:locator}')
 
 snippet     click_button
 abbr        click_button(locator)
 options     word
-  click_button("${1:locator}")
+  click_button('${1:locator}')
 
 snippet     fill_in
 abbr        fill_in(locator, options={})
 options     word
-  fill_in("${1:locator}", with: ${2:input_text})
+  fill_in('${1:locator}', with: ${2:input_text})
 
 snippet     choose
 abbr        choose(locator)
 options     word
-  choose("${1:locator}")
+  choose('${1:locator}')
 
 snippet     check
 abbr        check(locator)
 options     word
-  check("${1:locator}")
+  check('${1:locator}')
 
 snippet     uncheck
 abbr        uncheck(locator)
 options     word
-  uncheck("${1:locator}")
+  uncheck('${1:locator}')
 
 snippet     visit
 abbr        visit ...
@@ -45,7 +45,7 @@ options     word
 snippet     select
 abbr        select(value, options={})
 options     word
-  select("${1:value}", from: "${2:string}")
+  select('${1:value}', from: '${2:string}')
 
 snippet     unselect
 abbr        unselect(value, options={})
@@ -59,36 +59,36 @@ options     word
 #}}}
 
 snippet     click_on
-abbr        click_on("...") link or button
+abbr        click_on('...') link or button
 options     word
-  click_on("${1}")
+  click_on('${1}')
 
 # have {{{
 #snippet     have_selector
 #abbr        have_selector(*args)
 #options     word
-#  have_selector("${1:locator}")
+#  have_selector('${1:locator}')
 
 snippet     have_selectorx
 abbr        have_selector(:xpath, options={})
 options     word
-  have_selector(:xpath, "${1:locator}")
+  have_selector(:xpath, '${1:locator}')
 
 snippet     have_xpath
 abbr        have_xpath(xpath, options={})
 options     word
-  have_xpath("${1}"${2:, ${3:options\}})
+  have_xpath('${1}'${2:, ${3:options\}})
 
 snippet     have_css
 abbr        have_css(css, options={})
 options     word
-  have_css("${1}"${2:, ${3:options\}})
+  have_css('${1}'${2:, ${3:options\}})
 
 
 snippet     have_content
 abbr        have_content(text)
 options     word
-  have_content("${1:text}")
+  have_content('${1:text}')
 
 snippet     have_text
 abbr        have_text(text)
@@ -136,19 +136,19 @@ snippet     has_selector?
 alias       selector?
 options     word
 abbr        has_selector?(*args)
-  has_selector?("${1}")
+  has_selector?('${1}')
 
 snippet     has_no_selector?
 alias       no_selector?
 options     word
 abbr        has_no_selector?(*args)
-  has_no_selector?("${1}")
+  has_no_selector?('${1}')
 
 snippet     has_selector?x
 alias       selectorx?
 options     word
-abbr        has_selector?(:xpath, "...")
-  has_selector?(:xpath, "${1}")
+abbr        has_selector?(:xpath, '...')
+  has_selector?(:xpath, '${1}')
 
 snippet     assert_selector
 abbr        assert_selector(*args)
@@ -213,12 +213,12 @@ options     word
 snippet     has_field?
 abbr        has_field?(locator, options={})
 options     word
-  has_field?(${1:locator}${2:, ${3:with: "...", type: :email\}})
+  has_field?(${1:locator}${2:, ${3:with: '...', type: :email\}})
 
 snippet     has_no_field?
 abbr        has_no_field?(locator, options={})
 options     word
-  has_no_field?(${1:locator}${2:, ${3:with: "...", type: :email\}})
+  has_no_field?(${1:locator}${2:, ${3:with: '...', type: :email\}})
 
 snippet     has_checked_field?
 abbr        has_checked_field?(locator)
@@ -263,7 +263,7 @@ options     word
 snippet     has_content?
 alias       content?
 options     word
-abbr        has_content?("...")
+abbr        has_content?('...')
   has_content?(${1})
 #}}}
 
@@ -294,9 +294,9 @@ options     word
   find_by_id(${1:id})
 
 snippet     findx
-abbr        find(:xpath, "...")
+abbr        find(:xpath, '...')
 options     word
-  find(:xpath, "${1}")
+  find(:xpath, '${1}')
 
 snippet     all
 abbr        all(*args)
@@ -311,21 +311,21 @@ options     word
 
 # with {{{
 snippet     within
-abbr        within("...") do ... end
+abbr        within('...') do ... end
 options     word
-  within "${1}" do
+  within '${1}' do
     ${2}
   end
 
 snippet     withinx
-abbr        within :xpath, "..." do ... end
+abbr        within :xpath, '...' do ... end
 options     word
-  within :xpath, "${1}" do
+  within :xpath, '${1}' do
     ${2}
   end
 
 snippet     withinf
-abbr        within_fieldset "..." do ... end
+abbr        within_fieldset '...' do ... end
 options     word
   within_fieldset ${1} do
     ${2}
@@ -334,15 +334,15 @@ options     word
 
 # js {{{
 snippet     execute_script
-abbr        page.execute_script("...")
+abbr        page.execute_script('...')
 options     word
 alias       script_ex
-  execute_script(%Q!${1}!)
+  page.execute_script(%Q!${1}!)
 
 snippet     evaluate_script
 alias       script_ev
 options     word
-abbr        evaluate_script("...")
+abbr        page.evaluate_script('...')
   page.evaluate_script(%Q!${1}!)
 #}}}
 
@@ -357,7 +357,7 @@ options     word
 
 snippet     save_screenshot
 options     word
-  page.save_screenshot("${1:name.png}")
+  page.save_screenshot('${1:name.png}')
 #}}}
 #}}}
 

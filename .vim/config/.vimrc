@@ -1621,7 +1621,7 @@ function bundle.hooks.on_source(bundle) "{{{
           \|nnoremap <buffer><space>t :<C-U>TagbarToggle<CR>
   aug END
 
-  if exists('g:my.bin.ctags')
+  if exists('g:my.bin.ctags') && executable(g:my.bin.ctags)
     let g:tagbar_ctags_bin  = g:my.bin.ctags
   endif
   " let g:tagbar_autoclose = 1
