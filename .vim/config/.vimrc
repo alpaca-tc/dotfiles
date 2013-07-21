@@ -772,10 +772,10 @@ NeoBundleLazy 'vim-less', {
 
 " html
 " ----------------------------------------
-NeoBundleLazy 'alpaca-tc/html5.vim', { 'autoload' : {
-      \   'filetypes' : g:my.ft.markup_files,
-      \   'functions' : ['HtmlIndentGet']
-      \ }}
+" NeoBundleLazy 'alpaca-tc/html5.vim', { 'autoload' : {
+"       \   'filetypes' : g:my.ft.markup_files,
+"       \   'functions' : ['HtmlIndentGet']
+"       \ }}
 
 " haml
 " ----------------------------------------
@@ -859,8 +859,8 @@ NeoBundleLazy 'alpaca-tc/vim-endwise.git', {
       \ 'autoload' : {
       \   'insert' : 1,
       \ }}
-" NeoBundleLazy 'vim-ruby/vim-ruby', { 'autoload' : {
-"       \ 'filetypes': ['ruby'] } }
+NeoBundleLazy 'vim-ruby/vim-ruby', { 'autoload' : {
+      \ 'filetypes': ['ruby', 'eruby'] } }
 
 " rails
 NeoBundleLazy 'basyura/unite-rails', {
@@ -1337,7 +1337,7 @@ set equalalways       " 画面の自動サイズ調整
 
 " ここら辺を設定すると、描写が遅くなる
 " set laststatus=2
-set laststatus=0
+set laststatus=2
 set lazyredraw
 " set linebreak
 " set balloondelay=300
@@ -1378,6 +1378,10 @@ if v:version >= 703
   highlight ColorColumn guibg=#012345
   set conceallevel=2 concealcursor=iv
   set colorcolumn=80
+endif
+
+if has('gui')
+  autocmd VimEnter set guioptions-=egLrm
 endif
 
 syntax on
@@ -2252,7 +2256,7 @@ function bundle.hooks.on_source(bundle) "{{{
   "   call add( g:syntastic_mode_map.passive_filetypes, "ruby" )
   " endfunction
 
-  let s:passive_filetypes = ["html", "yaml", "racc.ruby"]
+  let s:passive_filetypes = ["html", "yaml", "racc.ruby", 'eruby']
   let g:syntastic_mode_map = {
         \ 'mode'              : 'active',
         \ 'active_filetypes'  : g:my.ft.program_files,
@@ -2571,7 +2575,7 @@ xmap A  <Plug>(niceblock-A)
 " ------------------------------------
 nnoremap ! :Switch<CR>
 let s:switch_define = {
-      \ "ruby" : [
+      \ "ruby,eruby" : [
       \   ["if", "unless"],
       \   ["while", "until"],
       \   [".blank?", ".present?"],
