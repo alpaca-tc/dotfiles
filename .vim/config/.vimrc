@@ -450,10 +450,10 @@ NeoBundleLazy 'alpaca-tc/alpaca_remove_dust.vim', {
       \   'commands': ['RemoveDustDisable', 'RemoveDustEnable', 'RemoveDust', 'RemoveDustForce']
       \ }}
 " Asynchronous updating tags
-NeoBundleLazy 'alpaca-tc/alpaca_tags', {
+NeoBundle 'alpaca-tc/alpaca_tags', {
       \ 'depends': 'Shougo/vimproc',
       \ 'autoload' : {
-      \   'commands': ['AlpacaTagsUpdate', 'AlpacaTagsSet', 'AlpacaTagsBundle']
+      \   'commands': ['AlpacaTagsUpdate', 'AlpacaTagsSet', 'AlpacaTagsBundle'],
       \ }}
 " window系script
 NeoBundleLazy 'alpaca-tc/alpaca_window.vim', {
@@ -613,11 +613,11 @@ NeoBundleLazy 'ujihisa/unite-colorscheme', {
       \   'unite_sources': 'colorscheme'
       \ }}
 " NeoBundleLazy 'tsukkee/unite-tag', {
-NeoBundleLazy 'zhaocai/unite-tag', {
-      \ 'depends' : ['Shougo/unite.vim'],
-      \ 'autoload' : {
-      \   'unite_sources' : 'tag'
-      \ }}
+" NeoBundleLazy 'zhaocai/unite-tag', {
+"       \ 'depends' : ['Shougo/unite.vim'],
+"       \ 'autoload' : {
+"       \   'unite_sources' : ['tag', 'tag/file']
+"       \ }}
 NeoBundleLazy 'mattn/qiita-vim', { 'depends' :
       \ ['Shougo/unite.vim', 'mattn/webapi-vim'],
       \ 'autoload': {
@@ -657,6 +657,7 @@ NeoBundleLazy 'basyura/TweetVim', { 'depends' :
 
 " その他 / テスト
 NeoBundle 'alpaca-tc/unite-git-aliases'
+NeoBundle 'kien/ctrlp.vim'
 " C# そのうち試す http://d.hatena.ne.jp/thinca/20130522/1369234427
 " NeoBundleLazy 'https://bitbucket.org/abudden/taghighlight', { 'autoload' : {
 "       \   'filetypes' : g:my.ft.program_files
@@ -1412,10 +1413,10 @@ endif
 
 " 超絶便利
 augroup AlpacaUpdateTags
-  au!
-  " au FileWritePost,BufWritePost * AlpacaTagsUpdate -style
-  au FileWritePost,BufWritePost Gemfile AlpacaTagsBundle -style
-  au FileReadPost,BufEnter * AlpacaTagsSet
+  autocmd!
+  autocmd FileWritePost,BufWritePost * AlpacaTagsUpdate -style -rspec -vim
+  autocmd FileWritePost,BufWritePost Gemfile AlpacaTagsBundle -style
+  autocmd FileReadPost,BufEnter * AlpacaTagsSet
 augroup END
 
 "tags_jumpを使い易くする
@@ -1447,10 +1448,9 @@ function! s:auto_dict_setting()
 
   nnoremap <buffer><Space>d :execute join([alpaca_window#util#get_smart_split_command("split"), b:dict_path], " ")<CR>
 endfunc
-aug MyAutoCmd
-  au FileType * call <SID>auto_dict_setting()
-aug END
-
+augroup MyAutoCmd
+  autocmd FileType * call <SID>auto_dict_setting()
+augroup END
 
 nnoremap [plug] <Nop>
 nnoremap [minor] <Nop>
@@ -1492,7 +1492,7 @@ unlet bundle
 
 "------------------------------------
 xnoremap m      :Align<Space>
-xnoremap mm :Align =<CR>
+xnoremap mm     :Align =<CR>
 let bundle = NeoBundleGet('vim-alignta')
 function bundle.hooks.on_source(bundle) "{{{
   let g:Align_xstrlen = 3
@@ -1623,6 +1623,8 @@ function bundle.hooks.on_source(bundle) "{{{
 
   if exists('g:my.bin.ctags') && executable(g:my.bin.ctags)
     let g:tagbar_ctags_bin  = g:my.bin.ctags
+  else
+    let g:tagbar_ctags_bin  = 'ctags'
   endif
   " let g:tagbar_autoclose = 1
   " let g:tagbar_sort = 0
@@ -1939,7 +1941,6 @@ unlet bundle
 "------------------------------------
 " memolist.vim
 "------------------------------------
-"
 let g:memolist_path              = g:my.dir.memolist
 let g:memolist_template_dir_path = g:my.dir.memolist
 let g:memolist_memo_suffix       = "mkd"
@@ -1956,7 +1957,6 @@ function! s:edit_memolist()
 endfunction
 nnoremap <silent><Space>ml :call <SID>edit_memolist()<CR>
 nnoremap <Space>mg  :<C-U>MemoGrep<CR>
-
 
 "------------------------------------
 " coffee script
@@ -2635,6 +2635,9 @@ let s:switch_define = {
       \   [510, ':not_extended'],
       \   [511, ':network_authentication_required'],
       \ ],
+      \ 'c' : [
+      \   ['signed', 'unsigned'],
+      \ ],
       \ "haml" : [
       \   ["if", "unless"],
       \   ["while", "until"],
@@ -2663,8 +2666,12 @@ let s:switch_define = {
       \   ['\.to_not', '\.to'],
       \   { '\([^. ]\+\)\.should\(_not\|\)': 'expect(\1)\.to\2' },
       \   { 'expect(\([^. ]\+\))\.to\(_not\|\)': '\1.should\2' },
-      \ ]
+      \ ],
+      \ 'vim' : [
+      \   { '\vhttps{,1}://github.com/([^/]+)/([^/]+)(\.git){,1}': '\1/\2' }
+      \ ],
       \ }
+      " \   { 'https?://github.com/': '\1/\2' }
 
 let s:switch_define = alpaca#initialize#redefine_with_each_filetypes(s:switch_define)
 function! s:define_switch_mappings() "{{{
@@ -2707,12 +2714,13 @@ unlet bundle
 " ------------------------------------
       " \ '_' : '-R --sort=yes --languages=-css --languages=-scss --languages=-js',
 let g:alpaca_update_tags_config = {
-      \ '_' : '-R --sort=yes --languages=-js,JavaScript',
+      \ '_' : '-R --sort=yes --languages=-js,JavaScript,css,sass,scss,vim,Vim',
       \ 'js' : '--languages=+js',
       \ '-js' : '--languages=-js,JavaScript',
       \ 'vim' : '--languages=+Vim,vim',
       \ '-vim' : '--languages=-Vim,vim',
       \ '-style': '--languages=-css,sass,scss,js,JavaScript,html',
+      \ '-spec': '--languages=-rspec',
       \ 'scss' : '--languages=+scss --languages=-css,sass',
       \ 'sass' : '--languages=+sass --languages=-css,scss',
       \ 'css' : '--languages=+css',

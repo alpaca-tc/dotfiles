@@ -24,6 +24,8 @@
   no-assume = !"fun() { git update-index --no-assume-unchanged `git ls-files $@ --no-empty-directory`; }; fun"
   assume-list = !"git ls-files -v | grep -e "^[a-z]""
 
+  send-request = !"branch_name=`git rev-parse --abbrev-ref HEAD`; git push origin ${branch_name}; hub pull-request -b master -h Lang-8:${branch_name}"
+
   add-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
   edit-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; vim `f`"
 
