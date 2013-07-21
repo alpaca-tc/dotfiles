@@ -15,11 +15,12 @@ aug END
         \   'e:contexts',
         \   'i:it',
         \   's:its',
+        \   'a:association',
         \ ],
         \ 'sro' : '.',
         \ }
   " let g:tagbar_type_ruby = {
-  "       \ 'ctagstype' : 'Ruby',
+  "       \ 'ctagstype' : 'ruby',
   "       \ 'kinds' : [
   "       \   'm:modules',
   "       \   'c:classes',

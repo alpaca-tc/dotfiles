@@ -451,10 +451,10 @@ abbr        time_zone_select(object, method, priority_zones=nil, prop={}, html_p
 options     word
   time_zone_select ${1:object_name}, "time_zone", ${2:priority_zone}${3:, ${4:prop\}}${5:, ${6:prop\}}
 
-snippet     option_for_select
-abbr        option_for_select(container, selected=nil)
+snippet     options_for_select
+abbr        options_for_select(container, selected=nil)
 options     word
-  option_for_select ${1:hash_or_array}, ${2:selected_value}
+  options_for_select ${1:hash_or_array}, ${2:selected_value}
 
 snippet     options_from_collection_for_select
 abbr        options_from_collection_for_select(collection, :value_method, :text_method, selected=nil)
@@ -602,10 +602,10 @@ abbr        .time_zone_select(method, priority_zones=nil, prop={}, html_prop={})
 options     word
   .time_zone_select "time_zone", ${1:priority_zone}${2:, ${3:prop\}}${4:, ${5:prop\}}
 
-snippet     .option_for_select
-abbr        .option_for_select(container, selected=nil)
+snippet     .options_for_select
+abbr        .options_for_select(container, selected=nil)
 options     word
-  .option_for_select ${1:hash_or_array}, ${2:selected_value}
+  .options_for_select ${1:hash_or_array}, ${2:selected_value}
 
 snippet     .options_from_collection_for_select
 abbr        .options_from_collection_for_select(collection, :value_method, :text_method, selected=nil)
