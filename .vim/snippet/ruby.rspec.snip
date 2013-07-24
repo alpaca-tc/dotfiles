@@ -285,6 +285,11 @@ options     word
   slow: true
 #}}}
 
+snippet     respond_to
+abbr        be_respond_to(...)
+options     word
+  should be_respond_to(:${1:method})
+
 snippet     when
 abbr        context 'when'
 options     word

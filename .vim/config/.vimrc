@@ -450,8 +450,8 @@ NeoBundleLazy 'alpaca-tc/alpaca_remove_dust.vim', {
       \   'commands': ['RemoveDustDisable', 'RemoveDustEnable', 'RemoveDust', 'RemoveDustForce']
       \ }}
 " Asynchronous updating tags
-NeoBundle 'alpaca-tc/alpaca_tags', {
-      \ 'depends': 'Shougo/vimproc',
+NeoBundleLazy 'alpaca-tc/alpaca_tags', {
+      \ 'depends': ['Shougo/vimproc', 'Shougo/unite.vim'],
       \ 'autoload' : {
       \   'commands': ['AlpacaTagsUpdate', 'AlpacaTagsSet', 'AlpacaTagsBundle'],
       \ }}
@@ -613,11 +613,11 @@ NeoBundleLazy 'ujihisa/unite-colorscheme', {
       \   'unite_sources': 'colorscheme'
       \ }}
 " NeoBundleLazy 'tsukkee/unite-tag', {
-" NeoBundleLazy 'zhaocai/unite-tag', {
-"       \ 'depends' : ['Shougo/unite.vim'],
-"       \ 'autoload' : {
-"       \   'unite_sources' : ['tag', 'tag/file']
-"       \ }}
+NeoBundleLazy 'zhaocai/unite-tag', {
+      \ 'depends' : ['Shougo/unite.vim'],
+      \ 'autoload' : {
+      \   'unite_sources' : ['tag', 'tag/file']
+      \ }}
 NeoBundleLazy 'mattn/qiita-vim', { 'depends' :
       \ ['Shougo/unite.vim', 'mattn/webapi-vim'],
       \ 'autoload': {
@@ -657,7 +657,6 @@ NeoBundleLazy 'basyura/TweetVim', { 'depends' :
 
 " その他 / テスト
 NeoBundle 'alpaca-tc/unite-git-aliases'
-NeoBundle 'kien/ctrlp.vim'
 " C# そのうち試す http://d.hatena.ne.jp/thinca/20130522/1369234427
 " NeoBundleLazy 'https://bitbucket.org/abudden/taghighlight', { 'autoload' : {
 "       \   'filetypes' : g:my.ft.program_files
@@ -1550,6 +1549,7 @@ if empty( s:surround_mapping )
         \   '(' : "(\r)",
         \   '[' : "[\r]",
         \   '{' : "{ \r }",
+        \   '#':  "#{\r}",
         \ }
         \ })
 endif
@@ -2577,6 +2577,8 @@ let s:switch_define = {
       \   [".blank?", ".present?"],
       \   ["include", "extend"],
       \   ["class", "module"],
+      \   ['.inject', '.delete_if'],
+      \   ['.map', '.map!'],
       \ ],
       \ 'rails' : [
       \   [100, ':continue', ':information'],
@@ -2730,6 +2732,7 @@ let g:alpaca_update_tags_config = {
       \ '-coffee': '--languages=-coffee',
       \ 'bundle': '--languages=+Ruby --languages=-css,sass,scss,js,JavaScript,coffee',
       \ }
+let g:alpaca_tags_enable_unite = 1
 
 " ------------------------------------
 " vim-gitgutter
@@ -3066,7 +3069,6 @@ function! bundle.hooks.on_source(bundle) "{{{
   " inoremap <expr><C-p>      pumvisible() ? "\<C-p>" : "\<Up>"
   inoremap <expr><C-n>  pumvisible() ? "\<C-n>" : "\<C-x>\<C-u>\<C-p>\<Down>"
   inoremap <expr><C-p>  pumvisible() ? "\<C-p>" : "\<C-p>\<C-n>"
-  inoremap <expr>'  pumvisible() ? neocomplete#close_popup() . "'" : "'"
   inoremap <expr><C-x><C-f>  neocomplete#start_manual_complete('file')
   inoremap <expr><C-g>     neocomplete#undo_completion()
 
@@ -3177,7 +3179,7 @@ nnoremap <silent>[unite]u       :<C-u>UniteWithBufferDir -buffer-name=file file<
 nnoremap <silent>[unite]e       :<C-u>Unite english_dictionary -buffer-name=english_dictionary<CR>
 nnoremap <silent>[unite]x       :<C-u>Unite english_example -horizontal -buffer-name=example<CR>
 nnoremap <silent>[unite]a       :<C-u>Unite web_search -horizontal -buffer-name=web_search<CR>
-nnoremap <silent>[unite]t       :<C-u>Unite english_thesaurus -horizontal -buffer-name=thesaurus<CR>
+nnoremap <silent>[unite]T       :<C-u>Unite english_thesaurus -horizontal -buffer-name=thesaurus<CR>
 nnoremap <silent>[unite]B       :<C-u>Unite bookmark -buffer-name=bookmark<CR>
 nnoremap <silent>g/             :<C-U>call <SID>unite_with_same_syntax('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast')<CR>
 nnoremap <silent>g#             :<C-U>call <SID>unite_with_same_syntax('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast -input=<C-R><C-W>')<CR>
@@ -3218,11 +3220,11 @@ nnoremap <silent>[unite]o        :<C-U>Unite -no-start-insert -horizontal -no-qu
 nnoremap <silent>[unite]q        :<C-U>Unite qiita -buffer-name=qiita<CR>
 nnoremap <silent>[unite]ra       :<C-U>Unite -buffer-name=rake rake<CR>
 nnoremap <silent>[unite]/        :<C-U>Unite -buffer-name=history_search -no-empty history/search<CR>
-nnoremap <silent>[unite]T        :<C-U>Unite tag -buffer-name=tag -no-empty -split<CR>
-autocmd BufEnter *
-      \   if empty(&buftype)
-      \|      nnoremap <buffer>[unite]T :<C-u>UniteWithCursorWord -horizontal -immediately tag<CR>
-      \|  endif
+nnoremap <silent>[unite]t        :<C-U>call <SID>unite_tags()<CR>
+function! s:unite_tags()
+  execute 'UniteWithCursorWord tags -horizontal -buffer-name=tags -input=' .  s:get_cursor_word()
+endfunction
+
 nnoremap <silent>[unite]y        :<C-U>Unite -buffer-name=history_yank -no-empty history/yank<CR>
 nnoremap [unite]S                :<C-U>Unite -no-start-insert -buffer-name=ssh ssh://
 nnoremap [unite]l                :<C-U>Unite locate -buffer-name=locate -input=
@@ -3518,6 +3520,8 @@ function! s:clear_memory() "{{{
   execute 'bdelete' join(s:buffer_nr_list(), ' ')
 endfunction "}}}
 command! Clean call <SID>clear_memory()
+
+command! CleanSwap call vimproc#system('rm -rf ' . g:my.dir.swap_dir . '/*')
 "}}}
 
 " ----------------------------------------
