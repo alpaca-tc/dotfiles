@@ -451,6 +451,7 @@ NeoBundleLazy 'alpaca-tc/alpaca_remove_dust.vim', {
       \ }}
 " Asynchronous updating tags
 NeoBundle 'alpaca-tc/alpaca_tags', {
+      \ 'branch' : 'development',
       \ 'depends': 'Shougo/vimproc',
       \ 'autoload' : {
       \   'commands': ['AlpacaTagsUpdate', 'AlpacaTagsSet', 'AlpacaTagsBundle'],
@@ -656,7 +657,11 @@ NeoBundleLazy 'basyura/TweetVim', { 'depends' :
       \ }}
 
 " その他 / テスト
-NeoBundle 'alpaca-tc/unite-git-aliases'
+NeoBundleLazy 'alpaca-tc/unite-git-aliases', {
+      \   'autoload' : {
+      \   'unite_sources' : ['menu', 'menu:git_aliases']
+      \ }
+      \ }
 NeoBundle 'kien/ctrlp.vim'
 " C# そのうち試す http://d.hatena.ne.jp/thinca/20130522/1369234427
 " NeoBundleLazy 'https://bitbucket.org/abudden/taghighlight', { 'autoload' : {
@@ -860,8 +865,8 @@ NeoBundleLazy 'alpaca-tc/vim-endwise.git', {
       \ 'autoload' : {
       \   'insert' : 1,
       \ }}
-NeoBundleLazy 'vim-ruby/vim-ruby', { 'autoload' : {
-      \ 'filetypes': ['ruby', 'eruby'] } }
+" NeoBundleLazy 'vim-ruby/vim-ruby', { 'autoload' : {
+"       \ 'filetypes': ['ruby', 'eruby'] } }
 
 " rails
 NeoBundleLazy 'basyura/unite-rails', {
@@ -2724,7 +2729,6 @@ let g:alpaca_update_tags_config = {
       \ 'vim' : '--languages=+Vim,vim',
       \ '-vim' : '--languages=-Vim,vim',
       \ '-style': '--languages=-css,sass,scss,js,JavaScript,html',
-      \ '-spec': '--languages=-rspec',
       \ 'scss' : '--languages=+scss --languages=-css,sass',
       \ 'sass' : '--languages=+sass --languages=-css,scss',
       \ 'css' : '--languages=+css',
@@ -3558,9 +3562,10 @@ augroup MyAutoCmd
   autocmd User Rails call <SID>do_lang8_autocmd()
   autocmd FileType ruby let g:syntastic_ruby_checkers = ['mri']
 augroup END
-command! -nargs=? L8SendPullRequest call alpaca#function#send_pullrequest(<args>)
+command! -nargs=? L8SendPullRequest call alpaca#function#send_pullrequest('Lang-8')
 "}}}
 
+" ----------------------------------------
 let g:git_aliases#author_name = 'alpaca_taichou'
 
 if !has('vim_starting')

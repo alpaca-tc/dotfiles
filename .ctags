@@ -1,6 +1,8 @@
 --jcode=utf8
 
 --exclude=.git
+--exclude=*.c
+--exclude=spec
 --exclude=log
 
 --langdef=js
@@ -48,23 +50,28 @@
 --regex-coffee=/(constructor:[[:space:]]\()@[A-Za-z.]+(,[[:space:]]@([A-Za-z.]+)){8}/\3/f,field/
 --regex-coffee=/(constructor:[[:space:]]\()@[A-Za-z.]+(,[[:space:]]@([A-Za-z.]+)){9}/\3/f,field/
 
---langmap=ruby:+.rb,+.rake
---regex-ruby=/^[ \t]*([A-Z][-_A-Za-z0-9]*::)*([A-Z][-_A-Za-z0-9]*)[\t ]*=/\2/C,constant/
---regex-ruby=/^[ \t]*([A-Z_][A-Z0-9_]*)[ \t]*=/\1/C,constant/
---regex-ruby=/^[ \t]*context[[:space:]]+['"](.*)['"][[:space:]]+do/\1/e,rspec context/ 
---regex-ruby=/^[ \t]*context[[:space:]]+(:?[a-zA-Z0-9?]+)[[:space:]]+do/\1/e,rspec context/ 
---regex-ruby=/^[ \t]*describe[[:space:]]+['"](.*)['"][[:space:]]+do/\1/d,rspec describe/ 
---regex-ruby=/^[ \t]*describe[[:space:]]+(:?[a-zA-Z0-9?]+)[[:space:]]+do/\1/d,rspec describe/ 
---regex-ruby=/^[ \t]*its\((:?[a-zA-Z0-9?]+)\)[[:space:]]*{[[:space:]](.*)[[:space:]]}[[:space:]]*/its(\1) \2/s,rspec its/ 
---regex-ruby=/^[ \t]*it[[:space:]]+['"](.*)['"][[:space:]]+do/\1/i,rspec it/ 
---regex-ruby=/^[ \t]*it[[:space:]]+{[[:space:]]*(.*)[[:space:]]*}[[:space:]]*/\1/i,rspec it/ 
+--langmap=Ruby:+.rb,+.rake
+--regex-Ruby=/^[ \t]*([A-Z][-_A-Za-z0-9]*::)*([A-Z][-_A-Za-z0-9]*)[\t ]*=/\2/C,constant/
+--regex-Ruby=/^[ \t]*([A-Z_][A-Z0-9_]*)[ \t]*=/\1/C,constant/
 
---regex-ruby=/[ \t]*(has_many|belongs_to|has_one|has_and_belongs_to_many)\(? *:([[:alnum:]_]+)/\2/a/
---regex-ruby=/[ \t]*(named_)?scope\(? *:([[:alnum:]_]+)/\3/f,function,named_scope/
---regex-ruby=/[ \t]*expose\(? *:([[:alnum:]_]+)/\2/f,function,exposure/
---regex-ruby=/[ \t]*event\(? *:([[:alnum:]_]+)/\2/f,function,aasm_event/
---regex-ruby=/[ \t]*event\(? *:([[:alnum:]_]+)/\2!/f,function,aasm_event/
---regex-ruby=/[ \t]*event\(? *:([[:alnum:]_]+)/\2?/f,function,aasm_event/
+/*--langdef=rails*/
+/*--langmap=rails:.rb*/
+/*--regex-rails=/[ \t]*(has_many|belongs_to|has_one|has_and_belongs_to_many)\(? *:([[:alnum:]_]+)/\2/a/*/
+/*--regex-rails=/[ \t]*(named_)?scope\(? *:([[:alnum:]_]+)/\3/f,function,named_scope/*/
+/*--regex-rails=/[ \t]*expose\(? *:([[:alnum:]_]+)/\2/f,function,exposure/*/
+/*--regex-rails=/[ \t]*event\(? *:([[:alnum:]_]+)/\2/f,function,aasm_event/*/
+/*--regex-rails=/[ \t]*event\(? *:([[:alnum:]_]+)/\2!/f,function,aasm_event/*/
+/*--regex-rails=/[ \t]*event\(? *:([[:alnum:]_]+)/\2?/f,function,aasm_event/*/
+
+/*--langdef=spec*/
+/*--langmap=spec:.rb*/
+/*--regex-spec=/^[ \t]*context[[:space:]]+['"](.*)['"][[:space:]]+do/\1/e,rspec context/ */
+/*--regex-spec=/^[ \t]*context[[:space:]]+(:?[a-zA-Z0-9?]+)[[:space:]]+do/\1/e,rspec context/ */
+/*--regex-spec=/^[ \t]*describe[[:space:]]+['"](.*)['"][[:space:]]+do/\1/d,rspec describe/ */
+/*--regex-spec=/^[ \t]*describe[[:space:]]+(:?[a-zA-Z0-9?]+)[[:space:]]+do/\1/d,rspec describe/ */
+/*--regex-spec=/^[ \t]*its\((:?[a-zA-Z0-9?]+)\)[[:space:]]*{[[:space:]](.*)[[:space:]]}[[:space:]]*/its(\1) \2/s,rspec its/ */
+/*--regex-spec=/^[ \t]*it[[:space:]]+['"](.*)['"][[:space:]]+do/\1/i,rspec it/ */
+/*--regex-spec=/^[ \t]*it[[:space:]]+{[[:space:]]*(.*)[[:space:]]*}[[:space:]]*/\1/i,rspec it/ */
 
 --langdef=scss
 --langmap=scss:.scss
