@@ -451,9 +451,20 @@ NeoBundleLazy 'alpaca-tc/alpaca_remove_dust.vim', {
       \ }}
 " Asynchronous updating tags
 NeoBundleLazy 'alpaca-tc/alpaca_tags', {
+      \ 'rev' : 'development',
       \ 'depends': ['Shougo/vimproc', 'Shougo/unite.vim'],
       \ 'autoload' : {
-      \   'commands': ['AlpacaTagsUpdate', 'AlpacaTagsSet', 'AlpacaTagsBundle'],
+      \   'commands' : [{
+      \     'name' : 'Tags',
+      \     'complete' : 'customlist,alpaca_tags#complete_source'},
+      \     'TagsSet', 'TagsBundle'
+      \     ],
+      \   'unite_sources' : ['tags']
+      \ }}
+
+NeoBundleLazy 'alpaca-tc/lang-8.vim', {
+      \ 'autoload': {
+      \   'commands' : ['PostJournal']
       \ }}
 " window系script
 NeoBundleLazy 'alpaca-tc/alpaca_window.vim', {
@@ -612,8 +623,8 @@ NeoBundleLazy 'ujihisa/unite-colorscheme', {
       \ 'autoload': {
       \   'unite_sources': 'colorscheme'
       \ }}
-" NeoBundleLazy 'tsukkee/unite-tag', {
-NeoBundleLazy 'zhaocai/unite-tag', {
+" NeoBundleLazy 'zhaocai/unite-tag', {
+NeoBundleLazy 'tsukkee/unite-tag', {
       \ 'depends' : ['Shougo/unite.vim'],
       \ 'autoload' : {
       \   'unite_sources' : ['tag', 'tag/file']
@@ -662,7 +673,8 @@ NeoBundle 'alpaca-tc/unite-git-aliases'
 "       \   'filetypes' : g:my.ft.program_files
 "       \ }}
 NeoBundleLazy 'alpaca-tc/alpaca_session.vim', { 'autoload' : {
-      \ 'commands' : ['Load', 'Save']
+      \ 'functions' : ['alpaca_session#session_exists'],
+      \ 'commands' : ['SessionLoad', 'SessionSave', 'SessionForceSave', 'SessionRemove']
       \ }}
 NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
       \ 'insert' : 1,
@@ -1411,11 +1423,13 @@ if v:version < 703 || (v:version == 7.3 && !has('patch336'))
 endif
 
 " 超絶便利
-augroup AlpacaUpdateTags
+augroup AlpacaTags
   autocmd!
-  autocmd FileWritePost,BufWritePost * AlpacaTagsUpdate -style -rspec -vim
-  autocmd FileWritePost,BufWritePost Gemfile AlpacaTagsBundle -style
-  autocmd FileReadPost,BufEnter * AlpacaTagsSet
+  if exists(':Tags')
+    autocmd FileWritePost,BufWritePost * Tags -style -rspec -vim
+    autocmd FileWritePost,BufWritePost Gemfile TagsBundle -style
+    autocmd FileReadPost,BufEnter * TagsSet
+  endif
 augroup END
 
 "tags_jumpを使い易くする
@@ -2079,7 +2093,7 @@ augroup RailsDictSetting
   " autocmd User Rails/spec/features/*    NeoSnippetSource ~/.vim/snippet/ruby.rspec.controller.snip
   " autocmd User Rails/spec/routes/*    NeoSnippetSource ~/.vim/snippet/ruby.rspec.controller.snip
 
-  autocmd User Rails autocmd BufWrite      <buffer> AlpacaTagsUpdate
+  autocmd User Rails autocmd BufWrite <buffer> Tags
   " autocmd User Rails/config/database.rb    let b:file_type_name="ruby.database"
   " autocmd User Rails/config/boot.rb        let b:file_type_name="ruby.boot"
   " autocmd User Rails/config/locales/*      let b:file_type_name="ruby.locales"
@@ -2579,6 +2593,7 @@ let s:switch_define = {
       \   ["class", "module"],
       \   ['.inject', '.delete_if'],
       \   ['.map', '.map!'],
+      \   ['attr_accessor', 'attr_reader', 'attr_writer'],
       \ ],
       \ 'rails' : [
       \   [100, ':continue', ':information'],
@@ -2715,7 +2730,7 @@ unlet bundle
 " alpaca_tags
 " ------------------------------------
       " \ '_' : '-R --sort=yes --languages=-css --languages=-scss --languages=-js',
-let g:alpaca_update_tags_config = {
+let g:alpaca_tags_config = {
       \ '_' : '-R --sort=yes --languages=-js,JavaScript,css,sass,scss,vim,Vim',
       \ 'js' : '--languages=+js',
       \ '-js' : '--languages=-js,JavaScript',
@@ -2732,7 +2747,6 @@ let g:alpaca_update_tags_config = {
       \ '-coffee': '--languages=-coffee',
       \ 'bundle': '--languages=+Ruby --languages=-css,sass,scss,js,JavaScript,coffee',
       \ }
-let g:alpaca_tags_enable_unite = 1
 
 " ------------------------------------
 " vim-gitgutter
@@ -3093,6 +3107,13 @@ unlet bundle
 " echodoc
 let g:echodoc_enable_at_startup = 1
 
+"----------------------------------------
+" echodoc
+augroup AlpacaSession
+  autocmd!
+  autocmd VimLeave * SessionForceSave
+augroup END
+
 "------------------------------------
 " VimFiler "{{{
 nnoremap <silent>[plug]f   :<C-U>call <SID>vim_filer_explorer_git()<CR>
@@ -3220,10 +3241,8 @@ nnoremap <silent>[unite]o        :<C-U>Unite -no-start-insert -horizontal -no-qu
 nnoremap <silent>[unite]q        :<C-U>Unite qiita -buffer-name=qiita<CR>
 nnoremap <silent>[unite]ra       :<C-U>Unite -buffer-name=rake rake<CR>
 nnoremap <silent>[unite]/        :<C-U>Unite -buffer-name=history_search -no-empty history/search<CR>
-nnoremap <silent>[unite]t        :<C-U>call <SID>unite_tags()<CR>
-function! s:unite_tags()
-  execute 'UniteWithCursorWord tags -horizontal -buffer-name=tags -input=' .  s:get_cursor_word()
-endfunction
+nnoremap <silent><expr>[unite]t  ':Unite tags -horizontal -buffer-name=tags -input='.expand("<cword>").'<CR>'
+nnoremap <silent><expr>[unite]s  ':Unite tag -horizontal -buffer-name=tags -input='.expand("<cword>").'<CR>'
 
 nnoremap <silent>[unite]y        :<C-U>Unite -buffer-name=history_yank -no-empty history/yank<CR>
 nnoremap [unite]S                :<C-U>Unite -no-start-insert -buffer-name=ssh ssh://
@@ -3357,6 +3376,8 @@ function! bundle.hooks.on_source(bundle) "{{{
   let g:giti_log_default_line_count = 500
   call unite#custom_source('giti/branch_all', 'max_candidates', 5000)
   call unite#custom_source('line/fast', 'max_candidates', 5000)
+  call unite#custom_source('tags', 'max_candidates', 5000)
+  call unite#custom_source('tag', 'max_candidates', 5000)
 
   "------------------------------------
   " vim-version
@@ -3453,6 +3474,9 @@ let bundle = NeoBundleGet('eclim')
 function! bundle.hooks.on_source(bundle) "{{{
   let g:EclimCompletionMethod = 'omnifunc'
 endfunction"}}}
+
+"----------------------------------------
+let g:lang8_email_address = 'alpaca_tc@ezweb.ne.jp'
 "}}}
 
 "----------------------------------------
@@ -3514,6 +3538,10 @@ function! s:clear_memory() "{{{
     NeoCompleteClean
     NeoCompleteDisable
     NeoCompleteEnable
+    SessionRemove
+    TagsCleanCache
+    set tags=
+    TagsSet
   endif
   " execute 'bwipeout' join(s:buffer_nr_list(), ' ')
   " execute 'bunload' join(s:buffer_nr_list(), ' ')
@@ -3527,7 +3555,7 @@ command! CleanSwap call vimproc#system('rm -rf ' . g:my.dir.swap_dir . '/*')
 " ----------------------------------------
 " Open macvim"{{{
 function! s:open_macvim() "{{{
-  Save
+  SessionSave
   let current_dir = getcwd()
   Clean
   call alpaca#system_bg('mvim', current_dir)
