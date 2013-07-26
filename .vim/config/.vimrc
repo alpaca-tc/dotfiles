@@ -69,6 +69,22 @@ function! s:current_git()
 
   return s:git_root_cache[current_dir]
 endfunction
+function! s:current_remote_account_name()
+  let git_remotes = system('git remote -v')
+  if git_remotes =~ "fatal: Not a git repository"
+    " throw "No a git repository."
+    return ""
+  endif
+
+  let origin_remote = filter(split(git_remotes, '\n'), 'v:val =~ "^origin"')
+  if empty(origin_remote)
+    return ''
+  endif
+
+  let account_name = substitute(origin_remote[0], 'origin\thttp://github.com/\([^/]\+\)/\S\+\s(.*)$', '\1', 'g')
+  return account_name
+endfunction
+
 function! s:convert_bufname(name)
   let bufname = a:name
   if bufname =~# '^[[:alnum:].+-]\+:\\\\'
@@ -454,11 +470,7 @@ NeoBundleLazy 'alpaca-tc/alpaca_tags', {
       \ 'rev' : 'development',
       \ 'depends': ['Shougo/vimproc', 'Shougo/unite.vim'],
       \ 'autoload' : {
-      \   'commands' : [{
-      \     'name' : 'Tags',
-      \     'complete' : 'customlist,alpaca_tags#complete_source'},
-      \     'TagsSet', 'TagsBundle'
-      \     ],
+      \   'commands' : ['Tags', 'TagsSet', 'TagsBundle', 'TagsCleanCache'],
       \   'unite_sources' : ['tags']
       \ }}
 
@@ -466,6 +478,7 @@ NeoBundleLazy 'alpaca-tc/lang-8.vim', {
       \ 'autoload': {
       \   'commands' : ['PostJournal']
       \ }}
+
 " window系script
 NeoBundleLazy 'alpaca-tc/alpaca_window.vim', {
       \ 'autoload': {
@@ -667,7 +680,12 @@ NeoBundleLazy 'basyura/TweetVim', { 'depends' :
       \ }}
 
 " その他 / テスト
-NeoBundle 'alpaca-tc/unite-git-aliases'
+NeoBundleLazy 'alpaca-tc/unite-git-aliases', {
+      \   'autoload' : {
+      \   'unite_sources' : ['menu', 'menu:git_aliases']
+      \ }
+      \ }
+NeoBundle 'kien/ctrlp.vim'
 " C# そのうち試す http://d.hatena.ne.jp/thinca/20130522/1369234427
 " NeoBundleLazy 'https://bitbucket.org/abudden/taghighlight', { 'autoload' : {
 "       \   'filetypes' : g:my.ft.program_files
@@ -784,10 +802,10 @@ NeoBundleLazy 'vim-less', {
 
 " html
 " ----------------------------------------
-NeoBundleLazy 'alpaca-tc/html5.vim', { 'autoload' : {
-      \   'filetypes' : g:my.ft.markup_files,
-      \   'functions' : ['HtmlIndentGet']
-      \ }}
+" NeoBundleLazy 'alpaca-tc/html5.vim', { 'autoload' : {
+"       \   'filetypes' : g:my.ft.markup_files,
+"       \   'functions' : ['HtmlIndentGet']
+"       \ }}
 
 " haml
 " ----------------------------------------
@@ -872,7 +890,7 @@ NeoBundleLazy 'alpaca-tc/vim-endwise.git', {
       \   'insert' : 1,
       \ }}
 " NeoBundleLazy 'vim-ruby/vim-ruby', { 'autoload' : {
-"       \ 'filetypes': ['ruby'] } }
+"       \ 'filetypes': ['ruby', 'eruby'] } }
 
 " rails
 NeoBundleLazy 'basyura/unite-rails', {
@@ -1349,7 +1367,7 @@ set equalalways       " 画面の自動サイズ調整
 
 " ここら辺を設定すると、描写が遅くなる
 " set laststatus=2
-set laststatus=0
+set laststatus=2
 set lazyredraw
 " set linebreak
 " set balloondelay=300
@@ -1392,6 +1410,10 @@ if v:version >= 703
   set colorcolumn=80
 endif
 
+if has('gui')
+  autocmd VimEnter set guioptions-=egLrm
+endif
+
 syntax on
 
 " カレントウィンドウにのみ罫線を引く
@@ -1426,9 +1448,9 @@ endif
 augroup AlpacaTags
   autocmd!
   if exists(':Tags')
-    autocmd FileWritePost,BufWritePost * Tags -style -rspec -vim
-    autocmd FileWritePost,BufWritePost Gemfile TagsBundle -style
-    autocmd FileReadPost,BufEnter * TagsSet
+    autocmd BufWritePost * TagsUpdate ruby
+    autocmd BufWritePost Gemfile TagsBundle -style
+    autocmd BufEnter * TagsSet
   endif
 augroup END
 
@@ -2092,8 +2114,6 @@ augroup RailsDictSetting
   " autocmd User Rails/spec/views/*    NeoSnippetSource ~/.vim/snippet/ruby.rspec.controller.snip
   " autocmd User Rails/spec/features/*    NeoSnippetSource ~/.vim/snippet/ruby.rspec.controller.snip
   " autocmd User Rails/spec/routes/*    NeoSnippetSource ~/.vim/snippet/ruby.rspec.controller.snip
-
-  autocmd User Rails autocmd BufWrite <buffer> Tags
   " autocmd User Rails/config/database.rb    let b:file_type_name="ruby.database"
   " autocmd User Rails/config/boot.rb        let b:file_type_name="ruby.boot"
   " autocmd User Rails/config/locales/*      let b:file_type_name="ruby.locales"
@@ -2266,7 +2286,7 @@ function bundle.hooks.on_source(bundle) "{{{
   "   call add( g:syntastic_mode_map.passive_filetypes, "ruby" )
   " endfunction
 
-  let s:passive_filetypes = ["html", "yaml", "racc.ruby"]
+  let s:passive_filetypes = ["html", "yaml", "racc.ruby", 'eruby']
   let g:syntastic_mode_map = {
         \ 'mode'              : 'active',
         \ 'active_filetypes'  : g:my.ft.program_files,
@@ -2585,7 +2605,7 @@ xmap A  <Plug>(niceblock-A)
 " ------------------------------------
 nnoremap ! :Switch<CR>
 let s:switch_define = {
-      \ "ruby" : [
+      \ "ruby,eruby" : [
       \   ["if", "unless"],
       \   ["while", "until"],
       \   [".blank?", ".present?"],
@@ -2729,23 +2749,22 @@ unlet bundle
 " ------------------------------------
 " alpaca_tags
 " ------------------------------------
-      " \ '_' : '-R --sort=yes --languages=-css --languages=-scss --languages=-js',
+let g:alpaca_tags_ctags_bin = '/Applications/MacVim.app/Contents/MacOS/ctags'
 let g:alpaca_tags_config = {
-      \ '_' : '-R --sort=yes --languages=-js,JavaScript,css,sass,scss,vim,Vim',
+      \ '_' : '-R --sort=yes --languages=+Ruby',
+      \ 'default' : '--languages=-css,scss,html,js,JavaScript',
       \ 'js' : '--languages=+js',
       \ '-js' : '--languages=-js,JavaScript',
       \ 'vim' : '--languages=+Vim,vim',
       \ '-vim' : '--languages=-Vim,vim',
-      \ '-style': '--languages=-css,sass,scss,js,JavaScript,html',
-      \ '-spec': '--languages=-rspec',
-      \ 'scss' : '--languages=+scss --languages=-css,sass',
-      \ 'sass' : '--languages=+sass --languages=-css,scss',
+      \ '-style': '--languages=-css,scss,js,JavaScript,html',
+      \ 'scss' : '--languages=+scss --languages=-css',
       \ 'css' : '--languages=+css',
       \ 'java' : '--languages=+java $JAVA_HOME/src',
       \ 'ruby': '--languages=+Ruby',
       \ 'coffee': '--languages=+coffee',
       \ '-coffee': '--languages=-coffee',
-      \ 'bundle': '--languages=+Ruby --languages=-css,sass,scss,js,JavaScript,coffee',
+      \ 'bundle': '--languages=+Ruby',
       \ }
 
 " ------------------------------------
@@ -2888,7 +2907,7 @@ function! bundle.hooks.on_source(bundle) "{{{
   " let g:neocomplete_caching_limit_file_size=500000
   " let g:neocomplete_max_keyword_width=120
   let g:neocomplete#auto_completion_start_length=g:neocomplete#sources#syntax#min_keyword_length
-  let g:neocomplete#ctags_arguments=g:alpaca_update_tags_config
+  let g:neocomplete#ctags_arguments=g:alpaca_tags_config
   let g:neocomplete#data_directory=g:my.dir.neocomplete
   let g:neocomplete#enable_auto_close_preview=0
   let g:neocomplete#enable_auto_select=0
@@ -3105,7 +3124,7 @@ unlet bundle
 
 "----------------------------------------
 " echodoc
-let g:echodoc_enable_at_startup = 1
+let g:echodoc_enable_at_startup = 0
 
 "----------------------------------------
 " echodoc
@@ -3586,9 +3605,15 @@ augroup MyAutoCmd
   autocmd User Rails call <SID>do_lang8_autocmd()
   autocmd FileType ruby let g:syntastic_ruby_checkers = ['mri']
 augroup END
-command! -nargs=? L8SendPullRequest call alpaca#function#send_pullrequest(<args>)
+
+function! s:send_pull_request(...) "{{{
+  let account_name = empty(a:000[0]) ? s:current_remote_account_name() : a:1
+  call alpaca#function#send_pullrequest(account_name)
+endfunction"}}}
+command! -nargs=? SendPullRequest call s:send_pull_request(<q-args>)
 "}}}
 
+" ----------------------------------------
 let g:git_aliases#author_name = 'alpaca_taichou'
 
 if !has('vim_starting')
