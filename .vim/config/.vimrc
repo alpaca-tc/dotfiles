@@ -361,8 +361,6 @@ NeoBundle 'kana/vim-smartword', { 'autoload' : {
       \ 'mappings' : [
       \   '<Plug>(smartword-w)', '<Plug>(smartword-b)', '<Plug>(smartword-ge)']
       \ }}
-
-" vim必須
 NeoBundleLazy 'thinca/vim-quickrun', { 'autoload' : {
       \   'mappings' : [['nxo', '<Plug>(quickrun)']],
       \   'commands' : 'QuickRun' }}
@@ -373,10 +371,6 @@ NeoBundleLazy 'thinca/vim-quickrun', { 'autoload' : {
 "       \ 'filetypes' : g:my.ft.program_files }}
 NeoBundleLazy 'vim-scripts/sudo.vim', {
       \ 'autoload': { 'commands': ['SudoRead', 'SudoWrite'] }}
-" NeoBundleLazy 'tyru/eskk.vim', { 'autoload' : {
-"       \ 'mappings' : [['i', '<Plug>(eskk:toggle)']],
-"       \ 'insert' : 1,
-"       \ }}
 NeoBundleLazy 'thinca/vim-ref', { 'autoload' : {
       \ 'commands' : {
       \   'name' : "Ref",
@@ -418,11 +412,9 @@ if has("lua")
         \   'insert' : 1,
         \ }}
 else
-  NeoBundleLazy 'Shougo/neocomplcache', {
-        \ 'autoload' : {
+  NeoBundleLazy 'Shougo/neocomplcache', { 'autoload' : {
         \   'insert' : 1,
-        \ },
-        \ }
+        \ }}
 endif
 NeoBundleLazy 'Shougo/neosnippet', {
       \ 'autoload' : {
@@ -439,10 +431,10 @@ NeoBundleLazy 'Shougo/vimshell', {
       \     'VimShellExecute', 'VimShellInteractive', 'VimShellTerminal', 'VimShellPop', 'VimShellBufferDir'],
       \   'mappings' : ['<Plug>(vimshell_switch)']
       \ }}
-" NeoBundleLazy 'Shougo/echodoc', {
-"       \ 'autoload' : {
-"       \   'insert' : 1,
-"       \ }}
+NeoBundleLazy 'Shougo/echodoc', {
+      \ 'autoload' : {
+      \   'insert' : 1,
+      \ }}
 
 " commands
 " Removing dust.
@@ -492,8 +484,6 @@ NeoBundleLazy 'mattn/gist-vim', {
       \ 'depends': ['mattn/webapi-vim' ],
       \ 'autoload' : {
       \   'commands' : 'Gist' }}
-" NeoBundleLazy 'ujihisa/vimshell-ssh', { 'autoload' : {
-"       \ 'filetypes' : 'vimshell' }}
 NeoBundleLazy 'glidenote/memolist.vim', { 'autoload' :
       \ { 'commands' : ['MemoNew', 'MemoGrep'] }}
 NeoBundleLazy 'h1mesuke/vim-alignta', {
@@ -526,7 +516,6 @@ NeoBundleLazy 'tyru/caw.vim', {
       \   'mappings' : [ '<Plug>(caw:prefix)', '<Plug>(caw:i:toggle)'],
       \ }}
 
-" extend mappings
 NeoBundleLazy 'AndrewRadev/switch.vim', { 'autoload' : {
       \ 'commands' : 'Switch',
       \ }}
@@ -540,11 +529,6 @@ NeoBundleLazy 't9md/vim-textmanip', { 'autoload' : {
       \   '<Plug>(textmanip-move-down)', '<Plug>(textmanip-move-up)',
       \   '<Plug>(textmanip-move-left)', '<Plug>(textmanip-move-right)'],
       \ }}
-" NeoBundleLazy 'tpope/vim-speeddating', {
-"       \ 'autoload': {
-"       \   'mappings': [
-"       \     ['nx', '<C-A>'], ['nx', '<C-X>']
-"       \ ] }}
 if has("conceal")
   NeoBundleLazy 'Yggdroot/indentLine', { 'autoload' : {
         \   'commands' : ["IndentLinesReset", "IndentLinesToggle"],
@@ -595,11 +579,9 @@ NeoBundleLazy 'operator-camelize', {
       \ ]}}
 " NeoBundle 'tyru/operator-html-escape.vim'
 
-
 " unite
 NeoBundleLazy 'thinca/vim-qfreplace', { 'autoload' : {
       \ 'filetypes' : ['unite', 'quickfix'],
-      \ 'commands' : ["Qfreplace"],
       \ }}
 NeoBundleLazy 'Shougo/unite-build', {
       \ 'depends' : 'Shougo/unite.vim',
@@ -611,31 +593,30 @@ NeoBundleLazy 'Shougo/unite-outline', {
       \ 'autoload' : {
       \   'unite_sources' : 'outline' },
       \ }
-NeoBundleLazy 'osyo-manga/unite-quickfix', { 'autoload': {
-      \ 'unite_sources' : ['quickfix', 'location_list']
-      \ }}
+" NeoBundleLazy 'osyo-manga/unite-quickfix', { 'autoload': {
+"       \ 'unite_sources' : ['quickfix', 'location_list']
+"       \ }}
 NeoBundleLazy 'tacroe/unite-mark', {
       \ 'depends' : ['Shougo/unite.vim'],
       \ 'autoload': {
       \   'unite_sources' : 'mark'
       \ }}
 " NeoBundle 'alpaca-tc/unite-converter'
-NeoBundleLazy 'ujihisa/unite-colorscheme', {
-      \ 'autoload': {
-      \   'unite_sources': 'colorscheme'
-      \ }}
-" NeoBundleLazy 'zhaocai/unite-tag', {
+" NeoBundleLazy 'ujihisa/unite-colorscheme', {
+"       \ 'autoload': {
+"       \   'unite_sources': 'colorscheme'
+"       \ }}
 NeoBundleLazy 'tsukkee/unite-tag', {
       \ 'depends' : ['Shougo/unite.vim'],
       \ 'autoload' : {
-      \   'unite_sources' : ['tag', 'tag/file']
+      \   'unite_sources' : ['tag', 'tag/file', 'tag/include']
       \ }}
-NeoBundleLazy 'mattn/qiita-vim', { 'depends' :
-      \ ['Shougo/unite.vim', 'mattn/webapi-vim'],
+NeoBundleLazy 'mattn/qiita-vim', { 
+      \ 'depends' : ['Shougo/unite.vim', 'mattn/webapi-vim'],
       \ 'autoload': {
       \   'unite_sources' : 'qiita'
       \ }}
-NeoBundle 'kmnk/vim-unite-giti', {
+NeoBundleLazy 'kmnk/vim-unite-giti', {
       \ 'autoload': {
       \   'unite_sources': [
       \     'giti', 'giti/branch', 'giti/branch/new', 'giti/branch_all', 'giti/pull_request',
@@ -673,7 +654,6 @@ NeoBundleLazy 'alpaca-tc/unite-git-aliases', {
       \   'unite_sources' : ['menu', 'menu:git_aliases']
       \ }
       \ }
-NeoBundle 'kien/ctrlp.vim'
 " C# そのうち試す http://d.hatena.ne.jp/thinca/20130522/1369234427
 " NeoBundleLazy 'https://bitbucket.org/abudden/taghighlight', { 'autoload' : {
 "       \   'filetypes' : g:my.ft.program_files
@@ -706,15 +686,6 @@ if has("ruby")
         \ 'commands' : ['Snail'],
         \ }}
 endif
-
-if has("clientserver")
-  NeoBundleLazy 'thinca/vim-singleton', { 'autoload' : {
-        \ 'functions' : 'singleton#enable'
-        \ }}
-end
-NeoBundleLazy 'itchyny/thumbnail.vim', { 'autoload' : {
-      \ 'commands' : 'Thumbnail'
-      \ }}
 NeoBundleLazy 'tyru/restart.vim', {
       \ 'gui' : 1,
       \ 'autoload' : {
@@ -764,7 +735,6 @@ let g:ricty_generate_command = join([
       \   neobundle#get_neobundle_dir().'/alpaca/fonts/migu-1m-regular.ttf',
       \   neobundle#get_neobundle_dir().'/alpaca/fonts/migu-1m-bold.ttf',
       \ ], ' ')
-
 NeoBundleFetch 'yascentur/Ricty', {
       \ 'depends' : 'alpaca-tc/alpaca',
       \ 'autoload' : {
@@ -773,8 +743,6 @@ NeoBundleFetch 'yascentur/Ricty', {
       \     'unix' : g:ricty_generate_command,
       \   }
       \ }}
-
-" bundle.lang
 
 " css
 " ----------------------------------------
@@ -3559,7 +3527,6 @@ function! s:clear_memory() "{{{
   execute 'bdelete' join(s:buffer_nr_list(), ' ')
 endfunction "}}}
 command! Clean call <SID>clear_memory()
-
 command! CleanSwap call vimproc#system('rm -rf ' . g:my.dir.swap_dir . '/*')
 "}}}
 
