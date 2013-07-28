@@ -3691,6 +3691,7 @@ ia Haveing Having
 ia haviest heaviest
 ia Haviest Heaviest
 ia hda had
+ia hadnt hadn't
 ia Hda Had
 ia headquarer headquarter
 ia Headquarer Headquarter
@@ -3848,6 +3849,7 @@ ia husban husband
 ia Husban Husband
 ia hvae have
 ia Hvae Have
+ia havent haven't
 ia hvaing having
 ia Hvaing Having
 ia hvea have

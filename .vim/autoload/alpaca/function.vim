@@ -75,39 +75,11 @@ function! alpaca#function#endtag_comment() "{{{
 
   let @@ = reg_save
 endfunction"}}}
-function! s:branch_name() "{{{
-  return fugitive#head()
-endfunction "}}}
-function! alpaca#function#send_pullrequest(...)
-  let repo_name = empty(a:000) ? g:my.info.github : a:1
-  let branch_name = s:branch_name()
-
-  if input('May I send pull-request to '.repo_name.':'.branch_name.'? y/n ') == 'y'
-    ruby << EOF
-    def branch_name
-      VIM.evaluate('branch_name')
-    end
-
-    def repos
-      VIM.evaluate('repo_name')
-    end
-
-    def commit_message
-      branch_name.capitalize.gsub('_', ' ')
-    end
-
-    def pull_request
-      cmd = %Q!hub pull-request -b master -h #{repos}:#{branch_name} '#{commit_message}'!
-      system(cmd)
-      cmd
-    end
-
-    if branch_name && branch_name.match(/(master|remotes\/origin)/).nil?
-      pull_request_id = `#{pull_request}`.split('/')[-1].chomp
-      system "hub browse -- pull/#{pull_request_id}"
-    else
-      VIM::message("You can't send pull-request to master.")
-    end
-EOF
+function! s:convert_bufname(name) "{{{
+  let bufname = a:name
+  if bufname =~# '^[[:alnum:].+-]\+:\\\\'
+    let bufname = substitute(bufname, '\\', '/', 'g')
   endif
-endfunction
+
+  return bufname
+endfunction"}}}

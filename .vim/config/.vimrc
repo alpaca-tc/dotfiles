@@ -69,21 +69,6 @@ function! s:current_git()
 
   return s:git_root_cache[current_dir]
 endfunction
-function! s:current_remote_account_name()
-  let git_remotes = system('git remote -v')
-  if git_remotes =~ "fatal: Not a git repository"
-    " throw "No a git repository."
-    return ""
-  endif
-
-  let origin_remote = filter(split(git_remotes, '\n'), 'v:val =~ "^origin"')
-  if empty(origin_remote)
-    return ''
-  endif
-
-  let account_name = substitute(origin_remote[0], 'origin\thttp://github.com/\([^/]\+\)/\S\+\s(.*)$', '\1', 'g')
-  return account_name
-endfunction
 
 function! s:convert_bufname(name)
   let bufname = a:name
@@ -381,11 +366,11 @@ NeoBundle 'kana/vim-smartword', { 'autoload' : {
 NeoBundleLazy 'thinca/vim-quickrun', { 'autoload' : {
       \   'mappings' : [['nxo', '<Plug>(quickrun)']],
       \   'commands' : 'QuickRun' }}
-NeoBundleLazy 'scrooloose/syntastic', { 'autoload': {
-      \ 'build' : {
-      \   'mac' : join(['brew install tidy', 'brew install csslint', 'gem install sass', 'npm install -g jslint', 'gem install rubocop'], ' && ')
-      \ },
-      \ 'filetypes' : g:my.ft.program_files }}
+" NeoBundleLazy 'scrooloose/syntastic', { 'autoload': {
+"       \ 'build' : {
+"       \   'mac' : join(['brew install tidy', 'brew install csslint', 'gem install sass', 'npm install -g jslint', 'gem install rubocop'], ' && ')
+"       \ },
+"       \ 'filetypes' : g:my.ft.program_files }}
 NeoBundleLazy 'vim-scripts/sudo.vim', {
       \ 'autoload': { 'commands': ['SudoRead', 'SudoWrite'] }}
 " NeoBundleLazy 'tyru/eskk.vim', { 'autoload' : {
@@ -474,7 +459,7 @@ NeoBundleLazy 'alpaca-tc/alpaca_tags', {
       \   'unite_sources' : ['tags']
       \ }}
 
-NeoBundleLazy 'alpaca-tc/lang-8.vim', {
+NeoBundle 'alpaca-tc/lang-8.vim', {
       \ 'autoload': {
       \   'commands' : ['PostJournal']
       \ }}
@@ -512,7 +497,10 @@ NeoBundleLazy 'mattn/gist-vim', {
 NeoBundleLazy 'glidenote/memolist.vim', { 'autoload' :
       \ { 'commands' : ['MemoNew', 'MemoGrep'] }}
 NeoBundleLazy 'h1mesuke/vim-alignta', {
-      \ 'autoload' : { 'commands' : ['Align'] }}
+      \ 'autoload' : { 
+      \   'unite_sources' : 'alignta',
+      \   'commands' : ['Align'] 
+      \ }}
 NeoBundleLazy 'grep.vim', {
       \ 'autoload' : { 'commands': ["Grep", "Rgrep", "GrepBuffer"] }}
 NeoBundleLazy 'sjl/gundo.vim', {
@@ -647,10 +635,10 @@ NeoBundleLazy 'mattn/qiita-vim', { 'depends' :
       \ 'autoload': {
       \   'unite_sources' : 'qiita'
       \ }}
-NeoBundleLazy 'kmnk/vim-unite-giti', {
+NeoBundle 'kmnk/vim-unite-giti', {
       \ 'autoload': {
       \   'unite_sources': [
-      \     'giti', 'giti/branch', 'giti/branch/new', 'giti/branch_all',
+      \     'giti', 'giti/branch', 'giti/branch/new', 'giti/branch_all', 'giti/pull_request',
       \     'giti/config', 'giti/log', 'giti/remote', 'giti/status'
       \   ]
       \ }}
@@ -2259,41 +2247,37 @@ function! bundle.hooks.on_source(bundle)
     "       \| inoremap <buffer> <expr> . smartchr#loop('.', ' => ')
   augroup END
 endfunction
-
+unlet bundle
 
 "------------------------------------
-let bundle = NeoBundleGet('syntastic')
-function bundle.hooks.on_source(bundle) "{{{
-  "loadのときに、syntaxCheckをする
-  let g:syntastic_auto_jump=1
-  let g:syntastic_auto_loc_list=1
-  let g:syntastic_check_on_open=0
-  let g:syntastic_echo_current_error=1
-  let g:syntastic_enable_balloons = has("balloon_eval")
-  let g:syntastic_enable_highlighting = 1
-  let g:syntastic_enable_signs = 1
-  let g:syntastic_loc_list_height=3
-  let g:syntastic_quiet_warnings=0
-  let g:syntastic_error_symbol='>'
-  let g:syntastic_warning_symbol='X'
-  " let g:syntastic_error_symbol='✗'
-  " let g:syntastic_warning_symbol='⚠'
+"loadのときに、syntaxCheckをする
+let g:syntastic_auto_jump=1
+let g:syntastic_auto_loc_list=1
+let g:syntastic_check_on_open=0
+let g:syntastic_echo_current_error=1
+let g:syntastic_enable_balloons = has("balloon_eval")
+let g:syntastic_enable_highlighting = 1
+let g:syntastic_enable_signs = 1
+let g:syntastic_loc_list_height=3
+let g:syntastic_quiet_warnings=0
+let g:syntastic_error_symbol='>'
+let g:syntastic_warning_symbol='X'
+" let g:syntastic_error_symbol='✗'
+" let g:syntastic_warning_symbol='⚠'
 
-  " racc.rubyのftで編集すると、保存時に怒られるので除外する。
-  " au FileType ruby let g:syntastic_mode_map.passive_filetypes = copy( s:passive_filetypes )
-  " au BufEnter *.y call <SID>remove_ruby_syntastic()
-  " function! s:remove_ruby_syntastic()
-  "   call add( g:syntastic_mode_map.passive_filetypes, "ruby" )
-  " endfunction
+" racc.rubyのftで編集すると、保存時に怒られるので除外する。
+" au FileType ruby let g:syntastic_mode_map.passive_filetypes = copy( s:passive_filetypes )
+" au BufEnter *.y call <SID>remove_ruby_syntastic()
+" function! s:remove_ruby_syntastic()
+"   call add( g:syntastic_mode_map.passive_filetypes, "ruby" )
+" endfunction
 
-  let s:passive_filetypes = ["html", "yaml", "racc.ruby", 'eruby']
-  let g:syntastic_mode_map = {
-        \ 'mode'              : 'active',
-        \ 'active_filetypes'  : g:my.ft.program_files,
-        \ 'passive_filetypes' : copy(s:passive_filetypes),
-        \}
-endfunction "}}}
-unlet bundle
+let s:passive_filetypes = ["html", "yaml", "racc.ruby", 'eruby']
+let g:syntastic_mode_map = {
+      \ 'mode'              : 'active',
+      \ 'active_filetypes'  : g:my.ft.program_files,
+      \ 'passive_filetypes' : copy(s:passive_filetypes),
+      \}
 
 "------------------------------------
 " w3m.vim
@@ -2751,7 +2735,7 @@ unlet bundle
 " ------------------------------------
 let g:alpaca_tags_ctags_bin = '/Applications/MacVim.app/Contents/MacOS/ctags'
 let g:alpaca_tags_config = {
-      \ '_' : '-R --sort=yes --languages=+Ruby',
+      \ '_' : '-R --sort=yes --languages=+Ruby --languages=-js,JavaScript',
       \ 'default' : '--languages=-css,scss,html,js,JavaScript',
       \ 'js' : '--languages=+js',
       \ '-js' : '--languages=-js,JavaScript',
@@ -2766,6 +2750,12 @@ let g:alpaca_tags_config = {
       \ '-coffee': '--languages=-coffee',
       \ 'bundle': '--languages=+Ruby',
       \ }
+let g:alpaca_tags_print_to_console = {
+        \ 'debug' : 0,
+        \ 'setted tags' : 0,
+        \ 'created/updated tags' : 1,
+        \ }
+
 
 " ------------------------------------
 " vim-gitgutter
@@ -3273,6 +3263,7 @@ nnoremap <silent> [unite]rr :<C-u>Unite -no-quit rails_best_practices<CR>
 
 " unite-giti
 nnoremap <silent>gl :<C-U>Unite -buffer-name=giti_log -no-start-insert -horizontal giti/log<CR>
+nnoremap <silent>gP :<C-U>Unite -buffer-name=giti_pull_request -no-start-insert -horizontal giti/pull_request/base<CR>
 nnoremap <silent>gL :<C-U>Unite -buffer-name=versions_log -no-start-insert -horizontal versions/git/log<CR>
 nnoremap <silent>gS :<C-U>Unite -buffer-name=versions_status -no-start-insert -horizontal versions/git/status<CR>
 nnoremap <silent>gs :<C-U>Unite -buffer-name=giti_status -no-start-insert -horizontal giti/status<CR>
@@ -3496,6 +3487,7 @@ endfunction"}}}
 
 "----------------------------------------
 let g:lang8_email_address = 'alpaca_tc@ezweb.ne.jp'
+" let g:lang8_email_address = 'mon03g@yahoo.co.jp'
 "}}}
 
 "----------------------------------------
@@ -3610,6 +3602,7 @@ function! s:send_pull_request(...) "{{{
   let account_name = empty(a:000[0]) ? s:current_remote_account_name() : a:1
   call alpaca#function#send_pullrequest(account_name)
 endfunction"}}}
+command! -nargs=0 Remote echo s:current_remote_account_name()
 command! -nargs=? SendPullRequest call s:send_pull_request(<q-args>)
 "}}}
 
