@@ -619,7 +619,7 @@ NeoBundleLazy 'mattn/qiita-vim', {
 NeoBundleLazy 'kmnk/vim-unite-giti', {
       \ 'autoload': {
       \   'unite_sources': [
-      \     'giti', 'giti/branch', 'giti/branch/new', 'giti/branch_all', 'giti/pull_request',
+      \     'giti', 'giti/branch', 'giti/branch/new', 'giti/branch_all', 'giti/pull_request/base', 'giti/pull_request/head',
       \     'giti/config', 'giti/log', 'giti/remote', 'giti/status'
       \   ]
       \ }}
@@ -649,7 +649,7 @@ NeoBundleLazy 'basyura/TweetVim', { 'depends' :
       \ }}
 
 " その他 / テスト
-NeoBundleLazy 'alpaca-tc/unite-git-aliases', {
+NeoBundle 'alpaca-tc/unite-git-aliases', {
       \   'autoload' : {
       \   'unite_sources' : ['menu', 'menu:git_aliases']
       \ }
@@ -2557,7 +2557,7 @@ xmap A  <Plug>(niceblock-A)
 " ------------------------------------
 nnoremap ! :Switch<CR>
 let s:switch_define = {
-      \ "ruby,eruby" : [
+      \ "ruby,eruby,haml" : [
       \   ["if", "unless"],
       \   ["while", "until"],
       \   [".blank?", ".present?"],
@@ -2627,11 +2627,6 @@ let s:switch_define = {
       \ 'c' : [
       \   ['signed', 'unsigned'],
       \ ],
-      \ "haml" : [
-      \   ["if", "unless"],
-      \   ["while", "until"],
-      \   [".blank?", ".present?"],
-      \ ],
       \ "css,scss,sass": [
       \   ["collapse", "separate"],
       \   ["margin", "padding"],
@@ -2660,7 +2655,6 @@ let s:switch_define = {
       \   { '\vhttps{,1}://github.com/([^/]+)/([^/]+)(\.git){,1}': '\1/\2' }
       \ ],
       \ }
-      " \   { 'https?://github.com/': '\1/\2' }
 
 let s:switch_define = alpaca#initialize#redefine_with_each_filetypes(s:switch_define)
 function! s:define_switch_mappings() "{{{
@@ -2723,7 +2717,6 @@ let g:alpaca_tags_print_to_console = {
         \ 'setted tags' : 0,
         \ 'created/updated tags' : 1,
         \ }
-
 
 " ------------------------------------
 " vim-gitgutter

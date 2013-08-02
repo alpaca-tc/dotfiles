@@ -1,3 +1,4 @@
+" Sended pull_request to unite-giti
 function! alpaca#function#git#send_pullrequest(...) "{{{
   let repo_names = s:current_remote_names()
 

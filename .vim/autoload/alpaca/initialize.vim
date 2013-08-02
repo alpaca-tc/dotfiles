@@ -25,7 +25,7 @@ function! alpaca#initialize#define_abbrev(define, ...) "{{{
 
   execute a:0 > 0 ? s:get_autcmd_with_filetype(a:1, command) : command
 endfunction"}}}
-function! alpaca#initialize#redefine_with_each_filetypes(ft_dictionary)
+function! alpaca#initialize#redefine_with_each_filetypes(ft_dictionary) "{{{
   let result = {}
 
   for [filetypes, value] in items(a:ft_dictionary)
@@ -39,4 +39,4 @@ function! alpaca#initialize#redefine_with_each_filetypes(ft_dictionary)
   endfor
 
   return result
-endfunction
+endfunction"}}}

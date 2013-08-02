@@ -19,126 +19,122 @@ let g:alpaca_complete_assets_dir = {
       \ 'img'   : 'app/assets/images',
       \ 'js'    : 'app/assets/javascripts',
       \ 'style' : 'app/assets/stylesheets',
-     \}
-      " \ 'ctrl'  : 'app/controllers',
-      " \ 'mig'   : 'db/migrate',
-      " \ 'seed'  : 'db/seeds',
-      " \ 'lib'   : 'lib',
-      " \ 'spec'  : 'spec',
-      " \ 'model' : 'app/models',
-      " \ 'view'  : 'app/views',
-      " \ 'helper': 'app/helpers',
-      " \ 'admin' : 'app/admin',
-      " \ 'conf'  : 'config',
+      \}
+" \ 'ctrl'  : 'app/controllers',
+" \ 'mig'   : 'db/migrate',
+" \ 'seed'  : 'db/seeds',
+" \ 'lib'   : 'lib',
+" \ 'spec'  : 'spec',
+" \ 'model' : 'app/models',
+" \ 'view'  : 'app/views',
+" \ 'helper': 'app/helpers',
+" \ 'admin' : 'app/admin',
+" \ 'conf'  : 'config',
 
 
-let bundle = neobundle#get('neocomplcache')
-function! bundle.hooks.on_source(bundle) "{{{
-  " initialize "{{{
-  if $USER == 'root'
-    let g:neocomplcache_temporary_dir = '/tmp'
-  endif
+" initialize "{{{
+if $USER == 'root'
+  let g:neocomplcache_temporary_dir = '/tmp'
+endif
 
-  let s:neocomplcache_initialize_lists = [
-        \ 'neocomplcache_include_patterns',
-        \ 'neocomplcache_wildcard_characters',
-        \ 'neocomplcache_omni_patterns',
-        \ 'neocomplcache_force_omni_patterns',
-        \ 'neocomplcache_keyword_patterns',
-        \ 'neocomplcache_source_completion_length',
-        \ 'neocomplcache_source_rank',
-        \ 'neocomplcache_vim_completefuncs',
-        \ 'neocomplcache_same_filetype_lists',
-        \ 'neocomplcache_delimiter_patterns',
-        \ 'neocomplcache_dictionary_filetype_lists',
-        \ 'neocomplcache_disabled_sources_list',
-        \ 'neocomplcache_text_mode_filetypes'
-        \ ]
+let s:neocomplcache_initialize_lists = [
+      \ 'neocomplcache_include_patterns',
+      \ 'neocomplcache_wildcard_characters',
+      \ 'neocomplcache_omni_patterns',
+      \ 'neocomplcache_force_omni_patterns',
+      \ 'neocomplcache_keyword_patterns',
+      \ 'neocomplcache_source_completion_length',
+      \ 'neocomplcache_source_rank',
+      \ 'neocomplcache_vim_completefuncs',
+      \ 'neocomplcache_same_filetype_lists',
+      \ 'neocomplcache_delimiter_patterns',
+      \ 'neocomplcache_dictionary_filetype_lists',
+      \ 'neocomplcache_disabled_sources_list',
+      \ 'neocomplcache_text_mode_filetypes'
+      \ ]
 
-  for initialize_variable in s:neocomplcache_initialize_lists
-    call alpaca#let_g:(initialize_variable, {})
-  endfor
-  "}}}
+for initialize_variable in s:neocomplcache_initialize_lists
+  call alpaca#let_g:(initialize_variable, {})
+endfor
+"}}}
 
-  " Define force omni patterns"{{{
-  let g:neocomplcache_force_omni_patterns = {
-        \ }
+" Define force omni patterns"{{{
+let g:neocomplcache_force_omni_patterns = {
+      \ }
 
-  let g:neocomplcache_text_mode_filetypes = {
-        \ 'markdown' : 1,
-        \ 'gitcommit' : 1,
-        \ 'text' : 1,
-        \ }
+let g:neocomplcache_text_mode_filetypes = {
+      \ 'markdown' : 1,
+      \ 'gitcommit' : 1,
+      \ 'text' : 1,
+      \ }
 
-  let g:neocomplcache_source_rank = {
-        \ 'c'       : '[^.[:digit:] *\t]\%(\.\|->\)',
-        \ 'cpp'     : '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::',
-        \ 'python'  : '[^. \t]\.\w*',
-        \ }
+let g:neocomplcache_source_rank = {
+      \ 'c'       : '[^.[:digit:] *\t]\%(\.\|->\)',
+      \ 'cpp'     : '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::',
+      \ 'python'  : '[^. \t]\.\w*',
+      \ }
 
-  " Define keyword pattern.
-  let g:neocomplcache_keyword_patterns = {
-        \ 'c'         : '[^.[:digit:]*\t]\%(\.\|->\)',
-        \ 'mail'      : '^\s*\w\+',
-        \ }
+" Define keyword pattern.
+let g:neocomplcache_keyword_patterns = {
+      \ 'c'         : '[^.[:digit:]*\t]\%(\.\|->\)',
+      \ 'mail'      : '^\s*\w\+',
+      \ }
 
-  " Define include pattern.
-  let g:neocomplcache_include_patterns = {
-        \ 'scala' : '^import',
-        \ 'scss'  : '^\s*\<\%(@import\)\>',
-        \ 'php'   : '^\s*\<\%(inlcude\|\|include_once\|require\|require_once\)\>',
-        \ }
+" Define include pattern.
+let g:neocomplcache_include_patterns = {
+      \ 'scala' : '^import',
+      \ 'scss'  : '^\s*\<\%(@import\)\>',
+      \ 'php'   : '^\s*\<\%(inlcude\|\|include_once\|require\|require_once\)\>',
+      \ }
 
-  " tags_completeはデフォルトでOFFでいい。。
-  let g:neocomplcache_disabled_sources_list._ = ['tags_complete']
-  " let g:neocomplcache_disabled_sources_list._ = ['tags_complete', 'omni_complete']
+" tags_completeはデフォルトでOFFでいい。。
+let g:neocomplcache_disabled_sources_list._ = ['tags_complete']
+" let g:neocomplcache_disabled_sources_list._ = ['tags_complete', 'omni_complete']
 
-  " Define omni patterns
-  let g:neocomplcache_omni_patterns = {
-        \ 'php' : '[^. *\t]\.\w*\|\h\w*::'
-        \ }
+" Define omni patterns
+let g:neocomplcache_omni_patterns = {
+      \ 'php' : '[^. *\t]\.\w*\|\h\w*::'
+      \ }
 
-  " let g:neocomplcache_delimiter_patterns = {
-  "       \ 'ruby' : []
-  "       \ }
+" let g:neocomplcache_delimiter_patterns = {
+"       \ 'ruby' : []
+"       \ }
 
-  " Define completefunc
-  let g:neocomplcache_vim_completefuncs = {
-        \ "Ref"                 : 'ref#complete',
-        \ "Unite"               : 'unite#complete_source',
-        \ "VimFiler"            : 'vimfiler#complete',
-        \ "VimShell"            : 'vimshell#complete',
-        \ "VimShellExecute"     : 'vimshell#vimshell_execute_complete',
-        \ "VimShellInteractive" : 'vimshell#vimshell_execute_complete',
-        \ "VimShellTerminal"    : 'vimshell#vimshell_execute_complete',
-        \ "Vinarise"            : 'vinarise#complete',
-        \ }
+" Define completefunc
+let g:neocomplcache_vim_completefuncs = {
+      \ "Ref"                 : 'ref#complete',
+      \ "Unite"               : 'unite#complete_source',
+      \ "VimFiler"            : 'vimfiler#complete',
+      \ "VimShell"            : 'vimshell#complete',
+      \ "VimShellExecute"     : 'vimshell#vimshell_execute_complete',
+      \ "VimShellInteractive" : 'vimshell#vimshell_execute_complete',
+      \ "VimShellTerminal"    : 'vimshell#vimshell_execute_complete',
+      \ "Vinarise"            : 'vinarise#complete',
+      \ }
 
-  " ファイルタイプ毎の辞書ファイルの場所 {{{
-  let g:neocomplcache_dictionary_filetype_lists = {
-        \ 'default'             : '',
-        \ 'javascript.timobile' : $HOME.'/.vim/dict/timobile.dict',
-        \ 'coffee.timobile'     : $HOME.'/.vim/dict/timobile.dict',
-        \ }
+" ファイルタイプ毎の辞書ファイルの場所 {{{
+let g:neocomplcache_dictionary_filetype_lists = {
+      \ 'default'             : '',
+      \ 'javascript.timobile' : $HOME.'/.vim/dict/timobile.dict',
+      \ 'coffee.timobile'     : $HOME.'/.vim/dict/timobile.dict',
+      \ }
 
-  for s:dict in split(glob($HOME.'/.vim/dict/*.dict'))
-    let s:ft = matchstr(s:dict, '[a-zA-Z0-9.]\+\ze\.dict$')
-    let g:neocomplcache_dictionary_filetype_lists[s:ft] = s:dict
-  endfor
-  "}}}
+for s:dict in split(glob($HOME.'/.vim/dict/*.dict'))
+  let s:ft = matchstr(s:dict, '[a-zA-Z0-9.]\+\ze\.dict$')
+  let g:neocomplcache_dictionary_filetype_lists[s:ft] = s:dict
+endfor
+"}}}
 
-  aug MyAutoCmd
-    " previewwindowを自動で閉じる
-    au BufReadPre *
-          \ if &previewwindow
-          \|  au BufEnter <buffer>
-          \|    if &previewwindow
+aug MyAutoCmd
+  " previewwindowを自動で閉じる
+  au BufReadPre *
+        \ if &previewwindow
+        \|  au BufEnter <buffer>
+        \|    if &previewwindow
           \|      call <SID>smart_close()
           \|    endif
           \|endif
-  aug END
-endfunction"}}}
-unlet bundle
+aug END
 "}}}
 
 " keymap {{{
@@ -157,5 +153,3 @@ inoremap <expr><C-x><C-f> neocomplcache#manual_filename_complete()
 " }}}
 
 " }}}
-
-
