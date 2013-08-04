@@ -491,6 +491,8 @@ NeoBundleLazy 'h1mesuke/vim-alignta', {
       \   'unite_sources' : 'alignta',
       \   'commands' : ['Align'] 
       \ }}
+NeoBundleLazy 'junegunn/vim-easy-align', { 'autoload': {
+      \ 'commands' : ['EasyAlign'] }}
 NeoBundleLazy 'grep.vim', {
       \ 'autoload' : { 'commands': ["Grep", "Rgrep", "GrepBuffer"] }}
 NeoBundleLazy 'sjl/gundo.vim', {
@@ -649,11 +651,11 @@ NeoBundleLazy 'basyura/TweetVim', { 'depends' :
       \ }}
 
 " その他 / テスト
-NeoBundle 'alpaca-tc/unite-git-aliases', {
-      \   'autoload' : {
-      \   'unite_sources' : ['menu', 'menu:git_aliases']
-      \ }
-      \ }
+NeoBundle 'alpaca-tc/unite-git-aliases'
+" NeoBundle 'alpaca-tc/unite-git-aliases', {
+"       \   'autoload' : {
+"       \   'unite_sources' : ['git_aliases']
+"       \ }}
 " C# そのうち試す http://d.hatena.ne.jp/thinca/20130522/1369234427
 " NeoBundleLazy 'https://bitbucket.org/abudden/taghighlight', { 'autoload' : {
 "       \   'filetypes' : g:my.ft.program_files
@@ -712,7 +714,7 @@ NeoBundleLazy 'DirDiff.vim', { 'autoload' : {
 NeoBundleLazy 'repeat.vim', { 'autoload' : {
       \ 'mappings' : '.',
       \ }}
-NeoBundleLazy 'jiangmiao/auto-pairs', { 'autoload' : {
+NeoBundle 'jiangmiao/auto-pairs', { 'autoload' : {
       \ 'insert': 1 }}
 NeoBundle 'terryma/vim-multiple-cursors', { 'autload': {
       \ 'function_prefix': 'multiple_cursors',
@@ -1053,7 +1055,7 @@ augroup END
 " xnoremap <S-TAB>  <
 " xnoremap <TAB>  >
 xnoremap < <gv
-xnoremap <C-M> :sort<CR>
+xnoremap m :sort<CR>
 xnoremap > >gv
 
 " 便利系
@@ -1489,6 +1491,9 @@ function bundle.hooks.on_source(bundle) "{{{
   let g:Align_xstrlen = 3
 endfunction "}}}
 unlet bundle
+
+"------------------------------------
+xnoremap <silent>a :EasyAlign<CR>
 
 "------------------------------------
 " surround.vim"{{{
