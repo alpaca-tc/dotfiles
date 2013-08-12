@@ -618,7 +618,7 @@ NeoBundleLazy 'mattn/qiita-vim', {
       \ 'autoload': {
       \   'unite_sources' : 'qiita'
       \ }}
-NeoBundleLazy 'kmnk/vim-unite-giti', {
+NeoBundle 'kmnk/vim-unite-giti', {
       \ 'autoload': {
       \   'unite_sources': [
       \     'giti', 'giti/branch', 'giti/branch/new', 'giti/branch_all', 'giti/pull_request/base', 'giti/pull_request/head',
@@ -651,7 +651,8 @@ NeoBundleLazy 'basyura/TweetVim', { 'depends' :
       \ }}
 
 " その他 / テスト
-NeoBundle 'alpaca-tc/unite-git-aliases'
+NeoBundleLazy 'alpaca-tc/unite-git-aliases', { 'autoload' : {
+      \ 'unite_sources' : 'git_aliases' }}
 " NeoBundle 'alpaca-tc/unite-git-aliases', {
 "       \   'autoload' : {
 "       \   'unite_sources' : ['git_aliases']
@@ -685,7 +686,9 @@ if has("ruby")
         \ }
   " l8のバイトの金額求める
   NeoBundleLazy 'alpaca-tc/snail_csv2google_sheet', { 'autoload': {
-        \ 'commands' : ['Snail'],
+        \ 'commands' : [
+        \   { "name": "Snail", "complete" : "file" },
+        \ ],
         \ }}
 endif
 NeoBundleLazy 'tyru/restart.vim', {
@@ -757,6 +760,8 @@ NeoBundleLazy 'AtsushiM/sass-compile.vim', {
 NeoBundleLazy 'vim-less', {
       \ 'autoload': { 'filetypes': ['less'] }
       \ }
+NeoBundleLazy 'mattn/livestyle-vim', { 'autoload' : 
+      \ { 'commands' : ['LiveStyle'] } }
 
 " html
 " ----------------------------------------
@@ -980,6 +985,22 @@ NeoBundleLazy "vim-jp/cpp-vim", {
 " ----------------------------------------
 NeoBundleLazy 'sh.vim', { 'autoload': {
       \ 'filetypes': g:my.ft.sh_files }}
+
+" jekyll.vim
+" ----------------------------------------
+NeoBundleLazy 'csexton/jekyll.vim'
+function! s:load_jekyll_plugins()
+  let pwd = getcwd()
+  if pwd =~ 'github.com'
+    autocmd! JekyllLoading
+    augroup! JekyllLoading
+    NeoBundleSource jekyll.vim
+  endif
+endfunction
+augroup JekyllLoading
+  autocmd!
+  autocmd FileReadPre * <SID>load_jekyll_plugins()
+augroup END
 
 " 他のアプリを呼び出すetc
 " NeoBundle 'yuroyoro/vimdoc_ja'
@@ -2194,14 +2215,11 @@ function! bundle.hooks.on_source(bundle)
   augroup MySmarChr
     au!
     " Substitute .. into -> .
-    au FileType c,cpp    inoremap <buffer><expr> . smartchr#loop('.', '->', '..', '...')
-    au FileType perl,php inoremap <buffer><expr> - smartchr#loop('-', '->')
-    au FileType coffee   inoremap <buffer><expr> - smartchr#loop('-', '->', '=>')
-    au FileType php      inoremap <buffer><expr> . smartchr#loop('.', '->', '..')
-          \| inoremap <buffer><expr>> smartchr#loop('>', '=>')
-    au FileType scala    inoremap <buffer><expr> - smartchr#loop('-', '->', '=>')
-          \| inoremap <buffer><expr> < smartchr#loop('<', '<-')
-    au FileType yaml,eruby inoremap <buffer><expr> < smartchr#loop('<', '<%', '<%=')
+    autocmd FileType c,cpp    inoremap <buffer><expr> . smartchr#loop('.', '->', '..', '...')
+    autocmd FileType perl,php inoremap <buffer><expr> - smartchr#loop('-', '->')
+    autocmd FileType coffee   inoremap <buffer><expr> - smartchr#loop('-', '->', '=>')
+    autocmd FileType scala    inoremap <buffer><expr> - smartchr#loop('-', '->', '=>')
+    autocmd FileType yaml,eruby inoremap <buffer><expr> < smartchr#loop('<', '<%', '<%=')
           \| inoremap <buffer><expr> > smartchr#loop('>', '%>', '-%>')
 
     " 使わない
@@ -2224,33 +2242,28 @@ unlet bundle
 
 "------------------------------------
 "loadのときに、syntaxCheckをする
-let g:syntastic_auto_jump=1
-let g:syntastic_auto_loc_list=1
-let g:syntastic_check_on_open=0
-let g:syntastic_echo_current_error=1
+let g:syntastic_auto_jump = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 0
+let g:syntastic_echo_current_error = 1
 let g:syntastic_enable_balloons = has("balloon_eval")
 let g:syntastic_enable_highlighting = 1
 let g:syntastic_enable_signs = 1
 let g:syntastic_loc_list_height=3
-let g:syntastic_quiet_warnings=0
-let g:syntastic_error_symbol='>'
-let g:syntastic_warning_symbol='X'
+let g:syntastic_quiet_warnings = 0
+let g:syntastic_error_symbol = '>'
+let g:syntastic_warning_symbol = 'X'
 " let g:syntastic_error_symbol='✗'
 " let g:syntastic_warning_symbol='⚠'
 
 " racc.rubyのftで編集すると、保存時に怒られるので除外する。
-" au FileType ruby let g:syntastic_mode_map.passive_filetypes = copy( s:passive_filetypes )
-" au BufEnter *.y call <SID>remove_ruby_syntastic()
-" function! s:remove_ruby_syntastic()
-"   call add( g:syntastic_mode_map.passive_filetypes, "ruby" )
-" endfunction
-
 let s:passive_filetypes = ["html", "yaml", "racc.ruby", 'eruby']
+let g:syntastic_ruby_checkers = ['mri', 'rubocop']
 let g:syntastic_mode_map = {
-      \ 'mode'              : 'active',
+      \ 'mode'              : 'passive',
       \ 'active_filetypes'  : g:my.ft.program_files,
       \ 'passive_filetypes' : copy(s:passive_filetypes),
-      \}
+      \ }
 
 "------------------------------------
 " w3m.vim
@@ -3454,6 +3467,13 @@ endfunction"}}}
 "----------------------------------------
 let g:lang8_email_address = 'alpaca_tc@ezweb.ne.jp'
 " let g:lang8_email_address = 'mon03g@yahoo.co.jp'
+
+"----------------------------------------
+let bundle = NeoBundleGet('jekyll.vim')
+function! bundle.hooks.on_source(bundle) "{{{
+  let git_dir = s:current_git()
+  let g:jekyll_path = git_dir
+endfunction"}}}
 "}}}
 
 "----------------------------------------
@@ -3550,7 +3570,6 @@ function! s:do_lang8_autocmd() "{{{
   endif
 endfunction"}}}
 function! s:lang8_settings()
-  let g:syntastic_ruby_checkers = ['mri', 'rubocop']
   let g:neorspec_command = 'Dispatch spec {spec}'
 
   nnoremap <buffer>[plug]c           :<C-U>UniteGit config<CR>
@@ -3560,7 +3579,6 @@ function! s:lang8_settings()
 endfunction
 augroup MyAutoCmd
   autocmd User Rails call <SID>do_lang8_autocmd()
-  autocmd FileType ruby let g:syntastic_ruby_checkers = ['mri']
 augroup END
 
 function! s:send_pull_request(...) "{{{

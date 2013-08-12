@@ -11,6 +11,7 @@ export BROWSER=google-chrome
 export GITHUB_HOST='github.com'
 export CONFIGURE_OPTS="--with-gcc=clang"
 export ECLIPSE_HOME='/Applications/eclipse'
+export SSL_CERT_FILE=/usr/local/etc/cacert.pem
 
 # 各種の設定 古いgccを使う場合
 # export CC='/usr/local/bin/gcc-4.2'
