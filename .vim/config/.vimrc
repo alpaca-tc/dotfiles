@@ -717,7 +717,7 @@ NeoBundleLazy 'DirDiff.vim', { 'autoload' : {
 NeoBundleLazy 'repeat.vim', { 'autoload' : {
       \ 'mappings' : '.',
       \ }}
-NeoBundle 'jiangmiao/auto-pairs', { 'autoload' : {
+NeoBundleLazy 'jiangmiao/auto-pairs', { 'autoload' : {
       \ 'insert': 1 }}
 NeoBundle 'terryma/vim-multiple-cursors', { 'autload': {
       \ 'function_prefix': 'multiple_cursors',
@@ -1026,6 +1026,7 @@ NeoBundleLazy 'thinca/vim-scouter', { 'autoload' : {
 " endif
 
 filetype plugin indent on
+" finish
 "}}}
 
 "----------------------------------------
@@ -1119,10 +1120,13 @@ let s:alpaca_abbr_define = {
       \ "yaml": [
       \   "< << : *"
       \ ],
-      \ "ruby,ruby.rspec" : [
+      \ "ruby.rspec" : [
       \   "sh should",
       \   "reqs require 'spec_helper'",
       \   "req require",
+      \ ],
+      \ 'ruby' : [
+      \   'req require',
       \ ],
       \ "scss": [
       \   "in include",
@@ -2672,6 +2676,9 @@ let s:switch_define = {
       \ 'vim' : [
       \   { '\vhttps{,1}://github.com/([^/]+)/([^/]+)(\.git){,1}': '\1/\2' }
       \ ],
+      \ 'markdown' : [
+      \   ['[ ]', '[x]']
+      \ ]
       \ }
 
 let s:switch_define = alpaca#initialize#redefine_with_each_filetypes(s:switch_define)
@@ -3474,6 +3481,15 @@ function! bundle.hooks.on_source(bundle) "{{{
   let git_dir = s:current_git()
   let g:jekyll_path = git_dir
 endfunction"}}}
+
+let bundle = NeoBundleGet('auto-pairs')
+function! bundle.hooks.on_source(bundle) "{{{
+  let g:auto_pairs#mapSpace = 0
+endfunction"}}}
+function! bundle.hooks.on_post_source(bundle) "{{{
+  call auto_pairs#try_init()
+endfunction"}}}
+unlet bundle
 "}}}
 
 "----------------------------------------
