@@ -717,7 +717,8 @@ NeoBundleLazy 'DirDiff.vim', { 'autoload' : {
 NeoBundleLazy 'repeat.vim', { 'autoload' : {
       \ 'mappings' : '.',
       \ }}
-NeoBundleLazy 'jiangmiao/auto-pairs', { 'autoload' : {
+" NeoBundleLazy 'jiangmiao/auto-pairs', { 'autoload' : {
+NeoBundleLazy 'alpaca-tc/auto-pairs', { 'autoload' : {
       \ 'insert': 1 }}
 NeoBundle 'terryma/vim-multiple-cursors', { 'autload': {
       \ 'function_prefix': 'multiple_cursors',
