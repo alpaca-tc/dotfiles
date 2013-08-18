@@ -1139,7 +1139,7 @@ let s:alpaca_abbr_define = {
       \ ],
       \ "gitcommit" : [
       \   "wip [WIP]"
-      \ ]
+      \ ],
       \ }
 for [filetype, abbr_defines] in items(s:alpaca_abbr_define)
   call alpaca#initialize#define_abbrev(abbr_defines, filetype)
@@ -3485,7 +3485,8 @@ endfunction"}}}
 
 let bundle = NeoBundleGet('auto-pairs')
 function! bundle.hooks.on_source(bundle) "{{{
-  let g:auto_pairs#mapSpace = 0
+  let g:auto_pairs#map_space = 0
+  let g:auto_pairs#map_cr = 0
 endfunction"}}}
 function! bundle.hooks.on_post_source(bundle) "{{{
   call auto_pairs#try_init()
@@ -3607,7 +3608,7 @@ command! -nargs=? SendPullRequest call s:send_pull_request(<q-args>)
 "}}}
 
 " ----------------------------------------
-let g:git_aliases#author_name = 'alpaca_taichou'
+let g:git_aliases#author_name = g:my.info.github
 
 if !has('vim_starting')
   " Call on_source hook when reloading .vimrc.
