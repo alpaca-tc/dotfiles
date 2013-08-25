@@ -1,3 +1,3 @@
-aug MyFtDetect
-  au BufNewFile,BufRead *.dict setf dict
-aug END
+augroup MyFtDetect
+  autocmd BufNewFile,BufRead *.dict setf dict
+augroup END

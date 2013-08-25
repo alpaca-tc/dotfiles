@@ -150,9 +150,14 @@ abbr include Enumerable
 
 # module
 snippet     alias
-abbr        alias :new_name, :old_name
+abbr        alias :new_name :old_name
 options     word
-  alias :${1:new_name}, :${2:old_name}
+  alias :${1:new_name} :${2:old_name}
+
+snippet     autoload
+abbr        autoload :Name, 'path/to/file'
+options     word
+  autoload :${1:Name}, '${2:path/to/file}'
 
 snippet     alias_method
 abbr        alias_method :new_name, :old_name

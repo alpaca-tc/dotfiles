@@ -1,0 +1,248 @@
+# Mouse Event#{{{
+snippet onclick
+abbr    The event occurs when the user clicks on an element
+regexp  '.\+\.'
+options word
+  onclick = function() {
+    ${1}
+  }
+
+snippet ondblclick
+abbr    The event occurs when the user double-clicks on an element
+regexp  '.\+\.'
+options word
+  ondblclick = function() {
+    ${1}
+  }
+
+snippet onmousedown
+abbr    The event occurs when a user presses a mouse button over an element
+regexp  '.\+\.'
+options word
+  onmousedown = function() {
+    ${1}
+  }
+
+snippet onmousemove
+abbr    The event occurs when the pointer is moving while it is over an element
+regexp  '.\+\.'
+options word
+  onmousemove = function() {
+    ${1}
+  }
+
+snippet onmouseover
+abbr    The event occurs when the pointer is moved onto an element
+regexp  '.\+\.'
+options word
+  onmouseover = function() {
+    ${1}
+  }
+
+snippet onmouseout
+abbr    The event occurs when a user moves the mouse pointer out of an element
+regexp  '.\+\.'
+options word
+  onmouseout = function() {
+    ${1}
+  }
+
+snippet onmouseup
+abbr    The event occurs when a user releases a mouse button over an element
+regexp  '.\+\.'
+options word
+  onmouseup = function() {
+    ${1}
+  }
+#}}}
+
+# Key Event#{{{
+snippet onkeydown
+abbr    The event occurs when the user is pressing a key
+regexp  '.\+\.'
+options word
+  onkeydown = function() {
+    ${1}
+  }
+
+snippet onkeypress
+abbr    The event occurs when the user presses a key
+regexp  '.\+\.'
+options word
+  onkeypress = function() {
+    ${1}
+  }
+snippet onkeyup
+abbr    The event occurs when the user releases a key
+regexp  '.\+\.'
+options word
+  onkeyup = function() {
+    ${1}
+  }
+#}}}
+
+# Frame Event#{{{
+snippet onabort
+abbr    The event occurs when an image is stopped from loading before completely loaded (for <object>)
+regexp  '.\+\.'
+options word
+  onabort = function() {
+    ${1}
+  }
+
+snippet onerror
+abbr    The event occurs when an image does not load properly (for <object>, <body> and <frameset>)
+regexp  '.\+\.'
+options word
+  onerror = function() {
+    ${1}
+  }
+
+snippet onload
+abbr    The event occurs when a document, frameset, or <object> has been loaded
+regexp  '.\+\.'
+options word
+  onload = function() {
+    ${1}
+  }
+
+snippet onresize
+abbr    The event occurs when a document view is resized
+regexp  '.\+\.'
+options word
+  onresize = function() {
+    ${1}
+  }
+
+snippet onscroll
+abbr    The event occurs when a document view is scrolled
+regexp  '.\+\.'
+options word
+  onscroll = function() {
+    ${1}
+  }
+# }}}
+
+# Form Event {{{
+snippet onblur
+abbr    The event occurs when a form element loses focus
+regexp  '.\+\.'
+options word
+  onblur = function() {
+    ${1}
+  }
+
+snippet onchange
+abbr    The event occurs when the content of a form element, the selection, or the checked state have changed (for <input>, <select>, and <textarea>)
+regexp  '.\+\.'
+options word
+  onchange = function() {
+    ${1}
+  }
+
+snippet onfocus
+abbr    The event occurs when an element gets focus (for <label>, <input>, <select>, textarea>, and <button>)
+regexp  '.\+\.'
+options word
+  onfocus = function() {
+    ${1}
+  }
+
+snippet onreset
+abbr    The event occurs when a form is reset
+regexp  '.\+\.'
+options word
+  onreset = function() {
+    ${1}
+  }
+
+snippet onselect
+abbr    The event occurs when a user selects some  text (for <input> and <textarea>)
+regexp  '.\+\.'
+options word
+  onselect = function() {
+    ${1}
+  }
+
+snippet onsubmit
+abbr    The event occurs when a form is submitted
+regexp  '.\+\.'
+options word
+  onsubmit = function() {
+    ${1}
+  }
+# }}}
+
+# Mouse Event {{{
+snippet altKey
+abbr    Returns whether or not the "ALT" key was pressed when an event was triggered
+regexp  'mouseEvent\.'
+options word
+  altKey
+
+snippet button
+abbr    Returns which mouse button was clicked when an event was triggered
+regexp  'mouseEvent\.'
+options word
+  button
+
+snippet clientX
+abbr    Returns the horizontal coordinate of the mouse pointer, relative to the current window, when an event was triggered
+regexp  'mouseEvent\.'
+options word
+  clientX
+
+snippet clientY
+abbr    Returns the vertical coordinate of the mouse pointer, relative to the current window, when an event was triggered
+regexp  'mouseEvent\.'
+options word
+  clientY
+
+snippet ctrlKey
+abbr    Returns whether or not the "CTRL" key was pressed when an event was triggered
+regexp  'mouseEvent\.'
+options word
+  ctrlKey
+
+snippet keyIdentifier
+abbr    Returns the identifier of a key
+regexp  'mouseEvent\.'
+options word
+  keyIdentifier
+
+snippet keyLocation
+abbr    Returns the location of the key on the device
+regexp  'mouseEvent\.'
+options word
+  keyLocation
+
+snippet metaKey
+abbr    Returns whether or not the "meta" key was pressed when an event was triggered
+regexp  'mouseEvent\.'
+options word
+  metaKey
+
+snippet relatedTarget
+abbr    Returns the element related to the element that triggered the event
+regexp  'mouseEvent\.'
+options word
+  relatedTarget
+
+snippet screenX
+abbr    Returns the horizontal coordinate of the mouse pointer, relative to the screen, when an event was triggered
+regexp  'mouseEvent\.'
+options word
+  screenX
+
+snippet screenY
+abbr    Returns the vertical coordinate of the mouse pointer, relative to the screen, when an event was triggered
+regexp  'mouseEvent\.'
+options word
+  screenY
+
+snippet shiftKey
+abbr    Returns whether or not the "SHIFT" key was pressed when an event was triggered
+regexp  'mouseEvent\.'
+options word
+  shiftKey
+# }}}

@@ -27,6 +27,10 @@ augroup MyAutoCmd
   autocmd!
 augroup END
 
+augroup MyFtDetect
+  autocmd!
+augroup END
+
 " http://rubyforge.org/pipermail/vim-ruby-devel/2007q1/000698.html
 " Fix up ruby interface
 " For vim > v932
@@ -497,14 +501,14 @@ NeoBundleLazy 'grep.vim', {
       \ 'autoload' : { 'commands': ["Grep", "Rgrep", "GrepBuffer"] }}
 NeoBundleLazy 'sjl/gundo.vim', {
       \ 'autoload' : { 'commands': ["GundoToggle", 'GundoRenderGraph'] }}
-NeoBundleLazy 'majutsushi/tagbar', {
-      \ 'build' : {
-      \   'mac' : 'npm install jsctags && gem ins CoffeeTags',
-      \   'unix' : 'npm install -g jsctags',
-      \ },
-      \ 'autoload' : {
-      \   'commands': ["TagbarToggle", "TagbarTogglePause", "TagbarOpen"],
-      \   'fuctions': ['tagbar#currenttag'] }}
+" NeoBundleLazy 'majutsushi/tagbar', {
+"       \ 'build' : {
+"       \   'mac' : 'npm install jsctags && gem ins CoffeeTags',
+"       \   'unix' : 'npm install -g jsctags',
+"       \ },
+"       \ 'autoload' : {
+"       \   'commands': ["TagbarToggle", "TagbarTogglePause", "TagbarOpen"],
+"       \   'fuctions': ['tagbar#currenttag'] }}
 NeoBundleLazy 'open-browser.vim', { 'autoload' : {
       \ 'mappings' : [ '<Plug>(open-browser-wwwsearch)', '<Plug>(openbrowser-open)',  ],
       \ 'commands' : ['OpenBrowserSearch'] }}
@@ -521,9 +525,9 @@ NeoBundleLazy 'tyru/caw.vim', {
 NeoBundleLazy 'AndrewRadev/switch.vim', { 'autoload' : {
       \ 'commands' : 'Switch',
       \ }}
-NeoBundle 'mattn/zencoding-vim', {
+NeoBundle 'mattn/emmet-vim', {
       \ 'autoload': {
-      \   'function_prefix': 'zencoding',
+      \   'function_prefix': 'emmet',
       \   'filetypes': g:my.ft.html_files + g:my.ft.style_files,
       \ }}
 NeoBundleLazy 't9md/vim-textmanip', { 'autoload' : {
@@ -766,10 +770,10 @@ NeoBundleLazy 'mattn/livestyle-vim', { 'autoload' :
 
 " html
 " ----------------------------------------
-" NeoBundleLazy 'alpaca-tc/html5.vim', { 'autoload' : {
-"       \   'filetypes' : g:my.ft.markup_files,
-"       \   'functions' : ['HtmlIndentGet']
-"       \ }}
+NeoBundleLazy 'alpaca-tc/html5.vim', { 'autoload' : {
+      \   'filetypes' : g:my.ft.markup_files,
+      \   'functions' : ['HtmlIndentGet']
+      \ }}
 
 " haml
 " ----------------------------------------
@@ -795,11 +799,17 @@ NeoBundleLazy 'jiangmiao/simple-javascript-indenter', { 'autoload' : {
 NeoBundleLazy 'jelera/vim-javascript-syntax', { 'autoload' : {
       \ 'filetypes' : ['javascript', 'json'],
       \ }}
+NeoBundleLazy 'vim-scripts/jQuery', { 'autoload' : {
+      \ 'filetypes' : ['javascript', 'coffee'],
+      \ }}
 NeoBundleLazy 'teramako/jscomplete-vim', { 'autoload' : {
       \ 'filetypes' : g:my.ft.js_files
       \ }}
 NeoBundleLazy 'mklabs/vim-backbone', { 'autoload' : {
       \ 'filetypes' : ['javascript']
+      \ }}
+NeoBundleLazy 'nono/vim-handlebars', { 'autoload' : {
+      \ 'filetypes' : ['handlebars']
       \ }}
 if has("python")
   " NeoBundleLazy 'marijnh/tern_for_vim', {
@@ -1113,6 +1123,10 @@ xmap <silent><C-A> :ContinuousNumber <C-A><CR>
 xmap <silent><C-X> :ContinuousNumber <C-X><CR>
 
 let s:alpaca_abbr_define = {
+      \ 'javascript' : [
+      \   'elsif else if',
+      \   'elseif else if',
+      \ ],
       \ "vim" : [
       \   "sh should",
       \   "reqs require 'spec_helper'",
@@ -1636,7 +1650,7 @@ unlet bundle
 "------------------------------------
 nnoremap <Space>t :<C-U>TagbarToggle<CR>
 let bundle = NeoBundleGet('tagbar')
-function bundle.hooks.on_source(bundle) "{{{
+function! bundle.hooks.on_source(bundle) "{{{
   aug MyTagbarCmd
     autocmd!
     autocmd FileType tagbar
@@ -1725,8 +1739,7 @@ unlet bundle
 
 "----------------------------------------
 let bundle = NeoBundleGet("zencoding-vim")
-imap <C-E> <C-Y>,<Space>
-function bundle.hooks.on_source(bundle) "{{{
+function! bundle.hooks.on_source(bundle) "{{{
   let g:user_zen_complete_tag = 1
   let g:user_zen_expandabbr_key = '<C-E>'
   let g:user_zen_leader_key = '<c-y>'
@@ -1735,7 +1748,7 @@ function bundle.hooks.on_source(bundle) "{{{
   let g:user_zen_settings = {
         \ 'lang' : 'ja',
         \ 'html' : {
-        \ 'filters' : 'html',
+        \   'filters' : 'html',
         \   'indentation' : ''
         \ },
         \ 'css' : {
@@ -1750,8 +1763,30 @@ function bundle.hooks.on_source(bundle) "{{{
         \   'extends' : 'html',
         \   'filters' : 'html,c',
         \ },
-        \}
+        \ }
 endfunction "}}}
+unlet bundle
+
+let bundle = NeoBundleGet('emmet-vim')
+function! bundle.hooks.on_source(bundle) "{{{
+  let g:user_emmet_mode = 'iv'
+  let g:user_emmet_leader_key = '<C-E>'
+  let g:use_emmet_complete_tag = 1
+  let g:user_emmet_settings = {
+        \ 'lang' : 'ja',
+        \ 'html' : {
+        \   'filters' : 'html',
+        \   'indentation' : &tabstop,
+        \ },
+        \ 'css' : {
+        \   'filters' : 'fc',
+        \ },
+        \ 'php' : {
+        \   'extends' : 'html',
+        \   'filters' : 'html',
+        \ },
+        \}
+endfunction"}}}
 unlet bundle
 
 "----------------------------------------
@@ -2483,10 +2518,7 @@ xnoremap E :ExciteTranslate<CR>
 "------------------------------------
 "  jscomplete-vim
 "------------------------------------
-"
 let g:jscomplete_use = ['dom', 'moz', 'ex6th']
-" xpcom.vim
-"
 
 "------------------------------------
 "  typescript

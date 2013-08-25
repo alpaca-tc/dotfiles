@@ -1,3 +1,3 @@
-aug MyFtDetect
-  au BufNewFile,BufRead .tern-project set filetype=json
-aug END
+augroup MyFtDetect
+  autocmd BufNewFile,BufRead .tern-project set filetype=json
+augroup END

@@ -1,3 +1,7 @@
+if exists("b:did_ftplugin")
+  finish
+endif
+
 setl makeprg=php\ -l\ %\ $*
 setl errorformat=%EPHP\ Parse\ error:\ %m\ in\ %f\ on\ line\ %l
                        \%WNotice:\ %m\ in\ %f\ on\ line\ %l,

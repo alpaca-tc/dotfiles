@@ -1,6 +1,8 @@
-# Prototype
+include javascript.dom.snip
+
+# Javascript Common Snippets {{{
 snippet     try
-abbr        try {} catch
+abbr        try {} catch {}
 options     word
   try {
     ${1}
@@ -22,85 +24,117 @@ options     word
 snippet     throw
 abbr        throw
 options     word
-  throw "${1}";
+  throw '${1}';
 
-snippet proto
-    ${1:class_name}.prototype.${2:method_name} =
-    function(${3:first_argument}) {
-        ${4:// body...}
-    };
-# Function
-snippet fun
-    function ${1:function_name} (${2:argument}) {
-        ${3:// body...}
-    }
-# Anonymous Function
-snippet f
-    function(${1}) {${2}};
-# if
+snippet prototype
+abbr    Class.prototype.method = function () { ... };
+options word
+  ${1:class_name}.prototype.${2:method_name} = function (${3:first_argument}) {
+    ${4:// body...}
+  };
+
+snippet function
+abbr    function name() { ... }
+alias   fun
+options word
+  function ${1:function_name}(${2:argument}) {
+    ${3:// body...}
+  }
+
 snippet if
-    if (${1:true}) {${2}};
-# if ... else
-snippet ife
-    if (${1:true}) {${2}}
-    else{${3}};
-# tertiary conditional
-snippet switch
-    switch(${1:expression}) {
-        case '${3:case}':
-            ${4:// code}
-            break;
-        ${5}
-        default:
-            ${2:// code}
-    }
-# case
-snippet case
-    case '${1:case}':
-        ${2:// code}
-        break;
-    ${3}
+abbr    if (condition) { ... }
+options word
+  if (${1:true}) {
+    ${2}
+  };
 
-# for (...) {...}
+snippet ife
+  if (${1:true}) {
+    ${2}
+  } else {
+    ${3}
+  };
+
+snippet switch
+abbr    switch(expression) { ... }
+options word
+  switch(${1:expression}) {
+    case '${3:case}':
+      ${4:// code}
+      break;
+    default:
+      ${2:// code}
+  }
+
+snippet case
+abbr    case
+options word
+  case '${1:case}':
+    ${2:// code}
+    break;
+
 snippet     for
 abbr        for ( var i = 0; i < ...; i += 1 )
 options     word
-  for ( var i = 0; i < ${1}; i += 1 ) {
+  for (var i = 0; i < ${1}; i += 1) {
     ${2}
   }
 
-# for (...) {...} (Improved Native For-Loop)
 snippet forr
-    for (var ${2:i} = ${1:Things}.length - 1; $2 >= 0; $2${3:--}) {
-        ${4:$1[$2]}
-    };
+abbr    for (var i = obj.length - 1; i < len; i += 1) {
+options word
+  for (var i = ${1:Things}.length - 1; i < len; i += 1) {
+    ${4:$1[$2]}
+  };
 
-# while (...) {...}
 snippet wh
-    while (${1:/* condition */}) {
-        ${2:/* code */}
-    }
+abbr    while () { ... }
+alias   while
+options word
+  while (${1:/* condition */}) {
+    ${2:/* code */}
+  }
 
-# do...while
 snippet do
-    do {
-        ${2:/* code */}
-    } while (${1:/* condition */});
-# Object Method
-snippet :f
+abbr    do
+alias   dowhile
+options word
+  do {
+    ${2:/* code */}
+  } while (${1:/* condition */});
+
+snippet :fun
+alias   :function
+abbr    method: function() { ... }
+options word
     ${1:method_name}: function(${2:attribute}) {
         ${4}
     }${3:,}
-# setTimeout function
-snippet timeout
-    setTimeout(function() {${3}}${2}, ${1:10};
-# Get Elements
-snippet get
-    getElementsBy${1:TagName}('${2}')${3}
-# Get Element
-snippet gett
-    getElementBy${1:Id}('${2}')${3}
 
+snippet timeout
+abbr    setTimeout(function() { ... }, time);
+alias   setTimeout
+options word
+  setTimeout(function() {${3}}${2}, ${1:10};
+
+snippet setInterval
+abbr    setInterval(function() { ... }, time);
+alias   setInterval
+options word
+  setInterval(function() {${3}}${2}, ${1:10};
+
+snippet clearInterval
+abbr    Clears a timer set with setInterval()
+options word
+  clearInterval(${1:interval_var})
+
+snippet clearTimeout()
+abbr    Clears a timer set with setTimeout()
+options word
+  clearTimeout(${1:timeout_var})
+#}}}
+
+# Web development#{{{
 snippet debug
     console.debug(${1});
 
@@ -109,4 +143,4 @@ snippet log
 
 snippet warn
     console.warn(${1});
-
+#}}}

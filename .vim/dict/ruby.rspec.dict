@@ -216,3 +216,4 @@ has_unchecked_field?
 has_xpath?
 be_a
 be_an
+Enumerable
