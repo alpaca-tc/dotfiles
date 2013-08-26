@@ -22,7 +22,6 @@
 "    ξ                ξ
 "    ξ ξξ~～~~〜~ξ ξ
 "    ξ_ξξ_ξξ_ξξ_ξ  =з =з =з
-
 augroup MyAutoCmd
   autocmd!
 augroup END
@@ -1118,7 +1117,7 @@ nnoremap re :%s!
 xnoremap re :s!
 xnoremap rep y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!g<Left><Left>
 xnoremap ,c :s/./&/g
-nnoremap ,f :setl filetype=
+nnoremap ,f :<C-U>FileType<Space>
 xmap <silent><C-A> :ContinuousNumber <C-A><CR>
 xmap <silent><C-X> :ContinuousNumber <C-X><CR>
 
@@ -1769,14 +1768,18 @@ unlet bundle
 
 let bundle = NeoBundleGet('emmet-vim')
 function! bundle.hooks.on_source(bundle) "{{{
+  imap <buffer><C-E> <Plug>(EmmetExpandAbbr)
+  augroup MyAutoCmd
+    execute 'autocmd FileType ' . join(g:my.ft.html_files, ',') . ' imap <buffer><C-E> <Plug>(EmmetExpandAbbr)'
+  augroup END
   let g:user_emmet_mode = 'iv'
-  let g:user_emmet_leader_key = '<C-E>'
+  let g:user_emmet_leader_key = '<C-Y>'
   let g:use_emmet_complete_tag = 1
   let g:user_emmet_settings = {
         \ 'lang' : 'ja',
         \ 'html' : {
         \   'filters' : 'html',
-        \   'indentation' : &tabstop,
+        \   'indentation' : ' ' * &tabstop,
         \ },
         \ 'css' : {
         \   'filters' : 'fc',
@@ -3638,6 +3641,10 @@ endfunction"}}}
 command! -nargs=0 Remote echo s:current_remote_account_name()
 command! -nargs=? SendPullRequest call s:send_pull_request(<q-args>)
 "}}}
+
+" ----------------------------------------
+" Complete FileType 
+command! -nargs=? -complete=filetype FileType execute 'set filetype=' . <q-args>
 
 " ----------------------------------------
 let g:git_aliases#author_name = g:my.info.github
