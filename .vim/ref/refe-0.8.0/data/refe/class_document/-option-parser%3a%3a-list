@@ -1,0 +1,4 @@
+Simple option list providing mapping from short and/or long option
+string to OptionParser::Switch, and mapping from acceptable
+argument to matching pattern and converter pair.  Also provides
+summary feature.

@@ -1,0 +1,38 @@
+parse.y:4688
+static NODE*
+match_gen(node1, node2)
+    NODE *node1;
+    NODE *node2;
+{
+    local_cnt('~');
+
+    value_expr(node1);
+    value_expr(node2);
+    if (node1) {
+	switch (nd_type(node1)) {
+	  case NODE_DREGX:
+	  case NODE_DREGX_ONCE:
+	    return NEW_MATCH2(node1, node2);
+
+	  case NODE_LIT:
+	    if (TYPE(node1->nd_lit) == T_REGEXP) {
+		return NEW_MATCH2(node1, node2);
+	    }
+	}
+    }
+
+    if (node2) {
+	switch (nd_type(node2)) {
+	  case NODE_DREGX:
+	  case NODE_DREGX_ONCE:
+	    return NEW_MATCH3(node2, node1);
+
+	  case NODE_LIT:
+	    if (TYPE(node2->nd_lit) == T_REGEXP) {
+		return NEW_MATCH3(node2, node1);
+	    }
+	}
+    }
+
+    return NEW_CALL(node1, tMATCH, NEW_LIST(node2));
+}

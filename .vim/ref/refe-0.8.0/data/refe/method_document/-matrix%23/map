@@ -1,0 +1,6 @@
+--- Matrix#collect {|x| ... } 
+--- Matrix#map {|x| ... }
+    creates a matrix which is the result of iteration of given block over all components.
+
+    行列の各要素に対してブロックの適用を繰り返した結果を、要素として持つ行列を生成する。
+

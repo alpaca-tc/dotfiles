@@ -1,0 +1,30 @@
+--- module_eval(expr, [fname, [lineno=1]])
+--- module_eval {|mod| .... }
+
+    モジュールのコンテキストで文字列 expr を評価してその結果を返
+    します。
+    fname、lineno が与えられた場合は、ファイル fname、
+    行番号 lineno にその文字列があるかのようにコンパイルされ、ス
+    タックトレース表示などのファイル名／行番号を差し替えることができま
+    す。
+
+    ブロックが与えられた場合にはそのブロックをモジュールのコンテキスト
+    で評価してその結果を返します。ブロックの引数 mod には
+    self が渡されます。
+
+    モジュールのコンテキストで評価するとは、実行中そのモジュールが
+    self になるということです。つまり、そのモジュールの定義文の
+    中にあるかのように実行されます。
+
+    ただし、ローカル変数は module_eval の外側のスコープと共有し
+    ます。ruby 1.6 feature: version 1.6.8 以降、定数、クラス変数
+    のスコープも外側のスコープになります。
+
+    ((*注*)): module_eval のブロック中でメソッドを定義する場合、
+    instance_eval と同様の制限があります。詳細はそちらの
+    説明を参照してください。
+
+    Object#instance_eval [Object/instance_eval],
+    Module#class_eval [Module/class_eval]
+    Module.new も参照してください。
+

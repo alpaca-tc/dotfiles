@@ -1,0 +1,11 @@
+array.c:34
+static void
+memfill(mem, size, val)
+    register VALUE *mem;
+    register long size;
+    register VALUE val;
+{
+    while (size--) {
+	*mem++ = val;
+    }
+}

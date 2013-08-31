@@ -1,0 +1,25 @@
+--- match(str)
+
+    MatchData オブジェクトを返す点を除いて、self =~ str と
+    同じです。マッチしなかった場合 nil を返します。
+
+    正規表現にマッチした部分文字列だけが必要な場合に、
+
+      bar = /foo(.*)baz/.match("foobarbaz").to_a[1]
+
+      foo, bar, baz = /(foo)(bar)(baz)/.match("foobarbaz").to_a.indexes(1,2,3)
+
+    のように使用できます。(to_a は、マッチに失敗した場合を考慮しています。)
+
+    ruby 1.8 feature:
+    1.8 の多重代入の規則では右辺が配列でない一つのオブジェクトで to_a 
+    メソッドを持つ場合、右辺に * を付けることで to_a の結果を利用でき
+    ます。つまり、上記は以下のように書くことができます。(ここでの 
+    `_' は、$& を捨てるために適当に選んだ変数
+    名)
+
+        _, foo, bar, baz = */(foo)(bar)(baz)/.match("foobarbaz")
+        p [foo, bar, baz]
+
+        # => ["foo", "bar", "baz"]
+

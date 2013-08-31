@@ -1,0 +1,49 @@
+process.c:697
+static int
+proc_spawn_v(argv, prog)
+    char **argv;
+    char *prog;
+{
+    char *extension;
+    int status;
+
+    if (!prog)
+	prog = argv[0];
+    security(prog);
+    prog = dln_find_exe(prog, 0);
+    if (!prog)
+	return -1;
+
+#if defined(__human68k__)
+    if ((extension = strrchr(prog, '.')) != NULL && strcasecmp(extension, ".bat") == 0) {
+	char **new_argv;
+	char *p;
+	int n;
+
+	for (n = 0; argv[n]; n++)
+	    /* no-op */;
+	new_argv = ALLOCA_N(char*, n + 2);
+	for (; n > 0; n--)
+	    new_argv[n + 1] = argv[n];
+	new_argv[1] = strcpy(ALLOCA_N(char, strlen(argv[0]) + 1), argv[0]);
+	for (p = new_argv[1]; *p != '\0'; p++)
+	    if (*p == '/')
+		*p = '\\';
+	new_argv[0] = COMMAND;
+	argv = new_argv;
+	prog = dln_find_exe(argv[0], 0);
+	if (!prog) {
+	    errno = ENOENT;
+	    return -1;
+	}
+    }
+#endif
+    before_exec();
+#if defined(_WIN32)
+    status = do_aspawn(P_WAIT, prog, argv);
+#else
+    status = spawnv(P_WAIT, prog, argv);
+#endif
+    after_exec();
+    return status;
+}

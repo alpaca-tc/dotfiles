@@ -1,0 +1,13 @@
+--- ObjectSpace.add_finalizer(proc)
+
+    proc をファイナライザとして設定します。
+
+    call_finalizer で指定したオブジェクトが開放され
+    る時、そのオブジェクトの ID(c.f Object#id [Object/id])を引数に
+    ファイナライザが評価されます。
+
+    proc を返します。
+
+    このメソッドは、obsolete です。代わりに 
+    ObjectSpace.define_finalizer を使用してください
+

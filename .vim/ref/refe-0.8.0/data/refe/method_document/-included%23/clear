@@ -1,0 +1,4 @@
+--- clear
+#    Removes all elements and returns self.
+    要素をすべて削除します。
+

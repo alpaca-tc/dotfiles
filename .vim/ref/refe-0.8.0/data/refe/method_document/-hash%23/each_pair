@@ -1,0 +1,6 @@
+--- each {|key, value| ... }
+--- each_pair {|key, value| ... }
+
+    key と value を引数としてブロックを評価します。
+    self を返します。
+

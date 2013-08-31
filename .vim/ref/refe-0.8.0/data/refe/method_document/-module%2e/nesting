@@ -1,0 +1,14 @@
+--- Module.nesting
+
+    このメソッドを呼び出した時点でのクラス/モジュールのネスト情
+    報を配列に入れて返します。
+
+        module Foo
+          module Bar
+            module Baz
+              p Module.nesting
+            end
+          end
+        end
+        # => [Foo::Bar::Baz, Foo::Bar, Foo]
+

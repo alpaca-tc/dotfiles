@@ -1,0 +1,3 @@
+: VALUE INT2FIX(int i)
+    31ビット以内におさまる整数を Fixnum に変換します。
+

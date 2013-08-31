@@ -1,0 +1,10 @@
+gc.c:406
+static int
+stack_growup_p(addr)
+    VALUE *addr;
+{
+    SET_STACK_END;
+
+    if (STACK_END > addr) return Qtrue;
+    return Qfalse;
+}

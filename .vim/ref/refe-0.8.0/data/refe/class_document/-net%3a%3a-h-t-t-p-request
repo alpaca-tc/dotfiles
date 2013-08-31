@@ -1,0 +1,3 @@
+HTTP リクエストを抽象化するクラス。Net::HTTPRequest は抽象クラス
+なので実際には下位クラスの Net::HTTP::Get, Post, Head, Put を使用
+してください。

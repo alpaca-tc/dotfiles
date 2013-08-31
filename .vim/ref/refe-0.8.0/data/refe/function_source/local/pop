@@ -1,0 +1,14 @@
+parse.y:5520
+static void
+local_pop()
+{
+    struct local_vars *local = lvtbl->prev;
+
+    if (lvtbl->tbl) {
+	if (!lvtbl->nofree) free(lvtbl->tbl);
+	else lvtbl->tbl[0] = lvtbl->cnt;
+    }
+    ruby_dyna_vars = lvtbl->dyna_vars;
+    free(lvtbl);
+    lvtbl = local;
+}

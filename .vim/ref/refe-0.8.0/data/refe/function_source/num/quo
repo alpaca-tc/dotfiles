@@ -1,0 +1,7 @@
+numeric.c:189
+static VALUE
+num_quo(x, y)
+    VALUE x, y;
+{
+    return rb_funcall(x, '/', 1, y);
+}

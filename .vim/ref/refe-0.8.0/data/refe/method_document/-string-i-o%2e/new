@@ -1,0 +1,17 @@
+--- StringIO.new([string[, mode]])
+--- StringIO.open([string[, mode]])
+--- StringIO.open([string[, mode]]) {|io| ... }
+
+    StringIO オブジェクトを生成します。
+
+        require 'stringio'
+
+        io = StringIO.new("foo")
+        p io.getc       # => 102
+        p io.pos        # => 1
+        p io.size       # => 3
+        io << "bar"
+        p io.size       # => 4
+        io.rewind
+        p io.gets       # => "fbar"
+

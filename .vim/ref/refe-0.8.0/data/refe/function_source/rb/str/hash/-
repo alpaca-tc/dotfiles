@@ -1,0 +1,32 @@
+string.c:728
+int
+rb_str_hash(str)
+    VALUE str;
+{
+    register long len = RSTRING(str)->len;
+    register char *p = RSTRING(str)->ptr;
+    register int key = 0;
+
+#ifdef HASH_ELFHASH
+    register unsigned int g;
+
+    while (len--) {
+	key = (key << 4) + *p++;
+	if (g = key & 0xF0000000)
+	    key ^= g >> 24;
+	key &= ~g;
+    }
+#elif HASH_PERL
+    while (len--) {
+	key = key*33 + *p++;
+    }
+    key = key + (key>>5);
+#else
+    while (len--) {
+	key = key*65599 + *p;
+	p++;
+    }
+    key = key + (key>>5);
+#endif
+    return key;
+}

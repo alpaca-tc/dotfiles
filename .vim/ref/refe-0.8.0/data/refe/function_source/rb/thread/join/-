@@ -1,0 +1,42 @@
+eval.c:9005
+static int
+rb_thread_join(th, limit)
+    rb_thread_t th;
+    double limit;
+{
+    enum thread_status last_status = THREAD_RUNNABLE;
+
+    if (rb_thread_critical) rb_thread_deadlock();
+    if (!rb_thread_dead(th)) {
+	if (th == curr_thread)
+	    rb_raise(rb_eThreadError, "thread 0x%lx tried to join itself",
+		     th->thread);
+	if ((th->wait_for & WAIT_JOIN) && th->join == curr_thread)
+	    rb_raise(rb_eThreadError, "Thread#join: deadlock 0x%lx - mutual join(0x%lx)",
+		     curr_thread->thread, th->thread);
+	if (curr_thread->status == THREAD_TO_KILL)
+	    last_status = THREAD_TO_KILL;
+	if (limit == 0) return Qfalse;
+	curr_thread->status = THREAD_STOPPED;
+	curr_thread->join = th;
+	curr_thread->wait_for = WAIT_JOIN;
+	curr_thread->delay = timeofday() + limit;
+	if (limit < DELAY_INFTY) curr_thread->wait_for |= WAIT_TIME;
+	rb_thread_schedule();
+	curr_thread->status = last_status;
+	if (!rb_thread_dead(th)) return Qfalse;
+    }
+
+    if (!NIL_P(th->errinfo) && (th->flags & THREAD_RAISED)) {
+	VALUE oldbt = get_backtrace(th->errinfo);
+	VALUE errat = make_backtrace();
+
+	if (TYPE(oldbt) == T_ARRAY && RARRAY(oldbt)->len > 0) {
+	    rb_ary_unshift(errat, rb_ary_entry(oldbt, 0));
+	}
+	set_backtrace(th->errinfo, errat);
+	rb_exc_raise(th->errinfo);
+    }
+
+    return Qtrue;
+}

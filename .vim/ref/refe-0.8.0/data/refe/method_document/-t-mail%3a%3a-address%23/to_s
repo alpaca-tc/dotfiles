@@ -1,0 +1,8 @@
+: to_s( eol = "\n", encoding = 'e' ) -> String
+: decoded( eol = "\n", encoding = 'e' ) -> String
+    eol: String
+    encoding: String
+
+    デコードされた RFC2822 形式の文字列表現を返します。
+    行末コードに eol、文字エンコーディングに encoding を使います。
+

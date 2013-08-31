@@ -1,0 +1,16 @@
+--- upto(max) {|s| ... }
+
+    self から始めて max まで「次の文字列」を順番にブロックに
+    与えて繰り返します。「次」の定義については String#succ [String/succ] を
+    参照してください。
+
+    このメソッドは文字列の Range の内部で使用されます。
+    
+
+    たとえば以下のコードは a, b, c, ... z,aa, ... az, ..., za を
+    出力します。
+
+           ("a" .. "za").each do |str|
+             puts str
+           end
+

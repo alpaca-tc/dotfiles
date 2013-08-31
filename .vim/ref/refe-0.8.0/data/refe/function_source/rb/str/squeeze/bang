@@ -1,0 +1,48 @@
+string.c:2436
+static VALUE
+rb_str_squeeze_bang(argc, argv, str)
+    int argc;
+    VALUE *argv;
+    VALUE str;
+{
+    char squeez[256];
+    char *s, *send, *t;
+    int c, save, modify = 0;
+    int init = 1;
+    int i;
+
+    if (argc == 0) {
+	for (i=0; i<256; i++) {
+	    squeez[i] = 1;
+	}
+    }
+    else {
+	for (i=0; i<argc; i++) {
+	    VALUE s = argv[i];
+
+	    StringValue(s);
+	    tr_setup_table(s, squeez, init);
+	    init = 0;
+	}
+    }
+
+    rb_str_modify(str);
+    s = t = RSTRING(str)->ptr;
+    if (!s || RSTRING(str)->len == 0) return Qnil;
+    send = s + RSTRING(str)->len;
+    save = -1;
+    while (s < send) {
+	c = *s++ & 0xff;
+	if (c != save || !squeez[c]) {
+	    *t++ = save = c;
+	}
+    }
+    *t = '\0';
+    if (t - RSTRING(str)->ptr != RSTRING(str)->len) {
+	RSTRING(str)->len = t - RSTRING(str)->ptr;
+	modify = 1;
+    }
+
+    if (modify) return str;
+    return Qnil;
+}

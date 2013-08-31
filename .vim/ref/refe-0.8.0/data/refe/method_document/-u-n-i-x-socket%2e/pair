@@ -1,0 +1,6 @@
+--- UNIXSocket.pair([type[, protocol]])  ruby 1.7 feature
+--- UNIXSocket.socketpair([type[, protocol]])  ruby 1.7 feature
+    相互に結合されたUNIXソケットのペアを含む2要素の配列を返します。
+    type が省略された場合、Socket::SOCK_STREAM が使われます。
+    protocol が省略された場合、0 が使われます。
+

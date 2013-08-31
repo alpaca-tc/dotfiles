@@ -1,0 +1,8 @@
+file.c:2406
+static VALUE
+rb_stat_rowned(obj)
+    VALUE obj;
+{
+    if (get_stat(obj)->st_uid == getuid()) return Qtrue;
+    return Qfalse;
+}

@@ -1,0 +1,2 @@
+: struct RData *RDATA(VALUE obj)
+

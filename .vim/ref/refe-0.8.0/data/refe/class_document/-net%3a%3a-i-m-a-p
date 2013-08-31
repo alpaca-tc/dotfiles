@@ -1,0 +1,14 @@
+Net::IMAP implements Internet Message Access Protocol (IMAP) clients.
+(The protocol is described in imap.rb"/[IMAP].)
+
+Net::IMAP supports multiple commands. For example,
+
+  imap = Net::IMAP.new("imap.foo.net", "imap2")
+  imap.authenticate("cram-md5", "bar", "password")
+  imap.select("inbox")
+  fetch_thread = Thread.start { imap.fetch(1..-1, "UID") }
+  search_result = imap.search(["BODY", "hello"])
+  fetch_result = fetch_thread.value
+  imap.disconnect
+
+This script invokes the FETCH command and the SEARCH command concurrently.

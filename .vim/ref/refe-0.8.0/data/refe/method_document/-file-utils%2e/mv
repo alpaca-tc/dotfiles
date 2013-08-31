@@ -1,0 +1,19 @@
+--- FileUtils.mv( src, dest, *options )
+  Options: noop verbose
+
+  from を to に移動します。to がディレクトリなら to/from に
+  移動します。三つ以上の引数を与えたときはディレクトリ dir の
+  中にその他のファイルを移動します。
+
+    FileUtils.mv 'badname.rb', 'goodname.rb'
+    FileUtils.mv 'stuff.rb', 'lib/ruby', :force
+
+--- FileUtils.mv( list, dir, *options )
+  Options: noop verbose
+
+  file1 file2 …を dir/file1 dir/file2 …に移動します。
+  パーティションをまたいで移動するときはコピーします。
+
+    FileUtils.mv 'junk.txt', 'dust.txt', '/home/aamine/.trash/'
+    FileUtils.mv Dir.glob('test*.rb'), 'T', :noop, :verbose
+

@@ -1,0 +1,8 @@
+--- new( ... )
+
+    クラスのインスタンスを生成して返します。このメソッドの引数はブロック引数も
+    含め initialize に渡されます。
+
+    ruby 1.7 feature: version 1.7 では、new は、allocate でイン
+    スタンスを生成し、initialize で初期化を行うメソッドです。
+

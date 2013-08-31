@@ -1,0 +1,5 @@
+--- Vector#[](i)
+    Returns the i-th element. The index starts from 0.
+
+    i番目の要素を返す。インデックスは0から開始する。
+

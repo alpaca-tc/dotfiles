@@ -1,0 +1,19 @@
+array.c:649
+static VALUE
+rb_ary_indexes(argc, argv, ary)
+    int argc;
+    VALUE *argv;
+    VALUE ary;
+{
+    VALUE new_ary;
+    long i;
+
+    rb_warn("Array#%s is deprecated; use Array#values_at",
+	    rb_id2name(rb_frame_last_func()));
+    new_ary = rb_ary_new2(argc);
+    for (i=0; i<argc; i++) {
+	rb_ary_push(new_ary, rb_ary_aref(1, argv+i, ary));
+    }
+
+    return new_ary;
+}

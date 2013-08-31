@@ -1,0 +1,16 @@
+: ready( from_addr, *to_addrs ) {|adapter| .... }
+    メール書きこみの準備をしたうえで、write メソッドを持つオブジェクトを
+    ブロックにあたえます。from_addr は送信元メールアドレスで to_addrs は
+    宛先のメールボックスです。
+
+        # example
+        Net::SMTP.start( 'your.smtp.server', 25 ) {|smtp|
+            smtp.ready( 'from@mail.addr', 'dest@mail.addr' ) {|f|
+                f.puts 'From: aamine@loveruby.net'
+                f.puts 'To: someone@somedomain.org'
+                f.puts 'Subject: test mail'
+                f.puts
+                f.puts 'This is test mail.'
+            }
+        }
+

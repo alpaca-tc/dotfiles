@@ -1,0 +1,3 @@
+: VALUE rb_dvar_ref(ID id)
+    現在のローカル変数スコープで id を参照します。
+

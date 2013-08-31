@@ -1,0 +1,19 @@
+--- eval(expr[, binding[, fname[, lineno=1]]])
+
+    文字列 expr を Ruby プログラムとして評価してその結果を返しま
+    す。第2引数に Proc オブジェクトまたは Binding オブジェ
+    クトを与えた場合、そのオブジェクトを生成したコンテキストで文字列を
+    評価します。binding も参照してください。
+
+        def foo
+          a = 1
+          binding
+        end
+
+        eval("p a", foo)  # => 1
+
+    fname と lineno が与えられた場合には、ファイル
+    fname 行番号 lineno に文字列があるかのように
+    コンパイルされ、スタックトレースの表示などを差し替えることが
+    できます。
+

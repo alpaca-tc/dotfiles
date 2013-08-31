@@ -1,0 +1,34 @@
+eval.c:10233
+static VALUE
+rb_f_throw(argc, argv)
+    int argc;
+    VALUE *argv;
+{
+    VALUE tag, value;
+    struct tag *tt = prot_tag;
+
+    rb_scan_args(argc, argv, "11", &tag, &value);
+    tag = ID2SYM(rb_to_id(tag));
+
+    while (tt) {
+	if (tt->tag == tag) {
+	    tt->dst = tag;
+	    tt->retval = value;
+	    break;
+	}
+	if (tt->tag == PROT_THREAD) {
+	    rb_raise(rb_eThreadError, "uncaught throw `%s' in thread 0x%lx",
+		     rb_id2name(SYM2ID(tag)),
+		     curr_thread);
+	}
+	tt = tt->prev;
+    }
+    if (!tt) {
+	rb_name_error(SYM2ID(tag), "uncaught throw `%s'", rb_id2name(SYM2ID(tag)));
+    }
+    rb_trap_restore_mask();
+    JUMP_TAG(TAG_THROW);
+#ifndef __GNUC__
+    return Qnil; 		/* not reached */
+#endif
+}

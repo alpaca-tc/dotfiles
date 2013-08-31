@@ -1,0 +1,4 @@
+--- to_proc
+
+    self を call する Proc オブジェクトを生成して返します。
+

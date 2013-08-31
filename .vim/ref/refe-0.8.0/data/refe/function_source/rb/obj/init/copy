@@ -1,0 +1,12 @@
+object.c:167
+VALUE
+rb_obj_init_copy(obj, orig)
+    VALUE obj, orig;
+{
+    if (obj == orig) return obj;
+    rb_check_frozen(obj);
+    if (TYPE(obj) != TYPE(orig) || rb_obj_class(obj) != rb_obj_class(orig)) {
+	rb_raise(rb_eTypeError, "initialize_copy should take same class object");
+    }
+    return obj;
+}

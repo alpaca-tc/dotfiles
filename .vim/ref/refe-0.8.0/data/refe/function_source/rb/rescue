@@ -1,0 +1,8 @@
+eval.c:4589
+VALUE
+rb_rescue(b_proc, data1, r_proc, data2)
+    VALUE (*b_proc)(), (*r_proc)();
+    VALUE data1, data2;
+{
+    return rb_rescue2(b_proc, data1, r_proc, data2, rb_eStandardError, (VALUE)0);
+}

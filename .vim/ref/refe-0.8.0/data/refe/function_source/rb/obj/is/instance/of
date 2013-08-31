@@ -1,0 +1,17 @@
+object.c:275
+VALUE
+rb_obj_is_instance_of(obj, c)
+    VALUE obj, c;
+{
+    switch (TYPE(c)) {
+      case T_MODULE:
+      case T_CLASS:
+      case T_ICLASS:
+	break;
+      default:
+	rb_raise(rb_eTypeError, "class or module required");
+    }
+
+    if (rb_obj_class(obj) == c) return Qtrue;
+    return Qfalse;
+}

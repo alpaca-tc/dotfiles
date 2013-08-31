@@ -1,0 +1,28 @@
+eval.c:1493
+static void
+localjump_error(mesg, value, reason)
+    const char *mesg;
+    VALUE value;
+    int reason;
+{
+    VALUE exc = rb_exc_new2(rb_eLocalJumpError, mesg);
+    ID id;
+
+    rb_iv_set(exc, "@exit_value", value);
+    switch (reason) {
+      case TAG_BREAK:
+	id = rb_intern("break"); break;
+      case TAG_REDO:
+	id = rb_intern("redo"); break;
+      case TAG_RETRY:
+	id = rb_intern("retry"); break;
+      case TAG_NEXT:
+	id = rb_intern("next"); break;
+      case TAG_RETURN:
+	id = rb_intern("return"); break;
+      default:
+	id = rb_intern("noreason"); break;
+    }
+    rb_iv_set(exc, "@reason", ID2SYM(id));
+    rb_exc_raise(exc);
+}

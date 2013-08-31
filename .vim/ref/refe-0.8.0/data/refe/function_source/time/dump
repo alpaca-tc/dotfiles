@@ -1,0 +1,18 @@
+time.c:1350
+static VALUE
+time_dump(argc, argv, time)
+    int argc;
+    VALUE *argv;
+    VALUE time;
+{
+    VALUE str;
+
+    rb_scan_args(argc, argv, "01", 0);
+    str = time_mdump(time); 
+    if (FL_TEST(time, FL_EXIVAR)) {
+	rb_copy_generic_ivar(str, time);
+	FL_SET(str, FL_EXIVAR);
+    }
+
+    return str;
+}

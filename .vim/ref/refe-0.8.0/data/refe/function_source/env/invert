@@ -1,0 +1,6 @@
+hash.c:1686
+static VALUE
+env_invert()
+{
+    return rb_hash_invert(env_to_hash());
+}

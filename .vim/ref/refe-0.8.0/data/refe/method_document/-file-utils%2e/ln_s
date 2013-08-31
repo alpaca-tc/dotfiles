@@ -1,0 +1,23 @@
+--- FileUtils.ln_s( old, new, *options )
+  Options: force noop verbose
+
+  old へのシンボリックリンク new を作成します。
+  new がすでに存在しディレクトリであるときは new/old を作成します。
+  new がすでに存在しディレクトリでないならば例外 Errno::ENOTDIR が発生します。
+  ただし force オプションを指定したときは new を上書きします。
+
+    FileUtils.ln_s '/usr/bin/ruby', '/usr/local/bin/ruby'
+    FileUtils.ln_s 'verylongsourcefilename.c', 'c', :force
+
+--- FileUtils.ln_s( list, destdir, *options )
+  Options: force noop verbose
+
+  list[0]、list[1] …へのシンボリックリンク dir/list[0], dir/list[1] …を
+  作成します。destdir がディレクトリでない場合は例外 Errno::ENOTDIR が
+  発生します。
+  list[0] へのシンボリックリンク destdir/list[0]、list[1] への
+  ハードリンク destdir/list[1] …を作成します。
+  destdir がディレクトリでない場合は例外 Errno::ENOTDIR が発生します。
+
+   FileUtils.ln_s Dir.glob('bin/*.rb'), '/home/aamine/bin'
+

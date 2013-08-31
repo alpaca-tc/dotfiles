@@ -1,0 +1,7 @@
+math.c:116
+double
+sinh(x)
+    double x;
+{
+    return (exp(x) - exp(-x)) / 2;
+}

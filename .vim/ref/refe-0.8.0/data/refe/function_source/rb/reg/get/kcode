@@ -1,0 +1,18 @@
+re.c:1454
+static int
+rb_reg_get_kcode(re)
+    VALUE re;
+{
+    switch (RBASIC(re)->flags & KCODE_MASK) {
+      case KCODE_NONE:
+	return 16;
+      case KCODE_EUC:
+	return 32;
+      case KCODE_SJIS:
+	return 48;
+      case KCODE_UTF8:
+	return 64;
+      default:
+	return 0;
+    }
+}

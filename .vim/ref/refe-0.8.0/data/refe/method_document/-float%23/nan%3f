@@ -1,0 +1,12 @@
+--- nan?
+
+    数値が NaN(Not a number)のとき真を返します。浮動小数点数 0 の 0 に
+    よる除算は NaN です。
+
+          nan = 0.0/0.0
+          p nan
+          p nan.nan?
+
+          => NaN
+             true
+

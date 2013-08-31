@@ -1,0 +1,4 @@
+--- Sync_m#sync_unlock(mode = EX)
+--- Sync_m#unlock(mode = EX)
+      ロックを解除する。
+

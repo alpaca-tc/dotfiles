@@ -1,0 +1,5 @@
+: static NODE *compile(VALUE src, char *file, int line)
+    Ruby の文字列または IO オブジェクト src を
+    構文木にコンパイルし、返します。そのとき、src が
+    ファイル file の line 行目から始まっていると仮定します。
+

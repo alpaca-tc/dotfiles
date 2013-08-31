@@ -1,0 +1,15 @@
+variable.c:1100
+NORETURN(static void uninitialized_constant _((VALUE, ID)));
+static void
+uninitialized_constant(klass, id)
+    VALUE klass;
+    ID id;
+{
+    if (klass && klass != rb_cObject)
+	rb_name_error(id, "uninitialized constant %s::%s",
+		      RSTRING(rb_class_path(klass))->ptr,
+		      rb_id2name(id));
+    else {
+	rb_name_error(id, "uninitialized constant %s", rb_id2name(id));
+    }
+}

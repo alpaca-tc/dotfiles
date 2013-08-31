@@ -1,0 +1,7 @@
+eval.c:6122
+VALUE
+rb_require(fname)
+    const char *fname;
+{
+    return rb_require_safe(rb_str_new2(fname), ruby_safe_level);
+}

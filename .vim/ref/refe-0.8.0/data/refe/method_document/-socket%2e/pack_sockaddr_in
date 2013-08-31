@@ -1,0 +1,11 @@
+--- Socket.sockaddr_in(port, host)       ruby 1.7 feature
+--- Socket.pack_sockaddr_in(port, host)  ruby 1.7 feature
+
+    指定したアドレスをソケットアドレス構造体を pack した文字列
+    で返します。port は、ポート番号を表す Fixnum あるいは、ポート
+    番号、サービス名を表す文字列です。
+
+        require 'socket'
+        p Socket.pack_sockaddr_in("echo", "localhost")
+        => "\002\000\000\a\177\000\000\001\000\000\000\000\000\000\000\000"
+

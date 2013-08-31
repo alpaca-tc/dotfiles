@@ -1,0 +1,9 @@
+string.c:2941
+static VALUE
+rb_str_lstrip(str)
+    VALUE str;
+{
+    str = rb_str_dup(str);
+    rb_str_lstrip_bang(str);
+    return str;
+}

@@ -1,0 +1,8 @@
+io.c:3953
+static VALUE
+argf_closed()
+{
+    next_argv();
+    ARGF_FORWARD();
+    return rb_io_closed(current_file);
+}

@@ -1,0 +1,11 @@
+--- OptionParser.accept(t, [pat]) {...}
+--- OptionParser#accept(t, [pat]) {...}
+    Directs to accept specified class argument.
+    :Parameters:
+      : t
+        argument class specifier, any object including Class.
+      : pat
+        pattern for argument, defaulted to t if it respond to match.
+      : Block
+        receives argument string and should be convert to desired class.
+

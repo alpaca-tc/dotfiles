@@ -1,0 +1,28 @@
+time.c:90
+void
+time_overflow_p(sec, usec)
+    time_t sec, usec;
+{
+    time_t tmp;
+
+    if (usec >= 1000000) {	/* usec positive overflow */
+	tmp = sec + usec / 1000000;
+	usec %= 1000000;
+	if (sec > 0 && tmp < 0) {
+	    rb_raise(rb_eRangeError, "out of Time range");
+	}
+	sec = tmp;
+    }
+    if (usec < 0) {		/* usec negative overflow */
+	tmp = sec + NDIV(usec,1000000); /* negative div */
+	usec = NMOD(usec,1000000);      /* negative mod */
+	if (sec < 0 && tmp > 0) {
+	    rb_raise(rb_eRangeError, "out of Time range");
+	}
+	sec = tmp;
+    }
+#ifndef NEGATIVE_TIME_T
+    if (sec < 0 || (sec == 0 && usec < 0))
+	rb_raise(rb_eArgError, "time must be positive");
+#endif
+}

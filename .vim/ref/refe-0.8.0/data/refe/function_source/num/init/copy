@@ -1,0 +1,9 @@
+numeric.c:161
+static VALUE
+num_init_copy(x, y)
+    VALUE x, y;
+{
+    /* Numerics are immutable values, which should not be copied */
+    rb_raise(rb_eTypeError, "can't copy %s", rb_obj_classname(x));
+    return Qnil;		/* not reached */
+}

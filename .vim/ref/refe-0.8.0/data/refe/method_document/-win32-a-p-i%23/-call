@@ -1,0 +1,15 @@
+--- Win32API#call([args ...])
+--- Win32API#Call([args ...])
+    API関数 をコールします。指定する引数と戻り値は new の引数の
+    指定に従います。特にポインタを渡してそのポインタの指す領域に値が
+    設定される場合はその領域をあらかじめ確保しておく必要があります。
+
+    例えば、文字列が返る関数をコールする場合は以下のようにします。
+       obj = Win32API.new 'dllname.dll', 'foo', 'p', 'v'
+       arg = "\0" * 256
+       obj.call(arg)
+    ポインタの配列を渡す場合は以下のようにします。
+       obj = Win32API.new 'dllname.dll', 'foo', 'p', 'v'
+       args = ["\0" * 256, "\0" * 256, "\0" * 256,]
+       obj.call(args.pack("p3"))
+

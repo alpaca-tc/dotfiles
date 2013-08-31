@@ -1,0 +1,16 @@
+io.c:3181
+static VALUE
+rb_f_readlines(argc, argv)
+    int argc;
+    VALUE *argv;
+{
+    VALUE line, ary;
+
+    NEXT_ARGF_FORWARD();
+    ary = rb_ary_new();
+    while (!NIL_P(line = argf_getline(argc, argv))) {
+	rb_ary_push(ary, line);
+    }
+
+    return ary;
+}

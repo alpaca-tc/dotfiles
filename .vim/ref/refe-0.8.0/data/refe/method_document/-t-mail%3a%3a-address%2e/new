@@ -1,0 +1,9 @@
+: new( locals, domains ) -> TMail::Address/TMail::AddressGroup
+    locals: [String]
+    domains: [String]
+
+    新しい TMail::Address オブジェクトを生成します。locals、domains はそれぞれ
+    アドレススペック (...@...) の、＠の左側と右側をドットで split した
+    配列です。このメソッドは内部用であり使いにくくなっています。
+    Address.parse を使ってください。
+

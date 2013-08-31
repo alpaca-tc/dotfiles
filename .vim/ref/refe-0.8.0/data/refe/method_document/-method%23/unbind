@@ -1,0 +1,5 @@
+--- unbind
+
+    self のレシーバとの関連を取り除いた UnboundMethod オブ
+    ジェクトを生成して返します。
+

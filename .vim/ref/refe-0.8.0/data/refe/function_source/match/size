@@ -1,0 +1,7 @@
+re.c:602
+static VALUE
+match_size(match)
+    VALUE match;
+{
+    return INT2FIX(RMATCH(match)->regs->num_regs);
+}

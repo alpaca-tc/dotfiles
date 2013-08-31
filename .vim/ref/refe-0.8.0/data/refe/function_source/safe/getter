@@ -1,0 +1,6 @@
+eval.c:8056
+static VALUE
+safe_getter()
+{
+    return INT2NUM(ruby_safe_level);
+}

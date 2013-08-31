@@ -1,0 +1,12 @@
+ruby.h:654
+static inline int
+#if defined(HAVE_PROTOTYPES)
+rb_special_const_p(VALUE obj)
+#else
+rb_special_const_p(obj)
+    VALUE obj;
+#endif
+{
+    if (SPECIAL_CONST_P(obj)) return Qtrue;
+    return Qfalse;
+}

@@ -1,0 +1,18 @@
+--- CGI.pretty(string, shift = "  ")
+      HTMLを整形。
+        例：
+        print CGI::pretty("<HTML><BODY></BODY></HTML>")
+          # <HTML>
+          #   <BODY>
+          #   </BODY>
+          # </HTML>
+
+        print CGI::pretty("<HTML><BODY></BODY></HTML>", "\t")
+          # <HTML>
+          #         <BODY>
+          #         </BODY>
+          # </HTML>
+
+
+#== HTML ELEMENTS
+

@@ -1,0 +1,4 @@
+--- self + other
+
+    self より other 秒だけ後の時刻を返します
+

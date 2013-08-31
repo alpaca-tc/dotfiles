@@ -1,0 +1,22 @@
+--- remainder(other)
+
+    self を other で割った余り r を返します (divmod参照)。
+
+    ただし r の符号は self と同じ(またはゼロ)です。
+    つまり
+    * self > 0 のとき  0 <= r < |other|
+    * self < 0 のとき -|other| < r <= 0
+    となります。
+
+        p (13.modulo(4))      #=>  1
+        p (13.modulo(-4))     #=> -3
+        p ((-13).modulo(4))   #=>  3
+        p ((-13).modulo(-4))  #=> -1
+
+        p (13.remainder(4))      #=>  1
+        p (13.remainder(-4))     #=>  1
+        p ((-13).remainder(4))   #=> -1
+        p ((-13).remainder(-4))  #=> -1
+
+    このメソッドは、メソッド % によって定義されています。
+

@@ -1,0 +1,9 @@
+eval.c:967
+void
+ruby_set_current_source()
+{
+    if (ruby_current_node) {
+        ruby_sourcefile = ruby_current_node->nd_file;
+	ruby_sourceline = nd_line(ruby_current_node);
+    }
+}

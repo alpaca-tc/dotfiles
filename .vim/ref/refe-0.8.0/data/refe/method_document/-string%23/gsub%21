@@ -1,0 +1,54 @@
+--- gsub(pattern, replace)
+--- gsub!(pattern, replace)
+--- gsub(pattern) {|matched| .... }
+--- gsub!(pattern) {|matched| .... }
+
+    文字列中で pattern にマッチする部分((*全て*))を replace で
+    置き換えます。置換文字列 replace 中の \& と
+    \0 はマッチした部分文字列に、\1 ... \9 は n 番
+    目の括弧の内容に置き換えられます。置換文字列内では \`、
+    \'、\+ も使えます。これらは $`、
+    $'、$+ に対応します。
+
+          p 'abcabc'.gsub(/b/, '(\&)')   #=> "a(b)ca(b)c"
+
+    引数 replace を省略した時にはイテレータとして動作し、
+    ブロックを評価した結果で置換を行います。ブロックには引数として
+    マッチした部分文字列が渡されます。
+    またブロックなしの場合と違い、ブロックの中からは組み込み変数 
+    $<digits> [組み込み変数] を参照できます。
+
+          p 'abcabc'.gsub(/b/) {|s| s.upcase }  #=> "aBcaBc"
+          p 'abcabc'.gsub(/b/) { $&.upcase }    #=> "aBcaBc"
+
+    gsub は置換後の文字列を生成して返します。
+    gsub! は self を変更して返しますが、置換が起こらなかっ
+    た場合は nil を返します。
+
+          p 'abcdefg'.gsub(/cd/, 'CD')   #=> "abCDefg"
+
+          str = 'abcdefg'
+          str.gsub!(/cd/, 'CD')
+          p str                          #=> "abCDefg"
+
+          p 'abbbxabx'.gsub(/a(b+)/, '\1')   #=> "bbbxbx"
+
+    ((*注意*)): 引数 replace の中で $<digits> [組み込み変数/$1] 
+    を使うことはできません。この文字列が評価される時点ではまだマッチが
+    行われていないからです。また replace は \ を 2 重にエ
+    スケープしなければなりません(trap::\の影響参照)。
+
+          # 第二引数の指定でよくある間違い
+          p 'abbbcd'.gsub(/a(b+)/, "#{$1}")       # これは間違い
+          p 'abbbcd'.gsub(/a(b+)/, "\1")          # これも間違い
+          p 'abbbcd'.gsub(/a(b+)/, "\\1")         # これは正解
+          p 'abbbcd'.gsub(/a(b+)/, '\1')          # これも正解
+          p 'abbbcd'.gsub(/a(b+)/, '\\1')         # これも正解(より安全)
+          p 'abbbcd'.gsub(/a(b+)/) { $1 }         # これも正解(もっとも安全)
+
+    sub も参照してください。
+
+    ruby 1.7 feature: 1.6 以前は、pattern が文字列の場合、
+    その文字列を正規表現にコンパイルしていました。1.7 以降は、その文字
+    列そのものがパターンになります。
+

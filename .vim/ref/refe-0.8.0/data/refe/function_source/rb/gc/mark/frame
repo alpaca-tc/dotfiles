@@ -1,0 +1,8 @@
+gc.c:1163
+void
+rb_gc_mark_frame(frame)
+    struct FRAME *frame;
+{
+    mark_locations_array(frame->argv, frame->argc);
+    rb_gc_mark((VALUE)frame->node);
+}

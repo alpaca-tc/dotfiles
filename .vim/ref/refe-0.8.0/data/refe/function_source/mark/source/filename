@@ -1,0 +1,9 @@
+gc.c:476
+static void
+mark_source_filename(f)
+    char *f;
+{
+    if (f) {
+	f[-1] = 1;
+    }
+}

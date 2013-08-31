@@ -1,0 +1,12 @@
+process.c:396
+static int
+wait_each(pid, status, data)
+    int pid, status;
+    struct wait_data *data;
+{
+    if (data->status != -1) return ST_STOP;
+
+    data->pid = pid;
+    data->status = status;
+    return ST_DELETE;
+}

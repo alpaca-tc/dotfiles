@@ -1,0 +1,4 @@
+--- getsockname
+    ソケットの情報を取得します。sockaddr構造体をパックした
+    文字列を返します。getsockname(2)を参照のこと。
+

@@ -1,0 +1,7 @@
+hash.c:957
+static VALUE
+rb_hash_merge(hash1, hash2)
+    VALUE hash1, hash2;
+{
+    return rb_hash_update(rb_obj_dup(hash1), hash2);
+}

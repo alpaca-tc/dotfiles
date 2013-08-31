@@ -1,0 +1,36 @@
+range.c:285
+static VALUE
+range_each(range)
+    VALUE range;
+{
+    VALUE beg, end;
+
+    beg = rb_ivar_get(range, id_beg);
+    end = rb_ivar_get(range, id_end);
+
+    if (!rb_respond_to(beg, id_succ)) {
+	rb_raise(rb_eTypeError, "cannot iterate from %s",
+		 rb_obj_classname(beg));
+    }
+    if (FIXNUM_P(beg) && FIXNUM_P(end)) { /* fixnums are special */
+	long lim = FIX2LONG(end);
+	long i;
+
+	if (!EXCL(range)) lim += 1;
+	for (i=FIX2LONG(beg); i<lim; i++) {
+	    rb_yield(LONG2NUM(i));
+	}
+    }
+    else if (TYPE(beg) == T_STRING) {
+	VALUE args[5];
+	long iter[2];
+
+	args[0] = beg; args[1] = end; args[2] = range;
+	iter[0] = 1; iter[1] = 1;
+	rb_iterate((VALUE(*)_((VALUE)))str_step, (VALUE)args, step_i, (VALUE)iter);
+    }
+    else {
+	range_each_func(range, each_i, beg, end, NULL);
+    }
+    return range;
+}

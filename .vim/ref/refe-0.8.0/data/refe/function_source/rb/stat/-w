@@ -1,0 +1,20 @@
+file.c:2484
+static VALUE
+rb_stat_W(obj)
+    VALUE obj;
+{
+    struct stat *st = get_stat(obj);
+
+#ifdef S_IWUSR
+    if (rb_stat_rowned(obj))
+	return st->st_mode & S_IWUSR ? Qtrue : Qfalse;
+#endif
+#ifdef S_IWGRP
+    if (group_member(get_stat(obj)->st_gid))
+	return st->st_mode & S_IWGRP ? Qtrue : Qfalse;
+#endif
+#ifdef S_IWOTH
+    if (!(st->st_mode & S_IWOTH)) return Qfalse;
+#endif
+    return Qtrue;
+}

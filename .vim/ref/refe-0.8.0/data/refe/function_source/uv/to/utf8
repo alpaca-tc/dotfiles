@@ -1,0 +1,47 @@
+pack.c:1823
+static int
+uv_to_utf8(buf, uv)
+    char *buf;
+    unsigned long uv;
+{
+    if (uv <= 0x7f) {
+	buf[0] = (char)uv;
+	return 1;
+    }
+    if (uv <= 0x7ff) {
+	buf[0] = ((uv>>6)&0xff)|0xc0;
+	buf[1] = (uv&0x3f)|0x80;
+	return 2;
+    }
+    if (uv <= 0xffff) {
+	buf[0] = ((uv>>12)&0xff)|0xe0;
+	buf[1] = ((uv>>6)&0x3f)|0x80;
+	buf[2] = (uv&0x3f)|0x80;
+	return 3;
+    }
+    if (uv <= 0x1fffff) {
+	buf[0] = ((uv>>18)&0xff)|0xf0;
+	buf[1] = ((uv>>12)&0x3f)|0x80;
+	buf[2] = ((uv>>6)&0x3f)|0x80;
+	buf[3] = (uv&0x3f)|0x80;
+	return 4;
+    }
+    if (uv <= 0x3ffffff) {
+	buf[0] = ((uv>>24)&0xff)|0xf8;
+	buf[1] = ((uv>>18)&0x3f)|0x80;
+	buf[2] = ((uv>>12)&0x3f)|0x80;
+	buf[3] = ((uv>>6)&0x3f)|0x80;
+	buf[4] = (uv&0x3f)|0x80;
+	return 5;
+    }
+    if (uv <= 0x7fffffff) {
+	buf[0] = ((uv>>30)&0xff)|0xfc;
+	buf[1] = ((uv>>24)&0x3f)|0x80;
+	buf[2] = ((uv>>18)&0x3f)|0x80;
+	buf[3] = ((uv>>12)&0x3f)|0x80;
+	buf[4] = ((uv>>6)&0x3f)|0x80;
+	buf[5] = (uv&0x3f)|0x80;
+	return 6;
+    }
+    rb_raise(rb_eArgError, "pack(U): value out of range");
+}

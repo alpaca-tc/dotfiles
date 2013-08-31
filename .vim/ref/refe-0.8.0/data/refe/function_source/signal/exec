@@ -1,0 +1,34 @@
+signal.c:340
+static void signal_exec _((int sig));
+static void
+signal_exec(sig)
+    int sig;
+{
+    if (trap_list[sig] == 0) {
+	switch (sig) {
+	  case SIGINT:
+	    rb_thread_interrupt();
+	    break;
+#ifdef SIGHUP
+	  case SIGHUP:
+#endif
+#ifdef SIGQUIT
+	  case SIGQUIT:
+#endif
+#ifdef SIGALRM
+	  case SIGALRM:
+#endif
+#ifdef SIGUSR1
+	  case SIGUSR1:
+#endif
+#ifdef SIGUSR2
+	  case SIGUSR2:
+#endif
+	    rb_thread_signal_raise(signo2signm(sig));
+	    break;
+	}
+    }
+    else {
+	rb_thread_trap_eval(trap_list[sig], sig);
+    }
+}

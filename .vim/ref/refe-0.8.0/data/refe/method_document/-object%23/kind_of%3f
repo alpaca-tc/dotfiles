@@ -1,0 +1,22 @@
+--- is_a?(mod)
+--- kind_of?(mod)
+
+    self が、クラス mod とそのサブクラス、および
+    モジュール mod をインクルードしたクラスとそのサブクラス、
+    のいずれかのインスタンスであるとき真を返します。
+
+        module M
+        end
+        class C < Object
+          include M
+        end
+        class S < C
+        end
+
+        obj = S.new
+        p obj.is_a? S       # true
+        p obj.is_a? M       # true
+        p obj.is_a? C       # true
+        p obj.is_a? Object  # true
+        p obj.is_a? Hash    # false
+

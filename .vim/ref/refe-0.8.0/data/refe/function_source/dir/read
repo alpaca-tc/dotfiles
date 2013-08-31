@@ -1,0 +1,22 @@
+dir.c:329
+static VALUE
+dir_read(dir)
+    VALUE dir;
+{
+    struct dir_data *dirp;
+    struct dirent *dp;
+
+    GetDIR(dir, dirp);
+    errno = 0;
+    dp = readdir(dirp->dir);
+    if (dp) {
+	return rb_tainted_str_new(dp->d_name, NAMLEN(dp));
+    }
+    else if (errno == 0) {	/* end of stream */
+	return Qnil;
+    }
+    else {
+	rb_sys_fail(0);
+    }
+    return Qnil;		/* not reached */
+}

@@ -1,0 +1,65 @@
+re.c:735
+long
+rb_reg_search(re, str, pos, reverse)
+    VALUE re, str;
+    long pos, reverse;
+{
+    long result;
+    VALUE match;
+    static struct re_registers regs;
+    long range;
+
+    if (pos > RSTRING(str)->len || pos < 0) {
+	rb_backref_set(Qnil);
+	return -1;
+    }
+
+    rb_reg_check(re);
+    if (may_need_recompile) rb_reg_prepare_re(re);
+
+    if (FL_TEST(re, KCODE_FIXED))
+	kcode_set_option(re);
+    else if (reg_kcode != curr_kcode)
+	kcode_reset_option();
+
+    if (reverse) {
+	range = -pos;
+    }
+    else {
+	range = RSTRING(str)->len - pos;
+    }
+    result = re_search(RREGEXP(re)->ptr,RSTRING(str)->ptr,RSTRING(str)->len,
+		       pos, range, &regs);
+
+    if (FL_TEST(re, KCODE_FIXED))
+	kcode_reset_option();
+
+    if (result == -2) {
+	rb_reg_raise(RREGEXP(re)->str, RREGEXP(re)->len,
+		     "Stack overflow in regexp matcher", re);
+    }
+
+    if (result < 0) {
+	rb_backref_set(Qnil);
+	return result;
+    }
+
+    match = rb_backref_get();
+    if (NIL_P(match) || FL_TEST(match, MATCH_BUSY)) {
+	match = match_alloc(rb_cMatch);
+    }
+    else {
+	if (rb_safe_level() >= 3) 
+	    OBJ_TAINT(match);
+	else
+	    FL_UNSET(match, FL_TAINT);
+    }
+
+    re_copy_registers(RMATCH(match)->regs, &regs);
+    RMATCH(match)->str = rb_str_new4(str);
+    rb_backref_set(match);
+
+    OBJ_INFECT(match, re);
+    OBJ_INFECT(match, str);
+    return result;
+}

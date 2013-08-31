@@ -1,0 +1,23 @@
+array.c:1898
+static VALUE
+rb_ary_compact_bang(ary)
+    VALUE ary;
+{
+    VALUE *p, *t, *end;
+
+    rb_ary_modify(ary);
+    p = t = RARRAY(ary)->ptr;
+    end = p + RARRAY(ary)->len;
+    
+    while (t < end) {
+	if (NIL_P(*t)) t++;
+	else *p++ = *t++;
+    }
+    if (RARRAY(ary)->len == (p - RARRAY(ary)->ptr)) {
+	return Qnil;
+    }
+    RARRAY(ary)->len = RARRAY(ary)->aux.capa = (p - RARRAY(ary)->ptr);
+    REALLOC_N(RARRAY(ary)->ptr, VALUE, RARRAY(ary)->len);
+
+    return ary;
+}

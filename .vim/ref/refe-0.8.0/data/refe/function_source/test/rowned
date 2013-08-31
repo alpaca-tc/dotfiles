@@ -1,0 +1,11 @@
+file.c:760
+static VALUE
+test_rowned(obj, fname)
+    VALUE obj, fname;
+{
+    struct stat st;
+
+    if (rb_stat(fname, &st) < 0) return Qfalse;
+    if (st.st_uid == getuid()) return Qtrue;
+    return Qfalse;
+}

@@ -1,0 +1,24 @@
+object.c:292
+VALUE
+rb_obj_is_kind_of(obj, c)
+    VALUE obj, c;
+{
+    VALUE cl = CLASS_OF(obj);
+
+    switch (TYPE(c)) {
+      case T_MODULE:
+      case T_CLASS:
+      case T_ICLASS:
+	break;
+
+      default:
+	rb_raise(rb_eTypeError, "class or module required");
+    }
+
+    while (cl) {
+	if (cl == c || RCLASS(cl)->m_tbl == RCLASS(c)->m_tbl)
+	    return Qtrue;
+	cl = RCLASS(cl)->super;
+    }
+    return Qfalse;
+}

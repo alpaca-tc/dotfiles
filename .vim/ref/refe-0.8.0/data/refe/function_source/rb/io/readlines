@@ -1,0 +1,24 @@
+io.c:1158
+static VALUE
+rb_io_readlines(argc, argv, io)
+    int argc;
+    VALUE *argv;
+    VALUE io;
+{
+    VALUE line, ary;
+    VALUE rs;
+    OpenFile *fptr;
+
+    if (argc == 0) {
+	rs = rb_rs;
+    }
+    else {
+	rb_scan_args(argc, argv, "1", &rs);
+    }
+    GetOpenFile(io, fptr);
+    ary = rb_ary_new();
+    while (!NIL_P(line = rb_io_getline(rs, fptr))) {
+	rb_ary_push(ary, line);
+    }
+    return ary;
+}

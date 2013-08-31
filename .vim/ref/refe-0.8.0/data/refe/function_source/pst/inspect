@@ -1,0 +1,49 @@
+process.c:154
+static VALUE
+pst_inspect(st)
+    VALUE st;
+{
+    VALUE pid;
+    int status;
+    VALUE str;
+    char buf[256];
+
+    pid = pst_pid(st);
+    status = NUM2INT(st);
+
+    snprintf(buf, sizeof(buf), "#<%s: pid=%ld", rb_class2name(CLASS_OF(st)), NUM2LONG(pid));
+    str = rb_str_new2(buf);
+    if (WIFSTOPPED(status)) {
+	int stopsig = WSTOPSIG(status);
+	const char *signame = ruby_signal_name(stopsig);
+	if (signame) {
+	    snprintf(buf, sizeof(buf), ",stopped(SIG%s=%d)", signame, stopsig);
+	}
+	else {
+	    snprintf(buf, sizeof(buf), ",stopped(%d)", stopsig);
+	}
+	rb_str_cat2(str, buf);
+    }
+    if (WIFSIGNALED(status)) {
+	int termsig = WTERMSIG(status);
+	const char *signame = ruby_signal_name(termsig);
+	if (signame) {
+	    snprintf(buf, sizeof(buf), ",signaled(SIG%s=%d)", signame, termsig);
+	}
+	else {
+	    snprintf(buf, sizeof(buf), ",signaled(%d)", termsig);
+	}
+	rb_str_cat2(str, buf);
+    }
+    if (WIFEXITED(status)) {
+	snprintf(buf, sizeof(buf), ",exited(%d)", WEXITSTATUS(status));
+	rb_str_cat2(str, buf);
+    }
+#ifdef WCOREDUMP
+    if (WCOREDUMP(status)) {
+	rb_str_cat2(str, ",coredumped");
+    }
+#endif
+    rb_str_cat2(str, ">");
+    return str;
+}

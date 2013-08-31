@@ -1,0 +1,32 @@
+bignum.c:1673
+static VALUE
+rb_big_aref(x, y)
+    VALUE x, y;
+{
+    BDIGIT *xds;
+    int shift;
+    long s1, s2;
+
+    if (TYPE(y) == T_BIGNUM) {
+	if (!RBIGNUM(y)->sign || RBIGNUM(x)->sign)
+	    return INT2FIX(0);
+	return INT2FIX(1);
+    }
+    shift = NUM2INT(y);
+    if (shift < 0) return INT2FIX(0);
+    s1 = shift/BITSPERDIG;
+    s2 = shift%BITSPERDIG;
+
+    if (!RBIGNUM(x)->sign) {
+	if (s1 >= RBIGNUM(x)->len) return INT2FIX(1);
+	x = rb_big_clone(x);
+	get2comp(x, Qtrue);
+    }
+    else {
+	if (s1 >= RBIGNUM(x)->len) return INT2FIX(0);
+    }
+    xds = BDIGITS(x);
+    if (xds[s1] & (1<<s2))
+	return INT2FIX(1);
+    return INT2FIX(0);
+}

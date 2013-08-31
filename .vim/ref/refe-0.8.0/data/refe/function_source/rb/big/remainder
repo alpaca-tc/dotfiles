@@ -1,0 +1,22 @@
+bignum.c:1337
+static VALUE
+rb_big_remainder(x, y)
+    VALUE x, y;
+{
+    VALUE z;
+
+    switch (TYPE(y)) {
+      case T_FIXNUM:
+	y = rb_int2big(FIX2LONG(y));
+	break;
+
+      case T_BIGNUM:
+	break;
+
+      default:
+	return rb_num_coerce_bin(x, y);
+    }
+    bigdivrem(x, y, 0, &z);
+
+    return bignorm(z);
+}

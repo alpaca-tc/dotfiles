@@ -1,0 +1,12 @@
+eval.c:6393
+static void
+errat_setter(val, id, var)
+    VALUE val;
+    ID id;
+    VALUE *var;
+{
+    if (NIL_P(ruby_errinfo)) {
+	rb_raise(rb_eArgError, "$! not set");
+    }
+    set_backtrace(ruby_errinfo, val);
+}

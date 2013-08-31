@@ -1,0 +1,15 @@
+eval.c:10014
+static VALUE thgroup_s_alloc _((VALUE));
+static VALUE
+thgroup_s_alloc(klass)
+    VALUE klass;
+{
+    VALUE group;
+    struct thgroup *data;
+
+    group = Data_Make_Struct(klass, struct thgroup, 0, free, data);
+    data->enclosed = 0;
+    data->group = group;
+
+    return group;
+}

@@ -1,0 +1,20 @@
+string.c:426
+void
+rb_str_associate(str, add)
+    VALUE str, add;
+{
+    if (FL_TEST(str, STR_ASSOC)) {
+	/* already associated */
+	rb_ary_concat(RSTRING(str)->aux.shared, add);
+    }
+    else {
+	if (FL_TEST(str, ELTS_SHARED)) {
+	    str_make_independent(str);
+	}
+	else if (RSTRING(str)->aux.capa != RSTRING(str)->len) {
+	    RESIZE_CAPA(str, RSTRING(str)->len);
+	}
+	RSTRING(str)->aux.shared = add;
+	FL_SET(str, STR_ASSOC);
+    }
+}

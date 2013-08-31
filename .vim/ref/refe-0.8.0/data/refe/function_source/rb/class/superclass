@@ -1,0 +1,18 @@
+object.c:772
+static VALUE
+rb_class_superclass(klass)
+    VALUE klass;
+{
+    VALUE super = RCLASS(klass)->super;
+
+    if (!super) {
+	rb_raise(rb_eTypeError, "uninitialized class");
+    }
+    while (TYPE(super) == T_ICLASS) {
+	super = RCLASS(super)->super;
+    }
+    if (!super) {
+	return Qnil;
+    }
+    return super;
+}

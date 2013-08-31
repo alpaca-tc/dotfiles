@@ -1,0 +1,15 @@
+io.c:2261
+static VALUE
+rb_io_s_open(argc, argv, klass)
+    int argc;
+    VALUE *argv;
+    VALUE klass;
+{
+    VALUE io = rb_class_new_instance(argc, argv, klass);
+
+    if (rb_block_given_p()) {
+	return rb_ensure(rb_yield, io, io_close, io);
+    }
+
+    return io;
+}

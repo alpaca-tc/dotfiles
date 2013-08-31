@@ -1,0 +1,7 @@
+error.c:605
+static VALUE
+syserr_errno(self)
+    VALUE self;
+{
+    return rb_attr_get(self, rb_intern("errno"));
+}

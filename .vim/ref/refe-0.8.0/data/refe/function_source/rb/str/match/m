@@ -1,0 +1,7 @@
+string.c:1087
+static VALUE
+rb_str_match_m(str, re)
+    VALUE str, re;
+{
+    return rb_funcall(get_pat(re, 0), rb_intern("match"), 1, str);
+}

@@ -1,0 +1,32 @@
+class.c:220
+VALUE
+rb_define_class_under(outer, name, super)
+    VALUE outer;
+    const char *name;
+    VALUE super;
+{
+    VALUE klass;
+    ID id;
+
+    id = rb_intern(name);
+    if (rb_const_defined_at(outer, id)) {
+	klass = rb_const_get_at(outer, id);
+	if (TYPE(klass) != T_CLASS) {
+	    rb_raise(rb_eTypeError, "%s is not a class", name);
+	}
+	if (rb_class_real(RCLASS(klass)->super) != super) {
+	    rb_name_error(id, "%s is already defined", name);
+	}
+	return klass;
+    }
+    if (!super) {
+	rb_warn("no super class for `%s::%s', Object assumed",
+		rb_class2name(outer), name);
+    }
+    klass = rb_define_class_id(id, super);
+    rb_set_class_path(klass, outer, name);
+    rb_const_set(outer, id, klass);
+    rb_class_inherited(super, klass);
+
+    return klass;
+}

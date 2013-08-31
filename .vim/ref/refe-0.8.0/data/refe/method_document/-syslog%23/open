@@ -1,0 +1,5 @@
+: open(ident=$0, options=Syslog::LOG_PID|Syslog::LOG_CONS, facility=Syslog::LOG_USER)
+   与えられた引数でsyslogを開く。
+   syslogを既に開いていた場合はRuntimeErrorが
+   発生する。
+

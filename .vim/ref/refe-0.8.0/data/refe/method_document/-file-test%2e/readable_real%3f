@@ -1,0 +1,5 @@
+--- FileTest.readable_real?(filename)
+
+    filename が実ユーザ/実グループによって読み込み可能な時に真を
+    返します。
+

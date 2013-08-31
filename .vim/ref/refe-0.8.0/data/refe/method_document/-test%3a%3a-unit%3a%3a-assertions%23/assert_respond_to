@@ -1,0 +1,4 @@
+--- assert_respond_to(object, method, message="")
+
+    object.respond_to?(method) が真なら pass
+

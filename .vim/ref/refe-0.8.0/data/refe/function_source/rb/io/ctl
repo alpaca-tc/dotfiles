@@ -1,0 +1,72 @@
+io.c:3386
+static VALUE
+rb_io_ctl(io, req, arg, io_p)
+    VALUE io, req, arg;
+    int io_p;
+{
+#if !defined(MSDOS) && !defined(__human68k__)
+    int cmd = NUM2ULONG(req);
+    OpenFile *fptr;
+    long len = 0;
+    long narg = 0;
+    int retval;
+
+    rb_secure(2);
+    GetOpenFile(io, fptr);
+
+    if (NIL_P(arg) || arg == Qfalse) {
+	narg = 0;
+    }
+    else if (FIXNUM_P(arg)) {
+	narg = FIX2LONG(arg);
+    }
+    else if (arg == Qtrue) {
+	narg = 1;
+    }
+    else {
+	VALUE tmp = rb_check_string_type(arg);
+
+	if (NIL_P(tmp)) {
+	    narg = NUM2LONG(arg);
+	}
+	else {
+	    arg = tmp;
+#ifdef IOCPARM_MASK
+#ifndef IOCPARM_LEN
+#define IOCPARM_LEN(x)  (((x) >> 16) & IOCPARM_MASK)
+#endif
+#endif
+#ifdef IOCPARM_LEN
+	    len = IOCPARM_LEN(cmd);	/* on BSDish systems we're safe */
+#else
+	    len = 256;		/* otherwise guess at what's safe */
+#endif
+	    rb_str_modify(arg);
+
+	    if (len <= RSTRING(arg)->len) {
+		len = RSTRING(arg)->len;
+	    }
+	    if (RSTRING(arg)->len < len) {
+		rb_str_resize(arg, len+1);
+	    }
+	    RSTRING(arg)->ptr[len] = 17;	/* a little sanity check here */
+	    narg = (long)RSTRING(arg)->ptr;
+	}
+    }
+    retval = io_cntl(fileno(fptr->f), cmd, narg, io_p);
+    if (retval < 0) rb_sys_fail(fptr->path);
+    if (TYPE(arg) == T_STRING && RSTRING(arg)->ptr[len] != 17) {
+	rb_raise(rb_eArgError, "return value overflowed string");
+    }
+
+    if (fptr->f2 && fileno(fptr->f) != fileno(fptr->f2)) {
+	/* call on f2 too; ignore result */
+	io_cntl(fileno(fptr->f2), cmd, narg, io_p);
+    }
+
+    return INT2NUM(retval);
+#else
+    rb_notimplement();
+    return Qnil;		/* not reached */
+#endif
+}

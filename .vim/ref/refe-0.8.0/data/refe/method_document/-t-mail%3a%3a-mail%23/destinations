@@ -1,0 +1,4 @@
+: destinations( default = nil ) -> [String]
+    To、Cc、Bcc すべてのアドレススペック文字列の配列を
+    返します。ひとつも存在しなければ default を返します。
+

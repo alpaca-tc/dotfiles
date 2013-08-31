@@ -1,0 +1,21 @@
+eval.c:5637
+static VALUE
+eval_under(under, self, src, file, line)
+    VALUE under, self, src;
+    const char *file;
+    int line;
+{
+    VALUE args[4];
+
+    if (ruby_safe_level >= 4) {
+	StringValue(src);
+    }
+    else {
+	SafeStringValue(src);
+    }
+    args[0] = self;
+    args[1] = src;
+    args[2] = (VALUE)file;
+    args[3] = (VALUE)line;
+    return exec_under(eval_under_i, under, under, args);
+}

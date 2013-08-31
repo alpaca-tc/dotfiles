@@ -1,0 +1,25 @@
+--- Dir.chdir([path])
+--- Dir.chdir([path]) {|path| ... }  ruby 1.7 feature
+
+    カレントディレクトリを path に変更します。
+    path を省略した場合、環境変数 HOME または LOGDIR 
+    が設定されていればそのディレクトリに移動します。
+
+    カレントディレクトリの変更に成功すれば 0 を返します。失敗した場合
+    は例外 Errno::EXXX が発生します。
+
+    ruby 1.7 feature:
+    ブロックが指定された場合、ディレクトリの変更はブロックの実行中に限
+    られます。これは以下と等価です。
+
+        savedir = Dir.pwd
+        Dir.chdir(newdir)
+        begin
+          ...
+        ensure
+          Dir.chdir(savedir)
+        end
+
+    ブロックが指定されたときのこのメソッドの戻り値はブロックの実行結果
+    です。
+

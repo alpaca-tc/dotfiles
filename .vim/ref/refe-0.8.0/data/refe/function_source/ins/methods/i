@@ -1,0 +1,9 @@
+class.c:477
+static int
+ins_methods_i(name, type, ary)
+    ID name;
+    long type;
+    VALUE ary;
+{
+    return ins_methods_push(name, type, ary, -1); /* everything but private */
+}

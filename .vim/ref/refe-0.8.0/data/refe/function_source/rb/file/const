@@ -1,0 +1,8 @@
+file.c:2602
+void
+rb_file_const(name, value)
+    const char *name;
+    VALUE value;
+{
+    rb_define_const(rb_mFConst, name, value);
+}

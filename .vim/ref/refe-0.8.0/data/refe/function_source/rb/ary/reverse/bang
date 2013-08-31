@@ -1,0 +1,7 @@
+array.c:1111
+static VALUE
+rb_ary_reverse_bang(ary)
+    VALUE ary;
+{
+    return rb_ary_reverse(ary);
+}

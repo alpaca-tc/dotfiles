@@ -1,0 +1,4 @@
+: int FIX2INT(VALUE x)
+    Fixnum を int に変換します。
+    返り値が int の範囲から外れる場合は RangeError が発生します。
+

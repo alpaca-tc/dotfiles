@@ -1,0 +1,5 @@
+--- Resolv::Hosts#getaddress(name)
+--- Resolv::Hosts#getaddresses(name)
+--- Resolv::Hosts#each_address(name) {|address| ...}
+    address lookup methods.
+

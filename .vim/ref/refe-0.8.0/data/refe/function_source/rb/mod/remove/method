@@ -1,0 +1,14 @@
+eval.c:459
+static VALUE
+rb_mod_remove_method(argc, argv, mod)
+    int argc;
+    VALUE *argv;
+    VALUE mod;
+{
+    int i;
+
+    for (i=0; i<argc; i++) {
+	remove_method(mod, rb_to_id(argv[i]));
+    }
+    return mod;
+}

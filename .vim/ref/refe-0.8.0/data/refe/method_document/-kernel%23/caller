@@ -1,0 +1,64 @@
+--- caller([level])
+
+    level 段上(引数省略時は、1)の呼び出し元の情報を $@
+    の形式のバックトレース(文字列の配列)として返します。トップレベルで
+    は空の配列を返します。caller の戻り値を $@ に代入することで
+    例外の発生位置を設定できます。
+
+        def foo
+          p caller(0)
+          p caller(1)
+          p caller(2)
+          p caller(3)
+        end
+
+        def bar
+          foo
+        end
+
+        bar
+
+        => ["-:2:in `foo'", "-:9:in `bar'", "-:12"]
+           ["-:9:in `bar'", "-:12"]
+           ["-:12"]
+           []
+
+    以下の関数は、caller の要素から [ファイル名, 行番号, メソッド名] 
+    を取り出して返します。
+
+        def parse_caller(at)
+          if /^(.+?):(\d+)(:in `(.*)')?/ =~ at
+            file = $1
+            line = $2.to_i
+            method = $4 if $3
+            [file, line, method]
+          end
+        end
+
+        def foo
+          p parse_caller(caller.first)
+        end
+
+        def bar
+          foo
+          p parse_caller(caller.first)
+        end
+
+        bar
+        p parse_caller(caller.first)
+
+        => ["-", 15, "bar"]
+           ["-", 19, nil]
+           nil
+
+    以下は、$DEBUG が真の場合に役に立つ debug 関数
+    のサンプルです。
+
+        def debug(*args)
+          p [caller.first, *args] if $DEBUG
+        end
+
+        debug "debug information"
+
+        => ["-:5", "debug information"]
+

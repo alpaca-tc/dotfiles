@@ -1,0 +1,8 @@
+parse.y:5942
+int
+rb_is_class_id(id)
+    ID id;
+{
+    if (is_class_id(id)) return Qtrue;
+    return Qfalse;
+}

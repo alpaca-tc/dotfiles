@@ -1,0 +1,17 @@
+class.c:513
+static int
+method_entry(key, body, list)
+    ID key;
+    NODE *body;
+    st_table *list;
+{
+    long type;
+
+    if (key == ID_ALLOCATOR) return ST_CONTINUE;
+    if (!st_lookup(list, key, 0)) {
+	if (!body->nd_body) type = -1; /* none */
+	else type = VISI(body->nd_noex);
+	st_add_direct(list, key, type);
+    }
+    return ST_CONTINUE;
+}

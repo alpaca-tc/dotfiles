@@ -1,0 +1,5 @@
+--- Etc.getgrnam(name)
+    nameという名前のグループエントリを返す。戻り値は
+    Etc/Etc.getgrgidと同様である。詳細はgetgrnam(3) [manual page]
+    を参照。
+

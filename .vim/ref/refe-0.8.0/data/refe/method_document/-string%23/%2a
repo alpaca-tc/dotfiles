@@ -1,0 +1,8 @@
+--- self * times
+
+    文字列の内容を times 回だけ繰り返した新しい文字列を作成して
+    返します。
+
+    例:
+        p "abc" * 4   #=> "abcabcabcabc"
+

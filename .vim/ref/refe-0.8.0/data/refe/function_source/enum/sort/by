@@ -1,0 +1,24 @@
+enum.c:270
+static VALUE
+enum_sort_by(obj)
+    VALUE obj;
+{
+    VALUE ary;
+    long i;
+
+    if (TYPE(obj) == T_ARRAY) {
+	ary  = rb_ary_new2(RARRAY(obj)->len);
+    }
+    else {
+	ary = rb_ary_new();
+    }
+    rb_iterate(rb_each, obj, sort_by_i, ary);
+    if (RARRAY(ary)->len > 1) {
+	qsort(RARRAY(ary)->ptr, RARRAY(ary)->len, sizeof(VALUE), sort_by_cmp);
+    }
+    for (i=0; i<RARRAY(ary)->len; i++) {
+	VALUE e = RARRAY(ary)->ptr[i];
+	RARRAY(ary)->ptr[i] = RARRAY(e)->ptr[1];
+    }
+    return ary;
+}

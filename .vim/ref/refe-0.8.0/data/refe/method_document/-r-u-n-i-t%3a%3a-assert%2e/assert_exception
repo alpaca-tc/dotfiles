@@ -1,0 +1,3 @@
+--- assert_exception(exception[, message]) { ... }
+--- assert_no_exception(exceptions, ...[, message]) { ... }
+

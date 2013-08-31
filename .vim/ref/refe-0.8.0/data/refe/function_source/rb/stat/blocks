@@ -1,0 +1,11 @@
+file.c:256
+static VALUE
+rb_stat_blocks(self)
+    VALUE self;
+{
+#ifdef HAVE_ST_BLOCKS
+    return ULONG2NUM(get_stat(self)->st_blocks);
+#else
+    return Qnil;
+#endif
+}

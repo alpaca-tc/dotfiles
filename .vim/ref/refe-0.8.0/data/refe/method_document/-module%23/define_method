@@ -1,0 +1,37 @@
+--- define_method(name, method)
+--- define_method(name) { ... }
+
+    インスタンスメソッド name を定義します。
+    method には Proc、Method あるいは
+    UnboundMethod のいずれかのインスタンスを指定します。
+    引数 method を与えたときはそれを、ブロック付きで
+    呼びだしたときはブロックを Proc 化したオブジェクトを、
+    それぞれ返します。
+
+    例:
+
+        class Foo
+          def foo() p :foo end
+          define_method(:bar, instance_method(:foo))
+        end
+        Foo.new.bar    # => :foo
+
+    ブロックを与えた場合、Ruby 1.7 以降では、定義したメソッド
+    の実行時にブロックがレシーバクラスのインスタンスの上で
+    instance_eval されます。
+    一方 Ruby 1.6 ではブロックとメソッドの関連づけを行うだけで、
+    メソッドの実行時にはブロックは生成時のコンテキストのままで
+    実行されます。たとえば以下の例を参照してください。
+
+        class C
+        end
+        # インスタンスメソッド print_self を定義。
+        # ただし define_method はプライベートメソッド
+        # なので直接は呼べない。__send__ を介して呼ぶ。
+        C.__send__(:define_method, :print_self) { p self }
+
+        # 1.6 の場合
+        C.new.print_self    #=> main
+        # 1.7 の場合
+        C.new.print_self    #=> #<C:0x4015b490>
+

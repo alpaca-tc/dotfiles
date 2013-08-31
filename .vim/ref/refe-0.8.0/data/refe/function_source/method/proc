@@ -1,0 +1,18 @@
+eval.c:7615
+static VALUE
+method_proc(method)
+    VALUE method;
+{
+    VALUE proc;
+    struct METHOD *mdata;
+    struct BLOCK *bdata;
+
+    proc = rb_iterate((VALUE(*)_((VALUE)))mproc, 0, bmcall, method);
+    Data_Get_Struct(method, struct METHOD, mdata);
+    Data_Get_Struct(proc, struct BLOCK, bdata);
+    bdata->body->nd_file = mdata->body->nd_file;
+    nd_set_line(bdata->body, nd_line(mdata->body));
+    bdata->body->nd_state = YIELD_FUNC_SVALUE;
+
+    return proc;
+}

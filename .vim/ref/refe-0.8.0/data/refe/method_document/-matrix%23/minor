@@ -1,0 +1,10 @@
+--- Matrix#minor(from_row,row_size,from_col,col_size)
+--- Matrix#minor(from_row..to_row,from_col..to_col)
+    returns sub matrix. parameter is specified as the following:
+    (1) from_row, row_size, from_col, size_col
+    (2) from_row..to_row, from_col..to_col
+
+    部分行列を返す。たたし、パラメータは、次の方法で指定する。
+    (1) 開始行番号, 行の大きさ, 開始列番号, 列の大きさ
+    (2) 開始行番号..終了行番号, 開始列番号..終了列番号
+

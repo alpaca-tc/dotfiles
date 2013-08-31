@@ -1,0 +1,4 @@
+--- OptionParser.inc(arg[, default])
+--- OptionParser#inc(arg[, default])
+    Returns incremented value of default according to arg.
+

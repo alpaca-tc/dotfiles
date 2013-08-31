@@ -1,0 +1,10 @@
+eval.c:8426
+static void
+rb_thread_ready(th)
+    rb_thread_t th;
+{
+    th->wait_for = 0;
+    if (th->status != THREAD_TO_KILL) {
+	th->status = THREAD_RUNNABLE;
+    }
+}

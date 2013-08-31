@@ -1,0 +1,4 @@
+--- String#external_filter(prog)
+      Stringを標準入力として外部プログラムprogを起動し、標準出力をStringとして返す。
+      標準添付希望。
+

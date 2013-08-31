@@ -1,0 +1,8 @@
+--- Process.groups=gid_ary
+
+    補助グループを設定します。右辺の配列の要素はグループ ID かグループ
+    名を指定します。Process.groups の結果を返します。
+
+    設定する補助グループ ID の数が Process.maxgroups の
+    数を越えている場合、例外 ArgumentError が発生します。
+

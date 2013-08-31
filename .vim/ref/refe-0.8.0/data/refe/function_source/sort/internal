@@ -1,0 +1,9 @@
+array.c:1153
+static VALUE
+sort_internal(ary)
+    VALUE ary;
+{
+    qsort(RARRAY(ary)->ptr, RARRAY(ary)->len, sizeof(VALUE),
+	  rb_block_given_p()?sort_1:sort_2);
+    return ary;
+}

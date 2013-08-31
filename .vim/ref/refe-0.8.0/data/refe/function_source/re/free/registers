@@ -1,0 +1,9 @@
+regex.c:4426
+void
+re_free_registers(regs)
+     struct re_registers *regs;
+{
+  if (regs->allocated == 0) return;
+  if (regs->beg) xfree(regs->beg);
+  if (regs->end) xfree(regs->end);
+}

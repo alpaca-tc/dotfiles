@@ -1,0 +1,21 @@
+--- upcase
+--- upcase!
+
+    ASCII 文字列の範囲内でアルファベットを全て大文字にします
+
+    upcase は置換後の文字列を生成して返します。
+    upcase! は self を変更して返しますが、置換が起こら
+    なかった場合は nil を返します。
+
+    $KCODE が適切に設定されていなければ、漢字コードの一部も変換
+    してしまいます(これは、ShiftJIS コードで起こり得ます)。
+    逆に、$KCODE を設定してもマルチバイト文字のアルファベット
+    は処理しません。
+
+        # -*- Coding: shift_jis -*-
+        $KCODE ='n'
+        puts "蟻".upcase # => 帰
+
+    downcase, swapcase,
+    capitalize も参照してください。
+

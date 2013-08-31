@@ -1,0 +1,10 @@
+variable.c:1747
+VALUE
+rb_iv_get(obj, name)
+    VALUE obj;
+    const char *name;
+{
+    ID id = rb_intern(name);
+
+    return rb_ivar_get(obj, id);
+}

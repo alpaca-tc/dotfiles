@@ -1,0 +1,3 @@
+: VALUE rb_define_module_under(VALUE outer, const char *name)
+    モジュール outer::name を作成し返します。
+

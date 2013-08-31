@@ -1,0 +1,20 @@
+ruby.c:1080
+void
+ruby_set_argv(argc, argv)
+    int argc;
+    char **argv;
+{
+    int i;
+
+#if defined(USE_DLN_A_OUT)
+    if (origargv) dln_argv0 = origargv[0];
+    else          dln_argv0 = argv[0];
+#endif
+    rb_ary_clear(rb_argv);
+    for (i=0; i < argc; i++) {
+	VALUE arg = rb_tainted_str_new2(argv[i]);
+
+	OBJ_FREEZE(arg);
+	rb_ary_push(rb_argv, arg);
+    }
+}

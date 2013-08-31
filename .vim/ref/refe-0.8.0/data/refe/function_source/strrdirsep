@@ -1,0 +1,19 @@
+file.c:1494
+static char *
+strrdirsep(path)
+    const char *path;
+{
+    char *last = NULL;
+    while (*path) {
+	if (isdirsep(*path)) {
+	    const char *tmp = path++;
+	    while (isdirsep(*path)) path++;
+	    if (!*path) break;
+	    last = (char *)tmp;
+	}
+	else {
+	    path = CharNext(path);
+	}
+    }
+    return last;
+}

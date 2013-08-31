@@ -1,0 +1,5 @@
+--- Readline.emacs_editing_mode
+    編集モードを Emacs モードにします。デフォルトは Emacs モードです。
+
+    詳細は、GNU Readline のマニュアルを参照してください。
+

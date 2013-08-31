@@ -1,0 +1,8 @@
+variable.c:1115
+static VALUE
+const_missing(klass, id)
+    VALUE klass;
+    ID id;
+{
+    return rb_funcall(klass, rb_intern("const_missing"), 1, ID2SYM(id));
+}

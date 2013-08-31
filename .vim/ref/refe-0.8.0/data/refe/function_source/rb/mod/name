@@ -1,0 +1,10 @@
+variable.c:170
+VALUE
+rb_mod_name(mod)
+    VALUE mod;
+{
+    VALUE path = classname(mod);
+
+    if (!NIL_P(path)) return rb_str_dup(path);
+    return rb_str_new(0,0);
+}

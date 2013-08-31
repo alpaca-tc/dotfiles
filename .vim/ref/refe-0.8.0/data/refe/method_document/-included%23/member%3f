@@ -1,0 +1,5 @@
+--- include?(o)
+--- member?(o)
+#    Returns true if the set contains the given object.
+    オブジェクト o がその集合に属す場合に true を返します。
+

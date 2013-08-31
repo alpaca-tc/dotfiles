@@ -1,0 +1,54 @@
+eval.c:3682
+static VALUE
+module_setup(module, n)
+    VALUE module;
+    NODE *n;
+{
+    NODE * volatile node = n->nd_body;
+    int state;
+    struct FRAME frame;
+    VALUE result = Qnil;	/* OK */
+    TMP_PROTECT;
+
+    frame = *ruby_frame;
+    frame.tmp = ruby_frame;
+    ruby_frame = &frame;
+
+    PUSH_CLASS(module);
+    PUSH_SCOPE();
+    PUSH_VARS();
+
+    if (node->nd_tbl) {
+	VALUE *vars = TMP_ALLOC(node->nd_tbl[0]+1);
+	*vars++ = (VALUE)node;
+	ruby_scope->local_vars = vars;
+	rb_mem_clear(ruby_scope->local_vars, node->nd_tbl[0]);
+	ruby_scope->local_tbl = node->nd_tbl;
+    }
+    else {
+	ruby_scope->local_vars = 0;
+	ruby_scope->local_tbl  = 0;
+    }
+
+    PUSH_CREF(module);
+    PUSH_TAG(PROT_NONE);
+    if ((state = EXEC_TAG()) == 0) {
+	if (trace_func) {
+	    call_trace_func("class", n, ruby_cbase, ruby_frame->last_func, ruby_frame->last_class);
+	}
+	result = rb_eval(ruby_cbase, node->nd_next);
+    }
+    POP_TAG();
+    POP_CREF();
+    POP_VARS();
+    POP_SCOPE();
+    POP_CLASS();
+
+    ruby_frame = frame.tmp;
+    if (trace_func) {
+	call_trace_func("end", n, 0, ruby_frame->last_func, ruby_frame->last_class);
+    }
+    if (state) JUMP_TAG(state);
+
+    return result;
+}

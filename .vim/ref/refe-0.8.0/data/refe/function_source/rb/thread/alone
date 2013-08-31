@@ -1,0 +1,6 @@
+eval.c:8911
+int
+rb_thread_alone()
+{
+    return curr_thread == curr_thread->next;
+}

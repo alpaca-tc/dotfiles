@@ -1,0 +1,13 @@
+object.c:897
+static VALUE
+rb_mod_const_set(mod, name, value)
+    VALUE mod, name, value;
+{
+    ID id = rb_to_id(name);
+
+    if (!rb_is_const_id(id)) {
+	rb_name_error(id, "wrong constant name %s", rb_id2name(id));
+    }
+    rb_const_set(mod, id, value);
+    return value;
+}

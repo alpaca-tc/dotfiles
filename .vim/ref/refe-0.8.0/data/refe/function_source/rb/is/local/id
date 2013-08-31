@@ -1,0 +1,8 @@
+parse.y:5958
+int
+rb_is_local_id(id)
+    ID id;
+{
+    if (is_local_id(id)) return Qtrue;
+    return Qfalse;
+}

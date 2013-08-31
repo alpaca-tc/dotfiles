@@ -1,0 +1,9 @@
+class.c:756
+void
+rb_define_global_function(name, func, argc)
+    const char *name;
+    VALUE (*func)();
+    int argc;
+{
+    rb_define_module_function(rb_mKernel, name, func, argc);
+}

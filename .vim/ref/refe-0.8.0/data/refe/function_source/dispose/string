@@ -1,0 +1,8 @@
+parse.y:2953
+static void
+dispose_string(str)
+    VALUE str;
+{
+    free(RSTRING(str)->ptr);
+    rb_gc_force_recycle(str);
+}

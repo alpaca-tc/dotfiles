@@ -1,0 +1,7 @@
+signal.c:194
+const char *
+ruby_signal_name(no)
+    int no;
+{
+    return signo2signm(no);
+}

@@ -1,0 +1,16 @@
+eval.c:8512
+static void
+copy_fds(dst, src, max)
+    fd_set *dst, *src;
+    int max;
+{
+    int n = 0;
+    int i;
+
+    for (i=0; i<=max; i++) {
+	if (FD_ISSET(i, src)) {
+	    n = i;
+	    FD_SET(i, dst);
+	}
+    }
+}

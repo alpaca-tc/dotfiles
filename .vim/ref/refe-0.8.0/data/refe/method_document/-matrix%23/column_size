@@ -1,0 +1,5 @@
+--- Matrix#column_size
+    returns the number of columns
+
+    列の大きさを返す。
+

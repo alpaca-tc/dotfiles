@@ -1,0 +1,12 @@
+file.c:226
+static VALUE
+rb_stat_rdev_minor(self)
+    VALUE self;
+{
+#if defined(HAVE_ST_RDEV) && defined(minor)
+    long rdev = get_stat(self)->st_rdev;
+    return ULONG2NUM(minor(rdev));
+#else
+    return Qnil;
+#endif
+}

@@ -1,0 +1,14 @@
+--- length
+--- size
+
+    範囲の長さを返します。
+    始点と終端が Integer のインスタンスなら
+        (last - first + (exclude_end? ? 0 : 1))
+    です。それ以外では、each が実行され範囲の長さを数えます。
+
+    ruby 1.7 feature: length, size メソッドはなくなりました。
+    必要なら
+      p ("a" .. "z").to_a.size
+      => 26
+    などとする必要があります。
+

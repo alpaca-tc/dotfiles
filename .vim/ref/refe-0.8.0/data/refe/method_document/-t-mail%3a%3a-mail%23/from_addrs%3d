@@ -1,0 +1,7 @@
+: from_addrs( default = nil ) -> [TMail::Address]
+: from_addrs=( addrs )
+    addrs: TMail::Address / [TMail::Address]
+    default: Object
+
+    From: アドレスの配列。
+

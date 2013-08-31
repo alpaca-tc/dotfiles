@@ -1,0 +1,3 @@
+--- OptionParser::List#atype
+    Map from acceptable argument types to pattern and converter pairs.
+

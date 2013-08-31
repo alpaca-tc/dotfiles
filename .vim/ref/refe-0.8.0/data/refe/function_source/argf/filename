@@ -1,0 +1,7 @@
+io.c:3907
+static VALUE
+argf_filename()
+{
+    next_argv();
+    return filename;
+}

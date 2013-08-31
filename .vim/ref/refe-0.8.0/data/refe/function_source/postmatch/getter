@@ -1,0 +1,6 @@
+re.c:905
+static VALUE
+postmatch_getter()
+{
+    return rb_reg_match_post(rb_backref_get());
+}

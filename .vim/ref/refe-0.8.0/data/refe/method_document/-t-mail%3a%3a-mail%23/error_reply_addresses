@@ -1,0 +1,4 @@
+: error_reply_addresses( default = nil ) -> [TMail::Address]
+    エラーメールを返送すべきアドレスを判断し、Address オブジェクトの
+    配列で返します。返送すべきアドレスがみつからなければ default を返します。
+

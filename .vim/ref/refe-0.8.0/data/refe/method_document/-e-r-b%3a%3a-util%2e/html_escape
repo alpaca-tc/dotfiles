@@ -1,0 +1,5 @@
+--- ERB::Util.html_escape(s)
+--- ERB::Util.h(s)
+    HTMLの &"<> をエスケープする。
+    (CGI.escapeHTMLとほぼ同じ。)
+

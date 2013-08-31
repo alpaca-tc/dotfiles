@@ -1,0 +1,7 @@
+file.c:1748
+VALUE
+rb_file_expand_path(fname, dname)
+    VALUE fname, dname;
+{
+    return file_expand_path(fname, dname, rb_str_new(0, MAXPATHLEN + 2));
+}

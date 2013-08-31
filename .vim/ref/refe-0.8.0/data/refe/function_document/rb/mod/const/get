@@ -1,0 +1,2 @@
+: static VALUE rb_mod_const_get(VALUE mod, VALUE name)
+

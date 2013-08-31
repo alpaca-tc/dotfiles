@@ -1,0 +1,112 @@
+eval.c:9411
+static VALUE
+rb_thread_start_0(fn, arg, th)
+    VALUE (*fn)();
+    void *arg;
+    rb_thread_t th;
+{
+    volatile rb_thread_t th_save = th;
+    volatile VALUE thread = th->thread;
+    struct BLOCK *volatile saved_block = 0, *block;
+    enum thread_status status;
+    int state;
+
+    if (OBJ_FROZEN(curr_thread->thgroup)) {
+	rb_raise(rb_eThreadError,
+		 "can't start a new thread (frozen ThreadGroup)");
+    }
+
+#if defined(HAVE_SETITIMER)
+    if (!thread_init) {
+#ifdef POSIX_SIGNAL
+	posix_signal(SIGVTALRM, catch_timer);
+#else
+	signal(SIGVTALRM, catch_timer);
+#endif
+
+	thread_init = 1;
+	rb_thread_start_timer();
+    }
+#endif
+
+    if (THREAD_SAVE_CONTEXT(curr_thread)) {
+	return thread;
+    }
+
+    if (ruby_block) {		/* should nail down higher blocks */
+	struct BLOCK dummy;
+
+	dummy.prev = ruby_block;
+	blk_copy_prev(&dummy);
+	saved_block = ruby_block = dummy.prev;
+    }
+    scope_dup(ruby_scope);
+
+    if (!th->next) {
+	/* merge in thread list */
+	th->prev = curr_thread;
+	curr_thread->next->prev = th;
+	th->next = curr_thread->next;
+	curr_thread->next = th;
+	th->priority = curr_thread->priority;
+	th->thgroup = curr_thread->thgroup;
+    }
+
+    PUSH_TAG(PROT_THREAD);
+    if ((state = EXEC_TAG()) == 0) {
+	if (THREAD_SAVE_CONTEXT(th) == 0) {
+	    curr_thread = th;
+	    th->result = (*fn)(arg, th);
+	}
+	th = th_save;
+    }
+    else if (TAG_DST()) {
+	th = th_save;
+	th->result = prot_tag->retval;
+    }
+    POP_TAG();
+    status = th->status;
+
+    if (th == main_thread) ruby_stop(state);
+    rb_thread_remove(th);
+
+    for (block = saved_block; block;) {
+	struct BLOCK *tmp = block;
+
+	if (tmp->frame.argc > 0)
+	    free(tmp->frame.argv);
+	block = tmp->prev;
+	free((void*)tmp);
+    }
+
+    if (state && status != THREAD_TO_KILL && !NIL_P(ruby_errinfo)) {
+	th->flags |= THREAD_RAISED;
+	if (state == TAG_FATAL) {
+	    /* fatal error within this thread, need to stop whole script */
+	    main_thread->errinfo = ruby_errinfo;
+	    rb_thread_cleanup();
+	}
+	else if (rb_obj_is_kind_of(ruby_errinfo, rb_eSystemExit)) {
+	    if (th->safe >= 4) {
+		char buf[32];
+
+		sprintf(buf, "Insecure exit at level %d", th->safe);
+		th->errinfo = rb_exc_new2(rb_eSecurityError, buf);
+	    }
+	    else {
+		/* delegate exception to main_thread */
+		rb_thread_main_jump(ruby_errinfo, RESTORE_RAISE);
+	    }
+	}
+	else if (th->safe < 4 && (ruby_thread_abort || th->abort || RTEST(ruby_debug))) {
+	    /* exit on main_thread */
+	    rb_thread_main_jump(ruby_errinfo, RESTORE_EXIT);
+	}
+	else {
+	    th->errinfo = ruby_errinfo;
+	}
+    }
+    rb_thread_schedule();
+    ruby_stop(0);		/* last thread termination */
+    return 0;			/* not reached */
+}

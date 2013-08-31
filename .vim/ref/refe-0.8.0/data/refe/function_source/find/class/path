@@ -1,0 +1,28 @@
+variable.c:115
+static VALUE
+find_class_path(klass)
+    VALUE klass;
+{
+    struct fc_result arg;
+
+    arg.name = 0;
+    arg.path = 0;
+    arg.klass = klass;
+    arg.track = rb_cObject;
+    arg.prev = 0;
+    if (RCLASS(rb_cObject)->iv_tbl) {
+	st_foreach(RCLASS(rb_cObject)->iv_tbl, fc_i, (st_data_t)&arg);
+    }
+    if (arg.path == 0) {
+	st_foreach(rb_class_tbl, fc_i, (st_data_t)&arg);
+    }
+    if (arg.path) {
+	if (!ROBJECT(klass)->iv_tbl) {
+	    ROBJECT(klass)->iv_tbl = st_init_numtable();
+	}
+	st_insert(ROBJECT(klass)->iv_tbl, classpath, arg.path);
+	st_delete(RCLASS(klass)->iv_tbl, &tmp_classpath, 0);
+	return arg.path;
+    }
+    return Qnil;
+}

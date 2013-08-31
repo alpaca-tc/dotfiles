@@ -1,0 +1,5 @@
+--- connect(addr)
+    connect(2)と同じ働きをします。addr は、
+    ソケットアドレス構造体を pack した文字列
+    です。
+

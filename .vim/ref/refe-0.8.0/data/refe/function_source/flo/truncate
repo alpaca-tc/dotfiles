@@ -1,0 +1,17 @@
+numeric.c:833
+static VALUE
+flo_truncate(num)
+    VALUE num;
+{
+    double f = RFLOAT(num)->value;
+    long val;
+
+    if (f > 0.0) f = floor(f);
+    if (f < 0.0) f = ceil(f);
+
+    if (!FIXABLE(f)) {
+	return rb_dbl2big(f);
+    }
+    val = f;
+    return LONG2FIX(val);
+}

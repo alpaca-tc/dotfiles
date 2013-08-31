@@ -1,0 +1,15 @@
+process.c:1720
+static VALUE
+proc_initgroups(obj, uname, base_grp)
+    VALUE obj, uname, base_grp;
+{
+#ifdef HAVE_INITGROUPS
+    if (initgroups(StringValuePtr(uname), (gid_t)NUM2INT(base_grp)) != 0) {
+	rb_sys_fail(0);
+    }
+    return proc_getgroups(obj);
+#else
+    rb_notimplement();
+    return Qnil;
+#endif
+}

@@ -1,0 +1,16 @@
+re.c:955
+static VALUE
+match_aref(argc, argv, match)
+    int argc;
+    VALUE *argv;
+    VALUE match;
+{
+    VALUE idx, rest;
+
+    rb_scan_args(argc, argv, "11", &idx, &rest);
+
+    if (!NIL_P(rest) || !FIXNUM_P(idx) || FIX2INT(idx) < 0) {
+	return rb_ary_aref(argc, argv, match_to_a(match));
+    }
+    return rb_reg_nth_match(FIX2INT(idx), match);
+}

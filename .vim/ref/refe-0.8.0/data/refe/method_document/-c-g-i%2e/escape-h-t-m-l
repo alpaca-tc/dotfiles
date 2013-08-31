@@ -1,0 +1,8 @@
+--- CGI.escapeHTML(string)
+      HTMLの &"<> をエスケープ
+
+        例：
+        CGI::escapeHTML("string")
+
+#=== UNESCAPE HTML
+

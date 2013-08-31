@@ -1,0 +1,8 @@
+eval.c:8077
+static double
+timeofday()
+{
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    return (double)tv.tv_sec + (double)tv.tv_usec * 1e-6;
+}

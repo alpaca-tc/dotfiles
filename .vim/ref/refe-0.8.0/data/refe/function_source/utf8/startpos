@@ -1,0 +1,16 @@
+regex.c:4616
+static unsigned int
+utf8_startpos(string, pos)
+     const char *string;
+     unsigned int pos;
+{
+  unsigned int i = pos, w;
+
+  while (i > 0 && !utf8_islead(string[i])) {
+    --i;
+  }
+  if (i == pos || i + (w = utf8_mbclen(string[i])) > pos) {
+    return i;
+  }
+  return i + w;
+}

@@ -1,0 +1,7 @@
+numeric.c:1196
+static VALUE
+rb_fix_induced_from(klass, x)
+    VALUE klass, x;
+{
+    return rb_num2fix(x);
+}

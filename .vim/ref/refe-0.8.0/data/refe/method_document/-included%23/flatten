@@ -1,0 +1,12 @@
+--- flatten
+#    Returns a new set that is a copy of the set, flattening each
+#    containing set recursively.
+    ネストした集合を平滑化して作られる新しい集合を返します。
+
+    例:
+
+      p s0 = Set[Set[1,2], 3]  #=> #<Set: {#<Set: {1, 2}>, 3}>
+      p s0.flatten             #=> #<Set: {1, 2, 3}>
+      p s1 = Set[Set[1,2], 1]  #=> #<Set: {#<Set: {1, 2}>, 1}>
+      p s1.flatten             #=> #<Set: {1, 2}>
+

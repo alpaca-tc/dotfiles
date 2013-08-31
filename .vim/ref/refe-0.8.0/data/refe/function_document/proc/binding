@@ -1,0 +1,2 @@
+: static VALUE proc_binding(VALUE proc)
+

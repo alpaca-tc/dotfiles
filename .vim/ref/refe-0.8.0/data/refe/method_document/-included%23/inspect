@@ -1,0 +1,6 @@
+--- inspect
+#    Returns a string containing a human-readable representation of the
+#    set. ("#<Set: {element1, element2, ...}>")
+
+    人間の読みやすい形に表現した文字列を返します。
+

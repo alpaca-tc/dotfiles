@@ -1,0 +1,7 @@
+eval.c:6916
+static void
+proc_set_safe_level(data)
+    VALUE data;
+{
+    ruby_safe_level = proc_get_safe_level(data);
+}

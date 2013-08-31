@@ -1,0 +1,5 @@
+--- ENV.each {|key, value| ... }
+--- ENV.each_pair {|key, value| ... }
+
+    key と value を引数としてブロックを評価します。
+

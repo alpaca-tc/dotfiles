@@ -1,0 +1,40 @@
+eval.c:4462
+VALUE
+rb_iterate(it_proc, data1, bl_proc, data2)
+    VALUE (*it_proc) _((VALUE)), (*bl_proc)(ANYARGS);
+    VALUE data1, data2;
+{
+    int state;
+    volatile VALUE retval = Qnil;
+    NODE *node = NEW_IFUNC(bl_proc, data2);
+    VALUE self = ruby_top_self;
+
+    PUSH_ITER(ITER_PRE);
+    PUSH_BLOCK(0, node);
+
+    PUSH_TAG(PROT_ITER);
+    state = EXEC_TAG();
+    if (state == 0) {
+  iter_retry:
+	retval = (*it_proc)(data1);
+    }
+    else if (state == TAG_BREAK && TAG_DST()) {
+	retval = prot_tag->retval;
+	state = 0;
+    }
+    else if (state == TAG_RETRY) {
+	state = 0;
+	goto iter_retry;
+    }
+    POP_TAG();
+    POP_BLOCK();
+    POP_ITER();
+
+    switch (state) {
+      case 0:
+	break;
+      default:
+	JUMP_TAG(state);
+    }
+    return retval;
+}

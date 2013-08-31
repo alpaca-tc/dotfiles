@@ -1,0 +1,16 @@
+array.c:368
+static void
+ary_make_shared(ary)
+    VALUE ary;
+{
+    if (!FL_TEST(ary, ELTS_SHARED)) {
+	NEWOBJ(shared, struct RArray);
+	OBJSETUP(shared, rb_cArray, T_ARRAY);
+
+	shared->len = RARRAY(ary)->len;
+	shared->ptr = RARRAY(ary)->ptr;
+	shared->aux.capa = RARRAY(ary)->aux.capa;
+	RARRAY(ary)->aux.shared = (VALUE)shared;
+	FL_SET(ary, ELTS_SHARED);
+    }
+}

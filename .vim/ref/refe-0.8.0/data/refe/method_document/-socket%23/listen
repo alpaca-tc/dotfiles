@@ -1,0 +1,3 @@
+--- listen(backlog)
+    listen(2)と同じ働きをします。
+

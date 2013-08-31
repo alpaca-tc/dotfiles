@@ -1,0 +1,16 @@
+re.c:609
+static VALUE
+match_offset(match, n)
+    VALUE match, n;
+{
+    int i = NUM2INT(n);
+
+    if (i < 0 || RMATCH(match)->regs->num_regs <= i)
+	rb_raise(rb_eIndexError, "index %d out of matches", i);
+
+    if (RMATCH(match)->regs->beg[i] < 0)
+	return rb_assoc_new(Qnil, Qnil);
+
+    return rb_assoc_new(INT2FIX(RMATCH(match)->regs->beg[i]),
+			INT2FIX(RMATCH(match)->regs->end[i]));
+}

@@ -1,0 +1,9 @@
+object.c:521
+static VALUE
+sym_to_i(sym)
+    VALUE sym;
+{
+    ID id = SYM2ID(sym);
+
+    return LONG2FIX(id);
+}

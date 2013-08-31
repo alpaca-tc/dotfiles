@@ -1,0 +1,12 @@
+dir.c:625
+static char*
+extract_elem(path)
+    char *path;
+{
+    char *pend;
+
+    pend = strchr(path, '/');
+    if (!pend) pend = path + strlen(path);
+
+    return extract_path(path, pend);
+}

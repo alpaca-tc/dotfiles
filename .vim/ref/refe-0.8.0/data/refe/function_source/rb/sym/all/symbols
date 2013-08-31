@@ -1,0 +1,9 @@
+parse.y:5925
+VALUE
+rb_sym_all_symbols()
+{
+    VALUE ary = rb_ary_new2(sym_tbl->num_entries);
+
+    st_foreach(sym_tbl, symbols_i, ary);
+    return ary;
+}

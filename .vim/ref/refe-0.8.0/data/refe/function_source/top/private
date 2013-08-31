@@ -1,0 +1,8 @@
+eval.c:6230
+static VALUE
+top_private(argc, argv)
+    int argc;
+    VALUE *argv;
+{
+    return rb_mod_private(argc, argv, rb_cObject);
+}

@@ -1,0 +1,7 @@
+hash.c:1109
+static void
+path_tainted_p(path)
+    char *path;
+{
+    path_tainted = rb_path_check(path)?0:1;
+}

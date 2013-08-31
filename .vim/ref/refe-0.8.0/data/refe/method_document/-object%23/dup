@@ -1,0 +1,31 @@
+--- clone
+--- dup
+
+    オブジェクトの複製を作ります。
+    clone は freeze、taint、特異メソッドなどの情報も
+    含めた完全な複製を、dup はオブジェクトの内容のみの複製を
+    作ります。
+
+    clone や dup は「浅い(shallow)」コピーであることに注意
+    してください。オブジェクト自身を複製するだけで、オブジェクトの指し
+    ている先(たとえば配列の要素など)までは複製しません。
+
+    また複製したオブジェクトに対して
+
+      obj.equal?(obj.clone)
+
+    は一般に成立しませんが
+    、
+
+      obj == obj.clone
+
+    は多くの場合に成立します。
+
+    true, false, nil, Symbol オブジェクトなど
+    を複製しようとすると例外 TypeError が発生します。
+
+    ruby 1.7 feature:
+    version 1.7 では、Numeric オブジェクトなど immutable(内容不
+    変)であるオブジェクトを複製しようとすると例外 TypeError が発
+    生します。
+

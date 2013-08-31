@@ -1,0 +1,15 @@
+eval.c:5177
+VALUE
+rb_apply(recv, mid, args)
+    VALUE recv;
+    ID mid;
+    VALUE args;
+{
+    int argc;
+    VALUE *argv;
+
+    argc = RARRAY(args)->len; /* Assigns LONG, but argc is INT */
+    argv = ALLOCA_N(VALUE, argc);
+    MEMCPY(argv, RARRAY(args)->ptr, VALUE, argc);
+    return rb_call(CLASS_OF(recv), recv, mid, argc, argv, 1);
+}

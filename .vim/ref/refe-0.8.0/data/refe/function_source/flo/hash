@@ -1,0 +1,18 @@
+numeric.c:547
+static VALUE
+flo_hash(num)
+    VALUE num;
+{
+    double d;
+    char *c;
+    int i, hash;
+
+    d = RFLOAT(num)->value;
+    if (d == 0) d = fabs(d);
+    c = (char*)&d;
+    for (hash=0, i=0; i<sizeof(double);i++) {
+	hash += c[i] * 971;
+    }
+    if (hash < 0) hash = -hash;
+    return INT2FIX(hash);
+}

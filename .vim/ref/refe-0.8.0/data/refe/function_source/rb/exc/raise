@@ -1,0 +1,7 @@
+eval.c:3953
+void
+rb_exc_raise(mesg)
+    VALUE mesg;
+{
+    rb_longjmp(TAG_RAISE, mesg);
+}

@@ -1,0 +1,18 @@
+eval.c:9159
+VALUE
+rb_thread_stop()
+{
+    enum thread_status last_status = THREAD_RUNNABLE;
+
+    rb_thread_critical = 0;
+    if (curr_thread == curr_thread->next) {
+	rb_raise(rb_eThreadError, "stopping only thread\n\tnote: use sleep to stop forever");
+    }
+    if (curr_thread->status == THREAD_TO_KILL)
+	last_status = THREAD_TO_KILL;
+    curr_thread->status = THREAD_STOPPED;
+    rb_thread_schedule();
+    curr_thread->status = last_status;
+
+    return Qnil;
+}

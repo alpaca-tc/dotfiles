@@ -1,0 +1,5 @@
+: lines
+      Returns the size of the body in text lines.
+
+And Net::IMAP::BodyTypeText has all methods of imap.rb"/Net::IMAP::BodyTypeBasic.
+

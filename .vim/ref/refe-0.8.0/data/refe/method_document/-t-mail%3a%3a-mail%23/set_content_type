@@ -1,0 +1,7 @@
+: set_content_type( main, sub, params = nil )
+    main: String
+    sub: String
+    params: {String => String}
+
+    コンテントタイプを main/sub; param; param; ... のように設定します。
+

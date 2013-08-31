@@ -1,0 +1,11 @@
+enum.c:507
+static VALUE
+enum_each_with_index(obj)
+    VALUE obj;
+{
+    NODE *memo = rb_node_newnode(NODE_MEMO, 0, 0, 0);
+
+    rb_iterate(rb_each, obj, each_with_index_i, (VALUE)memo);
+    rb_gc_force_recycle((VALUE)memo);
+    return obj;
+}

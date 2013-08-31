@@ -1,0 +1,28 @@
+#The class implements pretty printing algorithm.
+#It finds line breaks and nice indentations for grouped structure.
+
+このクラスは pretty printing アルゴリズムの実装です。
+改行の位置を探し、構造のまとまりのためにきれいなインデントを施します。
+
+#By default, the class assumes that primitive elements are strings and
+#each byte in the strings have single column in width.
+#But it can be used for other situasions
+#by giving suitable arguments for some methods:
+#newline object and space generation block for PrettyPrint.new,
+#optional width argument for PrettyPrint#text,
+#PrettyPrint#breakable, etc.
+#There are several candidates to use them:
+#text formatting using proportional fonts,
+#multibyte characters which has columns diffrent to number of bytes,
+#non-string formatting, etc.
+
+デフォルトでは、このクラスは最も基本的な要素は文字列であり、
+その1バイトが出力幅の中で1カラムを占めると仮定しています。
+しかし、いくつかのメソッドに対して適切な引数を与えることで、
+そうでない状況にも利用できます:
+PrettyPrint.new には改行オブジェクトと空白の生成を表すブロックを、
+PrettyPrint#text や PrettyPrint#breakable には幅といった具合に。
+これらを使ういくつかの候補は例えば次のようなものでしょう。
+proportional font を使ったテキストの整形、
+出力幅とバイト数が異なるような多バイト文字、
+文字以外の出力などです。

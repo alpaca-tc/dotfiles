@@ -1,0 +1,22 @@
+parse.y:5218
+static int
+literal_node(node)
+    NODE *node;
+{
+    if (!node) return 1;	/* same as NODE_NIL */
+    switch (nd_type(node)) {
+      case NODE_LIT:
+      case NODE_STR:
+      case NODE_DSTR:
+      case NODE_EVSTR:
+      case NODE_DREGX:
+      case NODE_DREGX_ONCE:
+      case NODE_DSYM:
+	return 2;
+      case NODE_TRUE:
+      case NODE_FALSE:
+      case NODE_NIL:
+	return 1;
+    }
+    return 0;
+}

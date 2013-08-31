@@ -1,0 +1,7 @@
+--- Net::FTP#putbinaryfile(localfile, remotefile, blocksize = DEFAULT_BLOCKSIZE, callback = nil)
+
+    サーバーにバイナリファイルをputします。 
+
+    callbackやブロックが指定された場合は
+    データが送信されるごとにそれを呼び出します。
+

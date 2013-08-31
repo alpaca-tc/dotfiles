@@ -1,0 +1,7 @@
+hash.c:57
+static VALUE
+eql(args)
+    VALUE *args;
+{
+    return (VALUE)rb_eql(args[0], args[1]);
+}

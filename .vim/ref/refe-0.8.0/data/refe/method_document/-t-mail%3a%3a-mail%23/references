@@ -1,0 +1,8 @@
+: references( default = nil ) -> [String]
+: references=( ids )
+    ids: String / [String]
+
+    References: に含まれるメッセージ ID のリスト。
+    現在は References: にはメッセージ ID 以外は
+    含められません。(RFC2822)
+

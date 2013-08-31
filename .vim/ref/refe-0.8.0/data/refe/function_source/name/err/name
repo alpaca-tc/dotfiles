@@ -1,0 +1,7 @@
+error.c:488
+static VALUE
+name_err_name(self)
+    VALUE self;
+{
+    return rb_attr_get(self, rb_intern("name"));
+}

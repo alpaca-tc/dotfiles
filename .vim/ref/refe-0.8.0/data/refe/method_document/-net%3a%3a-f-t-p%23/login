@@ -1,0 +1,6 @@
+--- Net::FTP#login(user = "anonymous", passwd = nil, acct = nil)
+
+    ログイン処理を行ないます。 
+
+    userが省略された場合、anonymousでログインします。
+

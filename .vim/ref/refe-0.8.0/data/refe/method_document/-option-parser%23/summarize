@@ -1,0 +1,14 @@
+--- OptionParser#summarize(to = [], width = @summary_width, max = width - 1, indent = @summary_indent)
+    Puts option summary into to, and returns to.
+    :Parameters:
+      : to
+        output destination, which must have method <<. Defaulted to [].
+      : width
+        width of left side. Defaulted to @summary_width
+      : max
+        maximum length allowed for left side. Defaulted to width - 1
+      : indent
+        indentation. Defaulted to @summary_indent
+      : Block
+        yields with each line if called as iterator.
+

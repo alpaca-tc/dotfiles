@@ -1,0 +1,6 @@
+: delete_if {|name, field| .... }
+    name: String
+    field: TMail::HeaderField
+
+    ヘッダ名とヘッダを与えてブロックを評価し、真ならその関連づけを消します。
+

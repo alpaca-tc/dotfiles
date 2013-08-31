@@ -1,0 +1,11 @@
+time.c:761
+static VALUE
+time_utc_p(time)
+    VALUE time;
+{
+    struct time_object *tobj;
+
+    GetTimeval(time, tobj);
+    if (tobj->gmt) return Qtrue;
+    return Qfalse;
+}

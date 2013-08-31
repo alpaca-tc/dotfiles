@@ -1,0 +1,61 @@
+
+rb_define_method(rb_cString, "mustnotincluded_beg", rb_str_notexist, 0);
+
+void
+Init_String()
+{
+    rb_cString  = rb_define_class("String", rb_cObject);
+    rb_include_module(rb_cString, rb_mComparable);
+    rb_include_module(rb_cString, rb_mEnumerable);
+@@ String.new rb_str_s_new
+    rb_define_singleton_method(rb_cString, "new", rb_str_s_new, -1);
+@@ String#initialize rb_str_replace
+    rb_define_method(rb_cString, "initialize", rb_str_replace, 1);
+@@ String#clone rb_str_clone
+    rb_define_method(rb_cString,
+      "clone", rb_str_clone, 0);
+@@ String#dup rb_str_dup
+    rb_define_method(rb_cString,
+      "dup", rb_str_dup,
+      0);
+@@ String#<=> rb_str_cmp_m
+    rb_define_method(rb_cString, "<=>", rb_str_cmp_m, 1);
+@@ String#== rb_str_equal
+    rb_define_method(rb_cString, "==",
+      rb_str_equal, 1);
+@@ String#=== rb_str_equal
+    rb_define_method(rb_cString, "===",
+      rb_str_equal,
+      1);
+@@ String#eql? rb_str_eql
+    rb_define_method(rb_cString, "eql?", rb_str_eql, 1);
+@@ String#hash rb_str_hash_m
+    rb_define_method(rb_cString, "hash", rb_str_hash_m, 0);
+@@ String#casecmp rb_str_casecmp
+    rb_define_method(rb_cString, "casecmp", rb_str_casecmp, 1);
+@@ String#+ rb_str_plus
+    rb_define_method(rb_cString, "+", rb_str_plus, 1);
+@@ String#* rb_str_times
+    rb_define_method(rb_cString, "*", rb_str_times, 1);
+@@ String#% rb_str_format
+    rb_define_method(rb_cString, "%", rb_str_format, 1);
+@@ String#[] rb_str_aref_m
+    rb_define_method(rb_cString, "[]", rb_str_aref_m, -1);
+@@ String#[]= rb_str_aset_m
+    rb_define_method(rb_cString, "[]=", rb_str_aset_m, -1);
+@@ String#index rb_str_index_m
+    rb_define_method(rb_cString, "index", rb_str_index_m, -1);
+@@ String#rindex rb_str_rindex
+    rb_define_method(rb_cString, "rindex", rb_str_rindex, -1);
+@@ Math.sin rb_math_sin
+    rb_define_module_function(rb_mMath, "sin", rb_math_sin, 1);
+@@ FileTest.size rb_file_s_size
+@@ File.size rb_file_s_size
+    define_filetest_function("size", rb_file_s_size, 0);
+@@ Process::Status#inspect pst_to_s
+    rb_define_method(rb_cProcStatus, "inspect", pst_to_s, 0);
+@@ File::Stat#nlink rb_stat_nlink
+    rb_define_method(rb_cStat, "nlink", rb_stat_nlink, 0);
+}
+
+rb_define_method(rb_cString, "mustnotincluded_end", rb_str_notexist, 0);

@@ -1,0 +1,13 @@
+hash.c:1329
+static VALUE
+env_each_value(ehash)
+    VALUE ehash;
+{
+    VALUE values = env_values();
+    long i;
+
+    for (i=0; i<RARRAY(values)->len; i++) {
+	rb_yield(RARRAY(values)->ptr[i]);
+    }
+    return ehash;
+}

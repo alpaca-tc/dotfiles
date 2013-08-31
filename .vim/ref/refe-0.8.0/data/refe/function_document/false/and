@@ -1,0 +1,2 @@
+: static VALUE false_and(VALUE obj, VALUE obj2)
+

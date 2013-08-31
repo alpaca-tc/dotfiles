@@ -1,0 +1,18 @@
+parse.y:4670
+static NODE *
+call_op(recv, id, narg, arg1)
+    NODE *recv;
+    ID id;
+    int narg;
+    NODE *arg1;
+{
+    value_expr(recv);
+    if (narg == 1) {
+	value_expr(arg1);
+	arg1 = NEW_LIST(arg1);
+    }
+    else {
+	arg1 = 0;
+    }
+    return NEW_CALL(recv, id, arg1);
+}

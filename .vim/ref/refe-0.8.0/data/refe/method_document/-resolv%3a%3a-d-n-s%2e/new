@@ -1,0 +1,2 @@
+--- Resolv::DNS.new(resolv_conf='/etc/resolv.conf')
+

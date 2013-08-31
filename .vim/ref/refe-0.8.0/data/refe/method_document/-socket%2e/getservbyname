@@ -1,0 +1,4 @@
+--- Socket.getservbyname(service[, proto])
+    service, protoに対応するポート番号を返
+    します。protoの省略値は"tcp"です。
+

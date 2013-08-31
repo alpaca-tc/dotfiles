@@ -1,0 +1,13 @@
+parse.y:5576
+static int
+local_id(id)
+    ID id;
+{
+    int i, max;
+
+    if (lvtbl == 0) return Qfalse;
+    for (i=3, max=lvtbl->cnt+1; i<max; i++) {
+	if (lvtbl->tbl[i] == id) return Qtrue;
+    }
+    return Qfalse;
+}

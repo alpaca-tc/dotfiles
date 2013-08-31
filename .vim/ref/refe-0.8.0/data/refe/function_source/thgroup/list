@@ -1,0 +1,21 @@
+eval.c:10029
+static VALUE
+thgroup_list(group)
+    VALUE group;
+{
+    struct thgroup *data;
+    rb_thread_t th;
+    VALUE ary;
+
+    Data_Get_Struct(group, struct thgroup, data);
+    ary = rb_ary_new();
+
+    FOREACH_THREAD(th) {
+	if (th->thgroup == data->group) {
+	    rb_ary_push(ary, th->thread);
+	}
+    }
+    END_FOREACH(th);
+
+    return ary;
+}

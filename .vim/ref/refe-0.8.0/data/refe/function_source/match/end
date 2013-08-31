@@ -1,0 +1,15 @@
+re.c:640
+static VALUE
+match_end(match, n)
+    VALUE match, n;
+{
+    int i = NUM2INT(n);
+
+    if (i < 0 || RMATCH(match)->regs->num_regs <= i)
+	rb_raise(rb_eIndexError, "index %d out of matches", i);
+
+    if (RMATCH(match)->regs->beg[i] < 0)
+	return Qnil;
+
+    return INT2FIX(RMATCH(match)->regs->end[i]);
+}

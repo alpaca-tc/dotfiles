@@ -1,0 +1,9 @@
+gc.c:434
+int
+ruby_stack_check()
+{
+    int ret;
+
+    CHECK_STACK(ret);
+    return ret;
+}

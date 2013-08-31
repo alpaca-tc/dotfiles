@@ -1,0 +1,10 @@
+hash.c:499
+static enum st_retval
+select_i(key, value, result)
+    VALUE key, value, result;
+{
+    if (key == Qundef) return ST_CONTINUE;
+    if (RTEST(rb_yield_values(2, key, value)))
+	rb_ary_push(result, rb_assoc_new(key, value));
+    return ST_CONTINUE;
+}

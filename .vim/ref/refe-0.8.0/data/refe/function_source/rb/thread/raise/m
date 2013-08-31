@@ -1,0 +1,15 @@
+eval.c:9805
+static VALUE
+rb_thread_raise_m(argc, argv, thread)
+    int argc;
+    VALUE *argv;
+    VALUE thread;
+{
+    rb_thread_t th = rb_thread_check(thread);
+
+    if (ruby_safe_level > th->safe) {
+	rb_secure(4);
+    }
+    rb_thread_raise(argc, argv, th);
+    return Qnil;		/* not reached */
+}

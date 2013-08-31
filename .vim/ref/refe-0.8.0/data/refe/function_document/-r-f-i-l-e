@@ -1,0 +1,2 @@
+: struct RFile *RFILE(VALUE obj)
+

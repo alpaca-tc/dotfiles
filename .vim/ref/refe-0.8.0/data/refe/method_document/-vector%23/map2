@@ -1,0 +1,17 @@
+--- Vector#map2(v) {|x,y| ... }
+    Applies dyadic block to corresponding elements of `self' and `v', and returns a new Vector object of the results.
+
+    ベクトルの各要素と、それに対応するインデックスを持つ引数(配列)の要素との組に対して(2引数の)ブロックを評価した結果を、要素として持つベクトルを返す。
+
+次の例は、二つのベクトルの要素毎の積をとる。
+
+    require 'matrix'
+
+    v = Vector[2,3,5]
+    w = Vector[7,9,11]
+    z1 = v.collect2(w){|x,y| x*y } 
+    z2 = v.map2(w) {|x,y| x*y }
+
+    p z1 #=> [14, 27, 55]
+    p z2 #=> Vector[14, 27, 55]
+

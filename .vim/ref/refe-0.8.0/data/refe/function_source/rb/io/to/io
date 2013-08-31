@@ -1,0 +1,7 @@
+io.c:660
+static VALUE
+rb_io_to_io(io)
+    VALUE io;
+{
+    return io;
+}

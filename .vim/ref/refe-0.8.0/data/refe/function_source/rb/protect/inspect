@@ -1,0 +1,22 @@
+array.c:1009
+VALUE
+rb_protect_inspect(func, obj, arg)
+    VALUE (*func)(ANYARGS);
+    VALUE obj, arg;
+{
+    struct inspect_arg iarg;
+    VALUE inspect_tbl;
+    VALUE id;
+
+    inspect_tbl = get_inspect_tbl(Qtrue);
+    id = rb_obj_id(obj);
+    if (rb_ary_includes(inspect_tbl, id)) {
+	return (*func)(obj, arg);
+    }
+    rb_ary_push(inspect_tbl, id);
+    iarg.func = func;
+    iarg.arg1 = obj;
+    iarg.arg2 = arg;
+
+    return rb_ensure(inspect_call, (VALUE)&iarg, inspect_ensure, obj);
+}

@@ -1,0 +1,7 @@
+: set_content_disposition( pos, params = nil )
+    pos: String
+    params: {String => String}
+
+    disposition 文字列とパラメータのハッシュから Content-Disposition を
+    セットします。
+

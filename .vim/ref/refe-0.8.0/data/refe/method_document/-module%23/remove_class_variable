@@ -1,0 +1,16 @@
+--- remove_class_variable(name)
+
+    name で指定したクラス変数を取り除き、そのクラス変数に設定さ
+    れていた値を返します。もし指定したクラス変数がそのモジュール(また
+    はクラス)で定義されていない場合は例外 NameError が発生します。
+
+      class Foo
+        @@foo = 1
+        remove_class_variable(:@@foo)   # => 1
+        p @@foo   # => uninitialized class variable @@foo in Foo (NameError)
+      end
+
+    Module#remove_const [Module/remove_const],
+    Object#remove_instance_variable [Object/remove_instance_variable]
+    も参照してください。
+

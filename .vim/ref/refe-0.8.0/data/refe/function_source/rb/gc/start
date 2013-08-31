@@ -1,0 +1,7 @@
+gc.c:1310
+VALUE
+rb_gc_start()
+{
+    rb_gc();
+    return Qnil;
+}

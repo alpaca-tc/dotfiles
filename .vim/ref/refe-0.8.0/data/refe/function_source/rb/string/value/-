@@ -1,0 +1,16 @@
+string.c:458
+VALUE
+rb_string_value(ptr)
+    volatile VALUE *ptr;
+{
+    VALUE s = *ptr;
+    if (TYPE(s) != T_STRING) {
+	s = rb_str_to_str(s);
+	*ptr = s;
+    }
+    if (!RSTRING(s)->ptr) {
+	FL_SET(s, ELTS_SHARED);
+	RSTRING(s)->ptr = null_str;
+    }
+    return s;
+}

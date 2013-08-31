@@ -1,0 +1,11 @@
+--- warn(mesg)
+
+    ruby 1.8 feature
+
+    mesg と改行を順番に $deferr に出力します。
+
+        $deferr.print mesg, "\n"
+        mesg
+
+    と同じです。mesg を返します。
+

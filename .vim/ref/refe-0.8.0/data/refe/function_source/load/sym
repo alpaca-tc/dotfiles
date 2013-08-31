@@ -1,0 +1,44 @@
+dln.c:289
+static struct nlist *
+load_sym(fd, hdrp, disp)
+    int fd;
+    struct exec *hdrp;
+    long disp;
+{
+    struct nlist * buffer;
+    struct nlist * sym;
+    struct nlist * end;
+    long displ;
+    int size;
+
+    lseek(fd, N_SYMOFF(*hdrp) + hdrp->a_syms + disp, 0);
+    if (read(fd, &size, sizeof(int)) != sizeof(int)) {
+	goto err_noexec;
+    }
+
+    buffer = (struct nlist*)xmalloc(hdrp->a_syms + size);
+    if (buffer == NULL) {
+	dln_errno = errno;
+	return NULL;
+    }
+
+    lseek(fd, disp + N_SYMOFF(*hdrp), 0);
+    if (read(fd, buffer, hdrp->a_syms + size) != hdrp->a_syms + size) {
+	free(buffer);
+	goto err_noexec;
+    }
+
+    sym = buffer;
+    end = sym + hdrp->a_syms / sizeof(struct nlist);
+    displ = (long)buffer + (long)(hdrp->a_syms);
+
+    while (sym < end) {
+	sym->n_un.n_name = (char*)sym->n_un.n_strx + displ;
+	sym++;
+    }
+    return buffer;
+
+  err_noexec:
+    dln_errno = DLN_ENOEXEC;
+    return NULL;
+}

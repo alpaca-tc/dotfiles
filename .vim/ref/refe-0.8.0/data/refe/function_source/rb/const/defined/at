@@ -1,0 +1,8 @@
+variable.c:1477
+int
+rb_const_defined_at(klass, id)
+    VALUE klass;
+    ID id;
+{
+    return rb_const_defined_0(klass, id, Qtrue, Qfalse);
+}

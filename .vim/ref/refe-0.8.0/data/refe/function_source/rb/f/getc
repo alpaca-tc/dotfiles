@@ -1,0 +1,10 @@
+io.c:3171
+static VALUE
+rb_f_getc()
+{
+    rb_warn("getc is obsolete; use STDIN.getc instead");
+    if (TYPE(rb_stdin) != T_FILE) {
+	return rb_funcall3(rb_stdin, rb_intern("getc"), 0, 0);
+    }
+    return rb_io_getc(rb_stdin);
+}

@@ -1,0 +1,10 @@
+io.c:169
+VALUE
+rb_io_taint_check(io)
+    VALUE io;
+{
+    if (!OBJ_TAINTED(io) && rb_safe_level() >= 4)
+	rb_raise(rb_eSecurityError, "Insecure: operation on untainted IO");
+    rb_check_frozen(io);
+    return io;
+}

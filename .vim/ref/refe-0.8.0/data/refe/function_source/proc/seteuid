@@ -1,0 +1,28 @@
+process.c:1910
+static VALUE
+proc_seteuid(obj, euid)
+    VALUE obj, euid;
+{
+    rb_secure(2);
+    if (under_uid_switch) {
+	rb_raise(rb_eRuntimeError, "can't handle UID during evaluating the block given to the Process::UID.switch method");
+    }
+#if defined(HAVE_SETRESUID) && !defined(__CHECKER__)
+    if (setresuid(-1, NUM2INT(euid), -1) < 0) rb_sys_fail(0);
+#elif defined HAVE_SETREUID
+    if (setreuid(-1, NUM2INT(euid)) < 0) rb_sys_fail(0);
+#elif defined HAVE_SETEUID
+    if (seteuid(NUM2INT(euid)) < 0) rb_sys_fail(0);
+#elif defined HAVE_SETUID
+    euid = NUM2INT(euid);
+    if (euid == getuid()) {
+	if (setuid(euid) < 0) rb_sys_fail(0);
+    }
+    else {
+	rb_notimplement();
+    }
+#else
+    rb_notimplement();
+#endif
+    return euid;
+}

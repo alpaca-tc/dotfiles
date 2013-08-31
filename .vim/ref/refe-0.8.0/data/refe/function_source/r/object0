@@ -1,0 +1,355 @@
+marshal.c:954
+static VALUE
+r_object0(arg, proc, ivp, extended)
+    struct load_arg *arg;
+    VALUE proc;
+    int *ivp;
+    VALUE extended;
+{
+    VALUE v = Qnil;
+    int type = r_byte(arg);
+    long id;
+
+    switch (type) {
+      case TYPE_LINK:
+	id = r_long(arg);
+	v = rb_hash_aref(arg->data, LONG2FIX(id));
+	if (NIL_P(v)) {
+	    rb_raise(rb_eArgError, "dump format error (unlinked)");
+	}
+	return v;
+
+      case TYPE_IVAR:
+        {
+	    int ivar = Qtrue;
+
+	    v = r_object0(arg, 0, &ivar, extended);
+	    if (ivar) r_ivar(v, arg);
+	}
+	break;
+
+      case TYPE_EXTENDED:
+	{
+	    VALUE m = path2module(r_unique(arg));
+
+            if (NIL_P(extended)) extended = rb_ary_new2(0);
+            rb_ary_push(extended, m);
+
+	    v = r_object0(arg, 0, 0, extended);
+            while (RARRAY(extended)->len > 0) {
+                m = rb_ary_pop(extended);
+                rb_extend_object(v, m);
+            }
+	}
+	break;
+
+      case TYPE_UCLASS:
+	{
+	    VALUE c = path2class(r_unique(arg));
+
+	    if (FL_TEST(c, FL_SINGLETON)) {
+		rb_raise(rb_eTypeError, "singleton can't be loaded");
+	    }
+	    v = r_object0(arg, 0, 0, extended);
+	    if (rb_special_const_p(v) || TYPE(v) == T_OBJECT || TYPE(v) == T_CLASS) {
+	      format_error:
+		rb_raise(rb_eArgError, "dump format error (user class)");
+	    }
+	    if (TYPE(v) == T_MODULE || !RTEST(rb_funcall(c, '<', 1, RBASIC(v)->klass))) {
+		VALUE tmp = rb_obj_alloc(c);
+
+		if (TYPE(v) != TYPE(tmp)) goto format_error;
+	    }
+	    RBASIC(v)->klass = c;
+	}
+	break;
+
+      case TYPE_NIL:
+	v = Qnil;
+	break;
+
+      case TYPE_TRUE:
+	v = Qtrue;
+	break;
+
+      case TYPE_FALSE:
+	v = Qfalse;
+	break;
+
+      case TYPE_FIXNUM:
+	{
+	    long i = r_long(arg);
+	    v = LONG2FIX(i);
+	}
+	break;
+
+      case TYPE_FLOAT:
+	{
+	    double d, t = 0.0;
+	    VALUE str = r_bytes(arg);
+	    const char *ptr = RSTRING(str)->ptr;
+
+	    if (strcmp(ptr, "nan") == 0) {
+		d = t / t;
+	    }
+	    else if (strcmp(ptr, "inf") == 0) {
+		d = 1.0 / t;
+	    }
+	    else if (strcmp(ptr, "-inf") == 0) {
+		d = -1.0 / t;
+	    }
+	    else {
+		char *e;
+		d = strtod(ptr, &e);
+		d = load_mantissa(d, e, RSTRING(str)->len - (e - ptr));
+	    }
+	    v = rb_float_new(d);
+	    r_entry(v, arg);
+	}
+	break;
+
+      case TYPE_BIGNUM:
+	{
+	    long len;
+	    BDIGIT *digits;
+	    VALUE data;
+
+	    NEWOBJ(big, struct RBignum);
+	    OBJSETUP(big, rb_cBignum, T_BIGNUM);
+	    big->sign = (r_byte(arg) == '+');
+	    len = r_long(arg);
+	    data = r_bytes0(len * 2, arg);
+#if SIZEOF_BDIGITS == SIZEOF_SHORT
+	    big->len = len;
+#else
+	    big->len = (len + 1) * 2 / sizeof(BDIGIT);
+#endif
+	    big->digits = digits = ALLOC_N(BDIGIT, big->len);
+	    MEMCPY(digits, RSTRING(data)->ptr, char, len * 2);
+#if SIZEOF_BDIGITS > SIZEOF_SHORT
+	    MEMZERO((char *)digits + len * 2, char,
+		    big->len * sizeof(BDIGIT) - len * 2);
+#endif
+	    len = big->len;
+	    while (len > 0) {
+		unsigned char *p = (unsigned char *)digits;
+		BDIGIT num = 0;
+#if SIZEOF_BDIGITS > SIZEOF_SHORT
+		int shift = 0;
+		int i;
+
+		for (i=0; i<SIZEOF_BDIGITS; i++) {
+		    num |= (int)p[i] << shift;
+		    shift += 8;
+		}
+#else
+		num = p[0] | (p[1] << 8);
+#endif
+		*digits++ = num;
+		len--;
+	    }
+	    v = rb_big_norm((VALUE)big);
+	    r_entry(v, arg);
+	}
+	break;
+
+      case TYPE_STRING:
+	v = r_entry(r_string(arg), arg);
+	break;
+
+      case TYPE_REGEXP:
+	{
+	    volatile VALUE str = r_bytes(arg);
+	    int options = r_byte(arg);
+	    v = r_entry(rb_reg_new(RSTRING(str)->ptr, RSTRING(str)->len, options), arg);
+	}
+	break;
+
+      case TYPE_ARRAY:
+	{
+	    volatile long len = r_long(arg); /* gcc 2.7.2.3 -O2 bug?? */
+
+	    v = rb_ary_new2(len);
+	    r_entry(v, arg);
+	    while (len--) {
+		rb_ary_push(v, r_object(arg));
+	    }
+	}
+	break;
+
+      case TYPE_HASH:
+      case TYPE_HASH_DEF:
+	{
+	    long len = r_long(arg);
+
+	    v = rb_hash_new();
+	    r_entry(v, arg);
+	    while (len--) {
+		VALUE key = r_object(arg);
+		VALUE value = r_object(arg);
+		rb_hash_aset(v, key, value);
+	    }
+	    if (type == TYPE_HASH_DEF) {
+		RHASH(v)->ifnone = r_object(arg);
+	    }
+	}
+	break;
+
+      case TYPE_STRUCT:
+	{
+	    VALUE klass, mem, values;
+	    volatile long i;	/* gcc 2.7.2.3 -O2 bug?? */
+	    long len;
+	    ID slot;
+
+	    klass = path2class(r_unique(arg));
+	    mem = rb_struct_iv_get(klass, "__member__");
+	    if (mem == Qnil) {
+		rb_raise(rb_eTypeError, "uninitialized struct");
+	    }
+	    len = r_long(arg);
+
+	    values = rb_ary_new2(len);
+	    for (i=0; i<len; i++) {
+		rb_ary_push(values, Qnil);
+	    }
+	    v = rb_struct_alloc(klass, values);
+	    r_entry(v, arg);
+	    for (i=0; i<len; i++) {
+		slot = r_symbol(arg);
+
+		if (RARRAY(mem)->ptr[i] != ID2SYM(slot)) {
+		    rb_raise(rb_eTypeError, "struct %s not compatible (:%s for :%s)",
+			     rb_class2name(klass),
+			     rb_id2name(slot),
+			     rb_id2name(SYM2ID(RARRAY(mem)->ptr[i])));
+		}
+		rb_struct_aset(v, LONG2FIX(i), r_object(arg));
+	    }
+	}
+	break;
+
+      case TYPE_USERDEF:
+        {
+	    VALUE klass = path2class(r_unique(arg));
+	    VALUE data;
+
+	    if (!rb_respond_to(klass, s_load)) {
+		rb_raise(rb_eTypeError, "class %s needs to have method `_load'",
+			 rb_class2name(klass));
+	    }
+	    data = r_string(arg);
+	    if (ivp) {
+		r_ivar(data, arg);
+		*ivp = Qfalse;
+	    }
+	    v = rb_funcall(klass, s_load, 1, data);
+	    r_entry(v, arg);
+	}
+        break;
+
+      case TYPE_USRMARSHAL:
+        {
+	    VALUE klass = path2class(r_unique(arg));
+	    VALUE data;
+
+	    v = rb_obj_alloc(klass);
+            if (! NIL_P(extended)) {
+                while (RARRAY(extended)->len > 0) {
+                    VALUE m = rb_ary_pop(extended);
+                    rb_extend_object(v, m);
+                }
+            }
+	    if (!rb_respond_to(v, s_mload)) {
+		rb_raise(rb_eTypeError, "instance of %s needs to have method `marshal_load'",
+			 rb_class2name(klass));
+	    }
+	    r_entry(v, arg);
+	    data = r_object(arg);
+	    rb_funcall(v, s_mload, 1, data);
+	}
+        break;
+
+      case TYPE_OBJECT:
+	{
+	    VALUE klass = path2class(r_unique(arg));
+
+	    v = rb_obj_alloc(klass);
+	    if (TYPE(v) != T_OBJECT) {
+		rb_raise(rb_eArgError, "dump format error");
+	    }
+	    r_entry(v, arg);
+	    r_ivar(v, arg);
+	}
+	break;
+
+      case TYPE_DATA:
+       {
+           VALUE klass = path2class(r_unique(arg));
+           if (rb_respond_to(klass, s_alloc)) {
+	       static int warn = Qtrue;
+	       if (warn) {
+		   rb_warn("define `allocate' instead of `_alloc'");
+		   warn = Qfalse;
+	       }
+	       v = rb_funcall(klass, s_alloc, 0);
+           }
+	   else {
+	       v = rb_obj_alloc(klass);
+	   }
+           if (TYPE(v) != T_DATA) {
+               rb_raise(rb_eArgError, "dump format error");
+           }
+           r_entry(v, arg);
+           if (!rb_respond_to(v, s_load_data)) {
+               rb_raise(rb_eTypeError,
+                        "class %s needs to have instance method `_load_data'",
+                        rb_class2name(klass));
+           }
+           rb_funcall(v, s_load_data, 1, r_object0(arg, 0, 0, extended));
+       }
+       break;
+
+      case TYPE_MODULE_OLD:
+        {
+	    volatile VALUE str = r_bytes(arg);
+
+	    v = rb_path2class(RSTRING(str)->ptr);
+	    r_entry(v, arg);
+	}
+	break;
+
+      case TYPE_CLASS:
+        {
+	    volatile VALUE str = r_bytes(arg);
+
+	    v = path2class(RSTRING(str)->ptr);
+	    r_entry(v, arg);
+	}
+	break;
+
+      case TYPE_MODULE:
+        {
+	    volatile VALUE str = r_bytes(arg);
+
+	    v = path2module(RSTRING(str)->ptr);
+	    r_entry(v, arg);
+	}
+	break;
+
+      case TYPE_SYMBOL:
+	v = ID2SYM(r_symreal(arg));
+	break;
+
+      case TYPE_SYMLINK:
+	return ID2SYM(r_symlink(arg));
+
+      default:
+	rb_raise(rb_eArgError, "dump format error(0x%x)", type);
+	break;
+    }
+    if (proc) {
+	rb_funcall(proc, rb_intern("call"), 1, v);
+    }
+    return v;
+}

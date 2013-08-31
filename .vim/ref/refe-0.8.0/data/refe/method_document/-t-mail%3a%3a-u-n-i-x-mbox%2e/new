@@ -1,0 +1,6 @@
+: new( filename ) -> TMail::UNIXMbox
+    filename: String
+
+    新しい TMail::UNIXMbox オブジェクトを生成します。
+    filename は UNIX mbox ファイル名です。
+

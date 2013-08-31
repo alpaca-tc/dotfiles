@@ -1,0 +1,9 @@
+: mask
+: mask=(mask)
+   ログの優先度のマスクを取得または設定する。
+   マスクは永続的であり、
+   Syslog::open/Syslog#open/Syslog#close
+   ではリセットされない。
+      例:
+        sl.mask = Syslog::LOG_UPTO(Syslog::LOG_ERR)
+

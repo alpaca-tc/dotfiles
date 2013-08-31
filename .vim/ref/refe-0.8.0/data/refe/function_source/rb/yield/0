@@ -1,0 +1,175 @@
+eval.c:4084
+static VALUE
+rb_yield_0(val, self, klass, flags, avalue)
+    VALUE val, self, klass;	/* OK */
+    int flags, avalue;
+{
+    NODE *node;
+    volatile VALUE result = Qnil;
+    volatile VALUE old_cref;
+    volatile VALUE old_wrapper;
+    struct BLOCK * volatile block;
+    struct SCOPE * volatile old_scope;
+    int old_vmode;
+    struct FRAME frame;
+    NODE *cnode = ruby_current_node;
+    int state;
+
+    if (!rb_block_given_p()) {
+	localjump_error("no block given", Qnil, 0);
+    }
+
+    PUSH_VARS();
+    block = ruby_block;
+    frame = block->frame;
+    frame.prev = ruby_frame;
+    ruby_frame = &(frame);
+    old_cref = (VALUE)ruby_cref;
+    ruby_cref = block->cref;
+    old_wrapper = ruby_wrapper;
+    ruby_wrapper = block->wrapper;
+    old_scope = ruby_scope;
+    ruby_scope = block->scope;
+    old_vmode = scope_vmode;
+    scope_vmode = (flags & YIELD_PUBLIC_DEF) ? SCOPE_PUBLIC : block->vmode;
+    ruby_block = block->prev;
+    if (block->flags & BLOCK_D_SCOPE) {
+	/* put place holder for dynamic (in-block) local variables */
+	ruby_dyna_vars = new_dvar(0, 0, block->dyna_vars);
+    }
+    else {
+	/* FOR does not introduce new scope */
+	ruby_dyna_vars = block->dyna_vars;
+    }
+    PUSH_CLASS(klass ? klass : block->klass);
+    if (!klass) {
+	self = block->self;
+    }
+    node = block->body;
+
+    if (block->var) {
+	PUSH_TAG(PROT_NONE);
+	if ((state = EXEC_TAG()) == 0) {
+	    if (block->var == (NODE*)1) { /* no parameter || */
+		if ((flags & YIELD_PROC_CALL) && RARRAY(val)->len != 0) {
+		    rb_raise(rb_eArgError, "wrong number of arguments (%ld for 0)",
+			     RARRAY(val)->len);
+		}
+	    }
+	    else if (block->var == (NODE*)2) {
+		if (TYPE(val) == T_ARRAY && RARRAY(val)->len != 0) {
+		    rb_raise(rb_eArgError, "wrong number of arguments (%ld for 0)",
+			     RARRAY(val)->len);
+		}
+	    }
+	    else if (nd_type(block->var) == NODE_MASGN) {
+		if (!avalue) {
+		    val = svalue_to_mrhs(val, block->var->nd_head);
+		}
+		massign(self, block->var, val, flags&YIELD_PROC_CALL);
+	    }
+	    else {
+		int len = 0;
+		if (avalue) {
+		    len = RARRAY(val)->len;
+		    if (len == 0) {
+			goto zero_arg;
+		    }
+		    if (len == 1) {
+			val = RARRAY(val)->ptr[0];
+		    }
+		    else {
+			goto multi_values;
+		    }
+		}
+		else if (val == Qundef) {
+		  zero_arg:
+		    val = Qnil;
+		  multi_values:
+		    {
+			NODE *curr = ruby_current_node;
+			ruby_current_node = block->var;
+			rb_warn("multiple values for a block parameter (%d for 1)\n\tfrom %s:%d",
+				len, curr->nd_file, nd_line(curr));
+			ruby_current_node = curr;
+		    }
+		}
+		assign(self, block->var, val, flags&YIELD_PROC_CALL);
+	    }
+	}
+	POP_TAG();
+	if (state) goto pop_state;
+    }
+    if (!node) {
+	state = 0;
+	goto pop_state;
+    }
+
+    PUSH_ITER(block->iter);
+    PUSH_TAG(PROT_NONE);
+    if ((state = EXEC_TAG()) == 0) {
+      redo:
+	if (nd_type(node) == NODE_CFUNC || nd_type(node) == NODE_IFUNC) {
+	    if (node->nd_state == YIELD_FUNC_AVALUE) {
+		if (!avalue) {
+		    val = svalue_to_avalue(val);
+		}
+	    }
+	    else {
+		if (avalue) {
+		    val = avalue_to_svalue(val);
+		}
+		if (val == Qundef && node->nd_state != YIELD_FUNC_SVALUE)
+		    val = Qnil;
+	    }
+	    result = (*node->nd_cfnc)(val, node->nd_tval, self);
+	}
+	else {
+	    result = rb_eval(self, node);
+	}
+    }
+    else {
+	switch (state) {
+	  case TAG_REDO:
+	    state = 0;
+	    CHECK_INTS;
+	    goto redo;
+	  case TAG_NEXT:
+	    state = 0;
+	    result = prot_tag->retval;
+	    break;
+	  default:
+	    break;
+	}
+    }
+    POP_TAG();
+    POP_ITER();
+  pop_state:
+    POP_CLASS();
+    if (ruby_dyna_vars && (block->flags & BLOCK_D_SCOPE) &&
+	!FL_TEST(ruby_dyna_vars, DVAR_DONT_RECYCLE)) {
+	struct RVarmap *vars = ruby_dyna_vars;
+
+	if (ruby_dyna_vars->id == 0) {
+	    vars = ruby_dyna_vars->next;
+	    rb_gc_force_recycle((VALUE)ruby_dyna_vars);
+	    while (vars && vars->id != 0 && vars != block->dyna_vars) {
+		struct RVarmap *tmp = vars->next;
+		rb_gc_force_recycle((VALUE)vars);
+		vars = tmp;
+	    }
+	}
+    }
+    POP_VARS();
+    ruby_block = block;
+    ruby_frame = ruby_frame->prev;
+    ruby_cref = (NODE*)old_cref;
+    ruby_wrapper = old_wrapper;
+    if (ruby_scope->flags & SCOPE_DONT_RECYCLE)
+       scope_dup(old_scope);
+    ruby_scope = old_scope;
+    scope_vmode = old_vmode;
+    ruby_current_node = cnode;
+    if (state) JUMP_TAG(state);
+    return result;
+}

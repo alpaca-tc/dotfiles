@@ -1,0 +1,5 @@
+variable.c:373
+static void
+undef_marker()
+{
+}

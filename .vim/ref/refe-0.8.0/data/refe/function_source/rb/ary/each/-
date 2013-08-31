@@ -1,0 +1,12 @@
+array.c:810
+VALUE
+rb_ary_each(ary)
+    VALUE ary;
+{
+    long i;
+
+    for (i=0; i<RARRAY(ary)->len; i++) {
+	rb_yield(RARRAY(ary)->ptr[i]);
+    }
+    return ary;
+}

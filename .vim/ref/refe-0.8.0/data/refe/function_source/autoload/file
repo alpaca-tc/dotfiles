@@ -1,0 +1,35 @@
+variable.c:1220
+static VALUE
+autoload_file(mod, id)
+    VALUE mod;
+    ID id;
+{
+    VALUE val, file;
+    struct st_table *tbl;
+    st_data_t load;
+
+    if (!st_lookup(RCLASS(mod)->iv_tbl, autoload, &val) ||
+	!(tbl = check_autoload_table(val)) || !st_lookup(tbl, id, &load)) {
+	return Qnil;
+    }
+    file = ((NODE *)load)->nd_lit;
+    Check_Type(file, T_STRING);
+    if (!RSTRING(file)->ptr) {
+	rb_raise(rb_eArgError, "empty file name");
+    }
+    if (!rb_provided(RSTRING(file)->ptr)) {
+	return file;
+    }
+
+    /* already loaded but not defined */
+    st_delete(tbl, (st_data_t*)&id, 0);
+    if (!tbl->num_entries) {
+	DATA_PTR(val) = 0;
+	st_free_table(tbl);
+	id = autoload;
+	if (st_delete(RCLASS(mod)->iv_tbl, (st_data_t*)&id, &val)) {
+	    rb_gc_force_recycle(val);
+	}
+    }
+    return Qnil;
+}

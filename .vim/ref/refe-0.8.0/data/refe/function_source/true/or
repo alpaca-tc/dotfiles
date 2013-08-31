@@ -1,0 +1,7 @@
+object.c:465
+static VALUE
+true_or(obj, obj2)
+    VALUE obj, obj2;
+{
+    return Qtrue;
+}

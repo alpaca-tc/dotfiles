@@ -1,0 +1,11 @@
+string.c:391
+static int
+str_independent(str)
+    VALUE str;
+{
+    if (OBJ_FROZEN(str)) rb_error_frozen("string");
+    if (!OBJ_TAINTED(str) && rb_safe_level() >= 4)
+	rb_raise(rb_eSecurityError, "Insecure: can't modify string");
+    if (!FL_TEST(str, ELTS_SHARED)) return 1;
+    return 0;
+}

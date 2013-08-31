@@ -1,0 +1,8 @@
+bignum.c:580
+VALUE
+rb_ll2inum(n)
+    LONG_LONG n;
+{
+    if (FIXABLE(n)) return LONG2FIX(n);
+    return rb_ll2big(n);
+}

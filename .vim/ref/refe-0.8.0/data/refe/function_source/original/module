@@ -1,0 +1,9 @@
+variable.c:1548
+static VALUE
+original_module(c)
+    VALUE c;
+{
+    if (TYPE(c) == T_ICLASS)
+	return RBASIC(c)->klass;
+    return c;
+}

@@ -1,0 +1,8 @@
+math.c:89
+static VALUE
+math_atan(obj, x)
+    VALUE obj, x;
+{
+    Need_Float(x);
+    return rb_float_new(atan(RFLOAT(x)->value));
+}

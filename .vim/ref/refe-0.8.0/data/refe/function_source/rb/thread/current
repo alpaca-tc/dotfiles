@@ -1,0 +1,6 @@
+eval.c:9064
+VALUE
+rb_thread_current()
+{
+    return curr_thread->thread;
+}

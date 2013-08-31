@@ -1,0 +1,23 @@
+gc.c:208
+void
+rb_gc_unregister_address(addr)
+    VALUE *addr;
+{
+    struct gc_list *tmp = global_List;
+
+    if (tmp->varptr == addr) {
+	global_List = tmp->next;
+	RUBY_CRITICAL(free(tmp));
+	return;
+    }
+    while (tmp->next) {
+	if (tmp->next->varptr == addr) {
+	    struct gc_list *t = tmp->next;
+
+	    tmp->next = tmp->next->next;
+	    RUBY_CRITICAL(free(t));
+	    break;
+	}
+	tmp = tmp->next;
+    }
+}

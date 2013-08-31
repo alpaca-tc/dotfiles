@@ -1,0 +1,8 @@
+numeric.c:507
+static VALUE
+num_cmp(x, y)
+    VALUE x, y;
+{
+    if (x == y) return INT2FIX(0);
+    return Qnil;
+}

@@ -1,0 +1,7 @@
+array.c:201
+static VALUE
+to_ary(ary)
+    VALUE ary;
+{
+    return rb_convert_type(ary, T_ARRAY, "Array", "to_ary");
+}

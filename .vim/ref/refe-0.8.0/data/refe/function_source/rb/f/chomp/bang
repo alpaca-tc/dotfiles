@@ -1,0 +1,8 @@
+string.c:2897
+static VALUE
+rb_f_chomp_bang(argc, argv)
+    int argc;
+    VALUE *argv;
+{
+    return rb_str_chomp_bang(argc, argv, uscore_get());
+}

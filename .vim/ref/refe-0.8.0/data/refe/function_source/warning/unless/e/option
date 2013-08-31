@@ -1,0 +1,8 @@
+parse.y:5185
+static void
+warning_unless_e_option(node, str)
+    NODE *node;
+    const char *str;
+{
+    if (!e_option_supplied()) parser_warning(node, str);
+}

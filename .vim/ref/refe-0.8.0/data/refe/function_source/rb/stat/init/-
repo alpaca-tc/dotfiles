@@ -1,0 +1,22 @@
+file.c:2284
+static VALUE
+rb_stat_init(obj, fname)
+    VALUE obj, fname;
+{
+    struct stat st, *nst;
+
+    SafeStringValue(fname);
+
+    if (stat(StringValueCStr(fname), &st) == -1) {
+	rb_sys_fail(RSTRING(fname)->ptr);
+    }
+    if (DATA_PTR(obj)) {
+	free(DATA_PTR(obj));
+	DATA_PTR(obj) = NULL;
+    }
+    nst = ALLOC(struct stat);
+    *nst = st;
+    DATA_PTR(obj) = nst;
+
+    return Qnil;
+}

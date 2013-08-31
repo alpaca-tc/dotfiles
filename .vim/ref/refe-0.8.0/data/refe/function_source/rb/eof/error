@@ -1,0 +1,6 @@
+io.c:163
+void
+rb_eof_error()
+{
+    rb_raise(rb_eEOFError, "End of file reached");
+}

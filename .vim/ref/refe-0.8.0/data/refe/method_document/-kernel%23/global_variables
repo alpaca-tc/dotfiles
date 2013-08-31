@@ -1,0 +1,12 @@
+--- global_variables
+
+    プログラム中で定義されているグローバル変数(`$'で始まる変数)名の
+    配列を返します。
+
+    local_variables,
+    Object#instance_variables [Object/instance_variables],
+    Module.constants,
+    Module#constants [Module/constants],
+    Module#class_variables [Module/class_variables]
+    も参照してください。
+

@@ -1,0 +1,5 @@
+dmyext.c:1
+void
+Init_ext()
+{
+}

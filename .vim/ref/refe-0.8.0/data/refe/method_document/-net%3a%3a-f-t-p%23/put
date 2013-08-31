@@ -1,0 +1,16 @@
+--- Net::FTP#put(localfile, remotefile = File.basename(localfile), blocksize = DEFAULT_BLOCKSIZE)
+--- Net::FTP#put(localfile, remotefile = File.basename(localfile), blocksize = DEFAULT_BLOCKSIZE) { |data| .... }
+
+    binaryの値に従ってローカルファイル localfile を送信し、
+    remotefile をファイル名とするリモートファイルに保存します。
+    remotefileが省略されるとlocalfileのベースネームが
+    仮定されます。
+    block_sizeが省略されるとDEFAULT_BLOCLSIZEが仮定されます。
+    この値は binary が真であるときのみ有効です。
+
+    ブロックが与えられた場合はそのデータを送信するごとに、
+    送信したデータを data に代入してブロックが評価されます。
+    ブロックを最後に評価したときに得られた値が put の値になります。
+
+    ブロックが与えられなかった場合の put の値は nil です。
+

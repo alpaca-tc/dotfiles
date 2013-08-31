@@ -1,0 +1,287 @@
+# Nodes#{{{
+snippet addNode
+abbr    addNode(name, value)
+regexp  'sys\.'
+options word
+  addNode(${1:name}, ${2:value});
+
+snippet getNode
+abbr    getNode(name)
+regexp  'sys\.'
+options word
+  getNode(${1:name});
+
+snippet pruneNode
+abbr    pruneNode(node)
+regexp  'sys\.'
+options word
+  pruneNode(${1:node});
+#}}}
+
+# Edges#{{{
+snippet addEdge
+abbr    addEdge(source, target, data)
+regexp  'sys\.'
+options word
+  addEdge(${1:source}, ${2:target}${3:, ${4:#:data\}});
+
+snippet getEdges
+abbr    getEdges(source, target)
+regexp  'sys\.'
+options word
+  getEdges(${1:source}, ${2:target});
+
+snippet getEdgesFrom
+abbr    getEdgesFrom(node)
+regexp  'sys\.'
+options word
+  getEdgesFrom(${1:node});
+
+snippet getEdgesTo
+abbr    getEdgesTo(node)
+regexp  'sys\.'
+options word
+  getEdgesTo(${1:node});
+
+snippet pruneEdge
+abbr    pruneEdge(edge)
+regexp  'sys\.'
+options word
+  pruneEdge(${1:edge});
+#}}}
+
+# Iteration#{{{
+snippet eachNode
+abbr    eachNode(callback)
+regexp  'sys\.'
+options word
+  eachNode(function(node, pt) {
+    ${2}
+  });
+
+snippet eachEdge
+abbr    eachEdge(callback)
+regexp  'sys\.'
+options word
+  eachEdge(function(edge, pt1, pt2) {
+    ${2}
+  });
+#}}}
+
+# Modification#{{{
+snippet graft
+abbr    graft(branch)
+regexp  'sys\.'
+options word
+  graft(${1:branch_snippet});
+
+snippet merge
+abbr    merge(branch)
+regexp  'sys\.'
+options word
+  merge(${1:branch_snippet});
+
+snippet prune
+abbr    prune(callback)
+regexp  'sys\.'
+options word
+  prune(function(node, from, to) {
+    ${1}
+  });
+#}}}
+
+# System Settings#{{{
+snippet parameters
+abbr    if present, params is an object containing new settings values for the particle system. Valid keys are the same as for the ParticleSystem constructor function: repulsion, stiffness, friction, gravity, fps, and dt.
+regexp  'sys\.'
+options word
+  parameters();
+
+snippet fps
+abbr    if present, the fps argument is a positive integer.
+regexp  'sys\.'
+options word
+  fps();
+
+snippet bounds
+abbr    Returns a bounding box containing all nodes using system coordinates. 
+regexp  'sys\.'
+options word
+  bounds();
+
+snippet energy
+abbr    Returns some basic stats on the state of activity in the system. 
+regexp  'sys\.'
+options word
+  energy();
+
+snippet start
+abbr    start()
+regexp  'sys\.'
+options word
+  start();
+
+snippet stop
+abbr    Pauses the particle simulation until .start is called.
+regexp  'sys\.'
+options word
+  stop();
+#}}}
+
+# Coordinate Helpers#{{{
+snippet screenSize
+abbr    screenSize(width, height)
+regexp  'sys\.'
+options word
+  screenSize(${1:width}, ${2:height});
+
+snippet screenPadding
+abbr    screenPadding(top, right, bottom, left)
+regexp  'sys\.'
+options word
+  screenPadding(${1:top}, ${2:right}, ${3:bottom}, ${4:left});
+
+snippet screenStep
+abbr    screenStep(stepsize)
+regexp  'sys\.'
+options word
+  screenStep(${1:stepsize});
+
+snippet screen
+abbr    screen(opts={})
+regexp  'sys\.'
+options word
+  screen(${1:#:options});
+
+snippet toScreen
+abbr    toScreen(systemPoint)
+regexp  'sys\.'
+options word
+  toScreen(${1:systemPoint});
+
+snippet fromScreen
+abbr    fromScreen(screenPoint)
+regexp  'sys\.'
+options word
+  fromScreen(${1:screenPoint});
+
+snippet nearest
+abbr    nearest(screenPoint)
+regexp  'sys\.'
+options word
+  nearest(${1:screenPoint});
+#}}}
+
+# Tweening#{{{
+snippet tweenNode
+abbr    tweenNode(node, duration, opts)
+regexp  'sys\.'
+options word
+  tweenNode(${1:node}, ${2:duration}, ${3:opts});
+
+snippet tweenEdge
+abbr    tweenEdge(edge, duration, opts)
+regexp  'sys\.'
+options word
+  tweenEdge(${1:edge}, ${2:duration}, ${3:opts});
+#}}}
+
+# System #{{{
+snippet sys_get
+abbr    var sys = arbor.ParticleSystem(1000, 600, 0.5)
+regexp  'sys\.'
+options word
+  var sys = arbor.ParticleSystem${1:()}
+
+snippet ParticleSystem
+abbr    ParticleSystem(repulsion, stiffness, friction, gravity, fps, dt, precision)
+regexp  'arbor\.'
+options word
+  ParticleSystem({
+    repulsion: ${1:1000}, 
+    stiffness: ${2:600}, 
+    friction: ${3:0.5}, 
+    gravity: ${4:false}, 
+    fps: ${6:55}, 
+    precision: ${7:0.6}
+  });
+
+snippet mass
+abbr    mass : Number
+regexp  'sys\.'
+options word
+  mass
+
+snippet fixed
+abbr    fixed : Boolean
+regexp  'sys\.'
+options word
+  fixed
+
+snippet p
+abbr    p : Point
+regexp  'sys\.'
+options word
+  p 
+
+snippet data
+abbr    data : Hash
+regexp  'sys\.'
+options word
+  data
+#}}}
+
+# Point#{{{
+snippet point_get
+abbr    var point = arbor.Point(x, y)
+options word
+  var point = arbor.Point(${1:x}, ${2:y});
+
+snippet add
+abbr    Returns a new Point with the sum of the two points.
+regexp  'point\.'
+options word
+  add(${1:pt});
+
+snippet subtract
+abbr    Returns a new Point with the difference of the two points.
+regexp  'point\.'
+options word
+  subtract(${1:pt});
+
+snippet multiply
+abbr    Returns a linearly scaled copy of the original point.
+regexp  'point\.'
+options word
+  multiply(${1:n});
+
+snippet divide
+abbr    Returns a linearly scaled copy of the original point.
+regexp  'point\.'
+options word
+  divide(${1:n});
+
+snippet magnitude
+abbr    Returns the point's distance from the origin.
+regexp  'point\.'
+options word
+  magnitude()
+
+snippet normal
+abbr    Returns the point's vector normal.
+regexp  'point\.'
+options word
+  normal()
+
+snippet normalize
+abbr    Returns a scaled copy of the point with a magnitude of one.
+regexp  'point\.'
+options word
+  normalize()
+
+snippet exploded
+abbr    Returns true if x or y is NaN.
+regexp  'point\.'
+options word
+  exploded()
+#}}}

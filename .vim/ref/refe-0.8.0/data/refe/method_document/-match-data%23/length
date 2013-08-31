@@ -1,0 +1,8 @@
+--- length
+--- size
+
+    部分文字列の数を返します(self.to_a.size と同じです)。
+
+        /(foo)(bar)(BAZ)?/ =~ "foobarbaz"
+        p $~.size       # => 4
+

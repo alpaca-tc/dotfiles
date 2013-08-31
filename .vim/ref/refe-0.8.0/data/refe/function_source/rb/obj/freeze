@@ -1,0 +1,13 @@
+object.c:366
+VALUE
+rb_obj_freeze(obj)
+    VALUE obj;
+{
+    if (!OBJ_FROZEN(obj)) {
+	if (rb_safe_level() >= 4 && !OBJ_TAINTED(obj)) {
+	    rb_raise(rb_eSecurityError, "Insecure: can't freeze object");
+	}
+	OBJ_FREEZE(obj);
+    }
+    return obj;
+}

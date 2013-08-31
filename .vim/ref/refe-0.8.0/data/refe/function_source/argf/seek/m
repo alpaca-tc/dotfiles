@@ -1,0 +1,13 @@
+io.c:3742
+static VALUE
+argf_seek_m(argc, argv, self)
+    int argc;
+    VALUE *argv;
+    VALUE self;
+{
+    if (!next_argv()) {
+	rb_raise(rb_eArgError, "no stream to seek");
+    }
+    ARGF_FORWARD();
+    return rb_io_seek_m(argc, argv, current_file);
+}

@@ -1,0 +1,15 @@
+parse.y:3154
+static void
+heredoc_restore(here)
+    NODE *here;
+{
+    VALUE line = here->nd_orig;
+    lex_lastline = line;
+    lex_pbeg = RSTRING(line)->ptr;
+    lex_pend = lex_pbeg + RSTRING(line)->len;
+    lex_p = lex_pbeg + here->nd_nth;
+    heredoc_end = ruby_sourceline;
+    ruby_sourceline = nd_line(here);
+    dispose_string(here->nd_lit);
+    rb_gc_force_recycle((VALUE)here);
+}

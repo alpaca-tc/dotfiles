@@ -1,0 +1,42 @@
+string.c:1119
+static VALUE
+rb_str_succ(orig)
+    VALUE orig;
+{
+    VALUE str;
+    char *sbeg, *s;
+    int c = -1;
+    long n = 0;
+
+    str = rb_str_new5(orig,RSTRING(orig)->ptr, RSTRING(orig)->len);
+    OBJ_INFECT(str, orig);
+    if (RSTRING(str)->len == 0) return str;
+
+    sbeg = RSTRING(str)->ptr; s = sbeg + RSTRING(str)->len - 1;
+
+    while (sbeg <= s) {
+	if (ISALNUM(*s)) {
+	    if ((c = succ_char(s)) == 0) break;
+	    n = s - sbeg;
+	}
+	s--;
+    }
+    if (c == -1) {		/* str contains no alnum */
+	sbeg = RSTRING(str)->ptr; s = sbeg + RSTRING(str)->len - 1;
+	c = '\001';
+	while (sbeg <= s) {
+           if ((*s += 1) != 0) break;
+           s--;
+	}
+    }
+    if (s < sbeg) {
+	RESIZE_CAPA(str, RSTRING(str)->len + 1);
+	s = RSTRING(str)->ptr + n;
+	memmove(s+1, s, RSTRING(str)->len - n);
+	*s = c;
+	RSTRING(str)->len += 1;
+	RSTRING(str)->ptr[RSTRING(str)->len] = '\0';
+    }
+
+    return str;
+}

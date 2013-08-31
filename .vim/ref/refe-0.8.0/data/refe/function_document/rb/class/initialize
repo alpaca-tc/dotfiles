@@ -1,0 +1,3 @@
+: static VALUE rb_class_initialize(int argc, VALUE *argv, VALUE klass)
+    Class#initialize の実体。
+

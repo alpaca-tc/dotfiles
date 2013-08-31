@@ -1,0 +1,11 @@
+eval.c:3829
+void
+rb_exit(status)
+    int status;
+{
+    if (prot_tag) {
+	terminate_process(status, "exit", 4);
+    }
+    ruby_finalize();
+    exit(status);
+}

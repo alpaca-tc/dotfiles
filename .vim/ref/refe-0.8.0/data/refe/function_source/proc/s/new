@@ -1,0 +1,12 @@
+eval.c:6974
+static VALUE
+proc_s_new(argc, argv, klass)
+    int argc;
+    VALUE *argv;
+    VALUE klass;
+{
+    VALUE block = proc_alloc(klass, Qfalse);
+
+    rb_obj_call_init(block, argc, argv);
+    return block;
+}

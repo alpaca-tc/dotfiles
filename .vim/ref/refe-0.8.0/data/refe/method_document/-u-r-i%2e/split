@@ -1,0 +1,19 @@
+--- URI.split(url)
+
+    URI を以下の要素に分割した配列を返します。
+
+      * scheme
+      * userinfo
+      * host
+      * port
+      * registry
+      * path
+      * opaque
+      * query
+      * fragment
+
+    例:
+        require 'uri'
+        p URI.split("http://www.ruby-lang.org/")
+        # => ["http", nil, "www.ruby-lang.org", nil, nil, "/", nil, nil, nil]
+

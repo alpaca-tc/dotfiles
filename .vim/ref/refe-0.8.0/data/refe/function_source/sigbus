@@ -1,0 +1,8 @@
+signal.c:404
+static RETSIGTYPE sigbus _((int));
+static RETSIGTYPE
+sigbus(sig)
+    int sig;
+{
+    rb_bug("Bus Error");
+}

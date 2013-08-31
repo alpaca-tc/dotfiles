@@ -1,0 +1,11 @@
+parse.y:4835
+static NODE *
+aryset(recv, idx)
+    NODE *recv, *idx;
+{
+    if (recv && nd_type(recv) == NODE_SELF)
+	recv = (NODE *)1;
+    else
+	value_expr(recv);
+    return NEW_ATTRASGN(recv, tASET, idx);
+}

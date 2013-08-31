@@ -1,0 +1,10 @@
+gc.c:1490
+static VALUE
+undefine_final(os, obj)
+    VALUE os, obj;
+{
+    if (finalizer_table) {
+	st_delete(finalizer_table, (st_data_t*)&obj, 0);
+    }
+    return obj;
+}

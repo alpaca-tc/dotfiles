@@ -1,0 +1,4 @@
+--- File.socket?(path)
+
+    FileTest.socket? と同じです。
+

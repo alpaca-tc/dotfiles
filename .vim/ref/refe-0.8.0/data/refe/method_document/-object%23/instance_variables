@@ -1,0 +1,11 @@
+--- instance_variables
+
+    オブジェクトのインスタンス変数名を文字列の配列として返します。
+
+    local_variables,
+    global_variables,
+    Module.constants,
+    Module#constants [Module/constants],
+    Module#class_variables [Module/class_variables]
+    も参照してください。
+

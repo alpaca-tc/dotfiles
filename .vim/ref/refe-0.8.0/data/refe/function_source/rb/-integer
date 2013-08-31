@@ -1,0 +1,28 @@
+object.c:1098
+VALUE
+rb_Integer(val)
+    VALUE val;
+{
+    switch (TYPE(val)) {
+      case T_FLOAT:
+	if (RFLOAT(val)->value <= (double)FIXNUM_MAX
+	    && RFLOAT(val)->value >= (double)FIXNUM_MIN) {
+	    break;
+	}
+	return rb_dbl2big(RFLOAT(val)->value);
+
+      case T_FIXNUM:
+      case T_BIGNUM:
+	return val;
+
+      case T_STRING:
+	return rb_str_to_inum(val, 0, Qtrue);
+
+      default:
+	break;
+    }
+    if (rb_respond_to(val, rb_intern("to_int"))) {
+	return rb_to_integer(val, "to_int");
+    }
+    return rb_to_integer(val, "to_i");
+}

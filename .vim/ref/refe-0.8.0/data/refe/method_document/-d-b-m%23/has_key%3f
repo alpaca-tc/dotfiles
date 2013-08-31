@@ -1,0 +1,5 @@
+: has_key?(key)
+: key?(key)
+: include?(key)
+    keyがデータベース中に存在する時、真を返します。
+

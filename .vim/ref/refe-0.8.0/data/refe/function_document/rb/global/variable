@@ -1,0 +1,3 @@
+: void rb_global_variable(VALUE *var)
+    rb_gc_register_address と同じです。
+

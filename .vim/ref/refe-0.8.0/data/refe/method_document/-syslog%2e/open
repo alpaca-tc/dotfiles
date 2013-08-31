@@ -1,0 +1,18 @@
+: open(ident=$0, options=Syslog::LOG_PID|Syslog::LOG_CONS, facility=Syslog::LOG_USER)
+: open(ident=$0, options=Syslog::LOG_PID|Syslog::LOG_CONS, facility=Syslog::LOG_USER) { |syslog| ... }
+   与えられた引数でsyslogを開いて、Syslogの唯一の
+   インスタンスを返す。
+   ブロック付きで呼ばれた場合は、インスタンスを引数として
+   ブロックを呼び出す。
+   syslogを既に開いていた場合はRuntimeErrorが
+   発生する。
+
+   ident はすべてのログにつく識別子で、どのプログラムから
+   送られたログなのかを識別するために使われる。
+   options と facility については
+   Syslog::Constants を参照。
+
+      例:
+        sl = Syslog.open('ftpd', Syslog::LOG_PID | Syslog::LOG_NDELAY,
+                         Syslog::LOG_FTP)
+

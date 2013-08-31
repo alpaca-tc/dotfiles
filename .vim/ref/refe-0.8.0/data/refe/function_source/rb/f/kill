@@ -1,0 +1,76 @@
+signal.c:201
+VALUE
+rb_f_kill(argc, argv)
+    int argc;
+    VALUE *argv;
+{
+    int negative = 0;
+    int sig;
+    int i;
+    char *s;
+
+    rb_secure(2);
+    if (argc < 2)
+	rb_raise(rb_eArgError, "wrong number of arguments -- kill(sig, pid...)");
+    switch (TYPE(argv[0])) {
+      case T_FIXNUM:
+	sig = FIX2INT(argv[0]);
+	break;
+
+      case T_SYMBOL:
+	s = rb_id2name(SYM2ID(argv[0]));
+	if (!s) rb_raise(rb_eArgError, "bad signal");
+	goto str_signal;
+
+      case T_STRING:
+	s = RSTRING(argv[0])->ptr;
+	if (s[0] == '-') {
+	    negative++;
+	    s++;
+	}
+      str_signal:
+	if (strncmp("SIG", s, 3) == 0)
+	    s += 3;
+	if((sig = signm2signo(s)) == 0)
+	    rb_raise(rb_eArgError, "unsupported name `SIG%s'", s);
+
+	if (negative)
+	    sig = -sig;
+	break;
+
+      default:
+        {
+	    VALUE str;
+
+	    str = rb_check_string_type(argv[0]);
+	    if (!NIL_P(str)) {
+		s = RSTRING(str)->ptr;
+		goto str_signal;
+	    }
+	    rb_raise(rb_eArgError, "bad signal type %s",
+		     rb_obj_classname(argv[0]));
+	}
+	break;
+    }
+
+    if (sig < 0) {
+	sig = -sig;
+	for (i=1; i<argc; i++) {
+	    int pid = NUM2INT(argv[i]);
+#ifdef HAS_KILLPG
+	    if (killpg(pid, sig) < 0)
+#else
+	    if (kill(-pid, sig) < 0)
+#endif
+		rb_sys_fail(0);
+	}
+    }
+    else {
+	for (i=1; i<argc; i++) {
+	    Check_Type(argv[i], T_FIXNUM);
+	    if (kill(FIX2INT(argv[i]), sig) < 0)
+		rb_sys_fail(0);
+	}
+    }
+    return INT2FIX(i-1);
+}

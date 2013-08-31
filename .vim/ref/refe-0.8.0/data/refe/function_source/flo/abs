@@ -1,0 +1,8 @@
+numeric.c:731
+static VALUE
+flo_abs(flt)
+    VALUE flt;
+{
+    double val = fabs(RFLOAT(flt)->value);
+    return rb_float_new(val);
+}

@@ -1,0 +1,8 @@
+object.c:179
+static VALUE
+rb_any_to_a(obj)
+    VALUE obj;
+{
+    rb_warn("default `to_a' will be obsolete");
+    return rb_ary_new3(1, obj);
+}

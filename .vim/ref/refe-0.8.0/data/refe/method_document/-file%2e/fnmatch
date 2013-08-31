@@ -1,0 +1,59 @@
+--- File.fnmatch(pattern, path[, flags])   ruby 1.7 feature
+--- File.fnmatch?(pattern, path[, flags])   ruby 1.7 feature
+
+    ファイル名のパターンマッチを行います(fnmatch(3) [manual page])。
+    path が pattern にマッチすれば真を返します。
+
+    pattern にはワイルドカードとして `*', `?', `[]' が使用できま
+    す(Dir.glob とは違って `{}' や `**/' は使用できません)。
+
+        %w(foo foobar bar).each {|f|
+          p File.fnmatch("foo*", f)
+        }
+        # => true
+             true
+             false
+
+    flags に以下の定数(File::Constants モジュールで定義さ
+    れています)を論理和で指定することでパターンマッチの動作を変更する
+    ことができます。flags のデフォルト値は0(フラグ指定なし)です。
+
+    : FNM_NOESCAPE
+      エスケープ文字 `\' を普通の文字とみなします。
+
+        # デフォルトでは \ を伴う任意の文字はその文字にマッチしますが、
+        # このフラグをつけると、\ が普通の文字として扱われます。
+        p File.fnmatch('\a', 'a')                       # => true
+        p File.fnmatch('\a', '\a', File::FNM_NOESCAPE)  # => true
+
+        # 前者で * は、エスケープされているので "*" そのものにマッチ
+        # します。
+        p File.fnmatch('\*', 'a')                       # => false
+        p File.fnmatch('\*', '\a', File::FNM_NOESCAPE)  # => true
+
+        # 単体の \ は、このフラグの有無に関わらず \ にマッチします。
+        # (シングルクォート文字列中では \\ は、\ であることに注意)
+        p File.fnmatch('\\', '\\')                      # => true
+        p File.fnmatch('\\', '\\', File::FNM_NOESCAPE)  # => true
+
+    : FNM_PATHNAME
+      ワイルドカード `*', `?', `[]' が `/' にマッチしなくなります。
+      シェルのパターンマッチにはこのフラグが使用されています。
+
+        p File.fnmatch('*', '/', File::FNM_PATHNAME)   # => false
+        p File.fnmatch('?', '/', File::FNM_PATHNAME)   # => false
+        p File.fnmatch('[/]', '/', File::FNM_PATHNAME) # => false
+
+    : FNM_CASEFOLD
+      アルファベットの大小文字を区別せずにパターンマッチを行います。
+
+        p File.fnmatch('A', 'a', File::FNM_CASEFOLD)   # => true
+
+    : FNM_DOTMATCH
+      ワイルドカード `*', `?', `[]' が先頭の `.' にマッチするようになります。
+
+        p File.fnmatch('*', '.', File::FNM_DOTMATCH)           # => true
+        p File.fnmatch('?', '.', File::FNM_DOTMATCH)           # => true
+        p File.fnmatch('[.]', '.', File::FNM_DOTMATCH)         # => true
+        p File.fnmatch('foo/*', 'foo/.', File::FNM_DOTMATCH)   # => true
+

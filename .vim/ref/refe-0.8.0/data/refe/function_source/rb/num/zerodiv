@@ -1,0 +1,6 @@
+numeric.c:71
+void
+rb_num_zerodiv()
+{
+    rb_raise(rb_eZeroDivError, "divided by 0");
+}

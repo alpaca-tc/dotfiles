@@ -1,0 +1,5 @@
+--- REG_CREATED_NEW_KEY
+--- REG_OPENED_EXISTING_KEY
+    キーが新しく作られたか，既存キーが開かれたか。
+    disposition [Win32::Registry/disposition] メソッドも参照してください。
+

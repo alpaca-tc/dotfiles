@@ -1,0 +1,4 @@
+--- File.blockdev?(path)
+
+    FileTest.blockdev? と同じです。
+

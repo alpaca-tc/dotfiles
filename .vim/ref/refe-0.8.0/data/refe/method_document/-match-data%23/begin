@@ -1,0 +1,14 @@
+--- begin(n)
+
+    n 番目の部分文字列先頭のオフセットを返します。0 はマッチ全体
+    を意味します。n が範囲外の場合は例外 IndexError が発生
+    します。n 番目の部分文字列がマッチしていなければ nil 
+    を返します。
+
+        /(foo)(bar)(BAZ)?/ =~ "foobarbaz"
+        p $~.begin(0)   # => 0
+        p $~.begin(1)   # => 0
+        p $~.begin(2)   # => 3
+        p $~.begin(3)   # => nil
+        p $~.begin(-1)  # => `begin': index -1 out of matches (IndexError)
+

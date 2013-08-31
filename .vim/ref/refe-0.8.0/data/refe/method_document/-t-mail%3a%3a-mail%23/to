@@ -1,0 +1,7 @@
+: to( default = nil ) -> [String]
+: to=( specs )
+    specs: String / [String]
+    default: Object
+
+    To: アドレスの spec の配列。
+

@@ -1,0 +1,11 @@
+variable.c:890
+static int
+givar_i(obj, tbl)
+    VALUE obj;
+    st_table *tbl;
+{
+    if (rb_special_const_p(obj)) {
+	st_foreach(tbl, givar_mark_i, 0);
+    }
+    return ST_CONTINUE;
+}

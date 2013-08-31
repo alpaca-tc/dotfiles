@@ -1,0 +1,14 @@
+enum.c:318
+static VALUE
+enum_all(obj)
+    VALUE obj;
+{
+    VALUE result;
+    NODE *memo = rb_node_newnode(NODE_MEMO, Qnil, 0, 0);
+
+    memo->u1.value = Qtrue;
+    rb_iterate(rb_each, obj, rb_block_given_p() ? all_iter_i : all_i, (VALUE)memo);
+    result = memo->u1.value;
+    rb_gc_force_recycle((VALUE)memo);
+    return result;
+}

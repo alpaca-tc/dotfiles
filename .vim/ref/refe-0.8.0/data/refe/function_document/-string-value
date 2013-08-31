@@ -1,0 +1,5 @@
+: StringValue(VALUE val)
+    val が String でなければ to_str メソッドを使って String に変換します。
+
+    このマクロに渡した VALUE は ruby の GC から確実に保護されます。
+

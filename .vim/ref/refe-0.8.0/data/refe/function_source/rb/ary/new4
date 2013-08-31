@@ -1,0 +1,16 @@
+array.c:171
+VALUE
+rb_ary_new4(n, elts)
+    long n;
+    const VALUE *elts;
+{
+    VALUE ary;
+
+    ary = rb_ary_new2(n);
+    if (n > 0 && elts) {
+	MEMCPY(RARRAY(ary)->ptr, elts, VALUE, n);
+    }
+    RARRAY(ary)->len = n;
+
+    return ary;
+}

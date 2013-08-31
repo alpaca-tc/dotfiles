@@ -1,0 +1,7 @@
+bignum.c:861
+static VALUE
+rb_big_to_f(x)
+    VALUE x;
+{
+    return rb_float_new(rb_big2dbl(x));
+}

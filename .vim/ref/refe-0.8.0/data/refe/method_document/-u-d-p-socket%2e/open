@@ -1,0 +1,4 @@
+--- UDPSocket.open
+--- UDPSocket.new
+    新しいUDPソケットを返します。
+

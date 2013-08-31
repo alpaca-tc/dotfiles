@@ -1,0 +1,14 @@
+string.c:2905
+static VALUE
+rb_f_chomp(argc, argv)
+    int argc;
+    VALUE *argv;
+{
+    VALUE str = uscore_get();
+    VALUE dup = rb_str_dup(str);
+
+    if (NIL_P(rb_str_chomp_bang(argc, argv, dup)))
+	return str;
+    rb_lastline_set(dup);
+    return dup;
+}

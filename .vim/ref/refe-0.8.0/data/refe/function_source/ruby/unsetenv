@@ -1,0 +1,7 @@
+hash.c:1231
+void
+ruby_unsetenv(name)
+    const char *name;
+{
+    ruby_setenv(name, 0);
+}

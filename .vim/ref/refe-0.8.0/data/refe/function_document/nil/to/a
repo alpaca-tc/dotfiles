@@ -1,0 +1,2 @@
+: static VALUE nil_to_a(VALUE obj)
+

@@ -1,0 +1,19 @@
+array.c:1667
+VALUE
+rb_ary_rassoc(ary, value)
+    VALUE ary, value;
+{
+    VALUE *p, *pend;
+
+    p = RARRAY(ary)->ptr;
+    pend = p + RARRAY(ary)->len;
+
+    while (p < pend) {
+	if (TYPE(*p) == T_ARRAY
+	    && RARRAY(*p)->len > 1
+	    && rb_equal(RARRAY(*p)->ptr[1], value))
+	    return *p;
+	p++;
+    }
+    return Qnil;
+}

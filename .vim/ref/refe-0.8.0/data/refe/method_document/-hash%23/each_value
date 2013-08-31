@@ -1,0 +1,5 @@
+--- each_value {|value| ... }
+
+    valueを引数としてブロックを評価します。
+    self を返します。
+

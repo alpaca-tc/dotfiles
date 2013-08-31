@@ -1,0 +1,24 @@
+eval.c:1652
+static VALUE
+ev_const_defined(cref, id, self)
+    NODE *cref;
+    ID id;
+    VALUE self;
+{
+    NODE *cbase = cref;
+    VALUE result;
+
+    while (cbase && cbase->nd_next) {
+	struct RClass *klass = RCLASS(cbase->nd_clss);
+
+	if (NIL_P(klass)) return rb_const_defined(CLASS_OF(self), id);
+	if (klass->iv_tbl && st_lookup(klass->iv_tbl, id, &result)) {
+	    if (result == Qundef && NIL_P(rb_autoload_p((VALUE)klass, id))) {
+		return Qfalse;
+	    }
+	    return Qtrue;
+	}
+	cbase = cbase->nd_next;
+    }
+    return rb_const_defined(cref->nd_clss, id);
+}

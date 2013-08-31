@@ -1,0 +1,17 @@
+: foreach( address, port = 110, account, password ) {|mail| .... }
+    POP セッションを開き、サーバ上のすべてのメールに対して繰り返します。
+    以下と同じです。
+
+        Net::POP3.start( address, port, account, password ) {|pop|
+          pop.each_mail do |m|
+            yield m
+          end
+        }
+
+        # example
+        Net::POP3.foreach( 'your.pop.server', 110,
+                           'YourAccount', 'YourPassword' ) do |m|
+          file.write m.pop
+          m.delete if $DELETE
+        end
+

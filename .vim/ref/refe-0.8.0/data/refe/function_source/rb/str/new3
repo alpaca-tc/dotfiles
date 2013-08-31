@@ -1,0 +1,7 @@
+string.c:132
+VALUE
+rb_str_new3(str)
+    VALUE str;
+{
+    return str_new3(rb_obj_class(str), str);
+}

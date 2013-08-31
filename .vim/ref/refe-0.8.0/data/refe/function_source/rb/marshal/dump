@@ -1,0 +1,13 @@
+marshal.c:1407
+VALUE
+rb_marshal_dump(obj, port)
+    VALUE obj, port;
+{
+    int argc = 1;
+    VALUE argv[2];
+
+    argv[0] = obj;
+    argv[1] = port;
+    if (!NIL_P(port)) argc = 2;
+    return marshal_dump(argc, argv);
+}

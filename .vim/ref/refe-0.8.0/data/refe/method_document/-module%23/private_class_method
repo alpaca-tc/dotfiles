@@ -1,0 +1,8 @@
+--- private_class_method(name,  ... )
+--- public_class_method(name,  ... )
+
+    name で指定したクラスメソッド(クラスの特異メソッド) の可視性
+    を変更します。
+
+    self を返します。
+

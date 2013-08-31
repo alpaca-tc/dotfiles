@@ -1,0 +1,15 @@
+dir.c:382
+static VALUE
+dir_seek(dir, pos)
+    VALUE dir, pos;
+{
+    struct dir_data *dirp;
+
+#ifdef HAVE_SEEKDIR
+    GetDIR(dir, dirp);
+    seekdir(dirp->dir, NUM2INT(pos));
+    return dir;
+#else
+    rb_notimplement();
+#endif
+}

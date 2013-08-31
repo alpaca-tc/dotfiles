@@ -1,0 +1,9 @@
+variable.c:403
+static VALUE
+var_getter(id, var)
+    ID id;
+    VALUE *var;
+{
+    if (!var) return Qnil;
+    return *var;
+}

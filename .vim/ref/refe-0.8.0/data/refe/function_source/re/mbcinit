@@ -1,0 +1,24 @@
+regex.c:4535
+void
+re_mbcinit(mbctype)
+     int mbctype;
+{
+  switch (mbctype) {
+  case MBCTYPE_ASCII:
+    re_mbctab = mbctab_ascii;
+    current_mbctype = MBCTYPE_ASCII;
+    break;
+  case MBCTYPE_EUC:
+    re_mbctab = mbctab_euc;
+    current_mbctype = MBCTYPE_EUC;
+    break;
+  case MBCTYPE_SJIS:
+    re_mbctab = mbctab_sjis;
+    current_mbctype = MBCTYPE_SJIS;
+    break;
+  case MBCTYPE_UTF8:
+    re_mbctab = mbctab_utf8;
+    current_mbctype = MBCTYPE_UTF8;
+    break;
+  }
+}

@@ -1,0 +1,65 @@
+array.c:681
+static void
+rb_ary_update(ary, beg, len, rpl)
+    VALUE ary;
+    long beg, len;
+    VALUE rpl;
+{
+    long rlen;
+
+    if (len < 0) rb_raise(rb_eIndexError, "negative length (%ld)", len);
+    if (beg < 0) {
+	beg += RARRAY(ary)->len;
+	if (beg < 0) {
+	    beg -= RARRAY(ary)->len;
+	    rb_raise(rb_eIndexError, "index %ld out of array", beg);
+	}
+    }
+    if (beg + len > RARRAY(ary)->len) {
+	len = RARRAY(ary)->len - beg;
+    }
+
+    rb_ary_modify(ary);
+    if (NIL_P(rpl)) {
+	rlen = 0;
+    }
+    else {
+	rpl = rb_ary_to_ary(rpl);
+	rlen = RARRAY(rpl)->len;
+    }
+
+    if (beg >= RARRAY(ary)->len) {
+	len = beg + rlen;
+	if (len >= RARRAY(ary)->aux.capa) {
+	    REALLOC_N(RARRAY(ary)->ptr, VALUE, len);
+	    RARRAY(ary)->aux.capa = len;
+	}
+	rb_mem_clear(RARRAY(ary)->ptr + RARRAY(ary)->len, beg - RARRAY(ary)->len);
+	if (rlen > 0) {
+	    MEMCPY(RARRAY(ary)->ptr + beg, RARRAY(rpl)->ptr, VALUE, rlen);
+	}
+	RARRAY(ary)->len = len;
+    }
+    else {
+	long alen;
+
+	if (beg + len > RARRAY(ary)->len) {
+	    len = RARRAY(ary)->len - beg;
+	}
+
+	alen = RARRAY(ary)->len + rlen - len;
+	if (alen >= RARRAY(ary)->aux.capa) {
+	    REALLOC_N(RARRAY(ary)->ptr, VALUE, alen);
+	    RARRAY(ary)->aux.capa = alen;
+	}
+
+	if (len != rlen) {
+	    MEMMOVE(RARRAY(ary)->ptr + beg + rlen, RARRAY(ary)->ptr + beg + len,
+		    VALUE, RARRAY(ary)->len - (beg + len));
+	    RARRAY(ary)->len = alen;
+	}
+	if (rlen > 0) {
+	    MEMMOVE(RARRAY(ary)->ptr + beg, RARRAY(rpl)->ptr, VALUE, rlen);
+	}
+    }
+}

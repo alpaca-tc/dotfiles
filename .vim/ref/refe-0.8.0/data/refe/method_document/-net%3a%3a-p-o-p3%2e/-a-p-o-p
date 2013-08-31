@@ -1,0 +1,12 @@
+: APOP( is_apop )
+    bool が真なら Net::APOP クラス、偽なら Net::POP3 クラスを返します。
+    以下の例のように使ってください。
+
+        # example 1
+        pop = Net::POP3::APOP($isapop).new( addr, port )
+
+        # example 2
+        Net::POP3::APOP($isapop).start( addr, port ) {|pop|
+            ....
+        }
+

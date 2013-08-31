@@ -1,0 +1,12 @@
+eval.c:190
+NORETURN(static void print_undef _((VALUE, ID)));
+static void
+print_undef(klass, id)
+    VALUE klass;
+    ID id;
+{
+    rb_name_error(id, "undefined method `%s' for %s `%s'",
+		  rb_id2name(id),
+		  (TYPE(klass) == T_MODULE) ? "module" : "class",
+		  rb_class2name(klass));
+}

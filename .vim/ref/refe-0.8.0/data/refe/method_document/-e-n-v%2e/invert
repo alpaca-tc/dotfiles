@@ -1,0 +1,6 @@
+--- ENV.invert
+
+    ruby 1.8 feature
+
+    環境変数の値をキー、名前を値とした Hash を生成して返します。
+

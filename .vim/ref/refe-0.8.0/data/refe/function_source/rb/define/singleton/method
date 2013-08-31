@@ -1,0 +1,10 @@
+class.c:735
+void
+rb_define_singleton_method(obj, name, func, argc)
+    VALUE obj;
+    const char *name;
+    VALUE (*func)();
+    int argc;
+{
+    rb_define_method(rb_singleton_class(obj), name, func, argc);
+}

@@ -1,0 +1,38 @@
+--- CGI#out(options = "text/html")
+      HTTPヘッダとブロックで与えられた文字列を$DEFAULT_OUTPUT ($>)へ出力。
+        cgi = CGI.new
+        cgi.out{ "string" }
+          # Content-Type: text/html
+          # Content-Length: 6
+          #
+          # string
+
+        cgi.out("text/plain"){ "string" }
+          # Content-Type: text/plain
+          # Content-Length: 6
+          #
+          # string
+
+        cgi.out({"nph"        => true,
+                 "status"     => "OK",  # == "200 OK"
+                 "server"     => ENV['SERVER_SOFTWARE'],
+                 "connection" => "close",
+                 "type"       => "text/html",
+                 "charset"    => "iso-2022-jp",
+                   # Content-Type: text/html; charset=iso-2022-jp
+                 "language"   => "ja",
+                 "expires"    => Time.now + (3600 * 24 * 30),
+                 "cookie"     => [cookie1, cookie2],
+                 "my_header1" => "my_value",
+                 "my_header2" => "my_value"}){ "string" }
+
+#      if "HEAD" == REQUEST_METHOD then output only HTTP header.
+      HEADリクエスト("HEAD" == REQUEST_METHOD)の場合はHTTPヘッダのみを出力する。
+      
+#      if charset is "iso-2022-jp" or "euc-jp" or "shift_jis" then
+#      convert string charset, and set language to "ja".
+      charsetが"iso-2022-jp"か"euc-jp"か"shift_jis"である場合、
+      charsetを変換し、languageを"ja"にする。ruby-list:35911
+
+#=== PRINT
+

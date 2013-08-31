@@ -1,0 +1,34 @@
+sprintf.c:23
+static char*
+remove_sign_bits(str, base)
+    char *str;
+    int base;
+{
+    char *s, *t, *end;
+    unsigned long len;
+    
+    s = t = str;
+    len = strlen(str);
+    end = str + len;
+
+    if (base == 16) {
+	while (t<end && *t == 'f') {
+	    t++;
+	}
+    }
+    else if (base == 8) {
+	if (*t == '3') t++;
+	while (t<end && *t == '7') {
+	    t++;
+	}
+    }
+    else if (base == 2) {
+	while (t<end && *t == '1') {
+	    t++;
+	}
+    }
+    while (*t) *s++ = *t++;
+    *s = '\0';
+
+    return str;
+}

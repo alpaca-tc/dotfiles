@@ -1,0 +1,71 @@
+util.c:157
+void
+ruby_add_suffix(str, suffix)
+    VALUE str;
+    char *suffix;
+{
+    int baselen;
+    int extlen = strlen(suffix);
+    char *s, *t, *p;
+    long slen;
+    char buf[1024];
+
+    if (RSTRING(str)->len > 1000)
+        rb_fatal("Cannot do inplace edit on long filename (%ld characters)",
+		 RSTRING(str)->len);
+
+#if defined(DJGPP) || defined(__CYGWIN32__) || defined(_WIN32)
+    /* Style 0 */
+    slen = RSTRING(str)->len;
+    rb_str_cat(str, suffix, extlen);
+#if defined(DJGPP)
+    if (_USE_LFN) return;
+#else
+    if (valid_filename(RSTRING(str)->ptr)) return;
+#endif
+
+    /* Fooey, style 0 failed.  Fix str before continuing. */
+    RSTRING(str)->ptr[RSTRING(str)->len = slen] = '\0';
+#endif
+
+    slen = extlen;
+    t = buf; baselen = 0; s = RSTRING(str)->ptr;
+    while ((*t = *s) && *s != '.') {
+	baselen++;
+	if (*s == '\\' || *s == '/') baselen = 0;
+ 	s++; t++;
+    }
+    p = t;
+
+    t = ext; extlen = 0;
+    while (*t++ = *s++) extlen++;
+    if (extlen == 0) { ext[0] = '.'; ext[1] = 0; extlen++; }
+
+    if (*suffix == '.') {        /* Style 1 */
+        if (strEQ(ext, suffix)) goto fallback;
+	strcpy(p, suffix);
+    }
+    else if (suffix[1] == '\0') {  /* Style 2 */
+        if (extlen < 4) { 
+	    ext[extlen] = *suffix;
+	    ext[++extlen] = '\0';
+        }
+	else if (baselen < 8) {
+   	    *p++ = *suffix;
+	}
+	else if (ext[3] != *suffix) {
+	    ext[3] = *suffix;
+	}
+	else if (buf[7] != *suffix) {
+	    buf[7] = *suffix;
+	}
+	else goto fallback;
+	strcpy(p, ext);
+    }
+    else { /* Style 3:  Panic */
+fallback:
+	(void)memcpy(p, strEQ(ext, suffix1) ? suffix2 : suffix1, 5);
+    }
+    rb_str_resize(str, strlen(buf));
+    memcpy(RSTRING(str)->ptr, buf, RSTRING(str)->len);
+}

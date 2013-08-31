@@ -1,0 +1,37 @@
+eval.c:5592
+static VALUE
+exec_under(func, under, cbase, args)
+    VALUE (*func)();
+    VALUE under, cbase;
+    void *args;
+{
+    VALUE val = Qnil;		/* OK */
+    int state;
+    int mode;
+
+    PUSH_CLASS(under);
+    PUSH_FRAME();
+    ruby_frame->self = _frame.prev->self;
+    ruby_frame->last_func = _frame.prev->last_func;
+    ruby_frame->last_class = _frame.prev->last_class;
+    ruby_frame->argc = _frame.prev->argc;
+    ruby_frame->argv = _frame.prev->argv;
+    if (cbase) {
+	PUSH_CREF(cbase);
+    }
+
+    mode = scope_vmode;
+    SCOPE_SET(SCOPE_PUBLIC);
+    PUSH_TAG(PROT_NONE);
+    if ((state = EXEC_TAG()) == 0) {
+	val = (*func)(args);
+    }
+    POP_TAG();
+    if (cbase) POP_CREF();
+    SCOPE_SET(mode);
+    POP_FRAME();
+    POP_CLASS();
+    if (state) JUMP_TAG(state);
+
+    return val;
+}

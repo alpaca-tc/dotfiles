@@ -1,0 +1,3 @@
+--- ERB#def_module(methodname='erb')
+    変換したRubyスクリプトをメソッドとして定義した無名のモジュールを返す。
+

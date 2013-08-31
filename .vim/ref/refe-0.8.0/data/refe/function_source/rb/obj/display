@@ -1,0 +1,17 @@
+io.c:2737
+static VALUE
+rb_obj_display(argc, argv, self)
+    int argc;
+    VALUE *argv;
+    VALUE self;
+{
+    VALUE out;
+
+    if (rb_scan_args(argc, argv, "01", &out) == 0) {
+	out = rb_stdout;
+    }
+
+    rb_io_write(out, self);
+
+    return Qnil;
+}

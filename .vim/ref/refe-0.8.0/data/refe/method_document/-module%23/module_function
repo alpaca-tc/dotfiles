@@ -1,0 +1,43 @@
+--- module_function([name ... ])
+
+    引数なしのときは今後このモジュール定義内で新規に定義されるメソッド
+    をモジュール関数にします。モジュール関数とはプラ
+    イベートメソッドであると同時にモジュールの特異メソッドでもあるよう
+    なメソッドです。例えば Math モジュールで定義されているメソッ
+    ドがモジュール関数です。
+
+    引数が与えられた時には引数によって指定されたメソッドをモジュール関
+    数にします。
+
+    module_function はメソッドに「モジュール関数」という属性をつけるメ
+    ソッドではなく、プライベートメソッドとモジュールの特異メソッドの 2
+    つを同時に定義するメソッドです。そのため、モジュール関数を
+    alias する場合は
+
+      module Foo
+        def foo
+          p "foo"
+        end
+        module_function :foo
+        alias :bar :foo
+      end
+      Foo.foo           # => "foo"
+      Foo.bar           # => undefined method `bar' for Foo:Module (NoMethodError)
+
+    としても、プライベートメソッド foo の別名ができるだけで、Foo の特
+    異メソッド Foo.foo の別名は定義されません。このようなことをしたい場合
+    は、先に別名を定義してからそれぞれをモジュール関数として定義するの
+    が簡単です。
+
+      module Foo
+        def foo
+          p "foo"
+        end
+        alias :bar :foo
+        module_function :foo, :bar
+      end
+      Foo.foo           # => "foo"
+      Foo.bar           # => "foo"
+
+    self を返します。
+

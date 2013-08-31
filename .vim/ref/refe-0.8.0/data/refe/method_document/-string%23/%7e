@@ -1,0 +1,16 @@
+--- ~ self
+
+    self を正規表現にコンパイルして、組み込み変数 $_ に対して
+    マッチを行いマッチした位置のインデックスを返します。
+    $_ =~ Regexp.compile(self) と同じです。
+
+    $_ が文字列でなければ nil を返します。
+
+    ruby 1.7 feature:
+       $_ =~ Regexp.compile(Regexp.quote(self))
+    と同じです。
+
+    ruby 1.8 feature: このメソッドの使用は推奨されません(警告が
+    出力されます)。代わりに、Regexp#= [Regexp/~] などを使用してく
+    ださい。
+

@@ -1,0 +1,6 @@
+: each_header_name {|name| .... }
+: each_key {|name| .... }
+    name: String
+
+    全てのヘッダ名に対するくりかえし。
+

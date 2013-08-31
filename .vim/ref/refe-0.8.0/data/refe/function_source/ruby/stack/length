@@ -1,0 +1,9 @@
+gc.c:425
+int
+ruby_stack_length(p)
+    VALUE **p;
+{
+    SET_STACK_END;
+    if (p) *p = STACK_UPPER(STACK_END, rb_gc_stack_start, STACK_END);
+    return STACK_LENGTH;
+}

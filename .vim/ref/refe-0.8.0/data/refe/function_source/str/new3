@@ -1,0 +1,15 @@
+string.c:117
+static VALUE
+str_new3(klass, str)
+    VALUE klass, str;
+{
+    VALUE str2 = str_alloc(klass);
+
+    RSTRING(str2)->len = RSTRING(str)->len;
+    RSTRING(str2)->ptr = RSTRING(str)->ptr;
+    RSTRING(str2)->aux.shared = str;
+    FL_SET(str2, ELTS_SHARED);
+    OBJ_INFECT(str2, str);
+
+    return str2;
+}

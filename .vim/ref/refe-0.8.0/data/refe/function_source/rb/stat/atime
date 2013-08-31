@@ -1,0 +1,7 @@
+file.c:267
+static VALUE
+rb_stat_atime(self)
+    VALUE self;
+{
+    return rb_time_new(get_stat(self)->st_atime, 0);
+}

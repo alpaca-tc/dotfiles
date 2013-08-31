@@ -1,0 +1,7 @@
+--- CGI.unescapeHTML(string)
+      HTMLエスケープされた文字列を元に戻す
+
+        例：
+        CGI::unescapeHTML("HTML escaped string")
+#=== ESCAPE ELEMENT
+

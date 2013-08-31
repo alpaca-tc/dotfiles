@@ -1,0 +1,3 @@
+: route
+      Returns the route from imap.rb"/[RFC-822] route-addr.
+

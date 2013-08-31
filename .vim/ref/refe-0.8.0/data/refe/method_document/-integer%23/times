@@ -1,0 +1,9 @@
+--- times {|n| ... }
+
+    self 回だけ(0 から self-1 まで)繰り返します。
+    self が負であれば何もしません。
+
+    self を返します。
+
+    upto, downto, step も参照。
+

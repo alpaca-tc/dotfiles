@@ -1,0 +1,16 @@
+file.c:2610
+static int
+is_absolute_path(path)
+    const char *path;
+{
+#ifdef DOSISH_DRIVE_LETTER
+    if (has_drive_letter(path) && isdirsep(path[2])) return 1;
+#endif
+#ifdef DOSISH_UNC
+    if (isdirsep(path[0]) && isdirsep(path[1])) return 1;
+#endif
+#ifndef DOSISH
+    if (path[0] == '/') return 1;
+#endif
+    return 0;
+}

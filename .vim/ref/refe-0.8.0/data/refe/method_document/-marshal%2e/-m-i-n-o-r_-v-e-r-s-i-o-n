@@ -1,0 +1,21 @@
+--- MAJOR_VERSION    ruby 1.7 feature
+--- MINOR_VERSION    ruby 1.7 feature
+
+    Marshal.dump が出力するデータフォーマットのバージョ
+    ン番号です。
+
+    Marshal.load は、メジャーバージョンが異なるか、バー
+    ジョンの大きなマーシャルデータを読み込んだとき例外 TypeError 
+    を発生させます。
+
+    マイナーバージョンが古いだけのフォーマットは読み込み可能ですが、
+    $VERBOSE = true のときには警告メッセージが
+    出力されます
+
+    マーシャルされたデータのバージョン番号は以下のようにして取得するこ
+    とができます。
+
+        obj = Object.new
+        major, minor = Marshal.dump(obj).unpack("cc")
+        p [major, minor]
+

@@ -1,0 +1,41 @@
+time.c:924
+static VALUE
+time_plus(time1, time2)
+    VALUE time1, time2;
+{
+    struct time_object *tobj;
+    time_t sec, usec;
+    double f, d, v;
+
+    GetTimeval(time1, tobj);
+
+    if (TYPE(time2) == T_DATA && RDATA(time2)->dfree == time_free) {
+	rb_raise(rb_eTypeError, "time + time?");
+    }
+    v = NUM2DBL(time2);
+    d = modf(v, &f);
+    sec = (time_t)f;
+    if (f != (double)sec) {
+	rb_raise(rb_eRangeError, "time + %f out of Time range", v);
+    }
+#ifndef NEGATIVE_TIME_T
+    if (f < 0 && -f >= tobj->tv.tv_sec) {
+	rb_raise(rb_eArgError, "time must be positive");
+    }
+#endif
+    usec = tobj->tv.tv_usec + (time_t)(d*1e6);
+    sec = tobj->tv.tv_sec + (time_t)f;
+
+#ifdef NEGATIVE_TIME_T
+    if ((tobj->tv.tv_sec >= 0 && f >= 0 && sec < 0) ||
+	(tobj->tv.tv_sec <= 0 && f <= 0 && sec > 0)) {
+	rb_raise(rb_eRangeError, "time + %f out of Time range", v);
+    }
+#endif
+    time2 = rb_time_new(sec, usec);
+    if (tobj->gmt) {
+	GetTimeval(time2, tobj);
+	tobj->gmt = 1;
+    }
+    return time2;
+}

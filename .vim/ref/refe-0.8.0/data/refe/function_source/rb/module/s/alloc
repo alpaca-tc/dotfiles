@@ -1,0 +1,11 @@
+object.c:678
+static VALUE rb_module_s_alloc _((VALUE));
+static VALUE
+rb_module_s_alloc(klass)
+    VALUE klass;
+{
+    VALUE mod = rb_module_new();
+
+    RBASIC(mod)->klass = klass;
+    return mod;
+}

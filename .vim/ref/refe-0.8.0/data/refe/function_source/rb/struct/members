@@ -1,0 +1,7 @@
+struct.c:57
+static VALUE
+rb_struct_members(obj)
+    VALUE obj;
+{
+    return rb_struct_s_members(rb_obj_class(obj));
+}

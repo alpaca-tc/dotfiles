@@ -1,0 +1,49 @@
+parse.y:4592
+static NODE *
+literal_concat(head, tail)
+    NODE *head, *tail;
+{
+    enum node_type htype;
+
+    if (!head) return tail;
+    if (!tail) return head;
+
+    htype = nd_type(head);
+    if (htype == NODE_EVSTR) {
+	NODE *node = NEW_DSTR(rb_str_new(0, 0));
+	head = list_append(node, head);
+    }
+    switch (nd_type(tail)) {
+      case NODE_STR:
+	if (htype == NODE_STR) {
+	    rb_str_concat(head->nd_lit, tail->nd_lit);
+	    rb_gc_force_recycle((VALUE)tail);
+	}
+	else {
+	    list_append(head, tail);
+	}
+	break;
+
+      case NODE_DSTR:
+	if (htype == NODE_STR) {
+	    rb_str_concat(head->nd_lit, tail->nd_lit);
+	    tail->nd_lit = head->nd_lit;
+	    rb_gc_force_recycle((VALUE)head);
+	    head = tail;
+	}
+	else {
+	    nd_set_type(tail, NODE_ARRAY);
+	    tail->nd_head = NEW_STR(tail->nd_lit);
+	    list_concat(head, tail);
+	}
+	break;
+
+      case NODE_EVSTR:
+	if (htype == NODE_STR) {
+	    nd_set_type(head, NODE_DSTR);
+	}
+	list_append(head, tail);
+	break;
+    }
+    return head;
+}

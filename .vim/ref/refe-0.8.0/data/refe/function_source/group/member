@@ -1,0 +1,30 @@
+file.c:431
+static int
+group_member(gid)
+    GETGROUPS_T gid;
+{
+#ifndef _WIN32
+    if (getgid() ==  gid)
+	return Qtrue;
+
+# ifdef HAVE_GETGROUPS
+#  ifndef NGROUPS
+#   ifdef NGROUPS_MAX
+#    define NGROUPS NGROUPS_MAX
+#   else
+#    define NGROUPS 32
+#   endif
+#  endif
+    {
+	GETGROUPS_T gary[NGROUPS];
+	int anum;
+
+	anum = getgroups(NGROUPS, gary);
+	while (--anum >= 0)
+	    if (gary[anum] == gid)
+		return Qtrue;
+    }
+# endif
+#endif
+    return Qfalse;
+}

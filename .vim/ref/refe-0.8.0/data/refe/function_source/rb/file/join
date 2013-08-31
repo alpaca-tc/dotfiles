@@ -1,0 +1,57 @@
+file.c:1909
+static VALUE
+rb_file_join(ary, sep)
+    VALUE ary, sep;
+{
+    long len, i;
+    int taint = 0;
+    VALUE result, tmp;
+    char *name;
+
+    if (RARRAY(ary)->len == 0) return rb_str_new(0, 0);
+    if (OBJ_TAINTED(ary)) taint = 1;
+    if (OBJ_TAINTED(sep)) taint = 1;
+
+    len = 1;
+    for (i=0; i<RARRAY(ary)->len; i++) {
+	if (TYPE(RARRAY(ary)->ptr[i]) == T_STRING) {
+	    len += RSTRING(RARRAY(ary)->ptr[i])->len;
+	}
+	else {
+	    len += 10;
+	}
+    }
+    if (!NIL_P(sep) && TYPE(sep) == T_STRING) {
+	len += RSTRING(sep)->len * RARRAY(ary)->len - 1;
+    }
+    result = rb_str_buf_new(len);
+    for (i=0; i<RARRAY(ary)->len; i++) {
+	tmp = RARRAY(ary)->ptr[i];
+	switch (TYPE(tmp)) {
+	  case T_STRING:
+	    break;
+	  case T_ARRAY:
+	    if (rb_inspecting_p(tmp)) {
+		tmp = rb_str_new2("[...]");
+	    }
+	    else {
+		VALUE args[2];
+
+		args[0] = tmp;
+		args[1] = sep;
+		tmp = rb_protect_inspect(file_inspect_join, ary, (VALUE)args);
+	    }
+	    break;
+	  default:
+	    tmp = rb_obj_as_string(tmp);
+	}
+	name = StringValueCStr(result);
+	if (i > 0 && !NIL_P(sep) && !*chompdirsep(name))
+	    rb_str_buf_append(result, sep);
+	rb_str_buf_append(result, tmp);
+	if (OBJ_TAINTED(tmp)) taint = 1;
+    }
+
+    if (taint) OBJ_TAINT(result);
+    return result;
+}

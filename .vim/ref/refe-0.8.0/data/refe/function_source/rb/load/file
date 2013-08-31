@@ -1,0 +1,7 @@
+ruby.c:913
+void
+rb_load_file(fname)
+    char *fname;
+{
+    load_file(fname, 0);
+}

@@ -1,0 +1,3 @@
+--- create(subkey, desired = KEY_ALL_ACCESS, opt = REG_OPTION_RESERVED)
+    Win32::Registry.create [Win32::Registry/Registry.create](self, subkey, desired, opt) と同じです。
+

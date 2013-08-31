@@ -1,0 +1,26 @@
+io.c:739
+static long
+remain_size(fptr)
+    OpenFile *fptr;
+{
+    struct stat st;
+    off_t siz = BUFSIZ;
+    off_t pos;
+
+    if (feof(fptr->f)) return 0;
+    if (fstat(fileno(fptr->f), &st) == 0  && S_ISREG(st.st_mode)
+#ifdef __BEOS__
+	&& (st.st_dev > 3)
+#endif
+	)
+    {
+	pos = io_tell(fptr);
+	if (st.st_size > pos && pos >= 0) {
+	    siz = st.st_size - pos + 1;
+	    if (siz > LONG_MAX) {
+		rb_raise(rb_eIOError, "file too big for single read");
+	    }
+	}
+    }
+    return (long)siz;
+}

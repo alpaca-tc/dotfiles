@@ -1,0 +1,6 @@
+re.c:911
+static VALUE
+last_paren_match_getter()
+{
+    return rb_reg_match_last(rb_backref_get());
+}

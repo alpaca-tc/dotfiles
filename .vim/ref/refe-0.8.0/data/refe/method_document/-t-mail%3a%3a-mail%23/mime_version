@@ -1,0 +1,7 @@
+: mime_version( default = nil ) -> String
+: mime_version=( ver )
+    ver: String
+
+    MIME バージョン。現在は常に "1.0" です。
+    ヘッダが存在しない場合は default を返します。
+

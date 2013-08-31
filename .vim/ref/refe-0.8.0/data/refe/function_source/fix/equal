@@ -1,0 +1,12 @@
+numeric.c:1465
+static VALUE
+fix_equal(x, y)
+    VALUE x, y;
+{
+    if (FIXNUM_P(y)) {
+	return (FIX2LONG(x) == FIX2LONG(y))?Qtrue:Qfalse;
+    }
+    else {
+	return num_equal(x, y);
+    }
+}

@@ -1,0 +1,6 @@
+: new( port = TMail::StringPort.new, config = DEFAULT_CONFIG ) -> TMail::Mail
+    port: TMail::Port
+    config: TMail::Config
+
+    port から Mail オブジェクトを作成します。
+

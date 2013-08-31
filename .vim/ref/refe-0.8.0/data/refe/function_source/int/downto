@@ -1,0 +1,24 @@
+numeric.c:1742
+static VALUE
+int_downto(from, to)
+    VALUE from, to;
+{
+    if (FIXNUM_P(from) && FIXNUM_P(to)) {
+	long i, end;
+
+	end = FIX2LONG(to);
+	for (i=FIX2LONG(from); i >= end; i--) {
+	    rb_yield(LONG2FIX(i));
+	}
+    }
+    else {
+	VALUE i = from, c;
+
+	while (!(c = rb_funcall(i, '<', 1, to))) {
+	    rb_yield(i);
+	    i = rb_funcall(i, '-', 1, INT2FIX(1));
+	}
+	if (NIL_P(c)) rb_cmperr(i, to);
+    }
+    return from;
+}

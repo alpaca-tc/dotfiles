@@ -1,0 +1,9 @@
+struct.c:520
+static VALUE struct_entry _((VALUE, long));
+static VALUE
+struct_entry(s, n)
+    VALUE s;
+    long n;
+{
+    return rb_struct_aref(s, LONG2NUM(n));
+}

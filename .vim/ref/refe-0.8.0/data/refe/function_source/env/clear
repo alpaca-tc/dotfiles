@@ -1,0 +1,18 @@
+hash.c:1445
+static VALUE
+env_clear()
+{
+    volatile VALUE keys;
+    long i;
+    
+    rb_secure(4);
+    keys = env_keys();
+
+    for (i=0; i<RARRAY(keys)->len; i++) {
+	VALUE val = rb_f_getenv(Qnil, RARRAY(keys)->ptr[i]);
+	if (!NIL_P(val)) {
+	    env_delete(Qnil, RARRAY(keys)->ptr[i]);
+	}
+    }
+    return envtbl;
+}

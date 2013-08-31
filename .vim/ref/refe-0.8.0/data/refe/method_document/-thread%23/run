@@ -1,0 +1,9 @@
+--- run
+
+    停止状態(stop)のスレッドを再開させます。
+    Thread#wakeup [Thread/wakeup] と異なりすぐにスレッドの切り替え
+    を行います。死んでいるスレッドに対して実行すると ThreadError 
+    が発生します。
+
+    self を返します。
+

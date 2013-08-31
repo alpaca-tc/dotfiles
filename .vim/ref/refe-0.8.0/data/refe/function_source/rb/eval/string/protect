@@ -1,0 +1,23 @@
+eval.c:1433
+VALUE
+rb_eval_string_protect(str, state)
+    const char *str;
+    int *state;
+{
+    VALUE result = Qnil;	/* OK */
+    int status;
+
+    PUSH_TAG(PROT_NONE);
+    if ((status = EXEC_TAG()) == 0) {
+	result = rb_eval_string(str);
+    }
+    POP_TAG();
+    if (state) {
+	*state = status;
+    }
+    if (status != 0) {
+	return Qnil;
+    }
+
+    return result;
+}

@@ -1,0 +1,20 @@
+gc.c:536
+static inline int
+is_pointer_to_heap(ptr)
+    void *ptr;
+{
+    register RVALUE *p = RANY(ptr);
+    register RVALUE *heap_org;
+    register long i;
+
+    if (p < lomem || p > himem) return Qfalse;
+
+    /* check if p looks like a pointer */
+    for (i=0; i < heaps_used; i++) {
+	heap_org = heaps[i].slot;
+	if (heap_org <= p && p < heap_org + heaps[i].limit &&
+	    ((((char*)p)-((char*)heap_org))%sizeof(RVALUE)) == 0)
+	    return Qtrue;
+    }
+    return Qfalse;
+}

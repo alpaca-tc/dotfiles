@@ -1,0 +1,3 @@
+: int toklen(void) [macro]
+    現在のトークンの長さ。
+

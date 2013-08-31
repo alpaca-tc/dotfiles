@@ -1,0 +1,7 @@
+parse.y:5785
+void
+Init_sym()
+{
+    sym_tbl = st_init_strtable_with_size(200);
+    sym_rev_tbl = st_init_numtable_with_size(200);
+}

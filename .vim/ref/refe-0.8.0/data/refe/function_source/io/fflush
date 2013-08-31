@@ -1,0 +1,21 @@
+io.c:299
+static void
+io_fflush(f, fptr)
+    FILE *f;
+    OpenFile *fptr;
+{
+    int n;
+
+    if (!rb_thread_fd_writable(fileno(f))) {
+        rb_io_check_closed(fptr);
+    }
+    for (;;) {
+	TRAP_BEG;
+	n = fflush(f);
+	TRAP_END;
+	if (n != EOF) break;
+	if (!rb_io_wait_writable(fileno(f)))
+	    rb_sys_fail(fptr->path);
+    }
+    fptr->mode &= ~FMODE_WBUF;
+}

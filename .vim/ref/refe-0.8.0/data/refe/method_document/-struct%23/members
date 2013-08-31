@@ -1,0 +1,7 @@
+--- members
+
+    構造体のメンバの名前(文字列)の配列を返します。
+
+        Foo = Struct.new(:foo, :bar)
+        p Foo.new.members  # => ["foo", "bar"]
+

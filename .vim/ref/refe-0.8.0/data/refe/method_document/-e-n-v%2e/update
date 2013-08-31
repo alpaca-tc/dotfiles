@@ -1,0 +1,9 @@
+--- ENV.update(other)
+
+    ruby 1.8 feature
+
+    ハッシュ other の内容を環境変数にマージします。重複するキー
+    に対応する値は other の内容で上書きされます。
+
+    self を返します。
+

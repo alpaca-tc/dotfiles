@@ -1,0 +1,46 @@
+regex.c:660
+static void
+set_list_bits(c1, c2, b)
+    unsigned long c1, c2;
+    unsigned char *b;
+{
+  unsigned char sbc_size = b[-1];
+  unsigned short mbc_size = EXTRACT_UNSIGNED(&b[sbc_size]);
+  unsigned short beg, end, upb;
+
+  if (c1 > c2)
+    return;
+  b = &b[sbc_size + 2];
+
+  for (beg = 0, upb = mbc_size; beg < upb; ) {
+    unsigned short mid = (unsigned short)(beg + upb) >> 1;
+
+    if ((int)c1 - 1 > (int)EXTRACT_MBC(&b[mid*8+4]))
+      beg = mid + 1;
+    else
+      upb = mid;
+  }
+
+  for (end = beg, upb = mbc_size; end < upb; ) {
+    unsigned short mid = (unsigned short)(end + upb) >> 1;
+
+    if ((int)c2 >= (int)EXTRACT_MBC(&b[mid*8]) - 1)
+      end = mid + 1;
+    else
+      upb = mid;
+  }
+
+  if (beg != end) {
+    if (c1 > EXTRACT_MBC(&b[beg*8]))
+      c1 = EXTRACT_MBC(&b[beg*8]);
+    if (c2 < EXTRACT_MBC(&b[(end - 1)*8+4]))
+      c2 = EXTRACT_MBC(&b[(end - 1)*8+4]);
+  }
+  if (end < mbc_size && end != beg + 1)
+    /* NOTE: memcpy() would not work here.  */
+    memmove(&b[(beg + 1)*8], &b[end*8], (mbc_size - end)*8);
+  STORE_MBC(&b[beg*8 + 0], c1);
+  STORE_MBC(&b[beg*8 + 4], c2);
+  mbc_size += beg - end + 1;
+  STORE_NUMBER(&b[-2], mbc_size);
+}

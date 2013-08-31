@@ -1,0 +1,12 @@
+process.c:275
+static VALUE
+pst_wifexited(st)
+    VALUE st;
+{
+    int status = NUM2INT(st);
+
+    if (WIFEXITED(status))
+	return Qtrue;
+    else
+	return Qfalse;
+}

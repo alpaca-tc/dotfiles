@@ -1,0 +1,8 @@
+--- Resolv::DNS#getname(address)
+--- Resolv::DNS#getnames(address)
+--- Resolv::DNS#each_name(address) {|name| ...}
+    hostnames lookup methods.
+
+    address must be a instance of Resolv::IPv4, Resolv::IPv6 or String.
+    Lookupped name is represented as an instance of Resolv::Name.
+

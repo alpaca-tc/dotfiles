@@ -1,0 +1,26 @@
+io.c:1446
+static VALUE
+rb_io_close_read(io)
+    VALUE io;
+{
+    OpenFile *fptr;
+    int n;
+
+    if (rb_safe_level() >= 4 && !OBJ_TAINTED(io)) {
+	rb_raise(rb_eSecurityError, "Insecure: can't close");
+    }
+    GetOpenFile(io, fptr);
+    if (fptr->f2 == 0 && (fptr->mode & FMODE_WRITABLE)) {
+	rb_raise(rb_eIOError, "closing non-duplex IO for reading");
+    }
+    if (fptr->f2 == 0) {
+	return rb_io_close(io);
+    }
+    n = fclose(fptr->f);
+    fptr->mode &= ~FMODE_READABLE;
+    fptr->f = fptr->f2;
+    fptr->f2 = 0;
+    if (n != 0) rb_sys_fail(fptr->path);
+
+    return Qnil;
+}

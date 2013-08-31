@@ -1,0 +1,7 @@
+: from( default = nil ) -> [String]
+: from=( specs )
+    specs: String / [String]
+    default: Object
+
+    From: アドレスの spec の配列。
+

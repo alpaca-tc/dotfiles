@@ -1,0 +1,79 @@
+--- flock(operation)
+
+    ファイルをロックします。ロックに成功した場合は 0 を返します。失敗
+    した場合は例外 Errno::EXXX が発生します。LOCK_NB が指
+    定されていて、ブロックされそうな場合には false を返します。
+    有効な operation は以下の通りです。
+
+    * LOCK_SH
+
+      共有ロック。複数のプロセスが同時にロックを共有できます。
+
+      システムによってはロック対象のファイルは読み込みモード
+      ("r", "r+" など)でオープンされている必要があります。そのよ
+      うなシステムでは読み込み可能でないファイルに対するロックは例外 
+      Errno::EBADF [Errno::EXXX] が発生するかもしれません。
+
+    * LOCK_EX
+
+      排他ロック。同時にはただひとつのプロセスだけがロックを保持できます。
+
+      システムによってはロック対象のファイルは書き込みモード
+      ("w", "r+" など)でオープンされている必要があります。そのよ
+      うなシステムでは書き込み可能でないファイルに対するロックは例外 
+      Errno::EBADF [Errno::EXXX] が発生するかもしれません。
+
+    * LOCK_UN
+
+      アンロック。
+
+      この明示的なアンロック以外に、Rubyインタプリタの終了
+      (プロセスの終了)によっても自動的にロック状態は解除されます。
+
+    * LOCK_NB
+
+      ノンブロックモード。
+
+      LOCK_SH | LOCK_NB のように他の指定と or することで指
+      定します。この指定がない場合、ブロックされる条件での flock 
+      の呼び出しはロックが解除されるまでブロックされます。
+
+      LOCK_NB の指定がある場合、ブロックされる条件での
+      flock は false を返します。
+
+      「ブロックされる条件」とは
+      * 他のプロセスが排他ロックをすでに行っている場合にロックを行う
+      * 他のプロセスがロックしている状態で排他ロックを行う
+      の場合です
+
+    以上の定数は File::Constants モジュールで定義されています。
+
+    例:
+
+        f = File.open("/tmp/foo", "w")
+
+        f.flock(File::LOCK_EX)
+        puts "locked by process1"
+
+        fork {
+          f = File.open("/tmp/foo", "r")
+          f.flock(File::LOCK_SH)
+          puts "locked by process2"
+          sleep 5
+          puts "unlocked by process2"
+        }
+
+        sleep 5
+
+        f.flock(File::LOCK_UN)
+        puts "unlocked by process1"
+        sleep 1 # <- 子プロセスが確実に先にロックするための sleep
+        f.flock(File::LOCK_EX)
+        puts "re-locked by process1"
+
+        => locked by process1
+           unlocked by process1
+           locked by process2
+           unlocked by process2
+           re-locked by process1
+

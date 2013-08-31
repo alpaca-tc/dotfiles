@@ -1,0 +1,10 @@
+file.c:2560
+static VALUE
+rb_stat_s(obj)
+    VALUE obj;
+{
+    off_t size = get_stat(obj)->st_size;
+
+    if (size == 0) return Qnil;
+    return OFFT2NUM(size);
+}

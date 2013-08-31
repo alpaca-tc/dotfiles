@@ -1,0 +1,5 @@
+--- Net::Telnet#telnetmode
+--- Net::Telnet#telnetmode(bool)
+--- Net::Telnet#telnetmode = bool
+    ...
+

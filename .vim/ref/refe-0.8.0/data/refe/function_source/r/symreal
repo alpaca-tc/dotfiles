@@ -1,0 +1,12 @@
+marshal.c:867
+static ID
+r_symreal(arg)
+    struct load_arg *arg;
+{
+    ID id;
+
+    id = rb_intern(RSTRING(r_bytes(arg))->ptr);
+    st_insert(arg->symbols, arg->symbols->num_entries, id);
+
+    return id;
+}

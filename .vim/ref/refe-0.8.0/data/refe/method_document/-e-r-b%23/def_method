@@ -1,0 +1,8 @@
+--- ERB#def_method(mod, methodname, fname='(ERB)')
+    変換したRubyスクリプトをメソッドとして定義する。
+    定義先のモジュールはmodで指定し、メソッド名はmethodnameで指定する。
+    fnameはスクリプトを定義する際のファイル名である。主にエラー時に活躍する。
+    
+      erb = ERB.new(script)
+      erb.def_method(MyClass, 'foo(bar)', 'foo.erb')
+

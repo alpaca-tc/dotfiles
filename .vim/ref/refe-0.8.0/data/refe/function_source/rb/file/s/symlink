@@ -1,0 +1,18 @@
+file.c:1269
+static VALUE
+rb_file_s_symlink(klass, from, to)
+    VALUE klass, from, to;
+{
+#ifdef HAVE_SYMLINK
+    SafeStringValue(from);
+    SafeStringValue(to);
+
+    if (symlink(StringValueCStr(from), StringValueCStr(to)) < 0) {
+	sys_fail2(from, to);
+    }
+    return INT2FIX(0);
+#else
+    rb_notimplement();
+    return Qnil;		/* not reached */
+#endif
+}

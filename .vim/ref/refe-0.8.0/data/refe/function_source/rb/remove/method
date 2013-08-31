@@ -1,0 +1,8 @@
+eval.c:451
+void
+rb_remove_method(klass, name)
+    VALUE klass;
+    const char *name;
+{
+    remove_method(klass, rb_intern(name));
+}

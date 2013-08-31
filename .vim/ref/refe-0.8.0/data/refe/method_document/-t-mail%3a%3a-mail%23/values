@@ -1,0 +1,3 @@
+: values -> [TMail::HeaderField]
+    登録されている全てのヘッダオブジェクトの配列を返します。
+

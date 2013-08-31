@@ -136,11 +136,11 @@ options word
 
 # Web development#{{{
 snippet debug
-    console.debug(${1});
+    console.debug(${1:#:`expand("<cword>")`});
 
 snippet log
-    console.log(${1});
+    console.log(${1:#:`expand("<cword>")`});
 
 snippet warn
-    console.warn(${1});
+    console.warn(${1:#:`expand("<cword>")`});
 #}}}

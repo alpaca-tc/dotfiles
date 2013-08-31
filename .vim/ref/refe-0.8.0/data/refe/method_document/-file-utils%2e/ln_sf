@@ -1,0 +1,5 @@
+--- FileUtils.ln_sf( src, dest, *options )
+  Options: noop verbose
+
+  ln_s(src,dest,:force) と同じです。
+

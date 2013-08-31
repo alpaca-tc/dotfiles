@@ -1,0 +1,37 @@
+--- instance_methods([inherited_too])
+--- public_instance_methods([inherited_too])
+
+    そのモジュールで定義されている public メソッド名の一覧を配列で返します。
+
+    inherited_too が真であれば(デフォルトは偽)、スーパー
+    クラスのメソッドも探索します。
+
+    (ruby 1.8 feature: 引数のデフォルトは真に変わる予定です。
+    引数を省略すると警告が出るので、変更までは引数を明示することが望ま
+    れます)
+
+    ruby 1.7 feature: instance_methods は、protected メソッドも
+    含みます。
+
+    Object#methods [Object/methods],
+    Object#public_methods [Object/public_methods],
+    も参照してください。
+
+        class Foo
+          private;   def private_foo()   end
+          protected; def protected_foo() end
+          public;    def public_foo()    end
+        end
+
+        class Bar < Foo
+        end
+
+        p Bar.instance_methods(true)           - Object.instance_methods(true)
+        p Bar.public_instance_methods(true)    - Object.public_instance_methods(true)
+        p Bar.private_instance_methods(true)   - Object.private_instance_methods(true)
+        p Bar.protected_instance_methods(true) - Object.protected_instance_methods(true)
+        => ["public_foo"]   # version 1.7 以降、["protected_foo", "public_foo"]
+           ["public_foo"]
+           ["private_foo"]
+           ["protected_foo"]
+

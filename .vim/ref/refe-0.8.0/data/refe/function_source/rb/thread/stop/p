@@ -1,0 +1,11 @@
+eval.c:9632
+static VALUE
+rb_thread_stop_p(thread)
+    VALUE thread;
+{
+    rb_thread_t th = rb_thread_check(thread);
+
+    if (rb_thread_dead(th)) return Qtrue;
+    if (th->status == THREAD_STOPPED) return Qtrue;
+    return Qfalse;
+}

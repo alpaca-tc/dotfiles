@@ -1,0 +1,8 @@
+--- ObjectSpace.call_finalizer(obj)
+
+    obj をファイナライザの対象オブジェクトとして設定します。
+
+    obj を返します。
+
+    このメソッドは、obsolete です。
+

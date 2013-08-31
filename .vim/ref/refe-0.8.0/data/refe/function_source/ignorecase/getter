@@ -1,0 +1,6 @@
+re.c:1651
+static VALUE
+ignorecase_getter()
+{
+    return ruby_ignorecase?Qtrue:Qfalse;
+}

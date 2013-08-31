@@ -1,0 +1,27 @@
+sprintf.c:630
+static void
+fmt_setup(buf, c, flags, width, prec)
+    char *buf;
+    int c;
+    int flags, width, prec;
+{
+    *buf++ = '%';
+    if (flags & FSHARP) *buf++ = '#';
+    if (flags & FPLUS)  *buf++ = '+';
+    if (flags & FMINUS) *buf++ = '-';
+    if (flags & FZERO)  *buf++ = '0';
+    if (flags & FSPACE) *buf++ = ' ';
+
+    if (flags & FWIDTH) {
+	sprintf(buf, "%d", width);
+	buf += strlen(buf);
+    }
+
+    if (flags & FPREC) {
+	sprintf(buf, ".%d", prec);
+	buf += strlen(buf);
+    }
+
+    *buf++ = c;
+    *buf = '\0';
+}

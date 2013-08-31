@@ -1,0 +1,7 @@
+numeric.c:1711
+static VALUE
+fix_size(fix)
+    VALUE fix;
+{
+    return INT2FIX(sizeof(long));
+}

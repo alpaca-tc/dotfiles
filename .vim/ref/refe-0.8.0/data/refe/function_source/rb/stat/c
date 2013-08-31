@@ -1,0 +1,9 @@
+file.c:2389
+static VALUE
+rb_stat_c(obj)
+    VALUE obj;
+{
+    if (S_ISCHR(get_stat(obj)->st_mode)) return Qtrue;
+
+    return Qfalse;
+}

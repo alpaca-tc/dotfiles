@@ -1,0 +1,40 @@
+regex.c:2715
+static int
+bm_search(little, llen, big, blen, skip, translate)
+     unsigned char *little;
+     int llen;
+     unsigned char *big;
+     int blen;
+     int *skip;
+     unsigned char *translate;
+{
+  int i, j, k;
+
+  i = llen-1;
+  if (translate) {
+    while (i < blen) {
+      k = i;
+      j = llen-1;
+      while (j >= 0 && translate[big[k]] == translate[little[j]]) {
+	k--;
+	j--;
+      }
+      if (j < 0) return k+1;
+
+      i += skip[translate[big[i]]];
+    }
+    return -1;
+  }
+  while (i < blen) {
+    k = i;
+    j = llen-1;
+    while (j >= 0 && big[k] == little[j]) {
+      k--;
+      j--;
+    }
+    if (j < 0) return k+1;
+
+    i += skip[big[i]];
+  }
+  return -1;
+}

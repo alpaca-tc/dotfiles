@@ -1,0 +1,2 @@
+: static VALUE undef_getter(ID id)
+

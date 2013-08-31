@@ -1,0 +1,16 @@
+process.c:1570
+static VALUE
+p_sys_setresgid(obj, rid, eid, sid)
+    VALUE obj, rid, eid, sid;
+{
+#if defined HAVE_SETRESGID
+    rb_secure(2);
+    if (under_gid_switch) {
+	rb_raise(rb_eRuntimeError, "can't handle GID during evaluating the block given to the Process::GID.switch method");
+    }
+    if (setresgid(NUM2INT(rid),NUM2INT(eid),NUM2INT(sid)) != 0) rb_sys_fail(0);
+#else
+    rb_notimplement();
+#endif
+    return Qnil;
+}

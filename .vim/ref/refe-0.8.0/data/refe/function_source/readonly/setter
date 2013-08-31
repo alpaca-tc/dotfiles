@@ -1,0 +1,9 @@
+variable.c:428
+static void
+readonly_setter(val, id, var)
+    VALUE val;
+    ID id;
+    void *var;
+{
+    rb_name_error(id, "%s is a read-only variable", rb_id2name(id));
+}

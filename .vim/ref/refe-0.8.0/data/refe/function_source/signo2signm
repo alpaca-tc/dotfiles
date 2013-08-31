@@ -1,0 +1,12 @@
+signal.c:182
+static char*
+signo2signm(no)
+    int no;
+{
+    struct signals *sigs;
+
+    for (sigs = siglist; sigs->signm; sigs++)
+	if (sigs->signo == no)
+	    return sigs->signm;
+    return 0;
+}

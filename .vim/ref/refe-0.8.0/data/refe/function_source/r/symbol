@@ -1,0 +1,10 @@
+marshal.c:879
+static ID
+r_symbol(arg)
+    struct load_arg *arg;
+{
+    if (r_byte(arg) == TYPE_SYMLINK) {
+	return r_symlink(arg);
+    }
+    return r_symreal(arg);
+}

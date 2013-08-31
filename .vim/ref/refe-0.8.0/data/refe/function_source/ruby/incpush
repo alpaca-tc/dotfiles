@@ -1,0 +1,37 @@
+ruby.c:174
+void
+ruby_incpush(path)
+    const char *path;
+{
+    const char sep = PATH_SEP_CHAR;
+
+    if (path == 0) return;
+#if defined(__CYGWIN__)
+    {
+	char rubylib[FILENAME_MAX];
+	conv_to_posix_path(path, rubylib, FILENAME_MAX);
+	path = rubylib;
+    }
+#endif
+    if (strchr(path, sep)) {
+	const char *p, *s;
+	VALUE ary = rb_ary_new();
+
+	p = path;
+	while (*p) {
+	    while (*p == sep) p++;
+	    if (s = strchr(p, sep)) {
+		rb_ary_push(ary, rubylib_mangled_path(p, (int)(s-p)));
+		p = s + 1;
+	    }
+	    else {
+		rb_ary_push(ary, rubylib_mangled_path2(p));
+		break;
+	    }
+	}
+	rb_ary_concat(rb_load_path, ary);
+    }
+    else {
+	rb_ary_push(rb_load_path, rubylib_mangled_path2(path));
+    }
+}

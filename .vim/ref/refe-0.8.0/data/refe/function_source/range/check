@@ -1,0 +1,11 @@
+range.c:28
+static VALUE
+range_check(args)
+    VALUE *args;
+{
+    VALUE v;
+
+    v = rb_funcall(args[0], id_cmp, 1, args[1]);
+    if (NIL_P(v)) range_failed();
+    return Qnil;
+}

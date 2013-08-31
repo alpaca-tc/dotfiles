@@ -1,0 +1,54 @@
+eval.c:1147
+void
+ruby_init()
+{
+    static int initialized = 0;
+    static struct FRAME frame;
+    static struct iter iter;
+    int state;
+
+    if (initialized)
+	return;
+    initialized = 1;
+
+    ruby_frame = top_frame = &frame;
+    ruby_iter = &iter;
+
+#ifdef __MACOS__
+    rb_origenviron = 0;
+#else
+    rb_origenviron = environ;
+#endif
+
+    Init_stack((void*)&state);
+    Init_heap();
+    PUSH_SCOPE();
+    ruby_scope->local_vars = 0;
+    ruby_scope->local_tbl  = 0;
+    top_scope = ruby_scope;
+    /* default visibility is private at toplevel */
+    SCOPE_SET(SCOPE_PRIVATE);
+
+    PUSH_TAG(PROT_NONE);
+    if ((state = EXEC_TAG()) == 0) {
+	rb_call_inits();
+	ruby_class = rb_cObject;
+	ruby_frame->self = ruby_top_self;
+	top_cref = rb_node_newnode(NODE_CREF,rb_cObject,0,0);
+	ruby_cref = top_cref;
+	rb_define_global_const("TOPLEVEL_BINDING", rb_f_binding(ruby_top_self));
+#ifdef __MACOS__
+	_macruby_init();
+#endif
+	ruby_prog_init();
+	ALLOW_INTS;
+    }
+    POP_TAG();
+    if (state) {
+	error_print();
+	exit(EXIT_FAILURE);
+    }
+    POP_SCOPE();
+    ruby_scope = top_scope;
+    ruby_running = 1;
+}

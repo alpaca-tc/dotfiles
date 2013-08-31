@@ -1,0 +1,16 @@
+bignum.c:949
+static VALUE
+rb_big_neg(x)
+    VALUE x;
+{
+    VALUE z = rb_big_clone(x);
+    long i = RBIGNUM(x)->len;
+    BDIGIT *ds = BDIGITS(z);
+
+    if (!RBIGNUM(x)->sign) get2comp(z, Qtrue);
+    while (i--) ds[i] = ~ds[i];
+    if (RBIGNUM(x)->sign) get2comp(z, Qfalse);
+    RBIGNUM(z)->sign = !RBIGNUM(z)->sign;
+
+    return bignorm(z);
+}

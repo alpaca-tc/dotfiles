@@ -1,0 +1,11 @@
+compar.c:92
+static VALUE
+cmp_lt(x, y)
+    VALUE x, y;
+{
+    VALUE c = rb_funcall(x, cmp, 1, y);
+
+    if (NIL_P(c)) return cmperr();
+    if (rb_cmpint(c, x, y) < 0) return Qtrue;
+    return Qfalse;
+}

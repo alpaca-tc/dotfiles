@@ -1,0 +1,13 @@
+--- URI::Generic.new(scheme, userinfo, host, port, registry, path, opaque, query, fragment[, arg_check])
+
+#    汎用的な構成要素から URI::Generic オブジェクトを生成します。build 
+#    と異なり、引数の正当性を検査しません。
+    各引数を成分とする汎用URIオブジェクトを生成して返します。
+
+    use_registry が偽のとき、new に偽でない registry 
+    部が与えられると例外 URI::InvalidURIError が起こります。
+
+    第10引数arg_checkとして真が与えられた場合は、
+    値を返す前に各引数が字句規則に適合しているか否かを検査し、
+    適合しない場合は例外 URI::InvalidComponentError が起ります。
+

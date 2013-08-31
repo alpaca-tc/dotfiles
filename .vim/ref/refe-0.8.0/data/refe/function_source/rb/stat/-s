@@ -1,0 +1,11 @@
+file.c:2367
+static VALUE
+rb_stat_S(obj)
+    VALUE obj;
+{
+#ifdef S_ISSOCK
+    if (S_ISSOCK(get_stat(obj)->st_mode)) return Qtrue;
+
+#endif
+    return Qfalse;
+}

@@ -1,0 +1,14 @@
+variable.c:359
+static void
+undef_setter(val, id, data, var)
+    VALUE val;
+    ID id;
+    void *data;
+    struct global_variable *var;
+{
+    var->getter = val_getter;
+    var->setter = val_setter;
+    var->marker = val_marker;
+
+    var->data = (void*)val;
+}

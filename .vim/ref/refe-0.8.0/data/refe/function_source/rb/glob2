@@ -1,0 +1,11 @@
+dir.c:851
+static void
+rb_glob2(path, flags, func, arg)
+    char *path;
+    int flags;
+    void (*func) _((const char*, VALUE));
+    VALUE arg;
+{
+    int status = glob_helper(path, 0, flags, func, arg);
+    if (status) rb_jump_tag(status);
+}

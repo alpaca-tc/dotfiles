@@ -1,0 +1,10 @@
+eval.c:7592
+static VALUE
+bmcall(args, method)
+    VALUE args, method;
+{
+    volatile VALUE a;
+
+    a = svalue_to_avalue(args);
+    return method_call(RARRAY(a)->len, RARRAY(a)->ptr, method);
+}

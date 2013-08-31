@@ -1,0 +1,13 @@
+io.c:3848
+static VALUE
+argf_readchar()
+{
+    VALUE c;
+
+    NEXT_ARGF_FORWARD();
+    c = argf_getc();
+    if (NIL_P(c)) {
+	rb_eof_error();
+    }
+    return c;
+}

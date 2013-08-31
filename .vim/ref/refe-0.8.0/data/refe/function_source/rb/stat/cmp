@@ -1,0 +1,17 @@
+file.c:136
+static VALUE
+rb_stat_cmp(self, other)
+    VALUE self, other;
+{
+    if (rb_obj_is_kind_of(other, rb_obj_class(self))) {
+	time_t t1 = get_stat(self)->st_mtime;
+	time_t t2 = get_stat(other)->st_mtime;
+	if (t1 == t2)
+	    return INT2FIX(0);
+	else if (t1 < t2)
+	    return INT2FIX(-1);
+	else
+	    return INT2FIX(1);
+    }
+    return Qnil;
+}

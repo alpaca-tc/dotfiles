@@ -1,0 +1,4 @@
+--- Net::FTP#debug_mode = boolean
+
+    デバッグモードの値を設定します。
+

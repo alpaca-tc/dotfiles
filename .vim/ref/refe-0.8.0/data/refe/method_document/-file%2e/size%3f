@@ -1,0 +1,4 @@
+--- File.size?(path)
+
+    FileTest.size? と同じです。
+

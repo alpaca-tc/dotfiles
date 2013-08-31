@@ -1,0 +1,17 @@
+--- File.extname(filename)      ruby 1.7 feature
+
+    ファイル名 filename の拡張子部分(最後の "." に続く文字列)を
+    返します。ディレクトリ名に含まれる "." や、ファイル名先頭の "." 
+    は拡張子の一部としては見なされません。filename に拡張子が含
+    まれない場合は空文字列を返します。
+
+      p File.extname("foo/foo.txt")     # => ".txt"
+      p File.extname("foo/foo.tar.gz")  # => ".gz"
+      p File.extname("foo/bar")         # => ""
+      p File.extname("foo/.bar")        # => ""
+      p File.extname("foo.txt/bar")     # => ""
+      p File.extname(".foo")            # => ""
+
+
+    File.basename, File.dirname も参照。
+

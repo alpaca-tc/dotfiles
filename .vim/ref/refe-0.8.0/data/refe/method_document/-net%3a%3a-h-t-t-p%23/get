@@ -1,0 +1,35 @@
+: get( path, header = nil )
+: get( path, header = nil ) {|str| .... }
+    サーバ上の path にあるエンティティを取得します。また header が nil
+    でなければ、リクエストを送るときにその内容を HTTP ヘッダとして書き
+    こみます。header はハッシュで、「ヘッダ名 => 内容」のような形式で
+    なければいけません。
+
+    戻り値は、バージョン 1.1 では HTTPResponse とエンティティボディ文字列の
+    二要素の配列です。1.2 では HTTPResponse ただひとつのみです。この場合、
+    エンティティボディは response.body で得られます。
+
+    ブロックとともに呼ばれた時はエンティティボディを少しづつブロックに
+    与えます。
+
+    1.1 では 3xx (再試行可能なエラー)に対しても例外を発生します。この場合
+    HTTPResponse は例外オブジェクトから err.response で得ることができます。
+    一方 1.2 では全く例外を発生しません。
+
+        # version 1.1 (bundled with Ruby 1.6)
+        response, body = http.get( '/index.html' )
+
+        # version 1.2 (bundled with Ruby 1.7 or later)
+        response = http.get( '/index.html' )
+
+        # compatible in both version
+        response , = http.get( '/index.html' )
+        response.body
+        
+        # using block
+        File.open( 'save.txt', 'w' ) {|f|
+            http.get( '/~foo/', nil ) do |str|
+              f.write str
+            end
+        }
+

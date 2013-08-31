@@ -1,0 +1,4 @@
+: static NODE *newline_node(NODE *node)
+    nodeがNULLでなければ現在パース中の行番号を格納した
+    NODE_NEWLINEをnodeの前にに付加し、それを返す。
+

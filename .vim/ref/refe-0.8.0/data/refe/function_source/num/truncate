@@ -1,0 +1,7 @@
+numeric.c:871
+static VALUE
+num_truncate(num)
+    VALUE num;
+{
+    return flo_truncate(rb_Float(num));
+}

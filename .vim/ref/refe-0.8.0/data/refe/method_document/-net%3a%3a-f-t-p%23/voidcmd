@@ -1,0 +1,5 @@
+--- Net::FTP#voidcmd(cmd)
+
+    sendcmdと同様にサーバーにコマンドを送りますが、nilを返す点と、
+    応答コードが2xx以外の場合、例外FTPReplyErrorが発生する点が異なります。
+

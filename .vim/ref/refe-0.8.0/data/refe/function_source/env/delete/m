@@ -1,0 +1,11 @@
+hash.c:1033
+static VALUE
+env_delete_m(obj, name)
+    VALUE obj, name;
+{
+    VALUE val;
+
+    val = env_delete(obj, name);
+    if (NIL_P(val) && rb_block_given_p()) rb_yield(name);
+    return val;
+}

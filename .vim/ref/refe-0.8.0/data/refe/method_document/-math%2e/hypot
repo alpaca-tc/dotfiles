@@ -1,0 +1,4 @@
+--- Math.hypot(x, y) ruby 1.7 feature
+
+    sqrt(x*x + y*y) を返します。
+

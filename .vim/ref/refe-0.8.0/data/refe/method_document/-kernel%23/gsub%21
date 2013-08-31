@@ -1,0 +1,24 @@
+--- gsub(pattern[, replace])
+--- gsub!(pattern[, replace])
+--- gsub(pattern) {|matched| ... }
+--- gsub!(pattern) {|matched| ... }
+
+    組み込み変数 $_ の指す文字列内で pattern に
+    マッチする部分を全て replace に置き換えた文字列を返します。
+    引数 replace が省略された時にはイテレータとして動作し、ブロッ
+    クを評価した結果で置換を行います。ブロックには引数としてマッチした
+    文字列が渡されます。
+
+       $_ = "foobar"
+       p gsub(/o+/) {|m|
+         m.upcase
+       }
+       # => "fOObar"
+
+    gsub! は $_ の指している文字列そのものを書き換えます。
+    詳細は、String#gsub [String/gsub] を参照してください。
+    String#gsub と関数 gsub では以下の点で違いがあります。
+
+    * gsubメソッドは $_ の値をコピーして、コピーの方を更新し、
+      $_ に((*再代入*))します。
+

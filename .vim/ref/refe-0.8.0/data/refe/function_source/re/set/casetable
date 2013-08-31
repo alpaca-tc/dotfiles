@@ -1,0 +1,7 @@
+regex.c:218
+void
+re_set_casetable(table)
+     const char *table;
+{
+  translate = (const unsigned char*)table;
+}

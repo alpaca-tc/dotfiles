@@ -1,0 +1,17 @@
+util.c:288
+int
+mblen(const char *s, size_t n)
+{
+    static int need_init = 1;
+    if (need_init) {
+	make_dbcs_table();
+	need_init = 0;
+    }
+    if (s) {
+	if (n == 0 || *s == 0)
+	    return 0;
+	return dbcs_table[(unsigned char)*s] + 1;
+    }
+    else
+	return 1;
+}

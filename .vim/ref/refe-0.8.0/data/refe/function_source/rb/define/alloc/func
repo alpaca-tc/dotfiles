@@ -1,0 +1,9 @@
+eval.c:324
+void
+rb_define_alloc_func(klass, func)
+    VALUE klass;
+    VALUE (*func) _((VALUE));
+{
+    Check_Type(klass, T_CLASS);
+    rb_add_method(CLASS_OF(klass), ID_ALLOCATOR, NEW_CFUNC(func, 0), NOEX_PRIVATE);
+}

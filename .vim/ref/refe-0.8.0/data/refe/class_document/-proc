@@ -1,0 +1,56 @@
+Proc はブロックをコンテキスト(ローカル変数のスコープやスタックフ
+レーム)とともにオブジェクト化した手続きオブジェクトです。Proc は
+ローカル変数のスコープを導入しないことを除いて名前のない関数のように使
+えます(ダイナミックローカル変数は Proc ローカル
+の変数として使えます)。
+
+Proc がローカル変数のスコープを保持していることは以下の例で
+変数 var を参照できていることからわかります。
+
+    var = 1
+    $foo = Proc.new { var }
+    var = 2
+
+    def foo
+      $foo.call
+    end
+
+    p foo       # => 2
+
+Proc を生成したメソッドからリターンしてしまった後は Proc 
+からの return, retry は例外 
+LocalJumpError を発生させます。
+
+    def foo
+      proc { return }
+    end
+
+    foo.call
+    # => in `call': return from proc-closure (LocalJumpError)
+
+    def foo
+      proc { retry }
+    end
+
+    foo.call
+    # => in `call': retry from proc-closure (LocalJumpError)
+
+イテレータに対して Proc オブジェクトを `&' を指定して渡すとイテ
+レータブロックのように動作しますが、厳密には以下の違いがあります
+。
+
+        # 問題なし
+        (1..5).each { break }
+
+        # ruby 1.6.7, 1.8 で問題なし。1.6.8 では例外
+        proc = Proc.new { break }
+        (1..5).each(&proc)
+
+        # ruby 1.6 では、LocalJumpError
+        # ruby 1.8 では、each 再実行
+        proc = Proc.new { retry }
+        (1..5).each(&proc)
+        #=> retry from proc-closure (LocalJumpError)
+
+これは、Proc オブジェクトがイテレータブロックとして振舞う際の制
+限です。

@@ -1,0 +1,12 @@
+hash.c:825
+static int
+rb_hash_search_value(key, value, data)
+    VALUE key, value, *data;
+{
+    if (key == Qundef) return ST_CONTINUE;
+    if (rb_equal(value, data[1])) {
+	data[0] = Qtrue;
+	return ST_STOP;
+    }
+    return ST_CONTINUE;
+}

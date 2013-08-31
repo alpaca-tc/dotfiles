@@ -1,0 +1,7 @@
+: subject( default = nil ) -> String
+: subject=( sbj )
+    sbj: String
+
+    Subject: の内容。
+    Subject: が存在しないときは default を返します。
+

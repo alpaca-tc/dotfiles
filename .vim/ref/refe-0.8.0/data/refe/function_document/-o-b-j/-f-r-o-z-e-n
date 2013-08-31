@@ -1,0 +1,2 @@
+: int OBJ_FROZEN(VALUE x)
+

@@ -1,0 +1,11 @@
+--- self == other
+--- self > other
+--- self >= other
+--- self < other
+--- self <= other
+
+    文字列の比較。変数 $= の値が真である時、比較はア
+    ルファベットの大文字小文字を無視して行われます。
+    ($=変数はいずれ廃止されることになっています obsolete 
+    を参照)
+

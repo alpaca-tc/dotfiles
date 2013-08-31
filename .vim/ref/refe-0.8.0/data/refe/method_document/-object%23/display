@@ -1,0 +1,10 @@
+--- display([out=$defout])
+
+    オブジェクトを out に出力します。以下のように定義できます。
+
+      class Object
+        def display(out=$defout)
+          out.print to_s
+        end
+      end
+

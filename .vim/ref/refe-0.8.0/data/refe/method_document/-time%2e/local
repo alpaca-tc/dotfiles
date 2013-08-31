@@ -1,0 +1,8 @@
+--- Time.local(year[, mon[, day[, hour[, min[, sec[, usec]]]]]])
+--- Time.local(sec, min, hour, mday, mon, year, wday, yday, isdst, zone)
+--- Time.mktime(year[, mon[, day[, hour[, min[, sec[, usec]]]]]])
+--- Time.mktime(sec, min, hour, mday, mon, year, wday, yday, isdst, zone)
+
+    引数で指定した地方時の Time オブジェクトを返します。引数の扱
+    いは Time.gm と同じです。
+

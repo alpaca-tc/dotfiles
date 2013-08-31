@@ -1,0 +1,7 @@
+error.c:507
+static VALUE
+nometh_err_args(self)
+    VALUE self;
+{
+    return rb_attr_get(self, rb_intern("args"));
+}

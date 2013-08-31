@@ -1,0 +1,11 @@
+hash.c:577
+static int
+replace_i(key, val, hash)
+    VALUE key, val, hash;
+{
+    if (key != Qundef) {
+	rb_hash_aset(hash, key, val);
+    }
+
+    return ST_CONTINUE;
+}

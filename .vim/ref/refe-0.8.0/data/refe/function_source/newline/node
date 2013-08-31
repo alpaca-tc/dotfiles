@@ -1,0 +1,14 @@
+parse.y:4438
+static NODE*
+newline_node(node)
+    NODE *node;
+{
+    NODE *nl = 0;
+    if (node) {
+	if (nd_type(node) == NODE_NEWLINE) return node;
+        nl = NEW_NEWLINE(node);
+        fixpos(nl, node);
+        nl->nd_nth = nd_line(node);
+    }
+    return nl;
+}

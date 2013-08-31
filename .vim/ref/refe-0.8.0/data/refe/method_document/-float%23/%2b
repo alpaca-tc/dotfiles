@@ -1,0 +1,9 @@
+--- self + other
+--- self - other
+--- self * other
+--- self / other
+--- self % other
+--- self ** other
+
+    算術演算子。それぞれ和、差、積、商、剰余、冪を計算します。
+

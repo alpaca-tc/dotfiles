@@ -1,0 +1,7 @@
+: ==( other )
+: eql?( other )
+    other: Object
+
+    #addresses の同値判定によって同じ内容かどうかを判断します。
+    #name は影響しません。
+

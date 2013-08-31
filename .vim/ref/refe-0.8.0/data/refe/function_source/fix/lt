@@ -1,0 +1,15 @@
+numeric.c:1523
+static VALUE
+fix_lt(x, y)
+    VALUE x, y;
+{
+    if (FIXNUM_P(y)) {
+	long a = FIX2LONG(x), b = FIX2LONG(y);
+
+	if (a < b) return Qtrue;
+	return Qfalse;
+    }
+    else {
+	return rb_num_coerce_relop(x, y);
+    }
+}

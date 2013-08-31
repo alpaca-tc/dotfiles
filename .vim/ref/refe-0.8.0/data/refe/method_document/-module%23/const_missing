@@ -1,0 +1,19 @@
+--- const_missing(name)       ruby 1.8 feature
+
+    定義されていない定数を参照したときに Ruby がこのメソッドを呼び
+    ます。参照した定数名の Symbol が引数に渡されます。
+
+    デフォルトではこのメソッドは例外 NameError を発生させます。
+
+        class Foo
+          def Foo.const_missing(id)
+            warn "undefined constant #{id.inspect}"
+          end
+
+          Bar
+        end
+        Foo::Bar
+
+        # => undefined constant :Bar
+             undefined constant :Bar
+

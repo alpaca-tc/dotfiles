@@ -1,0 +1,6 @@
+: transfer_encoding( default = nil ) -> String
+: transfer_encoding=( encoding )
+    encoding: String
+    転送時に適用したエンコーディング (Content-Transfer-Encoding)。
+    '7bit' '8bit' 'Base64' 'Binary' など。
+

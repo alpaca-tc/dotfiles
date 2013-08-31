@@ -1,0 +1,6 @@
+スコープを出てしまった Proc からの 
+return,
+break,
+retry で発生します。
+
+Proc の例を参照してください。

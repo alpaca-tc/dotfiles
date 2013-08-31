@@ -1,0 +1,7 @@
+numeric.c:210
+static VALUE
+num_modulo(x, y)
+    VALUE x, y;
+{
+    return rb_funcall(x, '%', 1, y);
+}

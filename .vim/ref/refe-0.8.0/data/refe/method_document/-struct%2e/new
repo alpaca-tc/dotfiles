@@ -1,0 +1,38 @@
+--- Struct.new([name,] member ... )
+
+    Struct クラスに name という名前の新しいサブクラスを作っ
+    て、それを返します。サブクラスでは構造体のメンバに対するアクセスメ
+    ソッドが定義されています。例えば:
+
+      dog = Struct.new("Dog", :name, :age)
+      fred = dog.new("fred", 5)
+      fred.age=6
+      printf "name:%s age:%d", fred.name, fred.age
+
+    は "name:fred age:6" を出力します。
+
+    構造体名 name はStructのクラス定数名になりますので大文字で始
+    まる必要があります。member は、Symbol か文字列で指定し
+    ます。
+
+    第一引数が文字列の場合、クラス名として扱おうとするため以下のような
+    指定はエラーになります。したがってメンバは Symbol を指定する
+    のが無難です
+
+        p Struct.new('foo', 'bar')
+        # => -:1:in `new': identifier foo needs to be constant (NameError)
+
+    name を省略した場合(第一引数が Symbol の場合)、生成し
+    た構造体クラスは名前のないクラスとなります。名前のないクラスは、最
+    初に名前を求める際に代入されている定数名を検索し、見つかった定数名
+    をクラス名とします(Class.newを参照)。
+
+
+    例: 構造体クラスのクラス名
+
+           p Struct.new("Foo", :foo, :bar)
+           => Struct::Foo
+
+           p Foo = Struct.new(:foo, :bar)
+           => Foo
+

@@ -1,0 +1,46 @@
+--- Readline.readline([prompt, [add_hist]])
+    ユーザからのキー入力を求め、入力した文字列を返します。EOF(UNIX で
+    は ^D)を入力すると nil を返します。
+
+    入力時には行内編集が可能で、vi モードと Emacs モードが用意されています。
+    (Readline.vi_editing_mode、Readline.emacs_editing_mode
+    を参照)。デフォルトは Emacs モードです。
+
+    文字列 prompt を指定するとカーソルの前にこの文字列を表示します。
+
+    add_hist が真ならば、入力した文字列はヒストリに記録されます。
+    Emacs モードなら ^P を入力することで前に入力した文字列を呼び出した
+    り、Readline::HISTORY モジュールによりヒストリの内容を操作す
+    ることができます。このデフォルト値は nil です。
+
+    : 注意
+      入力待ちの状態で ^C すると ruby インタプリタもろとも終了し端末状
+      態を復帰しません。これを回避するには、
+
+        stty_save = `stty -g`.chomp
+        begin
+          while buf = Readline.readline
+              p buf
+          end
+        rescue Interrupt
+          system("stty", stty_save)
+          exit
+        end
+
+      または、
+
+        stty_save = `stty -g`.chomp
+        trap("INT") { system "stty", stty_save; exit }
+
+        while buf = Readline.readline
+          p buf
+        end
+
+      などとします。単に、^C を受け付けなくするだけならば以下で十分です。
+
+        trap("INT", "SIG_IGN")
+
+        while buf = Readline.readline
+          p buf
+        end
+

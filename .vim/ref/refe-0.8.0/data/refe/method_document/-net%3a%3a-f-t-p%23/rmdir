@@ -1,0 +1,4 @@
+--- Net::FTP#rmdir(dirname)
+
+    ディレクトリを削除します。
+

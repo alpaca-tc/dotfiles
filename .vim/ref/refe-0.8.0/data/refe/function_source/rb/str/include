@@ -1,0 +1,26 @@
+string.c:1839
+static VALUE
+rb_str_include(str, arg)
+    VALUE str, arg;
+{
+    long i;
+
+    if (FIXNUM_P(arg)) {
+	int c = FIX2INT(arg);
+	long len = RSTRING(str)->len;
+	char *p = RSTRING(str)->ptr;
+
+	for (i=0; i<len; i++) {
+	    if (p[i] == c) {
+		return Qtrue;
+	    }
+	}
+	return Qfalse;
+    }
+
+    StringValue(arg);
+    i = rb_str_index(str, arg, 0);
+
+    if (i == -1) return Qfalse;
+    return Qtrue;
+}

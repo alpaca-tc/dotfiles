@@ -1,0 +1,18 @@
+bignum.c:152
+VALUE
+rb_int2big(n)
+    long n;
+{
+    long neg = 0;
+    VALUE big;
+
+    if (n < 0) {
+	n = -n;
+	neg = 1;
+    }
+    big = rb_uint2big(n);
+    if (neg) {
+	RBIGNUM(big)->sign = 0;
+    }
+    return big;
+}

@@ -1,0 +1,4 @@
+: opened?
+   syslogを既に開いていればtrueを、
+   開いていなければfalseを返す。
+

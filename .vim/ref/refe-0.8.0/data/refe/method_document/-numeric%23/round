@@ -1,0 +1,7 @@
+--- round
+
+    self に最も近い整数を返します。
+
+    truncate, to_i, ceil,
+    floor も参照。
+

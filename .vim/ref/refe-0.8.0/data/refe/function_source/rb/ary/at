@@ -1,0 +1,7 @@
+array.c:534
+static VALUE
+rb_ary_at(ary, pos)
+    VALUE ary, pos;
+{
+    return rb_ary_entry(ary, NUM2LONG(pos));
+}

@@ -1,0 +1,12 @@
+eval.c:10050
+VALUE
+thgroup_enclose(group)
+    VALUE group;
+{
+    struct thgroup *data;
+
+    Data_Get_Struct(group, struct thgroup, data);
+    data->enclosed = 1;
+
+    return group;
+}

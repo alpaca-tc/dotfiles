@@ -1,0 +1,7 @@
+io.c:2935
+static VALUE
+argf_forward()
+{
+    return rb_funcall3(current_file, ruby_frame->last_func,
+		       ruby_frame->argc, ruby_frame->argv);
+}

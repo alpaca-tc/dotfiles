@@ -1,0 +1,56 @@
+re.c:271
+static void
+rb_reg_expr_str(str, s, len)
+    VALUE str;
+    const char *s;
+    long len;
+{
+    const char *p, *pend;
+    int need_escape = 0;
+
+    p = s; pend = p + len;
+    while (p<pend) {
+	if (*p == '/' || (!ISPRINT(*p) && !ismbchar(*p))) {
+	    need_escape = 1;
+	    break;
+	}
+	p += mbclen(*p);
+    }
+    if (!need_escape) {
+	rb_str_buf_cat(str, s, len);
+    }
+    else {
+	p = s; 
+	while (p<pend) {
+	    if (*p == '\\') {
+		int n = mbclen(p[1]) + 1;
+		rb_str_buf_cat(str, p, n);
+		p += n;
+		continue;
+	    }
+	    else if (*p == '/') {
+		char c = '\\';
+		rb_str_buf_cat(str, &c, 1);
+		rb_str_buf_cat(str, p, 1);
+	    }
+	    else if (ismbchar(*p)) {
+	    	rb_str_buf_cat(str, p, mbclen(*p));
+		p += mbclen(*p);
+		continue;
+	    }
+	    else if (ISPRINT(*p)) {
+		rb_str_buf_cat(str, p, 1);
+	    }
+	    else if (!ISSPACE(*p)) {
+		char b[8];
+
+		sprintf(b, "\\%03o", *p & 0377);
+		rb_str_buf_cat(str, b, 4);
+	    }
+	    else {
+		rb_str_buf_cat(str, p, 1);
+	    }
+	    p++;
+	}
+    }
+}

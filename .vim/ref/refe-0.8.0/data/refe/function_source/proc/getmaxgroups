@@ -1,0 +1,7 @@
+process.c:1735
+static VALUE
+proc_getmaxgroups(obj)
+    VALUE obj;
+{
+    return INT2FIX(maxgroups);
+}

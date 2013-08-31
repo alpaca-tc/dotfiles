@@ -1,0 +1,16 @@
+process.c:1586
+static VALUE
+p_sys_issetugid(obj)
+    VALUE obj;
+{
+#if defined HAVE_ISSETUGID
+    if (issetugid()) {
+	return Qtrue;
+    } else {
+	return Qfalse;
+    }
+#else
+    rb_notimplement();
+    return Qnil;		/* not reached */
+#endif
+}

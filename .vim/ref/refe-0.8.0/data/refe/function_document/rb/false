@@ -1,0 +1,2 @@
+: static VALUE rb_false(VALUE obj)
+

@@ -1,0 +1,19 @@
+--- ancestors
+
+    クラス、モジュールのスーパークラスとインクルードしているモジュール
+    を優先順位順に配列に格納して返します。
+
+        module Foo
+        end
+        class Bar
+          include Foo
+        end
+        class Baz < Bar
+          p ancestors
+          p included_modules
+          p superclass
+        end
+        # => [Baz, Bar, Foo, Object, Kernel]
+        # => [Foo, Kernel]
+        # => Bar
+

@@ -1,0 +1,7 @@
+variable.c:1426
+VALUE
+rb_mod_constants(mod)
+    VALUE mod;
+{
+    return rb_const_list(rb_mod_const_of(mod, 0));
+}

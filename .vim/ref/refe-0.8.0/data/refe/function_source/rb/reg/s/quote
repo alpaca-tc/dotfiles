@@ -1,0 +1,20 @@
+re.c:1418
+static VALUE
+rb_reg_s_quote(argc, argv)
+    int argc;
+    VALUE *argv;
+{
+    VALUE str, kcode;
+    int kcode_saved = reg_kcode;
+
+    rb_scan_args(argc, argv, "11", &str, &kcode);
+    if (!NIL_P(kcode)) {
+	rb_set_kcode(StringValuePtr(kcode));
+	curr_kcode = reg_kcode;
+	reg_kcode = kcode_saved;
+    }
+    StringValue(str);
+    str = rb_reg_quote(str);
+    kcode_reset_option();
+    return str;
+}

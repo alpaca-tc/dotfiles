@@ -1,0 +1,25 @@
+variable.c:809
+static void
+generic_ivar_set(obj, id, val)
+    VALUE obj;
+    ID id;
+    VALUE val;
+{
+    st_table *tbl;
+
+    if (rb_special_const_p(obj)) {
+	special_generic_ivar = 1;
+    }
+    if (!generic_iv_tbl) {
+	generic_iv_tbl = st_init_numtable();
+    }
+
+    if (!st_lookup(generic_iv_tbl, obj, (st_data_t *)&tbl)) {
+	FL_SET(obj, FL_EXIVAR);
+	tbl = st_init_numtable();
+	st_add_direct(generic_iv_tbl, obj, (st_data_t)tbl);
+	st_add_direct(tbl, id, val);
+	return;
+    }
+    st_insert(tbl, id, val);
+}

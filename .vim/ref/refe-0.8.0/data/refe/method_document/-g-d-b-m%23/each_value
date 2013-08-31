@@ -1,0 +1,3 @@
+: each_value {|value|  ...  }
+    全てのvalueに対して繰り返すイテレータ．
+

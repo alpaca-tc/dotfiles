@@ -1,0 +1,17 @@
+--- append_features(module_or_class)
+
+    モジュール(あるいはクラス)に self の機能を追加します。
+    このメソッドは Module#include の実体であり、include を
+    Ruby で書くと以下のように定義できます。
+        def include(*modules)
+          modules.each {|mod|
+            # append_features はプライベートメソッドなので
+            # 直接 mod.append_features(self) とは書けない
+            mod.__send__ :append_features, self
+            # 1.7 以降は以下の行も実行される
+            # mod.__send__ :included, self
+          }
+        end
+
+    self を返します。
+

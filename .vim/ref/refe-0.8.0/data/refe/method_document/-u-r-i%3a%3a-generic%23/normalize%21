@@ -1,0 +1,6 @@
+--- URI::Generic#normalize
+--- URI::Generic#normalize!
+
+    URI オブジェクトを正規化して返します。ホスト名を小文字にし、path 
+    構成要素がなければ '/' をセットします。
+

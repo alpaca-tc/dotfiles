@@ -1,0 +1,6 @@
+--- Etc.getpwuid([uid])
+    uidをユーザIDとするpasswdエントリを返す。戻り値は
+    Etc.getpwnamと同様である。引数を省略した場合には
+    getuid(2) [manual page]の値を用いる。詳細は
+    getpwuid(3) [manual page] を参照のこと。
+

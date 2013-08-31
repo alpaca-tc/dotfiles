@@ -1,0 +1,15 @@
+parse.y:2676
+static char*
+newtok()
+{
+    tokidx = 0;
+    if (!tokenbuf) {
+	toksiz = 60;
+	tokenbuf = ALLOC_N(char, 60);
+    }
+    if (toksiz > 4096) {
+	toksiz = 60;
+	REALLOC_N(tokenbuf, char, 60);
+    }
+    return tokenbuf;
+}

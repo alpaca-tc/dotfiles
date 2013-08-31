@@ -1,0 +1,8 @@
+--- exit
+--- kill
+--- terminate           ruby 1.7 feature
+
+    スレッドの実行を終了させます。
+
+    self を返します。
+

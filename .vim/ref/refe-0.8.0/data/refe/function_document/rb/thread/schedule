@@ -1,0 +1,3 @@
+: void rb_thread_schedule(void)
+    別のスレッドに実行権を渡します。
+

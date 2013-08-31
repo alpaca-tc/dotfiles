@@ -1,0 +1,19 @@
+eval.c:3840
+VALUE
+rb_f_exit(argc, argv)
+    int argc;
+    VALUE *argv;
+{
+    VALUE status;
+    int istatus;
+
+    rb_secure(4);
+    if (rb_scan_args(argc, argv, "01", &status) == 1) {
+	istatus = NUM2INT(status);
+    }
+    else {
+	istatus = EXIT_SUCCESS;
+    }
+    rb_exit(istatus);
+    return Qnil;		/* not reached */
+}

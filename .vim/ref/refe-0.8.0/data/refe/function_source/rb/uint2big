@@ -1,0 +1,22 @@
+bignum.c:130
+VALUE
+rb_uint2big(n)
+    unsigned long n;
+{
+    BDIGIT_DBL num = n;
+    long i = 0;
+    BDIGIT *digits;
+    VALUE big;
+
+    big = bignew(DIGSPERLONG, 1);
+    digits = BDIGITS(big);
+    while (i < DIGSPERLONG) {
+	digits[i++] = BIGLO(num);
+	num = BIGDN(num);
+    }
+
+    i = DIGSPERLONG;
+    while (--i && !digits[i]) ;
+    RBIGNUM(big)->len = i+1;
+    return big;
+}

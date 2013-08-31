@@ -1,0 +1,22 @@
+eval.c:7192
+static VALUE
+proc_binding(proc)
+    VALUE proc;
+{
+    struct BLOCK *orig, *data;
+    VALUE bind;
+
+    Data_Get_Struct(proc, struct BLOCK, orig);
+    bind = Data_Make_Struct(rb_cBinding,struct BLOCK,blk_mark,blk_free,data);
+    MEMCPY(data, orig, struct BLOCK, 1);
+    frame_dup(&data->frame);
+
+    if (data->iter) {
+	blk_copy_prev(data);
+    }
+    else {
+	data->prev = 0;
+    }
+
+    return bind;
+}

@@ -1,0 +1,25 @@
+array.c:1264
+static VALUE
+rb_ary_select(argc, argv, ary)
+    int argc;
+    VALUE *argv;
+    VALUE ary;
+{
+    VALUE result;
+    long i;
+
+    if (!rb_block_given_p()) {
+	rb_warn("Array#select(index..) is deprecated; use Array#values_at");
+	return rb_ary_values_at(argc, argv, ary);
+    }
+    if (argc > 0) {
+	rb_raise(rb_eArgError, "wrong number arguments (%d for 0)", argc);
+    }
+    result = rb_ary_new2(RARRAY(ary)->len);
+    for (i = 0; i < RARRAY(ary)->len; i++) {
+	if (RTEST(rb_yield(RARRAY(ary)->ptr[i]))) {
+	    rb_ary_push(result, RARRAY(ary)->ptr[i]);
+	}
+    }
+    return result;
+}

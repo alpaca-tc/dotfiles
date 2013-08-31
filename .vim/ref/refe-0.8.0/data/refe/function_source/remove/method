@@ -1,0 +1,31 @@
+eval.c:420
+static void
+remove_method(klass, mid)
+    VALUE klass;
+    ID mid;
+{
+    NODE *body;
+
+    if (klass == rb_cObject) {
+	rb_secure(4);
+    }
+    if (ruby_safe_level >= 4 && !OBJ_TAINTED(klass)) {
+	rb_raise(rb_eSecurityError, "Insecure: can't remove method");
+    }
+    if (OBJ_FROZEN(klass)) rb_error_frozen("class/module");
+    if (mid == __id__ || mid == __send__ || mid == init) {
+	rb_warn("removing `%s' may cause serious problem", rb_id2name(mid));
+    }
+    if (!st_delete(RCLASS(klass)->m_tbl, &mid, (st_data_t *)&body) ||
+	!body->nd_body) {
+	rb_name_error(mid, "method `%s' not defined in %s",
+		      rb_id2name(mid), rb_class2name(klass));
+    }
+    rb_clear_cache_for_undef(klass, mid);
+    if (FL_TEST(klass, FL_SINGLETON)) {
+	rb_funcall(rb_iv_get(klass, "__attached__"), singleton_removed, 1, ID2SYM(mid));
+    }
+    else {
+	rb_funcall(klass, removed, 1, ID2SYM(mid));
+    }
+}

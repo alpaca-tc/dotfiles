@@ -1,0 +1,4 @@
+: to_a -> [TMail::Address/TMail::AddressGroup]
+: to_ary -> [TMail::Address/TMail::AddressGroup]
+    addresses.dup と同じです。
+

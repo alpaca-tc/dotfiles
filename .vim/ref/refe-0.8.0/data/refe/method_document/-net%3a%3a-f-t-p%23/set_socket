@@ -1,0 +1,10 @@
+--- Net::FTP#set_socket(sock, get_greeting = true)
+
+    通信先を TCPSocket オブジェクト sock に設定します。
+    省略可能な第2引数 get_greeting に偽が与えられると、
+    set_socket は通信先を設定するだけで sock に対する操作を
+    何も行ないません。このとき値として nil を返します。
+    get_greeting が真(デフォルト)ならば、通信先を sock に
+    設定したあと、通常FTPサーバが接続時に送ってくるメッセージを読み込み、
+    このメッセージを値として返します。
+

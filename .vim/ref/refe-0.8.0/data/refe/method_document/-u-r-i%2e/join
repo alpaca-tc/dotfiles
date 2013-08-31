@@ -1,0 +1,16 @@
+--- URI.join(uri_str[, str, ...])
+
+    文字列 uri_str と str ... をURIとして連結して得られる
+    URIオブジェクトを返します。
+
+    以下と等価です
+
+        URI.parse(uri_str) + str + ....
+#    URI と相対パスをつなげます。
+
+    例
+
+        require 'uri'
+        p URI.join('http://www.ruby-lang.org/', '/ja/man-1.6/')
+        => #<URI::HTTP:0x2010017a URL:http://www.ruby-lang.org/ja/man-1.6/>
+

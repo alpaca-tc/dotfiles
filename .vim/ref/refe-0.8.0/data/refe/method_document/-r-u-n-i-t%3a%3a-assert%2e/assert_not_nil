@@ -1,0 +1,3 @@
+--- assert_nil(obj[, message])
+--- assert_not_nil(obj[, message])
+

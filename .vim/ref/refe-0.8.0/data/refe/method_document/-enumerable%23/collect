@@ -1,0 +1,12 @@
+--- collect {|item| ... }
+--- map {|item| ... }
+
+    各要素に対してブロックを評価した結果を全て含む配列を返します。
+
+    ブロックを省略した場合、
+
+        obj.collect {|item| item}
+
+    を行います。これは Enumerable#to_a [Enumerable/to_a] と同じで
+    す。
+

@@ -1,0 +1,12 @@
+io.c:179
+void
+rb_io_check_closed(fptr)
+    OpenFile *fptr;
+{
+    if (!fptr) {
+	rb_raise(rb_eIOError, "uninitialized stream");
+    }
+    if (!fptr->f && !fptr->f2) {
+	rb_raise(rb_eIOError, "closed stream");
+    }
+}

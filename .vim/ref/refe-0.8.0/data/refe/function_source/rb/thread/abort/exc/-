@@ -1,0 +1,7 @@
+eval.c:9272
+static VALUE
+rb_thread_abort_exc(thread)
+    VALUE thread;
+{
+    return rb_thread_check(thread)->abort?Qtrue:Qfalse;
+}

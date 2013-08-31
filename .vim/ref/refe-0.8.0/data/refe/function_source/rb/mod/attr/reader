@@ -1,0 +1,14 @@
+object.c:843
+static VALUE
+rb_mod_attr_reader(argc, argv, klass)
+    int argc;
+    VALUE *argv;
+    VALUE klass;
+{
+    int i;
+
+    for (i=0; i<argc; i++) {
+	rb_attr(klass, rb_to_id(argv[i]), 1, 0, Qtrue);
+    }
+    return Qnil;
+}

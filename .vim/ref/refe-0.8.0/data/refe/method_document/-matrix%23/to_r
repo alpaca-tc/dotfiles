@@ -1,0 +1,5 @@
+--- Matrix#to_r
+    converts each element to Rational
+
+    各要素を有理数Rationalに変換する。
+

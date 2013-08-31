@@ -1,0 +1,7 @@
+array.c:1083
+static VALUE
+rb_ary_to_ary_m(ary)
+    VALUE ary;
+{
+    return ary;
+}

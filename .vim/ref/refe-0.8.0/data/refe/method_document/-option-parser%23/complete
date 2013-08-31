@@ -1,0 +1,13 @@
+--- OptionParser#complete(typ, opt, *etc)
+    Completes shortened long style option switch, and returns pair of
+    canonical switch and switch descriptorOptionParser::Switch.
+    :Parameters:
+      : id
+        searching table.
+      : opt
+        searching key.
+      : *pat
+        optional pattern for completion.
+      : Block
+        yielded with the found value when succeeded.
+

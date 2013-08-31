@@ -1,0 +1,4 @@
+--- File.owned?(path)
+
+    FileTest.owned? と同じです。
+

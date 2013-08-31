@@ -1,0 +1,16 @@
+eval.c:6154
+static VALUE
+rb_mod_public(argc, argv, module)
+    int argc;
+    VALUE *argv;
+    VALUE module;
+{
+    secure_visibility(module);
+    if (argc == 0) {
+	SCOPE_SET(SCOPE_PUBLIC);
+    }
+    else {
+	set_method_visibility(module, argc, argv, NOEX_PUBLIC);
+    }
+    return module;
+}

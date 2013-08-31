@@ -1,0 +1,4 @@
+--- Readline.basic_quote_characters=(str)
+--- Readline.basic_quote_characters
+    引用符を指定します。デフォルトでは、/"'/ です。
+

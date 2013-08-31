@@ -1,0 +1,26 @@
+numeric.c:410
+static void
+flodivmod(x, y, divp, modp)
+    double x, y;
+    double *divp, *modp;
+{
+    double div, mod;
+
+#ifdef HAVE_FMOD
+    mod = fmod(x, y);
+#else
+    {
+	double z;
+
+	modf(x/y, &z);
+	mod = x - z * y;
+    }
+#endif
+    div = (x - mod) / y;
+    if (y*mod < 0) {
+	mod += y;
+	div -= 1.0;
+    }
+    if (modp) *modp = mod;
+    if (divp) *divp = div;
+}

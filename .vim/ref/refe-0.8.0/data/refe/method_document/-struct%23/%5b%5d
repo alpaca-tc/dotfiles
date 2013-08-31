@@ -1,0 +1,19 @@
+--- self[nth]
+
+    構造体の nth 番目のメンバの値を返します。nth が文字列
+    または Symbol の場合はその名前のメンバの値を返します。
+
+    存在しないメンバを指定した場合、例外 IndexError あるいは 
+    NameError が発生します。
+
+        Foo = Struct.new(:foo, :bar)
+        obj = Foo.new('FOO', 'BAR')
+
+        p obj[:foo]     # => "FOO"
+        p obj['bar']    # => "BAR"
+        # p obj[:baz]     # => in `[]': no member 'baz' in struct (NameError)
+        p obj[0]        # => "FOO"
+        p obj[1]        # => "BAR"
+        p obj[-1]       # => "BAR"    # Array のように負のインデックスも指定できます。
+        p obj[2]        # => in `[]': offset 2 too large for struct(size:2) (IndexError)
+

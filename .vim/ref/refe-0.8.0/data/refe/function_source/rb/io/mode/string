@@ -1,0 +1,15 @@
+io.c:2334
+static char*
+rb_io_mode_string(fptr)
+    OpenFile *fptr;
+{
+    switch (fptr->mode & FMODE_READWRITE) {
+      case FMODE_READABLE:
+      default:
+	return "r";
+      case FMODE_WRITABLE:
+	return "w";
+      case FMODE_READWRITE:
+	return "r+";
+    }
+}

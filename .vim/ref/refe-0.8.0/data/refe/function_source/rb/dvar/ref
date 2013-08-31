@@ -1,0 +1,15 @@
+eval.c:729
+VALUE
+rb_dvar_ref(id)
+    ID id;
+{
+    struct RVarmap *vars = ruby_dyna_vars;
+
+    while (vars) {
+	if (vars->id == id) {
+	    return vars->val;
+	}
+	vars = vars->next;
+    }
+    return Qnil;
+}

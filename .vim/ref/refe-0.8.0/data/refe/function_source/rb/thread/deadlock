@@ -1,0 +1,15 @@
+eval.c:8497
+NORETURN(static void rb_thread_deadlock _((void)));
+static void
+rb_thread_deadlock()
+{
+    char msg[21+SIZEOF_LONG*2];
+    VALUE e;
+
+    sprintf(msg, "Thread(0x%lx): deadlock", curr_thread->thread);
+    e = rb_exc_new2(rb_eFatal, msg);
+    if (curr_thread == main_thread) {
+	rb_exc_raise(e);
+    }
+    rb_thread_main_jump(e, RESTORE_RAISE);
+}

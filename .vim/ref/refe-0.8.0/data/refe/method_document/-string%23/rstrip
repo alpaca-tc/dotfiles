@@ -1,0 +1,33 @@
+--- rstrip    ruby 1.7 feature
+--- rstrip!   ruby 1.7 feature
+
+    文字列の末尾にある空白文字を全て取り除きます。
+    空白文字の定義は " \t\r\n\f\v" です。
+
+    rstrip は加工後の文字列を新しく生成して返します。
+
+    rstrip! は自身を変更して返します。
+    ただし取り除く空白がなかったときは nil を返します。
+
+        p " abc\n".rstrip        #=> " abc"
+        p " abc \t\r\n".rstrip   #=> " abc"
+        p " abc".rstrip          #=> " abc"
+
+        str = "abc\n"
+        p str.rstrip           #=> "abc"
+        p str                  #=> "abc\n"  (変化なし)
+
+        str = "abc  "
+        p str.rstrip!          #=> "abc"
+        p str                  #=> "abc"  (変化あり)
+
+        str = "abc"
+        p str.rstrip!          #=> nil
+        p str                  #=> "abc"
+
+    ruby 1.8 feature: 空白類と "\0" を取り除きます。これに対して、
+    lstrip は "\0" を特別扱いしません。
+
+        str = "abc  \0"
+        p str.rstrip           # => "abc"
+

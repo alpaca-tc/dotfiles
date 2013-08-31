@@ -1,0 +1,10 @@
+process.c:408
+static int
+waitall_each(pid, status, ary)
+    int pid, status;
+    VALUE ary;
+{
+    last_status_set(status, pid);
+    rb_ary_push(ary, rb_assoc_new(INT2NUM(pid), rb_last_status));
+    return ST_DELETE;
+}

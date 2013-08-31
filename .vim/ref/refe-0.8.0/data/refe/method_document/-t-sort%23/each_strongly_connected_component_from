@@ -1,0 +1,14 @@
+--- each_strongly_connected_component_from(node) {|nodes| ...}
+#    iterates over strongly connected component in the subgraph reachable from 
+#    node.
+
+    node から到達可能な強連結成分についてのイテレータです。
+
+#    Return value is unspecified.
+    返す値は規定されていません。
+
+#    each_strongly_connected_component_from doesn't call
+#    tsort_each_node.
+    each_strongly_connected_component_from は
+    tsort_each_node を呼びません。
+

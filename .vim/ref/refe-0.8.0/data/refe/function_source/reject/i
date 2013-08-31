@@ -1,0 +1,10 @@
+enum.c:119
+static VALUE
+reject_i(i, ary)
+    VALUE i, ary;
+{
+    if (!RTEST(rb_yield(i))) {
+	rb_ary_push(ary, i);
+    }
+    return Qnil;
+}

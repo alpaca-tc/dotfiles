@@ -1,0 +1,3 @@
+: remove_response_handler(handler)
+      Removes the response handler.
+

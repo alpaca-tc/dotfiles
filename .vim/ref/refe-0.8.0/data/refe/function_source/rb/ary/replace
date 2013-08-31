@@ -1,0 +1,18 @@
+array.c:1486
+static VALUE
+rb_ary_replace(copy, orig)
+    VALUE copy, orig;
+{
+    rb_ary_modify(copy);
+    orig = to_ary(orig);
+    if (copy == orig) return copy;
+    ary_make_shared(orig);
+    if (RARRAY(copy)->ptr && !FL_TEST(copy, ELTS_SHARED))
+	free(RARRAY(copy)->ptr);
+    RARRAY(copy)->ptr = RARRAY(orig)->ptr;
+    RARRAY(copy)->len = RARRAY(orig)->len;
+    RARRAY(copy)->aux.shared = RARRAY(orig)->aux.shared;
+    FL_SET(copy, ELTS_SHARED);
+
+    return copy;
+}

@@ -1,0 +1,47 @@
+string.c:1214
+static VALUE
+rb_str_aref(str, indx)
+    VALUE str;
+    VALUE indx;
+{
+    long idx;
+
+    switch (TYPE(indx)) {
+      case T_FIXNUM:
+	idx = FIX2LONG(indx);
+
+      num_index:
+	if (idx < 0) {
+	    idx = RSTRING(str)->len + idx;
+	}
+	if (idx < 0 || RSTRING(str)->len <= idx) {
+	    return Qnil;
+	}
+	return INT2FIX(RSTRING(str)->ptr[idx] & 0xff);
+
+      case T_REGEXP:
+	return rb_str_subpat(str, indx, 0);
+
+      case T_STRING:
+	if (rb_str_index(str, indx, 0) != -1)
+	    return rb_str_dup(indx);
+	return Qnil;
+
+      default:
+	/* check if indx is Range */
+	{
+	    long beg, len;
+	    switch (rb_range_beg_len(indx, &beg, &len, RSTRING(str)->len, 0)) {
+	      case Qfalse:
+		break;
+	      case Qnil:
+		return Qnil;
+	      default:
+		return rb_str_substr(str, beg, len);
+	    }
+	}
+	idx = NUM2LONG(indx);
+	goto num_index;
+    }
+    return Qnil;		/* not reached */
+}

@@ -1,0 +1,18 @@
+インターネットドメインのストリーム型ソケットのクラス。通常の
+IOクラスのサブクラスと同
+様の入出力ができます。このクラスによってソケットを用いたクラ
+イアントを簡単に記述できるようになります。ユーザの入力をその
+ままサーバに転送するプログラムは以下のようになります。
+
+  require "socket"
+
+  port = if ARGV.size > 0 then ARGV.shift else 4444 end
+  print port, "\n"
+
+  s = TCPSocket.open("localhost", port)
+
+  while gets
+    s.write($_)
+    print(s.gets)
+  end
+  s.close

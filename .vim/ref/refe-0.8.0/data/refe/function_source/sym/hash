@@ -1,0 +1,22 @@
+dln.c:333
+static st_table *
+sym_hash(hdrp, syms)
+    struct exec *hdrp;
+    struct nlist *syms;
+{
+    st_table *tbl;
+    struct nlist *sym = syms;
+    struct nlist *end = syms + (hdrp->a_syms / sizeof(struct nlist));
+
+    tbl = st_init_strtable();
+    if (tbl == NULL) {
+	dln_errno = errno;
+	return NULL;
+    }
+
+    while (sym < end) {
+	st_insert(tbl, sym->n_un.n_name, sym);
+	sym++;
+    }
+    return tbl;
+}

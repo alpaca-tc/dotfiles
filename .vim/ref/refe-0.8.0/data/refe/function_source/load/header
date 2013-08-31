@@ -1,0 +1,21 @@
+dln.c:190
+static int
+load_header(fd, hdrp, disp)
+    int fd;
+    struct exec *hdrp;
+    long disp;
+{
+    int size;
+
+    lseek(fd, disp, 0);
+    size = read(fd, hdrp, sizeof(struct exec));
+    if (size == -1) {
+	dln_errno = errno;
+	return -1;
+    }
+    if (size != sizeof(struct exec) || N_BADMAG(*hdrp)) {
+	dln_errno = DLN_ENOEXEC;
+	return -1;
+    }
+    return 0;
+}

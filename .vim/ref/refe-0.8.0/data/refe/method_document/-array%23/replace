@@ -1,0 +1,10 @@
+--- replace(another)
+
+    配列の内容を配列 another の内容で置き換えます。
+    self を返します。
+
+    例:
+        a = [1, 2, 3]
+        a.replace [4, 5, 6]
+        p a                 #=> [4, 5, 6]
+

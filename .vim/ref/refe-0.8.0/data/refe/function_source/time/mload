@@ -1,0 +1,52 @@
+time.c:1368
+static VALUE
+time_mload(time, str)
+    VALUE time, str;
+{
+    struct time_object *tobj;
+    unsigned long p, s;
+    time_t sec, usec;
+    unsigned char *buf;
+    struct tm tm;
+    int i;
+
+    time_modify(time);
+    StringValue(str);
+    buf = (unsigned char *)RSTRING(str)->ptr;
+    if (RSTRING(str)->len != 8) {
+	rb_raise(rb_eTypeError, "marshaled time format differ");
+    }
+
+    p = s = 0;
+    for (i=0; i<4; i++) {
+	p |= buf[i]<<(8*i);
+    }
+    for (i=4; i<8; i++) {
+	s |= buf[i]<<(8*(i-4));
+    }
+
+    if ((p & (1<<31)) == 0) {
+	sec = p;
+	usec = s;
+    }
+    else {
+	p &= ~(1<<31);
+	tm.tm_year = (p >> 14) & 0x1ffff;
+	tm.tm_mon  = (p >> 10) & 0xf;
+	tm.tm_mday = (p >>  5) & 0x1f;
+	tm.tm_hour =  p        & 0x1f;
+	tm.tm_min  = (s >> 26) & 0x3f;
+	tm.tm_sec  = (s >> 20) & 0x3f;
+	tm.tm_isdst = 0;
+
+	sec = make_time_t(&tm, Qtrue);
+	usec = (time_t)(s & 0xfffff);
+    }
+    time_overflow_p(sec, usec);
+
+    GetTimeval(time, tobj);
+    tobj->tm_got = 0;
+    tobj->tv.tv_sec = sec;
+    tobj->tv.tv_usec = usec;
+    return time;
+}

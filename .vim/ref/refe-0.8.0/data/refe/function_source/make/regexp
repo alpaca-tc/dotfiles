@@ -1,0 +1,32 @@
+re.c:535
+static Regexp*
+make_regexp(s, len, flags)
+    const char *s;
+    long len;
+    int flags;
+{
+    Regexp *rp;
+    char *err;
+
+    /* Handle escaped characters first. */
+
+    /* Build a copy of the string (in dest) with the
+       escaped characters translated,  and generate the regex
+       from that.
+    */
+
+    rp = ALLOC(Regexp);
+    MEMZERO((char *)rp, Regexp, 1);
+    rp->buffer = ALLOC_N(char, 16);
+    rp->allocated = 16;
+    rp->fastmap = ALLOC_N(char, 256);
+    if (flags) {
+	rp->options = flags;
+    }
+    err = re_compile_pattern(s, len, rp);
+
+    if (err != NULL) {
+	rb_reg_raise(s, len, err, 0);
+    }
+    return rp;
+}

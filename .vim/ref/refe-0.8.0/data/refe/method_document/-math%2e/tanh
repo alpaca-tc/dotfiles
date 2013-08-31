@@ -1,0 +1,10 @@
+--- Math.cosh(x) ruby 1.7 feature
+--- Math.sinh(x) ruby 1.7 feature
+--- Math.tanh(x) ruby 1.7 feature
+
+    x の双曲線関数の値を返します。
+
+        cosh(x) = (exp(x) + exp(-x)) / 2
+        sinh(x) = (exp(x) - exp(-x)) / 2
+        tanh(x) = sinh(x) / cosh(x)
+

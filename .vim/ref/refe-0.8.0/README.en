@@ -1,0 +1,89 @@
+About ReFe
+==========
+
+  ReFe is reference manual searcher.
+  This program get entries from RD document or C code.
+
+
+Installation
+------------
+
+  % ruby setup.rb config
+  % ruby setup.rb setup
+ (% su)
+  # ruby setup.rb install
+
+  For detailes of setup.rb, try "ruby setup.rb --help".
+
+
+Configuration
+-------------
+
+  Set "REFE_DATA_DIR" environment variable before invoking ReFe.
+
+    (sh)
+    $ REFE_DATA_DIR=/usr/local/share/refe
+    $ export REFE_DATA_DIR
+
+    (csh)
+    % setenv REFE_DATA_DIR /usr/local/refe
+
+  "/usr/local/share/refe" might change by your installation.
+
+
+Usage
+-----
+
+  % refe <method name>
+  % refe <class name>
+  % refe <class name> <method name>
+
+  Names can omitted.  For example, you can use "Has" "Ha" "H"
+  instead of "Hash". e.g.
+
+    % refe h each_pair
+  
+  shows document of Hash#each_pair.
+  Here's some more examples:
+
+  [Documentation of methods]
+
+    % refe String              Shows all methods of class String.
+    % refe each_with_index     Shows document of Enumerable#each_with_index
+    % refe String#index        Shows document of String#index
+    % refe s#ind               Shows document of String#index
+    % refe inde                Shows a method list (Array#index String#index ...)
+    % refe s ind               Shows document of String#index
+    % refe st g!               Shows document of String#gsub!
+
+  [C functions, from method name]
+
+    % refe -c s g!               Shows code of rb_str_gsub_bang()
+
+  [C functions]
+
+    % refe -C rb_str_gsub_bang   Shows code of rb_str_gsub_bang()
+    % refe -C r e s w            Shows code of rb_eval_string_wrap()
+    % refe -C r eval             Shows code of rb_eval()
+
+  [Documentation of C functions]
+
+    % refe -e r d class          Shows document of rb_define_class()
+    % refe -e _s args            Shows document of rb_scan_args()
+
+
+License
+-------
+
+  GNU LGPL, Lesser General Public License version 2.
+  For details, see the file "COPYING".
+
+
+Project Home Page
+-----------------
+
+  http://i.loveruby.net/en/refe.html
+
+                                                        Minero Aoki
+                                                aamine@loveruby.net
+                                              http://i.loveruby.net

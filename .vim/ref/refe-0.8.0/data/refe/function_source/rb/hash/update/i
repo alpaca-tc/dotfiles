@@ -1,0 +1,10 @@
+hash.c:920
+static int
+rb_hash_update_i(key, value, hash)
+    VALUE key, value;
+    VALUE hash;
+{
+    if (key == Qundef) return ST_CONTINUE;
+    rb_hash_aset(hash, key, value);
+    return ST_CONTINUE;
+}

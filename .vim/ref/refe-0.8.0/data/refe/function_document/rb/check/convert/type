@@ -1,0 +1,2 @@
+: VALUE rb_check_convert_type(VALUE val, int type, const char *tname, const char *method)
+

@@ -1,0 +1,10 @@
+file.c:126
+static struct stat*
+get_stat(self)
+    VALUE self;
+{
+    struct stat* st;
+    Data_Get_Struct(self, struct stat, st);
+    if (!st) rb_raise(rb_eTypeError, "uninitialized File::Stat");
+    return st;
+}

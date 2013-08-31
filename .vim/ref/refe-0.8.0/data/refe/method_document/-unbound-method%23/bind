@@ -1,0 +1,69 @@
+--- bind(obj)
+
+    self を obj にバインドして bound method オブジェクト
+    (つまり Method オブジェクト) を生成し返します。ただしバイン
+    ドできるのは、unbind したオブジェクトのクラスのインスタンスか、メ
+    ソッド定義元のモジュールをインクルードしたクラスのインスタンスだけ
+    です。そうでなければ例外 TypeError が発生します。
+
+    例:
+
+        # クラスのインスタンスメソッドの UnboundMethod の場合
+
+        class Foo
+          def foo
+            "foo"
+          end
+        end
+
+        # UnboundMethod `m' を生成
+        p m = Foo.instance_method(:foo) # => #<UnboundMethod: Foo(Foo)#foo>
+
+        # Foo のインスタンスをレシーバとする Method オブジェクトを生成
+        p m.bind(Foo.new)               # => #<Method: Foo(Foo)#foo>
+
+        # Foo のサブクラス Bar のインスタンスをレシーバとする Method 
+        # オブジェクトを生成(これは許されない)
+        #  ruby 1.8 feature: 許されるようになりました
+
+        class Bar < Foo
+        end
+        # p m.bind(Bar.new)               # => -18:in `bind': bind argument must be an instance of Foo (TypeError)
+
+        # 同名の特異メソッドが定義されているとダメ
+        class << obj = Foo.new
+          def foo
+          end
+        end
+        p m.bind(obj)                   # => -:25:in `bind': method `foo' overridden (TypeError)
+
+        # モジュールのインスタンスメソッドの UnboundMethod の場合
+
+        module Foo
+          def foo
+            "foo"
+          end
+        end
+
+        # UnboundMethod `m' を生成
+        p m = Foo.instance_method(:foo) # => #<UnboundMethod: Foo(Foo)#foo>
+
+        # Foo をインクルードしたクラス Bar のインスタンスをレシーバと
+        # する Method オブジェクトを生成
+        class Bar
+          include Foo
+        end
+        p m.bind(Bar.new)               # => #<Method: Bar(Foo)#foo>
+
+        # Bar のサブクラスは Foo をインクルードしているのと同等なのでよい
+        class Baz <Bar
+        end
+        p m.bind(Baz.new)               # => #<Method: Baz(Foo)#foo>
+
+        # 同名の特異メソッドが定義されているとダメ
+        class << obj = Baz.new
+          def foo
+          end
+        end
+        p m.bind(obj)                   # => -:27:in `bind': method `foo' overridden (TypeError)
+

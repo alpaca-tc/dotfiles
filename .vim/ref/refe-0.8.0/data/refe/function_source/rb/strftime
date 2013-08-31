@@ -1,0 +1,33 @@
+time.c:1223
+static int
+rb_strftime(buf, format, time)
+    char ** volatile buf;
+    char * volatile format;
+    struct tm * volatile time;
+{
+    volatile int size;
+    int len, flen;
+
+    (*buf)[0] = '\0';
+    flen = strlen(format);
+    if (flen == 0) {
+	return 0;
+    }
+    len = strftime(*buf, SMALLBUF, format, time);
+    if (len != 0 || **buf == '\0') return len;
+    for (size=1024; ; size*=2) {
+	*buf = xmalloc(size);
+	(*buf)[0] = '\0';
+	len = strftime(*buf, size, format, time);
+	/*
+	 * buflen can be zero EITHER because there's not enough
+	 * room in the string, or because the control command
+	 * goes to the empty string. Make a reasonable guess that
+	 * if the buffer is 1024 times bigger than the length of the
+	 * format string, it's not failing for lack of room.
+	 */
+	if (len > 0 || size >= 1024 * flen) return len;
+	free(*buf);
+    }
+    /* not reached */
+}

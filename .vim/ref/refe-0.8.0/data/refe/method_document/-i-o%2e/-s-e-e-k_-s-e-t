@@ -1,0 +1,6 @@
+--- SEEK_CUR
+--- SEEK_END
+--- SEEK_SET
+
+    IO#seek [IO/seek] を参照してください。
+

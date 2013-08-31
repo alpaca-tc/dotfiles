@@ -1,0 +1,5 @@
+: ident
+: options
+: facility
+   最後のopenで与えられた対応する引数を返す。
+

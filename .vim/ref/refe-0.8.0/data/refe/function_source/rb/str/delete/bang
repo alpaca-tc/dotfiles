@@ -1,0 +1,41 @@
+string.c:2384
+static VALUE
+rb_str_delete_bang(argc, argv, str)
+    int argc;
+    VALUE *argv;
+    VALUE str;
+{
+    char *s, *send, *t;
+    char squeez[256];
+    int modify = 0;
+    int init = 1;
+    int i;
+
+    if (argc < 1) {
+	rb_raise(rb_eArgError, "wrong number of arguments");
+    }
+    for (i=0; i<argc; i++) {
+	VALUE s = argv[i];
+
+	StringValue(s);
+	tr_setup_table(s, squeez, init);
+	init = 0;
+    }
+
+    rb_str_modify(str);
+    s = t = RSTRING(str)->ptr;
+    if (!s || RSTRING(str)->len == 0) return Qnil;
+    send = s + RSTRING(str)->len;
+    while (s < send) {
+	if (squeez[*s & 0xff])
+	    modify = 1;
+	else
+	    *t++ = *s;
+	s++;
+    }
+    *t = '\0';
+    RSTRING(str)->len = t - RSTRING(str)->ptr;
+
+    if (modify) return str;
+    return Qnil;
+}

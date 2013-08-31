@@ -1,0 +1,10 @@
+marshal.c:123
+static void
+w_bytes(s, n, arg)
+    char *s;
+    int n;
+    struct dump_arg *arg;
+{
+    w_long(n, arg);
+    w_nbyte(s, n, arg);
+}

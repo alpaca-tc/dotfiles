@@ -1,0 +1,5 @@
+--- URI::Generic#to_a
+--- URI::Generic#to_ary
+
+    URI オブジェクトの構成要素の配列を返します。
+

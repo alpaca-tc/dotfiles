@@ -1,0 +1,9 @@
+# Module DL consists of three classes, a few module functions and constants.
+# The class Symbol represents the symbol we can call. The class PtrData
+# indicates a memory block such as a pointer in C. An object instantiated from
+# the class Handle keeps a handle to opened library.
+
+モジュール DL は数個のモジュール関数と定数を持つ 3 つのクラスから成っ
+ている。クラス Symbol は呼び出す事ができるシンボルに相当する。クラス 
+PtrData は、C のポインタのようなメモリブロックを示す。クラス Handle か
+ら具体化されたオブジェクトはオープンしたライブラリの操作を持つ。

@@ -1,0 +1,25 @@
+re.c:510
+static VALUE
+rb_reg_kcode_m(re)
+    VALUE re;
+{
+    char *kcode;
+
+    if (FL_TEST(re, KCODE_FIXED)) {
+	switch (RBASIC(re)->flags & KCODE_MASK) {
+	  case KCODE_NONE:
+	    kcode = "none"; break;
+	  case KCODE_EUC:
+	    kcode = "euc"; break;
+	  case KCODE_SJIS:
+	    kcode = "sjis"; break;
+	  case KCODE_UTF8:
+	    kcode = "utf8"; break;
+	  default:
+	    rb_bug("unknown kcode - should not happen");
+	    break;
+	}
+	return rb_str_new2(kcode);
+    }
+    return Qnil;
+}

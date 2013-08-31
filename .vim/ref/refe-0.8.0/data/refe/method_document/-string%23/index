@@ -1,0 +1,22 @@
+--- index(pattern[, pos])
+
+    部分文字列の探索を左端から右端に向かって行います。見つかった部分文
+    字列の左端の位置を返します。見つからなければ nil を返します。
+
+    引数 pattern には探索する部分文字列の指定を文字列、文字コー
+    ドを示す 0 から 255 の整数、正規表現のいずれかで指定します。
+
+    pos が与えられた時にはその位置から探索します。pos の省
+    略時の値は 0 です。
+
+        p "astrochemistry".index("str")         # => 1
+        p "character".index(?c)                 # => 0
+        p "regexpindex".index(/e.*x/, 2)        # => 3
+
+    pos が負の場合、文字列の末尾から数えた位置から探索します。
+
+        p "foobarfoobar".index("bar", 6)        # => 9
+        p "foobarfoobar".index("bar", -6)       # => 9
+
+    rindex も参照してください。
+

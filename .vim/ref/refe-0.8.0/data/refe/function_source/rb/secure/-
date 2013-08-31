@@ -1,0 +1,15 @@
+eval.c:141
+void
+rb_secure(level)
+    int level;
+{
+    if (level <= ruby_safe_level) {
+	if (ruby_frame->last_func) {
+	    rb_raise(rb_eSecurityError, "Insecure operation `%s' at level %d",
+		     rb_id2name(ruby_frame->last_func), ruby_safe_level);
+	}
+	else {
+	    rb_raise(rb_eSecurityError, "Insecure operation at level %d", ruby_safe_level);
+	}
+    }
+}

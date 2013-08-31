@@ -1,0 +1,8 @@
+--- FileTest.size?(filename)
+
+    filename のサイズを返します。filename が存在しない時や 
+    filename のサイズが0の時には nil を返します。
+
+    FileTest.size, FileTest.zero? も参照
+    してください。
+

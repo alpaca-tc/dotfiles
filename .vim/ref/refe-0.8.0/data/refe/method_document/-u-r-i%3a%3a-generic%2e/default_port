@@ -1,0 +1,8 @@
+--- URI::Generic.default_port
+
+    スキームに対応するデフォルトのポート番号を返します。
+
+        require 'uri'
+        p URI::Generic.default_port     # => nil
+        p URI::HTTP.default_port        # => 80
+

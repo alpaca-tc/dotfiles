@@ -1,0 +1,8 @@
+signal.c:424
+static RETSIGTYPE sigpipe _((int));
+static RETSIGTYPE
+sigpipe(sig)
+    int sig;
+{
+    /* do nothing */
+}

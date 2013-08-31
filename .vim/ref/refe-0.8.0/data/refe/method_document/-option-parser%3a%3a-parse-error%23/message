@@ -1,0 +1,5 @@
+--- OptionParser::ParseError#message
+--- OptionParser::ParseError#to_s
+--- OptionParser::ParseError#to_str
+    Default stringizing method to emit standard error message.
+

@@ -1,0 +1,3 @@
+: VALUE rb_obj_untaint(VALUE obj)
+    obj.untaint
+

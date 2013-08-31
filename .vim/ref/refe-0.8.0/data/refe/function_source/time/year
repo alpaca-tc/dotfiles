@@ -1,0 +1,13 @@
+time.c:1077
+static VALUE
+time_year(time)
+    VALUE time;
+{
+    struct time_object *tobj;
+
+    GetTimeval(time, tobj);
+    if (tobj->tm_got == 0) {
+	time_get_tm(time, tobj->gmt);
+    }
+    return LONG2NUM((long)tobj->tm.tm_year+1900);
+}

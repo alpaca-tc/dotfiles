@@ -1,0 +1,11 @@
+file.c:1325
+static VALUE
+rb_file_s_unlink(klass, args)
+    VALUE klass, args;
+{
+    long n;
+
+    rb_secure(2);
+    n = apply2files(unlink_internal, args, 0);
+    return LONG2FIX(n);
+}

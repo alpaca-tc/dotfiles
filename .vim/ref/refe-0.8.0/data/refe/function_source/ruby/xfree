@@ -1,0 +1,8 @@
+gc.c:157
+void
+ruby_xfree(x)
+    void *x;
+{
+    if (x)
+	RUBY_CRITICAL(free(x));
+}

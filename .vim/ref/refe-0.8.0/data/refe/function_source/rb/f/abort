@@ -1,0 +1,23 @@
+eval.c:3859
+VALUE
+rb_f_abort(argc, argv)
+    int argc;
+    VALUE *argv;
+{
+    rb_secure(4);
+    if (argc == 0) {
+	if (!NIL_P(ruby_errinfo)) {
+	    error_print();
+	}
+	rb_exit(EXIT_FAILURE);
+    }
+    else {
+	VALUE mesg;
+
+	rb_scan_args(argc, argv, "1", &mesg);
+	StringValue(argv[0]);
+	rb_io_puts(argc, argv, rb_stderr);
+	terminate_process(1, RSTRING(argv[0])->ptr, RSTRING(argv[0])->len);
+    }
+    return Qnil;		/* not reached */
+}

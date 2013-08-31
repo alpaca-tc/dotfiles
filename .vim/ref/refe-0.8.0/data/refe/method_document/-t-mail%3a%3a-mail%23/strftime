@@ -1,0 +1,8 @@
+: strftime( format, default = nil ) -> String
+    format: String
+    default: Object
+
+    Date: ヘッダに表現された時刻と対応する Time オブジェクトに対し
+    strftime を呼びます。Date: ヘッダが存在しない場合は default を
+    返します。
+

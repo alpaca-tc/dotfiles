@@ -1,0 +1,15 @@
+--- values_at(index_1, ... , index_n)
+
+    ruby 1.8 feature
+
+    引数で指定されたインデックスに対応する要素を配列で返します。インデッ
+    クスに対応する値がなければ nil が要素になります。
+    (indexes, indices と同じです)
+
+    例:
+        ary = %w( a b c d e )
+        p ary.values_at( 0, 2, 4 )          #=> ["a", "c", "e"]
+        p ary.values_at( 3, 4, 5, 6, 35 )   #=> ["d", "e", nil, nil, nil]
+        p ary.values_at( 0, -1, -2 )        #=> ["a", "e", "d"]
+        p ary.values_at( -4, -5, -6, -35 )  #=> ["b", "a", nil, nil]
+

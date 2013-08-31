@@ -1,0 +1,7 @@
+hash.c:1391
+static VALUE
+env_delete_if()
+{
+    env_reject_bang();
+    return envtbl;
+}

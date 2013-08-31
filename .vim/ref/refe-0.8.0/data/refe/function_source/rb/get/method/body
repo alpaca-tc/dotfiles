@@ -1,0 +1,62 @@
+eval.c:358
+static NODE*
+rb_get_method_body(klassp, idp, noexp)
+    VALUE *klassp;
+    ID *idp;
+    int *noexp;
+{
+    ID id = *idp;
+    VALUE klass = *klassp;
+    VALUE origin;
+    NODE * volatile body;
+    struct cache_entry *ent;
+
+    if ((body = search_method(klass, id, &origin)) == 0 || !body->nd_body) {
+	/* store empty info in cache */
+	ent = cache + EXPR1(klass, id);
+	ent->klass  = klass;
+	ent->origin = klass;
+	ent->mid = ent->mid0 = id;
+	ent->noex   = 0;
+	ent->method = 0;
+
+	return 0;
+    }
+
+    if (ruby_running) {
+	/* store in cache */
+	if (BUILTIN_TYPE(origin) == T_ICLASS) origin = RBASIC(origin)->klass;
+	ent = cache + EXPR1(klass, id);
+	ent->klass  = klass;
+	ent->noex   = body->nd_noex;
+	if (noexp) *noexp = body->nd_noex;
+	body = body->nd_body;
+	if (nd_type(body) == NODE_FBODY) {
+	    ent->mid = id;
+	    *klassp = body->nd_orig;
+	    ent->origin = body->nd_orig;
+	    *idp = ent->mid0 = body->nd_mid;
+	    body = ent->method = body->nd_head;
+	}
+	else {
+	    *klassp = origin;
+	    ent->origin = origin;
+	    ent->mid = ent->mid0 = id;
+	    ent->method = body;
+	}
+    }
+    else {
+	if (noexp) *noexp = body->nd_noex;
+	body = body->nd_body;
+	if (nd_type(body) == NODE_FBODY) {
+	    *klassp = body->nd_orig;
+	    *idp = body->nd_mid;
+	    body = body->nd_head;
+	}
+	else {
+	    *klassp = origin;
+	}
+    }
+
+    return body;
+}

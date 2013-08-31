@@ -1,0 +1,7 @@
+Rubyで書かれたリゾルバ(名前解決)ライブラリ。
+Since it is written in Ruby, it is thread-aware.
+I.e. it can resolv many hostnames concurrently.
+
+It is possible to lookup various resources of DNS using DNS module directly.
+
+執筆者募集

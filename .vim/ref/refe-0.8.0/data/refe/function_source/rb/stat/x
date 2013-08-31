@@ -1,0 +1,20 @@
+file.c:2504
+static VALUE
+rb_stat_x(obj)
+    VALUE obj;
+{
+    struct stat *st = get_stat(obj);
+
+#ifdef S_IXUSR
+    if (rb_stat_owned(obj))
+	return st->st_mode & S_IXUSR ? Qtrue : Qfalse;
+#endif
+#ifdef S_IXGRP
+    if (rb_stat_grpowned(obj))
+	return st->st_mode & S_IXGRP ? Qtrue : Qfalse;
+#endif
+#ifdef S_IXOTH
+    if (!(st->st_mode & S_IXOTH)) return Qfalse;
+#endif
+    return Qtrue;
+}

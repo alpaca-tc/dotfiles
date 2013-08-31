@@ -1,0 +1,22 @@
+--- method_removed(name)  ruby 1.7 feature
+
+    メソッドが Module#remove_method [Module/remove_method] により削
+    除された時にインタプリタから呼び出されます。
+    name には削除されたメソッド名が Symbol で渡されます。
+
+        class Foo
+          def Foo.method_removed(name)
+            puts "method \"#{name}\" was removed"
+          end
+
+          def foo
+          end
+          remove_method :foo
+        end
+
+        => method "foo" was removed
+
+    特異メソッドの削除に対するフックには
+    Object#singleton_method_removed [Object/singleton_method_removed]
+    を使います。
+

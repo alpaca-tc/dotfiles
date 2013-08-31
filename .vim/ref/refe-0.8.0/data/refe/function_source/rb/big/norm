@@ -1,0 +1,7 @@
+bignum.c:123
+VALUE
+rb_big_norm(x)
+    VALUE x;
+{
+    return bignorm(x);
+}

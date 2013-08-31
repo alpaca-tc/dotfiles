@@ -1,0 +1,11 @@
+eval.c:8344
+static void
+stack_extend(th, exit)
+    rb_thread_t th;
+    int exit;
+{
+    VALUE space[1024];
+
+    memset(space, 0, 1);	/* prevent array from optimization */
+    rb_thread_restore_context(th, exit);
+}

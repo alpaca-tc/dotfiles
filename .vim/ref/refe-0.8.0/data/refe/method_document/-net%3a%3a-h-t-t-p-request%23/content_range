@@ -1,0 +1,3 @@
+: content_range
+    Content-Range: ヘッダの値 (Range)。
+

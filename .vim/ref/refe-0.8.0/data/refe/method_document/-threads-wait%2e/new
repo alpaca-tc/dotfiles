@@ -1,0 +1,3 @@
+--- ThreadsWait.new(thread1,...)
+    creates synchronization object, specifying thread(s) to wait.
+

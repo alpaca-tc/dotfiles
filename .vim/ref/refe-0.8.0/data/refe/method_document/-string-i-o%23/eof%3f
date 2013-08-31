@@ -1,0 +1,9 @@
+--- close
+--- close_read
+--- close_write
+--- closed?
+--- closed_read?
+--- closed_write?
+--- eof
+--- eof?
+

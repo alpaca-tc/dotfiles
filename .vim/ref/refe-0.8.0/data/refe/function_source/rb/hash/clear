@@ -1,0 +1,10 @@
+hash.c:553
+static VALUE
+rb_hash_clear(hash)
+    VALUE hash;
+{
+    rb_hash_modify(hash);
+    st_foreach(RHASH(hash)->tbl, clear_i, 0);
+
+    return hash;
+}

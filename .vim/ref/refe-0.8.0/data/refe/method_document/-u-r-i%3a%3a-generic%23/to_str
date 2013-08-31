@@ -1,0 +1,5 @@
+--- URI::Generic#to_s
+--- URI::Generic#to_str
+
+    URI を返します。
+

@@ -1,0 +1,26 @@
+--- last
+--- last(n)    ruby 1.8 feature
+
+    配列の末尾の要素を返します。配列が空のときは nil を返します。
+
+        p [0, 1, 2].last   #=> 2
+        p [].last          #=> nil
+
+    ruby 1.8 feature:
+    省略可能な引数 n を指定した場合、末尾の n 要素を配列で
+    返します。n は 0 以上でなければなりません。
+
+        ary =  [0, 1, 2]
+        p ary.last(0)
+        p ary.last(1)
+        p ary.last(2)
+        p ary.last(3)
+        p ary.last(4)
+        # => []
+             [2]
+             [1, 2]
+             [0, 1, 2]
+             [0, 1, 2]
+
+    Array#first [Array/first] も参照してください。
+

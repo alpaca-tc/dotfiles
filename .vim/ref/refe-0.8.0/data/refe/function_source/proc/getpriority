@@ -1,0 +1,19 @@
+process.c:1200
+static VALUE
+proc_getpriority(obj, which, who)
+    VALUE obj, which, who;
+{
+#ifdef HAVE_GETPRIORITY
+    int prio, iwhich, iwho;
+
+    iwhich = NUM2INT(which);
+    iwho   = NUM2INT(who);
+
+    errno = 0;
+    prio = getpriority(iwhich, iwho);
+    if (errno) rb_sys_fail(0);
+    return INT2FIX(prio);
+#else
+    rb_notimplement();
+#endif
+}

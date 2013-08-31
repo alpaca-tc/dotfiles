@@ -1,0 +1,13 @@
+re.c:849
+VALUE
+rb_reg_match_pre(match)
+    VALUE match;
+{
+    VALUE str;
+
+    if (NIL_P(match)) return Qnil;
+    if (RMATCH(match)->BEG(0) == -1) return Qnil;
+    str = rb_str_substr(RMATCH(match)->str, 0, RMATCH(match)->BEG(0));
+    if (OBJ_TAINTED(match)) OBJ_TAINT(str);
+    return str;
+}

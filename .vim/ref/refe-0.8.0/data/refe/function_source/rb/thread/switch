@@ -1,0 +1,38 @@
+eval.c:8293
+static int
+rb_thread_switch(n)
+    int n;
+{
+    rb_trap_immediate = (curr_thread->flags&0x100)?1:0;
+    switch (n) {
+      case 0:
+	return 0;
+      case RESTORE_FATAL:
+	JUMP_TAG(TAG_FATAL);
+	break;
+      case RESTORE_INTERRUPT:
+	rb_interrupt();
+	break;
+      case RESTORE_TRAP:
+	rb_trap_eval(th_cmd, th_sig);
+	break;
+      case RESTORE_RAISE:
+	ruby_frame->last_func = 0;
+	ruby_current_node = th_raise_node;
+	rb_f_raise(th_raise_argc, th_raise_argv);
+	break;
+      case RESTORE_SIGNAL:
+	rb_raise(rb_eSignal, "SIG%s", th_signm);
+	break;
+      case RESTORE_EXIT:
+	ruby_errinfo = th_raise_argv[0];
+	ruby_current_node = th_raise_node;
+	error_print();
+	terminate_process(1, 0, 0);
+	break;
+      case RESTORE_NORMAL:
+      default:
+	break;
+    }
+    return 1;
+}

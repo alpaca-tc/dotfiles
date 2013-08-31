@@ -1,0 +1,8 @@
+parse.y:5169
+static int
+e_option_supplied()
+{
+    if (strcmp(ruby_sourcefile, "-e") == 0)
+	return Qtrue;
+    return Qfalse;
+}

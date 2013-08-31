@@ -1,0 +1,15 @@
+math.c:234
+static VALUE
+math_sqrt(obj, x)
+    VALUE obj, x;
+{
+    double d;
+
+    Need_Float(x);
+    errno = 0;
+    d = sqrt(RFLOAT(x)->value);
+    if (errno) {
+	rb_sys_fail("sqrt");
+    }
+    return rb_float_new(d);
+}

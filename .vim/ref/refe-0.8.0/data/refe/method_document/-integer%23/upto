@@ -1,0 +1,9 @@
+--- upto(max) {|n| ... }
+
+    self から max まで 1 ずつ増やしながら繰り返します。
+    self > max であれば何もしません。
+
+    self を返します。
+
+    downto, step, times も参照。
+

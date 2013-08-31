@@ -1,0 +1,23 @@
+: request_get( path, header = nil )
+: request_get( path, header = nil ) {|response| .... }
+    path にあるエンティティを取得します。HTTPResponse
+    オブジェクトを返します。
+
+    ブロックとともに呼び出されたときは、ブロック実行中は接続を
+    維持したまま HTTPResponse オブジェクトをブロックに渡します。
+
+    このメソッドは HTTP プロトコルに関連した例外は発生させません。
+
+        # example
+        response = http.request_get( '/index.html' )
+        p response['content-type']
+        puts response.body          # body is already read
+
+        # using block
+        http.request_get( '/index.html' ) {|response|
+            p response['content-type']
+            response.read_body do |str|   # read body now
+              print str
+            end
+        }
+

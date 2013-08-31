@@ -1,0 +1,5 @@
+--- Matrix#to_i
+    converts each element to Integer
+
+    各要素を整数Integerに変換する。
+

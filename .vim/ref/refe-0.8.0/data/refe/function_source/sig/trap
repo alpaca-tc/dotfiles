@@ -1,0 +1,38 @@
+signal.c:646
+static VALUE
+sig_trap(argc, argv)
+    int argc;
+    VALUE *argv;
+{
+    struct trap_arg arg;
+
+    rb_secure(2);
+    if (argc == 0 || argc > 2) {
+	rb_raise(rb_eArgError, "wrong number of arguments -- trap(sig, cmd)/trap(sig){...}");
+    }
+
+    arg.sig = argv[0];
+    if (argc == 1) {
+	arg.cmd = rb_block_proc();
+    }
+    else if (argc == 2) {
+	arg.cmd = argv[1];
+    }
+
+    if (OBJ_TAINTED(arg.cmd)) {
+	rb_raise(rb_eSecurityError, "Insecure: tainted signal trap");
+    }
+#ifndef _WIN32
+    /* disable interrupt */
+# ifdef HAVE_SIGPROCMASK
+    sigfillset(&arg.mask);
+    sigprocmask(SIG_BLOCK, &arg.mask, &arg.mask);
+# else
+    arg.mask = sigblock(~0);
+# endif
+
+    return rb_ensure(trap, (VALUE)&arg, trap_ensure, (VALUE)&arg);
+#else
+    return trap(&arg);
+#endif
+}

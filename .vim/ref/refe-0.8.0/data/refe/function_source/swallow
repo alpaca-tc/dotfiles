@@ -1,0 +1,38 @@
+io.c:948
+static inline int
+swallow(fptr, term)
+    OpenFile *fptr;
+    int term;
+{
+    FILE *f = fptr->f;
+    int c;
+
+    do {
+#ifdef READ_DATA_PENDING_PTR
+	long cnt;
+	while ((cnt = READ_DATA_PENDING_COUNT(f)) > 0) {
+	    char buf[1024];
+	    const char *p = READ_DATA_PENDING_PTR(f);
+	    int i;
+	    if (cnt > sizeof buf) cnt = sizeof buf;
+	    if (*p != term) return Qtrue;
+	    i = cnt;
+	    while (--i && *++p == term);
+	    if (!fread(buf, 1, cnt - i, f)) /* must not fail */
+		rb_sys_fail(fptr->path);
+	}
+	rb_thread_wait_fd(fileno(f));
+	rb_io_check_closed(fptr);
+#else
+	READ_CHECK(f);
+#endif
+	TRAP_BEG;
+	c = getc(f);
+	TRAP_END;
+	if (c != term) {
+	    ungetc(c, f);
+	    return Qtrue;
+	}
+    } while (c != EOF);
+    return Qfalse;
+}

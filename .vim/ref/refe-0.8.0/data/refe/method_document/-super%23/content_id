@@ -1,0 +1,3 @@
+: content_id
+      Returns a string giving the content id as defined in imap.rb"/[MIME-IMB].
+

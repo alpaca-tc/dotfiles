@@ -1,0 +1,4 @@
+--- assert_kind_of(klass, object, message="")
+
+    object.kind_of?(klass) が真なら pass
+

@@ -1,0 +1,10 @@
+time.c:704
+static VALUE
+time_to_f(time)
+    VALUE time;
+{
+    struct time_object *tobj;
+
+    GetTimeval(time, tobj);
+    return rb_float_new((double)tobj->tv.tv_sec+(double)tobj->tv.tv_usec/1e6);
+}

@@ -1,0 +1,11 @@
+numeric.c:565
+VALUE
+rb_dbl_cmp(a, b)
+    double a, b;
+{
+    if (isnan(a) || isnan(b)) return Qnil;
+    if (a == b) return INT2FIX(0);
+    if (a > b) return INT2FIX(1);
+    if (a < b) return INT2FIX(-1);
+    return Qnil;
+}

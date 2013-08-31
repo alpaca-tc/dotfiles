@@ -1,0 +1,7 @@
+--- PStore#transaction
+--- PStore#transaction(read_only=false) ruby 1.7 feature
+      トランザクションに入る。
+      このブロックの中でしかデータベースの読み書きはできない。
+
+      ruby 1.7 feature: 1.7では読み込み専用のトランザクションが使用可能。
+

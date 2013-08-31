@@ -1,0 +1,22 @@
+st.c:288
+int
+st_insert(table, key, value)
+    register st_table *table;
+    register st_data_t key;
+    st_data_t value;
+{
+    unsigned int hash_val, bin_pos;
+    register st_table_entry *ptr;
+
+    hash_val = do_hash(key, table);
+    FIND_ENTRY(table, ptr, hash_val, bin_pos);
+
+    if (ptr == 0) {
+	ADD_DIRECT(table, key, value, hash_val, bin_pos);
+	return 0;
+    }
+    else {
+	ptr->record = value;
+	return 1;
+    }
+}

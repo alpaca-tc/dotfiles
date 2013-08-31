@@ -1,0 +1,29 @@
+eval.c:492
+static void
+rb_export_method(klass, name, noex)
+    VALUE klass;
+    ID name;
+    ID noex;
+{
+    NODE *body;
+    VALUE origin;
+
+    if (klass == rb_cObject) {
+	rb_secure(4);
+    }
+    body = search_method(klass, name, &origin);
+    if (!body && TYPE(klass) == T_MODULE) {
+	body = search_method(rb_cObject, name, &origin);
+    }
+    if (!body || !body->nd_body) {
+	print_undef(klass, name);
+    }
+    if (body->nd_noex != noex) {
+	if (klass == origin) {
+	    body->nd_noex = noex;
+	}
+	else {
+	    rb_add_method(klass, name, NEW_ZSUPER(), noex);
+	}
+    }
+}

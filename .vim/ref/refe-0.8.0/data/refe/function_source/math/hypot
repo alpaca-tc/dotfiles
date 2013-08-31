@@ -1,0 +1,8 @@
+math.c:270
+static VALUE
+math_hypot(obj, x, y)
+    VALUE obj, x, y;
+{
+    Need_Float2(x, y);
+    return rb_float_new(hypot(RFLOAT(x)->value, RFLOAT(y)->value));
+}

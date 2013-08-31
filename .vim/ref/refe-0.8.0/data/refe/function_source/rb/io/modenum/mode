@@ -1,0 +1,33 @@
+io.c:1768
+static char*
+rb_io_modenum_mode(flags, mode)
+    int flags;
+    char *mode;
+{
+    char *p = mode;
+
+    switch (flags & (O_RDONLY|O_WRONLY|O_RDWR)) {
+      case O_RDONLY:
+	*p++ = 'r';
+	break;
+      case O_WRONLY:
+	*p++ = 'w';
+	break;
+      case O_RDWR:
+	*p++ = 'r';
+	*p++ = '+';
+	break;
+    }
+    *p++ = '\0';
+#ifdef O_BINARY
+    if (flags & O_BINARY) {
+	if (mode[1] == '+') {
+	    mode[1] = 'b'; mode[2] = '+'; mode[3] = '\0';
+	}
+	else {
+	    mode[1] = 'b'; mode[2] = '\0';
+	}
+    }
+#endif
+    return mode;
+}

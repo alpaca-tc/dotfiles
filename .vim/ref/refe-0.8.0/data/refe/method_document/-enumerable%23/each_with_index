@@ -1,0 +1,6 @@
+--- each_with_index {|item,index| ... }
+
+    要素とインデックスを両方与えるイテレータ。
+
+    self を返します。
+

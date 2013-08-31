@@ -1,0 +1,52 @@
+--- Object#marshal_dump         ruby 1.8 feature
+--- Object#marshal_load         ruby 1.8 feature
+
+    
+
+    Marshal.dump において、出力するオブジェクトがメソッド 
+    `marshal_dump' を定義している場合には、その戻り値が dump されます。
+    メソッド marshal_dump は任意のオブジェクトを返すメソッドとし
+    て定義します。
+
+    このようなオブジェクトを load するにはメソッド `marshal_load' が定
+    義されていなくてはならず、load 時に利用されます。
+    marshal_load は marshal_dump の戻り値のコピーを引数に受け取
+    ります。marshal_load 時の self は、生成されたばかり
+    (allocate されたばかり)の状態です。
+    なお、marshal_load の戻り値は無視されます。
+
+    dump するオブジェクトが _dump と marshal_dump の両方のメソッドを持
+    つ場合 marshal_dump が利用されます。
+
+        class Foo
+          def initialize
+            p "initialize() called"
+            @foo = ['foo', 'bar']
+          end
+          def marshal_dump
+            @foo
+          end
+          def marshal_load(obj)
+            @foo = obj
+          end
+        end
+
+        p Marshal.load(Marshal.dump(Foo.new))
+
+        "initialize() called"
+        #<Foo:0x4019ed2c @foo=["foo", "bar"]>
+
+    インスタンス変数の情報は普通マーシャルデータに含まれるので、この例
+    のように marshal_dump を定義する必要はありません(ただし 
+    marsahl_dump を定義するとインスタンス変数の情報は dump されなくな
+    りますので、marshal_dump/marshal_load で扱う必要があります)。
+    marshal_dump/marshal_load はより高度な制御を行いたい場合や
+    拡張ライブラリで定義したクラスのインスタンスがインスタンス変数以外
+    に情報を保持する場合に利用します。
+
+    特に、marshal_dump/marshal_load を定義したオブジェクトは特異メソッドが
+    定義されていてもマーシャルできるようになります。
+    (特異メソッドの情報が自動的に dump されるようになるわけではなく、
+    marshal_dump/marshal_load によりそれを実現する余地があるということ
+    です)
+

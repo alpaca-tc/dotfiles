@@ -1,0 +1,25 @@
+io.c:1605
+VALUE
+rb_io_binmode(io)
+    VALUE io;
+{
+#if defined(_WIN32) || defined(DJGPP) || defined(__CYGWIN__) || defined(__human68k__) || defined(__EMX__)
+    OpenFile *fptr;
+
+    GetOpenFile(io, fptr);
+#ifdef __human68k__
+    if (fptr->f)
+	fmode(fptr->f, _IOBIN);
+    if (fptr->f2)
+	fmode(fptr->f2, _IOBIN);
+#else
+    if (fptr->f && setmode(fileno(fptr->f), O_BINARY) == -1)
+	rb_sys_fail(fptr->path);
+    if (fptr->f2 && setmode(fileno(fptr->f2), O_BINARY) == -1)
+	rb_sys_fail(fptr->path);
+#endif
+
+    fptr->mode |= FMODE_BINMODE;
+#endif
+    return io;
+}

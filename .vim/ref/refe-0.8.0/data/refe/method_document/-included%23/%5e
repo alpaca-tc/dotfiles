@@ -1,0 +1,7 @@
+--- ^ enum
+#    Returns a new array containing elements exclusive between the set
+#    and the given enumerable object.  (set ^ enum) is equivalent to
+#    ((set | enum) - (set & enum)).
+    対称差、すなわち、2つの集合のいずれか一方にだけ属するすべての要素からなる
+    新しい集合を作りそれを返します。
+

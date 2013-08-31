@@ -1,0 +1,7 @@
+file.c:189
+static VALUE
+rb_stat_uid(self)
+    VALUE self;
+{
+    return UINT2NUM(get_stat(self)->st_uid);
+}

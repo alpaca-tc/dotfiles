@@ -1,0 +1,16 @@
+gc.c:1433
+static VALUE
+os_each_obj(argc, argv)
+    int argc;
+    VALUE *argv;
+{
+    VALUE of;
+
+    rb_secure(4);
+    if (rb_scan_args(argc, argv, "01", &of) == 0) {
+	return os_live_obj();
+    }
+    else {
+	return os_obj_of(of);
+    }
+}

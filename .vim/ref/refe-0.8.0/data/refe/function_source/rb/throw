@@ -1,0 +1,12 @@
+eval.c:10267
+void
+rb_throw(tag, val)
+    const char *tag;
+    VALUE val;
+{
+    VALUE argv[2];
+
+    argv[0] = ID2SYM(rb_intern(tag));
+    argv[1] = val;
+    rb_f_throw(2, argv);
+}

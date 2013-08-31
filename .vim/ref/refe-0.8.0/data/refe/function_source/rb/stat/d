@@ -1,0 +1,8 @@
+file.c:2338
+static VALUE
+rb_stat_d(obj)
+    VALUE obj;
+{
+    if (S_ISDIR(get_stat(obj)->st_mode)) return Qtrue;
+    return Qfalse;
+}

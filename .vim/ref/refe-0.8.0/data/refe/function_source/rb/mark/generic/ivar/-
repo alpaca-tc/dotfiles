@@ -1,0 +1,12 @@
+variable.c:869
+void
+rb_mark_generic_ivar(obj)
+    VALUE obj;
+{
+    st_table *tbl;
+
+    if (!generic_iv_tbl) return;
+    if (st_lookup(generic_iv_tbl, obj, (st_data_t *)&tbl)) {
+	rb_mark_tbl(tbl);
+    }
+}

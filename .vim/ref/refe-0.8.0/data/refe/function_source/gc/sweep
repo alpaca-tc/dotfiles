@@ -1,0 +1,114 @@
+gc.c:912
+static void
+gc_sweep()
+{
+    RVALUE *p, *pend, *final_list;
+    int freed = 0;
+    int i, j;
+    unsigned long live = 0;
+
+    if (ruby_in_compile && ruby_parser_stack_on_heap()) {
+	/* should not reclaim nodes during compilation
+           if yacc's semantic stack is not allocated on machine stack */
+	for (i = 0; i < heaps_used; i++) {
+	    p = heaps[i].slot; pend = p + heaps[i].limit;
+	    while (p < pend) {
+		if (!(p->as.basic.flags&FL_MARK) && BUILTIN_TYPE(p) == T_NODE)
+		    rb_gc_mark((VALUE)p);
+		p++;
+	    }
+	}
+    }
+
+    mark_source_filename(ruby_sourcefile);
+    st_foreach(source_filenames, sweep_source_filename, 0);
+
+    freelist = 0;
+    final_list = deferred_final_list;
+    deferred_final_list = 0;
+    for (i = 0; i < heaps_used; i++) {
+	int n = 0;
+	RVALUE *free = freelist;
+	RVALUE *final = final_list;
+
+	p = heaps[i].slot; pend = p + heaps[i].limit;
+	while (p < pend) {
+	    if (!(p->as.basic.flags & FL_MARK)) {
+		if (p->as.basic.flags) {
+		    obj_free((VALUE)p);
+		}
+		if (need_call_final && FL_TEST(p, FL_FINALIZE)) {
+		    p->as.free.flags = FL_MARK; /* remain marked */
+		    p->as.free.next = final_list;
+		    final_list = p;
+		}
+		else {
+		    p->as.free.flags = 0;
+		    p->as.free.next = freelist;
+		    freelist = p;
+		}
+		n++;
+	    }
+	    else if (RBASIC(p)->flags == FL_MARK) {
+		/* objects to be finalized */
+		/* do notning remain marked */
+	    }
+	    else {
+		RBASIC(p)->flags &= ~FL_MARK;
+		live++;
+	    }
+	    p++;
+	}
+	if (n == heaps[i].limit && freed + n > FREE_MIN) {
+	    RVALUE *pp;
+
+	    heaps[i].limit = 0;
+	    for (pp = final_list; pp != final; pp = pp->as.free.next) {
+		p->as.free.flags |= FL_SINGLETON; /* freeing page mark */
+	    }
+	    freelist = free;	/* cancel this page from freelist */
+	}
+	else {
+	    freed += n;
+	}
+    }
+    malloc_limit += (malloc_increase - malloc_limit) * (double)live / (live + freed);
+    if (malloc_limit < GC_MALLOC_LIMIT) malloc_limit = GC_MALLOC_LIMIT;
+    malloc_increase = 0;
+    if (freed < FREE_MIN) {
+	add_heap();
+    }
+    during_gc = 0;
+
+    /* clear finalization list */
+    if (final_list) {
+	RVALUE *tmp;
+
+	if (rb_prohibit_interrupt || ruby_in_compile) {
+	    deferred_final_list = final_list;
+	    return;
+	}
+
+	for (p = final_list; p; p = tmp) {
+	    tmp = p->as.free.next;
+	    run_final((VALUE)p);
+	    if (!FL_TEST(p, FL_SINGLETON)) { /* not freeing page */
+		p->as.free.flags = 0;
+		p->as.free.next = freelist;
+		freelist = p;
+	    }
+	}
+    }
+    for (i = j = 1; j < heaps_used; i++) {
+	if (heaps[i].limit == 0) {
+	    free(heaps[i].slot);
+	    heaps_used--;
+	}
+	else {
+	    if (i != j) {
+		heaps[j] = heaps[i];
+	    }
+	    j++;
+	}
+    }
+}

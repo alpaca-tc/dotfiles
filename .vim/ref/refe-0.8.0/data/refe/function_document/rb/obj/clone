@@ -1,0 +1,3 @@
+: VALUE rb_obj_clone(VALUE obj) 
+    Object#clone の実体です。
+

@@ -1,0 +1,5 @@
+--- Readline.completer_quote_characters=(str)
+--- Readline.completer_quote_character
+    補完時の引用符を指定します。この引用符の間では、completer_word_break_characters
+    も、普通の文字列として扱われます。
+

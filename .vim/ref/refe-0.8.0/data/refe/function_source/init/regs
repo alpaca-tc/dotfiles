@@ -1,0 +1,26 @@
+regex.c:3473
+static void
+init_regs(regs, num_regs)
+     struct re_registers *regs;
+     unsigned int num_regs;
+{
+  int i;
+
+  regs->num_regs = num_regs;
+  if (num_regs < RE_NREGS)
+    num_regs = RE_NREGS;
+
+  if (regs->allocated == 0) {
+    regs->beg = TMALLOC(num_regs, int);
+    regs->end = TMALLOC(num_regs, int);
+    regs->allocated = num_regs;
+  }
+  else if (regs->allocated < num_regs) {
+    TREALLOC(regs->beg, num_regs, int);
+    TREALLOC(regs->end, num_regs, int);
+    regs->allocated = num_regs;
+  }
+  for (i=0; i<num_regs; i++) {
+    regs->beg[i] = regs->end[i] = -1;
+  }
+}

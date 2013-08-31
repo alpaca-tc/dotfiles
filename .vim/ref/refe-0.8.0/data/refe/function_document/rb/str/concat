@@ -1,0 +1,3 @@
+: VALUE rb_str_concat(VALUE s1, VALUE s2)
+    s1.concat s2
+

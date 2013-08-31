@@ -1,0 +1,59 @@
+--- CGI#header(options = "text/html")
+      HTTPヘッダ文字列を作成
+
+        例：
+        header
+          # Content-Type: text/html
+
+        header("text/plain")
+          # Content-Type: text/plain
+
+        header({"nph"        => true,
+                "status"     => "OK",  # == "200 OK"
+                  # "status"     => "200 GOOD",
+                "server"     => ENV['SERVER_SOFTWARE'],
+                "connection" => "close",
+                "type"       => "text/html",
+                "charset"    => "iso-2022-jp",
+                  # Content-Type: text/html; charset=iso-2022-jp
+                "language"   => "ja",
+                "expires"    => Time.now + 30,
+                "cookie"     => [cookie1, cookie2],
+                "my_header1" => "my_value"
+                "my_header2" => "my_value"})
+
+#      header will not convert charset.
+      CGI#headerはcharsetを変換しない。ruby-list:35911
+
+#      status:
+      ステータス：
+
+        "OK"                  --> "200 OK"
+        "PARTIAL_CONTENT"     --> "206 Partial Content"
+        "MULTIPLE_CHOICES"    --> "300 Multiple Choices"
+        "MOVED"               --> "301 Moved Permanently"
+        "REDIRECT"            --> "302 Found"
+        "NOT_MODIFIED"        --> "304 Not Modified"
+        "BAD_REQUEST"         --> "400 Bad Request"
+        "AUTH_REQUIRED"       --> "401 Authorization Required"
+        "FORBIDDEN"           --> "403 Forbidden"
+        "NOT_FOUND"           --> "404 Not Found"
+        "METHOD_NOT_ALLOWED"  --> "405 Method Not Allowed"
+        "NOT_ACCEPTABLE"      --> "406 Not Acceptable"
+        "LENGTH_REQUIRED"     --> "411 Length Required"
+        "PRECONDITION_FAILED" --> "412 Rrecondition Failed"
+        "SERVER_ERROR"        --> "500 Internal Server Error"
+        "NOT_IMPLEMENTED"     --> "501 Method Not Implemented"
+        "BAD_GATEWAY"         --> "502 Bad Gateway"
+        "VARIANT_ALSO_VARIES" --> "506 Variant Also Negotiates"
+
+      CGI#header は、CGI#out を使わずに自力でHTMLを成生
+      して出力したい場合などに使います。
+
+        cgi = CGI.new('html3')
+        print cgi.header({"charset" => "Shift_JIS"})
+        print "<html><head><title>TITLE</title></head>\n"
+        print "<body>BODY</body></html>"
+
+#=== PRINT HTTP HEADER AND STRING TO $DEFAULT_OUTPUT ($>)
+

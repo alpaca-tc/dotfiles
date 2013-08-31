@@ -1,0 +1,7 @@
+parse.y:4424
+static enum node_type
+nodetype(node)			/* for debug */
+    NODE *node;
+{
+    return (enum node_type)nd_type(node);
+}

@@ -1,0 +1,130 @@
+bignum.c:1142
+static void
+bigdivrem(x, y, divp, modp)
+    VALUE x, y;
+    VALUE *divp, *modp;
+{
+    long nx = RBIGNUM(x)->len, ny = RBIGNUM(y)->len;
+    long i, j;
+    VALUE yy, z;
+    BDIGIT *xds, *yds, *zds, *tds;
+    BDIGIT_DBL t2;
+    BDIGIT_DBL_SIGNED num;
+    BDIGIT dd, q;
+
+    if (BIGZEROP(y)) rb_num_zerodiv();
+    yds = BDIGITS(y);
+    if (nx < ny || (nx == ny && BDIGITS(x)[nx - 1] < BDIGITS(y)[ny - 1])) {
+	if (divp) *divp = rb_int2big(0);
+	if (modp) *modp = x;
+	return;
+    }
+    xds = BDIGITS(x);
+    if (ny == 1) {
+	dd = yds[0];
+	z = rb_big_clone(x);
+	zds = BDIGITS(z);
+	t2 = 0; i = nx;
+	while (i--) {
+	    t2 = BIGUP(t2) + zds[i];
+	    zds[i] = (BDIGIT)(t2 / dd);
+	    t2 %= dd;
+	}
+	RBIGNUM(z)->sign = RBIGNUM(x)->sign==RBIGNUM(y)->sign;
+	if (modp) {
+	    *modp = rb_uint2big((unsigned long)t2);
+	    RBIGNUM(*modp)->sign = RBIGNUM(x)->sign;
+	}
+	if (divp) *divp = z;
+	return;
+    }
+    z = bignew(nx==ny?nx+2:nx+1, RBIGNUM(x)->sign==RBIGNUM(y)->sign);
+    zds = BDIGITS(z);
+    if (nx==ny) zds[nx+1] = 0;
+    while (!yds[ny-1]) ny--;
+
+    dd = 0;
+    q = yds[ny-1];
+    while ((q & (1<<(BITSPERDIG-1))) == 0) {
+	q <<= 1;
+	dd++;
+    }
+    if (dd) {
+	yy = rb_big_clone(y);
+	tds = BDIGITS(yy);
+	j = 0;
+	t2 = 0;
+	while (j<ny) {
+	    t2 += (BDIGIT_DBL)yds[j]<<dd;
+	    tds[j++] = BIGLO(t2);
+	    t2 = BIGDN(t2);
+	}
+	yds = tds;
+	j = 0;
+	t2 = 0;
+	while (j<nx) {
+	    t2 += (BDIGIT_DBL)xds[j]<<dd;
+	    zds[j++] = BIGLO(t2);
+	    t2 = BIGDN(t2);
+	}
+	zds[j] = (BDIGIT)t2;
+    }
+    else {
+	zds[nx] = 0;
+	j = nx;
+	while (j--) zds[j] = xds[j];
+    }
+
+    j = nx==ny?nx+1:nx;
+    do {
+	if (zds[j] ==  yds[ny-1]) q = BIGRAD-1;
+	else q = (BDIGIT)((BIGUP(zds[j]) + zds[j-1])/yds[ny-1]);
+	if (q) {
+	    i = 0; num = 0; t2 = 0;
+	    do {			/* multiply and subtract */
+		BDIGIT_DBL ee;
+		t2 += (BDIGIT_DBL)yds[i] * q;
+		ee = num - BIGLO(t2);
+		num = (BDIGIT_DBL)zds[j - ny + i] + ee;
+		if (ee) zds[j - ny + i] = BIGLO(num);
+		num = BIGDN(num);
+		t2 = BIGDN(t2);
+	    } while (++i < ny);
+	    num += zds[j - ny + i] - t2;/* borrow from high digit; don't update */
+	    while (num) {		/* "add back" required */
+		i = 0; num = 0; q--;
+		do {
+		    BDIGIT_DBL ee = num + yds[i];
+		    num = (BDIGIT_DBL)zds[j - ny + i] + ee;
+		    if (ee) zds[j - ny + i] = BIGLO(num);
+		    num = BIGDN(num);
+		} while (++i < ny);
+		num--;
+	    }
+	}
+	zds[j] = q;
+    } while (--j >= ny);
+    if (divp) {			/* move quotient down in z */
+	*divp = rb_big_clone(z);
+	zds = BDIGITS(*divp);
+	j = (nx==ny ? nx+2 : nx+1) - ny;
+	for (i = 0;i < j;i++) zds[i] = zds[i+ny];
+	RBIGNUM(*divp)->len = i;
+    }
+    if (modp) {			/* normalize remainder */
+	*modp = rb_big_clone(z);
+	zds = BDIGITS(*modp);
+	while (--ny && !zds[ny]); ++ny;
+	if (dd) {
+	    t2 = 0; i = ny;
+	    while(i--) {
+		t2 = (t2 | zds[i]) >> dd;
+		q = zds[i];
+		zds[i] = BIGLO(t2);
+		t2 = BIGUP(q);
+	    }
+	}
+	RBIGNUM(*modp)->len = ny;
+	RBIGNUM(*modp)->sign = RBIGNUM(x)->sign;
+    }
+}

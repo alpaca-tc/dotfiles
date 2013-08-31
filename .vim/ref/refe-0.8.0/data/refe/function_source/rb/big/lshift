@@ -1,0 +1,29 @@
+bignum.c:1602
+VALUE
+rb_big_lshift(x, y)
+    VALUE x, y;
+{
+    BDIGIT *xds, *zds;
+    int shift = NUM2INT(y);
+    int s1 = shift/BITSPERDIG;
+    int s2 = shift%BITSPERDIG;
+    VALUE z;
+    BDIGIT_DBL num = 0;
+    long len, i;
+
+    if (shift < 0) return rb_big_rshift(x, INT2FIX(-shift));
+    len = RBIGNUM(x)->len;
+    z = bignew(len+s1+1, RBIGNUM(x)->sign);
+    zds = BDIGITS(z);
+    for (i=0; i<s1; i++) {
+	*zds++ = 0;
+    }
+    xds = BDIGITS(x);
+    for (i=0; i<len; i++) {
+	num = num | (BDIGIT_DBL)*xds++<<s2;
+	*zds++ = BIGLO(num);
+	num = BIGDN(num);
+    }
+    *zds = BIGLO(num);
+    return bignorm(z);
+}

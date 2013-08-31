@@ -1,0 +1,19 @@
+eval.c:1731
+static VALUE
+rb_mod_s_constants()
+{
+    NODE *cbase = ruby_cref;
+    void *data = 0;
+
+    while (cbase) {
+	if (!NIL_P(cbase->nd_clss)) {
+	    data = rb_mod_const_at(cbase->nd_clss, data);
+	}
+	cbase = cbase->nd_next;
+    }
+
+    if (!NIL_P(ruby_cbase)) {
+	data = rb_mod_const_of(ruby_cbase, data);
+    }
+    return rb_const_list(data);
+}

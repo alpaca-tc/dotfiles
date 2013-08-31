@@ -1,0 +1,17 @@
+--- each {|item|  ... }
+
+    範囲内の要素に対して繰り返します。
+
+    ruby 1.7 feature: Range#each は各要素の succ メソッドを使用
+    してイテレーションするようになりました。1.6 までは、Numeric オブ
+    ジェクトは、特別に算術演算で行われていました。この変更により Float 
+    の Range の扱いが変わります(Float は、succ を持たない)。
+
+        (1.0 .. 2.0).each {|v| p v}
+        => ruby 1.6.7 (2002-03-01) [i586-linux]
+           1
+           2
+        => -:1:in `each': cannot iterate from Float (TypeError)
+                from -:1
+           ruby 1.7.3 (2002-09-02) [i586-linux]
+

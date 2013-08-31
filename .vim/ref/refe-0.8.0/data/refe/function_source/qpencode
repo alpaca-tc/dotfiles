@@ -1,0 +1,55 @@
+pack.c:1016
+static void
+qpencode(str, from, len)
+    VALUE str, from;
+    long len;
+{
+    char buff[1024];
+    long i = 0, n = 0, prev = EOF;
+    unsigned char *s = (unsigned char*)RSTRING(from)->ptr;
+    unsigned char *send = s + RSTRING(from)->len;
+
+    while (s < send) {
+        if ((*s > 126) ||
+	    (*s < 32 && *s != '\n' && *s != '\t') ||
+	    (*s == '=')) {
+	    buff[i++] = '=';
+	    buff[i++] = hex_table[*s >> 4];
+	    buff[i++] = hex_table[*s & 0x0f];
+            n += 3;
+            prev = EOF;
+        }
+	else if (*s == '\n') {
+            if (prev == ' ' || prev == '\t') {
+		buff[i++] = '=';
+		buff[i++] = *s;
+            }
+	    buff[i++] = *s;
+            n = 0;
+            prev = *s;
+        }
+	else {
+	    buff[i++] = *s;
+            n++;
+            prev = *s;
+        }
+        if (n > len) {
+	    buff[i++] = '=';
+	    buff[i++] = '\n';
+            n = 0;
+            prev = '\n';
+        }
+	if (i > 1024 - 5) {
+	    rb_str_buf_cat(str, buff, i);
+	    i = 0;
+	}
+	s++;
+    }
+    if (n > 0) {
+	buff[i++] = '=';
+	buff[i++] = '\n';
+    }
+    if (i > 0) {
+	rb_str_buf_cat(str, buff, i);
+    }
+}

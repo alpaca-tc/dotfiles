@@ -1,0 +1,10 @@
+numeric.c:260
+static VALUE
+num_nonzero_p(num)
+    VALUE num;
+{
+    if (RTEST(rb_funcall(num, rb_intern("zero?"), 0, 0))) {
+	return Qnil;
+    }
+    return num;
+}

@@ -1,0 +1,26 @@
+io.c:3359
+static int
+io_cntl(fd, cmd, narg, io_p)
+    int fd, cmd, io_p;
+    long narg;
+{
+    int retval;
+
+#ifdef HAVE_FCNTL
+    TRAP_BEG;
+# if defined(__CYGWIN__)
+    retval = io_p?ioctl(fd, cmd, (void*)narg):fcntl(fd, cmd, narg);
+# else
+    retval = io_p?ioctl(fd, cmd, narg):fcntl(fd, cmd, narg);
+# endif
+    TRAP_END;
+#else
+    if (!io_p) {
+	rb_notimplement();
+    }
+    TRAP_BEG;
+    retval = ioctl(fd, cmd, narg);
+    TRAP_END;
+#endif
+    return retval;
+}

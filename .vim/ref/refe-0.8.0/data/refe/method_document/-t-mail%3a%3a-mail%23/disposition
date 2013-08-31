@@ -1,0 +1,13 @@
+: disposition( default = nil ) -> String
+: disposition=( pos )
+    pos: String
+
+    Content-Disposition の主値 (文字列)。返り値は常に小文字に統一されます。
+    name に対応する値やヘッダそのものが存在しない場合は default を
+    返します。
+      --
+      # example
+      mail['Content-Disposition'] = 'attachement; filename="test.rb"'
+      p mail.disposition   # "attachment"
+      --
+

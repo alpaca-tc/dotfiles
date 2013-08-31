@@ -1,0 +1,95 @@
+string.c:2239
+static VALUE
+tr_trans(str, src, repl, sflag)
+    VALUE str, src, repl;
+    int sflag;
+{
+    struct tr trsrc, trrepl;
+    int cflag = 0;
+    int trans[256];
+    int i, c, modify = 0;
+    char *s, *send;
+
+    StringValue(src);
+    StringValue(repl);
+    if (RSTRING(str)->len == 0 || !RSTRING(str)->ptr) return Qnil;
+    trsrc.p = RSTRING(src)->ptr; trsrc.pend = trsrc.p + RSTRING(src)->len;
+    if (RSTRING(src)->len >= 2 && RSTRING(src)->ptr[0] == '^') {
+	cflag++;
+	trsrc.p++;
+    }
+    if (RSTRING(repl)->len == 0) {
+	return rb_str_delete_bang(1, &src, str);
+    }
+    trrepl.p = RSTRING(repl)->ptr;
+    trrepl.pend = trrepl.p + RSTRING(repl)->len;
+    trsrc.gen = trrepl.gen = 0;
+    trsrc.now = trrepl.now = 0;
+    trsrc.max = trrepl.max = 0;
+
+    if (cflag) {
+	for (i=0; i<256; i++) {
+	    trans[i] = 1;
+	}
+	while ((c = trnext(&trsrc)) >= 0) {
+	    trans[c & 0xff] = -1;
+	}
+	while ((c = trnext(&trrepl)) >= 0)
+	    /* retrieve last replacer */;
+	for (i=0; i<256; i++) {
+	    if (trans[i] >= 0) {
+		trans[i] = trrepl.now;
+	    }
+	}
+    }
+    else {
+	int r;
+
+	for (i=0; i<256; i++) {
+	    trans[i] = -1;
+	}
+	while ((c = trnext(&trsrc)) >= 0) {
+	    r = trnext(&trrepl);
+	    if (r == -1) r = trrepl.now;
+	    trans[c & 0xff] = r;
+	}
+    }
+
+    rb_str_modify(str);
+    s = RSTRING(str)->ptr; send = s + RSTRING(str)->len;
+    if (sflag) {
+	char *t = s;
+	int c0, last = -1;
+
+	while (s < send) {
+	    c0 = *s++;
+	    if ((c = trans[c0 & 0xff]) >= 0) {
+		if (last == c) continue;
+		last = c;
+		*t++ = c & 0xff;
+		modify = 1;
+	    }
+	    else {
+		last = -1;
+		*t++ = c0;
+	    }
+	}
+	if (RSTRING(str)->len > (t - RSTRING(str)->ptr)) {
+	    RSTRING(str)->len = (t - RSTRING(str)->ptr);
+	    modify = 1;
+	    *t = '\0';
+	}
+    }
+    else {
+	while (s < send) {
+	    if ((c = trans[*s & 0xff]) >= 0) {
+		*s = c & 0xff;
+		modify = 1;
+	    }
+	    s++;
+	}
+    }
+
+    if (modify) return str;
+    return Qnil;
+}

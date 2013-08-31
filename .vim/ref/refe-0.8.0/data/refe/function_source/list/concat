@@ -1,0 +1,25 @@
+parse.y:4566
+static NODE*
+list_concat(head, tail)
+    NODE *head, *tail;
+{
+    NODE *last;
+
+    if (head->nd_next) {
+	last = head->nd_next->nd_end;
+    }
+    else {
+	last = head;
+    }
+
+    head->nd_alen += tail->nd_alen;
+    last->nd_next = tail;
+    if (tail->nd_next) {
+	head->nd_next->nd_end = tail->nd_next->nd_end;
+    }
+    else {
+	head->nd_next->nd_end = tail;
+    }
+
+    return head;
+}

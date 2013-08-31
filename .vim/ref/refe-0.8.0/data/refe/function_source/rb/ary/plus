@@ -1,0 +1,16 @@
+array.c:1588
+VALUE
+rb_ary_plus(x, y)
+    VALUE x, y;
+{
+    VALUE z;
+    long len;
+
+    y = to_ary(y);
+    len = RARRAY(x)->len + RARRAY(y)->len;
+    z = rb_ary_new2(len);
+    MEMCPY(RARRAY(z)->ptr, RARRAY(x)->ptr, VALUE, RARRAY(x)->len);
+    MEMCPY(RARRAY(z)->ptr + RARRAY(x)->len, RARRAY(y)->ptr, VALUE, RARRAY(y)->len);
+    RARRAY(z)->len = len;
+    return z;
+}

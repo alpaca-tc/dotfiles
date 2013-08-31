@@ -1,0 +1,2 @@
+: VALUE rb_obj_instance_variables(VALUE obj)
+

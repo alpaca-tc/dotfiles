@@ -1,0 +1,20 @@
+array.c:1381
+static VALUE
+rb_ary_reject_bang(ary)
+    VALUE ary;
+{
+    long i1, i2;
+
+    rb_ary_modify(ary);
+    for (i1 = i2 = 0; i1 < RARRAY(ary)->len; i1++) {
+	if (RTEST(rb_yield(RARRAY(ary)->ptr[i1]))) continue;
+	if (i1 != i2) {
+	    RARRAY(ary)->ptr[i2] = RARRAY(ary)->ptr[i1];
+	}
+	i2++;
+    }
+    if (RARRAY(ary)->len == i2) return Qnil;
+    RARRAY(ary)->len = i2;
+
+    return ary;
+}

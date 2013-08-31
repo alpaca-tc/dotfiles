@@ -1,0 +1,22 @@
+io.c:3826
+static VALUE
+argf_getc()
+{
+    VALUE byte;
+
+  retry:
+    if (!next_argv()) return Qnil;
+    if (TYPE(current_file) != T_FILE) {
+	byte = rb_funcall3(current_file, rb_intern("getc"), 0, 0);
+    }
+    else {
+	byte = rb_io_getc(current_file);
+    }
+    if (NIL_P(byte) && next_p != -1) {
+	argf_close(current_file);
+	next_p = 1;
+	goto retry;
+    }
+
+    return byte;
+}

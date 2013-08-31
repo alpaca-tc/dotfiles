@@ -1,0 +1,13 @@
+--- reason ruby 1.8 feature
+
+    例外を発生させた原因をシンボルで返します。返す値は、
+
+        * :break
+        * :redo
+        * :retry
+        * :next
+        * :return
+#       * :noreason
+
+    のいずれかです。exit_value の例を参照してください。
+

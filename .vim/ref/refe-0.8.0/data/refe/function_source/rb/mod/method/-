@@ -1,0 +1,8 @@
+eval.c:7410
+static VALUE
+rb_mod_method(mod, vid)
+    VALUE mod;
+    VALUE vid;
+{
+    return mnew(mod, Qundef, rb_to_id(vid), rb_cUnboundMethod);
+}

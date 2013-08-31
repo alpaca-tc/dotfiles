@@ -1,0 +1,9 @@
+re.c:980
+static VALUE
+match_values_at(argc, argv, match)
+    int argc;
+    VALUE *argv;
+    VALUE match;
+{
+    return rb_values_at(match, RMATCH(match)->regs->num_regs, argc, argv, match_entry);
+}

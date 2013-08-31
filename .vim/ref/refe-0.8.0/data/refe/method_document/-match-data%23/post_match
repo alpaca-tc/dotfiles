@@ -1,0 +1,7 @@
+--- post_match
+
+    マッチした部分より後ろの文字列を返します($'と同じ)。
+
+        /(bar)(BAZ)?/ =~ "foobarbaz"
+        p $~.post_match # => "baz"
+

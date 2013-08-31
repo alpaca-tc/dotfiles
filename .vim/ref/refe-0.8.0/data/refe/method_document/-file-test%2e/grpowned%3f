@@ -1,0 +1,5 @@
+--- FileTest.grpowned?(filename)
+
+    filename のグループ ID が実行グループ ID と等しい時、真を返
+    します。
+

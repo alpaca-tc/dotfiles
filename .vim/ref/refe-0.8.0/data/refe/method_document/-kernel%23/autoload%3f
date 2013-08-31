@@ -1,0 +1,83 @@
+--- autoload(const_name, feature)
+--- autoload?(const_name)            ruby 1.8 feature
+
+    定数 const_name を最初に参照した時に feature を
+    require するように設定します。const_name
+    は文字列または Symbol で指定します。
+    なお、const_name には、"::" 演算子を含めることはできません
+    (つまり、トップレベルの定数しか指定できません)。
+
+    nil を返します。
+
+    ruby 1.8 feature: 任意のクラス／モジュールの定数を autoload 
+    できます。やはり、const_name に "::" 演算子を含めることはで
+    きませんが、以下のように定義する事ができます。(実際には、
+    Module#autoload [Module/autoload] が呼ばれます)
+
+        ------- /tmp/foo.rb ---------
+        class Foo
+          class Bar
+          end
+        end
+        ----- end of /tmp/foo.rb ----
+
+        class Foo
+          autoload :Bar, '/tmp/foo.rb'
+        end
+        p Foo::Bar
+
+    あるいは、以下のようにもできます。
+
+        class Foo
+        end
+        Foo.autoload :Bar, '/tmp/foo.rb'
+        p Foo::Bar
+
+    autoload? は、autoload 定数がまだ定義されてない(ロードされて
+    いない)ときにそのパス名を返します。また、ロード済みなら nil を返し
+    ます。
+
+        ------- /tmp/foo.rb ---------
+        class Foo
+          class Bar
+          end
+        end
+        ----- end of /tmp/foo.rb ----
+
+        class Foo
+        end
+        Foo.autoload :Bar, '/tmp/foo.rb'
+        p Foo.autoload?(:Bar)         # => "/tmp/foo.rb"
+        p Foo::Bar                    # => Foo::Bar
+        p Foo.autoload?(:Bar)         # => nil
+
+    以下のように、autoload したライブラリがネストした定数を定義しない場
+    合、一見、正常に動作しているように見えるので注意が必要です(警告メッ
+    セージが出ています)。
+
+          ------- /tmp/bar.rb ---------
+          class Bar
+          end
+          ----- end of /tmp/bar.rb ----
+
+          class Foo
+            autoload :Bar, '/tmp/bar.rb'
+          end
+          p Foo::Bar
+          p Foo.autoload?(:Bar)
+
+          # => -:4: warning: toplevel constant Bar referenced by Foo::Bar
+               Bar
+               nil
+
+    これは以下のようにネストせずに定義したのと同じことです。
+
+          class Foo
+          end
+          class Bar
+          end
+          p Foo::Bar
+
+          # => -:5: warning: toplevel constant Bar referenced by Foo::Bar
+               Bar
+

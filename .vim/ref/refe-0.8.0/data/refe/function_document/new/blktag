@@ -1,0 +1,2 @@
+: static struct BLOCKTAG *new_blktag(void)
+

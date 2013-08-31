@@ -1,0 +1,120 @@
+= NEWS
+
+== version 0.8.0 (2003-10-17)
+
+  * [CHANGE] Database format changed.
+    ReFe 0.8 can handle 0.7 database, but not vice versa.
+  * [new] Emulate method inheritance.  e.g. Array#inject -> Enumerable#inject
+  * [new] Convert charactor encodings (euc-jp/shift_jis only now).
+  * [fix] (rubyrefm) Could not get Array#-.
+  * [fix] (rubyrefm) +@/-@ are distinguished from +/-.
+  * [fix] (rubyrefm) Process each pages separately.
+  * [fix] (rubyrefm) Support latest Ruby Reference Manual (ja).
+
+== version 0.7.2 (2003-08-06)
+
+  * [new] new option: refe --pattern=PATTERN
+  * [new] support bare method list.
+    (Object#marshal_dump, Thread.exclusive, etc.)
+  * [new] -withdoc package contains TMail reference manual (experimental).
+  * [new] support my original format, Unified Reference RD (*.rrd.m).
+  * validated on ruby 1.8.0 release.
+
+== version 0.7.1 (2003-05-19)
+
+  * [new] support constants.
+  * [new] support "man" section (man.sprintf, man.pack)
+  * [fix] reduce ruby 1.8 warnings.
+
+== version 0.7.0 (2003-04-04)
+
+  * [CHANGE] Database format changed.
+  * [fix] Constant REFE_DATA_DIR was not set. (thanks WATANABE Hirofumi)
+  * [fix] There are case-insensitive file systems. (thanks Nobuyoshi Nakada)
+  * [fix] refe: wildcard did not work correctly.
+  * [new] refe: assume -l option if the stdout is not a TTY.
+  * [new] Manual page refe.1 is bundled.
+
+== version 0.6.0 (2003-04-01)
+
+  * [CHANGE] Introduces new database; It is ruby version independent.
+  * [CHANGE] mkrefe command is removed.  Use mkrefe_* command instead.
+  * [new] bundle compiled database.
+  * [new] support class document.
+  * [fix] better support for standard library reference.
+
+== version 0.5.2 (2002-11-10)
+
+  * [new] support macro entry in the extention reference manual.
+
+== version 0.5.1 (2002-10-24)
+
+  * [new] refe str g-   #=> String#gsub
+  * reduces warning in 1.7.
+
+== version 0.5.0 (2002-03-22)
+
+  * [new] support method list.
+
+== version 0.4.6 (2002-01-04)
+
+  * [fix] supports function names which include capitals (e.g. Check_Type).
+  * [fix] mkrefe -c correctly parses module functions.
+  * [fix] mkrefe -c correctly parses FileTest methods.
+  * [fix] mkrefe -c correctly parses File::Stat methods.
+  * [fix] mkrefe -c correctly parses Process::Status methods.
+
+== version 0.4.5 (2001-10-30)
+
+  * [fix] mkrefe 0.4.4 did not work with -e.
+  * [fix] mkrefe 0.4.4 did not work with Ruby 1.6.
+  * parses almost all functions correctly.
+
+== version 0.4.4 (2001-10-29)
+
+  * now refe can lookup C-API reference manual
+
+== version 0.4.3 (2001-10-17)
+
+  * [fix] checks both of PATH and PATH.db
+    (thanks Mitsuhiro Kondo)
+
+== version 0.4.2 (2001-08-23)
+
+  * parses global functions (raise, catch ...) for -c
+
+== version 0.4.1 (2001-08-21)
+
+  * [fix] installer did not work
+  * [fix] mkrefe -r; mkrefe -c failed
+  * selects DBM type automatically on installation (GDBM/DBM).
+
+== version 0.4.0 (2001-08-21)
+
+  * now refe is released under LGPL.
+  * file name changes: mkindex.rb -> mkrefe
+  * mkrefe -i for explicit initialize
+  * new options mkrefe -r, -c
+
+== version 0.3.1 (2001-04-05)
+
+  * adds ChangeLog
+  * install.rb: uses CONFIG['sitedir']
+  * refe: ',' is allowed as alias of '#'
+
+== version 0.3.0 (2001-04-01)
+
+  * librefe.rb: can abbreviate gsub! -> g!
+  * refe: new options -a -s -l --version --copyright --help
+
+== version 0.2.0 (2001-03-31)
+
+  * adds installer
+  * librefe.rb: class/method completion
+  * mkindex.rb: correctly parse aliased method.
+  * mkindex.rb: remove RD tags.
+
+== version 0.1.0 (2001-03-30)
+
+  * first release.
+

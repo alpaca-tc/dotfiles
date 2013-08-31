@@ -1,0 +1,2 @@
+--- assert_operator(obj1, op, obj2[, message])
+

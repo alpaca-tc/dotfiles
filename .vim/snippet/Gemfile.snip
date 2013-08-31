@@ -3,10 +3,15 @@ abbr        source 'https://rubygems.org'
 options     word
   source 'https://rubygems.org'
 
+snippet ruby
+abbr    ruby 'version'
+options word
+  ruby '${1:#:version}'
+
 snippet     gem
 abbr        gem 'name', 'version'
 options     word
-  gem '${1:name}'${2:, '~> ${3:1.0\}'}
+  gem '${1:#:name}'${2:, '~> ${3:version\}'}
 
 # Options {{{
 snippet     branch

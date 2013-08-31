@@ -1,0 +1,22 @@
+--- private([name ... ])
+
+    引数なしのときは今後このクラスまたはモジュール定義内で新規に定義さ
+    れるメソッドを関数形式でだけ呼び出せるように(private)設定します。
+
+    引数が与えられた時には引数によって指定されたメソッドを private に
+    設定します。
+
+    例:
+
+      class Foo
+        def foo1() 1 end      # デフォルトでは public
+        private               # 可視性を private に変更
+        def foo2() 2 end      # foo2 は private メソッド
+      end
+
+      foo = Foo.new
+      p foo.foo1          # => 1
+      p foo.foo2          # => private method `foo2' called for #<Foo:0x401b7628> (NoMethodError)
+
+    self を返します。
+

@@ -1,0 +1,4 @@
+--- OptionParser#banner
+--- OptionParser#banner=(heading)
+    Heading banner preceding summary.
+

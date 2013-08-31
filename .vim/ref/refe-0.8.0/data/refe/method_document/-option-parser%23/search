@@ -1,0 +1,11 @@
+--- OptionParser#search(id, k)
+    Searches k in stack for id hash, and returns it or yielded
+    value if called as iterator.
+    :Parameters:
+      : id
+        searching table.
+      : k
+        searching key.
+      : Block
+        yielded with the found value when succeeded.
+

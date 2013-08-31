@@ -1,0 +1,11 @@
+bignum.c:927
+static VALUE
+rb_big_eql(x, y)
+    VALUE x, y;
+{
+    if (TYPE(y) != T_BIGNUM) return Qfalse;
+    if (RBIGNUM(x)->sign != RBIGNUM(y)->sign) return Qfalse;
+    if (RBIGNUM(x)->len != RBIGNUM(y)->len) return Qfalse;
+    if (MEMCMP(BDIGITS(x),BDIGITS(y),BDIGIT,RBIGNUM(y)->len) != 0) return Qfalse;
+    return Qtrue;
+}

@@ -1,0 +1,7 @@
+--- OptionParser#environment([env])
+    Parses environment variable env or its uppercase with spliting
+    like as shell.
+    :Parameters:
+      : env
+        defaulted to basename of the program.
+

@@ -1,0 +1,27 @@
+time.c:213
+static VALUE
+time_s_at(argc, argv, klass)
+    int argc;
+    VALUE *argv;
+    VALUE klass;
+{
+    struct timeval tv;
+    VALUE time, t;
+
+    if (rb_scan_args(argc, argv, "11", &time, &t) == 2) {
+	tv.tv_sec = NUM2LONG(time);
+	tv.tv_usec = NUM2LONG(t);
+    }
+    else {
+	tv = rb_time_timeval(time);
+    }
+    t = time_new_internal(klass, tv.tv_sec, tv.tv_usec);
+    if (TYPE(time) == T_DATA && RDATA(time)->dfree == time_free) {
+	struct time_object *tobj, *tobj2;
+
+	GetTimeval(time, tobj);
+	GetTimeval(t, tobj2);
+	tobj2->gmt = tobj->gmt;
+    }
+    return t;
+}

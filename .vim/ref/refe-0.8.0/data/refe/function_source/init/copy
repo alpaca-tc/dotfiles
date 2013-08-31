@@ -1,0 +1,28 @@
+object.c:106
+static void
+init_copy(dest, obj)
+    VALUE dest, obj;
+{
+    if (OBJ_FROZEN(dest)) {
+        rb_raise(rb_eTypeError, "[bug] frozen object (%s) allocated", rb_obj_classname(dest));
+    }
+    RBASIC(dest)->flags &= ~(T_MASK|FL_EXIVAR);
+    RBASIC(dest)->flags |= RBASIC(obj)->flags & (T_MASK|FL_EXIVAR|FL_TAINT);
+    if (FL_TEST(obj, FL_EXIVAR)) {
+	rb_copy_generic_ivar(dest, obj);
+    }
+    rb_gc_copy_finalizer(dest, obj);
+    switch (TYPE(obj)) {
+      case T_OBJECT:
+      case T_CLASS:
+      case T_MODULE:
+	if (ROBJECT(dest)->iv_tbl) {
+	    st_free_table(ROBJECT(dest)->iv_tbl);
+	    ROBJECT(dest)->iv_tbl = 0;
+	}
+	if (ROBJECT(obj)->iv_tbl) {
+	    ROBJECT(dest)->iv_tbl = st_copy(ROBJECT(obj)->iv_tbl);
+	}
+    }
+    rb_funcall(dest, id_init_copy, 1, obj);
+}

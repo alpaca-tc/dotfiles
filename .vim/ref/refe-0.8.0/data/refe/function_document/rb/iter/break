@@ -1,0 +1,4 @@
+: void rb_iter_break(void)
+    break の C 用インターフェイスです。
+    現在評価中のブロックから抜けます。
+

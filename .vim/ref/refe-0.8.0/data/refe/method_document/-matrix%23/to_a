@@ -1,0 +1,6 @@
+--- Matrix#to_a
+    converts to Array
+
+    Arrayに変換する。
+    結果は、ネストした配列(配列の配列)となる。
+

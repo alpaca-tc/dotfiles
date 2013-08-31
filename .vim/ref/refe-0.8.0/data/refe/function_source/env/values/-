@@ -1,0 +1,18 @@
+hash.c:1311
+static VALUE
+env_values()
+{
+    char **env;
+    VALUE ary = rb_ary_new();
+
+    env = GET_ENVIRON(environ);
+    while (*env) {
+	char *s = strchr(*env, '=');
+	if (s) {
+	    rb_ary_push(ary, env_str_new2(s+1));
+	}
+	env++;
+    }
+    FREE_ENVIRON(environ);
+    return ary;
+}

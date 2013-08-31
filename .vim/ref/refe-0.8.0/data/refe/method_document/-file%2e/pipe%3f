@@ -1,0 +1,4 @@
+--- File.pipe?(path)
+
+    FileTest.pipe? と同じです。
+

@@ -1,0 +1,8 @@
+string.c:2691
+static VALUE
+rb_f_split(argc, argv)
+    int argc;
+    VALUE *argv;
+{
+    return rb_str_split_m(argc, argv, uscore_get());
+}

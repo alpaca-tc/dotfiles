@@ -1,0 +1,5 @@
+--- Matrix#[](i, j)
+    returns the (i,j)th-component
+
+    (i,j)要素を返す。
+

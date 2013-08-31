@@ -1,0 +1,40 @@
+array.c:746
+static VALUE
+rb_ary_aset(argc, argv, ary)
+    int argc;
+    VALUE *argv;
+    VALUE ary;
+{
+    long offset, beg, len;
+
+    if (argc == 3) {
+	if (SYMBOL_P(argv[0])) {
+	    rb_raise(rb_eTypeError, "Symbol as array index");
+	}
+	if (SYMBOL_P(argv[1])) {
+	    rb_raise(rb_eTypeError, "Symbol as subarray length");
+	}
+	rb_ary_update(ary, NUM2LONG(argv[0]), NUM2LONG(argv[1]), argv[2]);
+	return argv[2];
+    }
+    if (argc != 2) {
+	rb_raise(rb_eArgError, "wrong number of arguments (%d for 2)", argc);
+    }
+    if (FIXNUM_P(argv[0])) {
+	offset = FIX2LONG(argv[0]);
+	goto fixnum;
+    }
+    if (SYMBOL_P(argv[0])) {
+	rb_raise(rb_eTypeError, "Symbol as array index");
+    }
+    if (rb_range_beg_len(argv[0], &beg, &len, RARRAY(ary)->len, 1)) {
+	/* check if idx is Range */
+	rb_ary_update(ary, beg, len, argv[1]);
+	return argv[1];
+    }
+
+    offset = NUM2LONG(argv[0]);
+fixnum:
+    rb_ary_store(ary, offset, argv[1]);
+    return argv[1];
+}

@@ -1,0 +1,11 @@
+array.c:1031
+VALUE
+rb_inspecting_p(obj)
+    VALUE obj;
+{
+    VALUE inspect_tbl;
+
+    inspect_tbl = get_inspect_tbl(Qfalse);
+    if (NIL_P(inspect_tbl)) return Qfalse;
+    return rb_ary_includes(inspect_tbl, rb_obj_id(obj));
+}

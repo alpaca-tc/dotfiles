@@ -1,0 +1,6 @@
+: new( address, port = 80, proxy_addr = nil, proxy_port = nil )
+    新しい HTTP オブジェクトを生成します。address は HTTP サーバーの FQDN で、
+    port は接続するポート番号です。このメソッドではまだ接続はしません。
+
+    proxy_addr を与えるとプロクシを介して接続するオブジェクトを生成します。
+

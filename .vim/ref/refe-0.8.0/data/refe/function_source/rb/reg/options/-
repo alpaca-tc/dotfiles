@@ -1,0 +1,15 @@
+re.c:1472
+int
+rb_reg_options(re)
+    VALUE re;
+{
+    int options;
+
+    rb_reg_check(re);
+    options = RREGEXP(re)->ptr->options &
+	(RE_OPTION_IGNORECASE|RE_OPTION_MULTILINE|RE_OPTION_EXTENDED);
+    if (FL_TEST(re, KCODE_FIXED)) {
+	options |= rb_reg_get_kcode(re);
+    }
+    return options;
+}

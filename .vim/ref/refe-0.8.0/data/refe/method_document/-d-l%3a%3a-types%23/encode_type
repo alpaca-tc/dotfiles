@@ -1,0 +1,13 @@
+--- encode_type(alias)
+
+    DLモジュールで用いる型定義とRubyのオブジェクトをDLモジュールで用いるデータへの
+    エンコード用Procオブジェクトと、DLモジュールのデータからRubyオブジェクト
+    へのデコード用のProcオブジェクトの組を次の通りのArrayとして返す。
+
+      [ty,enc,dec,senc,sdec]
+      ty : DLでの型指定子
+      enc : エンコード用Proc
+      dec : デコード用Proc
+      senc : エンコード用Proc(dl/struct.rbで使用)
+      sdec : デコード用Proc(dl/struct.rbで使用)
+

@@ -1,0 +1,9 @@
+struct.c:529
+static VALUE
+rb_struct_values_at(argc, argv, s)
+    int argc;
+    VALUE *argv;
+    VALUE s;
+{
+    return rb_values_at(s, RSTRUCT(s)->len, argc, argv, struct_entry);
+}

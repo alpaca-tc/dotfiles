@@ -1,0 +1,20 @@
+array.c:273
+static VALUE
+rb_ary_s_create(argc, argv, klass)
+    int argc;
+    VALUE *argv;
+    VALUE klass;
+{
+    VALUE ary = ary_alloc(klass);
+
+    if (argc < 0) {
+	rb_raise(rb_eArgError, "negative number of arguments");
+    }
+    if (argc > 0) {
+	RARRAY(ary)->ptr = ALLOC_N(VALUE, argc);
+	MEMCPY(RARRAY(ary)->ptr, argv, VALUE, argc);
+    }
+    RARRAY(ary)->len = RARRAY(ary)->aux.capa = argc;
+
+    return ary;
+}

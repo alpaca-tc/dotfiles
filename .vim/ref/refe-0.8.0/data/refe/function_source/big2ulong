@@ -1,0 +1,20 @@
+bignum.c:706
+static unsigned long
+big2ulong(x, type)
+    VALUE x;
+    char *type;
+{
+    long len = RBIGNUM(x)->len;
+    BDIGIT_DBL num;
+    BDIGIT *ds;
+
+    if (len > SIZEOF_LONG/SIZEOF_BDIGITS)
+	rb_raise(rb_eRangeError, "bignum too big to convert into `%s'", type);
+    ds = BDIGITS(x);
+    num = 0;
+    while (len--) {
+	num = BIGUP(num);
+	num += ds[len];
+    }
+    return num;
+}

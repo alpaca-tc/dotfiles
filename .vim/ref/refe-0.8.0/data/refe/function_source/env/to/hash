@@ -1,0 +1,19 @@
+hash.c:1642
+static VALUE
+env_to_hash()
+{
+    char **env;
+    VALUE hash = rb_hash_new();
+
+    env = GET_ENVIRON(environ);
+    while (*env) {
+	char *s = strchr(*env, '=');
+	if (s) {
+	    rb_hash_aset(hash, env_str_new(*env, s-*env),
+			       env_str_new2(s+1));
+	}
+	env++;
+    }
+    FREE_ENVIRON(environ);
+    return hash;
+}

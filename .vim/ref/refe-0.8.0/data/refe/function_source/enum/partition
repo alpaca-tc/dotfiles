@@ -1,0 +1,13 @@
+enum.c:228
+static VALUE
+enum_partition(obj)
+    VALUE obj;
+{
+    VALUE ary[2];
+
+    ary[0] = rb_ary_new();
+    ary[1] = rb_ary_new();
+    rb_iterate(rb_each, obj, partition_i, (VALUE)ary);
+
+    return rb_assoc_new(ary[0], ary[1]);
+}

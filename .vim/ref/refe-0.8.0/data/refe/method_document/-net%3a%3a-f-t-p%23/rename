@@ -1,0 +1,4 @@
+--- Net::FTP#rename(fromname, toname)
+
+    ファイルをリネームします。
+

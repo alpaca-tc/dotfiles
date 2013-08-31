@@ -1,0 +1,11 @@
+process.c:287
+static VALUE
+pst_wexitstatus(st)
+    VALUE st;
+{
+    int status = NUM2INT(st);
+
+    if (WIFEXITED(status))
+	return INT2NUM(WEXITSTATUS(status));
+    return Qnil;
+}

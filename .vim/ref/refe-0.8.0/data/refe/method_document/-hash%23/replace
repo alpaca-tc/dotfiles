@@ -1,0 +1,5 @@
+--- replace(other)
+
+    ハッシュの内容を other の内容で置き換えます。
+    self を返します。
+

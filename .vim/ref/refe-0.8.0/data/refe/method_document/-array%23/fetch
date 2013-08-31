@@ -1,0 +1,14 @@
+--- fetch(nth)                          ruby 1.7 feature
+--- fetch(nth, ifnone)                  ruby 1.7 feature
+--- fetch(nth) {|nth| ... }             ruby 1.7 feature
+
+    Array#[nth] [Array/[]] と同様 nth 番目の要素を返しますが、
+    Array#[nth] とは nth 番目の要素が存在しない場合の振舞いが異
+    なります。
+
+    最初の形式では、例外 IndexError が発生します。
+    二番目の形式では、引数 ifnone を返します。
+    三番目の形式では、ブロックを評価した結果を返します。
+
+    Array#[nth] は、Array#fetch(nth, nil) と同じです。
+

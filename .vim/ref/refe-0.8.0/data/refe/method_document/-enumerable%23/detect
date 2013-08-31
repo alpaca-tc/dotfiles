@@ -1,0 +1,16 @@
+--- find([ifnone]) {|item| ... }
+--- detect([ifnone]) {|item| ... }
+
+    要素に対してブロックを評価した値が真になった最初の要素を返します。
+    真になる要素がひとつも見つからなかったときは ifnone を(もし
+    指定されていれば)評価して nil を返します。
+    (ruby 1.7 feature: ifnoneを評価した結果を返します。
+    )
+    ifnone には文字列かあるいは、call メソッドを持つオブジェ
+    クト(例えば Proc)を指定します。
+
+        [1,2,3].find("raise") {|v| v > 4}
+        # => -:1: unhandled exception
+
+    ruby 1.7 feature: ifnone に文字列は指定できなくなりました。
+

@@ -1,0 +1,8 @@
+io.c:448
+VALUE
+rb_io_addstr(io, str)
+    VALUE io, str;
+{
+    rb_io_write(io, str);
+    return io;
+}

@@ -1,0 +1,7 @@
+string.c:474
+char *
+rb_string_value_ptr(ptr)
+    volatile VALUE *ptr;
+{
+    return RSTRING(rb_string_value(ptr))->ptr;
+}

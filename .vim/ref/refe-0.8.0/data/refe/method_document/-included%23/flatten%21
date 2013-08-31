@@ -1,0 +1,7 @@
+--- flatten!
+#    Equivalent to Set#flatten, but replaces the receiver with the
+#    result in place.  Returns nil if no modifications were made.
+    flatten と同じですが、
+    集合それ自身が平滑化して作られた新しい集合の要素で置き換えられます。
+    ただし、要素の変更が起こらなかったときには nil を返します。
+

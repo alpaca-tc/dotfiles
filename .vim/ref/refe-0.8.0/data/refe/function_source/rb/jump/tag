@@ -1,0 +1,7 @@
+eval.c:4027
+void
+rb_jump_tag(tag)
+    int tag;
+{
+    JUMP_TAG(tag);
+}

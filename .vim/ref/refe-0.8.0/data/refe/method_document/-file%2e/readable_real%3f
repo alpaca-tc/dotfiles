@@ -1,0 +1,4 @@
+--- File.readable_real?(path)
+
+    FileTest.readable_real? と同じです。
+

@@ -1,0 +1,13 @@
+gc.c:556
+static void
+mark_locations_array(x, n)
+    register VALUE *x;
+    register long n;
+{
+    while (n--) {
+	if (is_pointer_to_heap((void *)*x)) {
+	    rb_gc_mark(*x);
+	}
+	x++;
+    }
+}

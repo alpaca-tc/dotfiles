@@ -1,0 +1,18 @@
+: head( path, header = nil )
+    サーバ上の path にあるエンティティのヘッダのみを取得します。
+    また header が nil でなければリクエストを送るときにその内容を
+    HTTP ヘッダとして書きこみます。header はハッシュで、
+    「ヘッダ名 => 内容」のような形式でなければいけません。
+
+    HTTPResponse オブジェクトを返します。
+
+    1.1 では 3xx (再試行可能なエラー)に対しても例外を発生します。この場合
+    HTTPResponse は例外オブジェクトから err.response で得ることができます。
+    一方 1.2 では全く例外を発生しません。
+
+        response = nil
+        Net::HTTP.start( 'some.www.server', 80 ) {|http|
+            response = http.head( '/index.html' )
+        }
+        p response['content-type']
+

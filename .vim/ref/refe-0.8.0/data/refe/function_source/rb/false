@@ -1,0 +1,7 @@
+object.c:514
+static VALUE
+rb_false(obj)
+    VALUE obj;
+{
+    return Qfalse;
+}

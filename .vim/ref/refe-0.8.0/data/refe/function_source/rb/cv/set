@@ -1,0 +1,13 @@
+variable.c:1651
+void
+rb_cv_set(klass, name, val)
+    VALUE klass;
+    const char *name;
+    VALUE val;
+{
+    ID id = rb_intern(name);
+    if (!rb_is_class_id(id)) {
+	rb_name_error(id, "wrong class variable name %s", name);
+    }
+    rb_cvar_set(klass, id, val, Qfalse);
+}

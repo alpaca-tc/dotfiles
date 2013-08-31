@@ -1,0 +1,12 @@
+--- Iconv.iconv(to, from, *strs)
+    次の省略形です。
+      Iconv.open(to, from) {|cd| (strs + [nil]).collect {|s| cd.iconv(s)}}
+
+    to, from の意味は Iconv.new と同じです。
+
+    strs は変換される文字列です。
+
+    このメソッドは
+    Iconv.new, Iconv.open および Iconv#iconv の例外
+    を起こします。
+

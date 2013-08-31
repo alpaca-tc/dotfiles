@@ -1,0 +1,5 @@
+--- included_modules
+
+    インクルードされているモジュールの配列を返します。
+    Module#ancestors [Module/ancestors] の例も参照してください
+

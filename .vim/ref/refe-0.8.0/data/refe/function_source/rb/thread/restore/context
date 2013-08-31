@@ -1,0 +1,71 @@
+eval.c:8355
+static void
+rb_thread_restore_context(th, exit)
+    rb_thread_t th;
+    int exit;
+{
+    VALUE v;
+    static rb_thread_t tmp;
+    static int ex;
+    static VALUE tval;
+
+    if (!th->stk_ptr) rb_bug("unsaved context");
+
+#if STACK_GROW_DIRECTION < 0
+    if (&v > th->stk_pos) stack_extend(th, exit);
+#elif STACK_GROW_DIRECTION > 0
+    if (&v < th->stk_pos + th->stk_len) stack_extend(th, exit);
+#else
+    if (&v < rb_gc_stack_start) {
+	/* Stack grows downward */
+	if (&v > th->stk_pos) stack_extend(th, exit);
+    }
+    else {
+	/* Stack grows upward */
+	if (&v < th->stk_pos + th->stk_len) stack_extend(th, exit);
+    }
+#endif
+
+    rb_trap_immediate = 0;	/* inhibit interrupts from here */
+    ruby_frame = th->frame;
+    ruby_scope = th->scope;
+    ruby_class = th->klass;
+    ruby_wrapper = th->wrapper;
+    ruby_cref = th->cref;
+    ruby_dyna_vars = th->dyna_vars;
+    ruby_block = th->block;
+    scope_vmode = th->flags&SCOPE_MASK;
+    ruby_iter = th->iter;
+    prot_tag = th->tag;
+    tracing = th->tracing;
+    ruby_errinfo = th->errinfo;
+    rb_last_status = th->last_status;
+    ruby_safe_level = th->safe;
+
+    ruby_current_node = th->node;
+
+#ifdef SAVE_WIN32_EXCEPTION_LIST
+    win32_set_exception_list(th->win32_exception_list);
+#endif
+    tmp = th;
+    ex = exit;
+    FLUSH_REGISTER_WINDOWS;
+    MEMCPY(tmp->stk_pos, tmp->stk_ptr, VALUE, tmp->stk_len);
+#ifdef __ia64__
+    MEMCPY((VALUE*)__libc_ia64_register_backing_store_base, tmp->bstr_ptr, VALUE, tmp->bstr_len);
+#endif
+
+    tval = rb_lastline_get();
+    rb_lastline_set(tmp->last_line);
+    tmp->last_line = tval;
+    tval = rb_backref_get();
+    rb_backref_set(tmp->last_match);
+    tmp->last_match = tval;
+
+#ifdef __ia64__
+    tmp->context_status = ex;
+    setcontext(&tmp->context);
+#else
+    longjmp(tmp->context, ex);
+#endif
+}

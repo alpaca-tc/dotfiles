@@ -1,0 +1,7 @@
+gc.c:1473
+static VALUE
+finals()
+{
+    rb_warn("ObjectSpace::finalizers is deprecated");
+    return finalizers;
+}

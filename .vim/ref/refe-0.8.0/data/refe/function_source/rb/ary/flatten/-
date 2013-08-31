@@ -1,0 +1,9 @@
+array.c:2000
+static VALUE
+rb_ary_flatten(ary)
+    VALUE ary;
+{
+    ary = rb_ary_dup(ary);
+    rb_ary_flatten_bang(ary);
+    return ary;
+}

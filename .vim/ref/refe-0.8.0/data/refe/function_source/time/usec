@@ -1,0 +1,10 @@
+time.c:714
+static VALUE
+time_usec(time)
+    VALUE time;
+{
+    struct time_object *tobj;
+
+    GetTimeval(time, tobj);
+    return LONG2NUM(tobj->tv.tv_usec);
+}

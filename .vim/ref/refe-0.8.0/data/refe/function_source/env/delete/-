@@ -1,0 +1,30 @@
+hash.c:1003
+static VALUE
+env_delete(obj, name)
+    VALUE obj, name;
+{
+    char *nam, *val;
+
+    rb_secure(4);
+    SafeStringValue(name);
+    nam = RSTRING(name)->ptr;
+    if (strlen(nam) != RSTRING(name)->len) {
+	rb_raise(rb_eArgError, "bad environment variable name");
+    }
+    val = getenv(nam);
+    if (val) {
+	VALUE value = env_str_new2(val);
+
+	ruby_setenv(nam, 0);
+#ifdef ENV_IGNORECASE
+	if (strcasecmp(nam, PATH_ENV) == 0)
+#else
+	if (strcmp(nam, PATH_ENV) == 0)
+#endif
+	{
+	    path_tainted = 0;
+	}
+	return value;
+    }
+    return Qnil;
+}

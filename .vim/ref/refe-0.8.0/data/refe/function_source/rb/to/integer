@@ -1,0 +1,13 @@
+object.c:1078
+static VALUE
+rb_to_integer(val, method)
+    VALUE val;
+    char *method;
+{
+    VALUE v = convert_type(val, "Integer", method, Qtrue);
+    if (!rb_obj_is_kind_of(v, rb_cInteger)) {
+	rb_raise(rb_eTypeError, "%s#%s should return Integer",
+		 rb_obj_classname(val), method);
+    }
+    return v;
+}

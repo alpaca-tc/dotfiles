@@ -1,0 +1,7 @@
+--- text(obj[, width])
+#    adds obj as a text of width columns in width.
+    obj を width カラムのテキストとして追加します。
+
+#    If width is not specified, obj.length is used.
+    width が指定されなかった場合、obj.length が利用されます。
+

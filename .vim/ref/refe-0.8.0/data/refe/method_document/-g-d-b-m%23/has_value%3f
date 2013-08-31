@@ -1,0 +1,4 @@
+: has_value?(key)
+: value?(value)
+    valueを値とする組がデータベース中に存在する時，真を返します．
+

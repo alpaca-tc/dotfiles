@@ -1,0 +1,4 @@
+--- URI::Generic#relative?
+
+    scheme が偽なら真です。
+

@@ -1,0 +1,6 @@
+: last_atime -> Time
+: last_atime=( time )
+    time: Time
+
+    最後に each_new_port/each_port/reverse_each_port を呼び出した時間。
+

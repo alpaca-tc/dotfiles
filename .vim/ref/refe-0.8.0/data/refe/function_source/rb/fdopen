@@ -1,0 +1,28 @@
+io.c:1849
+FILE *
+rb_fdopen(fd, mode)
+    int fd;
+    const char *mode;
+{
+    FILE *file;
+
+    file = fdopen(fd, mode);
+    if (!file) {
+	if (errno == EMFILE || errno == ENFILE) {
+	    rb_gc();
+	    file = fdopen(fd, mode);
+	}
+	if (!file) {
+#ifdef _WIN32
+	    if (errno == 0) errno = EINVAL;
+#endif
+	    rb_sys_fail(0);
+	}
+    }
+
+#ifdef USE_SETVBUF
+    if (setvbuf(file, NULL, _IOFBF, 0) != 0)
+	rb_warn("setvbuf() can't be honered (fd=%d)", fd);
+#endif
+    return file;
+}

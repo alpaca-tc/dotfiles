@@ -1,0 +1,16 @@
+eval.c:1201
+static VALUE
+eval_node(self, node)
+    VALUE self;
+    NODE *node;
+{
+    NODE *beg_tree = ruby_eval_tree_begin;
+
+    ruby_eval_tree_begin = 0;
+    if (beg_tree) {
+	rb_eval(self, beg_tree);
+    }
+
+    if (!node) return Qnil;
+    return rb_eval(self, node);
+}

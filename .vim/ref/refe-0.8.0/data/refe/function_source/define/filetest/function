@@ -1,0 +1,10 @@
+file.c:2850
+static void
+define_filetest_function(name, func, argc)
+    const char *name;
+    VALUE (*func)();
+    int argc;
+{
+    rb_define_module_function(rb_mFileTest, name, func, argc);
+    rb_define_singleton_method(rb_cFile, name, func, argc);
+}

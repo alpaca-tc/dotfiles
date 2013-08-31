@@ -1,0 +1,10 @@
+bignum.c:55
+VALUE
+rb_big_clone(x)
+    VALUE x;
+{
+    VALUE z = bignew_1(CLASS_OF(x), RBIGNUM(x)->len, RBIGNUM(x)->sign);
+
+    MEMCPY(BDIGITS(z), BDIGITS(x), BDIGIT, RBIGNUM(x)->len);
+    return z;
+}

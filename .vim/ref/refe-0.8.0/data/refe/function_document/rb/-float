@@ -1,0 +1,2 @@
+: VALUE rb_Float(VALUE val)
+

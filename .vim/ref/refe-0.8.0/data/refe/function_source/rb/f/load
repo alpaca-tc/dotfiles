@@ -1,0 +1,12 @@
+eval.c:5860
+static VALUE
+rb_f_load(argc, argv)
+    int argc;
+    VALUE *argv;
+{
+    VALUE fname, wrap;
+
+    rb_scan_args(argc, argv, "11", &fname, &wrap);
+    rb_load(fname, RTEST(wrap));
+    return Qtrue;
+}

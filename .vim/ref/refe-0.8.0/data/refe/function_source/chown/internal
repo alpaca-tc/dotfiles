@@ -1,0 +1,9 @@
+file.c:1066
+static void
+chown_internal(path, args)
+    const char *path;
+    struct chown_args *args;
+{
+    if (chown(path, args->owner, args->group) < 0)
+	rb_sys_fail(path);
+}

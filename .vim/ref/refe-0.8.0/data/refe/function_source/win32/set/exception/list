@@ -1,0 +1,19 @@
+eval.c:7802
+static inline void
+win32_set_exception_list(p)
+    DWORD p;
+{
+# if defined _MSC_VER
+#   ifdef _M_IX86
+    __asm mov eax, p;
+    __asm mov fs:[0], eax;
+#   endif
+# elif defined __GNUC__
+#   ifdef __i386__
+    __asm__("movl %0,%%fs:0" :: "r"(p));
+#   endif
+# elif defined __BORLANDC__
+    _EAX = p;
+    __emit__(0x64, 0xA3, 0, 0, 0, 0); /* mov fs:[0], eax */
+# endif
+}

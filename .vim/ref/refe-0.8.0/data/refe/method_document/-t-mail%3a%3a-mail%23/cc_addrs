@@ -1,0 +1,7 @@
+: cc_addrs( default = nil ) -> [TMail::Address]
+: cc_addrs=( addrs )
+    addrs: TMail::Address / [TMail::Address]
+    default: Object
+
+    Cc: アドレスの配列。
+

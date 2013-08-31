@@ -1,0 +1,10 @@
+variable.c:708
+static int
+gvar_i(key, entry, ary)
+    ID key;
+    struct global_entry *entry;
+    VALUE ary;
+{
+    rb_ary_push(ary, rb_str_new2(rb_id2name(key)));
+    return ST_CONTINUE;
+}

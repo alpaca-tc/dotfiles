@@ -1,0 +1,12 @@
+variable.c:1664
+VALUE
+rb_cv_get(klass, name)
+    VALUE klass;
+    const char *name;
+{
+    ID id = rb_intern(name);
+    if (!rb_is_class_id(id)) {
+	rb_name_error(id, "wrong class variable name %s", name);
+    }
+    return rb_cvar_get(klass, id);
+}

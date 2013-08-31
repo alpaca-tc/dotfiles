@@ -1,0 +1,10 @@
+marshal.c:337
+static int
+hash_each(key, value, arg)
+    VALUE key, value;
+    struct dump_call_arg *arg;
+{
+    w_object(key, arg->arg, arg->limit);
+    w_object(value, arg->arg, arg->limit);
+    return ST_CONTINUE;
+}

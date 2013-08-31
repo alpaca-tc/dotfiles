@@ -1,0 +1,24 @@
+error.c:452
+void
+#ifdef HAVE_STDARG_PROTOTYPES
+rb_name_error(ID id, const char *fmt, ...)
+#else
+rb_name_error(id, fmt, va_alist)
+    ID id;
+    const char *fmt;
+    va_dcl
+#endif
+{
+    VALUE exc, argv[2];
+    va_list args;
+    char buf[BUFSIZ];
+
+    va_init_list(args, fmt);
+    vsnprintf(buf, BUFSIZ, fmt, args);
+    va_end(args);
+
+    argv[0] = rb_str_new2(buf);
+    argv[1] = ID2SYM(id);
+    exc = rb_class_new_instance(2, argv, rb_eNameError);
+    rb_exc_raise(exc);
+}

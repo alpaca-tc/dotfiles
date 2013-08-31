@@ -1,0 +1,6 @@
+object.c:316
+static VALUE
+rb_obj_dummy()
+{
+    return Qnil;
+}

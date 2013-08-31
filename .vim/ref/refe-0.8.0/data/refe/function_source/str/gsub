@@ -1,0 +1,112 @@
+string.c:1582
+static VALUE
+str_gsub(argc, argv, str, bang)
+    int argc;
+    VALUE *argv;
+    VALUE str;
+    int bang;
+{
+    VALUE pat, val, repl, match;
+    struct re_registers *regs;
+    long beg, n;
+    long offset, blen, len;
+    int iter = 0;
+    char *buf, *bp, *cp;
+    int tainted = 0;
+
+    if (argc == 1 && rb_block_given_p()) {
+	iter = 1;
+    }
+    else if (argc == 2) {
+	repl = argv[1];
+	StringValue(repl);
+	if (OBJ_TAINTED(repl)) tainted = 1;
+    }
+    else {
+	rb_raise(rb_eArgError, "wrong number of arguments(%d for 2)", argc);
+    }
+
+    pat = get_pat(argv[0], 1);
+    offset=0; n=0; 
+    beg = rb_reg_search(pat, str, 0, 0);
+    if (beg < 0) {
+	if (bang) return Qnil;	/* no match, no substitution */
+	return rb_str_dup(str);
+    }
+
+    blen = RSTRING(str)->len + 30; /* len + margin */
+    buf = ALLOC_N(char, blen);
+    bp = buf;
+    cp = RSTRING(str)->ptr;
+
+    while (beg >= 0) {
+	n++;
+	match = rb_backref_get();
+	regs = RMATCH(match)->regs;
+	if (iter) {
+	    rb_match_busy(match);
+	    val = rb_obj_as_string(rb_yield(rb_reg_nth_match(0, match)));
+	    rb_backref_set(match);
+	}
+	else {
+	    val = rb_reg_regsub(repl, str, regs);
+	}
+	if (OBJ_TAINTED(val)) tainted = 1;
+	len = (bp - buf) + (beg - offset) + RSTRING(val)->len + 3;
+	if (blen < len) {
+	    while (blen < len) blen *= 2;
+	    len = bp - buf;
+	    REALLOC_N(buf, char, blen);
+	    bp = buf + len;
+	}
+	len = beg - offset;	/* copy pre-match substr */
+	memcpy(bp, cp, len);
+	bp += len;
+	memcpy(bp, RSTRING(val)->ptr, RSTRING(val)->len);
+	bp += RSTRING(val)->len;
+       offset = END(0);
+	if (BEG(0) == END(0)) {
+	    /*
+	     * Always consume at least one character of the input string
+	     * in order to prevent infinite loops.
+	     */
+	    if (RSTRING(str)->len <= END(0)) break;
+	    len = mbclen2(RSTRING(str)->ptr[END(0)], pat);
+	    memcpy(bp, RSTRING(str)->ptr+END(0), len);
+	    bp += len;
+	    offset = END(0) + len;
+	}
+	cp = RSTRING(str)->ptr + offset;
+	if (offset > RSTRING(str)->len) break;
+	beg = rb_reg_search(pat, str, offset, 0);
+    }
+    if (RSTRING(str)->len > offset) {
+	len = bp - buf;
+	if (blen - len < RSTRING(str)->len - offset + 1) {
+	    REALLOC_N(buf, char, len + RSTRING(str)->len - offset + 1);
+	    bp = buf + len;
+	}
+	memcpy(bp, cp, RSTRING(str)->len - offset);
+	bp += RSTRING(str)->len - offset;
+    }
+    rb_backref_set(match);
+    if (bang) {
+	if (str_independent(str)) {
+	    free(RSTRING(str)->ptr);
+	}
+	FL_UNSET(str, ELTS_SHARED|STR_ASSOC);
+    }
+    else {
+	VALUE dup = str_alloc(rb_obj_class(str));
+
+	OBJ_INFECT(dup, str);
+	str = dup;
+    }
+    RSTRING(str)->ptr = buf;
+    RSTRING(str)->len = len = bp - buf;
+    RSTRING(str)->ptr[len] = '\0';
+    RSTRING(str)->aux.capa = len;
+
+    if (tainted) OBJ_TAINT(str);
+    return str;
+}

@@ -1,0 +1,17 @@
+--- breakable([sep[, width]])
+#    tells "you can break a line here if necessary", and a
+#    width-column text sep is inserted if a line is not
+#    broken at the point.
+    「必要ならここで改行出来る」ということを通知します。
+    もしその位置で改行されなければ、
+    widthカラムのテキスト sep がそこに挿入されます。
+
+#    If sep is not specified, " " is used.
+    sep が指定されなければ " " が利用されます。
+
+#    If width is not specified, sep.length is used.
+#    You will have to specify this when sep is a multibyte
+#    character, for example.
+    width が指定されなければ、sep.length が利用されます。
+    例えば sep が多バイト文字の際に指定する必要があるかも知れません。
+

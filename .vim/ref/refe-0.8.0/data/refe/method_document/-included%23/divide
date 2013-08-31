@@ -1,0 +1,51 @@
+--- divide { |o| ... }
+--- divide { |o1, o2| ... }
+
+#    Divides the set into a set of subsets according to the commonality
+#    defined by the given block.
+
+    商集合、すなわちブロックで定義される関係で分割した結果を集合として
+    返します。
+
+#    If the arity of the block is 2, elements o1 and o2 are in common
+#    if block.call(o1, o2) is true.  Otherwise, elements o1 and o2 are
+#    in common if block.call(o1) == block.call(o2).
+
+    引数が2個のときは block.call(o1, o2) が真ならば o1 と o2 は同じ分
+    割に属します。引数が1個のときは block.call(o1) == block.call(o2) 
+    が真ならばo1 と o2 は同じ分割に属します。つまりブロックの引数が2個
+    のときはブロックの値の真偽で決まる同値類に、引数が1個のときはブロッ
+    クの値の == による等しさで定義される同値類に分割されます。
+
+    引数が2個のときは、いわゆる同値関係のうち、
+    対称律「block.call(o1, o2) かつ block.call(o2, o1)」、
+    そして推移律「block.call(o1, o2) かつ 
+    block.call(o2, o3) ならば
+    block.call(o1, o3)」
+    の2つを満たすことが仮定されています。
+
+    例:
+
+      require 'set'
+      numbers = Set[1, 3, 4, 6, 9, 10, 11]
+      set = numbers.divide { |i,j| (i - j).abs == 1 }
+      p set     #=> #<Set: {#<Set: {1}>,
+                #           #<Set: {11, 9, 10}>,
+                #           #<Set: {3, 4}>,
+                #           #<Set: {6}>}>
+
+    応用例:
+
+      # 8x2 のチェス盤上でナイトが到達できる位置に関する分類
+      require "set"
+      board = Set.new
+      m, n = 8, 2
+      for i in 1..m do for j in 1..n do board << [i,j] end end
+      knight_move = Set[1,2]
+      p board.divide { |i,j| 
+        Set[(i[0]-j[0]).abs, (i[1]-j[1]).abs] == knight_move
+      }  #=> #<Set: {#<Set: {[6, 2], [4, 1], [2, 2], [8, 1]}>, 
+         #           #<Set: {[2, 1], [8, 2], [6, 1], [4, 2]}>, 
+         #           #<Set: {[1, 1], [3, 2], [5, 1], [7, 2]}>, 
+         #           #<Set: {[1, 2], [5, 2], [3, 1], [7, 1]}>}>
+

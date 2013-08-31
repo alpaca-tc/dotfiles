@@ -1,0 +1,9 @@
+--- pos=(pos)
+--- seek(pos)
+
+    ディレクトリストリームの読み込み位置を pos に移動させます。
+    posはDir#tell [Dir/tell] で与えられた値でなければなりま
+    せん。
+
+    pos= は右辺を返します。seek は self を返します。
+

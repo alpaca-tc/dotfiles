@@ -1,0 +1,18 @@
+io.c:3111
+static VALUE
+rb_f_gets(argc, argv)
+    int argc;
+    VALUE *argv;
+{
+    VALUE line;
+
+    if (!next_argv()) return Qnil;
+    if (TYPE(current_file) != T_FILE) {
+	line = rb_funcall3(current_file, rb_intern("gets"), argc, argv);
+    }
+    else {
+	line = argf_getline(argc, argv);
+    }
+    rb_lastline_set(line);
+    return line;
+}

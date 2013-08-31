@@ -1,0 +1,18 @@
+array.c:1777
+static VALUE
+ary_make_hash(ary1, ary2)
+    VALUE ary1, ary2;
+{
+    VALUE hash = rb_hash_new();
+    long i;
+
+    for (i=0; i<RARRAY(ary1)->len; i++) {
+	rb_hash_aset(hash, RARRAY(ary1)->ptr[i], Qtrue);
+    }
+    if (ary2) {
+	for (i=0; i<RARRAY(ary2)->len; i++) {
+	    rb_hash_aset(hash, RARRAY(ary2)->ptr[i], Qtrue);
+	}
+    }
+    return hash;
+}

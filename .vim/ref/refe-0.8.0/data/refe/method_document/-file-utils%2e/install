@@ -1,0 +1,9 @@
+--- FileUtils.install( src, dest, mode = <src's>, *options )
+  Options: noop verbose
+
+  from と to の内容が違うときだけ from を to にコピーします。
+  そのさいモードを mode に設定します。
+
+    FileUtils.install 'ruby', '/usr/local/bin/ruby', 0755, :verbose
+    FileUtils.install 'lib.rb', '/usr/local/lib/ruby/site_ruby', :verbose
+

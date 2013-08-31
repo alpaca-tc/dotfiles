@@ -1,0 +1,14 @@
+--- step(limit, step) {|n| ... }
+
+    self からはじめ step を足しながら limit を越える
+    前までブロックを繰り返します。step は負の数も指定できます。
+    また、limit や step には Float なども指定できます。
+
+    step に 0 を指定した場合は例外 ArgumentError が発生します。
+
+    self を返します。
+
+    upto, downto, times も参照。
+
+    step も参照。
+

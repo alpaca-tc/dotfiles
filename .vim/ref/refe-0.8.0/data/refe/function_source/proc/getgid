@@ -1,0 +1,8 @@
+process.c:1602
+static VALUE
+proc_getgid(obj)
+    VALUE obj;
+{
+    int gid = getgid();
+    return INT2FIX(gid);
+}

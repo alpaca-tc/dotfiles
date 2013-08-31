@@ -1,0 +1,3 @@
+: reply_to
+      Retunns an array of imap.rb"/Net::IMAP::Address that represents the reply-to.
+

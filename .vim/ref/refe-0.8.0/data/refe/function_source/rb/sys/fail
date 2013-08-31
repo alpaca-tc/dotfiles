@@ -1,0 +1,17 @@
+error.c:757
+void
+rb_sys_fail(mesg)
+    const char *mesg;
+{
+    extern int errno;
+    int n = errno;
+    VALUE arg;
+
+    errno = 0;
+    if (n == 0) {
+	rb_bug("rb_sys_fail(%s) - errno == 0", mesg ? mesg : "");
+    }
+
+    arg = mesg ? rb_str_new2(mesg) : Qnil;
+    rb_exc_raise(rb_class_new_instance(1, &arg, get_syserr(n)));
+}

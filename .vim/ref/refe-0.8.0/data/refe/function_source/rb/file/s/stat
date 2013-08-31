@@ -1,0 +1,13 @@
+file.c:367
+static VALUE
+rb_file_s_stat(klass, fname)
+    VALUE klass, fname;
+{
+    struct stat st;
+
+    SafeStringValue(fname);
+    if (rb_stat(fname, &st) < 0) {
+	rb_sys_fail(StringValueCStr(fname));
+    }
+    return stat_new(&st);
+}
