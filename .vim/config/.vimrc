@@ -815,7 +815,9 @@ NeoBundleLazy 'leafgarland/typescript-vim', { 'autoload' : {
 NeoBundleLazy 'kchmck/vim-coffee-script', { 'autoload' : {
       \ 'filetypes' : 'coffee' }}
 if has("python") && executable('npm')
-  NeoBundleLazy 'marijnh/tern_for_vim', { 'autoload' : {
+  NeoBundleLazy 'marijnh/tern_for_vim', { 
+        \ 'build' : 'npm install',
+        \ 'autoload' : {
         \ 'functions': ['tern#Complete', 'tern#Enable'],
         \ 'filetypes' : g:my.ft.js_files
         \ }}
@@ -1771,7 +1773,7 @@ endfunction"}}}
 unlet bundle
 
 "----------------------------------------
-imap <C-E> <C-Y>,
+" imap <C-E> <C-Y>,
 let bundle = NeoBundleGet("zencoding-vim")
 function! bundle.hooks.on_source(bundle) "{{{
   let g:user_zen_complete_tag = 1
@@ -1803,7 +1805,7 @@ unlet bundle
 
 let bundle = NeoBundleGet('emmet-vim')
 function! bundle.hooks.on_source(bundle) "{{{
-  imap <buffer><C-E> <Plug>(EmmetExpandAbbr)
+  " imap <buffer><C-E> <Plug>(EmmetExpandAbbr)
   augroup MyAutoCmd
     execute 'autocmd FileType ' . join(g:my.ft.html_files, ',') . ' imap <buffer><C-E> <Plug>(EmmetExpandAbbr)'
   augroup END
@@ -3130,7 +3132,7 @@ function! bundle.hooks.on_source(bundle) "{{{
 
   " keymap
   imap <expr><C-G> neocomplete#undo_completion()
-  imap <C-K>       <Plug>(neocomplete_start_unite_complete)
+  inoremap <expr><C-e>  neocomplete#cancel_popup()
   imap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? neocomplete#complete_common_string() : "\<TAB>"
 
   function! s:my_crinsert()
@@ -3230,14 +3232,11 @@ unlet bundle
 "----------------------------------------
 " neosnippet
 nnoremap <silent><Space>e         :<C-U>NeoSnippetEdit -split<CR>
-nnoremap <Space>ns        :<C-U>NeoSnippetSource ~/.vim/snippet
-nnoremap <silent><Space><Space>e  :<C-U>Unite neosnippet/user neosnippet/runtime<CR>
-nnoremap so :<C-U>NeoSnippetSource ~/.vim/snippet/
-
-augroup ApplicationTemplate
-  autocmd!
-  autocmd FileType ruby.application_template NeoSnippetSource ~/.vim/snippet/ruby.rails.application_template.snip
-augroup END
+nnoremap <silent>so :<C-U>call <SID>open_neosnippet_source()<CR>
+function! s:open_neosnippet_source()
+  let ft = s:filetype()
+  silent! execute 'Unite neosnippet/user neosnippet/runtime -no-start-insert -default-action=neosnippet_source -input='.ft
+endfunction
 
 let bundle = NeoBundleGet('neosnippet')
 function! bundle.hooks.on_source(bundle) "{{{
@@ -3247,9 +3246,15 @@ function! bundle.hooks.on_source(bundle) "{{{
   "       \ '_' : 1
   "       \ }
 
-  imap <silent><C-F>                <Plug>(neosnippet_expand_or_jump)
-  smap <silent><C-F>                <Plug>(neosnippet_expand_or_jump)
-  inoremap <silent><C-U>            <ESC>:<C-U>Unite snippet<CR>
+  call unite#custom_action('neosnippet/user', 'open', 'neosnippet_source')
+  call unite#custom_action('neosnippet/runtime', 'open', 'neosnippet_source')
+  imap <silent><C-K>     <Plug>(neosnippet_start_unite_snippet)
+  imap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
+  smap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
+  function! s:unite_snippet() "{{{
+    call neocomplete#close_popup()
+    call unite#start(['snippet'], { 'input': expand('<cword>') })
+  endfunction"}}}
 endfunction "}}}
 unlet bundle
 
