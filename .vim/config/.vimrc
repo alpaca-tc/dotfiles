@@ -1406,11 +1406,17 @@ endif
 augroup AlpacaTags
   autocmd!
   if exists(':Tags')
-    autocmd BufWritePost * TagsUpdate ruby
     autocmd BufWritePost Gemfile TagsBundle -style
     autocmd BufEnter * TagsSet
+    " autocmd FileType * call s:set_update_tags()
   endif
 augroup END
+
+function! s:set_update_tags()
+  augroup TagsUpdate
+  autocmd! TagsUpdate
+  execute 'autocmd TagsUpdate BufWritePost <buffer> TagsUpdate ' . s:filetype()
+endfunction
 
 "tags_jumpを使い易くする
 nnoremap [tag_or_tab]t  <C-]>
@@ -1699,7 +1705,8 @@ unlet bundle
 
 "----------------------------------------
 let bundle = NeoBundleGet("zencoding-vim")
-imap <C-E> <C-Y>,<Space>
+" imap <C-E> <C-Y>,<Space>
+imap <C-E> <C-Y>,
 function bundle.hooks.on_source(bundle) "{{{
   let g:user_zen_complete_tag = 1
   let g:user_zen_expandabbr_key = '<C-E>'
@@ -1710,7 +1717,7 @@ function bundle.hooks.on_source(bundle) "{{{
         \ 'lang' : 'ja',
         \ 'html' : {
         \ 'filters' : 'html',
-        \   'indentation' : ''
+        \   'indentation' : ' '
         \ },
         \ 'css' : {
         \   'filters' : 'fc',
@@ -2197,8 +2204,6 @@ function! bundle.hooks.on_source(bundle)
     au FileType c,cpp    inoremap <buffer><expr> . smartchr#loop('.', '->', '..', '...')
     au FileType perl,php inoremap <buffer><expr> - smartchr#loop('-', '->')
     au FileType coffee   inoremap <buffer><expr> - smartchr#loop('-', '->', '=>')
-    au FileType php      inoremap <buffer><expr> . smartchr#loop('.', '->', '..')
-          \| inoremap <buffer><expr>> smartchr#loop('>', '=>')
     au FileType scala    inoremap <buffer><expr> - smartchr#loop('-', '->', '=>')
           \| inoremap <buffer><expr> < smartchr#loop('<', '<-')
     au FileType yaml,eruby inoremap <buffer><expr> < smartchr#loop('<', '<%', '<%=')
@@ -2562,6 +2567,10 @@ xmap A  <Plug>(niceblock-A)
 " ------------------------------------
 nnoremap ! :Switch<CR>
 let s:switch_define = {
+      \ 'sass,scss,css' : [
+      \   ['solid', 'dotted'],
+      \   ['left', 'right'],
+      \ ],
       \ "ruby,eruby,haml" : [
       \   ["if", "unless"],
       \   ["while", "until"],
@@ -2707,6 +2716,7 @@ let g:alpaca_tags_config = {
       \ 'js' : '--languages=+js',
       \ '-js' : '--languages=-js,JavaScript',
       \ 'vim' : '--languages=+Vim,vim',
+      \ 'php' : '--languages=+php',
       \ '-vim' : '--languages=-Vim,vim',
       \ '-style': '--languages=-css,scss,js,JavaScript,html',
       \ 'scss' : '--languages=+scss --languages=-css',
@@ -3557,6 +3567,7 @@ function! s:lang8_settings()
   nnoremap <buffer>[plug]j           :<C-U>UniteGit public/static/javascripts<CR>
   nnoremap <buffer>[plug]a           :<C-U>UniteGit public/static/sass<CR>
   nnoremap <buffer>[plug]m           :<C-U>UniteGit app/models/mailer<CR>
+  let g:user_zen_settings.filters.html.indentation = ''
 endfunction
 augroup MyAutoCmd
   autocmd User Rails call <SID>do_lang8_autocmd()

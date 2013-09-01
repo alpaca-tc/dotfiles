@@ -45,7 +45,7 @@ export NODE_PATH=/usr/local/lib/node
 export PATH=/usr/local/mysql/bin:/usr/local/share/npm/bin:$PATH
 
 # XAMPP
-export PATH=/Applications/XAMPP/xamppfiles/bin:$PATH
+export PATH=$PATH:/Applications/XAMPP/xamppfiles/bin
 
 # homebrew
 export PATH=/usr/local/bin:/usr/local/sbin:$PATH
