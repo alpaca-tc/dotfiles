@@ -4,3 +4,6 @@
 .DS_Store
 tags
 .sass-cache
+.tern-port
+npm-debug.log
+node_modules/*

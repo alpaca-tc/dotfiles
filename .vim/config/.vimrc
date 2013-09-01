@@ -504,14 +504,20 @@ NeoBundleLazy 'grep.vim', {
       \ 'autoload' : { 'commands': ["Grep", "Rgrep", "GrepBuffer"] }}
 NeoBundleLazy 'sjl/gundo.vim', {
       \ 'autoload' : { 'commands': ["GundoToggle", 'GundoRenderGraph'] }}
-" NeoBundleLazy 'majutsushi/tagbar', {
-"       \ 'build' : {
-"       \   'mac' : 'npm install jsctags && gem ins CoffeeTags',
-"       \   'unix' : 'npm install -g jsctags',
-"       \ },
-"       \ 'autoload' : {
-"       \   'commands': ["TagbarToggle", "TagbarTogglePause", "TagbarOpen"],
-"       \   'fuctions': ['tagbar#currenttag'] }}
+
+NeoBundleLazy 'int3/vim-taglist-plus', {
+      \ 'autoload' : {
+      \   'commands' : ['TlistToggle'],
+      \ }}
+" You need to fix bug in jsctags/jsctags/ctags/writter.js:67 Trait.required -> []
+NeoBundleLazy 'majutsushi/tagbar', {
+      \ 'build' : {
+      \   'mac' : 'npm install jsctags && gem ins CoffeeTags',
+      \   'unix' : 'npm install https://github.com/faceleg/doctorjs',
+      \ },
+      \ 'autoload' : {
+      \   'commands': ["TagbarToggle", "TagbarTogglePause", "TagbarOpen"],
+      \   'fuctions': ['tagbar#currenttag'] }}
 NeoBundleLazy 'open-browser.vim', { 'autoload' : {
       \ 'mappings' : [ '<Plug>(open-browser-wwwsearch)', '<Plug>(openbrowser-open)',  ],
       \ 'commands' : ['OpenBrowserSearch'] }}
@@ -1683,8 +1689,15 @@ function! bundle.hooks.on_source(bundle) "{{{
   let g:tagbar_autofocus  = 1
   let g:tagbar_autoshowtag= 1
   let g:tagbar_iconchars  =  ['▸', '▾']
-  let g:tagbar_width = 30
+  let g:tagbar_width = 40
 endfunction "}}}
+unlet bundle
+
+" ----------------------------------------
+" nnoremap <Space>t :<C-U>TlistToggle<CR>
+let bundle = NeoBundleGet('vim-taglist-plus')
+function! bundle.hooks.on_source(bundle) "{{{
+endfunction"}}}
 unlet bundle
 
 "------------------------------------
@@ -2939,10 +2952,9 @@ let bundle = NeoBundleGet(has("lua") ? 'neocomplete' : 'nothing!!')
 function! bundle.hooks.on_source(bundle) "{{{
   " " let g:neocomplete_enable_cursor_hold_i=0
   " let g:neocomplete#enable_smart_case = 1
-  let g:neocomplete#sources#syntax#min_keyword_length = 2
+  let g:neocomplete#auto_completion_start_length=3
+  let g:neocomplete#sources#syntax#min_keyword_length=3
   let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-
-  let g:neocomplete#auto_completion_start_length=2
   " let g:neocomplete_caching_limit_file_size=500000
   " let g:neocomplete_max_keyword_width=120
   let g:neocomplete#auto_completion_start_length=g:neocomplete#sources#syntax#min_keyword_length
@@ -2962,7 +2974,7 @@ function! bundle.hooks.on_source(bundle) "{{{
   let g:neocomplete#sources#tags#cache_limit_size=1000000
   let g:neocomplete#sources#include#max_proceslses = 30
   let g:neocomplete#max_list=100
-  " let g:neocomplete#skip_auto_completion_time='0.1'
+  let g:neocomplete#skip_auto_completion_time='0.1'
 
   " if g:neocomplete#enable_complete_select
   "   set completeopt-=noselect
@@ -3116,10 +3128,12 @@ function! bundle.hooks.on_source(bundle) "{{{
   inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
   " inoremap <expr><C-n>      pumvisible() ? "\<C-n>" : "\<Down>"
   " inoremap <expr><C-p>      pumvisible() ? "\<C-p>" : "\<Up>"
-  inoremap <expr><C-n>  pumvisible() ? "\<C-n>" : "\<C-x>\<C-u>\<C-p>\<Down>"
-  inoremap <expr><C-p>  pumvisible() ? "\<C-p>" : "\<C-p>\<C-n>"
-  inoremap <expr><C-x><C-f>  neocomplete#start_manual_complete('file')
-  inoremap <expr><C-g>     neocomplete#undo_completion()
+  inoremap <expr><C-N>  pumvisible() ? "\<C-N>" : "\<C-X>\<C-U>\<C-P>\<Down>"
+  inoremap <expr><C-P>  pumvisible() ? "\<C-P>" : "\<C-P>\<C-N>"
+  inoremap <expr><C-X><C-F>  neocomplete#start_manual_complete('file')
+  inoremap <expr><C-G>     neocomplete#undo_completion()
+
+  inoremap <expr><C-@> neocomplete#start_manual_complete(['neosnippet'])
 
   inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
   inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
@@ -3612,6 +3626,7 @@ function! s:clear_memory() "{{{
 endfunction "}}}
 command! Clean call <SID>clear_memory()
 command! CleanSwap call vimproc#system('rm -rf ' . g:my.dir.swap_dir . '/*')
+command! CleanAll call vimproc#system('rm -rf ' . g:my.dir.trash_dir . '*')
 "}}}
 
 " ----------------------------------------

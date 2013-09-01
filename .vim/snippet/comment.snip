@@ -1,0 +1,4 @@
+snippet     git_signature
+abbr        signature from git configuration
+options     word
+    `executable('git') ? substitute(system('git config user.name'), '\n', '', 'g') : "${1}"` <`executable('git') ? substitute(system('git config user.email'), '\n', '', 'g') : "${2}"`>${0}

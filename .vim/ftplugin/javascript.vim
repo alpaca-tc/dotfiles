@@ -7,9 +7,11 @@ setl dict+=~/.vim/dict/jquery.dict
 
 " js{{{
 if !exists('g:tagbar_type_javascript')
-  if executable('jsctags')
+  let jsctags = neobundle#get('tagbar').path . '/node_modules/jsctags/bin/jsctags.js'
+  let jsctags = expand('~/src/doctorjs/bin/jsctags.js')
+  if executable(jsctags)
     let g:tagbar_type_javascript = {
-          \ 'ctagsbin' : substitute(system('where jsctags'), '\n$', '', 'g')
+          \ 'ctagsbin' : jsctags
           \ }
   else
     let g:tagbar_type_javascript = {

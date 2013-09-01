@@ -43,6 +43,7 @@ export RSENSE_HOME=$HOME/.bundle/rsense-0.3
 
 # node
 export NODE_PATH=/usr/local/lib/node
+export NODE_PATH=/usr/local/lib/node_modules:$NODE_PATH
 export PATH=/usr/local/mysql/bin:/usr/local/share/npm/bin:$PATH
 
 # XAMPP
@@ -75,6 +76,7 @@ export PATH=/Applications/MacVim.app/Contents/MacOS:$PATH
 
 # export PYTHONPATH=/usr/local/Cellar/python32/3.2.3/Frameworks/Python.framework/Versions/3.2
 # alias python=python3.2
+export PATH=$HOME/usr/bin:$PATH
 # }}}
 
 # for vim
