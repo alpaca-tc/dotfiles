@@ -1,0 +1,22 @@
+hash.c:1125
+static int
+envix(nam)
+    const char *nam;
+{
+    register int i, len = strlen(nam);
+    char **env;
+
+    env = GET_ENVIRON(environ);
+    for (i = 0; env[i]; i++) {
+	if (
+#ifdef ENV_IGNORECASE
+	    strncasecmp(env[i],nam,len) == 0
+#else
+	    memcmp(env[i],nam,len) == 0
+#endif
+	    && env[i][len] == '=')
+	    break;			/* memcmp must come first to avoid */
+    }					/* potential SEGV's */
+    FREE_ENVIRON(environ);
+    return i;
+}

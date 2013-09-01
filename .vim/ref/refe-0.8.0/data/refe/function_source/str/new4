@@ -1,0 +1,20 @@
+string.c:139
+static VALUE
+str_new4(klass, str)
+    VALUE klass, str;
+{
+    VALUE str2 = str_alloc(klass);
+
+    RSTRING(str2)->len = RSTRING(str)->len;
+    RSTRING(str2)->ptr = RSTRING(str)->ptr;
+    if (FL_TEST(str, ELTS_SHARED) && !RSTRING(str)->aux.shared) {
+	/* ptr should be null_str */
+	FL_SET(str2, ELTS_SHARED);
+    }
+    else {
+	FL_SET(str, ELTS_SHARED);
+	RSTRING(str)->aux.shared = str2;
+    }
+
+    return str2;
+}

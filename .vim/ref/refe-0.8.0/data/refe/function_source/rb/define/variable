@@ -1,0 +1,8 @@
+variable.c:493
+void
+rb_define_variable(name, var)
+    const char  *name;
+    VALUE *var;
+{
+    rb_define_hooked_variable(name, var, 0, 0);
+}

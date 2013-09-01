@@ -1,0 +1,5 @@
+--- binding     ruby 1.7 feature
+
+    Proc オブジェクトが保持するコンテキストを Binding オブ
+    ジェクトで返します。
+

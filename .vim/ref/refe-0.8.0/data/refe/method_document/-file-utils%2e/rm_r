@@ -1,0 +1,9 @@
+--- FileUtils.rm_r( list, *options )
+  Options: force noop verbose
+
+  ファイルまたはディレクトリ list[0], list[1] …を消去します。
+  force オプションを渡した場合 StandardError を無視します。
+
+    FileUtils.rm_r Dir.glob('/tmp/*')
+    FileUtils.rm_r '/', :force          #  :-)
+

@@ -1,0 +1,9 @@
+--- p(obj, [obj2, ...])
+
+    obj を人間に読みやすい形で出力します。以下のコードと同じです。
+    (Object#inspect [Object/inspect]参照)
+
+      print obj.inspect, "\n", obj2.inspect, "\n", ...
+
+    nil を返します。
+

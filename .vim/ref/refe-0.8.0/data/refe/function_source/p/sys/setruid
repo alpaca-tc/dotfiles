@@ -1,0 +1,16 @@
+process.c:1258
+static VALUE
+p_sys_setruid(obj, id)
+    VALUE obj, id;
+{
+#if defined HAVE_SETRUID
+    rb_secure(2);
+    if (under_uid_switch) {
+	rb_raise(rb_eRuntimeError, "can't handle UID during evaluating the block given to the Process::UID.switch method");
+    }
+    if (setruid(NUM2INT(id)) != 0) rb_sys_fail(0);
+#else
+    rb_notimplement();
+#endif
+    return Qnil;
+}

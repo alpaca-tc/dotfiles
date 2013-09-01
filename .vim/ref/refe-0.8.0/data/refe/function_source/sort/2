@@ -1,0 +1,20 @@
+array.c:1133
+static int
+sort_2(ap, bp)
+    VALUE *ap, *bp;
+{
+    VALUE retval;
+    long a = (long)*ap, b = (long)*bp;
+
+    if (FIXNUM_P(a) && FIXNUM_P(b)) {
+	if (a > b) return 1;
+	if (a < b) return -1;
+	return 0;
+    }
+    if (TYPE(a) == T_STRING && TYPE(b) == T_STRING) {
+	return rb_str_cmp(a, b);
+    }
+
+    retval = rb_funcall(a, id_cmp, 1, b);
+    return rb_cmpint(retval, a, b);
+}

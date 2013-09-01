@@ -1,0 +1,22 @@
+file.c:610
+static VALUE
+test_b(obj, fname)
+    VALUE obj, fname;
+{
+#ifndef S_ISBLK
+#   ifdef S_IFBLK
+#	define S_ISBLK(m) ((m & S_IFMT) == S_IFBLK)
+#   else
+#	define S_ISBLK(m) (0)  /* anytime false */
+#   endif
+#endif
+
+#ifdef S_ISBLK
+    struct stat st;
+
+    if (rb_stat(fname, &st) < 0) return Qfalse;
+    if (S_ISBLK(st.st_mode)) return Qtrue;
+
+#endif
+    return Qfalse;
+}

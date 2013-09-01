@@ -1,0 +1,45 @@
+variable.c:70
+static int
+fc_i(key, value, res)
+    ID key;
+    VALUE value;
+    struct fc_result *res;
+{
+    if (!rb_is_const_id(key)) return ST_CONTINUE;
+
+    if (value == res->klass) {
+	res->path = fc_path(res, key);
+	return ST_STOP;
+    }
+    switch (TYPE(value)) {
+      case T_MODULE:
+      case T_CLASS:
+	if (!RCLASS(value)->iv_tbl) return ST_CONTINUE;
+	else {
+	    struct fc_result arg;
+	    struct fc_result *list;
+
+	    list = res;
+	    while (list) {
+		if (list->track == value) return ST_CONTINUE;
+		list = list->prev;
+	    }
+
+	    arg.name = key;
+	    arg.path = 0;
+	    arg.klass = res->klass;
+	    arg.track = value;
+	    arg.prev = res;
+	    st_foreach(RCLASS(value)->iv_tbl, fc_i, (st_data_t)&arg);
+	    if (arg.path) {
+		res->path = arg.path;
+		return ST_STOP;
+	    }
+	}
+	break;
+
+      default:
+	break;
+    }
+    return ST_CONTINUE;
+}

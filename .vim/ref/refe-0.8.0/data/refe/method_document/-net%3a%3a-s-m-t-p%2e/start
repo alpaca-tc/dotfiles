@@ -1,0 +1,10 @@
+: start( address, port = 25, helo_domain = 'localhost.localdomain', account = nil, password = nil, authtype = nil )
+: start( address, port = 25, helo_domain = 'localhost.localdomain', account = nil, password = nil, authtype = nil ) {|smtp| .... }
+    以下と同じです。
+        Net::SMTP.new(address,port).start(helo_domain,account,password,authtype)
+
+        # example
+        Net::SMTP.start( 'your.smtp.server' ) {
+            smtp.send_mail mail_string, 'from@mail.address', 'dest@mail.address'
+        }
+

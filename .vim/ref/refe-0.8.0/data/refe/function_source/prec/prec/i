@@ -1,0 +1,9 @@
+prec.c:26
+static VALUE
+prec_prec_i(x)
+    VALUE x;
+{
+    VALUE klass = rb_cInteger;
+
+    return rb_funcall(x, prc_pr, 1, klass);
+}

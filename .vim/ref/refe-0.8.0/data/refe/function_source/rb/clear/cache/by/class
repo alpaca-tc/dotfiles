@@ -1,0 +1,16 @@
+eval.c:266
+void
+rb_clear_cache_by_class(klass)
+    VALUE klass;
+{
+    struct cache_entry *ent, *end;
+
+    if (!ruby_running) return;
+    ent = cache; end = ent + CACHE_SIZE;
+    while (ent < end) {
+	if (ent->klass == klass || ent->origin == klass) {
+	    ent->mid = 0;
+	}
+	ent++;
+    }
+}

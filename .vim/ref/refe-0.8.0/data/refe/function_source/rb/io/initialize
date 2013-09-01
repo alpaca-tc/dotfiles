@@ -1,0 +1,37 @@
+io.c:2846
+static VALUE
+rb_io_initialize(argc, argv, io)
+    int argc;
+    VALUE *argv;
+    VALUE io;
+{
+    VALUE fnum, mode;
+    OpenFile *fp;
+    int fd, flags;
+    char mbuf[4];
+
+    rb_secure(4);
+    rb_scan_args(argc, argv, "11", &fnum, &mode);
+    fd = NUM2INT(fnum);
+    if (argc == 2) {
+	if (FIXNUM_P(mode)) {
+	    flags = FIX2LONG(mode);
+	}
+	else {
+	    SafeStringValue(mode);
+	    flags = rb_io_mode_modenum(RSTRING(mode)->ptr);
+	}
+    }
+    else {
+#if defined(HAVE_FCNTL) && defined(F_GETFL)
+	flags = fcntl(fd, F_GETFL);
+#else
+	flags = O_RDONLY;
+#endif
+    }
+    MakeOpenFile(io, fp);
+    fp->mode = rb_io_modenum_flags(flags);
+    fp->f = rb_fdopen(fd, rb_io_modenum_mode(flags, mbuf));
+
+    return io;
+}

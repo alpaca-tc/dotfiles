@@ -1,0 +1,4 @@
+--- File.grpowned?(path)
+
+    FileTest.grpowned? と同じです。
+

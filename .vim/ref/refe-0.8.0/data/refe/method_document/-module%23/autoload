@@ -1,0 +1,7 @@
+--- autoload(const_name, feature)
+--- autoload?(const_name)
+
+    ruby 1.8 feature
+
+    autoload を参照。
+

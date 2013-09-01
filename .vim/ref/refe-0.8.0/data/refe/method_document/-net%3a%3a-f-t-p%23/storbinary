@@ -1,0 +1,9 @@
+--- Net::FTP#storbinary(cmd, file, blocksize, rest_offset = nil, callback = nil)
+
+    サーバーにcmdで指定されたコマンドを送り、バイナリデータを
+    送ります。blocksizeで指定されたバイト単位で
+    fileからデータを読み込み、サーバーに送ります。 
+
+    callbackやブロックが指定された場合はデータが
+    送信されるごとにそれを呼び出します。
+

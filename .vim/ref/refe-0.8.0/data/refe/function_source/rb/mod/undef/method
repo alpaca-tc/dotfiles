@@ -1,0 +1,14 @@
+eval.c:1821
+static VALUE
+rb_mod_undef_method(argc, argv, mod)
+    int argc;
+    VALUE *argv;
+    VALUE mod;
+{
+    int i;
+
+    for (i=0; i<argc; i++) {
+	rb_undef(mod, rb_to_id(argv[i]));
+    }
+    return mod;
+}

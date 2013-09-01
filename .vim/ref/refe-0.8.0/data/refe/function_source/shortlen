@@ -1,0 +1,16 @@
+marshal.c:30
+static int
+shortlen(len, ds)
+    long len;
+    BDIGIT *ds;
+{
+    BDIGIT num;
+    int offset = 0;
+
+    num = ds[len-1];
+    while (num) {
+	num = SHORTDN(num);
+	offset++;
+    }
+    return (len - 1)*sizeof(BDIGIT)/2 + offset;
+}

@@ -1,0 +1,6 @@
+--- Time.new
+--- Time.now
+
+    現在時刻の Time オブジェクトを返します。new は 
+    now とは initialize を呼び出す点が異なります。
+

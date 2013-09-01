@@ -1,0 +1,8 @@
+math.c:124
+static VALUE
+math_sinh(obj, x)
+    VALUE obj, x;
+{
+    Need_Float(x);
+    return rb_float_new(sinh(RFLOAT(x)->value));
+}

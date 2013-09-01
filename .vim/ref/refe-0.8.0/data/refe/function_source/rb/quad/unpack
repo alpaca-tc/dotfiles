@@ -1,0 +1,22 @@
+bignum.c:285
+VALUE
+rb_quad_unpack(buf, sign)
+    const char *buf;
+    int sign;
+{
+    VALUE big = bignew(QUAD_SIZE/SIZEOF_BDIGITS, 1);
+
+    memcpy((char*)BDIGITS(big), buf, QUAD_SIZE);
+    if (sign && BNEG(buf)) {
+	long len = QUAD_SIZE;
+	char *tmp = (char*)BDIGITS(big);
+
+	RBIGNUM(big)->sign = 0;
+	while (len--) {
+	    *tmp = ~*tmp;
+	    tmp++;
+	}
+    }
+
+    return bignorm(big);
+}

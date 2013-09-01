@@ -1,0 +1,14 @@
+--- end(n)
+
+    n 番目の部分文字列終端のオフセットを返します。0 はマッチ全体
+    を意味します。n が範囲外の場合は例外 IndexError が発生
+    します。n 番目の部分文字列がマッチしていなければ nil 
+    を返します。
+
+        /(foo)(bar)(BAZ)?/ =~ "foobarbaz"
+        p $~.end(0)   # => 6
+        p $~.end(1)   # => 3
+        p $~.end(2)   # => 6
+        p $~.end(3)   # => nil
+        p $~.end(-1)  # => `end': index -1 out of matches (IndexError)
+

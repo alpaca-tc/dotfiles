@@ -1,0 +1,56 @@
+parse.y:4937
+static int
+value_expr0(node)
+    NODE *node;
+{
+    int cond = 0;
+
+    while (node) {
+	switch (nd_type(node)) {
+	  case NODE_DEFN:
+	  case NODE_DEFS:
+	    parser_warning(node, "void value expression");
+	    return Qfalse;
+
+	  case NODE_RETURN:
+	  case NODE_BREAK:
+	  case NODE_NEXT:
+	  case NODE_REDO:
+	  case NODE_RETRY:
+	    if (!cond) yyerror("void value expression");
+	    /* or "control never reach"? */
+	    return Qfalse;
+
+	  case NODE_BLOCK:
+	    while (node->nd_next) {
+		node = node->nd_next;
+	    }
+	    node = node->nd_head;
+	    break;
+
+	  case NODE_BEGIN:
+	    node = node->nd_body;
+	    break;
+
+	  case NODE_IF:
+	    if (!value_expr(node->nd_body)) return Qfalse;
+	    node = node->nd_else;
+	    break;
+
+	  case NODE_AND:
+	  case NODE_OR:
+	    cond = 1;
+	    node = node->nd_2nd;
+	    break;
+
+	  case NODE_NEWLINE:
+	    node = node->nd_next;
+	    break;
+
+	  default:
+	    return Qtrue;
+	}
+    }
+
+    return Qtrue;
+}

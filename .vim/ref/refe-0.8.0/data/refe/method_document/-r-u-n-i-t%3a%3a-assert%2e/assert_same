@@ -1,0 +1,2 @@
+--- assert_same(expected, actual[, message])
+

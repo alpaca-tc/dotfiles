@@ -1,0 +1,11 @@
+variable.c:509
+void
+rb_define_virtual_variable(name, getter, setter)
+    const char  *name;
+    VALUE (*getter)();
+    void  (*setter)();
+{
+    if (!getter) getter = val_getter;
+    if (!setter) setter = readonly_setter;
+    rb_define_hooked_variable(name, 0, getter, setter);
+}

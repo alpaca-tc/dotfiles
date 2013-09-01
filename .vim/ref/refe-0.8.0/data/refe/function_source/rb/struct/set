@@ -1,0 +1,23 @@
+struct.c:126
+static VALUE
+rb_struct_set(obj, val)
+    VALUE obj, val;
+{
+    VALUE member, slot;
+    long i;
+
+    member = rb_struct_iv_get(rb_obj_class(obj), "__member__");
+    if (NIL_P(member)) {
+	rb_bug("uninitialized struct");
+    }
+    rb_struct_modify(obj);
+    for (i=0; i<RARRAY(member)->len; i++) {
+	slot = RARRAY(member)->ptr[i];
+	if (rb_id_attrset(SYM2ID(slot)) == rb_frame_last_func()) {
+	    return RSTRUCT(obj)->ptr[i] = val;
+	}
+    }
+    rb_name_error(rb_frame_last_func(), "`%s' is not a struct member",
+		  rb_id2name(rb_frame_last_func()));
+    return Qnil;		/* not reached */
+}

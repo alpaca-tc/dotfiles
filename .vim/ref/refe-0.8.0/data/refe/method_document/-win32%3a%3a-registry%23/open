@@ -1,0 +1,3 @@
+--- open(subkey, desired = KEY_READ, opt = REG_OPTION_RESERVED)
+    Win32::Registry.open [Win32::Registry/Registry.open](self, subkey, desired, opt) と同じです。
+

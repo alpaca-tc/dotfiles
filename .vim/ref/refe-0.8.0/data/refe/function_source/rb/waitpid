@@ -1,0 +1,71 @@
+process.c:319
+int
+rb_waitpid(pid, st, flags)
+    int pid;
+    int *st;
+    int flags;
+{
+    int result;
+#ifndef NO_WAITPID
+    int oflags = flags;
+    if (!rb_thread_alone()) {	/* there're other threads to run */
+	flags |= WNOHANG;
+    }
+
+  retry:
+    TRAP_BEG;
+#ifdef HAVE_WAITPID
+    result = waitpid(pid, st, flags);
+#else  /* HAVE_WAIT4 */
+    result = wait4(pid, st, flags, NULL);
+#endif
+    TRAP_END;
+    if (result < 0) {
+	if (errno == EINTR) {
+	    rb_thread_polling();
+	    goto retry;
+	}
+	return -1;
+    }
+    if (result == 0) {
+	if (oflags & WNOHANG) return 0;
+	rb_thread_polling();
+	if (rb_thread_alone()) flags = oflags;
+	goto retry;
+    }
+#else  /* NO_WAITPID */
+    if (pid_tbl && st_lookup(pid_tbl, pid, st)) {
+	last_status_set(*st, pid);
+	st_delete(pid_tbl, (st_data_t*)&pid, NULL);
+	return pid;
+    }
+
+    if (flags) {
+	rb_raise(rb_eArgError, "can't do waitpid with flags");
+    }
+
+    for (;;) {
+	TRAP_BEG;
+	result = wait(st);
+	TRAP_END;
+	if (result < 0) {
+	    if (errno == EINTR) {
+		rb_thread_schedule();
+		continue;
+	    }
+	    return -1;
+	}
+	if (result == pid) {
+	    break;
+	}
+	if (!pid_tbl)
+	    pid_tbl = st_init_numtable();
+	st_insert(pid_tbl, pid, st);
+	if (!rb_thread_alone()) rb_thread_schedule();
+    }
+#endif
+    if (result > 0) {
+	last_status_set(*st, result);
+    }
+    return result;
+}

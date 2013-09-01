@@ -1,0 +1,11 @@
+file.c:738
+static VALUE
+test_s(obj, fname)
+    VALUE obj, fname;
+{
+    struct stat st;
+
+    if (rb_stat(fname, &st) < 0) return Qnil;
+    if (st.st_size == 0) return Qnil;
+    return OFFT2NUM(st.st_size);
+}

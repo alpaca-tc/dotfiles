@@ -1,0 +1,9 @@
+snippet site
+abbr    site :name
+options word
+  site :${1:opscode}
+
+snippet cookbook
+abbr    cookbook 'name'
+options word
+  cookbook '${1:#:name}'${2:, '~> ${3:version\}'}

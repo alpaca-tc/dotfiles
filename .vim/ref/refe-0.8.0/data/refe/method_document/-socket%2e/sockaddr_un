@@ -1,0 +1,10 @@
+--- Socket.sockaddr_un(path)             ruby 1.7 feature
+--- Socket.pack_sockaddr_un(path)        ruby 1.7 feature
+
+    指定したアドレスをソケットアドレス構造体を pack した文字列
+    で返します。
+
+        require 'socket'
+        p Socket.pack_sockaddr_un("/tmp/.X11-unix/X0")
+        => "\001\000/tmp/.X11-unix/X0\000...."
+

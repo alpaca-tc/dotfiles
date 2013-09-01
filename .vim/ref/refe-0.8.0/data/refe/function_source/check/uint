@@ -1,0 +1,9 @@
+numeric.c:1023
+static void
+check_uint(num)
+    unsigned long num;
+{
+    if (num > UINT_MAX) {
+	rb_raise(rb_eRangeError, "integer %lu too big to convert to `unsigned int'", num);
+    }
+}

@@ -1,0 +1,20 @@
+eval.c:6724
+static void
+scope_dup(scope)
+    struct SCOPE *scope;
+{
+    ID *tbl;
+    VALUE *vars;
+
+    scope->flags |= SCOPE_DONT_RECYCLE;
+    if (scope->flags & SCOPE_MALLOC) return;
+
+    if (scope->local_tbl) {
+	tbl = scope->local_tbl;
+	vars = ALLOC_N(VALUE, tbl[0]+1);
+	*vars++ = scope->local_vars[-1];
+	MEMCPY(vars, scope->local_vars, VALUE, tbl[0]);
+	scope->local_vars = vars;
+	scope->flags |= SCOPE_MALLOC;
+    }
+}

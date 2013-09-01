@@ -1,0 +1,7 @@
+variable.c:284
+char *
+rb_obj_classname(obj)
+    VALUE obj;
+{
+    return rb_class2name(CLASS_OF(obj));
+}

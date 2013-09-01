@@ -1,0 +1,4 @@
+--- Sync_m#sync_synchronize(mode = EX) {...}
+--- Sync_m#synchronize(mode = EX) {...}
+      ロック状態を変更してブロックを実行する。
+

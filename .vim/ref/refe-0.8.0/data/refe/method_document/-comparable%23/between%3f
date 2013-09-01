@@ -1,0 +1,9 @@
+--- between?(min, max)
+
+    self が min と max の範囲内(min, max 
+    を含みます)にある時真を返します。
+
+    ruby 1.8 feature:
+    self <=> min か、self <=> max が nil を返
+    したとき例外 ArgumentError が発生します。
+

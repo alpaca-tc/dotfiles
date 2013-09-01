@@ -1,0 +1,5 @@
+--- class_eval(src[,fname[,lineno]])
+--- class_eval { ... }
+
+    Module#module_eval [Module/module_eval] の別名。
+

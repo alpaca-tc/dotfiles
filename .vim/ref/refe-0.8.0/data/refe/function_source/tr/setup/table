@@ -1,0 +1,34 @@
+string.c:2350
+static void
+tr_setup_table(str, table, init)
+    VALUE str;
+    char table[256];
+    int init;
+{
+    char buf[256];
+    struct tr tr;
+    int i, c;
+    int cflag = 0;
+
+    tr.p = RSTRING(str)->ptr; tr.pend = tr.p + RSTRING(str)->len;
+    tr.gen = tr.now = tr.max = 0;
+    if (RSTRING(str)->len > 1 && RSTRING(str)->ptr[0] == '^') {
+	cflag = 1;
+	tr.p++;
+    }
+
+    if (init) {
+	for (i=0; i<256; i++) {
+	    table[i] = 1;
+	}
+    }
+    for (i=0; i<256; i++) {
+	buf[i] = cflag;
+    }
+    while ((c = trnext(&tr)) >= 0) {
+	buf[c & 0xff] = !cflag;
+    }
+    for (i=0; i<256; i++) {
+	table[i] = table[i]&&buf[i];
+    }
+}

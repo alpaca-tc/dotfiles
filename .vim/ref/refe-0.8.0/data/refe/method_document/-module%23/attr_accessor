@@ -1,0 +1,15 @@
+--- attr_accessor(name,  ... )
+
+    属性 name に対する読み込みメソッドと書きこみメソッドの両方を
+    定義します。name は Symbol か文字列で指定します。戻り値
+    は常に nil です。
+
+    このメソッドで定義されるメソッドの定義は以下の通りです。
+
+      def name
+        @name
+      end
+      def name=(val)
+        @name = val
+      end
+

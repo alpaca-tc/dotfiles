@@ -1,0 +1,4 @@
+--- FileTest.readable?(filename)
+
+    filename を読み込み可能な時に真を返します。
+

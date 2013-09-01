@@ -1,0 +1,7 @@
+eval.c:5934
+static void
+rb_provide_feature(feature)
+    VALUE feature;
+{
+    rb_ary_push(rb_features, feature);
+}

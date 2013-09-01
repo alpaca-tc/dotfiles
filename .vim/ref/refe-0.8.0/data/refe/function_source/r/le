@@ -1,0 +1,11 @@
+range.c:122
+static int
+r_le(a, b)
+    VALUE a, b;
+{
+    VALUE r = rb_funcall(a, id_cmp, 1, b);
+
+    if (NIL_P(r)) return Qfalse;
+    if (rb_cmpint(r, a, b) <= 0) return Qtrue;
+    return Qfalse;
+}

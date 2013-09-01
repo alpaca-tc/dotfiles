@@ -1,0 +1,9 @@
+file.c:658
+static VALUE
+test_r(obj, fname)
+    VALUE obj, fname;
+{
+    SafeStringValue(fname);
+    if (eaccess(StringValueCStr(fname), R_OK) < 0) return Qfalse;
+    return Qtrue;
+}

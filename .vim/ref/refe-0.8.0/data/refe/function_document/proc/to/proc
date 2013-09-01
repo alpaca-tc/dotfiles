@@ -1,0 +1,2 @@
+: static VALUE proc_to_proc(VALUE proc)
+

@@ -1,0 +1,49 @@
+gc.c:281
+static void
+add_heap()
+{
+    RVALUE *p, *pend;
+
+    if (heaps_used == heaps_length) {
+	/* Realloc heaps */
+	struct heaps_slot *p;
+	int length;
+
+	heaps_length += HEAPS_INCREMENT;
+	length = heaps_length*sizeof(struct heaps_slot);
+	RUBY_CRITICAL(
+	    if (heaps_used > 0) {
+		p = (struct heaps_slot *)realloc(heaps, length);
+		if (p) heaps = p;
+	    }
+	    else {
+		p = heaps = (struct heaps_slot *)malloc(length);
+	    });
+	if (p == 0) rb_memerror();
+    }
+
+    for (;;) {
+	RUBY_CRITICAL(p = heaps[heaps_used].slot = (RVALUE*)malloc(sizeof(RVALUE)*heap_slots));
+	heaps[heaps_used].limit = heap_slots;
+	if (p == 0) {
+	    if (heap_slots == HEAP_MIN_SLOTS) {
+		rb_memerror();
+	    }
+	    heap_slots = HEAP_MIN_SLOTS;
+	    continue;
+	}
+	break;
+    }
+    pend = p + heap_slots;
+    if (lomem == 0 || lomem > p) lomem = p;
+    if (himem < pend) himem = pend;
+    heaps_used++;
+    heap_slots *= 1.8;
+
+    while (p < pend) {
+	p->as.free.flags = 0;
+	p->as.free.next = freelist;
+	freelist = p;
+	p++;
+    }
+}

@@ -1,0 +1,7 @@
+--- Matrix#row(i)
+    returns the i-th row vector.
+    When the block is supplied for the method, the block is iterated over all row vectors.
+
+    第i番目の行ベクトルを返す。
+    ブロックが与えられたときは、各行ベクトルについて、ブロックを繰り返す。
+

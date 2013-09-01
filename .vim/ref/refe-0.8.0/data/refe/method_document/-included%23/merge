@@ -1,0 +1,5 @@
+--- merge(enum)
+#    Merges the elements of the given enumerable object to the set and
+#    returns self.
+    enum で与えられた Enumerable の要素を追加し、その集合自身を返します。
+

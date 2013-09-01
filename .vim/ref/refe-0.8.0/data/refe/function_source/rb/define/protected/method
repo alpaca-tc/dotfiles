@@ -1,0 +1,10 @@
+class.c:665
+void
+rb_define_protected_method(klass, name, func, argc)
+    VALUE klass;
+    const char *name;
+    VALUE (*func)();
+    int argc;
+{
+    rb_add_method(klass, rb_intern(name), NEW_CFUNC(func, argc), NOEX_PROTECTED);
+}

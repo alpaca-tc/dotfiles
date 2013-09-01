@@ -1,0 +1,5 @@
+--- ERB::Util.url_encode(s)
+--- ERB::Util.u(s)
+    文字列をURLエンコードする。
+    (CGI.escapeとほぼ同じ。)
+

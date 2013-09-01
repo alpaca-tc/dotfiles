@@ -1,0 +1,2 @@
+: NEWOBJ(obj, int typeflag)
+

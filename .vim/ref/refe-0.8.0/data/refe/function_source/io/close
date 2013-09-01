@@ -1,0 +1,7 @@
+io.c:1429
+static VALUE
+io_close(io)
+    VALUE io;
+{
+    return rb_funcall(io, rb_intern("close"), 0, 0);
+}

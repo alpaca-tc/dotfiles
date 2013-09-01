@@ -1,0 +1,7 @@
+marshal.c:896
+static VALUE
+r_string(arg)
+    struct load_arg *arg;
+{
+    return r_bytes(arg);
+}

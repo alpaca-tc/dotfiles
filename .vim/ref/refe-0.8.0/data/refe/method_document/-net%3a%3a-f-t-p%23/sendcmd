@@ -1,0 +1,9 @@
+--- Net::FTP#sendcmd(cmd)
+
+    cmdで指定されたコマンドをサーバーに送り、 サーバーからの応答を返します。 
+
+    応答コードが4xxの場合は例外FTPTermErrorが、5xxの場合は
+    例外FTPPermErrorが発生します。
+    応答コードの最初の数字が1から5のどれでもない場合は
+    例外FTPProtoErrorが発生します。
+

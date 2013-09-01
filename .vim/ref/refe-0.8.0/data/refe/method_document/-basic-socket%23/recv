@@ -1,0 +1,7 @@
+--- recv(len[, flags])
+    ソケットからデータを受け取り、文字列として返します。
+    lenは受け取る最大の長さを指定します。
+    flagsについてはrecv(2)を参照。flagsの
+    デフォルト値は0です。flagsの指定に必要な定数は
+    Socketクラスで定義されています。(例: Socket::SO_LINGER)
+

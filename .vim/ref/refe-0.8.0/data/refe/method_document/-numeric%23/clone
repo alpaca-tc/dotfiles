@@ -1,0 +1,10 @@
+--- clone
+--- dup
+
+    self を返します。
+
+    ruby 1.7 feature: version 1.7 では数値などの immutable なオ
+    ブジェクトは clone や dup が禁止されています。
+
+        1.dup   # => in `clone': can't clone Fixnum (TypeError)
+

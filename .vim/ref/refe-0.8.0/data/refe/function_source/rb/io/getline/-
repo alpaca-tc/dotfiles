@@ -1,0 +1,56 @@
+io.c:1005
+static VALUE
+rb_io_getline(rs, fptr)
+    VALUE rs;
+    OpenFile *fptr;
+{
+    VALUE str = Qnil;
+
+    rb_io_check_readable(fptr);
+    if (NIL_P(rs)) {
+	str = read_all(fptr, 0, Qnil);
+    }
+    else if (rs == rb_default_rs) {
+	return rb_io_getline_fast(fptr, '\n');
+    }
+    else {
+	int c, newline;
+	char *rsptr;
+	long rslen;
+	int rspara = 0;
+
+	StringValue(rs);
+	rslen = RSTRING(rs)->len;
+	if (rslen == 0) {
+	    rsptr = "\n\n";
+	    rslen = 2;
+	    rspara = 1;
+	    swallow(fptr, '\n');
+	}
+	else if (rslen == 1) {
+	    return rb_io_getline_fast(fptr, RSTRING(rs)->ptr[0]);
+	}
+	else {
+	    rsptr = RSTRING(rs)->ptr;
+	}
+	newline = rsptr[rslen - 1];
+
+	while ((c = appendline(fptr, newline, &str)) != EOF &&
+	       (c != newline || RSTRING(str)->len < rslen ||
+		memcmp(RSTRING(str)->ptr+RSTRING(str)->len-rslen,rsptr,rslen)));
+
+	if (rspara) {
+	    if (c != EOF) {
+		swallow(fptr, '\n');
+	    }
+	}
+    }
+
+    if (!NIL_P(str)) {
+	fptr->lineno++;
+	lineno = INT2FIX(fptr->lineno);
+	OBJ_TAINT(str);
+    }
+
+    return str;
+}

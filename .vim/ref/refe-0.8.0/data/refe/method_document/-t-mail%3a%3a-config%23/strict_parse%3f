@@ -1,0 +1,5 @@
+: strict_parse?
+    真ならば TMail のパーサはヘッダパース中に発生した
+    TMail::SyntaxError を返します。
+@nocode MH
+

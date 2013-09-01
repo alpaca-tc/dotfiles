@@ -1,0 +1,50 @@
+dln.c:1162
+static const char *
+dln_strerror()
+{
+#ifdef USE_DLN_A_OUT
+    char *strerror();
+
+    switch (dln_errno) {
+      case DLN_ECONFL:
+	return "Symbol name conflict";
+      case DLN_ENOINIT:
+	return "No inititalizer given";
+      case DLN_EUNDEF:
+	return "Unresolved symbols";
+      case DLN_ENOTLIB:
+	return "Not a library file";
+      case DLN_EBADLIB:
+	return "Malformed library file";
+      case DLN_EINIT:
+	return "Not initialized";
+      default:
+	return strerror(dln_errno);
+    }
+#endif
+
+#ifdef USE_DLN_DLOPEN
+    return (char*)dlerror();
+#endif
+
+#if defined _WIN32 && !defined __CYGWIN__
+    static char message[1024];
+    int error = GetLastError();
+    char *p = message;
+    p += sprintf(message, "%d: ", error);
+    FormatMessage(
+	FORMAT_MESSAGE_FROM_SYSTEM	 | FORMAT_MESSAGE_IGNORE_INSERTS,
+	NULL,
+	error,
+	MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+	p,
+	sizeof message - strlen(message),
+	NULL);
+
+    for (p = message; *p; p++) {
+	if (*p == '\n' || *p == '\r')
+	    *p = ' ';
+    }
+    return message;
+#endif
+}

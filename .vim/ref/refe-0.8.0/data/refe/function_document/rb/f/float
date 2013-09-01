@@ -1,0 +1,2 @@
+: static VALUE rb_f_float(VALUE obj, VALUE arg)
+

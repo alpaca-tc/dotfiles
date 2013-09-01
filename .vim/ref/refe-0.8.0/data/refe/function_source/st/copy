@@ -1,0 +1,41 @@
+st.c:349
+st_table*
+st_copy(old_table)
+    st_table *old_table;
+{
+    st_table *new_table;
+    st_table_entry *ptr, *entry;
+    int i, num_bins = old_table->num_bins;
+
+    new_table = alloc(st_table);
+    if (new_table == 0) {
+	return 0;
+    }
+
+    *new_table = *old_table;
+    new_table->bins = (st_table_entry**)
+	Calloc((unsigned)num_bins, sizeof(st_table_entry*));
+
+    if (new_table->bins == 0) {
+	free(new_table);
+	return 0;
+    }
+
+    for(i = 0; i < num_bins; i++) {
+	new_table->bins[i] = 0;
+	ptr = old_table->bins[i];
+	while (ptr != 0) {
+	    entry = alloc(st_table_entry);
+	    if (entry == 0) {
+		free(new_table->bins);
+		free(new_table);
+		return 0;
+	    }
+	    *entry = *ptr;
+	    entry->next = new_table->bins[i];
+	    new_table->bins[i] = entry;
+	    ptr = ptr->next;
+	}
+    }
+    return new_table;
+}

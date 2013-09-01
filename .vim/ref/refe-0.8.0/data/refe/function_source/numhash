@@ -1,0 +1,7 @@
+st.c:561
+static int
+numhash(n)
+    long n;
+{
+    return n;
+}

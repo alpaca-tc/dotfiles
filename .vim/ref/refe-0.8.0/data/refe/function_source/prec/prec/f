@@ -1,0 +1,9 @@
+prec.c:35
+static VALUE
+prec_prec_f(x)
+    VALUE x;
+{
+    VALUE klass = rb_cFloat;
+
+    return rb_funcall(x, prc_pr, 1, klass);
+}

@@ -1,0 +1,3 @@
+: keys -> [TMail::HeaderField]
+    ヘッダ名の配列を返します。
+

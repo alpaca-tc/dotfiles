@@ -1,0 +1,7 @@
+object.c:387
+static VALUE
+nil_to_i(obj)
+    VALUE obj;
+{
+    return INT2FIX(0);
+}

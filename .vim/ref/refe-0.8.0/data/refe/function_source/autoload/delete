@@ -1,0 +1,27 @@
+variable.c:1179
+static NODE*
+autoload_delete(mod, id)
+    VALUE mod;
+    ID id;
+{
+    VALUE val;
+    st_data_t load = 0;
+
+    st_delete(RCLASS(mod)->iv_tbl, (st_data_t*)&id, 0);
+    if (st_lookup(RCLASS(mod)->iv_tbl, autoload, &val)) {
+	struct st_table *tbl = check_autoload_table(val);
+
+	st_delete(tbl, (st_data_t*)&id, &load);
+
+	if (tbl->num_entries == 0) {
+	    DATA_PTR(val) = 0;
+	    st_free_table(tbl);
+	    id = autoload;
+	    if (st_delete(RCLASS(mod)->iv_tbl, (st_data_t*)&id, &val)) {
+		rb_gc_force_recycle(val);
+	    }
+	}
+    }
+
+    return (NODE *)load;
+}

@@ -1,0 +1,14 @@
+--- private_method_defined?(name)
+--- protected_method_defined?(name)
+--- public_method_defined?(name)
+
+    ruby 1.7 feature
+
+    それぞれ、private, protected,
+    public であるインスタンスメソッド name がモジュー
+    ルに定義されているとき真を返します。name は Symbol か
+    文字列です。
+
+    Module#method_defined? [Module/method_defined?]
+    も参照してください。
+

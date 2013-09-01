@@ -1,0 +1,7 @@
+io.c:251
+int
+rb_read_pending(fp)
+    FILE *fp;
+{
+    return READ_DATA_PENDING(fp);
+}

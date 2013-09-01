@@ -1,0 +1,5 @@
+--- Signal.trap(signal, command)
+--- Signal.trap(signal) { ... }
+
+    関数 trap と同じです
+

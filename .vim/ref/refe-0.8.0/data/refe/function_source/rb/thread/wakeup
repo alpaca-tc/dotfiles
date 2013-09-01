@@ -1,0 +1,13 @@
+eval.c:9097
+VALUE
+rb_thread_wakeup(thread)
+    VALUE thread;
+{
+    rb_thread_t th = rb_thread_check(thread);
+
+    if (th->status == THREAD_KILLED)
+	rb_raise(rb_eThreadError, "killed thread");
+    rb_thread_ready(th);
+
+    return thread;
+}

@@ -1,0 +1,30 @@
+io.c:377
+long
+rb_io_fwrite(ptr, len, f)
+    const char *ptr;
+    long len;
+    FILE *f;
+{
+    long n, r;
+
+    if ((n = len) <= 0) return n;
+#ifdef __human68k__
+    do {
+	if (fputc(*ptr++, f) == EOF) {
+	    if (ferror(f)) return -1L;
+	    break;
+	}
+    } while (--n > 0);
+#else
+    while (ptr += (r = fwrite(ptr, 1, n, f)), (n -= r) > 0) {
+	if (ferror(f)) {
+	    if (rb_io_wait_writable(fileno(f))) {
+		clearerr(f);
+		continue;
+	    }
+	    return -1L;
+	}
+    }
+#endif
+    return len - n;
+}

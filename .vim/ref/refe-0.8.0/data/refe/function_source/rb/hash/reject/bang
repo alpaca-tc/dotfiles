@@ -1,0 +1,10 @@
+hash.c:482
+VALUE
+rb_hash_reject_bang(hash)
+    VALUE hash;
+{
+    int n = RHASH(hash)->tbl->num_entries;
+    rb_hash_delete_if(hash);
+    if (n == RHASH(hash)->tbl->num_entries) return Qnil;
+    return hash;
+}

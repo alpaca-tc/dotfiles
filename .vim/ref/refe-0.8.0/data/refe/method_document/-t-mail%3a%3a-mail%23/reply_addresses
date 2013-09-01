@@ -1,0 +1,5 @@
+: reply_addresses( default = nil ) -> [TMail::Address]
+    返信すべきアドレスを判断し、Address オブジェクトの
+    配列で返します。返信すべきアドレスがみつからなければ
+    DEFAULT を返します。
+

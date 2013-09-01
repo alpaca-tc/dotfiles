@@ -1,0 +1,4 @@
+--- Net::FTP#passive = bool
+
+    passive モードの状態を設定します。新しい状態を返します。
+

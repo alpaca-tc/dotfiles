@@ -1,0 +1,19 @@
+--- ftype
+    ファイルのタイプを表す文字列を返します。文字列は以下のうちの
+    いずれかです。
+
+      "file"
+      "directory"
+      "characterSpecial"
+      "blockSpecial"
+      "fifo"
+      "link"
+      "socket"
+
+      "unknown"
+
+    
+
+以下の属性メソッドは、システムによってサポートされていない場合 0 が返ります。
+ruby 1.7 feature: 1.7 では nil が返ります。
+

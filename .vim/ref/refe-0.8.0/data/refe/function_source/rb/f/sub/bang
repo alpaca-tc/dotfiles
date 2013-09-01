@@ -1,0 +1,8 @@
+string.c:1756
+static VALUE
+rb_f_sub_bang(argc, argv)
+    int argc;
+    VALUE *argv;
+{
+    return rb_str_sub_bang(argc, argv, uscore_get());
+}

@@ -1,0 +1,6 @@
+parse.y:5665
+static int
+dyna_in_block()
+{
+    return (lvtbl->dlev > 0);
+}

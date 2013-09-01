@@ -1,0 +1,6 @@
+--- typealias(newtype, oldtype)
+
+    newtype型をoldtype型のエイリアスとして定義する。
+    newtypeで与えた型はexternやcallbackメソッド
+    のプロトタイプを与えるときに利用する。
+

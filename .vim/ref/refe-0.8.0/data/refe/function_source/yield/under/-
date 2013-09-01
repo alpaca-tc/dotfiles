@@ -1,0 +1,7 @@
+eval.c:5666
+static VALUE
+yield_under(under, self)
+    VALUE under, self;
+{
+    return exec_under(yield_under_i, under, 0, self);
+}

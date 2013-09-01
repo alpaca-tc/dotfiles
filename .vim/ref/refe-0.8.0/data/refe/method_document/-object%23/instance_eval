@@ -1,0 +1,70 @@
+--- instance_eval(expr, [fname, [lineno=1]])
+--- instance_eval {|obj| ... }
+
+    オブジェクトのコンテキストで文字列 expr を評価してその結果を返
+    します。
+    fname、lineno が与えられた場合は、ファイル fname、
+    行番号 lineno にその文字列があるかのようにコンパイルされ、ス
+    タックトレース表示などのファイル名／行番号を差し替えることができま
+    す。
+
+    ブロックが与えられた場合にはそのブロックをオブジェクトのコンテキス
+    トで評価してその結果を返します。ブロックの引数 obj には 
+    self が渡されます。
+
+    オブジェクトのコンテキストで評価するとは self をそのオブジェ
+    クトにして実行するということです。また、文字列／ブロック中でメソッ
+    ドを定義すれば self の特異メソッドが定義されます。
+
+    ただし、ローカル変数だけは instance_eval の外側のスコープと
+    共有します。
+
+    ((*注*)): メソッド定義の中で instance_eval のブロックを使用してメ
+    ソッド定義を行うと、"nested method definition" とコンパイルエラー
+    になります。これは、現在の ruby パーサの制限です。
+
+        def foo
+           instance_eval {
+             def bar            # <- ネストしたメソッド定義と判断される
+               "bar"
+             end
+           }
+        end
+
+        # => -:4: nested method definition
+
+    文字列で渡す形式を使えば、この制限は回避できます。
+
+        def foo
+           instance_eval %Q{
+             def bar
+               "bar"
+             end
+           }
+        end
+
+        # foo を実行すると関数(厳密には foo のレシーバのメソッド) bar 
+        # を定義する
+        foo
+        p bar
+        # => "bar"
+
+    ruby 1.7 feature: メソッド定義のネストに関して、この制限はな
+    くなっています。さらに、version 1.7 以降 instance_eval を使わなく
+    ても以下で同じことができます(厳密には異なります。
+    メソッド定義のネスト を参照してくださ
+    い)。
+
+        def foo
+           def bar
+             "bar"
+           end
+        end
+
+        foo
+        p bar
+        # => "bar"
+
+    Module#module_eval [Module/module_eval],
+    Module#class_eval [Module/class_eval] も参照してください。
+

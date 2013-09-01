@@ -1,0 +1,9 @@
+--- Matrix.rows(rows, copy = true)
+    creates a matrix where `rows' indicates rows.
+    If optional argument `copy' is false, use the array as
+    internal structure of the metrix without copying.
+
+    rowsを要素とする行列を生成する。
+    ただし、引数rowsはネストした配列(=配列の配列)である。
+    また、オプション引数 copy が偽(false)ならば、複製を行わない。
+

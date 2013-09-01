@@ -1,0 +1,7 @@
+object.c:507
+static VALUE
+rb_true(obj)
+    VALUE obj;
+{
+    return Qtrue;
+}

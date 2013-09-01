@@ -1,0 +1,37 @@
+st.c:482
+void
+st_foreach(table, func, arg)
+    st_table *table;
+    int (*func)();
+    st_data_t arg;
+{
+    st_table_entry *ptr, *last, *tmp;
+    enum st_retval retval;
+    int i;
+
+    for(i = 0; i < table->num_bins; i++) {
+	last = 0;
+	for(ptr = table->bins[i]; ptr != 0;) {
+	    retval = (*func)(ptr->key, ptr->record, arg);
+	    switch (retval) {
+	    case ST_CONTINUE:
+		last = ptr;
+		ptr = ptr->next;
+		break;
+	    case ST_STOP:
+		return;
+	    case ST_DELETE:
+		tmp = ptr;
+		if (last == 0) {
+		    table->bins[i] = ptr->next;
+		}
+		else {
+		    last->next = ptr->next;
+		}
+		ptr = ptr->next;
+		free(tmp);
+		table->num_entries--;
+	    }
+	}
+    }
+}

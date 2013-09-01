@@ -1,0 +1,96 @@
+io.c:852
+static int
+appendline(fptr, delim, strp)
+    OpenFile *fptr;
+    int delim;
+    VALUE *strp;
+{
+    FILE *f = fptr->f;
+    VALUE str = *strp;
+    int c = EOF;
+#ifndef READ_DATA_PENDING_PTR
+    char buf[8192];
+    char *bp = buf, *bpe = buf + sizeof buf - 3;
+    int cnt;
+#endif
+
+    do {
+#ifdef READ_DATA_PENDING_PTR
+	long pending = READ_DATA_PENDING_COUNT(f);
+	if (pending > 0) {
+	    const char *p = READ_DATA_PENDING_PTR(f);
+	    const char *e = memchr(p, delim, pending);
+	    long last = 0, len = (c != EOF);
+	    if (e) pending = e - p + 1;
+	    len += pending;
+	    if (!NIL_P(str)) {
+		last = RSTRING(str)->len;
+		rb_str_resize(str, last + len);
+	    }
+	    else {
+		*strp = str = rb_str_buf_new(len);
+		RSTRING(str)->len = len;
+		RSTRING(str)->ptr[len] = '\0';
+	    }
+	    if (c != EOF) {
+		RSTRING(str)->ptr[last++] = c;
+	    }
+	    fread(RSTRING(str)->ptr + last, 1, pending, f); /* must not fail */
+	    if (e) return delim;
+	}
+	else if (c != EOF) {
+	    if (!NIL_P(str)) {
+		char ch = c;
+		rb_str_buf_cat(str, &ch, 1);
+	    }
+	    else {
+		*strp = str = rb_str_buf_new(1);
+		RSTRING(str)->ptr[RSTRING(str)->len++] = c;
+	    }
+	}
+	rb_thread_wait_fd(fileno(f));
+	rb_io_check_closed(fptr);
+#else
+	READ_CHECK(f);
+#endif
+	TRAP_BEG;
+	c = getc(f);
+	TRAP_END;
+	if (c == EOF) {
+	    if (ferror(f)) {
+		clearerr(f);
+		if (!rb_io_wait_readable(fileno(f)))
+		    rb_sys_fail(fptr->path);
+		continue;
+	    }
+	    return c;
+	}
+#ifndef READ_DATA_PENDING_PTR
+	if ((*bp++ = c) == delim || bp == bpe) {
+	    cnt = bp - buf;
+
+	    if (cnt > 0) {
+		if (!NIL_P(str))
+		    rb_str_cat(str, buf, cnt);
+		else
+		    *strp = str = rb_str_new(buf, cnt);
+	    }
+	    bp = buf;
+	}
+#endif
+    } while (c != delim);
+
+#ifdef READ_DATA_PENDING_PTR
+    {
+	char ch = c;
+	if (!NIL_P(str)) {
+	    rb_str_cat(str, &ch, 1);
+	}
+	else {
+	    *strp = str = rb_str_new(&ch, 1);
+	}
+    }
+#endif
+
+    return c;
+}

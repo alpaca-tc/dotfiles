@@ -1,0 +1,2 @@
+: static VALUE rb_mod_ge(VALUE mod, VALUE arg)
+

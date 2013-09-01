@@ -1,0 +1,14 @@
+util.c:315
+static void
+push_element(const char *path, VALUE vinfo)
+{
+    struct PathList *p;
+    struct PathInfo *info = (struct PathInfo *)vinfo;
+
+    p = ALLOC(struct PathList);
+    MEMZERO(p, struct PathList, 1);
+    p->path = ruby_strdup(path);
+    p->next = info->head;
+    info->head = p;
+    info->count++;
+}

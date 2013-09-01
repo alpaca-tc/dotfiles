@@ -1,0 +1,7 @@
+process.c:510
+VALUE
+rb_detach_process(pid)
+    int pid;
+{
+    return rb_thread_create(detach_process_watcer, (void*)&pid);
+}

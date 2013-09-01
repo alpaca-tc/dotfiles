@@ -1,0 +1,7 @@
+: bcc_addrs( default = nil ) -> [TMail::Address]
+: bcc_addrs=( addrs )
+    addrs: TMail::Address / [TMail::Address]
+    default: Object
+
+    Bcc: アドレスの配列。
+

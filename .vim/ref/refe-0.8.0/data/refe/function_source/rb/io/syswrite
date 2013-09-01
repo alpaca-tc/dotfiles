@@ -1,0 +1,29 @@
+io.c:1526
+static VALUE
+rb_io_syswrite(io, str)
+    VALUE io, str;
+{
+    OpenFile *fptr;
+    FILE *f;
+    long n;
+
+    rb_secure(4);
+    if (TYPE(str) != T_STRING)
+	str = rb_obj_as_string(str);
+
+    GetOpenFile(io, fptr);
+    rb_io_check_writable(fptr);
+    f = GetWriteFile(fptr);
+
+    if (fptr->mode & FMODE_WBUF) {
+	rb_warn("syswrite for buffered IO");
+    }
+    if (!rb_thread_fd_writable(fileno(f))) {
+        rb_io_check_closed(fptr);
+    }
+    n = write(fileno(f), RSTRING(str)->ptr, RSTRING(str)->len);
+
+    if (n == -1) rb_sys_fail(fptr->path);
+
+    return LONG2FIX(n);
+}

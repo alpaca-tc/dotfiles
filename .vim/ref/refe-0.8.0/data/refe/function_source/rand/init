@@ -1,0 +1,15 @@
+random.c:150
+static int
+rand_init(seed)
+    unsigned long seed;
+{
+    static unsigned long saved_seed;
+    unsigned long old;
+
+    first = 0;
+    init_genrand(seed);
+    old = saved_seed;
+    saved_seed = seed;
+
+    return old;
+}

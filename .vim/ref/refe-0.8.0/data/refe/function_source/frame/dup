@@ -1,0 +1,23 @@
+eval.c:6813
+static void
+frame_dup(frame)
+    struct FRAME *frame;
+{
+    VALUE *argv;
+    struct FRAME *tmp;
+
+    for (;;) {
+	if (frame->argc > 0) {
+	    argv = ALLOC_N(VALUE, frame->argc);
+	    MEMCPY(argv, frame->argv, VALUE, frame->argc);
+	    frame->argv = argv;
+	    frame->flags |= FRAME_MALLOC;
+	}
+	frame->tmp = 0;		/* should not preserve tmp */
+	if (!frame->prev) break;
+	tmp = ALLOC(struct FRAME);
+	*tmp = *frame->prev;
+	frame->prev = tmp;
+	frame = tmp;
+    }
+}

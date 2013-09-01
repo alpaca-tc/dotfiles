@@ -1,0 +1,7 @@
+--- VERSION
+--- RELEASE_DATE
+--- PLATFORM
+
+    これらは、上記の定数 RUBY_XXX の古い名前です。
+    obsoleteも参照してください。
+

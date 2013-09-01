@@ -1,0 +1,11 @@
+--- Net::Telnet#cmd(string)
+--- Net::Telnet#cmd("String"=>string, "Match"=>match, "Timeout"=>timeout)
+
+    string を改行付きでリモートホストに送り、次のプロンプト
+    match が出力されるまで待ちます。
+
+    match のデフォルト値は new で指定した "Prompt" の値です。
+    timeout のデフォルト値は new で指定した "Timeout" の値です。
+
+    ブロックを指定した場合、出力文字列を引数にブロックを逐次実行します。
+

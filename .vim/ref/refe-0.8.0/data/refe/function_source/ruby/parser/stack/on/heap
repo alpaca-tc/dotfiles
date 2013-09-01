@@ -1,0 +1,10 @@
+parse.y:5686
+int
+ruby_parser_stack_on_heap()
+{
+#if defined(YYBISON) && !defined(C_ALLOCA)
+    return Qfalse;
+#else
+    return Qtrue;
+#endif
+}

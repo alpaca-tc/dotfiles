@@ -1,0 +1,7 @@
+: new( dirname ) -> TMail::MhMailbox
+    dirname: String
+
+    MhMailbox オブジェクトを生成します。
+    dirname は MH メールボックスとして使うディレクトリ名です。
+    すでに作成ずみでなければいけません。
+

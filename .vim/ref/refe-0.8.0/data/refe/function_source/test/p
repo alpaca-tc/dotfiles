@@ -1,0 +1,18 @@
+file.c:519
+static VALUE
+test_p(obj, fname)
+    VALUE obj, fname;
+{
+#ifdef S_IFIFO
+#  ifndef S_ISFIFO
+#    define S_ISFIFO(m) ((m & S_IFMT) == S_IFIFO)
+#  endif
+
+    struct stat st;
+
+    if (rb_stat(fname, &st) < 0) return Qfalse;
+    if (S_ISFIFO(st.st_mode)) return Qtrue;
+
+#endif
+    return Qfalse;
+}

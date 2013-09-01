@@ -1,0 +1,2 @@
+RFC:1321に記述されているRSA Data Security, Inc. の MD5 Message-Digest
+Algorithmを実装するクラス。

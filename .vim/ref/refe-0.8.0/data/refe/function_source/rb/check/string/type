@@ -1,0 +1,12 @@
+string.c:494
+VALUE
+rb_check_string_type(str)
+    VALUE str;
+{
+    str = rb_check_convert_type(str, T_STRING, "String", "to_str");
+    if (!NIL_P(str) && !RSTRING(str)->ptr) {
+	FL_SET(str, ELTS_SHARED);
+	RSTRING(str)->ptr = null_str;
+    }
+    return str;
+}

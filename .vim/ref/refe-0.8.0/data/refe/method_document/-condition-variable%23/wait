@@ -1,0 +1,8 @@
+--- wait(mutex)
+    mutex のロックを開放し、カレントスレッドを停止します。
+    ConditionVariable#signal [ConditionVariable]または、
+    ConditionVariable#broadcast [ConditionVariable]で送られたシグナルを
+    受け取ると、mutexのロックを取得し、実行状態となります。
+
+    self を返します。
+

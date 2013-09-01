@@ -1,0 +1,25 @@
+--- Time.gm(year[, mon[, day[, hour[, min[, sec[, usec]]]]]])
+--- Time.gm(sec, min, hour, mday, mon, year, wday, yday, isdst, zone)
+--- Time.utc(year[, mon[, day[, hour[, min[, sec[, usec]]]]]])
+--- Time.utc(sec, min, hour, mday, mon, year, wday, yday, isdst, zone)
+
+    引数で指定した協定世界時の Time オブジェクトを返します。第 2 
+    引数以降は省略可能で、省略した場合の値はその引数がとり得る最小の値
+    です。
+
+    数値を受け付ける引数には文字列も指定できます。
+
+        p Time.gm *"2002-03-17".split("-")
+        # => Sun Mar 17 00:00:00 UTC 2002
+
+    mon は 1(1月)から 12(12月)の範囲の整数または文字列です。英語
+    の月名("Jan", "Feb", ... などの省略名。文字の大小は無視)も指定でき
+    ます。
+
+    引数の数がTime#to_a [Time/to_a] と全く同じ場合(こちらは秒が先
+    頭に来る形式ですが)、その順序を正しく解釈します。
+    この形式の引数 wday, yday, zone に指定した値は無
+    視されます。
+    isdst には夏時間(Daylight Saving Time (Summer Time))があるか
+    を真偽値で指定します。
+

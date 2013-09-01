@@ -1,0 +1,53 @@
+--- self[nth]=val
+
+    nth 番目のバイトを文字列 val で置き換えます。
+    val が 0 から 255 の範囲の整数である場合、文字コード
+    とみなしてその文字で置き換えます。
+
+    val を返します。
+
+--- self[nth, len]=val
+
+    nth バイト番目から長さ len バイトの部分文字
+    列を文字列 val で置き換えます。nth が負の場
+    合は文字列の末尾から数えます。
+
+    val を返します。
+
+--- self[substr]=val
+
+    文字列中の substr に一致する最初の部分文字列を文字列
+    val で置き換えます。
+
+    self が substr を含まない場合、例外 IndexError 
+    が発生します。
+
+    val を返します。
+
+--- self[regexp]=val
+--- self[regexp, nth]=val       ruby 1.7 feature
+
+    正規表現 regexp にマッチする最初の部分文字列を文字列 
+    val で置き換えます。
+
+    正規表現がマッチしなければ例外 IndexError が発生します。
+
+    val を返します。
+
+    ruby 1.7 feature:
+    引数 nth を指定した場合は、正規表現 regexp の 
+    nth 番目の括弧にマッチする最初の部分文字列を文字列 val 
+    で置き換えます。nth が 0 の場合は、マッチした部分文字列全体
+    を val で置き換えます。
+
+    正規表現がマッチしない場合や nth に対応する括弧が
+    なければ例外 IndexError が発生します。
+
+--- self[first..last]=val
+--- self[first...last]=val
+
+    first から last までの部分文字列を文字列 val で
+    置き換えます。
+
+    val を返します。
+

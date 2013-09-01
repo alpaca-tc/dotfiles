@@ -1,0 +1,8 @@
+eval.c:9696
+static VALUE
+rb_thread_critical_set(obj, val)
+    VALUE obj, val;
+{
+    rb_thread_critical = RTEST(val);
+    return val;
+}

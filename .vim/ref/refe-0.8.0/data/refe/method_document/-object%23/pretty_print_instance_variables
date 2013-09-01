@@ -1,0 +1,11 @@
+--- pretty_print_instance_variables
+#    returns a sorted array of instance variable names.
+
+    ソートされたインスタンス変数の名前の配列を返します。
+
+#    This method should return an array of names of instance variables as symbols or strings as:
+
+    このメソッドはインスタンス変数の名前をシンボルか文字列として要素に持つ
+    配列を返さなければなりません。
+    [:@a, :@b].
+

@@ -1,0 +1,2 @@
+: struct global_entry *rb_global_entry(ID id)
+

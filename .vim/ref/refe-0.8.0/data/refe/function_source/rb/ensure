@@ -1,0 +1,23 @@
+eval.c:4621
+VALUE
+rb_ensure(b_proc, data1, e_proc, data2)
+    VALUE (*b_proc)();
+    VALUE data1;
+    VALUE (*e_proc)();
+    VALUE data2;
+{
+    int state;
+    volatile VALUE result = Qnil;
+    VALUE retval;
+
+    PUSH_TAG(PROT_NONE);
+    if ((state = EXEC_TAG()) == 0) {
+	result = (*b_proc)(data1);
+    }
+    POP_TAG();
+    retval = prot_tag ? prot_tag->retval : Qnil;	/* save retval */
+    (*e_proc)(data2);
+    if (prot_tag) return_value(retval);
+    if (state) JUMP_TAG(state);
+    return result;
+}

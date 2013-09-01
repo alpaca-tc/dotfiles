@@ -1,0 +1,8 @@
+file.c:1901
+static VALUE
+file_inspect_join(ary, arg)
+    VALUE ary;
+    VALUE *arg;
+{
+    return rb_file_join(arg[0], arg[1]);
+}

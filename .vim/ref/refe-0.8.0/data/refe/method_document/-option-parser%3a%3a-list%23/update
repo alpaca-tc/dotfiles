@@ -1,0 +1,13 @@
+--- OptionParser::List#update(sw, sopts, lopts, nlopts = nil)
+    Adds sw according to sopts, lopts and
+    nlopts.
+    :Parameters:
+      : sw
+        OptionParser::Switch instance to be added.
+      : sopts
+        short style options list.
+      : lopts
+        long style options list.
+      : nlopts
+        negated long style options list.
+

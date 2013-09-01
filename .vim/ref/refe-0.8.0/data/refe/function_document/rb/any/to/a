@@ -1,0 +1,2 @@
+: static VALUE rb_any_to_a(VALUE obj)
+

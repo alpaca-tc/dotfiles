@@ -1,0 +1,6 @@
+: each_address {|a| .... }
+    a: TMail::Address
+
+    #addresses に対する繰り返し。ただし TMail::AddressGroup オブジェクトに
+    対しては内部に入って再帰的に繰り返します。
+

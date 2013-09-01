@@ -1,0 +1,15 @@
+dir.c:292
+static VALUE
+dir_s_open(klass, dirname)
+    VALUE klass, dirname;
+{
+    struct dir_data *dp;
+    VALUE dir = Data_Make_Struct(klass, struct dir_data, 0, free_dir, dp);
+
+    dir_initialize(dir, dirname);
+    if (rb_block_given_p()) {
+	return rb_ensure(rb_yield, dir, dir_close, dir);
+    }
+
+    return dir;
+}

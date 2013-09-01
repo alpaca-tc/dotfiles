@@ -1,0 +1,8 @@
+eval.c:6329
+static VALUE
+rb_mod_extend_object(mod, obj)
+    VALUE mod, obj;
+{
+    rb_extend_object(obj, mod);
+    return obj;
+}

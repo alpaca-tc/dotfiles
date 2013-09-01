@@ -1,0 +1,15 @@
+object.c:187
+VALUE
+rb_any_to_s(obj)
+    VALUE obj;
+{
+    char *cname = rb_obj_classname(obj);
+    VALUE str;
+
+    str = rb_str_new(0, strlen(cname)+6+16+1); /* 6:tags 16:addr 1:nul */
+    sprintf(RSTRING(str)->ptr, "#<%s:0x%lx>", cname, obj);
+    RSTRING(str)->len = strlen(RSTRING(str)->ptr);
+    if (OBJ_TAINTED(obj)) OBJ_TAINT(str);
+
+    return str;
+}

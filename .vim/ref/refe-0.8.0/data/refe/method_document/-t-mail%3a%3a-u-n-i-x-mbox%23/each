@@ -1,0 +1,6 @@
+: each_port {|port| .... }
+: each {|port| .... }
+    port: TMail::FilePort
+
+    メールボックスのメールに対して古いメールから順番に繰り返します。
+

@@ -1,0 +1,13 @@
+parse.y:6020
+void
+rb_lastline_set(val)
+    VALUE val;
+{
+    VALUE *var = rb_svar(0);
+    if (var) {
+	*var = val;
+    }
+    else {
+	special_local_set('_', val);
+    }
+}

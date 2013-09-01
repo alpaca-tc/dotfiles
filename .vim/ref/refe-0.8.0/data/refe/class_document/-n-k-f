@@ -1,0 +1,3 @@
+nkf(1) [URL:http://rananim.ie.u-ryukyu.ac.jp/~kono/software.html]
+(Network Kanji code conversion Filter version 1.7)を ruby 
+から使うためのモジュールです。

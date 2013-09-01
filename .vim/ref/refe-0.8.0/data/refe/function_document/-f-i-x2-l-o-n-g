@@ -1,0 +1,4 @@
+: long FIX2LONG(VALUE x)
+    Fixnum を long に変換します。
+    返り値が long の範囲から外れる場合は RangeError が発生します。
+

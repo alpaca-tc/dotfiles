@@ -1,0 +1,26 @@
+#TSort implements topological sorting using Tarjan's algorithm for
+#strongly connected components.
+
+TSort は強連結成分に関する Tarjan のアルゴリズムを用いた
+トポロジカルソートの実装です。
+
+#TSort is designed to be able to use with any object which can be interpreted
+#as a directed graph.
+#TSort requires two methods to interpret a object as a graph:
+#tsort_each_node and tsort_each_child.
+
+TSort は任意のオブジェクトを有向グラフとして解釈できるように設計されています。
+TSort がオブジェクトをグラフとして解釈するには2つのメソッドを要求します。
+すなわち、tsort_each_node と tsort_each_child です。
+
+# * tsort_each_node is used to iterate for all nodes over a graph.
+# * tsort_each_child is used to iterate for child nodes of a given node.
+
+ * tsort_each_node はグラフ上のすべての頂点を巡回するのに用いられます。
+ * tsort_each_child は与えられた頂点の子を巡回するのに用いられます。
+
+#The equality of nodes are defined by eql? and hash since
+#TSort uses Hash internally.
+
+頂点同士の等価性は eql? と hash によって定義されます。
+これは TSort が内部でハッシュを用いているからです。

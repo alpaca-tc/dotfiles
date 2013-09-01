@@ -1,0 +1,14 @@
+marshal.c:410
+static void
+w_ivar(tbl, arg)
+    st_table *tbl;
+    struct dump_call_arg *arg;
+{
+    if (tbl) {
+	w_long(tbl->num_entries, arg->arg);
+	st_foreach(tbl, w_obj_each, (st_data_t)arg);
+    }
+    else {
+	w_long(0, arg->arg);
+    }
+}

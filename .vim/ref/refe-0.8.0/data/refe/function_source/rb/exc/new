@@ -1,0 +1,9 @@
+error.c:296
+VALUE
+rb_exc_new(etype, ptr, len)
+    VALUE etype;
+    const char *ptr;
+    long len;
+{
+    return rb_funcall(etype, rb_intern("new"), 1, rb_str_new(ptr, len));
+}

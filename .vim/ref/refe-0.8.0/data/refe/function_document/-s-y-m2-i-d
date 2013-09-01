@@ -1,0 +1,4 @@
+: int SYM2ID(VALUE symbol)
+    Symbol symbol を数値に変換します。
+    1.4では、FIX2INT(symbol)と同じです。
+

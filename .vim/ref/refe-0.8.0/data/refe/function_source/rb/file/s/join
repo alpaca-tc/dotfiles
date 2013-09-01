@@ -1,0 +1,7 @@
+file.c:1966
+static VALUE
+rb_file_s_join(klass, args)
+    VALUE klass, args;
+{
+    return rb_file_join(args, separator);
+}

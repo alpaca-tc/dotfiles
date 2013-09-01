@@ -1,0 +1,9 @@
+eval.c:9263
+static VALUE
+rb_thread_s_abort_exc_set(self, val)
+    VALUE self, val;
+{
+    rb_secure(4);
+    ruby_thread_abort = RTEST(val);
+    return val;
+}

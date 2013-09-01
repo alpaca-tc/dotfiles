@@ -1,0 +1,11 @@
+enum.c:169
+static VALUE
+enum_to_a(obj)
+    VALUE obj;
+{
+    VALUE ary = rb_ary_new();
+    
+    rb_iterate(rb_each, obj, collect_all, ary);
+
+    return ary;
+}

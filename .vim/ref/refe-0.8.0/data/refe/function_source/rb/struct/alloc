@@ -1,0 +1,7 @@
+struct.c:293
+VALUE
+rb_struct_alloc(klass, values)
+    VALUE klass, values;
+{
+    return rb_class_new_instance(RARRAY(values)->len, RARRAY(values)->ptr, klass);
+}

@@ -1,0 +1,11 @@
+st.c:471
+void
+st_cleanup_safe(table, never)
+    st_table *table;
+    st_data_t never;
+{
+    int num_entries = table->num_entries;
+
+    st_foreach(table, delete_never, never);
+    table->num_entries = num_entries;
+}

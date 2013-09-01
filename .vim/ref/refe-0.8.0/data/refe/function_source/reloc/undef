@@ -1,0 +1,64 @@
+dln.c:542
+static int
+reloc_undef(no, undef, arg)
+    int no;
+    struct undef *undef;
+    struct reloc_arg *arg;
+{
+    int datum;
+    char *address;
+#if defined(sun) && defined(sparc)
+    unsigned int mask = 0;
+#endif
+
+    if (strcmp(arg->name, undef->name) != 0) return ST_CONTINUE;
+    address = (char*)(undef->base + undef->reloc.r_address);
+    datum = arg->value;
+
+    if (R_PCREL(&(undef->reloc))) datum -= undef->base;
+#if defined(sun) && defined(sparc)
+    datum += undef->reloc.r_addend;
+    datum >>= R_RIGHTSHIFT(&(undef->reloc));
+    mask = (1 << R_BITSIZE(&(undef->reloc))) - 1;
+    mask |= mask -1;
+    datum &= mask;
+    switch (R_LENGTH(&(undef->reloc))) {
+      case 0:
+	*address = undef->u.c;
+	*address &= ~mask;
+	*address |= datum;
+	break;
+      case 1:
+	*(short *)address = undef->u.s;
+	*(short *)address &= ~mask;
+	*(short *)address |= datum;
+	break;
+      case 2:
+	*(long *)address = undef->u.l;
+	*(long *)address &= ~mask;
+	*(long *)address |= datum;
+	break;
+    }
+#else
+    switch (R_LENGTH(&(undef->reloc))) {
+      case 0:		/* byte */
+	if (R_MEMORY_SUB(&(undef->reloc)))
+	    *address = datum - *address;
+	else *address = undef->u.c + datum;
+	break;
+      case 1:		/* word */
+	if (R_MEMORY_SUB(&(undef->reloc)))
+	    *(short*)address = datum - *(short*)address;
+	else *(short*)address = undef->u.s + datum;
+	break;
+      case 2:		/* long */
+	if (R_MEMORY_SUB(&(undef->reloc)))
+	    *(long*)address = datum - *(long*)address;
+	else *(long*)address = undef->u.l + datum;
+	break;
+    }
+#endif
+    free(undef->name);
+    free(undef);
+    return ST_DELETE;
+}

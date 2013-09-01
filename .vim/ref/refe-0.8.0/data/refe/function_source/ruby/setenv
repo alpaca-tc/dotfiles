@@ -1,0 +1,84 @@
+hash.c:1147
+void
+ruby_setenv(name, value)
+    const char *name;
+    const char *value;
+{
+#if defined(_WIN32)
+    /* The sane way to deal with the environment.
+     * Has these advantages over putenv() & co.:
+     *  * enables us to store a truly empty value in the
+     *    environment (like in UNIX).
+     *  * we don't have to deal with RTL globals, bugs and leaks.
+     *  * Much faster.
+     * Why you may want to enable USE_WIN32_RTL_ENV:
+     *  * environ[] and RTL functions will not reflect changes,
+     *    which might be an issue if extensions want to access
+     *    the env. via RTL.  This cuts both ways, since RTL will
+     *    not see changes made by extensions that call the Win32
+     *    functions directly, either.
+     * GSAR 97-06-07
+     *
+     * REMARK: USE_WIN32_RTL_ENV is already obsoleted since we don't use
+     *         RTL's environ global variable directly yet.
+     */
+    SetEnvironmentVariable(name,value);
+#elif defined __CYGWIN__
+#undef setenv
+#undef unsetenv
+    if (value)
+	setenv(name,value,1);
+    else
+	unsetenv(name);
+#else  /* WIN32 */
+
+    int i=envix(name);		        /* where does it go? */
+
+    if (environ == origenviron) {	/* need we copy environment? */
+	int j;
+	int max;
+	char **tmpenv;
+
+	for (max = i; environ[max]; max++) ;
+	tmpenv = ALLOC_N(char*, max+2);
+	for (j=0; j<max; j++)		/* copy environment */
+	    tmpenv[j] = strdup(environ[j]);
+	tmpenv[max] = 0;
+	environ = tmpenv;		/* tell exec where it is now */
+    }
+    if (!value) {
+	if (environ != origenviron) {
+	    char **envp = origenviron;
+	    while (*envp && *envp != environ[i]) envp++;
+	    if (!*envp)
+		free(environ[i]);
+	}
+	while (environ[i]) {
+	    environ[i] = environ[i+1];
+	    i++;
+	}
+	return;
+    }
+    if (!environ[i]) {			/* does not exist yet */
+	REALLOC_N(environ, char*, i+2);	/* just expand it a bit */
+	environ[i+1] = 0;	/* make sure it's null terminated */
+    }
+    else {
+	if (environ[i] != origenviron[i])
+	    free(environ[i]);
+    }
+    environ[i] = ALLOC_N(char, strlen(name) + strlen(value) + 2);
+#ifndef MSDOS
+    sprintf(environ[i],"%s=%s",name,value); /* all that work just for this */
+#else
+    /* MS-DOS requires environment variable names to be in uppercase */
+    /* [Tom Dinger, 27 August 1990: Well, it doesn't _require_ it, but
+     * some utilities and applications may break because they only look
+     * for upper case strings. (Fixed strupr() bug here.)]
+     */
+    strcpy(environ[i],name); strupr(environ[i]);
+    sprintf(environ[i] + strlen(name),"=%s", value);
+#endif /* MSDOS */
+
+#endif /* WIN32 */
+}

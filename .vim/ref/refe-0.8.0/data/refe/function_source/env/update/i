@@ -1,0 +1,13 @@
+hash.c:1722
+static int
+env_update_i(key, val)
+    VALUE key, val;
+{
+    if (key != Qundef) {
+	if (rb_block_given_p()) {
+	    val = rb_yield_values(3, key, rb_f_getenv(Qnil, key), val);
+	}
+	env_aset(Qnil, key, val);
+    }
+    return ST_CONTINUE;
+}

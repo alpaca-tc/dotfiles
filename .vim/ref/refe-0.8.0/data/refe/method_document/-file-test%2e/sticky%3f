@@ -1,0 +1,5 @@
+--- FileTest.sticky?(filename)
+
+    filename の sticky ビット(chmod(2) [manual page] 参照)が
+    立っている時に真を返します。
+

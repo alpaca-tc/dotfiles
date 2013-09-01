@@ -1,0 +1,25 @@
+Thread はグループを持ち、必ずいずれかのグループに属します。
+ThreadGroup クラスによりグループに属する Thread をまとめて
+操作することができます。
+
+デフォルトの ThreadGroup は、
+ThreadGroup::Default [ThreadGroup/Default] です。生成されたばかり
+の Thread は生成した Thread のグループを引き継ぎます。
+
+: 例:
+    生成したすべてのThreadが終了するのを待つ
+
+        5.times {
+           Thread.new { sleep 1; puts "#{Thread.current} finished" }
+        }
+
+        (ThreadGroup::Default.list - [Thread.current]).each {|th| th.join}
+
+        puts "all threads finished"
+
+    対象の Thread が Thread を起こす可能性がある場合
+    (Thread.exclusive参照)
+
+        Thread.exclusive do
+          (ThreadGroup::Default.list - [Thread.current]).each {|th| th.join}
+        end

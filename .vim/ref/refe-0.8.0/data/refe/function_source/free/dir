@@ -1,0 +1,7 @@
+dir.c:242
+static void
+free_dir(dir)
+    struct dir_data *dir;
+{
+    if (dir && dir->dir) closedir(dir->dir);
+}

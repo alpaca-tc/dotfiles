@@ -1,0 +1,5 @@
+--- UNIXSocket.open(path)
+--- UNIXSocket.new(path)
+    pathで指定したパス名を用いて接続したソケットを返
+    します。
+

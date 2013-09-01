@@ -1,0 +1,9 @@
+string.c:3260
+static VALUE
+rb_str_center(argc, argv, str)
+    int argc;
+    VALUE *argv;
+    VALUE str;
+{
+    return rb_str_justify(argc, argv, str, 'c');
+}

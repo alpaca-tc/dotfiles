@@ -1,0 +1,13 @@
+--- class_variables
+
+    クラス／モジュールに定義されているクラス変数の配
+    列を返します。スーパークラスやインクルードしているモジュールのクラ
+    ス変数も含みます。
+
+    local_variables,
+    global_variables,
+    Object#instance_variables [Object/instance_variables],
+    Module.constants,
+    Module#constants [Module/constants]
+    も参照してください。
+

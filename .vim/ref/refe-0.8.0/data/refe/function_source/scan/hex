@@ -1,0 +1,20 @@
+util.c:45
+unsigned long
+scan_hex(start, len, retlen)
+    const char *start;
+    int len;
+    int *retlen;
+{
+    static char hexdigit[] = "0123456789abcdef0123456789ABCDEF";
+    register const char *s = start;
+    register unsigned long retval = 0;
+    char *tmp;
+
+    while (len-- && *s && (tmp = strchr(hexdigit, *s))) {
+	retval <<= 4;
+	retval |= (tmp - hexdigit) & 15;
+	s++;
+    }
+    *retlen = s - start;
+    return retval;
+}

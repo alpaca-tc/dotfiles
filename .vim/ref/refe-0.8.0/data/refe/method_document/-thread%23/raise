@@ -1,0 +1,21 @@
+--- raise([error_type,][message][,traceback])
+
+    そのスレッドで強制的に例外を発生させます。
+
+    引数の意味については組み込み関数 raise を参照してく
+    ださい。
+
+      Thread.new {
+        sleep 1
+        Thread.main.raise "foobar"
+      }
+
+      begin
+        sleep
+      rescue
+        p $!, $@
+      end
+
+      => #<RuntimeError: foobar>
+         ["-:3"]
+

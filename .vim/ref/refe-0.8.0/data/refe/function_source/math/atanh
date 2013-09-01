@@ -1,0 +1,15 @@
+math.c:172
+static VALUE
+math_atanh(obj, x)
+    VALUE obj, x;
+{
+    double d;
+
+    Need_Float(x);
+    errno = 0;
+    d = atanh(RFLOAT(x)->value);
+    if (errno) {
+	rb_sys_fail("atanh");
+    }
+    return rb_float_new(d);
+}

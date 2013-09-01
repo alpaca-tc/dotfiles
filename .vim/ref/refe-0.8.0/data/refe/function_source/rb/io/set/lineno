@@ -1,0 +1,12 @@
+io.c:1107
+static VALUE
+rb_io_set_lineno(io, lineno)
+    VALUE io, lineno;
+{
+    OpenFile *fptr;
+
+    GetOpenFile(io, fptr);
+    rb_io_check_readable(fptr);
+    fptr->lineno = NUM2INT(lineno);
+    return lineno;
+}

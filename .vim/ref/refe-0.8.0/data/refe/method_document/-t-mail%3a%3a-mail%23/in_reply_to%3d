@@ -1,0 +1,6 @@
+: in_reply_to( default = nil ) -> [String]
+: in_reply_to=( ids )
+    ids: String / [String]
+
+    In-Reply-To: に含まれるメッセージ ID のリスト。
+

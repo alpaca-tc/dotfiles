@@ -1,0 +1,16 @@
+--- Dir.foreach(path) {|file| ...}
+
+    pathのディレクトリの要素に対して繰り返すイテレー
+    タ。このメソッドは以下と同じ働きをします。
+
+      dir = Dir.open(path)
+      begin
+        dir.each {|file|
+           ...
+        }
+      ensure
+        dir.close
+      end
+
+    nil を返します。
+

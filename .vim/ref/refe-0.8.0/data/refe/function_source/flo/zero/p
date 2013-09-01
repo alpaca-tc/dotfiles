@@ -1,0 +1,10 @@
+numeric.c:739
+static VALUE
+flo_zero_p(num)
+    VALUE num;
+{
+    if (RFLOAT(num)->value == 0.0) {
+	return Qtrue;
+    }
+    return Qfalse;
+}

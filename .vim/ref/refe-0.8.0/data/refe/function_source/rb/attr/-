@@ -1,0 +1,44 @@
+eval.c:546
+void
+rb_attr(klass, id, read, write, ex)
+    VALUE klass;
+    ID id;
+    int read, write, ex;
+{
+    const char *name;
+    char *buf;
+    ID attriv;
+    int noex;
+
+    if (!ex) noex = NOEX_PUBLIC;
+    else {
+	if (SCOPE_TEST(SCOPE_PRIVATE)) {
+	    noex = NOEX_PRIVATE;
+	    rb_warning((scope_vmode == SCOPE_MODFUNC) ?
+		       "attribute accessor as module_function" :
+		       "private attribute?");
+	}
+	else if (SCOPE_TEST(SCOPE_PROTECTED)) {
+	    noex = NOEX_PROTECTED;
+	}
+	else {
+	    noex = NOEX_PUBLIC;
+	}
+    }
+
+    name = rb_id2name(id);
+    if (!name) {
+	rb_raise(rb_eArgError, "argument needs to be symbol or string");
+    }
+    buf = ALLOCA_N(char,strlen(name)+2);
+    sprintf(buf, "@%s", name);
+    attriv = rb_intern(buf);
+    if (read) {
+	rb_add_method(klass, id, NEW_IVAR(attriv), noex);
+    }
+    if (write) {
+	sprintf(buf, "%s=", name);
+	id = rb_intern(buf);
+	rb_add_method(klass, id, NEW_ATTRSET(attriv), noex);
+    }
+}

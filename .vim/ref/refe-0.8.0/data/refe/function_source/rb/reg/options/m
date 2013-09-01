@@ -1,0 +1,8 @@
+re.c:502
+static VALUE
+rb_reg_options_m(re)
+    VALUE re;
+{
+    int options = rb_reg_options(re);
+    return INT2NUM(options);
+}

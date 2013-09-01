@@ -1,0 +1,10 @@
+time.c:694
+static VALUE
+time_to_i(time)
+    VALUE time;
+{
+    struct time_object *tobj;
+
+    GetTimeval(time, tobj);
+    return LONG2NUM(tobj->tv.tv_sec);
+}

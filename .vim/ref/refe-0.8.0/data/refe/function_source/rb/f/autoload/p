@@ -1,0 +1,9 @@
+eval.c:6692
+static VALUE
+rb_f_autoload_p(obj, sym)
+    VALUE obj;
+    VALUE sym;
+{
+    /* use ruby_cbase as same as rb_f_autoload. */
+    return rb_mod_autoload_p(ruby_cbase, sym);
+}

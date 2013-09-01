@@ -1,0 +1,11 @@
+--- OptionParser#notwice(obj, prv, msg)
+    Checks never given twice an argument.
+    ((*Called from OptionParser#switch only*))
+    :Parameters:
+      : obj
+        new argument.
+      : prv
+        previously specified argument.
+      : msg
+        exception message
+

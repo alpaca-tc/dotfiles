@@ -1,0 +1,16 @@
+--- tsort_each {|node| ...}
+#    is the iterator version of the tsort method.
+#    obj.tsort_each is similar to obj.tsort.each but
+#    modification of obj during the iteration may cause unexpected result.
+
+    tsort メソッドのイテレータ版です。
+    obj.tsort_each は obj.tsort.each と似ていますが、
+    ブロックの評価中に obj が変更された場合は予期しない結果になる
+    ことがあります。
+
+#    tsort_each returns nil.
+#    If there is a cycle, TSort::Cyclic is raised.
+
+    tsort_each は nil を返します。
+    閉路が存在するとき、例外 TSort::Cyclic を起こします。
+

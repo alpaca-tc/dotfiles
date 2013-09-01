@@ -1,0 +1,10 @@
+range.c:408
+static void
+member_i(v, args)
+    VALUE v;
+    VALUE *args;
+{
+    if (rb_equal(v, args[0])) {
+	args[1] = Qtrue;
+    }
+}

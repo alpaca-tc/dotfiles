@@ -1,0 +1,7 @@
+range.c:321
+static VALUE
+range_first(range)
+    VALUE range;
+{
+    return rb_ivar_get(range, id_beg);
+}

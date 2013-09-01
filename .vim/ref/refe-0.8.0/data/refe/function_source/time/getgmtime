@@ -1,0 +1,7 @@
+time.c:870
+static VALUE
+time_getgmtime(time)
+    VALUE time;
+{
+    return time_gmtime(time_dup(time));
+}

@@ -1,0 +1,9 @@
+array.c:1401
+static VALUE
+rb_ary_reject(ary)
+    VALUE ary;
+{
+    ary = rb_ary_dup(ary);
+    rb_ary_reject_bang(ary);
+    return ary;
+}

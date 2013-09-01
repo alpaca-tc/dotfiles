@@ -1,0 +1,3 @@
+: store(key, val)
+    self[key]=val と同じです．keyに対してvalを格納します．
+

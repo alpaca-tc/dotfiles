@@ -1,0 +1,3 @@
+: static VALUE rb_class_allocate_instance(VALUE klass)
+    Class#allocate の実体。
+

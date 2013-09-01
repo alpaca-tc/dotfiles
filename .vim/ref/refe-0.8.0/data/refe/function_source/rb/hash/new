@@ -1,0 +1,6 @@
+hash.c:193
+VALUE
+rb_hash_new()
+{
+    return hash_alloc(rb_cHash);
+}

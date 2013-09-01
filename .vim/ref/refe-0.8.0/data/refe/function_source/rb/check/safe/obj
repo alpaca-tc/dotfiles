@@ -1,0 +1,16 @@
+eval.c:163
+void
+rb_check_safe_obj(x)
+    VALUE x;
+{
+    if (ruby_safe_level > 0 && OBJ_TAINTED(x)){
+	if (ruby_frame->last_func) {
+	    rb_raise(rb_eSecurityError, "Insecure operation - %s",
+		     rb_id2name(ruby_frame->last_func));
+	}
+	else {
+	    rb_raise(rb_eSecurityError, "Insecure operation: -r");
+	}
+    }
+    rb_secure(4);
+}

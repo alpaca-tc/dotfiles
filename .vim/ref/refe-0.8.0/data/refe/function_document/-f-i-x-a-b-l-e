@@ -1,0 +1,3 @@
+: int FIXABLE(long f)
+    f が Fixnum の範囲に収まっているなら真。
+

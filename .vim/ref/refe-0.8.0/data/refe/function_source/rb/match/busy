@@ -1,0 +1,7 @@
+re.c:657
+void
+rb_match_busy(match)
+    VALUE match;
+{
+    FL_SET(match, MATCH_BUSY);
+}

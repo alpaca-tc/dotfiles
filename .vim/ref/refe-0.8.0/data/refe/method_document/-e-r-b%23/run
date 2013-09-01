@@ -1,0 +1,3 @@
+--- ERB#run(b=TOPLEVEL_BINDING)
+    ERBをbのbindingで実行し、印字する。
+

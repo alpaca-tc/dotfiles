@@ -1,0 +1,28 @@
+variable.c:1433
+static int
+rb_const_defined_0(klass, id, exclude, recurse)
+    VALUE klass;
+    ID id;
+    int exclude, recurse;
+{
+    VALUE value, tmp;
+    int mod_retry = 0;
+
+    tmp = klass;
+  retry:
+    while (tmp) {
+	if (RCLASS(tmp)->iv_tbl && st_lookup(RCLASS(tmp)->iv_tbl, id, &value)) {
+	    if (value == Qundef && NIL_P(autoload_file(klass, id)))
+		return Qfalse;
+	    return Qtrue;
+	}
+	if (!recurse && klass != rb_cObject) break;
+	tmp = RCLASS(tmp)->super;
+    }
+    if (!exclude && !mod_retry && BUILTIN_TYPE(klass) == T_MODULE) {
+	mod_retry = 1;
+	tmp = rb_cObject;
+	goto retry;
+    }
+    return Qfalse;
+}

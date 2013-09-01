@@ -1,0 +1,21 @@
+string.c:1818
+static VALUE
+rb_str_reverse(str)
+    VALUE str;
+{
+    VALUE obj;
+    char *s, *e, *p;
+
+    if (RSTRING(str)->len <= 1) return rb_str_dup(str);
+
+    obj = rb_str_new5(str, 0, RSTRING(str)->len);
+    s = RSTRING(str)->ptr; e = s + RSTRING(str)->len - 1;
+    p = RSTRING(obj)->ptr;
+
+    while (e >= s) {
+	*p++ = *e--;
+    }
+    OBJ_INFECT(obj, str);
+
+    return obj;
+}

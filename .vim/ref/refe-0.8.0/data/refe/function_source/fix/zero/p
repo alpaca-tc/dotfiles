@@ -1,0 +1,10 @@
+numeric.c:1790
+static VALUE
+fix_zero_p(num)
+    VALUE num;
+{
+    if (FIX2LONG(num) == 0) {
+	return Qtrue;
+    }
+    return Qfalse;
+}

@@ -1,0 +1,8 @@
+process.c:1902
+static VALUE
+proc_geteuid(obj)
+    VALUE obj;
+{
+    int euid = geteuid();
+    return INT2FIX(euid);
+}

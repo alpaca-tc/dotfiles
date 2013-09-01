@@ -1,0 +1,13 @@
+parse.y:5974
+static void
+special_local_set(c, val)
+    char c;
+    VALUE val;
+{
+    int cnt;
+
+    top_local_init();
+    cnt = local_cnt(c);
+    top_local_setup();
+    ruby_scope->local_vars[cnt] = val;
+}

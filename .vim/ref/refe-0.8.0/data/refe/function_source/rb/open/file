@@ -1,0 +1,33 @@
+io.c:2228
+static VALUE
+rb_open_file(argc, argv, io)
+    int argc;
+    VALUE *argv;
+    VALUE io;
+{
+    VALUE fname, vmode, perm;
+    char *path, *mode;
+    int flags, fmode;
+
+    rb_scan_args(argc, argv, "12", &fname, &vmode, &perm);
+    SafeStringValue(fname);
+    path = RSTRING(fname)->ptr;
+
+    if (FIXNUM_P(vmode) || !NIL_P(perm)) {
+	if (FIXNUM_P(vmode)) {
+	    flags = NUM2INT(vmode);
+	}
+	else {
+	    SafeStringValue(vmode);
+	    flags = rb_io_mode_modenum(RSTRING(vmode)->ptr);
+	}
+	fmode = NIL_P(perm) ? 0666 :  NUM2INT(perm);
+
+	rb_file_sysopen_internal(io, path, flags, fmode);
+    }
+    else {
+	mode = NIL_P(vmode) ? "r" : StringValuePtr(vmode);
+	rb_file_open_internal(io, RSTRING(fname)->ptr, mode);
+    }
+    return io;
+}

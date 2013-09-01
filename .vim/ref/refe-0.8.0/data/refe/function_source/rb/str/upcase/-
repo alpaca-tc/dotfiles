@@ -1,0 +1,9 @@
+string.c:2081
+static VALUE
+rb_str_upcase(str)
+    VALUE str;
+{
+    str = rb_str_dup(str);
+    rb_str_upcase_bang(str);
+    return str;
+}

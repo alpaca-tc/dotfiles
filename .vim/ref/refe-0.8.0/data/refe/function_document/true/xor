@@ -1,0 +1,2 @@
+: static VALUE true_xor(VALUE obj, VALUE obj2)
+

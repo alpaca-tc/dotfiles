@@ -1,0 +1,10 @@
+process.c:111
+static VALUE
+get_ppid()
+{
+#ifdef _WIN32
+    return INT2FIX(0);
+#else
+    return INT2FIX(getppid());
+#endif
+}

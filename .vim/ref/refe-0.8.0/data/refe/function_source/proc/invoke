@@ -1,0 +1,80 @@
+eval.c:7018
+static VALUE
+proc_invoke(proc, args, self, klass)
+    VALUE proc, args;		/* OK */
+    VALUE self, klass;
+{
+    struct BLOCK * volatile old_block;
+    struct BLOCK _block;
+    struct BLOCK *data;
+    volatile VALUE result = Qundef;
+    int state;
+    volatile int orphan;
+    volatile int safe = ruby_safe_level;
+    volatile VALUE old_wrapper = ruby_wrapper;
+    struct RVarmap * volatile old_dvars = ruby_dyna_vars;
+    volatile int pcall;
+
+    if (rb_block_given_p() && ruby_frame->last_func) {
+	rb_warning("block for %s#%s is useless",
+		   rb_obj_classname(proc),
+		   rb_id2name(ruby_frame->last_func));
+    }
+
+    Data_Get_Struct(proc, struct BLOCK, data);
+    orphan = block_orphan(data);
+    pcall = data->flags & BLOCK_LAMBDA ? YIELD_PROC_CALL : 0;
+
+    ruby_wrapper = data->wrapper;
+    ruby_dyna_vars = data->dyna_vars;
+    /* PUSH BLOCK from data */
+    old_block = ruby_block;
+    _block = *data;
+    if (self != Qundef) _block.frame.self = self;
+    if (klass) _block.frame.last_class = klass;
+    ruby_block = &_block;
+
+    PUSH_ITER(ITER_CUR);
+    ruby_frame->iter = ITER_CUR;
+    ruby_current_node = data->body;
+    PUSH_TAG((pcall || orphan) ? PROT_PCALL : PROT_CALL);
+    state = EXEC_TAG();
+    if (state == 0) {
+	proc_set_safe_level(proc);
+	result = rb_yield_0(args, self, self!=Qundef?CLASS_OF(self):0, pcall, Qtrue);
+    }
+    else if (pcall || orphan || TAG_DST()) {
+	result = prot_tag->retval;
+    }
+    POP_TAG();
+    POP_ITER();
+    ruby_block = old_block;
+    ruby_wrapper = old_wrapper;
+    ruby_dyna_vars = old_dvars;
+    ruby_safe_level = safe;
+
+    switch (state) {
+      case 0:
+	break;
+      case TAG_RETRY:
+	if (pcall || orphan) {
+	    localjump_error("retry from proc-closure", Qnil, state);
+	}
+	/* fall through */
+      case TAG_BREAK:
+      case TAG_RETURN:
+	if (pcall) break;
+	if (orphan) {		/* orphan block */
+	    char mesg[32];
+	    snprintf(mesg, sizeof mesg, "%s from proc-closure",
+		     state == TAG_BREAK ? "break" : "return");
+	    localjump_error(mesg, result, state);
+	}
+	if (result != Qundef) {
+	    localjump_destination(state, ruby_scope, result);
+	}
+      default:
+	JUMP_TAG(state);
+    }
+    return result;
+}

@@ -40,4 +40,3 @@ augroup Gemfile
   autocmd!
   autocmd BufWritePost <buffer> call vimproc#system_bg('gem ctags')
 augroup END
-

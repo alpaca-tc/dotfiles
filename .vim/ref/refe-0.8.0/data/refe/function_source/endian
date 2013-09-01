@@ -1,0 +1,13 @@
+pack.c:180
+static int
+endian()
+{
+    static int init = 0;
+    static int endian_value;
+    char *p;
+
+    if (init) return endian_value;
+    init = 1;
+    p = (char*)&init;
+    return endian_value = p[0]?0:1;
+}

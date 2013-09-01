@@ -1,0 +1,19 @@
+eval.c:2346
+static VALUE
+svalue_to_mrhs(v, lhs)
+    VALUE v;
+    NODE *lhs;
+{
+    VALUE tmp;
+
+    if (v == Qundef) return rb_ary_new2(0);
+    tmp = rb_check_array_type(v);
+    if (NIL_P(tmp)) {
+	return rb_ary_new3(1, v);
+    }
+    /* no lhs means splat lhs only */
+    if (!lhs) {
+	return rb_ary_new3(1, v);
+    }
+    return tmp;
+}

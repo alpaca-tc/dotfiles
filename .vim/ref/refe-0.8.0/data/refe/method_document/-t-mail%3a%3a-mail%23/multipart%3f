@@ -1,0 +1,8 @@
+: multipart?
+    メールが MIME マルチパートのとき真。
+    このメソッドは Content-Type ヘッダの内容で真偽を判断します。
+
+: multipart? -> bool
+    Content-Type が MIME マルチパートメールであることを
+    示す内容ならば真。
+

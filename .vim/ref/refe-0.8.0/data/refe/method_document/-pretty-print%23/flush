@@ -1,0 +1,4 @@
+--- flush
+#    outputs buffered data.
+    バッファされたデータを出力します。
+

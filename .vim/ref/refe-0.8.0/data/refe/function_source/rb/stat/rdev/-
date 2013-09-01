@@ -1,0 +1,11 @@
+file.c:203
+static VALUE
+rb_stat_rdev(self)
+    VALUE self;
+{
+#ifdef HAVE_ST_RDEV
+    return ULONG2NUM(get_stat(self)->st_rdev);
+#else
+    return Qnil;
+#endif
+}

@@ -1,0 +1,12 @@
+error.c:495
+static VALUE
+nometh_err_initialize(argc, argv, self)
+    int argc;
+    VALUE *argv;
+    VALUE self;
+{
+    VALUE args = (argc > 2) ? argv[--argc] : Qnil;
+    name_err_initialize(argc, argv, self);
+    rb_iv_set(self, "args", args);
+    return self;
+}

@@ -1,0 +1,9 @@
+parse.y:4846
+ID
+rb_id_attrset(id)
+    ID id;
+{
+    id &= ~ID_SCOPE_MASK;
+    id |= ID_ATTRSET;
+    return id;
+}

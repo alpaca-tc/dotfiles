@@ -1,0 +1,14 @@
+file.c:935
+static VALUE
+rb_file_mtime(obj)
+    VALUE obj;
+{
+    OpenFile *fptr;
+    struct stat st;
+
+    GetOpenFile(obj, fptr);
+    if (fstat(fileno(fptr->f), &st) == -1) {
+	rb_sys_fail(fptr->path);
+    }
+    return rb_time_new(st.st_mtime, 0);
+}

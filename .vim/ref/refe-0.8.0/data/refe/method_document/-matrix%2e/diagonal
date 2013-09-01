@@ -1,0 +1,5 @@
+--- Matrix.diagonal(values)
+    creates a matrix where `values' indicates columns.
+
+    対角要素がvalues (配列)で、非対角要素が全て0であるような正方行列を生成する。
+

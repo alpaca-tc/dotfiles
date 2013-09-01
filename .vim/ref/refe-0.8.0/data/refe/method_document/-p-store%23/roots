@@ -1,0 +1,4 @@
+--- PStore#roots
+      ルートの集合を配列で返す。
+      Hash#keysに相当。
+

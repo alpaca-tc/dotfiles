@@ -1,0 +1,27 @@
+string.c:1047
+static VALUE
+rb_str_match(x, y)
+    VALUE x, y;
+{
+    VALUE reg;
+    long start;
+
+    switch (TYPE(y)) {
+      case T_REGEXP:
+	return rb_reg_match(y, x);
+
+      case T_STRING:
+#if RUBY_VERSION_CODE < 181
+	rb_warn("string =~ string will be obsolete; use explicit regexp");
+#endif
+	reg = rb_reg_regcomp(y);
+	start = rb_reg_search(reg, x, 0, 0);
+	if (start == -1) {
+	    return Qnil;
+	}
+	return INT2NUM(start);
+
+      default:
+	return rb_funcall(y, rb_intern("=~"), 1, x);
+    }
+}

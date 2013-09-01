@@ -1,0 +1,7 @@
+--- assert_in_delta(expected_float, actual_float, delta, message="")
+
+    (expected_float.to_f - actual_float.to_f).abs <= delta.to_f 
+    が真なら pass
+
+    delta は正の数でなければならない。
+

@@ -1,0 +1,8 @@
+variable.c:1304
+VALUE
+rb_const_get_from(klass, id)
+    VALUE klass;
+    ID id;
+{
+    return rb_const_get_0(klass, id, Qtrue, Qtrue);
+}

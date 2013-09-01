@@ -1,0 +1,29 @@
+--- self <=> other
+
+    self と other を比較して、
+    self が other の子孫であるとき -1、
+    同一のクラス／モジュールのとき 0、
+    self が other の先祖であるとき 1
+    を返します。
+
+    親子関係にないクラス同士の比較ではその動作は不定です。
+    other がクラスやモジュールでなければ例外 TypeError が
+    発生します。
+        module Foo
+        end
+        class Bar
+          include Foo
+        end
+        class Baz < Bar
+        end
+        class Qux
+        end
+        p Bar <=> Foo     # => -1
+        p Baz <=> Bar     # => -1
+        p Baz <=> Foo     # => -1
+        p Baz <=> Qux     # => 1   (version 1.7 では nil, 1.8 では -1)
+        p Qux <=> Baz     # => 1   (version 1.7 では nil, 1.8 では -1)
+
+        p Baz <=> Object.new  # => :in `<=>': <=> requires Class or Module (Object given) (TypeError)
+                              # (version 1.8 では nil)
+

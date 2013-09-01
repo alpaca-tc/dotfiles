@@ -1,0 +1,4 @@
+--- FileTest.chardev?(filename)
+
+    filename がキャラクタスペシャルファイルの時、真を返します。
+

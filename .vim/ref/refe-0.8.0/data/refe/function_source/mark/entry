@@ -1,0 +1,9 @@
+gc.c:580
+static int
+mark_entry(key, value)
+    ID key;
+    VALUE value;
+{
+    rb_gc_mark(value);
+    return ST_CONTINUE;
+}

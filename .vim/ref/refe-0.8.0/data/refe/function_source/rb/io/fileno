@@ -1,0 +1,12 @@
+io.c:621
+static VALUE
+rb_io_fileno(io)
+    VALUE io;
+{
+    OpenFile *fptr;
+    int fd;
+
+    GetOpenFile(io, fptr);
+    fd = fileno(fptr->f);
+    return INT2FIX(fd);
+}

@@ -1,0 +1,20 @@
+variable.c:789
+static VALUE
+generic_ivar_get(obj, id)
+    VALUE obj;
+    ID id;
+{
+    st_table *tbl;
+    VALUE val;
+
+    if (generic_iv_tbl) {
+      if (st_lookup(generic_iv_tbl, obj, (st_data_t *)&tbl)) {
+	if (st_lookup(tbl, id, &val)) {
+	  return val;
+	}
+      }
+    }
+
+    rb_warning("instance variable %s not initialized", rb_id2name(id));
+    return Qnil;
+}

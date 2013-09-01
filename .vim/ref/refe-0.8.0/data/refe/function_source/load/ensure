@@ -1,0 +1,8 @@
+marshal.c:1323
+static VALUE
+load_ensure(arg)
+    struct load_arg *arg;
+{
+    st_free_table(arg->symbols);
+    return 0;
+}

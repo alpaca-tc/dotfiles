@@ -1,0 +1,18 @@
+eval.c:8181
+static void
+thread_free(th)
+    rb_thread_t th;
+{
+    if (th->stk_ptr) free(th->stk_ptr);
+    th->stk_ptr = 0;
+#ifdef __ia64__
+    if (th->bstr_ptr) free(th->bstr_ptr);
+    th->bstr_ptr = 0;
+#endif
+    if (th->locals) st_free_table(th->locals);
+    if (th->status != THREAD_KILLED) {
+	if (th->prev) th->prev->next = th->next;
+	if (th->next) th->next->prev = th->prev;
+    }
+    if (th != main_thread) free(th);
+}

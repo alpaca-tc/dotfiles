@@ -1,0 +1,6 @@
+hash.c:1661
+static VALUE
+env_reject()
+{
+    return rb_hash_delete_if(env_to_hash());
+}

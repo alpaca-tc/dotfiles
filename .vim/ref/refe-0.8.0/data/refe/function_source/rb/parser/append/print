@@ -1,0 +1,9 @@
+parse.y:5708
+void
+rb_parser_append_print()
+{
+    ruby_eval_tree =
+	block_append(ruby_eval_tree,
+		     NEW_FCALL(rb_intern("print"),
+			       NEW_ARRAY(NEW_GVAR(rb_intern("$_")))));
+}

@@ -1,0 +1,7 @@
+string.c:229
+VALUE
+rb_str_to_str(str)
+    VALUE str;
+{
+    return rb_convert_type(str, T_STRING, "String", "to_str");
+}

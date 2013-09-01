@@ -1,0 +1,15 @@
+--- File.stat(filename)
+--- File.lstat(filename)
+
+    filename の情報を含む File::Stat オブジェクトを生成し
+    て返します。情報の取得に失敗した場合は例外 Errno::EXXX が発
+    生します。
+
+    lstat は、シンボリックリンクに関してリンクそのものの
+    情報を返します。
+    lstat(2) [manual page] を実装していないシステムでは、
+    File.stat と同じです。
+
+    IO#stat [IO/stat],
+    File#lstat [File/lstat] も参照してください。
+

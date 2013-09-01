@@ -1,0 +1,21 @@
+file.c:1368
+static VALUE
+rb_file_s_umask(argc, argv)
+    int argc;
+    VALUE *argv;
+{
+    int omask = 0;
+
+    rb_secure(2);
+    if (argc == 0) {
+	omask = umask(0);
+	umask(omask);
+    }
+    else if (argc == 1) {
+	omask = umask(NUM2INT(argv[0]));
+    }
+    else {
+	rb_raise(rb_eArgError, "wrong number of argument");
+    }
+    return INT2FIX(omask);
+}

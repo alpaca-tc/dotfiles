@@ -1,0 +1,5 @@
+--- ERB.new(eruby_script, safe_level=nil, trim_mode=nil, eoutvar='_erbout')
+    eruby_scriptからERBを生成する。eval時の$SAFE、trim_mode(後述)、
+    eoutvar(eRubyスクリプトの中でさらにERBを使うときに変更する。
+    普通、変更する必要はない。)を指定できる。
+

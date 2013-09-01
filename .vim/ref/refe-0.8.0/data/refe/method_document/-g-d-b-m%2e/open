@@ -1,0 +1,24 @@
+: new(dbname[, mode[, flags]])
+: open(dbname[, mode[, flags]])
+: open(dbname[, mode[, flags]]) {|db| ...}
+    dbnameで指定したデータベースをモードを
+    modeに設定してオープンします．modeの省
+    略値は0666です．modeとしてnilを指定
+    するとデータベースが存在しない時には新たなデータベースを作らず
+    nilを返します．
+
+    flags には，GDBM::FAST, GDBM::SYNC, GDBM::NOLOCK を
+    の論理和を指定します．デフォルト値は指定なし(つまり0)です．
+
+    ブロックを指定した場合，オープンしたGDBMオブジェクトを
+    引数にブロックを実行します．実行後GDBMオブジェクトをクローズ
+    し，openメソッドはブロックの結果を返します．これはちょうど
+    以下と同じです．
+
+      dbm = GDBM.open(file)
+      begin
+        yield dbm
+      ensure
+        dbm.close
+      end
+

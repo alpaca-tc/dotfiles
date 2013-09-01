@@ -1,0 +1,12 @@
+re.c:1247
+static VALUE
+rb_reg_match_m(re, str)
+    VALUE re, str;
+{
+    VALUE result = rb_reg_match(re, str);
+
+    if (NIL_P(result)) return Qnil;
+    result = rb_backref_get();
+    rb_match_busy(result);
+    return result;
+}

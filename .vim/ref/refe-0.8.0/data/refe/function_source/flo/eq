@@ -1,0 +1,24 @@
+numeric.c:523
+static VALUE
+flo_eq(x, y)
+    VALUE x, y;
+{
+    double a, b;
+
+    switch (TYPE(y)) {
+      case T_FIXNUM:
+	b = FIX2LONG(y);
+	break;
+      case T_BIGNUM:
+	b = rb_big2dbl(y);
+	break;
+      case T_FLOAT:
+	b = RFLOAT(y)->value;
+	break;
+      default:
+	return num_equal(x, y);
+    }
+    a = RFLOAT(x)->value;
+    if (isnan(a) || isnan(b)) return Qfalse;
+    return (a == b)?Qtrue:Qfalse;
+}

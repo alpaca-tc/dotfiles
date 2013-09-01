@@ -1,0 +1,2 @@
+: double rb_str_to_dbl(VALUE str, int badcheck)
+

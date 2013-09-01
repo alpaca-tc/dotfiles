@@ -1,0 +1,22 @@
+regex.c:4592
+static unsigned int
+sjis_startpos(string, pos)
+     const char *string;
+     unsigned int pos;
+{
+  unsigned int i = pos, w;
+
+  if (i > 0 && sjis_istrail(string[i])) {
+    do {
+      if (!sjis_isfirst(string[--i])) {
+	++i;
+	break;
+      }
+    } while (i > 0);
+  }
+  if (i == pos || i + (w = sjis_mbclen(string[i])) > pos) {
+    return i;
+  }
+  i += w;
+  return i + ((pos - i) & ~1);
+}

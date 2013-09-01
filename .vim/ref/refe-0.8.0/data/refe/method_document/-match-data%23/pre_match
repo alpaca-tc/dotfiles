@@ -1,0 +1,7 @@
+--- pre_match
+
+    マッチした部分より前の文字列を返します($`と同じ)。
+
+        /(bar)(BAZ)?/ =~ "foobarbaz"
+        p $~.pre_match  # => "foo"
+

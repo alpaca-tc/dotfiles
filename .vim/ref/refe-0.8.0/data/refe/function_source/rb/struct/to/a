@@ -1,0 +1,7 @@
+struct.c:405
+static VALUE
+rb_struct_to_a(s)
+    VALUE s;
+{
+    return rb_ary_new4(RSTRUCT(s)->len, RSTRUCT(s)->ptr);
+}

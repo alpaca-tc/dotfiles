@@ -1,0 +1,7 @@
+object.c:444
+static VALUE
+main_to_s(obj)
+    VALUE obj;
+{
+    return rb_str_new2("main");
+}

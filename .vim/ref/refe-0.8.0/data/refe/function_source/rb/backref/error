@@ -1,0 +1,14 @@
+parse.y:4867
+static void
+rb_backref_error(node)
+    NODE *node;
+{
+    switch (nd_type(node)) {
+      case NODE_NTH_REF:
+	rb_compile_error("Can't set variable $%d", node->nd_nth);
+	break;
+      case NODE_BACK_REF:
+	rb_compile_error("Can't set variable $%c", (int)node->nd_nth);
+	break;
+    }
+}

@@ -1,0 +1,9 @@
+array.c:1921
+static VALUE
+rb_ary_compact(ary)
+    VALUE ary;
+{
+    ary = rb_ary_dup(ary);
+    rb_ary_compact_bang(ary);
+    return ary;
+}

@@ -1,0 +1,77 @@
+--- raise
+--- raise(exception)
+--- raise(message)
+--- raise(error_type, message [, backtrace])
+--- fail(error_type, message [, backtrace])
+
+    例外を発生させます。
+
+    引数が無い場合は、同スレッドの同じブロック内で最後に rescue された
+    例外オブジェクト ($!) を再発生させます。そのような
+    例外が存在しないときは例外 RuntimeError を発生させます。
+
+        begin
+          open("nonexist")
+        rescue
+          raise   # => `open': No such file or directory - "nonexist" (Errno::ENOENT)
+        end
+
+    引数が一つの場合、引数が文字列であれば、その文字列をメッ
+    セージとする RuntimeError 例外を発生させます。引数
+    が例外クラスまたは例外オブジェクトであった場合にはその例
+    外を発生させます。
+
+        raise "error message"    # => -:1: error message (RuntimeError)
+
+        raise ArgumentError      # => -:1: ArgumentError (ArgumentError)
+
+        raise ArgumentError.new  # => -:1: ArgumentError (ArgumentError)
+
+    引数が二つまたは三つの場合、第一引数で指定された例外を、第二引数に
+    与えたメッセージとともに発生させます。この場合、例外は例外クラスまたは
+    例外オブジェクトで指定します。第三引数は例外発生時のスタックトレース
+    で、caller の戻り値と同じ形式でなければいけません。
+
+        raise ArgumentError, "error message"
+        # => -:1: error message (ArgumentError)
+
+        raise ArgumentError, "error message", ["file1:99",
+                                               "file2:999:in `method'"]
+
+        # => file1:99: error message (ArgumentError)
+                      from file2:999:in `method'
+
+    例外ではないクラスやオブジェクトを第一引数に指定した場合、実際に
+    発生する例外はそのオブジェクトの exception メソッドが
+    返す値になります。
+
+        class MyException
+          def exception
+            ArgumentError.new
+          end
+        end
+
+        raise MyException.new
+
+        # => -:7: ArgumentError (ArgumentError)
+
+    第二の形式で引数を指定した場合は、exception メソッ
+    ドにその引数が渡されます。
+
+        class MyException
+          def exception(mesg)
+            ArgumentError.new(mesg)
+          end
+        end
+
+        raise MyException.new, "error message"
+
+        # => -:7: error message (ArgumentError)
+
+    exception メソッドは必ず例外オブジェクトを返さなければいけ
+    ません。そうでない場合は TypeError が発生します。
+
+    発生した例外は変数 $! に格納されます。また例外が
+    発生した時のスタックトーレスが変数 $@ に格納され
+    ます。
+

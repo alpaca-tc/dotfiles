@@ -31,7 +31,7 @@ abbr        it { ... }
 
 snippet     des
 abbr        describe do
-  describe '${1}' do
+  describe ${1} do
       ${2}
   end
 
@@ -56,6 +56,11 @@ abbr        it_should_behave_like '...'
 options     word
   it_should_behave_like '${1:name}'
 
+snippet     expect
+abbr        expect(...).to
+options     word
+  expect(${1:}).to ${2}
+
 snippet     behaves
 abbr        it_behaves_like '...'
 options     word
@@ -72,6 +77,11 @@ abbr        let!(:name) {}
 snippet     reqs
 abbr        require rspec
   require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+
+snippet     req
+abbr        require 'spec_helper'
+options     word
+  require 'spec_helper'
 
 snippet     its
   its(:${1}) { ${2} }

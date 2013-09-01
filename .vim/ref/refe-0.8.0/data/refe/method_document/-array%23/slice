@@ -1,0 +1,5 @@
+--- slice(pos[, len])
+--- slice(start..last)
+
+    self[] と同じです。
+

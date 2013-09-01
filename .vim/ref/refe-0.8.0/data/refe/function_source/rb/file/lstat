@@ -1,0 +1,20 @@
+file.c:411
+static VALUE
+rb_file_lstat(obj)
+    VALUE obj;
+{
+#ifdef HAVE_LSTAT
+    OpenFile *fptr;
+    struct stat st;
+
+    rb_secure(2);
+    GetOpenFile(obj, fptr);
+    if (!fptr->path) return Qnil;
+    if (lstat(fptr->path, &st) == -1) {
+	rb_sys_fail(fptr->path);
+    }
+    return stat_new(&st);
+#else
+    return rb_io_stat(obj);
+#endif
+}

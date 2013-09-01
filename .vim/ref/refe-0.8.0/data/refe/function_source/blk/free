@@ -1,0 +1,24 @@
+eval.c:6762
+static void
+blk_free(data)
+    struct BLOCK *data;
+{
+    struct FRAME *frame;
+    void *tmp;
+
+    frame = data->frame.prev;
+    while (frame) {
+	if (frame->argc > 0 && (frame->flags & FRAME_MALLOC))
+	    free(frame->argv);
+	tmp = frame;
+	frame = frame->prev;
+	free(tmp);
+    }
+    while (data) {
+	if (data->frame.argc > 0)
+	    free(data->frame.argv);
+	tmp = data;
+	data = data->prev;
+	free(tmp);
+    }
+}

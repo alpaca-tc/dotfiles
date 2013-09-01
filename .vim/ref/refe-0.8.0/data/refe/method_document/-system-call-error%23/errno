@@ -1,0 +1,36 @@
+--- errno
+
+    システムから返された errno の値を返します。
+    実際にシステムコールエラーが発生してなければ nil を返します。
+
+    例:
+      二つ目の例のように raiseによって故意にエラーが発生しているかのように
+      見せかける場合は注意してください。
+
+        begin
+          open("nonexistent file")
+        rescue Errno::ENOENT
+          p Errno::ENOENT::Errno      # => 2
+          p $!.errno                  # => 2
+        end
+
+        begin
+          raise Errno::ENOENT
+        rescue Errno::ENOENT
+          p Errno::ENOENT::Errno      # => 2
+          p $!.errno                  # => nil
+        end
+
+      ruby 1.8 feature: Errno::EXXX 例外オブジェクトは対応する 
+      errno 値を初期化時に設定するようになりました。
+
+        begin
+          raise Errno::ENOENT
+        rescue Errno::ENOENT
+          p Errno::ENOENT::Errno      # => 2
+          p $!.errno                  # => 2
+        end
+
+    まだ発生してない例外に対応する errno の値を知りたい場合は
+    Errno::EXXX::Errno [Errno::EXXX/Errno] 定数を使用してください。
+

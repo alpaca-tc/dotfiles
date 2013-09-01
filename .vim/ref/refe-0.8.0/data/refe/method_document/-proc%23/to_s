@@ -1,0 +1,12 @@
+--- to_s        ruby 1.7 feature
+
+    self の文字列表現を返します。可能なら self を生成した
+    ソースファイル名、行番号を含みます。
+
+        p Proc.new {
+
+          true
+        }.to_s
+
+        => "#<Proc:0x0x401a880c@-:3>"
+

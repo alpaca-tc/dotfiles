@@ -1,0 +1,12 @@
+parse.y:4855
+static NODE *
+attrset(recv, id)
+    NODE *recv;
+    ID id;
+{
+    if (recv && nd_type(recv) == NODE_SELF)
+	recv = (NODE *)1;
+    else
+	value_expr(recv);
+    return NEW_ATTRASGN(recv, rb_id_attrset(id), 0);
+}

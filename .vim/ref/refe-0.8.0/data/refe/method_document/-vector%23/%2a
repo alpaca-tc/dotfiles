@@ -1,0 +1,10 @@
+--- Vector#* a
+    returns a vector multiplied by scalar `a'
+
+    数aを乗じたベクトルを返す。
+
+--- Vector#* m
+    returns a vector multiplied by matrix `m' from right side.
+
+    列ベクトル(行列)に変換して(実際にはMatrix#column_vector [Matrix/column_vector](self)を適用)から、行列mを右から乗じた行列(Matrixクラス)を返す。
+

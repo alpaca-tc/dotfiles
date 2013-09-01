@@ -1,0 +1,7 @@
+--- Socket.gethostbyaddr(host[, type])
+
+    sockaddr 構造体をパックした文字列からホスト情報を返します。
+    ホスト情報の構造は Socket.gethostbynameと同じです。
+    type には、アドレスタイプ(デフォルトは 
+    Socket::AF_INET)を指定します。
+

@@ -1,0 +1,6 @@
+--- unbind
+
+    self を返します。
+
+    ruby 1.8 feature: このメソッドはなくなりました。
+

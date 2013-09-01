@@ -1,0 +1,16 @@
+eval.c:6138
+static void
+set_method_visibility(self, argc, argv, ex)
+    VALUE self;
+    int argc;
+    VALUE *argv;
+    ID ex;
+{
+    int i;
+
+    secure_visibility(self);
+    for (i=0; i<argc; i++) {
+	rb_export_method(self, rb_to_id(argv[i]), ex);
+    }
+    rb_clear_cache_by_class(self);
+}

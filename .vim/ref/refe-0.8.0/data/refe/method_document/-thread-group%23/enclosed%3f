@@ -1,0 +1,16 @@
+--- enclosed?           ruby 1.8 feature
+
+    enclose の状態を真偽値で返します。
+    freeze された ThreadGroup に Thread の追加/削除はできなくなりますが、
+    enclosed? は false を返します。
+
+        thg = ThreadGroup.new
+        p thg.enclosed?         # => false
+        thg.enclose
+        p thg.enclosed?         # => true
+
+        thg = ThreadGroup.new
+        p thg.enclosed?         # => false
+        thg.freeze
+        p thg.enclosed?         # => false
+

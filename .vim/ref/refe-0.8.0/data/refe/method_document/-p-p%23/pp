@@ -1,0 +1,12 @@
+--- pp(obj)
+#    adds obj to the pretty printing buffer
+#    using Object#pretty_print or Object#pretty_print_cycle.
+    Object#pretty_print や Object#pretty_print_cycle を使って、
+    obj を pretty print バッファに追加します。
+
+#    Object#pretty_print_cycle is used when obj is already
+#    printed, a.k.a the object reference chain has a cycle.
+    obj がすでに出力されていたときには Object#pretty_print_cycle 
+    が使われます。これはオブジェクトの参照の連鎖がループしていることを
+    意味します。
+

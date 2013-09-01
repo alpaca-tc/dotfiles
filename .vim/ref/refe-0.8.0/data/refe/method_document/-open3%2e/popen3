@@ -1,0 +1,19 @@
+--- Open3.popen3(cmd)
+      外部プログラムcmdを実行し、そのプロセスの標準入力、標準出力、
+      標準エラー出力に接続されたパイプを3要素の配列で返す。
+      cmd は exec [組み込み関数]と同じ規則で解釈される。
+
+      ブロックを指定するとパイプの配列を引数にブロックを実行し、最後に
+      パイプを close する。この場合はブロックの最後の式の結果を返す。
+
+        require 'open3'
+
+        Open3.popen3("read stdin; echo stdout; echo stderr >&2") {|stdin, stdout, stderr|
+
+          stdin.puts "stdin"
+          p stdout.read
+          p stderr.read
+        }
+        #=> "stdout\n"
+            "stderr\n"
+

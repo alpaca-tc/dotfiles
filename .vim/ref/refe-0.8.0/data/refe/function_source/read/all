@@ -1,0 +1,39 @@
+io.c:765
+static VALUE
+read_all(fptr, siz, str)
+    OpenFile *fptr;
+    long siz;
+    VALUE str;
+{
+    long bytes = 0;
+    long n;
+    off_t pos = 0;
+
+    if (feof(fptr->f)) return Qnil;
+    READ_CHECK(fptr->f);
+    if (!siz) siz = BUFSIZ;
+    if (NIL_P(str)) {
+	str = rb_tainted_str_new(0, siz);
+    }
+    else {
+	rb_str_resize(str, siz);
+    }
+    pos = io_tell(fptr);
+    for (;;) {
+	n = rb_io_fread(RSTRING(str)->ptr+bytes, siz-bytes, fptr->f);
+	if (pos > 0 && n == 0 && bytes == 0) {
+	    rb_str_resize(str,0);
+	    if (feof(fptr->f)) return Qnil;
+	    if (!ferror(fptr->f)) return str;
+	    rb_sys_fail(fptr->path);
+	}
+	bytes += n;
+	if (bytes < siz) break;
+	siz += BUFSIZ;
+	rb_str_resize(str, siz);
+    }
+    if (bytes == 0) return rb_str_new(0,0);
+    if (bytes != siz) rb_str_resize(str, bytes);
+
+    return str;
+}

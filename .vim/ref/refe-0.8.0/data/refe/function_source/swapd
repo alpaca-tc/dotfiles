@@ -1,0 +1,17 @@
+pack.c:146
+static double
+swapd(d)
+    const double d;
+{
+    double dtmp = d;
+    unsigned short utmp[2];
+    unsigned short utmp0;
+
+    utmp[0] = 0; utmp[1] = 0;
+    memcpy(utmp,&dtmp,sizeof(double));
+    utmp0 = utmp[0];
+    utmp[0] = swaps(utmp[1]);
+    utmp[1] = swaps(utmp0);
+    memcpy(&dtmp,utmp,sizeof(double));
+    return dtmp;
+}

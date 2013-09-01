@@ -1,0 +1,28 @@
+file.c:1422
+static void
+getcwdofdrv(drv, buf, len)
+    int drv;
+    char *buf;
+    int len;
+{
+    char drive[4];
+    char oldcwd[MAXPATHLEN+1];
+
+    drive[0] = drv;
+    drive[1] = ':';
+    drive[2] = '\0';
+
+    /* the only way that I know to get the current directory
+       of a particular drive is to change chdir() to that drive,
+       so save the old cwd before chdir()
+    */
+    getcwd(oldcwd, MAXPATHLEN);
+    if (chdir(drive) == 0) {
+	getcwd(buf, len);
+	chdir(oldcwd);
+    }
+    else {
+	/* perhaps the drive is not exist. we return only drive letter */
+	strncpy(buf, drive, len);
+    }
+}

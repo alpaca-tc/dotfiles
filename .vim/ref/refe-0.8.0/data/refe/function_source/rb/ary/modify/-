@@ -1,0 +1,16 @@
+array.c:58
+static void
+rb_ary_modify(ary)
+    VALUE ary;
+{
+    VALUE *ptr;
+
+    rb_ary_modify_check(ary);
+    if (FL_TEST(ary, ELTS_SHARED)) {
+	ptr = ALLOC_N(VALUE, RARRAY(ary)->len);
+	FL_UNSET(ary, ELTS_SHARED);
+	RARRAY(ary)->aux.capa = RARRAY(ary)->len;
+	MEMCPY(ptr, RARRAY(ary)->ptr, VALUE, RARRAY(ary)->len);
+	RARRAY(ary)->ptr = ptr;
+    }
+}

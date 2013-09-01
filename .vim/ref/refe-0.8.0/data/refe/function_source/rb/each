@@ -1,0 +1,7 @@
+enum.c:20
+VALUE
+rb_each(obj)
+    VALUE obj;
+{
+    return rb_funcall(obj, id_each, 0, 0);
+}

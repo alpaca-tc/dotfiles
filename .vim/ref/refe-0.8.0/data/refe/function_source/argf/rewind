@@ -1,0 +1,10 @@
+io.c:3766
+static VALUE
+argf_rewind()
+{
+    if (!next_argv()) {
+	rb_raise(rb_eArgError, "no stream to rewind");
+    }
+    ARGF_FORWARD();
+    return rb_io_rewind(current_file);
+}

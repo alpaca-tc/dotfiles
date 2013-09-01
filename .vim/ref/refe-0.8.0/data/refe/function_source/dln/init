@@ -1,0 +1,75 @@
+dln.c:355
+static int
+dln_init(prog)
+    const char *prog;
+{
+    char *file;
+    int fd;
+    struct exec hdr;
+    struct nlist *syms;
+
+    if (dln_init_p == 1) return 0;
+
+    file = dln_find_exe(prog, NULL);
+    if (file == NULL || (fd = open(file, O_RDONLY)) < 0) {
+	dln_errno = errno;
+	return -1;
+    }
+
+    if (load_header(fd, &hdr, 0) == -1) return -1;
+    syms = load_sym(fd, &hdr, 0);
+    if (syms == NULL) {
+	close(fd);
+	return -1;
+    }
+    sym_tbl = sym_hash(&hdr, syms);
+    if (sym_tbl == NULL) {	/* file may be start with #! */
+	char c = '\0';
+	char buf[MAXPATHLEN];
+	char *p;
+
+	free(syms);
+	lseek(fd, 0L, 0);
+	if (read(fd, &c, 1) == -1) {
+	    dln_errno = errno;
+	    return -1;
+	}
+	if (c != '#') goto err_noexec;
+	if (read(fd, &c, 1) == -1) {
+	    dln_errno = errno;
+	    return -1;
+	}
+	if (c != '!') goto err_noexec;
+
+	p = buf;
+	/* skip forwading spaces */
+	while (read(fd, &c, 1) == 1) {
+	    if (c == '\n') goto err_noexec;
+	    if (c != '\t' && c != ' ') {
+		*p++ = c;
+		break;
+	    }
+	}
+	/* read in command name */
+	while (read(fd, p, 1) == 1) {
+	    if (*p == '\n' || *p == '\t' || *p == ' ') break;
+	    p++;
+	    if (p-buf >= MAXPATHLEN) {
+		dln_errno = ENAMETOOLONG;
+		return -1;
+	    }
+	}
+	*p = '\0';
+
+	return dln_init(buf);
+    }
+    dln_init_p = 1;
+    undef_tbl = st_init_strtable();
+    close(fd);
+    return 0;
+
+  err_noexec:
+    close(fd);
+    dln_errno = DLN_ENOEXEC;
+    return -1;
+}

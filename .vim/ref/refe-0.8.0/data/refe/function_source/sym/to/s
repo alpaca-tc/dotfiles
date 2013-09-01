@@ -1,0 +1,7 @@
+object.c:549
+static VALUE
+sym_to_s(sym)
+    VALUE sym;
+{
+    return rb_str_new2(rb_id2name(SYM2ID(sym)));
+}

@@ -1,0 +1,30 @@
+class.c:190
+VALUE
+rb_define_class(name, super)
+    const char *name;
+    VALUE super;
+{
+    VALUE klass;
+    ID id;
+
+    id = rb_intern(name);
+    if (rb_const_defined(rb_cObject, id)) {
+	klass = rb_const_get(rb_cObject, id);
+	if (TYPE(klass) != T_CLASS) {
+	    rb_raise(rb_eTypeError, "%s is not a class", name);
+	}
+	if (rb_class_real(RCLASS(klass)->super) != super) {
+	    rb_name_error(id, "%s is already defined", name);
+	}
+	return klass;
+    }
+    if (!super) {
+	rb_warn("no super class for `%s', Object assumed", name);
+    }
+    klass = rb_define_class_id(id, super);
+    st_add_direct(rb_class_tbl, id, klass);
+    rb_const_set(rb_cObject, id, klass);
+    rb_class_inherited(super, klass);
+
+    return klass;
+}

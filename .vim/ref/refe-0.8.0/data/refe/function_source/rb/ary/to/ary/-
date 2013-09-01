@@ -1,0 +1,13 @@
+array.c:668
+VALUE
+rb_ary_to_ary(obj)
+    VALUE obj;
+{
+    if (TYPE(obj) == T_ARRAY) {
+	return obj;
+    }
+    if (rb_respond_to(obj, rb_intern("to_ary"))) {
+	return rb_convert_type(obj, T_ARRAY, "Array", "to_ary");
+    }
+    return rb_ary_new3(1, obj);
+}

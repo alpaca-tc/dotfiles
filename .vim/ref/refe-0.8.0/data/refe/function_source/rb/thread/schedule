@@ -1,0 +1,243 @@
+eval.c:8581
+void
+rb_thread_schedule()
+{
+    rb_thread_t next;		/* OK */
+    rb_thread_t th;
+    rb_thread_t curr;
+    int found = 0;
+
+    fd_set readfds;
+    fd_set writefds;
+    fd_set exceptfds;
+    struct timeval delay_tv, *delay_ptr;
+    double delay, now;	/* OK */
+    int n, max;
+    int need_select = 0;
+    int select_timeout = 0;
+
+    rb_thread_pending = 0;
+    if (curr_thread == curr_thread->next
+	&& curr_thread->status == THREAD_RUNNABLE)
+	return;
+
+    next = 0;
+    curr = curr_thread;		/* starting thread */
+
+    while (curr->status == THREAD_KILLED) {
+	curr = curr->prev;
+    }
+
+  again:
+    max = -1;
+    FD_ZERO(&readfds);
+    FD_ZERO(&writefds);
+    FD_ZERO(&exceptfds);
+    delay = DELAY_INFTY;
+    now = -1.0;
+
+    FOREACH_THREAD_FROM(curr, th) {
+	if (!found && th->status <= THREAD_RUNNABLE) {
+	    found = 1;
+	}
+	if (th->status != THREAD_STOPPED) continue;
+	if (th->wait_for & WAIT_JOIN) {
+	    if (rb_thread_dead(th->join)) {
+		th->status = THREAD_RUNNABLE;
+		found = 1;
+	    }
+	}
+	if (th->wait_for & WAIT_FD) {
+	    FD_SET(th->fd, &readfds);
+	    if (max < th->fd) max = th->fd;
+	    need_select = 1;
+	}
+	if (th->wait_for & WAIT_SELECT) {
+	    copy_fds(&readfds, &th->readfds, th->fd);
+	    copy_fds(&writefds, &th->writefds, th->fd);
+	    copy_fds(&exceptfds, &th->exceptfds, th->fd);
+	    if (max < th->fd) max = th->fd;
+	    need_select = 1;
+	    if (th->wait_for & WAIT_TIME) {
+		select_timeout = 1;
+	    }
+	    th->select_value = 0;
+	}
+	if (th->wait_for & WAIT_TIME) {
+	    double th_delay;
+
+	    if (now < 0.0) now = timeofday();
+	    th_delay = th->delay - now;
+	    if (th_delay <= 0.0) {
+		th->status = THREAD_RUNNABLE;
+		found = 1;
+	    }
+	    else if (th_delay < delay) {
+		delay = th_delay;
+		need_select = 1;
+	    }
+	    else if (th->delay == DELAY_INFTY) {
+		need_select = 1;
+	    }
+	}
+    }
+    END_FOREACH_FROM(curr, th);
+
+    /* Do the select if needed */
+    if (need_select) {
+	/* Convert delay to a timeval */
+	/* If a thread is runnable, just poll */
+	if (found) {
+	    delay_tv.tv_sec = 0;
+	    delay_tv.tv_usec = 0;
+	    delay_ptr = &delay_tv;
+	}
+	else if (delay == DELAY_INFTY) {
+	    delay_ptr = 0;
+	}
+	else {
+	    delay_tv.tv_sec = delay;
+	    delay_tv.tv_usec = (delay - (double)delay_tv.tv_sec)*1e6;
+	    delay_ptr = &delay_tv;
+	}
+
+	n = select(max+1, &readfds, &writefds, &exceptfds, delay_ptr);
+	if (n < 0) {
+	    int e = errno;
+
+	    if (rb_trap_pending) rb_trap_exec();
+	    if (e == EINTR) goto again;
+#ifdef ERESTART
+	    if (e == ERESTART) goto again;
+#endif
+	    FOREACH_THREAD_FROM(curr, th) {
+		if (th->wait_for & WAIT_SELECT) {
+		    int v = 0;
+
+		    v |= find_bad_fds(&readfds, &th->readfds, th->fd);
+		    v |= find_bad_fds(&writefds, &th->writefds, th->fd);
+		    v |= find_bad_fds(&exceptfds, &th->exceptfds, th->fd);
+		    if (v) {
+			th->select_value = n;
+			n = max;
+		    }
+		}
+	    }
+	    END_FOREACH_FROM(curr, th);
+	}
+ 	if (select_timeout && n == 0) {
+ 	    if (now < 0.0) now = timeofday();
+ 	    FOREACH_THREAD_FROM(curr, th) {
+ 		if (((th->wait_for&(WAIT_SELECT|WAIT_TIME)) == (WAIT_SELECT|WAIT_TIME)) &&
+		    th->delay <= now) {
+ 		    th->status = THREAD_RUNNABLE;
+ 		    th->wait_for = 0;
+ 		    th->select_value = 0;
+ 		    found = 1;
+                    intersect_fds(&readfds, &th->readfds, max);
+                    intersect_fds(&writefds, &th->writefds, max);
+                    intersect_fds(&exceptfds, &th->exceptfds, max);
+		}
+	    }
+	    END_FOREACH_FROM(curr, th);
+	}
+	if (n > 0) {
+	    now = -1.0;
+	    /* Some descriptors are ready.
+	       Make the corresponding threads runnable. */
+	    FOREACH_THREAD_FROM(curr, th) {
+		if ((th->wait_for&WAIT_FD) && FD_ISSET(th->fd, &readfds)) {
+		    /* Wake up only one thread per fd. */
+		    FD_CLR(th->fd, &readfds);
+		    th->status = THREAD_RUNNABLE;
+		    th->fd = 0;
+		    th->wait_for = 0;
+		    found = 1;
+		}
+		if ((th->wait_for&WAIT_SELECT) &&
+		    (match_fds(&readfds, &th->readfds, max) ||
+		     match_fds(&writefds, &th->writefds, max) ||
+		     match_fds(&exceptfds, &th->exceptfds, max))) {
+		    /* Wake up only one thread per fd. */
+		    th->status = THREAD_RUNNABLE;
+		    th->wait_for = 0;
+		    n = intersect_fds(&readfds, &th->readfds, max) +
+			intersect_fds(&writefds, &th->writefds, max) +
+			intersect_fds(&exceptfds, &th->exceptfds, max);
+		    th->select_value = n;
+		    found = 1;
+		}
+	    }
+	    END_FOREACH_FROM(curr, th);
+	}
+	/* The delays for some of the threads should have expired.
+	   Go through the loop once more, to check the delays. */
+	if (!found && delay != DELAY_INFTY)
+	    goto again;
+    }
+
+    FOREACH_THREAD_FROM(curr, th) {
+	if (th->status == THREAD_TO_KILL) {
+	    next = th;
+	    break;
+	}
+	if (th->status == THREAD_RUNNABLE && th->stk_ptr) {
+	    if (!next || next->priority < th->priority)
+	       next = th;
+	}
+    }
+    END_FOREACH_FROM(curr, th);
+
+    if (!next) {
+	/* raise fatal error to main thread */
+	curr_thread->node = ruby_current_node;
+	if (curr->next == curr) {
+	    TRAP_BEG;
+	    pause();
+	    TRAP_END;
+	}
+	FOREACH_THREAD_FROM(curr, th) {
+	    warn_printf("deadlock 0x%lx: %s:",
+			th->thread, thread_status_name(th->status));
+	    if (th->wait_for & WAIT_FD) warn_printf("F(%d)", th->fd);
+	    if (th->wait_for & WAIT_SELECT) warn_printf("S");
+	    if (th->wait_for & WAIT_TIME) warn_printf("T(%f)", th->delay);
+	    if (th->wait_for & WAIT_JOIN)
+		warn_printf("J(0x%lx)", th->join ? th->join->thread : 0);
+	    if (th->wait_for & WAIT_PID) warn_printf("P");
+	    if (!th->wait_for) warn_printf("-");
+	    warn_printf(" %s - %s:%d\n",
+			th==main_thread ? "(main)" : "",
+			th->node->nd_file, nd_line(th->node));
+	}
+	END_FOREACH_FROM(curr, th);
+	next = main_thread;
+	rb_thread_ready(next);
+	next->status = THREAD_TO_KILL;
+	if (!rb_thread_dead(curr_thread)) {
+	    rb_thread_save_context(curr_thread);
+	}
+	rb_thread_deadlock();
+    }
+    next->wait_for = 0;
+    if (next->status == THREAD_RUNNABLE && next == curr_thread) {
+	return;
+    }
+
+    /* context switch */
+    if (curr == curr_thread) {
+	if (THREAD_SAVE_CONTEXT(curr)) {
+	    return;
+	}
+    }
+
+    curr_thread = next;
+    if (next->status == THREAD_TO_KILL) {
+	if (!(next->flags & THREAD_TERMINATING)) {
+	    next->flags |= THREAD_TERMINATING;
+	    /* terminate; execute ensure-clause if any */
+	    rb_thread_restore_context(next, RESTORE_FATAL);
+	}
+    }
+    rb_thread_restore_context(next, RESTORE_NORMAL);
+}

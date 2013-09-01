@@ -1,0 +1,3 @@
+: LOG_UPTO(priority)
+   priorityまでのすべての優先度のマスクを作成する。
+

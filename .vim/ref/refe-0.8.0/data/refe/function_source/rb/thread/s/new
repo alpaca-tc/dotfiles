@@ -1,0 +1,19 @@
+eval.c:9557
+static VALUE
+rb_thread_s_new(argc, argv, klass)
+    int argc;
+    VALUE *argv;
+    VALUE klass;
+{
+    rb_thread_t th = rb_thread_alloc(klass);
+    volatile VALUE *pos;
+
+    pos = th->stk_pos;
+    rb_obj_call_init(th->thread, argc, argv);
+    if (th->stk_pos == 0) {
+	rb_raise(rb_eThreadError, "uninitialized thread - check `%s#initialize'",
+		 rb_class2name(klass));
+    }
+
+    return th->thread;
+}

@@ -1,0 +1,196 @@
+file.c:1552
+static VALUE
+file_expand_path(fname, dname, result)
+    VALUE fname, dname, result;
+{
+    char *s, *buf, *b, *p, *pend, *root;
+    long buflen, dirlen;
+    int tainted;
+
+    s = StringValuePtr(fname);
+    BUFINIT();
+    tainted = OBJ_TAINTED(fname);
+
+    if (s[0] == '~') {
+	if (isdirsep(s[1]) || s[1] == '\0') {
+	    char *dir = getenv("HOME");
+
+	    if (!dir) {
+		rb_raise(rb_eArgError, "couldn't find HOME environment -- expanding `%s'", s);
+	    }
+	    dirlen = strlen(dir);
+	    BUFCHECK(dirlen > buflen);
+	    strcpy(buf, dir);
+#if defined DOSISH || defined __CYGWIN__
+	    for (p = buf; *p; p = CharNext(p)) {
+		if (*p == '\\') {
+		    *p = '/';
+		}
+	    }
+#else
+	    p = buf + strlen(dir);
+#endif
+	    s++;
+	    tainted = 1;
+	}
+	else {
+#ifdef HAVE_PWD_H
+	    struct passwd *pwPtr;
+	    s++;
+#endif
+	    s = nextdirsep(b = s);
+	    BUFCHECK(bdiff + (s-b) >= buflen);
+	    memcpy(p, b, s-b);
+	    p += s-b;
+	    *p = '\0';
+#ifdef HAVE_PWD_H
+	    pwPtr = getpwnam(buf);
+	    if (!pwPtr) {
+		endpwent();
+		rb_raise(rb_eArgError, "user %s doesn't exist", buf);
+	    }
+	    dirlen = strlen(pwPtr->pw_dir);
+	    BUFCHECK(dirlen > buflen);
+	    strcpy(buf, pwPtr->pw_dir);
+	    p = buf + strlen(pwPtr->pw_dir);
+	    endpwent();
+#endif
+	}
+    }
+#ifdef DOSISH_DRIVE_LETTER
+    /* skip drive letter */
+    else if (has_drive_letter(s)) {
+	if (isdirsep(s[2])) {
+	    /* specified drive letter, and full path */
+	    /* skip drive letter */
+	    BUFCHECK(bdiff + 2 >= buflen);
+	    memcpy(p, s, 2);
+	    p += 2;
+	    s += 2;
+	}
+	else {
+	    /* specified drive, but not full path */
+	    int same = 0;
+	    if (!NIL_P(dname)) {
+		file_expand_path(dname, Qnil, result);
+		BUFINIT();
+		if (has_drive_letter(p) && TOLOWER(p[0]) == TOLOWER(s[0])) {
+		    /* ok, same drive */
+		    same = 1;
+		}
+	    }
+	    if (!same) {
+		BUFCHECK(buflen < MAXPATHLEN);
+		getcwdofdrv(*s, buf, MAXPATHLEN);
+		tainted = 1;
+	    }
+	    p = chompdirsep(skiproot(buf));
+	    s += 2;
+	}
+    }
+#endif
+    else if (!is_absolute_path(s)) {
+	if (!NIL_P(dname)) {
+	    file_expand_path(dname, Qnil, result);
+	    BUFINIT();
+	}
+	else {
+	    char *dir = my_getcwd();
+
+	    tainted = 1;
+	    dirlen = strlen(dir);
+	    BUFCHECK(dirlen > buflen);
+	    strcpy(buf, dir);
+	    free(dir);
+	}
+#if defined DOSISH || defined __CYGWIN__
+	if (isdirsep(*s)) {
+	    /* specified full path, but not drive letter nor UNC */
+	    /* we need to get the drive letter or UNC share name */
+	    p = skipprefix(buf);
+	}
+	else
+#endif
+	    p = chompdirsep(skiproot(buf));
+    }
+    else {
+	b = s;
+	do s++; while (isdirsep(*s));
+	p = buf + (s - b);
+	BUFCHECK(bdiff >= buflen);
+	memset(buf, '/', p - buf);
+    }
+    if (p > buf && p[-1] == '/')
+	--p;
+    else
+	*p = '/';
+
+    p[1] = 0;
+    root = skipprefix(buf);
+
+    b = s;
+    while (*s) {
+	switch (*s) {
+	  case '.':
+	    if (b == s++) {	/* beginning of path element */
+		switch (*s) {
+		  case '\0':
+		    b = s;
+		    break;
+		  case '.':
+		    if (*(s+1) == '\0' || isdirsep(*(s+1))) {
+			/* We must go back to the parent */
+			*p = '\0';
+			if (!(b = strrdirsep(root))) {
+			    *p = '/';
+			}
+			else {
+			    p = b;
+			}
+			b = ++s;
+		    }
+		    break;
+		  case '/':
+#if defined DOSISH || defined __CYGWIN__
+		  case '\\':
+#endif
+		    b = ++s;
+		    break;
+		  default:
+		    /* ordinary path element, beginning don't move */
+		    break;
+		}
+	    }
+	    break;
+	  case '/':
+#if defined DOSISH || defined __CYGWIN__
+	  case '\\':
+#endif
+	    if (s > b) {
+		long rootdiff = root - buf;
+		BUFCHECK(bdiff + (s-b+1) >= buflen);
+		root = buf + rootdiff;
+		memcpy(++p, b, s-b);
+		p += s-b;
+		*p = '/';
+	    }
+	    b = ++s;
+	    break;
+	  default:
+	    s = CharNext(s);
+	    break;
+	}
+    }
+
+    if (s > b) {
+	BUFCHECK(bdiff + (s-b) >= buflen);
+	memcpy(++p, b, s-b);
+	p += s-b;
+    }
+    if (p == skiproot(buf) - 1) p++;
+
+    if (tainted) OBJ_TAINT(result);
+    RSTRING(result)->len = p - buf;
+    *p = '\0';
+    return result;
+}

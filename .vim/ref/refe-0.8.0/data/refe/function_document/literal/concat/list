@@ -1,0 +1,2 @@
+: static NODE *literal_concat_list(NODE *head, NODE *tail)
+

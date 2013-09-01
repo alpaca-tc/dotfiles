@@ -1,0 +1,17 @@
+eval.c:6445
+void
+rb_set_end_proc(func, data)
+    void (*func) _((VALUE));
+    VALUE data;
+{
+    struct end_proc_data *link = ALLOC(struct end_proc_data);
+    struct end_proc_data **list;
+
+    if (ruby_wrapper) list = &ephemeral_end_procs;
+    else              list = &end_procs;
+    link->next = *list;
+    link->func = func;
+    link->data = data;
+    link->safe = ruby_safe_level;
+    *list = link;
+}

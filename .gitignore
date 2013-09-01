@@ -3,6 +3,7 @@
 /sercret
 /.eskk/log/*
 /sercret
+.node_modules
 
 ~
 \~

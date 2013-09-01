@@ -1,0 +1,17 @@
+re.c:585
+static VALUE
+match_init_copy(obj, orig)
+    VALUE obj, orig;
+{
+    if (obj == orig) return obj;
+
+    if (!rb_obj_is_instance_of(orig, rb_obj_class(obj))) {
+	rb_raise(rb_eTypeError, "wrong argument class");
+    }
+    RMATCH(obj)->str = RMATCH(orig)->str;
+    re_free_registers(RMATCH(obj)->regs);
+    RMATCH(obj)->regs->allocated = 0;
+    re_copy_registers(RMATCH(obj)->regs, RMATCH(orig)->regs);
+
+    return obj;
+}

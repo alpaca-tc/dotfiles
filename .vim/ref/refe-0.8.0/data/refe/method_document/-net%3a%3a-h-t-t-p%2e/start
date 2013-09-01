@@ -1,0 +1,6 @@
+: start( address, port = 80, proxy_addr = nil, proxy_port = nil )
+: start( address, port = 80, proxy_addr = nil, proxy_port = nil ) {|http| .... }
+    以下と同じです。
+
+        Net::HTTP.new(address, port, proxy_addr, proxy_port).start(&block)
+

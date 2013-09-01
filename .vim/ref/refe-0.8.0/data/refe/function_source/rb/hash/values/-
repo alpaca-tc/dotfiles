@@ -1,0 +1,12 @@
+hash.c:802
+static VALUE
+rb_hash_values(hash)
+    VALUE hash;
+{
+    VALUE ary;
+
+    ary = rb_ary_new();
+    st_foreach(RHASH(hash)->tbl, values_i, ary);
+
+    return ary;
+}

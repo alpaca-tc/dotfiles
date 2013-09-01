@@ -1,0 +1,17 @@
+--- to_a
+
+    tm 構造体の中身を配列にして返します。その順序は:
+
+    * sec
+    * min
+    * hour
+    * mday
+    * mon
+    * year
+    * wday
+    * yday
+    * isdst
+    * zone
+
+    です。
+

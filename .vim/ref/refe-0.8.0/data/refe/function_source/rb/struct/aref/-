@@ -1,0 +1,21 @@
+struct.c:451
+VALUE
+rb_struct_aref(s, idx)
+    VALUE s, idx;
+{
+    long i;
+
+    if (TYPE(idx) == T_STRING || TYPE(idx) == T_SYMBOL) {
+	return rb_struct_aref_id(s, rb_to_id(idx));
+    }
+
+    i = NUM2LONG(idx);
+    if (i < 0) i = RSTRUCT(s)->len + i;
+    if (i < 0)
+        rb_raise(rb_eIndexError, "offset %ld too small for struct(size:%ld)",
+		 i, RSTRUCT(s)->len);
+    if (RSTRUCT(s)->len <= i)
+        rb_raise(rb_eIndexError, "offset %ld too large for struct(size:%ld)",
+		 i, RSTRUCT(s)->len);
+    return RSTRUCT(s)->ptr[i];
+}

@@ -1,0 +1,37 @@
+io.c:3074
+static VALUE
+argf_getline(argc, argv)
+    int argc;
+    VALUE *argv;
+{
+    VALUE line;
+
+  retry:
+    if (!next_argv()) return Qnil;
+    if (argc == 0 && rb_rs == rb_default_rs) {
+	line = rb_io_gets(current_file);
+    }
+    else {
+	VALUE rs;
+	OpenFile *fptr;
+
+	if (argc == 0) {
+	    rs = rb_rs;
+	}
+	else {
+	    rb_scan_args(argc, argv, "1", &rs);
+	}
+	GetOpenFile(current_file, fptr);
+	line = rb_io_getline(rs, fptr);
+    }
+    if (NIL_P(line) && next_p != -1) {
+	argf_close(current_file);
+	next_p = 1;
+	goto retry;
+    }
+    if (!NIL_P(line)) {
+	gets_lineno++;
+	lineno = INT2FIX(gets_lineno);
+    }
+    return line;
+}

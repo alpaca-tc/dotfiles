@@ -1,0 +1,4 @@
+--- PP.sharing_detection = boolean_value
+#    sets the sharing detection flag.
+    共有検出フラグを設定します。
+

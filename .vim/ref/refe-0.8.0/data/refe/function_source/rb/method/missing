@@ -1,0 +1,85 @@
+eval.c:4689
+static VALUE
+rb_method_missing(argc, argv, obj)
+    int argc;
+    VALUE *argv;
+    VALUE obj;
+{
+    ID id;
+    VALUE exc = rb_eNoMethodError;
+    volatile VALUE d = 0;
+    char *format = 0;
+    char *desc = "";
+    NODE *cnode = ruby_current_node;
+
+    if (argc == 0 || !SYMBOL_P(argv[0])) {
+	rb_raise(rb_eArgError, "no id given");
+    }
+
+    stack_check();
+
+    id = SYM2ID(argv[0]);
+
+    switch (TYPE(obj)) {
+      case T_NIL:
+	desc = "nil";
+	break;
+      case T_TRUE:
+	desc = "true";
+	break;
+      case T_FALSE:
+	desc = "false";
+	break;
+      default:
+	if (rb_respond_to(obj, rb_intern("inspect")))
+	    d = rb_inspect(obj);
+	else
+	    d = rb_any_to_s(obj);
+	break;
+    }
+    if (d) {
+	if (RSTRING(d)->len > 65) {
+	    d = rb_any_to_s(obj);
+	}
+	desc = RSTRING(d)->ptr;
+    }
+
+    if (last_call_status & CSTAT_PRIV) {
+	format = "private method `%s' called for %s%s%s";
+    }
+    else if (last_call_status & CSTAT_PROT) {
+	format = "protected method `%s' called for %s%s%s";
+    }
+    else if (last_call_status & CSTAT_VCALL) {
+	format = "undefined local variable or method `%s' for %s%s%s";
+	exc = rb_eNameError;
+    }
+    else if (last_call_status & CSTAT_SUPER) {
+	format = "super: no superclass method `%s'";
+    }
+    if (!format) {
+	format = "undefined method `%s' for %s%s%s";
+    }
+
+    ruby_current_node = cnode;
+    {
+	char buf[BUFSIZ];
+	int noclass = (!desc || desc[0]=='#');
+	int n = 0;
+	VALUE args[3];
+
+	snprintf(buf, BUFSIZ, format, rb_id2name(id),
+		 desc, noclass ? "" : ":",
+		 noclass ? "" : rb_obj_classname(obj));
+	args[n++] = rb_str_new2(buf);
+	args[n++] = argv[0];
+	if (exc == rb_eNoMethodError) {
+	    args[n++] = rb_ary_new4(argc-1, argv+1);
+	}
+	exc = rb_class_new_instance(n, args, exc);
+	ruby_frame = ruby_frame->prev; /* pop frame for "method_missing" */
+	rb_exc_raise(exc);
+    }
+
+    return Qnil;		/* not reached */
+}

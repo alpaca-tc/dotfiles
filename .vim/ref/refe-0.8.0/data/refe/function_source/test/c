@@ -1,0 +1,16 @@
+file.c:632
+static VALUE
+test_c(obj, fname)
+    VALUE obj, fname;
+{
+#ifndef S_ISCHR
+#   define S_ISCHR(m) ((m & S_IFMT) == S_IFCHR)
+#endif
+
+    struct stat st;
+
+    if (rb_stat(fname, &st) < 0) return Qfalse;
+    if (S_ISCHR(st.st_mode)) return Qtrue;
+
+    return Qfalse;
+}

@@ -1,0 +1,13 @@
+string.c:1743
+static VALUE
+uscore_get()
+{
+    VALUE line;
+
+    line = rb_lastline_get();
+    if (TYPE(line) != T_STRING) {
+	rb_raise(rb_eTypeError, "$_ value need to be String (%s given)",
+		 NIL_P(line) ? "nil" : rb_obj_classname(line));
+    }
+    return line;
+}

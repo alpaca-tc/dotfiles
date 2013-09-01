@@ -1,0 +1,9 @@
+class.c:495
+static int
+ins_methods_priv_i(name, type, ary)
+    ID name;
+    long type;
+    VALUE ary;
+{
+    return ins_methods_push(name, type, ary, NOEX_PRIVATE);
+}

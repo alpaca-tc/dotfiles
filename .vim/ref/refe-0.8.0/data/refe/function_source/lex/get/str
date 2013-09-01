@@ -1,0 +1,20 @@
+parse.y:2559
+static VALUE
+lex_get_str(s)
+    VALUE s;
+{
+    char *beg, *end, *pend;
+
+    beg = RSTRING(s)->ptr;
+    if (lex_gets_ptr) {
+	if (RSTRING(s)->len == lex_gets_ptr) return Qnil;
+	beg += lex_gets_ptr;
+    }
+    pend = RSTRING(s)->ptr + RSTRING(s)->len;
+    end = beg;
+    while (end < pend) {
+	if (*end++ == '\n') break;
+    }
+    lex_gets_ptr = end - RSTRING(s)->ptr;
+    return rb_str_new(beg, end - beg);
+}

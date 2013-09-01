@@ -1,0 +1,8 @@
+bignum.c:170
+VALUE
+rb_uint2inum(n)
+    unsigned long n;
+{
+    if (POSFIXABLE(n)) return LONG2FIX(n);
+    return rb_uint2big(n);
+}

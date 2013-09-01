@@ -1,0 +1,13 @@
+io.c:1972
+static void
+pipe_atexit _((void))
+{
+    struct pipe_list *list = pipe_list;
+    struct pipe_list *tmp;
+
+    while (list) {
+	tmp = list->next;
+	rb_io_fptr_finalize(list->fptr);
+	list = tmp;
+    }
+}

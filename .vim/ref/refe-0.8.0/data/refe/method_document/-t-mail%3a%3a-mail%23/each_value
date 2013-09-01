@@ -1,0 +1,9 @@
+: each_field {|field| .... }
+: each_value {|field| .... }
+    field: TMail::HeaderField
+
+    全てのヘッダオブジェクトに対するくりかえし。
+    ヘッダの順序指定付きの each_header です。最初に指定したものが指定した
+    順番で並び、その他のヘッダがランダムに続きます。順序は文字列の配列
+    TMail::Mail::FIELD_ORDER で設定してください(詳細はソースコードを参照)。
+

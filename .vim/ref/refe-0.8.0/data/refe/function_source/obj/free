@@ -1,0 +1,128 @@
+gc.c:1035
+static void
+obj_free(obj)
+    VALUE obj;
+{
+    switch (RANY(obj)->as.basic.flags & T_MASK) {
+      case T_NIL:
+      case T_FIXNUM:
+      case T_TRUE:
+      case T_FALSE:
+	rb_bug("obj_free() called for broken object");
+	break;
+    }
+
+    if (FL_TEST(obj, FL_EXIVAR)) {
+	rb_free_generic_ivar((VALUE)obj);
+    }
+
+    switch (RANY(obj)->as.basic.flags & T_MASK) {
+      case T_OBJECT:
+	if (RANY(obj)->as.object.iv_tbl) {
+	    st_free_table(RANY(obj)->as.object.iv_tbl);
+	}
+	break;
+      case T_MODULE:
+      case T_CLASS:
+	rb_clear_cache_by_class((VALUE)obj);
+	st_free_table(RANY(obj)->as.klass.m_tbl);
+	if (RANY(obj)->as.object.iv_tbl) {
+	    st_free_table(RANY(obj)->as.object.iv_tbl);
+	}
+	break;
+      case T_STRING:
+	if (RANY(obj)->as.string.ptr && !FL_TEST(obj, ELTS_SHARED)) {
+	    RUBY_CRITICAL(free(RANY(obj)->as.string.ptr));
+	}
+	break;
+      case T_ARRAY:
+	if (RANY(obj)->as.array.ptr && !FL_TEST(obj, ELTS_SHARED)) {
+	    RUBY_CRITICAL(free(RANY(obj)->as.array.ptr));
+	}
+	break;
+      case T_HASH:
+	if (RANY(obj)->as.hash.tbl) {
+	    st_free_table(RANY(obj)->as.hash.tbl);
+	}
+	break;
+      case T_REGEXP:
+	if (RANY(obj)->as.regexp.ptr) {
+	    re_free_pattern(RANY(obj)->as.regexp.ptr);
+	}
+	if (RANY(obj)->as.regexp.str) {
+	    RUBY_CRITICAL(free(RANY(obj)->as.regexp.str));
+	}
+	break;
+      case T_DATA:
+	if (DATA_PTR(obj)) {
+	    if ((long)RANY(obj)->as.data.dfree == -1) {
+		RUBY_CRITICAL(free(DATA_PTR(obj)));
+	    }
+	    else if (RANY(obj)->as.data.dfree) {
+		(*RANY(obj)->as.data.dfree)(DATA_PTR(obj));
+	    }
+	}
+	break;
+      case T_MATCH:
+	if (RANY(obj)->as.match.regs) {
+	    re_free_registers(RANY(obj)->as.match.regs);
+	    RUBY_CRITICAL(free(RANY(obj)->as.match.regs));
+	}
+	break;
+      case T_FILE:
+	if (RANY(obj)->as.file.fptr) {
+	    rb_io_fptr_finalize(RANY(obj)->as.file.fptr);
+	    RUBY_CRITICAL(free(RANY(obj)->as.file.fptr));
+	}
+	break;
+      case T_ICLASS:
+	/* iClass shares table with the module */
+	break;
+
+      case T_FLOAT:
+      case T_VARMAP:
+      case T_BLKTAG:
+	break;
+
+      case T_BIGNUM:
+	if (RANY(obj)->as.bignum.digits) {
+	    RUBY_CRITICAL(free(RANY(obj)->as.bignum.digits));
+	}
+	break;
+      case T_NODE:
+	switch (nd_type(obj)) {
+	  case NODE_SCOPE:
+	    if (RANY(obj)->as.node.u1.tbl) {
+		RUBY_CRITICAL(free(RANY(obj)->as.node.u1.tbl));
+	    }
+	    break;
+#ifdef C_ALLOCA
+	  case NODE_ALLOCA:
+	    RUBY_CRITICAL(free(RANY(obj)->as.node.u1.node));
+	    break;
+#endif
+	}
+	return;			/* no need to free iv_tbl */
+
+      case T_SCOPE:
+	if (RANY(obj)->as.scope.local_vars &&
+            RANY(obj)->as.scope.flags != SCOPE_ALLOCA) {
+	    VALUE *vars = RANY(obj)->as.scope.local_vars-1;
+	    if (vars[0] == 0)
+		RUBY_CRITICAL(free(RANY(obj)->as.scope.local_tbl));
+	    if (RANY(obj)->as.scope.flags & SCOPE_MALLOC)
+		RUBY_CRITICAL(free(vars));
+	}
+	break;
+
+      case T_STRUCT:
+	if (RANY(obj)->as.rstruct.ptr) {
+	    RUBY_CRITICAL(free(RANY(obj)->as.rstruct.ptr));
+	}
+	break;
+
+      default:
+	rb_bug("gc_sweep(): unknown data type 0x%lx(%ld)", obj,
+	       RANY(obj)->as.basic.flags & T_MASK);
+    }
+}

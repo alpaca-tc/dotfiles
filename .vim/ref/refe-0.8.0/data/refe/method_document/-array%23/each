@@ -1,0 +1,46 @@
+--- each {|item| .... }
+
+    各要素に対してブロックを評価します。self を返します。
+
+    例:
+
+        # 1、2、3 が順番に表示される
+        [1, 2, 3].each do |i|
+          puts i
+        end
+
+    each により(また、標準のメソッドで)複数の値を取得しながら繰り返す
+    ことはできません。現在のところ以下のようなメソッドを定義する必要が
+    あります。
+
+    例:
+
+        class Array
+          def every(&block)
+            arity = block.arity
+            return self.each(&block) if arity <= 0
+
+            i = 0
+            while i < self.size
+              yield(*self[i, arity])
+              i += arity
+            end
+            self
+          end
+        end
+
+        ary = [1,2,3]
+        ary.every {|i| p i}
+        # => 1
+        #    2
+        #    3
+        ary.every {|i,j| p [i,j]}
+        # => [1, 2]
+        #    [3, nil]
+        ary.every {|i,j,k| p [i,j,k]}
+        # => [1, 2, 3]
+        ary.every {|*i| p *i}
+        # => 1
+        #    2
+        #    3
+

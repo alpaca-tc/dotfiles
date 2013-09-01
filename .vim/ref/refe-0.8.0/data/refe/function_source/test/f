@@ -1,0 +1,11 @@
+file.c:716
+static VALUE
+test_f(obj, fname)
+    VALUE obj, fname;
+{
+    struct stat st;
+
+    if (rb_stat(fname, &st) < 0) return Qfalse;
+    if (S_ISREG(st.st_mode)) return Qtrue;
+    return Qfalse;
+}

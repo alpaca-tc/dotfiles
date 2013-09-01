@@ -1,0 +1,5 @@
+--- Sync_m#sync_try_lock(mode = EX)
+--- Sync_m#try_lock(mode = EX)
+      ロック状態を変更する。
+      変更できたかどうかをtrueかfalseで返し、ブロックしない。
+

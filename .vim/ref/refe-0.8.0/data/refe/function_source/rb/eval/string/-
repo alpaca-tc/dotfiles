@@ -1,0 +1,15 @@
+eval.c:1418
+VALUE
+rb_eval_string(str)
+    const char *str;
+{
+    VALUE v;
+    NODE *oldsrc = ruby_current_node;
+
+    ruby_current_node = 0;
+    ruby_sourcefile = rb_source_filename("(eval)");
+    v = eval(ruby_top_self, rb_str_new2(str), Qnil, 0, 0);
+    ruby_current_node = oldsrc;
+
+    return v;
+}

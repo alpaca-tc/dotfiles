@@ -1,0 +1,4 @@
+: host
+      nil indicates imap.rb"/[RFC-822] group syntax.
+      Otherwise, returns imap.rb"/[RFC-822] domain name.
+

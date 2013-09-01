@@ -1,0 +1,11 @@
+time.c:245
+static long
+obj2long(obj)
+    VALUE obj;
+{
+    if (TYPE(obj) == T_STRING) {
+	obj = rb_str_to_inum(obj, 10, Qfalse);
+    }
+
+    return NUM2LONG(obj);
+}

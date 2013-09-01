@@ -1,0 +1,7 @@
+process.c:147
+static VALUE
+pst_pid(st)
+    VALUE st;
+{
+    return rb_iv_get(st, "pid");
+}

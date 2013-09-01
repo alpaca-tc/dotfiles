@@ -1,0 +1,9 @@
+file.c:1025
+static void
+lchmod_internal(path, mode)
+    const char *path;
+    int mode;
+{
+    if (lchmod(path, mode) < 0)
+	rb_sys_fail(path);
+}

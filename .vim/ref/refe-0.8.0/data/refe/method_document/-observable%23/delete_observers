@@ -1,0 +1,3 @@
+--- Observable#delete_observers
+            オブザーバをすべて削除する。
+

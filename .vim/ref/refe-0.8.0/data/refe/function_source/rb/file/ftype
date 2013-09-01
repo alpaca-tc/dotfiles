@@ -1,0 +1,42 @@
+file.c:843
+static VALUE
+rb_file_ftype(st)
+    struct stat *st;
+{
+    char *t;
+
+    if (S_ISREG(st->st_mode)) {
+	t = "file";
+    }
+    else if (S_ISDIR(st->st_mode)) {
+	t = "directory";
+    }
+    else if (S_ISCHR(st->st_mode)) {
+	t = "characterSpecial";
+    }
+#ifdef S_ISBLK
+    else if (S_ISBLK(st->st_mode)) {
+	t = "blockSpecial";
+    }
+#endif
+#ifdef S_ISFIFO
+    else if (S_ISFIFO(st->st_mode)) {
+	t = "fifo";
+    }
+#endif
+#ifdef S_ISLNK
+    else if (S_ISLNK(st->st_mode)) {
+	t = "link";
+    }
+#endif
+#ifdef S_ISSOCK
+    else if (S_ISSOCK(st->st_mode)) {
+	t = "socket";
+    }
+#endif
+    else {
+	t = "unknown";
+    }
+
+    return rb_str_new2(t);
+}

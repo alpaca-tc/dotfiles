@@ -1,0 +1,7 @@
+file.c:196
+static VALUE
+rb_stat_gid(self)
+    VALUE self;
+{
+    return UINT2NUM(get_stat(self)->st_gid);
+}

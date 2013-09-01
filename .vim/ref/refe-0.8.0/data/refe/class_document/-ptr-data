@@ -1,0 +1,97 @@
+* ptr = PtrData.new(addr, [size = 0, free = nil])
+#   * returns the PtrData object representing the pointer which indicates the
+#     address addr. GC frees the memory using the free function.
+
+  * アドレス addr を指すポインタに相当する PtrData オブジェクトを返す。
+    GC は free 関数を使用してメモリを解放する。
+
+* PtrData#free=(sym)
+#   * If you specify a symbol object sym, GC frees the memory using the function
+#     represented by sym.
+
+  * シンボルオブジェクト sym を指定した場合、GC は sym に相当する関数
+    を使ってメモリを解放する。
+
+* sym = PtrData#free
+#   * returns a symbol object sym which is used when GC frees the memory. it
+#     usually configured by `PtrData#free=' or `PtrData.new'.
+
+  * GC がメモリを解放するのに使用するシンボルオブジェクト sym を返す。
+    sym は普通 `PtrData#free=' や `PtrData.new' によって設定される。
+
+* size = PtrData#size, PtrData#size=(size)
+#   * gets and sets allocated size of the memory.
+  * サイズ size を割り当てたメモリを取得および設定する。
+
+* ary = PtrData#to_a(type, [size])
+#   * returns an array of the type which specified with type. type must be one of
+#     'S','P','I','L','D' and 'F'.
+
+  * type で指定された型の配列を返す。type は 'S','P','I','L','D' そし
+    て 'F' のいずれか。
+
+* str = PtrData#to_s([len])
+#   * returns a string which length is len. if len is omitted, the end of the
+#     string is '\0'.
+
+  * 長さ len の文字列を返す。len を省略した場合は、文字列の終りは '\0'。
+
+* ptr = PtrData#ptr,+@
+#   * returns the pointed value as a PtrData object ptr.
+
+  * ポインタが指す値を PtrData オブジェクト ptr で返す。(訳注:？)
+    (訳注:PtrDataが指す値をポインタであるとして、PtrData にして返す(？))
+
+* ptr = PtrData#ref,-@
+#   * returns the reference as a PtrData object ptr.
+
+  * 参照を PtrData オブジェクト ptr で返す。(訳注:？)
+    (訳注:PtrDataへの参照を、PtrData にして返す(？))
+    (訳注:PtrDataを指すポインタを、PtrData にして返す(？))
+
+* ptr = PtrData#+
+#   * returns the PtrData object
+
+  * PtrData オブジェクトを返す。(訳注: 引数バイトを足した新しい 
+    PtrData オブジェクトを返す)
+
+* ptr = PtrData#-
+#   * returns the PtrData object
+
+  * PtrData オブジェクトを返す。(訳注: 引数バイトを引いた新しい 
+    PtrData オブジェクトを返す)
+
+* PtrData#struct!(type, *members)
+#   * defines the data type to get access to a structure member with a symbol.
+#     (see also PtrData#[])
+
+  * 構造体メンバをシンボルでアクセスするデータ型を定義する(PtrData#[]
+    も参照)
+
+* PtrData#union!(type, *members)
+#   * defines the data type to get access to a union member with a symbol. (see
+#     also PtrData#[])
+
+  * 共用体メンバをシンボルでアクセスするデータ型を定義する(PtrData#[]
+    も参照)
+
+* val = PtrData#[key], PtrData#[key, num = 0]
+#   * if the key is a string or symbol, this method returns the value of the
+#     structure/union member which has the type defined by PtrData#
+#     {struct!,union!}. if the key is a integer value and this object represents
+#     the pointer ptr, it returns the value of `(ptr + key).to_s(num)'
+
+  * key が文字列やシンボルなら、このメソッドは構造体/共用体メンバの値
+    を返す。それは PtrData#{struct!,union!} によって定義された型を持つ。
+    key が整数でこのオブジェクトがポインタ ptr に相当するなら、`(ptr +
+    key).to_s(num)' の値を返す
+
+* PtrData#[key,num]=val, PtrData#[key]=val
+#   * if the key is a string or symbol, this method substitute the value of the
+#     structure/union member with val. if the key is a integer value and val is a
+#     string, this method copies num bytes of val to the memory area ptr using
+#     memcpy(3).
+
+  * key が文字列やシンボルなら、このメソッドは構造体/共用体メンバの値
+    を val にする。key が整数で val が文字列なら memcpy(3) を使ってメ
+    モリ領域 ptr への値の num バイトをコピーする。

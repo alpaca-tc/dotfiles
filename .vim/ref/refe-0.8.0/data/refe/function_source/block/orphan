@@ -1,0 +1,13 @@
+eval.c:7005
+static int
+block_orphan(data)
+    struct BLOCK *data;
+{
+    if (data->scope->flags & SCOPE_NOSTACK) {
+	return 1;
+    }
+    if (data->orig_thread != rb_thread_current()) {
+	return 1;
+    }
+    return 0;
+}

@@ -1,0 +1,2 @@
+: static VALUE bind_clone(VALUE self)
+

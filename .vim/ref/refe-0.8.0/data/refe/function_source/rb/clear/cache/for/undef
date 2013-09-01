@@ -1,0 +1,17 @@
+eval.c:233
+static void
+rb_clear_cache_for_undef(klass, id)
+    VALUE klass;
+    ID id;
+{
+    struct cache_entry *ent, *end;
+
+    if (!ruby_running) return;
+    ent = cache; end = ent + CACHE_SIZE;
+    while (ent < end) {
+	if (ent->origin == klass && ent->mid == id) {
+	    ent->mid = 0;
+	}
+	ent++;
+    }
+}

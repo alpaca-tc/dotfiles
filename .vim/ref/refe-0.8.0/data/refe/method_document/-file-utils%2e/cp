@@ -1,0 +1,20 @@
+--- FileUtils.cp( src, dest, *options )
+  Options: preserve noop verbose
+
+  ファイル src を dest にコピーします。dest がディレクトリなら
+  dest/src にコピーします。dest が既に存在ししかもディレクトリで
+  ないときは上書きします。
+
+    FileUtils.cp 'eval.c', 'eval.c.org'
+
+--- FileUtils.cp( list, dir, *options )
+  Options: preserve noop verbose
+
+  file1 を dir/file1 にコピー、file2 を dir/file2 にコピー、
+  というように、ディレクトリ dir の中にファイル file1、file2 …を
+  同じ名前でコピーします。dir がディレクトリでない場合は例外
+  Errno::ENOTDIR が発生します。
+
+    FileUtils.cp 'cgi.rb', 'complex.rb', 'date.rb', '/usr/lib/ruby/1.6'
+    FileUtils.cp :verbose, %w(cgi.rb complex.rb date.rb), '/usr/lib/ruby/1.6'
+

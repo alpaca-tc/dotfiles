@@ -1,0 +1,20 @@
+range.c:418
+static VALUE
+range_member(range, val)
+    VALUE range, val;
+{
+    VALUE beg, end;
+    VALUE args[2];
+
+    beg = rb_ivar_get(range, id_beg);
+    end = rb_ivar_get(range, id_end);
+
+    if (!rb_respond_to(beg, id_succ)) {
+	rb_raise(rb_eTypeError, "cannot iterate from %s",
+		 rb_obj_classname(beg));
+    }
+    args[0] = val;
+    args[1] = Qfalse;
+    range_each_func(range, member_i, beg, end, args);
+    return args[1];
+}

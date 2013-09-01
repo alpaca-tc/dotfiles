@@ -1,0 +1,38 @@
+--- SystemCallError === other  ruby 1.7 feature
+
+    other が SystemCallError のサブクラスであれば真です。
+    (Module#=== [Module/===] と同じ)。
+
+    また、左辺が SystemCallError のサブクラスである場合、
+    other.errno の値(nil ならば そのクラスの
+    Errno [Errno::EXXX/Errno] 定数の値)が 
+    self::Errno と同じ場合に真を返します。
+
+    このメソッドにより、システムによって errno が同じ値の例外に対して
+    以下の例のように捕捉できるようになっていま((*した*))。
+
+        p Errno::EAGAIN::Errno
+        p Errno::EWOULDBLOCK::Errno
+        begin
+          raise Errno::EAGAIN, "pseudo error"
+        rescue Errno::EWOULDBLOCK
+          p $!
+        end
+
+        # => 11
+             11
+             #<Errno::EAGAIN: pseudo error>
+
+    現在、 SystemCallError#=== のこの特徴は特に意味がありません。
+    (以下のように同一のオブジェクトになっているからです)
+
+        p Errno::EAGAIN
+        p Errno::EWOULDBLOCK
+        p Errno::EWOULDBLOCK.id
+        p SystemCallError.new(11).class.id
+
+        => Errno::EAGAIN
+           Errno::EAGAIN
+           537747360
+           537747360
+

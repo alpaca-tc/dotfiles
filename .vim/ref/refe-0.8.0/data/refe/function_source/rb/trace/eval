@@ -1,0 +1,7 @@
+variable.c:520
+static void
+rb_trace_eval(cmd, val)
+    VALUE cmd, val;
+{
+    rb_eval_cmd(cmd, rb_ary_new3(1, val), 0);
+}

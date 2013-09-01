@@ -1,0 +1,17 @@
+array.c:446
+VALUE
+rb_ary_entry(ary, offset)
+    VALUE ary;
+    long offset;
+{
+    if (RARRAY(ary)->len == 0) return Qnil;
+
+    if (offset < 0) {
+	offset += RARRAY(ary)->len;
+    }
+    if (offset < 0 || RARRAY(ary)->len <= offset) {
+	return Qnil;
+    }
+
+    return RARRAY(ary)->ptr[offset];
+}

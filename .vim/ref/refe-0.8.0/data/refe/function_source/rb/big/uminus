@@ -1,0 +1,11 @@
+bignum.c:938
+static VALUE
+rb_big_uminus(x)
+    VALUE x;
+{
+    VALUE z = rb_big_clone(x);
+
+    RBIGNUM(z)->sign = !RBIGNUM(x)->sign;
+
+    return bignorm(z);
+}

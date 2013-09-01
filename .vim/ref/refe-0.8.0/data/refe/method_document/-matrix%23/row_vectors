@@ -1,0 +1,5 @@
+--- Matrix#row_vectors
+    array of row vectors
+
+    列ベクトルの配列を返す。
+

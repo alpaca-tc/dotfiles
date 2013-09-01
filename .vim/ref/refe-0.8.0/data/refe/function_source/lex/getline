@@ -1,0 +1,10 @@
+parse.y:2579
+static VALUE
+lex_getline()
+{
+    VALUE line = (*lex_gets)(lex_input);
+    if (ruby_debug_lines && !NIL_P(line)) {
+	rb_ary_push(ruby_debug_lines, line);
+    }
+    return line;
+}

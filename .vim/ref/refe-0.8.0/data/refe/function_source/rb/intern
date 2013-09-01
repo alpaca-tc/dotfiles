@@ -1,0 +1,76 @@
+parse.y:5800
+ID
+rb_intern(name)
+    const char *name;
+{
+    const char *m = name;
+    ID id;
+    int last;
+
+    if (st_lookup(sym_tbl, (st_data_t)name, (st_data_t *)&id))
+	return id;
+
+    last = strlen(name)-1;
+    id = 0;
+    switch (*name) {
+      case '$':
+	id |= ID_GLOBAL;
+	m++;
+	if (!is_identchar(*m)) m++;
+	break;
+      case '@':
+	if (name[1] == '@') {
+	    m++;
+	    id |= ID_CLASS;
+	}
+	else {
+	    id |= ID_INSTANCE;
+	}
+	m++;
+	break;
+      default:
+	if (name[0] != '_' && !ISALPHA(name[0]) && !ismbchar(name[0])) {
+	    /* operators */
+	    int i;
+
+	    for (i=0; op_tbl[i].token; i++) {
+		if (*op_tbl[i].name == *name &&
+		    strcmp(op_tbl[i].name, name) == 0) {
+		    id = op_tbl[i].token;
+		    goto id_regist;
+		}
+	    }
+	}
+
+	if (name[last] == '=') {
+	    /* attribute assignment */
+	    char *buf = ALLOCA_N(char,last+1);
+
+	    strncpy(buf, name, last);
+	    buf[last] = '\0';
+	    id = rb_intern(buf);
+	    if (id > tLAST_TOKEN && !is_attrset_id(id)) {
+		id = rb_id_attrset(id);
+		goto id_regist;
+	    }
+	    id = ID_ATTRSET;
+	}
+	else if (ISUPPER(name[0])) {
+	    id = ID_CONST;
+        }
+	else {
+	    id = ID_LOCAL;
+	}
+	break;
+    }
+    while (m <= name + last && is_identchar(*m)) {
+	m += mbclen(*m);
+    }
+    if (*m) id = ID_JUNK;
+    id |= ++last_id << ID_SCOPE_SHIFT;
+  id_regist:
+    name = strdup(name);
+    st_add_direct(sym_tbl, (st_data_t)name, id);
+    st_add_direct(sym_rev_tbl, id, (st_data_t)name);
+    return id;
+}

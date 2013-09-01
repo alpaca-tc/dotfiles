@@ -1,0 +1,7 @@
+eval.c:7098
+static VALUE
+proc_call(proc, args)
+    VALUE proc, args;		/* OK */
+{
+    return proc_invoke(proc, args, Qundef, 0);
+}

@@ -1,0 +1,91 @@
+re.c:387
+static VALUE
+rb_reg_to_s(re)
+    VALUE re;
+{
+    int options;
+    const int embeddable = RE_OPTION_MULTILINE|RE_OPTION_IGNORECASE|RE_OPTION_EXTENDED;
+    long len;
+    const char* ptr;
+    VALUE str = rb_str_buf_new2("(?");
+
+    rb_reg_check(re);
+
+    options = RREGEXP(re)->ptr->options;
+    ptr = RREGEXP(re)->str;
+    len = RREGEXP(re)->len;
+  again:
+    if (len >= 4 && ptr[0] == '(' && ptr[1] == '?') {
+	int err = 1;
+	ptr += 2;
+	if ((len -= 2) > 0) {
+	    do {
+		if (*ptr == 'm') {
+		    options |= RE_OPTION_MULTILINE;
+		}
+		else if (*ptr == 'i') {
+		    options |= RE_OPTION_IGNORECASE;
+		}
+		else if (*ptr == 'x') {
+		    options |= RE_OPTION_EXTENDED;
+		}
+		else break;
+		++ptr;
+	    } while (--len > 0);
+	}
+	if (len > 1 && *ptr == '-') {
+	    ++ptr;
+	    --len;
+	    do {
+		if (*ptr == 'm') {
+		    options &= ~RE_OPTION_MULTILINE;
+		}
+		else if (*ptr == 'i') {
+		    options &= ~RE_OPTION_IGNORECASE;
+		}
+		else if (*ptr == 'x') {
+		    options &= ~RE_OPTION_EXTENDED;
+		}
+		else break;
+		++ptr;
+	    } while (--len > 0);
+	}
+	if (*ptr == ')') {
+	    --len;
+	    ++ptr;
+	    goto again;
+	}
+	if (*ptr == ':' && ptr[len-1] == ')') {
+	    Regexp *rp;
+	    kcode_set_option(re);
+	    rp = ALLOC(Regexp);
+	    MEMZERO((char *)rp, Regexp, 1);
+	    err = re_compile_pattern(++ptr, len -= 2, rp) != 0;
+	    kcode_reset_option();
+	    re_free_pattern(rp);
+	}
+	if (err) {
+	    options = RREGEXP(re)->ptr->options;
+	    ptr = RREGEXP(re)->str;
+	    len = RREGEXP(re)->len;
+	}
+    }
+
+    if (options & RE_OPTION_MULTILINE) rb_str_buf_cat2(str, "m");
+    if (options & RE_OPTION_IGNORECASE) rb_str_buf_cat2(str, "i");
+    if (options & RE_OPTION_EXTENDED) rb_str_buf_cat2(str, "x");
+
+    if ((options & embeddable) != embeddable) {
+	rb_str_buf_cat2(str, "-");
+	if (!(options & RE_OPTION_MULTILINE)) rb_str_buf_cat2(str, "m");
+	if (!(options & RE_OPTION_IGNORECASE)) rb_str_buf_cat2(str, "i");
+	if (!(options & RE_OPTION_EXTENDED)) rb_str_buf_cat2(str, "x");
+    }
+
+    rb_str_buf_cat2(str, ":");
+    rb_reg_expr_str(str, ptr, len);
+    rb_str_buf_cat2(str, ")");
+
+    OBJ_INFECT(str, re);
+    return str;
+}

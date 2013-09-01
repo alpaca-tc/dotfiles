@@ -1,0 +1,3 @@
+--- WeakRef.new(obj)
+            objへのweak referenceを生成する
+

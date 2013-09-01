@@ -1,0 +1,5 @@
+--- FileTest.writable_real?(filename)
+
+    filename が実ユーザ/実グループによって書き込み可である時、真
+    を返します。
+

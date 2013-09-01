@@ -1,0 +1,9 @@
+math.c:50
+static VALUE
+math_tan(obj, x)
+    VALUE obj, x;
+{
+    Need_Float(x);
+
+    return rb_float_new(tan(RFLOAT(x)->value));
+}

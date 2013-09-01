@@ -1,0 +1,11 @@
+class.c:745
+void
+rb_define_module_function(module, name, func, argc)
+    VALUE module;
+    const char *name;
+    VALUE (*func)();
+    int argc;
+{
+    rb_define_private_method(module, name, func, argc);
+    rb_define_singleton_method(module, name, func, argc);
+}

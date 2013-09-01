@@ -1,0 +1,6 @@
+--- push(value)
+--- self << value
+--- enq(value)
+    queueの値を追加します。待っているスレッドがいれば実行を再開
+    させます。
+

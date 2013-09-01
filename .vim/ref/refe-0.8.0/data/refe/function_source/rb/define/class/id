@@ -1,0 +1,15 @@
+class.c:167
+VALUE
+rb_define_class_id(id, super)
+    ID id;
+    VALUE super;
+{
+    VALUE klass;
+
+    if (!super) super = rb_cObject;
+    klass = rb_class_new(super);
+    rb_name_class(klass, id);
+    rb_make_metaclass(klass, RBASIC(super)->klass);
+
+    return klass;
+}

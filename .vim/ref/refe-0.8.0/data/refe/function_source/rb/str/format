@@ -1,0 +1,19 @@
+string.c:372
+static VALUE
+rb_str_format(str, arg)
+    VALUE str, arg;
+{
+    VALUE *argv;
+
+    if (TYPE(arg) == T_ARRAY) {
+	argv = ALLOCA_N(VALUE, RARRAY(arg)->len + 1);
+	argv[0] = str;
+	MEMCPY(argv+1, RARRAY(arg)->ptr, VALUE, RARRAY(arg)->len);
+	return rb_f_sprintf(RARRAY(arg)->len+1, argv);
+    }
+    
+    argv = ALLOCA_N(VALUE, 2);
+    argv[0] = str;
+    argv[1] = arg;
+    return rb_f_sprintf(2, argv);
+}

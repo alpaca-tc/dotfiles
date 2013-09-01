@@ -1,0 +1,35 @@
+--- rindex(pattern[, pos])
+
+    部分文字列の探索を右端から左端に向かって行います。見つかった部分文
+    字列の左端の位置を返します。見つからなければ nil を返します。
+
+    引数 pattern には探索する部分文字列の指定を文字列、文字コー
+    ドを示す 0 から 255 の整数、正規表現のいずれかで指定します。
+
+    pos が与えられた時にはその位置から探索します。pos の省
+    略時の値は self.size (右端)です。
+
+        p "astrochemistry".rindex("str")        # => 10
+        p "character".rindex(?c)                # => 5
+        p "regexprindex".rindex(/e.*x/, 2)      # => 1
+
+    pos が負の場合、文字列の末尾から数えた位置から探索します。
+
+        p "foobarfoobar".rindex("bar", 6)       # => 3
+        p "foobarfoobar".rindex("bar", -6)      # => 3
+
+    index と完全に左右が反転した動作をするわけではありま
+    せん。探索はその開始位置を右から左にずらしながら行いますが、部分文
+    字列の照合は左から右に向かって行います。以下の例を参照してください。
+
+        # String#index の場合
+        p "foobar".index("bar", 2)    # => 3
+        #    bar   <- ここから探索を行う
+        #     bar  <- 右にずらしてここで見つかる
+
+        # String#rindex の場合
+        p "foobar".rindex("bar", -2)  # => 3
+        #    bar <- ここ(右端が末尾から 2 番目)ではなく
+        #      bar <- ここから探索を行う(左端が末尾から2番目)
+        #     bar  <- 左にずらしてここで見つかる
+

@@ -1,0 +1,19 @@
+array.c:1648
+VALUE
+rb_ary_assoc(ary, key)
+    VALUE ary, key;
+{
+    VALUE *p, *pend;
+
+    p = RARRAY(ary)->ptr;
+    pend = p + RARRAY(ary)->len;
+    
+    while (p < pend) {
+	if (TYPE(*p) == T_ARRAY &&
+		RARRAY(*p)->len > 0 &&
+		rb_equal(RARRAY(*p)->ptr[0], key))
+	    return *p;
+	p++;
+    }
+    return Qnil;
+}

@@ -1,0 +1,19 @@
+--- Find.find(dir[, ...]) {|file| }
+    find(1) [manual page]のようにdir配下のすべてのファイルや
+    ディレクトリを一つずつ引数fileに渡してブロックを実行します。
+    file に渡される順序は不定です。
+
+    あるディレクトリ配下の探索を省略したい場合
+
+      require 'find'
+
+      Find.find('/tmp') {|f|
+        Find.prune if f == "/tmp/bar"
+        ...
+      }
+
+    のように、Find.pruneを使用します。この例では "/tmp/bar" 
+    配下のファイルやディレクトリを探索しません。prune の代わりに 
+    next を使用した場合、"/tmp/bar" 自体をスキップする
+    だけで、その配下の探索は続行されます．
+

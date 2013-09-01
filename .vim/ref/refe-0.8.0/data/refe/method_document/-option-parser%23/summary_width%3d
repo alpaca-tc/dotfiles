@@ -1,0 +1,4 @@
+--- OptionParser#summary_width
+--- OptionParser#summary_width=(width)
+    Width for option list portion of summary. Must be Numeric.
+

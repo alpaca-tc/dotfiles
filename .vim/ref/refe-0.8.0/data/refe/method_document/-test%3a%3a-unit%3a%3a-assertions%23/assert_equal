@@ -1,0 +1,7 @@
+--- assert_equal(expected, actual, message=nil)
+--- assert_not_equal(expected, actual, message="")
+
+    expected == actual が真なら pass
+
+    expected != actual が真なら pass
+

@@ -1,0 +1,6 @@
+: getquotaroot(mailbox)
+      Sends the GETQUOTAROOT command along with specified mailbox.
+      This command is generally available to both admin and user.
+      If mailbox exists, returns an array containing objects of
+      imap.rb"/Net::IMAP::MailboxQuotaRoot and imap.rb"/Net::IMAP::MailboxQuota.
+

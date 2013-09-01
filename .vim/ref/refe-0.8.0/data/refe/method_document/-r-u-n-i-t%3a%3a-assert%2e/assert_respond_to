@@ -1,0 +1,2 @@
+--- assert_respond_to(method, obj[, message])
+

@@ -1,0 +1,338 @@
+regex.c:2763
+void
+re_compile_fastmap(bufp)
+     struct re_pattern_buffer *bufp;
+{
+  unsigned char *pattern = (unsigned char*)bufp->buffer;
+  int size = bufp->used;
+  register char *fastmap = bufp->fastmap;
+  register unsigned char *p = pattern;
+  register unsigned char *pend = pattern + size;
+  register int j, k;
+  unsigned is_a_succeed_n;
+
+  
+  unsigned char *stacka[NFAILURES];
+  unsigned char **stackb = stacka;
+  unsigned char **stackp = stackb;
+  unsigned char **stacke = stackb + NFAILURES;
+  int options = bufp->options;
+
+  memset(fastmap, 0, (1 << BYTEWIDTH));
+  bufp->fastmap_accurate = 1;
+  bufp->can_be_null = 0;
+
+  while (p) {
+    is_a_succeed_n = 0;
+    if (p == pend) {
+      bufp->can_be_null = 1;
+      break;
+    }
+#ifdef SWITCH_ENUM_BUG
+    switch ((int)((enum regexpcode)*p++))
+#else
+    switch ((enum regexpcode)*p++)
+#endif
+      {
+      case exactn:
+	if (p[1] == 0xff) {
+	  if (TRANSLATE_P())
+	    fastmap[translate[p[2]]] = 2;
+	  else
+	    fastmap[p[2]] = 2;
+	  bufp->options |= RE_OPTIMIZE_BMATCH;
+	}
+	else if (TRANSLATE_P())
+	  fastmap[translate[p[1]]] = 1;
+	else
+	  fastmap[p[1]] = 1;
+	break;
+
+      case begline:
+      case begbuf:
+      case begpos:
+      case endbuf:
+      case endbuf2:
+      case wordbound:
+      case notwordbound:
+      case wordbeg:
+      case wordend:
+      case pop_and_fail:
+      case push_dummy_failure:
+      case start_paren:
+      case stop_paren:
+	continue;
+
+      case casefold_on:
+	bufp->options |= RE_MAY_IGNORECASE;
+	options |= RE_OPTION_IGNORECASE;
+	continue;
+
+      case casefold_off:
+	options &= ~RE_OPTION_IGNORECASE;
+	continue;
+
+      case option_set:
+	options = *p++;
+	continue;
+
+      case endline:
+	if (TRANSLATE_P())
+	  fastmap[translate['\n']] = 1;
+	else
+	  fastmap['\n'] = 1;
+	if ((options & RE_OPTION_SINGLELINE) == 0 && bufp->can_be_null == 0)
+	  bufp->can_be_null = 2;
+	break;
+
+      case jump_n:
+      case finalize_jump:
+      case maybe_finalize_jump:
+      case jump:
+      case jump_past_alt:
+      case dummy_failure_jump:
+      case finalize_push:
+      case finalize_push_n:
+	EXTRACT_NUMBER_AND_INCR(j, p);
+	p += j;	
+	if (j > 0)
+	  continue;
+	/* Jump backward reached implies we just went through
+	   the body of a loop and matched nothing.
+	   Opcode jumped to should be an on_failure_jump.
+	   Just treat it like an ordinary jump.
+	   For a * loop, it has pushed its failure point already;
+	   If so, discard that as redundant.  */
+
+	if ((enum regexpcode)*p != on_failure_jump
+	    && (enum regexpcode)*p != try_next
+	    && (enum regexpcode)*p != succeed_n)
+	  continue;
+	p++;
+	EXTRACT_NUMBER_AND_INCR(j, p);
+	p += j;	
+	if (stackp != stackb && *stackp == p)
+	  stackp--;		/* pop */
+	continue;
+
+      case try_next:
+      case start_nowidth:
+      case stop_nowidth:
+      case stop_backtrack:
+	p += 2;
+	continue;
+
+      case succeed_n:
+	is_a_succeed_n = 1;
+	/* Get to the number of times to succeed.  */
+	EXTRACT_NUMBER(k, p + 2);
+	/* Increment p past the n for when k != 0.  */
+	if (k != 0) {
+	  p += 4;
+	  continue;
+	}
+	/* fall through */
+
+      case on_failure_jump:
+      EXTRACT_NUMBER_AND_INCR(j, p);
+      if (p + j < pend) {
+	if (stackp == stacke) {
+	  EXPAND_FAIL_STACK();
+	}
+	*++stackp = p + j;	/* push */
+      }
+      else {
+	bufp->can_be_null = 1;
+      }
+      if (is_a_succeed_n)
+	EXTRACT_NUMBER_AND_INCR(k, p);	/* Skip the n.  */
+      continue;
+
+      case set_number_at:
+	p += 4;
+	continue;
+
+      case start_memory:
+      case stop_memory:
+	p += 2;
+	continue;
+
+      case duplicate:
+	bufp->can_be_null = 1;
+	if (*p >= bufp->re_nsub) break;
+	fastmap['\n'] = 1;
+      case anychar_repeat:
+      case anychar:
+	for (j = 0; j < (1 << BYTEWIDTH); j++) {
+	  if (j != '\n' || (options & RE_OPTION_MULTILINE))
+	    fastmap[j] = 1;
+	}
+	if (bufp->can_be_null) {
+	  FREE_AND_RETURN_VOID(stackb);
+	}
+	/* Don't return; check the alternative paths
+	   so we can set can_be_null if appropriate.  */
+	if ((enum regexpcode)p[-1] == anychar_repeat) {
+	    continue;
+	}
+	break;
+
+      case wordchar:
+	for (j = 0; j < 0x80; j++) {
+	  if (SYNTAX(j) == Sword)
+	    fastmap[j] = 1;
+	}
+	switch (current_mbctype) {
+	case MBCTYPE_ASCII:
+	  for (j = 0x80; j < (1 << BYTEWIDTH); j++) {
+	    if (SYNTAX(j) == Sword2)
+	      fastmap[j] = 1;
+	  }
+	  break;
+	case MBCTYPE_EUC:
+	case MBCTYPE_SJIS:
+	case MBCTYPE_UTF8:
+	  for (j = 0x80; j < (1 << BYTEWIDTH); j++) {
+	    if (re_mbctab[j])
+	      fastmap[j] = 1;
+	  }
+	  break;
+	}
+	break;
+
+      case notwordchar:
+	for (j = 0; j < 0x80; j++)
+	  if (SYNTAX(j) != Sword)
+	    fastmap[j] = 1;
+	switch (current_mbctype) {
+	case MBCTYPE_ASCII:
+	  for (j = 0x80; j < (1 << BYTEWIDTH); j++) {
+	    if (SYNTAX(j) != Sword2)
+	      fastmap[j] = 1;
+	  }
+	  break;
+	case MBCTYPE_EUC:
+	case MBCTYPE_SJIS:
+	case MBCTYPE_UTF8:
+	  for (j = 0x80; j < (1 << BYTEWIDTH); j++) {
+	    if (!re_mbctab[j])
+	      fastmap[j] = 1;
+	  }
+	  break;
+	}
+	break;
+
+      case charset:
+	/* NOTE: Charset for single-byte chars never contain
+	   multi-byte char.  See set_list_bits().  */
+	for (j = *p++ * BYTEWIDTH - 1; j >= 0; j--)
+	  if (p[j / BYTEWIDTH] & (1 << (j % BYTEWIDTH))) {
+	    int tmp = TRANSLATE_P()?translate[j]:j;
+	    fastmap[tmp] = 1;
+	  }
+	{
+	  unsigned short size;
+	  unsigned long c, beg, end;
+
+	  p += p[-1] + 2;
+	  size = EXTRACT_UNSIGNED(&p[-2]);
+	  for (j = 0; j < (int)size; j++) {
+	    c = EXTRACT_MBC(&p[j*8]);
+	    beg = WC2MBC1ST(c);
+	    c = EXTRACT_MBC(&p[j*8+4]);
+	    end = WC2MBC1ST(c);
+	    /* set bits for 1st bytes of multi-byte chars.  */
+	    while (beg <= end) {
+	      /* NOTE: Charset for multi-byte chars might contain
+		 single-byte chars.  We must reject them. */
+	      if (c < 0x100) {
+		fastmap[beg] = 2;
+		bufp->options |= RE_OPTIMIZE_BMATCH;
+	      }
+	      else if (ismbchar(beg))
+		fastmap[beg] = 1;
+	      beg++;
+	    }
+	  }
+	}
+	break;
+
+      case charset_not:
+	/* S: set of all single-byte chars.
+	   M: set of all first bytes that can start multi-byte chars.
+	   s: any set of single-byte chars.
+	   m: any set of first bytes that can start multi-byte chars.
+
+	   We assume S+M = U.
+	   ___      _   _
+	   s+m = (S*s+M*m).  */
+	/* Chars beyond end of map must be allowed */
+	/* NOTE: Charset_not for single-byte chars might contain
+	   multi-byte chars.  See set_list_bits(). */
+	for (j = *p * BYTEWIDTH; j < (1 << BYTEWIDTH); j++)
+	  if (!ismbchar(j))
+	    fastmap[j] = 1;
+
+	for (j = *p++ * BYTEWIDTH - 1; j >= 0; j--)
+	  if (!(p[j / BYTEWIDTH] & (1 << (j % BYTEWIDTH)))) {
+	    if (!ismbchar(j))
+	      fastmap[j] = 1;
+	  }
+	{
+	  unsigned short size;
+	  unsigned long c, beg;
+	  int num_literal = 0;
+
+	  p += p[-1] + 2;
+	  size = EXTRACT_UNSIGNED(&p[-2]);
+	  if (size == 0) {
+	    for (j = 0x80; j < (1 << BYTEWIDTH); j++)
+	      if (ismbchar(j))
+		fastmap[j] = 1;
+	    break;
+	  }
+	  for (j = 0,c = 0;j < (int)size; j++) {
+	    unsigned int cc = EXTRACT_MBC(&p[j*8]);
+	    beg = WC2MBC1ST(cc);
+	    while (c <= beg) {
+	      if (ismbchar(c))
+		fastmap[c] = 1;
+	      c++;
+	    }
+
+	    cc = EXTRACT_MBC(&p[j*8+4]);
+	    if (cc < 0xff) {
+	      num_literal = 1;
+	      while (c <= cc) {
+		if (ismbchar(c))
+		  fastmap[c] = 1;
+		c++;
+	      }
+	    }
+	    c = WC2MBC1ST(cc);
+	  }
+
+	  for (j = c; j < (1 << BYTEWIDTH); j++) {
+	    if (num_literal)
+	      fastmap[j] = 1;
+	    if (ismbchar(j))
+	      fastmap[j] = 1;
+	  }
+	}
+	break;
+
+      case unused:	/* pacify gcc -Wall */
+	break;
+      }
+
+    /* Get here means we have successfully found the possible starting
+       characters of one path of the pattern.  We need not follow this
+       path any farther.  Instead, look at the next alternative
+       remembered in the stack.  */
+    if (stackp != stackb)
+      p = *stackp--;		/* pop */
+    else
+      break;
+  }
+  FREE_AND_RETURN_VOID(stackb);
+}

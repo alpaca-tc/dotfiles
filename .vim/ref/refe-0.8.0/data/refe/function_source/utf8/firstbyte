@@ -1,0 +1,17 @@
+regex.c:491
+static unsigned int
+utf8_firstbyte(c)
+     unsigned long c;
+{
+  if (c < 0x80) return c;
+  if (c <= 0x7ff) return ((c>>6)&0xff)|0xc0;
+  if (c <= 0xffff) return ((c>>12)&0xff)|0xe0;
+  if (c <= 0x1fffff) return ((c>>18)&0xff)|0xf0;
+  if (c <= 0x3ffffff) return ((c>>24)&0xff)|0xf8;
+  if (c <= 0x7fffffff) return ((c>>30)&0xff)|0xfc;
+#if SIZEOF_INT > 4
+  if (c <= 0xfffffffff) return 0xfe;
+#else
+  return 0xfe;
+#endif
+}

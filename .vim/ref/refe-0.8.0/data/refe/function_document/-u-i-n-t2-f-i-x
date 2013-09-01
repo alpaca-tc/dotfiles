@@ -1,0 +1,3 @@
+: VALUE UINT2FIX(unsigned int i)
+    unsigned int を Fixnum に変換します。
+

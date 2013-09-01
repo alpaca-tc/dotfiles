@@ -1,0 +1,9 @@
+string.c:2341
+static VALUE
+rb_str_tr(str, src, repl)
+    VALUE str, src, repl;
+{
+    str = rb_str_dup(str);
+    tr_trans(str, src, repl, 0);
+    return str;
+}

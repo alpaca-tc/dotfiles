@@ -1,0 +1,11 @@
+parse.y:4463
+static void
+parser_warning(node, mesg)
+    NODE *node;
+    const char *mesg;
+{
+    int line = ruby_sourceline;
+    ruby_sourceline = nd_line(node);
+    rb_warning(mesg);
+    ruby_sourceline = line;
+}

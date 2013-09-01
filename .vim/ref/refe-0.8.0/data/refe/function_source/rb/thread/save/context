@@ -1,0 +1,64 @@
+eval.c:8229
+static void
+rb_thread_save_context(th)
+    rb_thread_t th;
+{
+    VALUE *pos;
+    int len;
+    static VALUE tval;
+
+    len = ruby_stack_length(&pos);
+    th->stk_len = 0;
+    th->stk_pos = pos;
+    if (len > th->stk_max) {
+	REALLOC_N(th->stk_ptr, VALUE, len);
+	th->stk_max = len;
+    }
+    th->stk_len = len;
+    FLUSH_REGISTER_WINDOWS;
+    MEMCPY(th->stk_ptr, th->stk_pos, VALUE, th->stk_len);
+#ifdef __ia64__
+    {
+	ucontext_t ctx;
+	VALUE *top, *bot;
+
+	getcontext(&ctx);
+	bot = (VALUE*)__libc_ia64_register_backing_store_base;
+#if defined(__FreeBSD__)
+	top = (VALUE*)ctx.uc_mcontext.mc_special.bspstore;
+#else
+	top = (VALUE*)ctx.uc_mcontext.sc_ar_bsp;
+#endif
+	th->bstr_len = top - bot;
+	REALLOC_N(th->bstr_ptr, VALUE, th->bstr_len);
+	MEMCPY(th->bstr_ptr, (VALUE*)__libc_ia64_register_backing_store_base, VALUE, th->bstr_len);
+    }
+#endif
+#ifdef SAVE_WIN32_EXCEPTION_LIST
+    th->win32_exception_list = win32_get_exception_list();
+#endif
+
+    th->frame = ruby_frame;
+    th->scope = ruby_scope;
+    th->klass = ruby_class;
+    th->wrapper = ruby_wrapper;
+    th->cref = ruby_cref;
+    th->dyna_vars = ruby_dyna_vars;
+    th->block = ruby_block;
+    th->flags &= THREAD_FLAGS_MASK;
+    th->flags |= (rb_trap_immediate<<8) | scope_vmode;
+    th->iter = ruby_iter;
+    th->tag = prot_tag;
+    th->tracing = tracing;
+    th->errinfo = ruby_errinfo;
+    th->last_status = rb_last_status;
+    tval = rb_lastline_get();
+    rb_lastline_set(th->last_line);
+    th->last_line = tval;
+    tval = rb_backref_get();
+    rb_backref_set(th->last_match);
+    th->last_match = tval;
+    th->safe = ruby_safe_level;
+
+    th->node = ruby_current_node;
+}

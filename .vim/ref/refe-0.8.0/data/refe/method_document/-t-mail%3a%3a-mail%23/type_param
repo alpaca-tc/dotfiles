@@ -1,0 +1,12 @@
+: type_param( name, default = nil ) -> String
+    name: String
+
+    Content-Type の name パラメータの値を返します。
+    name に対応する値やヘッダそのものが存在しない場合は default を
+    返します。
+      --
+      # example
+      mail['Content-Type'] = 'text/plain; charset=iso-2022-jp'
+      p mail.type_param('charset')   # "iso-2022-jp"
+      --
+

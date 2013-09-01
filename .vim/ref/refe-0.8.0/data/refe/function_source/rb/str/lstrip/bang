@@ -1,0 +1,22 @@
+string.c:2919
+static VALUE
+rb_str_lstrip_bang(str)
+    VALUE str;
+{
+    char *s, *t, *e;
+
+    s = RSTRING(str)->ptr;
+    if (!s || RSTRING(str)->len == 0) return Qnil;
+    e = t = s + RSTRING(str)->len;
+    /* remove spaces at head */
+    while (s < t && ISSPACE(*s)) s++;
+
+    if (s > RSTRING(str)->ptr) {
+	rb_str_modify(str);
+	RSTRING(str)->len = t-s;
+	memmove(RSTRING(str)->ptr, s, RSTRING(str)->len);
+	RSTRING(str)->ptr[RSTRING(str)->len] = '\0';
+	return str;
+    }
+    return Qnil;
+}

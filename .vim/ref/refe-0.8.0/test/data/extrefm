@@ -1,0 +1,196 @@
+@@@@@src rb_ary_new
+: VALUE rb_ary_new()
+    空の Ruby の配列を作成し返します。
+
+    対応する Ruby プログラム
+
+      ary = []
+
+    使用例
+
+      VALUE ary;
+      ary = rb_ary_new();
+
+@@@@@ok rb_ary_new
+: VALUE rb_ary_new()
+    空の Ruby の配列を作成し返します。
+
+    対応する Ruby プログラム
+
+      ary = []
+
+    使用例
+
+      VALUE ary;
+      ary = rb_ary_new();
+
+@@@@@src rb_ary_store
+: void rb_ary_store(VALUE ary, long idx, VALUE val)
+    配列 ((|ary|)) のインデックス ((|idx|)) に
+    ((|val|)) を格納します。((|idx|)) が範囲を越えるときは
+    Ruby レベルと同じく自動的にサイズが拡張されます。
+
+    対応するRubyコード
+
+      ary[idx] = val
+
+    使用例
+
+      VALUE ary;
+      int idx;
+      int n[5] = { 1, 2, 3, 4, 5 };
+      ary = rb_ary_new();
+      for (idx=0; idx<5; idx++) rb_ary_store(ary, idx, INT2FIX(n[idx])); 
+
+@@@@@ok rb_ary_store
+: void rb_ary_store(VALUE ary, long idx, VALUE val)
+    配列 ary のインデックス idx に
+    val を格納します。idx が範囲を越えるときは
+    Ruby レベルと同じく自動的にサイズが拡張されます。
+
+    対応するRubyコード
+
+      ary[idx] = val
+
+    使用例
+
+      VALUE ary;
+      int idx;
+      int n[5] = { 1, 2, 3, 4, 5 };
+      ary = rb_ary_new();
+      for (idx=0; idx<5; idx++) rb_ary_store(ary, idx, INT2FIX(n[idx])); 
+
+@@@@@src rb_scan_args
+: int rb_scan_args(int argc, VALUE *argv, const char *fmt, VALUE *var0, *var1, ...)
+    長さ ((|argc|)) の VALUE の配列 ((|argv|)) を ((|fmt|)) に
+    従ってスキャンし、((|var0|)) ((|var1|)) …… に書きこみます。
+    ((|argc|)) を返します。
+
+    ((|fmt|)) 指定フォーマット
+      .
+        1   2   3   4   バイトめ
+       ----------------
+       \d  \d  '*' '&'
+        |   |   |   |
+        |   |   |   +-- ブロックを Proc オブジェクトとして受け取る
+        |   |   +------ 残りを Ruby の配列として受け取る
+        |   +---------- 省略可能な引数の個数
+        +-------------- 省略できない引数の個数
+
+        \d には数字を指定。'*' '&' はそれぞれその文字を指定。
+        (2) を指定するなら (1) は省略不可。
+        (3)、(4) は自由に省略可能だが必ずこの順番でなければ
+        ならない。
+
+    使用例
+
+        VALUE a, b, optv;
+        rb_scan_args(argc, argv, "21", &a, &b, &optv);
+
+    対応する Ruby プログラムでの宣言
+
+        def some_method( a, b, opt = nil )
+
+    使用例 (2)
+
+        VALUE a, rest, block;
+        rb_scan_args(argc, argv, "1*&", &a, &rest, &block);
+
+    対応する Ruby プログラムでの宣言
+
+        def some_method( a, *rest, &block )
+
+@@@@@ok rb_scan_args
+: int rb_scan_args(int argc, VALUE *argv, const char *fmt, VALUE *var0, *var1, ...)
+    長さ argc の VALUE の配列 argv を fmt に
+    従ってスキャンし、var0 var1 …… に書きこみます。
+    argc を返します。
+
+    fmt 指定フォーマット
+      .
+        1   2   3   4   バイトめ
+       ----------------
+       \d  \d  '*' '&'
+        |   |   |   |
+        |   |   |   +-- ブロックを Proc オブジェクトとして受け取る
+        |   |   +------ 残りを Ruby の配列として受け取る
+        |   +---------- 省略可能な引数の個数
+        +-------------- 省略できない引数の個数
+
+        \d には数字を指定。'*' '&' はそれぞれその文字を指定。
+        (2) を指定するなら (1) は省略不可。
+        (3)、(4) は自由に省略可能だが必ずこの順番でなければ
+        ならない。
+
+    使用例
+
+        VALUE a, b, optv;
+        rb_scan_args(argc, argv, "21", &a, &b, &optv);
+
+    対応する Ruby プログラムでの宣言
+
+        def some_method( a, b, opt = nil )
+
+    使用例 (2)
+
+        VALUE a, rest, block;
+        rb_scan_args(argc, argv, "1*&", &a, &rest, &block);
+
+    対応する Ruby プログラムでの宣言
+
+        def some_method( a, *rest, &block )
+
+@@@@@src rb_raise
+: rb_raise(VALUE exception_type, char *fmt, ...)
+    例外を発生します。((|exception_type|)) は例外クラスで
+    なければいけません。((|fmt|)) と残りの引数は (({sprintf})) と
+    同様に解釈され、この例外のメッセージになります。
+
+@@@@@ok rb_raise
+: rb_raise(VALUE exception_type, char *fmt, ...)
+    例外を発生します。exception_type は例外クラスで
+    なければいけません。fmt と残りの引数は sprintf と
+    同様に解釈され、この例外のメッセージになります。
+
+@@@@@src rb_gc_register_address
+: void rb_gc_register_address(VALUE *addr)
+    ポインタ ((|addr|)) が指す変数を GC の対象にします。
+
+    初出: [ruby-list:20488]
+
+@@@@@ok rb_gc_register_address
+: void rb_gc_register_address(VALUE *addr)
+    ポインタ addr が指す変数を GC の対象にします。
+
+    初出: [ruby-list:20488]
+
+@@@@@src pipe_open
+: static VALUE pipe_open(char *pname, char *mode)
+    popen(3)を実行します。引数((|pname|))、((|mode|))はpopen(3)の
+    引数に対応します。
+
+    ((|pname|))は、実行するプロセスで(({"-"}))ならば、自身を
+    fork(2)します。
+
+@@@@@ok pipe_open
+: static VALUE pipe_open(char *pname, char *mode)
+    popen(3)を実行します。引数pname、modeはpopen(3)の
+    引数に対応します。
+
+    pnameは、実行するプロセスで"-"ならば、自身を
+    fork(2)します。
+
+@@@@@src ALLOC
+: type* ALLOC(type)
+    (({sizeof(type)})) バイトのメモリを確保しその先頭へのポインタを
+    返します。ゼロクリアはされていません。
+
+    メモリ確保に失敗すると例外 NoMemoryError が発生します。
+
+@@@@@ok ALLOC
+: type* ALLOC(type)
+    sizeof(type) バイトのメモリを確保しその先頭へのポインタを
+    返します。ゼロクリアはされていません。
+
+    メモリ確保に失敗すると例外 NoMemoryError が発生します。
+

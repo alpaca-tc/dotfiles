@@ -1,0 +1,19 @@
+marshal.c:305
+static void
+w_symbol(id, arg)
+    ID id;
+    struct dump_arg *arg;
+{
+    char *sym = rb_id2name(id);
+    st_data_t num;
+
+    if (st_lookup(arg->symbols, id, &num)) {
+	w_byte(TYPE_SYMLINK, arg);
+	w_long((long)num, arg);
+    }
+    else {
+	w_byte(TYPE_SYMBOL, arg);
+	w_bytes(sym, strlen(sym), arg);
+	st_add_direct(arg->symbols, id, arg->symbols->num_entries);
+    }
+}

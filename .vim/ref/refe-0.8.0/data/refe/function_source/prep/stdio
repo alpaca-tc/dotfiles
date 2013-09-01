@@ -1,0 +1,22 @@
+io.c:2812
+static VALUE
+prep_stdio(f, mode, klass)
+    FILE *f;
+    int mode;
+    VALUE klass;
+{
+    OpenFile *fp;
+    VALUE io = io_alloc(klass);
+
+    MakeOpenFile(io, fp);
+#ifdef __CYGWIN__
+    if (!isatty(fileno(f))) {
+	mode |= O_BINARY;
+	setmode(fileno(f), O_BINARY);
+    }
+#endif
+    fp->f = f;
+    fp->mode = mode;
+
+    return io;
+}

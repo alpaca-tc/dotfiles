@@ -1,0 +1,19 @@
+hash.c:383
+static VALUE
+rb_hash_indexes(argc, argv, hash)
+    int argc;
+    VALUE *argv;
+    VALUE hash;
+{
+    VALUE indexes;
+    int i;
+
+    rb_warn("Hash#%s is deprecated; use Hash#values_at",
+	    rb_id2name(rb_frame_last_func()));
+    indexes = rb_ary_new2(argc);
+    for (i=0; i<argc; i++) {
+	RARRAY(indexes)->ptr[i] = rb_hash_aref(hash, argv[i]);
+	RARRAY(indexes)->len++;
+    }
+    return indexes;
+}

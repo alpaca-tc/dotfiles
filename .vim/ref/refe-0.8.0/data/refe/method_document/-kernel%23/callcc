@@ -1,0 +1,4 @@
+--- callcc {|cont| .... }
+
+    Continuation を参照してください。
+

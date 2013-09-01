@@ -1,0 +1,3 @@
+: VALUE INT2NUM(long i)
+    任意の整数を Fixnum か Bignum に変換します。
+

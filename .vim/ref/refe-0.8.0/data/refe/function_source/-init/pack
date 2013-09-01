@@ -1,0 +1,7 @@
+pack.c:1932
+void
+Init_pack()
+{
+    rb_define_method(rb_cArray, "pack", pack_pack, 1);
+    rb_define_method(rb_cString, "unpack", pack_unpack, 1);
+}

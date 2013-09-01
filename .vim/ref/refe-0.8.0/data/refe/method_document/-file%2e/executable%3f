@@ -1,0 +1,4 @@
+--- File.executable?(path)
+
+    FileTest.executable? と同じです。
+

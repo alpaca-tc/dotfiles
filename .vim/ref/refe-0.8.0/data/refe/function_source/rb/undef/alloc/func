@@ -1,0 +1,8 @@
+eval.c:333
+void
+rb_undef_alloc_func(klass)
+    VALUE klass;
+{
+    Check_Type(klass, T_CLASS);
+    rb_add_method(CLASS_OF(klass), ID_ALLOCATOR, 0, NOEX_UNDEF);
+}

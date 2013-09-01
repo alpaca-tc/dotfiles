@@ -1,0 +1,29 @@
+eval.c:7463
+static VALUE
+umethod_bind(method, recv)
+    VALUE method, recv;
+{
+    struct METHOD *data, *bound;
+
+    Data_Get_Struct(method, struct METHOD, data);
+    if (data->rklass != CLASS_OF(recv)) {
+	if (FL_TEST(data->rklass, FL_SINGLETON)) {
+	    rb_raise(rb_eTypeError, "singleton method called for a different object");
+	}
+	if (FL_TEST(CLASS_OF(recv), FL_SINGLETON) &&
+	    st_lookup(RCLASS(CLASS_OF(recv))->m_tbl, data->oid, 0)) {
+	    rb_raise(rb_eTypeError, "method `%s' overridden", rb_id2name(data->oid));
+	}
+	if(!rb_obj_is_kind_of(recv, data->rklass)) {
+	    rb_raise(rb_eTypeError, "bind argument must be an instance of %s",
+		     rb_class2name(data->rklass));
+	}
+    }
+
+    method = Data_Make_Struct(rb_cMethod,struct METHOD,bm_mark,free,bound);
+    *bound = *data;
+    bound->recv = recv;
+    bound->rklass = CLASS_OF(recv);
+
+    return method;
+}

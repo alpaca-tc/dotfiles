@@ -1,0 +1,17 @@
+object.c:1041
+VALUE
+rb_convert_type(val, type, tname, method)
+    VALUE val;
+    int type;
+    const char *tname, *method;
+{
+    VALUE v;
+
+    if (TYPE(val) == type) return val;
+    v = convert_type(val, tname, method, Qtrue);
+    if (TYPE(v) != type) {
+	rb_raise(rb_eTypeError, "%s#%s should return %s",
+		 rb_obj_classname(val), method, tname);
+    }
+    return v;
+}

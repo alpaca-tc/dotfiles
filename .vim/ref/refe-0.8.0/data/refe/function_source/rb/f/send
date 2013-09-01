@@ -1,0 +1,18 @@
+eval.c:5192
+static VALUE
+rb_f_send(argc, argv, recv)
+    int argc;
+    VALUE *argv;
+    VALUE recv;
+{
+    VALUE vid;
+
+    if (argc == 0) rb_raise(rb_eArgError, "no method name given");
+
+    vid = *argv++; argc--;
+    PUSH_ITER(rb_block_given_p()?ITER_PRE:ITER_NOT);
+    vid = rb_call(CLASS_OF(recv), recv, rb_to_id(vid), argc, argv, 1);
+    POP_ITER();
+
+    return vid;
+}

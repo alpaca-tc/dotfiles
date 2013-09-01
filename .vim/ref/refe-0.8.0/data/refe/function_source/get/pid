@@ -1,0 +1,6 @@
+process.c:105
+static VALUE
+get_pid()
+{
+    return INT2FIX(getpid());
+}

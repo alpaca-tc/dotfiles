@@ -1,0 +1,7 @@
+file.c:2331
+static VALUE
+rb_stat_ftype(obj)
+    VALUE obj;
+{
+    return rb_file_ftype(get_stat(obj));
+}

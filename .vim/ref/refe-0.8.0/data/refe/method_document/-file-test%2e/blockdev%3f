@@ -1,0 +1,4 @@
+--- FileTest.blockdev?(filename)
+
+    filename がブロックスペシャルファイルである時、真を返します。
+

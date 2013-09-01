@@ -1,0 +1,7 @@
+string.c:2334
+static VALUE
+rb_str_tr_bang(str, src, repl)
+    VALUE str, src, repl;
+{
+    return tr_trans(str, src, repl, 0);
+}

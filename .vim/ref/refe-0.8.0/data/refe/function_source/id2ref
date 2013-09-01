@@ -1,0 +1,26 @@
+gc.c:1629
+static VALUE
+id2ref(obj, id)
+    VALUE obj, id;
+{
+    unsigned long ptr, p0;
+
+    rb_secure(4);
+    p0 = ptr = NUM2ULONG(id);
+    if (ptr == Qtrue) return Qtrue;
+    if (ptr == Qfalse) return Qfalse;
+    if (ptr == Qnil) return Qnil;
+    if (FIXNUM_P(ptr)) return (VALUE)ptr;
+    if (SYMBOL_P(ptr) && rb_id2name(SYM2ID((VALUE)ptr)) != 0) {
+	return (VALUE)ptr;
+    }
+
+    ptr = id ^ FIXNUM_FLAG;	/* unset FIXNUM_FLAG */
+    if (!is_pointer_to_heap((void *)ptr)|| BUILTIN_TYPE(ptr) >= T_BLKTAG) {
+	rb_raise(rb_eRangeError, "0x%lx is not id value", p0);
+    }
+    if (BUILTIN_TYPE(ptr) == 0 || RBASIC(ptr)->klass == 0) {
+	rb_raise(rb_eRangeError, "0x%lx is recycled object", p0);
+    }
+    return (VALUE)ptr;
+}

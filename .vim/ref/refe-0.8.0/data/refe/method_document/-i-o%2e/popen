@@ -1,0 +1,65 @@
+--- IO.popen(command [, mode])
+--- IO.popen(command [, mode]) {|io| ... }
+
+    command をサブプロセスとして実行し、そのプロセスの標準入出力
+    との間にパイプラインを確立します。mode はオープンする IO ポー
+    トのモードを指定します(mode の詳細は open 
+    参照)。省略されたときのデフォルトは "r" です。
+
+    生成したパイプ(IO オブジェクト)を返します。
+
+        p io = IO.popen("cat", "r+")  # => #<IO:0x401b75c8>
+        io.puts "foo"
+        p io.gets  # => "foo\n"
+
+    ブロックが与えられた場合は生成した IO オブジェクトを引数にブ
+    ロックを実行し、その結果を返します。ブロックの実行後、生成したパイ
+    プは自動的にクローズされます。
+
+        p IO.popen("cat", "r+") {|io|
+          io.puts "foo"
+          io.gets
+        }
+        # => "foo\n"
+
+    コマンド名が "-" の時、Ruby は fork(2) [manual page] を
+    行い子プロセスの標準入出力との間にパイプラインを確立します。このと
+    きの戻りは、親プロセスは IO オブジェクトを返し、子プロセスは
+    nil を返します。ブロックがあれば、親プロセスは生成した
+    IO オブジェクトを引数にブロックを実行しその結果を返します。
+    (パイプはクローズされます)
+    子プロセスは nil を引数にブロックを実行し終了します。
+
+       # ブロックなしの例
+
+       io = IO.popen("-", "r+")
+       if io.nil?
+         # child
+         s = gets
+         print "child output: " + s
+         exit
+       end
+
+       # parent
+       io.puts "foo"
+       p io.gets                   # => "child output: foo\n"
+       io.close
+
+       # ブロックありの例
+
+       p IO.popen("-", "r+") {|io|
+         if io
+           # parent
+           io.puts "foo"
+           io.gets
+         else
+           # child
+           s = gets
+           puts "child output: " + s
+         end
+       }
+       # => "child output: foo\n"
+
+    パイプ、あるいは子プロセスの生成に失敗した場合は例外 
+    Errno::EXXX が発生します。
+

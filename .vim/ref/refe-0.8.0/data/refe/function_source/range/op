@@ -1,0 +1,23 @@
+parse.y:5195
+static NODE*
+range_op(node)
+    NODE *node;
+{
+    enum node_type type;
+
+    if (!e_option_supplied()) return node;
+    if (node == 0) return 0;
+
+    value_expr(node);
+    node = cond0(node);
+    type = nd_type(node);
+    if (type == NODE_NEWLINE) {
+	node = node->nd_next;
+	type = nd_type(node);
+    }
+    if (type == NODE_LIT && FIXNUM_P(node->nd_lit)) {
+	warn_unless_e_option(node, "integer literal in conditional range");
+	return call_op(node,tEQ,1,NEW_GVAR(rb_intern("$.")));
+    }
+    return node;
+}

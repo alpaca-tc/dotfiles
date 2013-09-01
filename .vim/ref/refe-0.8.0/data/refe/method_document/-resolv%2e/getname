@@ -1,0 +1,12 @@
+--- Resolv.getname(address)
+--- Resolv.getnames(address)
+--- Resolv.each_name(address) {|name| ...}
+    lookups hostnames of address which represents IP address as a string.
+
+    getname returns first entry of lookupped names.
+    getnames returns lookupped names.
+    each_names iterates over lookupped names.
+
+    Îã:
+      Resolv.getname("210.251.121.214").to_s #=> "helium.ruby-lang.org"
+

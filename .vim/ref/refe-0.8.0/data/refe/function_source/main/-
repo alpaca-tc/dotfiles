@@ -1,0 +1,18 @@
+main.c:36
+int
+main(argc, argv, envp)
+    int argc;
+    char **argv, **envp;
+{
+#ifdef _WIN32
+    NtInitialize(&argc, &argv);
+#endif
+#if defined(__MACOS__) && defined(__MWERKS__)
+    argc = ccommand(&argv);
+#endif
+
+    ruby_init();
+    ruby_options(argc, argv);
+    ruby_run();
+    return 0;
+}

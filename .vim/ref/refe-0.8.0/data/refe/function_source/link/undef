@@ -1,0 +1,32 @@
+dln.c:505
+static st_table *reloc_tbl = NULL;
+static void
+link_undef(name, base, reloc)
+    const char *name;
+    long base;
+    struct relocation_info *reloc;
+{
+    static int u_no = 0;
+    struct undef *obj;
+    char *addr = (char*)(reloc->r_address + base);
+
+    obj = (struct undef*)xmalloc(sizeof(struct undef));
+    obj->name = strdup(name);
+    obj->reloc = *reloc;
+    obj->base = base;
+    switch (R_LENGTH(reloc)) {
+      case 0:		/* byte */
+	obj->u.c = *addr;
+	break;
+      case 1:		/* word */
+	obj->u.s = *(short*)addr;
+	break;
+      case 2:		/* long */
+	obj->u.l = *(long*)addr;
+	break;
+    }
+    if (reloc_tbl == NULL) {
+	reloc_tbl = st_init_numtable();
+    }
+    st_insert(reloc_tbl, u_no++, obj);
+}

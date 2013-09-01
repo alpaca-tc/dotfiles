@@ -1,0 +1,8 @@
+eval.c:2406
+static VALUE
+splat_value(v)
+    VALUE v;
+{
+    if (NIL_P(v)) return rb_ary_new3(1, Qnil);
+    return rb_Array(v);
+}

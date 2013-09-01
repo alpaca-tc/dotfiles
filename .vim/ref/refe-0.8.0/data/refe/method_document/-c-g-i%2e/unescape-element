@@ -1,0 +1,13 @@
+--- CGI.unescapeElement(string, *element)
+      特定の要素だけをHTMLエスケープから戻す。
+
+        例：          
+        print CGI::unescapeElement(
+                CGI::escapeHTML('<BR><A HREF="url"></A>'), "A", "IMG")
+          # => "&lt;BR&gt;<A HREF="url"></A>"
+
+        print CGI::unescapeElement(
+                CGI::escapeHTML('<BR><A HREF="url"></A>'), ["A", "IMG"])
+          # => "&lt;BR&gt;<A HREF="url"></A>"
+#=== MAKE RFC1123 DATE STRING
+

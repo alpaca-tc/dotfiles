@@ -1,0 +1,33 @@
+--- Regexp.last_match
+
+    カレントスコープで最後に行った正規表現マッチの MatchData オ
+    ブジェクトを返します。このメソッドの呼び出しは $~ 
+    の参照と同じです。
+
+        /(.)(.)/ =~ "ab"
+        p Regexp.last_match      # => #<MatchData:0x4599e58>
+        p Regexp.last_match[0]   # => "ab"
+        p Regexp.last_match[1]   # => "a"
+        p Regexp.last_match[2]   # => "b"
+        p Regexp.last_match[3]   # => nil
+
+--- Regexp.last_match([nth])   ruby 1.7 feature
+
+    整数 nth が 0 の場合、マッチした文字列を返します
+    ($&)。それ以外では、nth 番目の括弧にマッチ
+    した部分文字列を返します($1,$2,...)。
+    対応する括弧がない場合やマッチしなかった場合には nil を返し
+    ます。
+
+        /(.)(.)/ =~ "ab"
+        p Regexp.last_match      # => #<MatchData:0x4599e58>
+        p Regexp.last_match(0)   # => "ab"
+        p Regexp.last_match(1)   # => "a"
+        p Regexp.last_match(2)   # => "b"
+        p Regexp.last_match(3)   # => nil
+
+    正規表現全体がマッチしなかった場合、引数なしの 
+    Regexp.last_match はnil を返すため、
+    last_match[1] の形式では例外 NameError が発生します。
+    対して、last_match(1) は nil を返します。
+

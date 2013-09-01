@@ -1,0 +1,8 @@
+io.c:3588
+static VALUE io_new_instance _((VALUE));
+static VALUE
+io_new_instance(args)
+    VALUE args;
+{
+    return rb_class_new_instance(2, (VALUE*)args+1, *(VALUE*)args);
+}

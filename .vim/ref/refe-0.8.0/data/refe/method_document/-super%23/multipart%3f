@@ -1,0 +1,6 @@
+: multipart?
+      Returns false.
+
+: multipart?
+      Returns true.
+

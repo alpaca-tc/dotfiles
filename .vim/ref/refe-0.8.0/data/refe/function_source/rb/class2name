@@ -1,0 +1,7 @@
+variable.c:277
+char *
+rb_class2name(klass)
+    VALUE klass;
+{
+    return RSTRING(rb_class_path(klass))->ptr;
+}

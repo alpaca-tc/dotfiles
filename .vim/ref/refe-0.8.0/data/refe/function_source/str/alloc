@@ -1,0 +1,15 @@
+string.c:40
+static VALUE str_alloc _((VALUE));
+static VALUE
+str_alloc(klass)
+    VALUE klass;
+{
+    NEWOBJ(str, struct RString);
+    OBJSETUP(str, klass, T_STRING);
+
+    str->ptr = 0;
+    str->len = 0;
+    str->aux.capa = 0;
+
+    return (VALUE)str;
+}

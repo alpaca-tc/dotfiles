@@ -1,0 +1,6 @@
+eval.c:9257
+static VALUE
+rb_thread_s_abort_exc()
+{
+    return ruby_thread_abort?Qtrue:Qfalse;
+}

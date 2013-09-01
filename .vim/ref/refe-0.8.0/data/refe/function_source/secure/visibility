@@ -1,0 +1,9 @@
+eval.c:6129
+static void
+secure_visibility(self)
+    VALUE self;
+{
+    if (ruby_safe_level >= 4 && !OBJ_TAINTED(self)) {
+	rb_raise(rb_eSecurityError, "Insecure: can't change method visibility");
+    }
+}

@@ -22,7 +22,6 @@ function! alpaca#initialize#define_abbrev(define, ...) "{{{
   call map(copy(a:define), 'add(defines, join(["inoreabbrev", "<buffer>", v:val], " "))')
 
   let command = join(defines, "|")
-
   execute a:0 > 0 ? s:get_autcmd_with_filetype(a:1, command) : command
 endfunction"}}}
 function! alpaca#initialize#redefine_with_each_filetypes(ft_dictionary) "{{{

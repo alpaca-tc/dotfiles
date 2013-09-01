@@ -1,0 +1,49 @@
+parse.y:4726
+static NODE*
+gettable(id)
+    ID id;
+{
+    if (id == kSELF) {
+	return NEW_SELF();
+    }
+    else if (id == kNIL) {
+	return NEW_NIL();
+    }
+    else if (id == kTRUE) {
+	return NEW_TRUE();
+    }
+    else if (id == kFALSE) {
+	return NEW_FALSE();
+    }
+    else if (id == k__FILE__) {
+	return NEW_STR(rb_str_new2(ruby_sourcefile));
+    }
+    else if (id == k__LINE__) {
+	return NEW_LIT(INT2FIX(ruby_sourceline));
+    }
+    else if (is_local_id(id)) {
+	if (dyna_in_block() && rb_dvar_defined(id)) return NEW_DVAR(id);
+	if (local_id(id)) return NEW_LVAR(id);
+	/* method call without arguments */
+#if 0
+	/* Rite will warn this */
+	rb_warn("ambiguous identifier; %s() or self.%s is better for method call",
+		rb_id2name(id), rb_id2name(id));
+#endif
+	return NEW_VCALL(id);
+    }
+    else if (is_global_id(id)) {
+	return NEW_GVAR(id);
+    }
+    else if (is_instance_id(id)) {
+	return NEW_IVAR(id);
+    }
+    else if (is_const_id(id)) {
+	return NEW_CONST(id);
+    }
+    else if (is_class_id(id)) {
+	return NEW_CVAR(id);
+    }
+    rb_compile_error("identifier %s is not valid", rb_id2name(id));
+    return 0;
+}

@@ -1,0 +1,26 @@
+ruby.c:1100
+void
+ruby_process_options(argc, argv)
+    int argc;
+    char **argv;
+{
+    origargc = argc; origargv = argv;
+
+    ruby_script(argv[0]);	/* for the time being */
+    rb_argv0 = rb_progname;
+#if defined(USE_DLN_A_OUT)
+    dln_argv0 = argv[0];
+#endif
+    proc_options(argc, argv);
+
+    if (do_check && ruby_nerrs == 0) {
+	printf("Syntax OK\n");
+	exit(0);
+    }
+    if (do_print) {
+	rb_parser_append_print();
+    }
+    if (do_loop) {
+	rb_parser_while_loop(do_line, do_split);
+    }
+}

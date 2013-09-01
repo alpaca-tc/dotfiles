@@ -1,0 +1,4 @@
+--- Etc.getlogin
+    自分のlogin名を返す。これが失敗した場合はEtc.getpwuidを用いると
+    良い。
+

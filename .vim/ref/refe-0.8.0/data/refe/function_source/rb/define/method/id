@@ -1,0 +1,10 @@
+class.c:641
+void
+rb_define_method_id(klass, name, func, argc)
+    VALUE klass;
+    ID name;
+    VALUE (*func)();
+    int argc;
+{
+    rb_add_method(klass, name, NEW_CFUNC(func,argc), NOEX_PUBLIC);
+}

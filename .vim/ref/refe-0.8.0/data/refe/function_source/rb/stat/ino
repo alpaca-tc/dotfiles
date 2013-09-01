@@ -1,0 +1,11 @@
+file.c:160
+static VALUE
+rb_stat_ino(self)
+    VALUE self;
+{
+#ifdef HUGE_ST_INO
+    return ULL2NUM(get_stat(self)->st_ino);
+#else
+    return ULONG2NUM(get_stat(self)->st_ino);
+#endif
+}

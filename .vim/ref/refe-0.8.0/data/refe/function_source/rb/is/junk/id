@@ -1,0 +1,8 @@
+parse.y:5966
+int
+rb_is_junk_id(id)
+    ID id;
+{
+    if (is_junk_id(id)) return Qtrue;
+    return Qfalse;
+}

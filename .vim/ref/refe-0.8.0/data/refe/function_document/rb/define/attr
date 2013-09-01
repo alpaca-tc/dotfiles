@@ -1,0 +1,5 @@
+: void rb_define_attr(VALUE klass, const char *name, int read, int write) 
+    クラス klass にメソッド name と name= を定義します。
+    read が真のときは name を定義し、
+    write が真のときは name= を定義します。
+

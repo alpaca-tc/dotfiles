@@ -1,0 +1,10 @@
+re.c:1144
+static int
+rb_reg_cur_kcode(re)
+    VALUE re;
+{
+    if (FL_TEST(re, KCODE_FIXED)) {
+	return RBASIC(re)->flags & KCODE_MASK;
+    }
+    return 0;
+}

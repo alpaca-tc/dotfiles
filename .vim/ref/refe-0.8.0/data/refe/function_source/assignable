@@ -1,0 +1,60 @@
+parse.y:4775
+static NODE*
+assignable(id, val)
+    ID id;
+    NODE *val;
+{
+    value_expr(val);
+    if (id == kSELF) {
+	yyerror("Can't change the value of self");
+    }
+    else if (id == kNIL) {
+	yyerror("Can't assign to nil");
+    }
+    else if (id == kTRUE) {
+	yyerror("Can't assign to true");
+    }
+    else if (id == kFALSE) {
+	yyerror("Can't assign to false");
+    }
+    else if (id == k__FILE__) {
+	yyerror("Can't assign to __FILE__");
+    }
+    else if (id == k__LINE__) {
+	yyerror("Can't assign to __LINE__");
+    }
+    else if (is_local_id(id)) {
+	if (rb_dvar_curr(id)) {
+	    return NEW_DASGN_CURR(id, val);
+	}
+	else if (rb_dvar_defined(id)) {
+	    return NEW_DASGN(id, val);
+	}
+	else if (local_id(id) || !dyna_in_block()) {
+	    return NEW_LASGN(id, val);
+	}
+	else{
+	    rb_dvar_push(id, Qnil);
+	    return NEW_DASGN_CURR(id, val);
+	}
+    }
+    else if (is_global_id(id)) {
+	return NEW_GASGN(id, val);
+    }
+    else if (is_instance_id(id)) {
+	return NEW_IASGN(id, val);
+    }
+    else if (is_const_id(id)) {
+	if (in_def || in_single)
+	    yyerror("dynamic constant assignment");
+	return NEW_CDECL(id, val, 0);
+    }
+    else if (is_class_id(id)) {
+	if (in_def || in_single) return NEW_CVASGN(id, val);
+	return NEW_CVDECL(id, val);
+    }
+    else {
+	rb_compile_error("identifier %s is not valid", rb_id2name(id));
+    }
+    return 0;
+}

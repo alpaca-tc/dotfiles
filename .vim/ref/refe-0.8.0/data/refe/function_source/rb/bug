@@ -1,0 +1,26 @@
+error.c:176
+void
+#ifdef HAVE_STDARG_PROTOTYPES
+rb_bug(const char *fmt, ...)
+#else
+rb_bug(fmt, va_alist)
+    const char *fmt;
+    va_dcl
+#endif
+{
+    char buf[BUFSIZ];
+    va_list args;
+    FILE *out = stderr;
+    int len = err_position(buf, BUFSIZ);
+
+    if (fwrite(buf, 1, len, out) == len ||
+	fwrite(buf, 1, len, (out = stdout)) == len) {
+	fputs("[BUG] ", out);
+	va_init_list(args, fmt);
+	vfprintf(out, fmt, args);
+	va_end(args);
+	fprintf(out, "\nruby %s (%s) [%s]\n\n",
+		RUBY_VERSION, RUBY_RELEASE_DATE, RUBY_PLATFORM);
+    }
+    abort();
+}

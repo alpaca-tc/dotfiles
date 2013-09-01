@@ -1,0 +1,14 @@
+eval.c:3801
+static VALUE
+rb_mod_protected_method_defined(mod, mid)
+    VALUE mod, mid;
+{
+    ID id = rb_to_id(mid);
+    int noex;
+
+    if (rb_get_method_body(&mod, &id, &noex)) {
+	if (VISI_CHECK(noex, NOEX_PROTECTED))
+	    return Qtrue;
+    }
+    return Qfalse;
+}

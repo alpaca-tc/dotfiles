@@ -1,0 +1,13 @@
+signal.c:696
+static void
+install_sighandler(signum, handler)
+    int signum;
+    sighandler_t handler;
+{
+    sighandler_t old;
+
+    old = ruby_signal(signum, handler);
+    if (old != SIG_DFL) {
+	ruby_signal(signum, old);
+    }
+}

@@ -1,0 +1,15 @@
+class.c:400
+VALUE
+rb_mod_included_modules(mod)
+    VALUE mod;
+{
+    VALUE ary = rb_ary_new();
+    VALUE p;
+
+    for (p = RCLASS(mod)->super; p; p = RCLASS(p)->super) {
+	if (BUILTIN_TYPE(p) == T_ICLASS) {
+	    rb_ary_push(ary, RBASIC(p)->klass);
+	}
+    }
+    return ary;
+}

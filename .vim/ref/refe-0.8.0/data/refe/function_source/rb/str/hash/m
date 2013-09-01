@@ -1,0 +1,8 @@
+string.c:760
+static VALUE
+rb_str_hash_m(str)
+    VALUE str;
+{
+    int key = rb_str_hash(str);
+    return INT2FIX(key);
+}

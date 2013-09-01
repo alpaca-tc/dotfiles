@@ -1,0 +1,8 @@
+st.c:142
+static void
+stat_col()
+{
+    FILE *f = fopen("/tmp/col", "w");
+    fprintf(f, "collision: %d\n", collision);
+    fclose(f);
+}

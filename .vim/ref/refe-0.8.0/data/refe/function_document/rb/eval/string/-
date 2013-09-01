@@ -1,0 +1,4 @@
+: VALUE rb_eval_string(const char *str)
+    str を Ruby スクリプトとしてコンパイル・評価し、
+    その値を返します。
+

@@ -1,0 +1,2 @@
+: void *rb_mod_const_at(VALUE mod, void *data)
+

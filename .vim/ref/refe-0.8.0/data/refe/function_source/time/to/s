@@ -1,0 +1,21 @@
+time.c:903
+static VALUE
+time_to_s(time)
+    VALUE time;
+{
+    struct time_object *tobj;
+    char buf[128];
+    int len;
+
+    GetTimeval(time, tobj);
+    if (tobj->tm_got == 0) {
+	time_get_tm(time, tobj->gmt);
+    }
+    if (tobj->gmt == 1) {
+	len = strftime(buf, 128, "%a %b %d %H:%M:%S UTC %Y", &tobj->tm);
+    }
+    else {
+	len = strftime(buf, 128, "%a %b %d %H:%M:%S %Z %Y", &tobj->tm);
+    }
+    return rb_str_new(buf, len);
+}

@@ -1,0 +1,11 @@
+file.c:2346
+static VALUE
+rb_stat_p(obj)
+    VALUE obj;
+{
+#ifdef S_IFIFO
+    if (S_ISFIFO(get_stat(obj)->st_mode)) return Qtrue;
+
+#endif
+    return Qfalse;
+}

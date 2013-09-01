@@ -1,0 +1,21 @@
+array.c:1090
+VALUE
+rb_ary_reverse(ary)
+    VALUE ary;
+{
+    VALUE *p1, *p2;
+    VALUE tmp;
+
+    rb_ary_modify(ary);
+    if (RARRAY(ary)->len > 1) {
+	p1 = RARRAY(ary)->ptr;
+	p2 = p1 + RARRAY(ary)->len - 1;	/* points last item */
+
+	while (p1 < p2) {
+	    tmp = *p1;
+	    *p1++ = *p2;
+	    *p2-- = tmp;
+	}
+    }
+    return ary;
+}

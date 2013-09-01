@@ -1,0 +1,9 @@
+hash.c:260
+static int
+rb_hash_rehash_i(key, value, tbl)
+    VALUE key, value;
+    st_table *tbl;
+{
+    if (key != Qundef) st_insert(tbl, key, value);
+    return ST_CONTINUE;
+}

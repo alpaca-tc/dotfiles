@@ -1,0 +1,24 @@
+--- Process.waitpid(pid[, flags])
+--- Process.waitpid2(pid[, flags])
+
+    pid で指定される特定の子プロセスの終了を待ち、そのプロセスが
+    終了した時に pid を返します。子プロセスが存在しなければ例外 
+    Errno::ECHILD [Errno::EXXX] が発生します。
+
+    flags には、Process モジュールの定数 
+    WNOHANG(ノンブロッキングモード)と
+    WUNTRACED の論理和を指定します。省略したときの値は 0 
+    です。
+
+    ノンブロッキングモードで子プロセスがまだ終了していない時には 
+    nil を返します。waitpid(2) [manual page] か 
+    wait4(2) [manual page] の実装されていないマシンでは 
+    flags はいつも nil または 0 を指定する必要があります。
+
+    waitpid2 は、その戻り値が pid と $? の配列
+    である点だけが異なります。
+
+    ruby 1.7 feature:
+    version 1.7 からは $? は Process::Status オブジェクト
+    です。
+

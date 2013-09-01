@@ -1,0 +1,11 @@
+error.c:355
+static VALUE
+exc_to_s(exc)
+    VALUE exc;
+{
+    VALUE mesg = rb_attr_get(exc, rb_intern("mesg"));
+
+    if (NIL_P(mesg)) return rb_class_path(CLASS_OF(exc));
+    if (OBJ_TAINTED(exc)) OBJ_TAINT(mesg);
+    return mesg;
+}

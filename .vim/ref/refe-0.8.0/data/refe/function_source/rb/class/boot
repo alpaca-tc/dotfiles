@@ -1,0 +1,16 @@
+class.c:22
+VALUE
+rb_class_boot(super)
+    VALUE super;
+{
+    NEWOBJ(klass, struct RClass);
+    OBJSETUP(klass, rb_cClass, T_CLASS);
+
+    klass->super = super;
+    klass->iv_tbl = 0;
+    klass->m_tbl = 0;		/* safe GC */
+    klass->m_tbl = st_init_numtable();
+
+    OBJ_INFECT(klass, super);
+    return (VALUE)klass;
+}

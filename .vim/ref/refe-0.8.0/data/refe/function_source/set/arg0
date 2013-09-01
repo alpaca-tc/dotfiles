@@ -1,0 +1,68 @@
+ruby.c:931
+static void
+set_arg0(val, id)
+    VALUE val;
+    ID id;
+{
+    char *s;
+    long i;
+    static int len;
+
+    if (origargv == 0) rb_raise(rb_eRuntimeError, "$0 not initialized");
+    StringValue(val);
+    s = RSTRING(val)->ptr;
+    i = RSTRING(val)->len;
+#ifdef __hpux
+    if (i >= PST_CLEN) {
+      union pstun j;
+      j.pst_command = s;
+      i = PST_CLEN;
+      RSTRING(val)->len = i;
+      *(s + i) = '\0';
+      pstat(PSTAT_SETCMD, j, PST_CLEN, 0, 0);
+    }
+    else {
+      union pstun j;
+      j.pst_command = s;
+      pstat(PSTAT_SETCMD, j, i, 0, 0);
+    }
+    rb_progname = rb_tainted_str_new(s, i);
+#elif defined(HAVE_SETPROCTITLE)
+    setproctitle("%.*s", (int)i, s);
+    rb_progname = rb_tainted_str_new(s, i);
+#else
+    if (len == 0) {
+	char *s = origargv[0];
+	int i;
+
+	s += strlen(s);
+	/* See if all the arguments are contiguous in memory */
+	for (i = 1; i < origargc; i++) {
+	    if (origargv[i] == s + 1) {
+		s++;
+		s += strlen(s);	/* this one is ok too */
+	    }
+	    else {
+		break;
+	    }
+	}
+	len = s - origargv[0];
+    }
+
+    if (i >= len) {
+	i = len;
+	memcpy(origargv[0], s, i);
+	origargv[0][i] = '\0';
+    }
+    else {
+	memcpy(origargv[0], s, i);
+	s = origargv[0]+i;
+	*s++ = '\0';
+	while (++i < len)
+	    *s++ = ' ';
+	for (i = 1; i < origargc; i++)
+	    origargv[i] = 0;
+    }
+    rb_progname = rb_tainted_str_new2(origargv[0]);
+#endif
+}

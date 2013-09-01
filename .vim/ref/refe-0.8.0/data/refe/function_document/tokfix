@@ -1,0 +1,3 @@
+: void tokfix(void) [macro]
+    トークンバッファを NUL で終端します。
+

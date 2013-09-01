@@ -1,0 +1,14 @@
+hash.c:369
+static VALUE
+rb_hash_index(hash, value)
+    VALUE hash, value;
+{
+    VALUE args[2];
+
+    args[0] = value;
+    args[1] = Qnil;
+
+    st_foreach(RHASH(hash)->tbl, index_i, (st_data_t)args);
+
+    return args[1];
+}

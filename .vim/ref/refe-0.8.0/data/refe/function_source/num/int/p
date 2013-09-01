@@ -1,0 +1,7 @@
+numeric.c:233
+static VALUE
+num_int_p(num)
+    VALUE num;
+{
+    return Qfalse;
+}

@@ -1,0 +1,20 @@
+process.c:1095
+static VALUE
+proc_getpgrp()
+{
+    int pgrp;
+
+#if defined(HAVE_GETPGRP) && defined(GETPGRP_VOID)
+    pgrp = getpgrp();
+    if (pgrp < 0) rb_sys_fail(0);
+    return INT2FIX(pgrp);
+#else
+# ifdef HAVE_GETPGID
+    pgrp = getpgid(0);
+    if (pgrp < 0) rb_sys_fail(0);
+    return INT2FIX(pgrp);
+# else
+    rb_notimplement();
+# endif
+#endif
+}

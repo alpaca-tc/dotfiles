@@ -1,0 +1,31 @@
+string.c:236
+static void
+rb_str_shared_replace(str, str2)
+    VALUE str, str2;
+{
+    if (str == str2) return;
+    rb_str_modify(str);
+    if (!FL_TEST(str, ELTS_SHARED)) free(RSTRING(str)->ptr);
+    if (NIL_P(str2)) {
+	RSTRING(str)->ptr = 0;
+	RSTRING(str)->len = 0;
+	RSTRING(str)->aux.capa = 0;
+	FL_UNSET(str, ELTS_SHARED|STR_ASSOC);
+	return;
+    }
+    RSTRING(str)->ptr = RSTRING(str2)->ptr;
+    RSTRING(str)->len = RSTRING(str2)->len;
+    FL_UNSET(str, ELTS_SHARED|STR_ASSOC);
+    if (FL_TEST(str2, ELTS_SHARED|STR_ASSOC)) {
+	FL_SET(str, RBASIC(str2)->flags & (ELTS_SHARED|STR_ASSOC));
+	RSTRING(str)->aux.shared = RSTRING(str2)->aux.shared;
+    }
+    else {
+	RSTRING(str)->aux.capa = RSTRING(str2)->aux.capa;
+    }
+    RSTRING(str2)->ptr = 0;	/* abandon str2 */
+    RSTRING(str2)->len = 0;
+    RSTRING(str2)->aux.capa = 0;
+    FL_UNSET(str2, ELTS_SHARED|STR_ASSOC);
+    if (OBJ_TAINTED(str2)) OBJ_TAINT(str);
+}

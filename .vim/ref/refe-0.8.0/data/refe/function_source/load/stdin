@@ -1,0 +1,7 @@
+ruby.c:920
+static void
+load_stdin()
+{
+    forbid_setid("program input from stdin");
+    load_file("-", 1);
+}

@@ -1,0 +1,12 @@
+enum.c:332
+static VALUE
+any_iter_i(i, memo)
+    VALUE i;
+    NODE *memo;
+{
+    if (RTEST(rb_yield(i))) {
+	memo->u1.value = Qtrue;
+	rb_iter_break();
+    }
+    return Qnil;
+}

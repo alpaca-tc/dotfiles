@@ -1,0 +1,13 @@
+hash.c:1551
+static VALUE
+env_has_key(env, key)
+    VALUE env, key;
+{
+    char *s;
+
+    s = StringValuePtr(key);
+    if (strlen(s) != RSTRING(key)->len)
+	rb_raise(rb_eArgError, "bad environment variable name");
+    if (getenv(s)) return Qtrue;
+    return Qfalse;
+}

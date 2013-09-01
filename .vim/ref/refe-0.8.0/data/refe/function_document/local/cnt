@@ -1,0 +1,4 @@
+: static int local_cnt(ID id) 
+    ローカル変数 id の変数 ID を取得します。
+    定義されていてもいなくても正しい ID が取得できます。
+

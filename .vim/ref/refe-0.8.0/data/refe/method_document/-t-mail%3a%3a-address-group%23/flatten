@@ -1,0 +1,4 @@
+: flatten -> [TMail::Address]
+    再帰的に TMail::AddressGroup オブジェクトを平坦化し、
+    TMail::Address オブジェクトの配列を得ます。
+

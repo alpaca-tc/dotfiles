@@ -1,0 +1,14 @@
+hash.c:726
+static VALUE
+inspect_hash(hash)
+    VALUE hash;
+{
+    VALUE str;
+
+    str = rb_str_buf_new2("{");
+    st_foreach(RHASH(hash)->tbl, inspect_i, str);
+    rb_str_buf_cat2(str, "}");
+    OBJ_INFECT(str, hash);
+
+    return str;
+}

@@ -1,0 +1,2 @@
+: struct RObject *ROBJECT(VALUE obj)
+

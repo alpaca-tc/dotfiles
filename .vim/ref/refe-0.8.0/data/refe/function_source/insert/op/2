@@ -1,0 +1,17 @@
+regex.c:2601
+static void
+insert_op_2(op, there, current_end, num_1, num_2)
+     int op;
+     char *there, *current_end;
+     int num_1, num_2;
+{
+  register char *pfrom = current_end;		/* Copy from here...  */
+  register char *pto = current_end + 5;		/* ...to here.  */
+
+  while (pfrom != there)			       
+    *--pto = *--pfrom;
+
+  there[0] = (char)op;
+  STORE_NUMBER(there + 1, num_1);
+  STORE_NUMBER(there + 3, num_2);
+}

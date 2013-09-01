@@ -1,0 +1,7 @@
+parse.y:4431
+static int
+nodeline(node)
+    NODE *node;
+{
+    return nd_line(node);
+}

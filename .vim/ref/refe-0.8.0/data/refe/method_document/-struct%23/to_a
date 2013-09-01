@@ -1,0 +1,9 @@
+--- values
+--- to_a
+
+    構造体のメンバの値を配列にいれて返します。例えば以下のようにして
+    passwd のエントリ(etc.so 参照)を出力できます。
+
+      require 'etc'
+      print Etc.getpwuid.values.join(":"), "\n"
+

@@ -1,0 +1,25 @@
+struct.c:300
+VALUE
+#ifdef HAVE_STDARG_PROTOTYPES
+rb_struct_new(VALUE klass, ...)
+#else
+rb_struct_new(klass, va_alist)
+    VALUE klass;
+    va_dcl
+#endif
+{
+    VALUE sz, *mem;
+    long size, i;
+    va_list args;
+
+    sz = rb_struct_iv_get(klass, "__size__");
+    size = FIX2LONG(sz); 
+    mem = ALLOCA_N(VALUE, size);
+    va_init_list(args, klass);
+    for (i=0; i<size; i++) {
+	mem[i] = va_arg(args, VALUE);
+    }
+    va_end(args);
+
+    return rb_class_new_instance(size, mem, klass);
+}

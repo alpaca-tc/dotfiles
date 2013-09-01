@@ -1,0 +1,18 @@
+file.c:1473
+static inline char *
+skipprefix(path)
+    const char *path;
+{
+#ifdef DOSISH_UNC
+    if (isdirsep(path[0]) && isdirsep(path[1])) {
+	if (*(path = nextdirsep(path + 2)))
+	    path = nextdirsep(path + 1);
+	return (char *)path;
+    }
+#endif
+#ifdef DOSISH_DRIVE_LETTER
+    if (has_drive_letter(path))
+	return (char *)(path + 2);
+#endif
+    return (char *)path;
+}

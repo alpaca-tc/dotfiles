@@ -1,0 +1,29 @@
+--- self < other
+--- self <= other
+--- self > other
+--- self >= other
+
+    比較演算子。self が other の子孫である時、
+    self < other が成立します。
+
+    親子関係にないクラス同士の比較ではいずれの関係も false を返します。
+    other がクラスやモジュールでなければ例外 TypeError が
+    発生します。
+
+        module Foo
+        end
+        class Bar
+          include Foo
+        end
+        class Baz < Bar
+        end
+        class Qux
+        end
+        p Bar < Foo     # => true
+        p Baz < Bar     # => true
+        p Baz < Foo     # => true
+        p Baz < Qux     # => false (version 1.8 では nil)
+        p Baz > Qux     # => false (version 1.8 では nil)
+
+        p Foo < Object.new # => in `<': compared with non class/module (TypeError)
+

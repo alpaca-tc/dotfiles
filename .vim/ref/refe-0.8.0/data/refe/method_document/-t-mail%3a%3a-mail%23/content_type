@@ -1,0 +1,4 @@
+: content_type( default = nil ) -> String
+    メール本体のファイルタイプを示す文字列。例えば "text/plain"。
+    ヘッダが存在しない場合は default を返します。
+

@@ -1,0 +1,9 @@
+eval.c:5731
+VALUE
+rb_mod_module_eval(argc, argv, mod)
+    int argc;
+    VALUE *argv;
+    VALUE mod;
+{
+    return specific_eval(argc, argv, mod, mod);
+}

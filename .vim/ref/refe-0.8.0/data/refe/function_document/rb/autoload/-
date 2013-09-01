@@ -1,0 +1,2 @@
+: void rb_autoload(const char *klass, const char *filename)
+

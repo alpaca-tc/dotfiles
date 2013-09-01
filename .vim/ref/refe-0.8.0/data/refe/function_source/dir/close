@@ -1,0 +1,13 @@
+dir.c:416
+static VALUE
+dir_close(dir)
+    VALUE dir;
+{
+    struct dir_data *dirp;
+
+    GetDIR(dir, dirp);
+    closedir(dirp->dir);
+    dirp->dir = NULL;
+
+    return Qnil;
+}

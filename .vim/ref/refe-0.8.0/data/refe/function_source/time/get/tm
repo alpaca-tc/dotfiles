@@ -1,0 +1,9 @@
+time.c:877
+static VALUE
+time_get_tm(time, gmt)
+    VALUE time;
+    int gmt;
+{
+    if (gmt) return time_gmtime(time);
+    return time_localtime(time);
+}

@@ -1,0 +1,5 @@
+--- add(o)
+--- << o
+#    Adds the given object to the set and returns self.
+    集合にオブジェクト o を加え、その集合自身を返します。
+

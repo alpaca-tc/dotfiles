@@ -1,0 +1,36 @@
+eval.c:7492
+static VALUE
+method_arity(method)
+    VALUE method;
+{
+    struct METHOD *data;
+    NODE *body;
+    int n;
+
+    Data_Get_Struct(method, struct METHOD, data);
+
+    body = data->body;
+    switch (nd_type(body)) {
+      case NODE_CFUNC:
+	if (body->nd_argc < 0) return INT2FIX(-1);
+	return INT2FIX(body->nd_argc);
+      case NODE_ZSUPER:
+	return INT2FIX(-1);
+      case NODE_ATTRSET:
+	return INT2FIX(1);
+      case NODE_IVAR:
+	return INT2FIX(0);
+      case NODE_BMETHOD:
+      case NODE_DMETHOD:
+       return proc_arity(method);
+      default:
+	body = body->nd_next;	/* skip NODE_SCOPE */
+	if (nd_type(body) == NODE_BLOCK)
+	    body = body->nd_head;
+	if (!body) return INT2FIX(0);
+	n = body->nd_cnt;
+	if (body->nd_opt || body->nd_rest != -1)
+	    n = -n-1;
+	return INT2FIX(n);
+    }
+}

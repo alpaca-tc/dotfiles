@@ -1,0 +1,9 @@
+--- CGI#print(*options)
+      出力。
+
+       例：
+       cgi = CGI.new
+       cgi.print    # default:  cgi.print == $DEFAULT_OUTPUT.print
+
+#=== MAKE COOKIE OBJECT
+

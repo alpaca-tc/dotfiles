@@ -1,0 +1,5 @@
+--- File::Stat.new(path)
+
+    path に関する File::Stat オブジェクトを生成して返します。
+    File.stat [File/stat] と同じです。
+

@@ -1,0 +1,4 @@
+--- Integer.induced_from(num)
+
+    num を Integer に変換した結果を返します。
+

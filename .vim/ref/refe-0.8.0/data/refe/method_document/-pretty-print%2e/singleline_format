@@ -1,0 +1,12 @@
+--- PrettyPrint.singleline_format([output[, maxwidth[, newline[, genspace]]]]) {|pp| ...}
+#     is similar to PrettyPrint.format but the result has no breaks.
+# 
+#     maxwidth, newline and genspace are ignored.
+#     The invocation of breakable in the block doesn't break a line and
+#     treated as just an invocation of text.
+
+    PrettyPrint.format に似ていますが、改行しません。引数 
+    maxwidth, newline と genspace は無視されます。ブロッ
+    ク中の breakable の実行は、改行せずに text の実行であるか
+    のように扱います。
+

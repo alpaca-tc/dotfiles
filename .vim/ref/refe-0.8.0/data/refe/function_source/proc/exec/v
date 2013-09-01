@@ -1,0 +1,59 @@
+process.c:549
+static int
+proc_exec_v(argv, prog)
+    char **argv;
+    char *prog;
+{
+    if (!prog)
+	prog = argv[0];
+    security(prog);
+    prog = dln_find_exe(prog, 0);
+    if (!prog)
+	return -1;
+
+#if (defined(MSDOS) && !defined(DJGPP)) || defined(__human68k__) || defined(__EMX__) || defined(OS2)
+    {
+#if defined(__human68k__)
+#define COMMAND "command.x"
+#endif
+#if defined(__EMX__) || defined(OS2) /* OS/2 emx */
+#define COMMAND "cmd.exe"
+#endif
+#if (defined(MSDOS) && !defined(DJGPP))
+#define COMMAND "command.com"
+#endif
+	char *extension;
+
+	if ((extension = strrchr(prog, '.')) != NULL && strcasecmp(extension, ".bat") == 0) {
+	    char **new_argv;
+	    char *p;
+	    int n;
+
+	    for (n = 0; argv[n]; n++)
+		/* no-op */;
+	    new_argv = ALLOCA_N(char*, n + 2);
+	    for (; n > 0; n--)
+		new_argv[n + 1] = argv[n];
+	    new_argv[1] = strcpy(ALLOCA_N(char, strlen(argv[0]) + 1), argv[0]);
+	    for (p = new_argv[1]; *p != '\0'; p++)
+		if (*p == '/')
+		    *p = '\\';
+	    new_argv[0] = COMMAND;
+	    argv = new_argv;
+	    prog = dln_find_exe(argv[0], 0);
+	    if (!prog) {
+		errno = ENOENT;
+		return -1;
+	    }
+	}
+    }
+#endif /* MSDOS or __human68k__ or __EMX__ */
+    before_exec();
+#ifdef _WIN32
+    do_aspawn(P_OVERLAY, prog, argv);
+#else
+    execv(prog, argv);
+#endif
+    after_exec();
+    return -1;
+}

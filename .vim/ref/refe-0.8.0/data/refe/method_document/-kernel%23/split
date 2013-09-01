@@ -1,0 +1,6 @@
+--- split([sep[, limit]])
+
+    $_ の示す文字列をパターン sep によって
+    limit 個の文字列に分割し、その配列を返します。詳細
+    は String#split [String/split] を参照してください。
+

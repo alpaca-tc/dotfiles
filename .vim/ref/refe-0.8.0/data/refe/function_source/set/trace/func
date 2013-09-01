@@ -1,0 +1,14 @@
+eval.c:2221
+static VALUE
+set_trace_func(obj, trace)
+    VALUE obj, trace;
+{
+    if (NIL_P(trace)) {
+	trace_func = 0;
+	return Qnil;
+    }
+    if (!rb_obj_is_proc(trace)) {
+	rb_raise(rb_eTypeError, "trace_func needs to be Proc");
+    }
+    return trace_func = trace;
+}

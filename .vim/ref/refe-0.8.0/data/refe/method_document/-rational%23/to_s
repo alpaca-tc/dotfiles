@@ -1,0 +1,13 @@
+: self + other
+: self - other
+: self * other
+: self / other
+: self % other
+: self ** other
+: divmod
+: abs
+: self <=> other
+: to_i
+: to_f
+: to_s
+

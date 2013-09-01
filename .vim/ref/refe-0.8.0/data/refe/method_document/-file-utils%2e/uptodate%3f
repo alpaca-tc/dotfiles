@@ -1,0 +1,8 @@
+--- FileUtils.uptodate?( newer, older_list, *options )
+  Options: verbose
+
+  newer が、older_list に含まれるすべてのファイルより新しいとき真。
+  存在しないファイルは無限に古いとみなされます。
+
+    FileUtils.newest? 'hello.o', 'hello.c', 'hello.h' or system 'make'
+

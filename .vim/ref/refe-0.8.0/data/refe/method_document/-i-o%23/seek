@@ -1,0 +1,11 @@
+--- seek(offset[, whence])
+
+    ファイルポインタを offset だけ移動させます。whence の
+    値が IO::SEEK_SET の時にはファイルの先頭から、
+    IO::SEEK_CUR の時には現在のファイルポインタから、
+    IO::SEEK_END の時にはEOFから offset バイトだけ移動しま
+    す。whence の省略値は IO::SEEK_SET です。
+
+    offset 位置への移動が成功すれば 0 を返します。
+    失敗した場合は例外 Errno::EXXX が発生します。
+

@@ -1,0 +1,12 @@
+--- OptionParser#parse(*argv)
+--- OptionParser#parse!([argv = ARGV])
+    Parses argv in order when environment variable POSIXLY_CORRECT
+    is set, otherwise permutation mode
+    
+    parse! takes argument array itself, and removes switches
+    destructively.
+    Defaults to parse ARGV.
+    :Parameters:
+      : argv
+        command line arguments to be parsed.
+

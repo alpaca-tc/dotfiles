@@ -1,0 +1,8 @@
+eval.c:4048
+static VALUE
+rb_f_block_given_p()
+{
+    if (ruby_frame->prev && ruby_frame->prev->iter == ITER_CUR && ruby_block)
+	return Qtrue;
+    return Qfalse;
+}

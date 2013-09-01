@@ -1,0 +1,2 @@
+: static inline int is_pointer_to_heap(void *ptr)
+

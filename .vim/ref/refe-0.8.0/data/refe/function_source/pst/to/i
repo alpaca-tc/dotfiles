@@ -1,0 +1,7 @@
+process.c:133
+static VALUE
+pst_to_i(st)
+    VALUE st;
+{
+    return rb_iv_get(st, "status");
+}

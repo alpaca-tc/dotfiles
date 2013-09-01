@@ -1,0 +1,38 @@
+dln.c:430
+static long
+load_text_data(fd, hdrp, bss, disp)
+    int fd;
+    struct exec *hdrp;
+    int bss;
+    long disp;
+{
+    int size;
+    unsigned char* addr;
+
+    lseek(fd, disp + N_TXTOFF(*hdrp), 0);
+    size = hdrp->a_text + hdrp->a_data;
+
+    if (bss == -1) size += hdrp->a_bss;
+    else if (bss > 1) size += bss;
+
+    addr = (unsigned char*)xmalloc(size);
+    if (addr == NULL) {
+	dln_errno = errno;
+	return 0;
+    }
+
+    if (read(fd, addr, size) !=  size) {
+	dln_errno = errno;
+	free(addr);
+	return 0;
+    }
+
+    if (bss == -1) {
+	memset(addr +  hdrp->a_text + hdrp->a_data, 0, hdrp->a_bss);
+    }
+    else if (bss > 0) {
+	memset(addr +  hdrp->a_text + hdrp->a_data, 0, bss);
+    }
+
+    return (long)addr;
+}

@@ -1,0 +1,14 @@
+--- instance_variable_set(var, val)
+
+    ruby 1.8 feature
+
+    オブジェクトのインスタンス変数 var の値を val に設定し
+    て val を返します。インスタンス変数が定義されていなければ イ
+    ンスタンス変数が定義されます。インスタンス変数名 var は文字
+    列か Symbol で指定します。
+
+        obj = Object.new
+        p obj.instance_variable_set("@foo", 1)  # => 1
+        p obj.instance_variable_set(:@foo, 2)   # => 2
+        p obj.instance_variable_get(:@foo)      # => 2
+

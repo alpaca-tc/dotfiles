@@ -1,0 +1,31 @@
+regex.c:508
+static void
+print_mbc(c)
+     unsigned int c;
+{
+  if (current_mbctype == MBCTYPE_UTF8) {
+    if (c < 0x80)
+      printf("%c", (int)c);
+    else if (c <= 0x7ff)
+      printf("%c%c", (int)utf8_firstbyte(c), (int)(c & 0x3f));
+    else if (c <= 0xffff)
+      printf("%c%c%c", (int)utf8_firstbyte(c), (int)((c >> 6) & 0x3f),
+	     (int)(c & 0x3f));
+    else if (c <= 0x1fffff) 
+      printf("%c%c%c%c", (int)utf8_firstbyte(c), (int)((c >> 12) & 0x3f),
+	     (int)((c >> 6) & 0x3f), (int)(c & 0x3f));
+    else if (c <= 0x3ffffff)
+      printf("%c%c%c%c%c", (int)utf8_firstbyte(c), (int)((c >> 18) & 0x3f),
+	     (int)((c >> 12) & 0x3f), (int)((c >> 6) & 0x3f), (int)(c & 0x3f));
+    else if (c <= 0x7fffffff)
+      printf("%c%c%c%c%c%c", (int)utf8_firstbyte(c), (int)((c >> 24) & 0x3f),
+	     (int)((c >> 18) & 0x3f), (int)((c >> 12) & 0x3f),
+	     (int)((c >> 6) & 0x3f), (int)(c & 0x3f));
+  }
+  else if (c < 0xff) {
+    printf("\\%o", (int)c);
+  }
+  else {
+    printf("%c%c", (int)(c >> BYTEWIDTH), (int)(c &0xff));
+  }
+}

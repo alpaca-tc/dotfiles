@@ -1,0 +1,9 @@
+string.c:287
+VALUE
+rb_str_dup(str)
+    VALUE str;
+{
+    VALUE dup = str_alloc(rb_obj_class(str));
+    rb_str_replace(dup, str);
+    return dup;
+}

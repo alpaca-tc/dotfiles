@@ -1,0 +1,43 @@
+variable.c:580
+VALUE
+rb_f_untrace_var(argc, argv)
+    int argc;
+    VALUE *argv;
+{
+    VALUE var, cmd;
+    ID id;
+    struct global_entry *entry;
+    struct trace_var *trace;
+
+    rb_scan_args(argc, argv, "11", &var, &cmd);
+    id = rb_to_id(var);
+    if (!st_lookup(rb_global_tbl, id, (st_data_t *)&entry)) {
+	rb_name_error(id, "undefined global variable %s", rb_id2name(id));
+    }
+
+    trace = entry->var->trace;
+    if (NIL_P(cmd)) {
+	VALUE ary = rb_ary_new();
+
+	while (trace) {
+	    struct trace_var *next = trace->next;
+	    rb_ary_push(ary, (VALUE)trace->data);
+	    trace->removed = 1;
+	    trace = next;
+	}
+
+	if (!entry->var->block_trace) remove_trace(entry->var);
+	return ary;
+    }
+    else {
+	while (trace) {
+	    if (trace->data == cmd) {
+		trace->removed = 1;
+		if (!entry->var->block_trace) remove_trace(entry->var);
+		return rb_ary_new3(1, cmd);
+	    }
+	    trace = trace->next;
+	}
+    }
+    return Qnil;
+}

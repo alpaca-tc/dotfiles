@@ -1,0 +1,9 @@
+error.c:514
+void
+rb_invalid_str(str, type)
+    const char *str, *type;
+{
+    VALUE s = rb_str_inspect(rb_str_new2(str));
+
+    rb_raise(rb_eArgError, "invalid value for %s: %s", type, RSTRING(s)->ptr);
+}

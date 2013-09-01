@@ -1,0 +1,12 @@
+numeric.c:177
+static VALUE
+num_uminus(num)
+    VALUE num;
+{
+    VALUE zero;
+
+    zero = INT2FIX(0);
+    do_coerce(&zero, &num, Qtrue);
+
+    return rb_funcall(zero, '-', 1, num);
+}

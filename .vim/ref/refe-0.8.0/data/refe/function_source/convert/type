@@ -1,0 +1,25 @@
+object.c:1016
+static VALUE
+convert_type(val, tname, method, raise)
+    VALUE val;
+    const char *tname, *method;
+    int raise;
+{
+    ID m;
+
+    m = rb_intern(method);
+    if (!rb_respond_to(val, m)) {
+	if (raise) {
+	    rb_raise(rb_eTypeError, "cannot convert %s into %s",
+		     NIL_P(val) ? "nil" :
+		     val == Qtrue ? "true" :
+		     val == Qfalse ? "false" :
+		     rb_obj_classname(val), 
+		     tname);
+	}
+	else {
+	    return Qnil;
+	}
+    }
+    return rb_funcall(val, m, 0);
+}

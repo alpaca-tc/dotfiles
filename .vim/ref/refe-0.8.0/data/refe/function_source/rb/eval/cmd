@@ -1,0 +1,45 @@
+eval.c:1568
+VALUE
+rb_eval_cmd(cmd, arg, tcheck)
+    VALUE cmd, arg;
+    int tcheck;
+{
+    int state;
+    VALUE val = Qnil;		/* OK */
+    struct SCOPE *saved_scope;
+    volatile int safe = ruby_safe_level;
+
+    if (TYPE(cmd) != T_STRING) {
+	PUSH_ITER(ITER_NOT);
+	val = rb_funcall2(cmd, rb_intern("call"), RARRAY(arg)->len, RARRAY(arg)->ptr);
+	POP_ITER();
+	return val;
+    }
+
+    saved_scope = ruby_scope;
+    ruby_scope = top_scope;
+    PUSH_FRAME();
+    ruby_frame->last_func = 0;
+    ruby_frame->orig_func = 0;
+    ruby_frame->last_class = 0;
+    ruby_frame->self = ruby_top_self;
+    PUSH_CREF(ruby_wrapper ? ruby_wrapper : rb_cObject);
+
+    if (tcheck && OBJ_TAINTED(cmd)) {
+	ruby_safe_level = 4;
+    }
+
+    PUSH_TAG(PROT_NONE);
+    if ((state = EXEC_TAG()) == 0) {
+	val = eval(ruby_top_self, cmd, Qnil, 0, 0);
+    }
+    if (ruby_scope->flags & SCOPE_DONT_RECYCLE)
+       scope_dup(saved_scope);
+    ruby_scope = saved_scope;
+    ruby_safe_level = safe;
+    POP_TAG();
+    POP_FRAME();
+
+    jump_tag_but_local_jump(state);
+    return val;
+}

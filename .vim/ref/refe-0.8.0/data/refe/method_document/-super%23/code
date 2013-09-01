@@ -1,0 +1,3 @@
+: code
+      Returns the response code. See imap.rb"/Net::IMAP::ResponseCode.
+

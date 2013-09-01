@@ -1,0 +1,13 @@
+eval.c:9241
+static VALUE
+rb_thread_safe_level(thread)
+    VALUE thread;
+{
+    rb_thread_t th;
+
+    th = rb_thread_check(thread);
+    if (th == curr_thread) {
+	return INT2NUM(ruby_safe_level);
+    }
+    return INT2NUM(th->safe);
+}

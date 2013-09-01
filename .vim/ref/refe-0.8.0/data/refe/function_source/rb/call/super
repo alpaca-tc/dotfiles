@@ -1,0 +1,36 @@
+eval.c:5262
+VALUE
+rb_call_super(argc, argv)
+    int argc;
+    const VALUE *argv;
+{
+    VALUE result, self, klass, k;
+
+    if (ruby_frame->last_class == 0) {
+	rb_name_error(ruby_frame->last_func, "calling `super' from `%s' is prohibited",
+		      rb_id2name(ruby_frame->last_func));
+    }
+
+    self = ruby_frame->self;
+    klass = ruby_frame->last_class;
+    if (BUILTIN_TYPE(klass) == T_MODULE) {
+	k = search_iclass(self, klass);
+	if (!k) {
+	    rb_raise(rb_eTypeError, "%s is not included in %s",
+		     rb_class2name(klass),
+		     rb_class2name(CLASS_OF(self)));
+	}
+	if (RCLASS(k)->super == 0) {
+	    rb_name_error(ruby_frame->last_func,
+			  "super: no superclass method `%s'",
+			  rb_id2name(ruby_frame->last_func));
+	}
+	klass = k;
+    }
+
+    PUSH_ITER(ruby_iter->iter ? ITER_PRE : ITER_NOT);
+    result = rb_call(RCLASS(klass)->super, self, ruby_frame->orig_func, argc, argv, 3);
+    POP_ITER();
+
+    return result;
+}

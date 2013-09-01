@@ -1,0 +1,15 @@
+re.c:1588
+const char*
+rb_get_kcode()
+{
+    switch (reg_kcode) {
+      case KCODE_SJIS:
+	return "SJIS";
+      case KCODE_EUC:
+	return "EUC";
+      case KCODE_UTF8:
+	return "UTF8";
+      default:
+	return "NONE";
+    }
+}

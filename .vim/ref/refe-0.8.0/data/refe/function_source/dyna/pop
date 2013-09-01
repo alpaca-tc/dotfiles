@@ -1,0 +1,8 @@
+parse.y:5657
+static void
+dyna_pop(vars)
+    struct RVarmap* vars;
+{
+    lvtbl->dlev--;
+    ruby_dyna_vars = vars;
+}

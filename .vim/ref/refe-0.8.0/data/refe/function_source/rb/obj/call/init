@@ -1,0 +1,11 @@
+eval.c:6311
+void
+rb_obj_call_init(obj, argc, argv)
+    VALUE obj;
+    int argc;
+    VALUE *argv;
+{
+    PUSH_ITER(rb_block_given_p()?ITER_PRE:ITER_NOT);
+    rb_funcall2(obj, init, argc, argv);
+    POP_ITER();
+}

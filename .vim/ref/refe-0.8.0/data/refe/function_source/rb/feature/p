@@ -1,0 +1,36 @@
+eval.c:5883
+static char *
+rb_feature_p(feature, ext, rb)
+    const char *feature, *ext;
+    int rb;
+{
+    VALUE v;
+    char *f, *e;
+    long i, len, elen;
+
+    if (ext) {
+	len = ext - feature;
+	elen = strlen(ext);
+    }
+    else {
+	len = strlen(feature);
+	elen = 0;
+    }
+    for (i = 0; i < RARRAY(rb_features)->len; ++i) {
+	v = RARRAY(rb_features)->ptr[i];
+	f = StringValuePtr(v);
+	if (strncmp(f, feature, len) != 0) continue;
+	if (!*(e = f + len)) {
+	    if (ext) continue;
+	    return e;
+	}
+	if (*e != '.') continue;
+	if ((!rb || !ext) && (IS_SOEXT(e) || IS_DLEXT(e))) {
+	    return e;
+	}
+	if ((rb || !ext) && (strcmp(e, ".rb") == 0)) {
+	    return e;
+	}
+    }
+    return 0;
+}

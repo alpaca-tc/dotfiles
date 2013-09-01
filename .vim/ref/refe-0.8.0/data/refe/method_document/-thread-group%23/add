@@ -1,0 +1,6 @@
+--- add(thread)
+
+    スレッド thread のグループを self にします。
+
+    self を返します。
+

@@ -1,0 +1,4 @@
+: static int new_size(int size) 
+    必要なサイズ size から、最適なハッシュエントリの
+    サイズを返す。
+

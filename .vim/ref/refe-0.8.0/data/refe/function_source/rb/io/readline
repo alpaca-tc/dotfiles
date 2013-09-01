@@ -1,0 +1,14 @@
+io.c:1144
+static VALUE
+rb_io_readline(argc, argv, io)
+    int argc;
+    VALUE *argv;
+    VALUE io;
+{
+    VALUE line = rb_io_gets_m(argc, argv, io);
+
+    if (NIL_P(line)) {
+	rb_eof_error();
+    }
+    return line;
+}

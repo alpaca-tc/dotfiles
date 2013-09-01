@@ -1,0 +1,19 @@
+--- unshift(obj1[, obj2 ...])
+--- unshift([obj1[, obj2 ...]])         ruby 1.8 feature
+
+    obj1, obj2 ... を順番に配列の先頭に挿入します。self を返します。
+
+    push, pop, shift も参照してく
+    ださい。
+
+    例:
+        arr = [1,2,3]
+        arr.unshift 0
+        p arr             #=> [0, 1, 2, 3]
+        arr.unshift [0]
+        p arr             #=> [[0], 0, 1, 2, 3]
+        arr.unshift 1, 2
+        p arr             #=> [1, 2, [0], 0, 1, 2, 3]
+
+    ruby 1.8 feature: 引数を指定しなければ何もしません。
+

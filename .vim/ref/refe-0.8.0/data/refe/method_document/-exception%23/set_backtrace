@@ -1,0 +1,7 @@
+--- set_backtrace(errinfo)
+
+    バックトレース情報に errinfo を設定し、設定されたバックトレース
+    情報を返します。errinfo は 
+    nil、String あるいは String の配列のいずれかでな
+    くてはなりません。
+

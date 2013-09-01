@@ -1,0 +1,37 @@
+error.c:232
+void
+rb_check_type(x, t)
+    VALUE x;
+    int t;
+{
+    struct types *type = builtin_types;
+
+    if (x == Qundef) {
+	rb_bug("undef leaked to the Ruby space");
+    }
+
+    if (TYPE(x) != t) {
+	while (type->type >= 0) {
+	    if (type->type == t) {
+		char *etype;
+
+		if (NIL_P(x)) {
+		    etype = "nil";
+		}
+		else if (FIXNUM_P(x)) {
+		    etype = "Fixnum";
+		}
+		else if (rb_special_const_p(x)) {
+		    etype = RSTRING(rb_obj_as_string(x))->ptr;
+		}
+		else {
+		    etype = rb_obj_classname(x);
+		}
+		rb_raise(rb_eTypeError, "wrong argument type %s (expected %s)",
+			 etype, type->name);
+	    }
+	    type++;
+	}
+	rb_bug("unknown type 0x%x", t);
+    }
+}

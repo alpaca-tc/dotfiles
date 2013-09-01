@@ -1,0 +1,6 @@
+--- self - other
+
+    other が Time オブジェクトである時、ふたつの時刻の差を 
+    Float で返します。other が数値である時には self 
+    より other だけ前の時刻を返します。
+

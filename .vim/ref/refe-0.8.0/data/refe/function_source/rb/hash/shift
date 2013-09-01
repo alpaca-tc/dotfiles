@@ -1,0 +1,21 @@
+hash.c:442
+static VALUE
+rb_hash_shift(hash)
+    VALUE hash;
+{
+    struct shift_var var;
+
+    rb_hash_modify(hash);
+    var.stop = 0;
+    st_foreach(RHASH(hash)->tbl, shift_i, (st_data_t)&var);
+
+    if (var.stop) {
+	return rb_assoc_new(var.key, var.val);
+    }
+    else if (FL_TEST(hash, HASH_PROC_DEFAULT)) {
+	return rb_funcall(RHASH(hash)->ifnone, id_call, 2, hash, Qnil);
+    }
+    else {
+	return RHASH(hash)->ifnone;
+    }
+}

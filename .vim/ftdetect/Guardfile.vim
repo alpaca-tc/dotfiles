@@ -1,3 +1,3 @@
-aug MyFtDetect
-  au BufNewFile,BufRead Guardfile setl ft=ruby
-aug END
+augroup MyFtDetect
+  autocmd BufNewFile,BufRead Guardfile setl ft=ruby
+augroup END

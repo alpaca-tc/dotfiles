@@ -1,0 +1,34 @@
+string.c:2511
+static VALUE
+rb_str_count(argc, argv, str)
+    int argc;
+    VALUE *argv;
+    VALUE str;
+{
+    char table[256];
+    char *s, *send;
+    int init = 1;
+    int i;
+
+    if (argc < 1) {
+	rb_raise(rb_eArgError, "wrong number of arguments");
+    }
+    for (i=0; i<argc; i++) {
+	VALUE s = argv[i];
+
+	StringValue(s);
+	tr_setup_table(s, table, init);
+	init = 0;
+    }
+
+    s = RSTRING(str)->ptr;
+    if (!s || RSTRING(str)->len == 0) return INT2FIX(0);
+    send = s + RSTRING(str)->len;
+    i = 0;
+    while (s < send) {
+	if (table[*s++ & 0xff]) {
+	    i++;
+	}
+    }
+    return INT2NUM(i);
+}

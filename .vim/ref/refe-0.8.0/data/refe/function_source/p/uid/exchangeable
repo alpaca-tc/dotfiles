@@ -1,0 +1,12 @@
+process.c:2065
+static VALUE
+p_uid_exchangeable()
+{
+#if defined(HAVE_SETRESUID) &&  !defined(__CHECKER__)
+    return Qtrue;
+#elif defined(HAVE_SETREUID) && !defined(OBSOLETE_SETREUID)
+    return Qtrue;
+#else
+    return Qfalse;
+#endif
+}

@@ -1,0 +1,7 @@
+--- ENV.has_key?(val)
+--- ENV.include?(val)
+--- ENV.key?(val)
+--- ENV.member?(val)
+
+    val で指定される環境変数が存在する時真を返します。
+

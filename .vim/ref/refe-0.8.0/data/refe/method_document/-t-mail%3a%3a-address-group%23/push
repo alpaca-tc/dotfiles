@@ -1,0 +1,7 @@
+: add( addr )
+: push( addr )
+    addr: TMail::Address / TMail::AddressGroup
+
+    TMail::Address または TMail::AddressGroup オブジェクトを
+    このグループに追加します。
+

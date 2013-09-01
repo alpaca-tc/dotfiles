@@ -1,0 +1,13 @@
+--- collect! {|item| ..}
+--- map! {|item| ..}
+
+    各要素を順番にブロックに渡して評価し、その結果で要素を
+    置き換えます。Enumerable#collect [Enumerable/collect] も参照。
+
+    self を返します。
+
+    例:
+        ary = [1, 2, 3]
+        ary.map! {|i| i * 3 }
+        p ary   #=> [3, 6, 9]
+

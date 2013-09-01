@@ -1,0 +1,20 @@
+--- singleton_method_added(name)
+
+    特異メソッドが追加された時にインタプリタから呼び出されます。
+    name には追加されたメソッド名が Symbol で渡されます。
+
+        class Foo
+          def singleton_method_added(name)
+            puts "singleton method \"#{name}\" was added"
+          end
+        end
+
+        obj = Foo.new
+        def obj.foo
+        end
+
+        => singleton method "foo" was added
+
+    通常のメソッドの追加に対するフックには
+    Module#method_added [Module/method_added]を使います。
+

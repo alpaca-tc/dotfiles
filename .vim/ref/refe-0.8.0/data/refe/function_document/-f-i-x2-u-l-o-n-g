@@ -1,0 +1,4 @@
+: unsigned long FIX2ULONG(VALUE x)
+    Fixnum を unsigned long に変換します。
+    返り値が unsigned long の範囲から外れる場合は RangeError が発生します。
+

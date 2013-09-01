@@ -1,0 +1,283 @@
+dln.c:637
+static int
+load_1(fd, disp, need_init)
+    int fd;
+    long disp;
+    const char *need_init;
+{
+    static char *libc = LIBC_NAME;
+    struct exec hdr;
+    struct relocation_info *reloc = NULL;
+    long block = 0;
+    long new_common = 0; /* Length of new common */
+    struct nlist *syms = NULL;
+    struct nlist *sym;
+    struct nlist *end;
+    int init_p = 0;
+
+    if (load_header(fd, &hdr, disp) == -1) return -1;
+    if (INVALID_OBJECT(hdr)) {
+	dln_errno = DLN_ENOEXEC;
+	return -1;
+    }
+    reloc = load_reloc(fd, &hdr, disp);
+    if (reloc == NULL) return -1;
+
+    syms = load_sym(fd, &hdr, disp);
+    if (syms == NULL) {
+	free(reloc);
+	return -1;
+    }
+
+    sym = syms;
+    end = syms + (hdr.a_syms / sizeof(struct nlist));
+    while (sym < end) {
+	struct nlist *old_sym;
+	int value = sym->n_value;
+
+#ifdef N_INDR
+	if (sym->n_type == (N_INDR | N_EXT)) {
+	    char *key = sym->n_un.n_name;
+
+	    if (st_lookup(sym_tbl, sym[1].n_un.n_name, &old_sym)) {
+		if (st_delete(undef_tbl, (st_data_t*)&key, NULL)) {
+		    unlink_undef(key, old_sym->n_value);
+		    free(key);
+		}
+	    }
+	    else {
+		struct indr_data data;
+
+		data.name0 = sym->n_un.n_name;
+		data.name1 = sym[1].n_un.n_name;
+		st_foreach(reloc_tbl, reloc_repl, &data);
+
+		st_insert(undef_tbl, strdup(sym[1].n_un.n_name), NULL);
+		if (st_delete(undef_tbl, (st_data_t*)&key, NULL)) {
+		    free(key);
+		}
+	    }
+	    sym += 2;
+	    continue;
+	}
+#endif
+	if (sym->n_type == (N_UNDF | N_EXT)) {
+	    if (st_lookup(sym_tbl, sym->n_un.n_name, &old_sym) == 0) {
+		old_sym = NULL;
+	    }
+
+	    if (value) {
+		if (old_sym) {
+		    sym->n_type = N_EXT | N_COMM;
+		    sym->n_value = old_sym->n_value;
+		}
+		else {
+		    int rnd =
+			value >= sizeof(double) ? sizeof(double) - 1
+			    : value >= sizeof(long) ? sizeof(long) - 1
+				: sizeof(short) - 1;
+
+		    sym->n_type = N_COMM;
+		    new_common += rnd;
+		    new_common &= ~(long)rnd;
+		    sym->n_value = new_common;
+		    new_common += value;
+		}
+	    }
+	    else {
+		if (old_sym) {
+		    sym->n_type = N_EXT | N_COMM;
+		    sym->n_value = old_sym->n_value;
+		}
+		else {
+		    sym->n_value = (long)dln_undefined;
+		    st_insert(undef_tbl, strdup(sym->n_un.n_name), NULL);
+		}
+	    }
+	}
+	sym++;
+    }
+
+    block = load_text_data(fd, &hdr, hdr.a_bss + new_common, disp);
+    if (block == 0) goto err_exit;
+
+    sym = syms;
+    while (sym < end) {
+	struct nlist *new_sym;
+	char *key;
+
+	switch (sym->n_type) {
+	  case N_COMM:
+	    sym->n_value += hdr.a_text + hdr.a_data;
+	  case N_TEXT|N_EXT:
+	  case N_DATA|N_EXT:
+
+	    sym->n_value += block;
+
+	    if (st_lookup(sym_tbl, sym->n_un.n_name, &new_sym) != 0
+		&& new_sym->n_value != (long)dln_undefined) {
+		dln_errno = DLN_ECONFL;
+		goto err_exit;
+	    }
+
+	    key = sym->n_un.n_name;
+	    if (st_delete(undef_tbl, (st_data_t*)&key, NULL) != 0) {
+		unlink_undef(key, sym->n_value);
+		free(key);
+	    }
+
+	    new_sym = (struct nlist*)xmalloc(sizeof(struct nlist));
+	    *new_sym = *sym;
+	    new_sym->n_un.n_name = strdup(sym->n_un.n_name);
+	    st_insert(sym_tbl, new_sym->n_un.n_name, new_sym);
+	    break;
+
+	  case N_TEXT:
+	  case N_DATA:
+	    sym->n_value += block;
+	    break;
+	}
+	sym++;
+    }
+
+    /*
+     * First comes the text-relocation
+     */
+    {
+	struct relocation_info * rel = reloc;
+	struct relocation_info * rel_beg = reloc +
+	    (hdr.a_trsize/sizeof(struct relocation_info));
+	struct relocation_info * rel_end = reloc +
+	    (hdr.a_trsize+hdr.a_drsize)/sizeof(struct relocation_info);
+
+	while (rel < rel_end) {
+	    char *address = (char*)(rel->r_address + block);
+	    long datum = 0;
+#if defined(sun) && defined(sparc)
+	    unsigned int mask = 0;
+#endif
+
+	    if(rel >= rel_beg)
+		address += hdr.a_text;
+
+	    if (rel->r_extern) { /* Look it up in symbol-table */
+		sym = &(syms[R_SYMBOL(rel)]);
+		switch (sym->n_type) {
+		  case N_EXT|N_UNDF:
+		    link_undef(sym->n_un.n_name, block, rel);
+		  case N_EXT|N_COMM:
+		  case N_COMM:
+		    datum = sym->n_value;
+		    break;
+		  default:
+		    goto err_exit;
+		}
+	    } /* end.. look it up */
+	    else { /* is static */
+		switch (R_SYMBOL(rel)) { 
+		  case N_TEXT:
+		  case N_DATA:
+		    datum = block;
+		    break;
+		  case N_BSS:
+		    datum = block +  new_common;
+		    break;
+		  case N_ABS:
+		    break;
+		}
+	    } /* end .. is static */
+	    if (R_PCREL(rel)) datum -= block;
+
+#if defined(sun) && defined(sparc)
+	    datum += rel->r_addend;
+	    datum >>= R_RIGHTSHIFT(rel);
+	    mask = (1 << R_BITSIZE(rel)) - 1;
+	    mask |= mask -1;
+	    datum &= mask;
+
+	    switch (R_LENGTH(rel)) {
+	      case 0:
+		*address &= ~mask;
+		*address |= datum;
+		break;
+	      case 1:
+		*(short *)address &= ~mask;
+		*(short *)address |= datum;
+		break;
+	      case 2:
+		*(long *)address &= ~mask;
+		*(long *)address |= datum;
+		break;
+	    }
+#else
+	    switch (R_LENGTH(rel)) {
+	      case 0:		/* byte */
+		if (datum < -128 || datum > 127) goto err_exit;
+		*address += datum;
+		break;
+	      case 1:		/* word */
+		*(short *)address += datum;
+		break;
+	      case 2:		/* long */
+		*(long *)address += datum;
+		break;
+	    }
+#endif
+	    rel++;
+	}
+    }
+
+    if (need_init) {
+	int len;
+	char **libs_to_be_linked = 0;
+	char *buf;
+
+	if (undef_tbl->num_entries > 0) {
+	    if (load_lib(libc) == -1) goto err_exit;
+	}
+
+	init_funcname(&buf, need_init);
+	len = strlen(buf);
+
+	for (sym = syms; sym<end; sym++) {
+	    char *name = sym->n_un.n_name;
+	    if (name[0] == '_' && sym->n_value >= block) {
+		if (strcmp(name+1, "dln_libs_to_be_linked") == 0) {
+		    libs_to_be_linked = (char**)sym->n_value;
+		}
+		else if (strcmp(name+1, buf) == 0) {
+		    init_p = 1;
+		    ((int (*)())sym->n_value)();
+		}
+	    }
+	}
+	if (libs_to_be_linked && undef_tbl->num_entries > 0) {
+	    while (*libs_to_be_linked) {
+		load_lib(*libs_to_be_linked);
+		libs_to_be_linked++;
+	    }
+	}
+    }
+    free(reloc);
+    free(syms);
+    if (need_init) {
+	if (init_p == 0) {
+	    dln_errno = DLN_ENOINIT;
+	    return -1;
+	}
+	if (undef_tbl->num_entries > 0) {
+	    if (load_lib(libc) == -1) goto err_exit;
+	    if (undef_tbl->num_entries > 0) {
+		dln_errno = DLN_EUNDEF;
+		return -1;
+	    }
+	}
+    }
+    return 0;
+
+  err_exit:
+    if (syms) free(syms);
+    if (reloc) free(reloc);
+    if (block) free((char*)block);
+    return -1;
+}

@@ -1,0 +1,8 @@
+--- URI::Generic.build(ary)
+--- URI::Generic.build(hash)
+
+    引数で与えられた URI 構成要素から URI::Generic オブジェクトを生成します。
+    構成要素は、
+      [scheme, userinfo, host, port, registry, path, opaque, query, fragment]
+    を配列かハッシュで与えます。
+

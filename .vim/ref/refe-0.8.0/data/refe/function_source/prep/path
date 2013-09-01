@@ -1,0 +1,12 @@
+io.c:2834
+static void
+prep_path(io, path)
+    VALUE io;
+    char *path;
+{
+    OpenFile *fptr;
+
+    GetOpenFile(io, fptr);
+    if (fptr->path) rb_bug("illegal prep_path() call");
+    fptr->path = strdup(path);
+}

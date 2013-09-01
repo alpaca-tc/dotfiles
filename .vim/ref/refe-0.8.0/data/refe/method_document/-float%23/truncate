@@ -1,0 +1,7 @@
+--- to_i
+--- truncate
+
+    小数点以下を切り捨てて値を整数に変換します。
+
+    round, ceil, floor も参照。
+

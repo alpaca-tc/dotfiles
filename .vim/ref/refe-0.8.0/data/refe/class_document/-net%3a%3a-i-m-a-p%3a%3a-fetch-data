@@ -1,0 +1,1 @@
+Net::IMAP::FetchData represents contents of the FETCH response.

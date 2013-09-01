@@ -1,0 +1,16 @@
+--- Net::FTP#get(localfile, remotefile = File.basename(localfile), blocksize = DEFAULT_BLOCKSIZE)
+--- Net::FTP#get(localfile, remotefile = File.basename(localfile), blocksize = DEFAULT_BLOCKSIZE) { |data| .... }
+
+    binaryの値に従ってリモートファイルを取得し、
+    localfileをファイル名とするローカルファイルに保存します。
+    remotefileが省略されるとlocalfileのベースネームが
+    仮定されます。
+    block_sizeが省略されるとDEFAULT_BLOCLSIZEが仮定されます。
+    この値は binary が真であるときのみ有効です。
+
+    ブロックが与えられた場合はそのデータをファイルに書きこむごとに、
+    書き込んだデータを data に代入してブロックが評価されます。
+    ブロックを最後に評価したときに得られた値が get の値になります。
+
+    ブロックが与えられなかった場合の get の値は nil です。
+

@@ -1,0 +1,16 @@
+--- getuid
+--- geteuid
+--- getgid
+--- getegid
+--- setuid
+--- setgid
+--- setruid
+--- setrgid
+--- seteuid
+--- setegid
+--- setreuid
+--- setregid
+--- setresuid
+--- setresgid
+--- issetugid
+

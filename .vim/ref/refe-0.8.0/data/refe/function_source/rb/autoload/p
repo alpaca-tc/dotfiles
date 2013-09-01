@@ -1,0 +1,14 @@
+variable.c:1255
+VALUE
+rb_autoload_p(mod, id)
+    VALUE mod;
+    ID id;
+{
+    struct st_table *tbl = RCLASS(mod)->iv_tbl;
+    VALUE val;
+
+    if (!tbl || !st_lookup(tbl, id, &val) || val != Qundef) {
+	return Qnil;
+    }
+    return autoload_file(mod, id);
+}

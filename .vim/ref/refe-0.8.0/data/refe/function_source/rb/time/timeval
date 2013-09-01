@@ -1,0 +1,15 @@
+time.c:198
+struct timeval
+rb_time_timeval(time)
+    VALUE time;
+{
+    struct time_object *tobj;
+    struct timeval t;
+
+    if (TYPE(time) == T_DATA && RDATA(time)->dfree == time_free) {
+	GetTimeval(time, tobj);
+	t = tobj->tv;
+	return t;
+    }
+    return time_timeval(time, Qfalse);
+}

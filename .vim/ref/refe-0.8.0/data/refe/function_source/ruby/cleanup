@@ -1,0 +1,23 @@
+eval.c:1338
+int
+ruby_cleanup(ex)
+    int ex;
+{
+    int state;
+
+    ruby_safe_level = 0;
+    PUSH_TAG(PROT_NONE);
+    PUSH_ITER(ITER_NOT);
+    if ((state = EXEC_TAG()) == 0) {
+	rb_thread_cleanup();
+	rb_thread_wait_other_threads();
+    }
+    else if (ex == 0) {
+	ex = state;
+    }
+    POP_ITER();
+
+    ex = error_handle(ex);
+    POP_TAG();
+    return ruby_finalize_0(ex);
+}

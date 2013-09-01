@@ -1,0 +1,40 @@
+gc.c:1317
+void
+Init_stack(addr)
+    VALUE *addr;
+{
+#if defined(__human68k__)
+    extern void *_SEND;
+    rb_gc_stack_start = _SEND;
+#else
+    if (!addr) addr = (VALUE *)&addr;
+    if (rb_gc_stack_start) {
+	if (STACK_UPPER(&addr,
+			rb_gc_stack_start > addr,
+			rb_gc_stack_start < ++addr))
+	    rb_gc_stack_start = addr;
+	return;
+    }
+    rb_gc_stack_start = addr;
+#endif
+#ifdef HAVE_GETRLIMIT
+    {
+	struct rlimit rlim;
+
+	if (getrlimit(RLIMIT_STACK, &rlim) == 0) {
+	    unsigned int space = rlim.rlim_cur/5;
+
+	    if (space > 1024*1024) space = 1024*1024;
+	    STACK_LEVEL_MAX = (rlim.rlim_cur - space) / sizeof(VALUE);
+	}
+    }
+#ifdef __ia64__
+    /* ruby crashes on IA64 if compiled with optimizer on */
+    /* when if STACK_LEVEL_MAX is greater than this magic number */
+    /* I know this is a kludge.  I suspect optimizer bug */
+#define IA64_MAGIC_STACK_LIMIT 49152
+    if (STACK_LEVEL_MAX > IA64_MAGIC_STACK_LIMIT)
+	STACK_LEVEL_MAX = IA64_MAGIC_STACK_LIMIT;
+#endif
+#endif
+}

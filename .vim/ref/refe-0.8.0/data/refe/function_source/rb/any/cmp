@@ -1,0 +1,24 @@
+hash.c:64
+static int
+rb_any_cmp(a, b)
+    VALUE a, b;
+{
+    VALUE args[2];
+
+    if (a == b) return 0;
+    if (FIXNUM_P(a) && FIXNUM_P(b)) {
+	return a != b;
+    }
+    if (TYPE(a) == T_STRING && RBASIC(a)->klass == rb_cString &&
+	TYPE(b) == T_STRING && RBASIC(b)->klass == rb_cString) {
+	return rb_str_cmp(a, b);
+    }
+    if (a == Qundef || b == Qundef) return -1;
+    if (SYMBOL_P(a) && SYMBOL_P(b)) {
+	return a != b;
+    }
+
+    args[0] = a;
+    args[1] = b;
+    return !rb_with_disable_interrupt(eql, (VALUE)args);
+}

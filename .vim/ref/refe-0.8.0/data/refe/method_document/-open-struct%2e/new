@@ -1,0 +1,4 @@
+--- OpenStruct.new(hash = nil)
+      OpenStructオブジェクトを生成。
+      hashが与えられたとき、
+

@@ -1,0 +1,10 @@
+io.c:2792
+static void
+defout_setter(val, id, variable)
+    VALUE val;
+    ID id;
+    VALUE *variable;
+{
+    stdout_setter(val, id, variable);
+    rb_warn("$defout is obslete; use $stdout instead");
+}

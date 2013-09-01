@@ -1,0 +1,6 @@
+--- replace(enum)
+#    Replaces the contents of the set with the contents of the given
+#    enumerable object and returns self.
+    要素を enum のものと置き換えます。要素をすべて削除し、enum で与え
+    られた Enumerable の要素を新しい要素とします。
+

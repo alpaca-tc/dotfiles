@@ -1,0 +1,5 @@
+: void rb_set_safe_level(int level)
+    セーフレベルを level に上げます。
+    level が現在のセーフレベルより低い場合は
+    例外 SecurityError が発生します。
+

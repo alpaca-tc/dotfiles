@@ -1,0 +1,15 @@
+marshal.c:369
+static void
+w_class(type, obj, arg)
+    int type;
+    VALUE obj;
+    struct dump_arg *arg;
+{
+    char *path;
+
+    VALUE klass = CLASS_OF(obj);
+    w_extended(klass, arg);
+    w_byte(type, arg);
+    path = rb_class2name(klass);
+    w_unique(path, arg);
+}

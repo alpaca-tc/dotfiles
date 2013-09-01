@@ -1,0 +1,15 @@
+object.c:977
+static VALUE
+rb_obj_public_methods(argc, argv, obj)
+    int argc;
+    VALUE *argv;
+    VALUE obj;
+{
+    if (argc == 0) {		/* hack to stop warning */
+	VALUE args[1];
+
+	args[0] = Qtrue;
+	return rb_class_public_instance_methods(1, args, CLASS_OF(obj));
+    }
+    return rb_class_public_instance_methods(argc, argv, CLASS_OF(obj));
+}

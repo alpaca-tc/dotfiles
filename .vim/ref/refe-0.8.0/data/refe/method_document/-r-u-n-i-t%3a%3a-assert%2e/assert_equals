@@ -1,0 +1,3 @@
+--- assert_equal(expected, actual[, message])
+--- assert_equals(expected, actual[, message])
+

@@ -1,0 +1,17 @@
+time.c:886
+static VALUE
+time_asctime(time)
+    VALUE time;
+{
+    struct time_object *tobj;
+    char *s;
+
+    GetTimeval(time, tobj);
+    if (tobj->tm_got == 0) {
+	time_get_tm(time, tobj->gmt);
+    }
+    s = asctime(&tobj->tm);
+    if (s[24] == '\n') s[24] = '\0';
+
+    return rb_str_new2(s);
+}

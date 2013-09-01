@@ -1,0 +1,14 @@
+eval.c:3815
+NORETURN(static VALUE terminate_process _((int, const char *, long)));
+static VALUE
+terminate_process(status, mesg, mlen)
+    int status;
+    const char *mesg;
+    long mlen;
+{
+    VALUE args[2];
+    args[0] = INT2NUM(status);
+    args[1] = rb_str_new(mesg, mlen);
+
+    rb_exc_raise(rb_class_new_instance(2, args, rb_eSystemExit));
+}

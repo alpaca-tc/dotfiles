@@ -1,0 +1,11 @@
+numeric.c:1668
+static VALUE
+fix_to_f(num)
+    VALUE num;
+{
+    double val;
+
+    val = (double)FIX2LONG(num);
+
+    return rb_float_new(val);
+}

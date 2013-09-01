@@ -1,0 +1,4 @@
+--- Readline.filename_quote_characters=(str)
+--- Readline.filename_quote_characters
+    補完時のファイル名の引用符を指定します。デフォルトでは nil です。
+

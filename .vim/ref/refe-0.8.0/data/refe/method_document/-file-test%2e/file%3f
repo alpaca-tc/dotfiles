@@ -1,0 +1,4 @@
+--- FileTest.file?(filename)
+
+    filaname が通常ファイルである時、真を返します。
+

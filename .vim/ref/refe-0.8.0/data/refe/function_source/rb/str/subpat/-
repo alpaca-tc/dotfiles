@@ -1,0 +1,11 @@
+string.c:1203
+static VALUE
+rb_str_subpat(str, re, nth)
+    VALUE str, re;
+    int nth;
+{
+    if (rb_reg_search(re, str, 0, 0) >= 0) {
+	return rb_reg_nth_match(nth, rb_backref_get());
+    }
+    return Qnil;
+}

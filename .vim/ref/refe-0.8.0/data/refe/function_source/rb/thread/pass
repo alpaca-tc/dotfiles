@@ -1,0 +1,7 @@
+eval.c:9152
+static VALUE
+rb_thread_pass()
+{
+    rb_thread_schedule();
+    return Qnil;
+}

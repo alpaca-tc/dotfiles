@@ -1,0 +1,16 @@
+numeric.c:1219
+static VALUE
+rb_flo_induced_from(klass, x)
+    VALUE klass, x;
+{
+    switch (TYPE(x)) {
+    case T_FIXNUM:
+    case T_BIGNUM:
+       return rb_funcall(x, rb_intern("to_f"), 0);
+    case T_FLOAT:
+       return x;
+    default:
+       rb_raise(rb_eTypeError, "failed to convert %s into Float",
+                rb_obj_classname(x));
+    }
+}

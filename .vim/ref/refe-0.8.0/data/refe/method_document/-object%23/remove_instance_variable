@@ -1,0 +1,22 @@
+--- remove_instance_variable(name)
+
+    オブジェクトからインスタンス変数 name を取り除き、そのインス
+    タンス変数に設定されていた値を返します。name は Symbol 
+    か文字列です。
+
+    オブジェクトがインスタンス変数 name を持たない場合は例外 
+    NameError が発生します。
+
+        class Foo
+          def foo
+            @foo = 1
+            p remove_instance_variable :@foo # => 1
+            p remove_instance_variable :@foo # => instance variable @foo not defined (NameError)
+          end
+        end
+        Foo.new.foo
+
+    Module#remove_class_variable [Module/remove_class_variable],
+    Module#remove_const [Module/remove_const] 
+    も参照してください。
+

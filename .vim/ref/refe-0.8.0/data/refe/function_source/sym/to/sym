@@ -1,0 +1,7 @@
+object.c:556
+static VALUE
+sym_to_sym(sym)
+    VALUE sym;
+{
+    return sym;
+}

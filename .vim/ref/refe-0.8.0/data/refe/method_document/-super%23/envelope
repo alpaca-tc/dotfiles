@@ -1,0 +1,3 @@
+: envelope
+      Returns a imap.rb"/Net::IMAP::Envelope giving the envelope structure.
+

@@ -1,0 +1,148 @@
+io.c:2027
+static VALUE
+pipe_open(pname, mode)
+    char *pname, *mode;
+{
+    int modef = rb_io_mode_flags(mode);
+    OpenFile *fptr;
+
+#if defined(DJGPP) || defined(__human68k__) || defined(__VMS)
+    FILE *f = popen(pname, mode);
+
+    if (!f) rb_sys_fail(pname);
+    else {
+	VALUE port = io_alloc(rb_cIO);
+
+	MakeOpenFile(port, fptr);
+	fptr->finalize = pipe_finalize;
+	fptr->mode = modef;
+
+	pipe_add_fptr(fptr);
+	if (modef & FMODE_READABLE) fptr->f  = f;
+	if (modef & FMODE_WRITABLE) {
+	    if (fptr->f) fptr->f2 = f;
+	    else fptr->f = f;
+	    rb_io_synchronized(fptr);
+	}
+	return (VALUE)port;
+    }
+#else
+#ifdef _WIN32
+    int pid;
+    FILE *fpr, *fpw;
+
+retry:
+    pid = pipe_exec(pname, rb_io_mode_modenum(mode), &fpr, &fpw);
+    if (pid == -1) {		/* exec failed */
+	if (errno == EAGAIN) {
+	    rb_thread_sleep(1);
+	    goto retry;
+	}
+	rb_sys_fail(pname);
+    }
+    else {
+        VALUE port = io_alloc(rb_cIO);
+
+	MakeOpenFile(port, fptr);
+	fptr->mode = modef;
+	fptr->mode |= FMODE_SYNC;
+	fptr->pid = pid;
+
+	if (modef & FMODE_READABLE) {
+	    fptr->f = fpr;
+	}
+	if (modef & FMODE_WRITABLE) {
+	    if (fptr->f) fptr->f2 = fpw;
+	    else fptr->f = fpw;
+	}
+	fptr->finalize = pipe_finalize;
+	pipe_add_fptr(fptr);
+	return (VALUE)port;
+    }
+#else
+    int pid, pr[2], pw[2];
+    volatile int doexec;
+
+    if (((modef & FMODE_READABLE) && pipe(pr) == -1) ||
+	((modef & FMODE_WRITABLE) && pipe(pw) == -1))
+	rb_sys_fail(pname);
+
+    doexec = (strcmp("-", pname) != 0);
+    if (!doexec) {
+	fflush(stdin);		/* is it really needed? */
+	fflush(stdout);
+	fflush(stderr);
+    }
+
+  retry:
+    switch ((pid = fork())) {
+      case 0:			/* child */
+	if (modef & FMODE_READABLE) {
+	    close(pr[0]);
+	    if (pr[1] != 1) {
+		dup2(pr[1], 1);
+		close(pr[1]);
+	    }
+	}
+	if (modef & FMODE_WRITABLE) {
+	    close(pw[1]);
+	    if (pw[0] != 0) {
+		dup2(pw[0], 0);
+		close(pw[0]);
+	    }
+	}
+
+	if (doexec) {
+	    int fd;
+
+	    for (fd = 3; fd < NOFILE; fd++)
+		close(fd);
+	    rb_proc_exec(pname);
+	    fprintf(stderr, "%s:%d: command not found: %s\n",
+		    ruby_sourcefile, ruby_sourceline, pname);
+	    _exit(127);
+	}
+	rb_io_synchronized(RFILE(orig_stdout)->fptr);
+	rb_io_synchronized(RFILE(orig_stderr)->fptr);
+	return Qnil;
+
+      case -1:			/* fork failed */
+	if (errno == EAGAIN) {
+	    rb_thread_sleep(1);
+	    goto retry;
+	}
+	close(pr[0]); close(pw[1]);
+	rb_sys_fail(pname);
+	break;
+
+      default:			/* parent */
+	if (pid < 0) rb_sys_fail(pname);
+	else {
+	    VALUE port = io_alloc(rb_cIO);
+
+	    MakeOpenFile(port, fptr);
+	    fptr->mode = modef;
+	    fptr->mode |= FMODE_SYNC;
+	    fptr->pid = pid;
+
+	    if (modef & FMODE_READABLE) {
+		close(pr[1]);
+		fptr->f  = rb_fdopen(pr[0], "r");
+	    }
+	    if (modef & FMODE_WRITABLE) {
+		FILE *f = rb_fdopen(pw[1], "w");
+
+		close(pw[0]);
+		if (fptr->f) fptr->f2 = f;
+		else fptr->f = f;
+	    }
+#if defined (__CYGWIN__)
+	    fptr->finalize = pipe_finalize;
+	    pipe_add_fptr(fptr);
+#endif
+	    return port;
+	}
+    }
+#endif
+#endif
+}

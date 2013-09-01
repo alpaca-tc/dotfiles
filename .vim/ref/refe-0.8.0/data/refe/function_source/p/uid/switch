@@ -1,0 +1,29 @@
+process.c:2206
+static VALUE
+p_uid_switch(obj)
+    VALUE obj;
+{
+    extern int errno;
+    int uid, euid;
+
+    rb_secure(2);
+    if (under_uid_switch) {
+	rb_raise(rb_eRuntimeError, "can't handle UID during evaluating the block given to the Process::UID.switch method");
+    }
+
+    uid = getuid();
+    euid = geteuid();
+
+    if (uid == euid) {
+	errno = EPERM;
+	rb_sys_fail(0);
+    }
+    p_uid_exchange(obj);
+    if (rb_block_given_p()) {
+	under_uid_switch = 1;
+	return rb_ensure(rb_yield, Qnil, p_uid_sw_ensure, obj);
+    } else {
+	return INT2FIX(euid);
+    }
+#endif
+}

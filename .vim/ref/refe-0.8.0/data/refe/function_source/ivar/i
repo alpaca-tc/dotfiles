@@ -1,0 +1,12 @@
+variable.c:1025
+static int
+ivar_i(key, entry, ary)
+    ID key;
+    struct global_entry *entry;
+    VALUE ary;
+{
+    if (rb_is_instance_id(key)) {
+	rb_ary_push(ary, rb_str_new2(rb_id2name(key)));
+    }
+    return ST_CONTINUE;
+}

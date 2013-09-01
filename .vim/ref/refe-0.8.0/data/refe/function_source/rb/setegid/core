@@ -1,0 +1,38 @@
+process.c:2020
+static VALUE
+rb_setegid_core(egid)
+    int egid;
+{
+    int gid;
+
+    rb_secure(2);
+    if (under_gid_switch) {
+	rb_raise(rb_eRuntimeError, "can't handle GID during evaluating the block given to the Process::GID.switch method");
+    }
+
+    gid = getgid();
+
+#if defined(HAVE_SETRESGID) && !defined(__CHECKER__)
+    if (gid != egid) {
+	if (setresgid(-1,egid,egid) < 0) rb_sys_fail(0);
+	SAVED_GROUP_ID = egid;
+    } else {
+	if (setresgid(-1,egid,-1) < 0) rb_sys_fail(0);
+    }
+#elif defined(HAVE_SETREGID) && !defined(OBSOLETE_SETREGID)
+    if (setregid(-1, egid) < 0) rb_sys_fail(0);
+    if (gid != egid) {
+	if (setregid(egid,gid) < 0) rb_sys_fail(0);
+	if (setregid(gid,egid) < 0) rb_sys_fail(0);
+	SAVED_GROUP_ID = egid;
+    }
+#elif defined HAVE_SETEGID
+    if (setegid(egid) < 0) rb_sys_fail(0);
+#elif defined HAVE_SETGID
+    if (geteuid() == 0 /* root user */) rb_sys_fail(0);
+    if (setgid(egid) < 0) rb_sys_fail(0);
+#else
+    rb_notimplement();
+#endif
+    return INT2FIX(egid);
+}

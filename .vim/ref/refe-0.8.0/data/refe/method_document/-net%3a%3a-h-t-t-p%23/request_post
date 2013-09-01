@@ -1,0 +1,24 @@
+: request_post( path, data, header = nil )
+: request_post( path, data, header = nil ) {|response| .... }
+    path にあるエンティティを取得します。HTTPResponse
+    オブジェクトを返します。
+
+    ブロックとともに呼び出されたときは、ボディを読みこむ前に
+    HTTPResponse オブジェクトをブロックに渡します。
+
+    このメソッドは HTTP プロトコルに関連した例外は発生させません。
+
+        # example
+        response = http.post2( '/cgi-bin/nice.rb', 'datadatadata...' )
+        p response.status
+        puts response.body          # body is already read
+
+        # using block
+        http.post2( '/cgi-bin/nice.rb', 'datadatadata...' ) {|response|
+          p response.status
+          p response['content-type']
+          response.read_body do |str|   # read body now
+            print str
+          end
+        }
+

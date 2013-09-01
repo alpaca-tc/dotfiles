@@ -1,0 +1,11 @@
+numeric.c:1679
+static VALUE
+fix_abs(fix)
+    VALUE fix;
+{
+    long i = FIX2LONG(fix);
+
+    if (i < 0) i = -i;
+
+    return LONG2NUM(i);
+}

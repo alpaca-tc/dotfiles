@@ -1,0 +1,7 @@
+: bcc( default = nil ) -> [String]
+: bcc=( specs )
+    specs: String / [String]
+    default: Object
+
+    Bcc: アドレスの spec の配列。
+

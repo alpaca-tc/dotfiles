@@ -1,0 +1,10 @@
+io.c:2559
+VALUE
+rb_io_printf(argc, argv, out)
+    int argc;
+    VALUE argv[];
+    VALUE out;
+{
+    rb_io_write(out, rb_f_sprintf(argc, argv));
+    return Qnil;
+}

@@ -1,0 +1,34 @@
+--- to_f
+
+    文字列を 10 進数表現と解釈して、浮動小数点数 Float に変換します。
+
+        p "10".to_f    # => 10.0
+        p "10e2".to_f  # => 1000.0
+        p "1e-2".to_f  # => 0.01
+        p ".1".to_f    # => 0.1
+
+        p "nan".to_f   # => NaN         (ruby 1.7 feature: => 0.0)
+        p "INF".to_f   # => Infinity    (ruby 1.7 feature: => 0.0)
+        p "-Inf".to_f  # => -Infinity   (ruby 1.7 feature: => -0.0)
+        p (("10" * 1000).to_f) # => Infinity  (ruby 1.7 feature: => out of range (ArgumentError)
+
+        p "0xa.a".to_f # => 10.625     # 16 進も許される(システム依存)
+                                       # (ruby 1.7 feature: => 0.0)
+        p " \n10".to_f # => 10.0       # 先頭の空白は無視される
+        p "1_0_0".to_f # => 1.0        # `_' は数値要素とみなされない
+                                       # (ruby 1.7 feature: => 100.0)
+        p "".to_f      # => 0.0
+
+    浮動小数点数とみなせなくなるところまでを変換対象とします。
+    変換対象が空文字列であれば 0.0 を返します。
+    
+    hex, oct, to_i, 
+    Integer, Float 
+    も参照してください。
+
+    逆に、数値を文字列に変換するには 
+    sprintf,
+    %,
+    Integer#to_s [Integer/to_s]
+    を使用します。
+

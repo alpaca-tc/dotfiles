@@ -1,0 +1,19 @@
+--- yield(arg ... )
+
+    ruby 1.7 feature
+
+    Proc#call [Proc/call] と同じですが、引数の数のチェックを行いません。
+
+        pr = Proc.new {|a,b,c| p [a,b,c]}
+        pr.yield(1)        #=> [1, nil, nil]
+        pr.yield(1,2,3,4)  #=> [1, 2, 3]
+        pr.call(1)         #=> wrong # of arguments (4 for 3) (ArgumentError)
+
+
+    これは yield と同じ動作です。
+
+        def foo
+          yield(1)
+        end
+        foo {|a,b,c| p [a,b,c]}
+

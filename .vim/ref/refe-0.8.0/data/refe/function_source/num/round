@@ -1,0 +1,7 @@
+numeric.c:864
+static VALUE
+num_round(num)
+    VALUE num;
+{
+    return flo_round(rb_Float(num));
+}

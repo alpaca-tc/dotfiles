@@ -1,0 +1,19 @@
+--- classify { |o| ... }
+#    Classifies the set by the return value of the given block and
+#    returns a hash of {value => set of elements} pairs.  The block is
+#    called once for each element of the set, passing the element as
+#    parameter.
+    集合をブロックの値によって分類します。返される分類結果は、
+    {値 => 要素の集合} という形をしたハッシュです。
+    ブロックは集合のすべての要素に対して1度ずつ実行され、
+    ブロック変数 o にはその要素が渡されます。
+
+    例:
+
+      require 'set'
+      files = Set.new(Dir.glob("*.rb"))
+      hash = files.classify { |f| File.mtime(f).year }
+      p hash    #=> {2000=>#<Set: {"a.rb", "b.rb"}>,
+                #    2001=>#<Set: {"c.rb", "d.rb", "e.rb"}>,
+                #    2002=>#<Set: {"f.rb"}>}
+

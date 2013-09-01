@@ -1,0 +1,2 @@
+: static int handle_rescue(VALUE self, NODE *node)
+

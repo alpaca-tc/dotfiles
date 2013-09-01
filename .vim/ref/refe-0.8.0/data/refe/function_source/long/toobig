@@ -1,0 +1,8 @@
+marshal.c:775
+static void
+long_toobig(size)
+    int size;
+{
+    rb_raise(rb_eTypeError, "long too big for this architecture (size %d, given %d)",
+	     sizeof(long), size);
+}

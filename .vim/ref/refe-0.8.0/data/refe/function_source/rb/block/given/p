@@ -1,0 +1,8 @@
+eval.c:4034
+int
+rb_block_given_p()
+{
+    if (ruby_frame->iter == ITER_CUR && ruby_block)
+	return Qtrue;
+    return Qfalse;
+}

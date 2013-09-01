@@ -1,0 +1,9 @@
+--- OptionParser::Switch#parse_arg(arg) {non-serious error handler}
+    Parses argument and returns rest of arg, and matched portion
+    to the argument pattern.
+    :Parameters:
+      : arg
+        option argument to be parsed.
+      : block
+        yields when the pattern doesn't match sub-string.
+

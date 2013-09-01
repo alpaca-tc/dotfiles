@@ -1,0 +1,14 @@
+regex.c:2580
+static void
+insert_op(op, there, current_end)
+     int op;
+     char *there, *current_end;
+{
+  register char *pfrom = current_end;		/* Copy from here...  */
+  register char *pto = current_end + 1;		/* ...to here.  */
+
+  while (pfrom != there)			       
+    *--pto = *--pfrom;
+
+  there[0] = (char)op;
+}

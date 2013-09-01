@@ -1,0 +1,3 @@
+: int POSFIXABLE(long f)
+    f が Fixnum の上限値以下ならば真。
+

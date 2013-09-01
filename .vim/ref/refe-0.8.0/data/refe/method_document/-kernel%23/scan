@@ -1,0 +1,5 @@
+--- scan(re)
+--- scan(re) {|matched| ... }
+
+    $_.scan と同じです。
+

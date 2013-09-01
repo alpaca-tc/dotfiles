@@ -1,0 +1,16 @@
+--- fcntl(cmd[, arg])
+
+    IOに対してシステムコール fcntl を実行します。
+    機能の詳細はfcntl(2) [manual page]を参照してください。
+
+    arg が整数の時にはその値を、true または false の場合はそれぞ
+    れ 1 または 0 を、文字列の場合には pack した構造体だとみなしてその
+    まま fcntl(2) [manual page] に渡します。arg の省略時の値
+    は 0 です。
+
+    cmd に対して指定できる値は、添付ライブラリ fcntl.so の 
+    Fcntl モジュールが提供しています。
+
+    fcntl(2) が返した数値を返します。fcntl(2) の実行に失敗
+    した場合は例外 Errno::EXXX が発生します。
+

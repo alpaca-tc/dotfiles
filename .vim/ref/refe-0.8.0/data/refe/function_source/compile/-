@@ -1,0 +1,20 @@
+eval.c:5392
+static NODE*
+compile(src, file, line)
+    VALUE src;
+    char *file;
+    int line;
+{
+    NODE *node;
+    int critical;
+
+    ruby_nerrs = 0;
+    StringValue(src);
+    critical = rb_thread_critical;
+    rb_thread_critical = Qtrue;
+    node = rb_compile_string(file, src, line);
+    rb_thread_critical = critical;
+
+    if (ruby_nerrs == 0) return node;
+    return 0;
+}

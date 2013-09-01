@@ -1,0 +1,15 @@
+hash.c:322
+static VALUE
+rb_hash_default(argc, argv, hash)
+    int argc;
+    VALUE *argv;
+    VALUE hash;
+{
+    VALUE key;
+
+    rb_scan_args(argc, argv, "01", &key);
+    if (FL_TEST(hash, HASH_PROC_DEFAULT)) {
+	return rb_funcall(RHASH(hash)->ifnone, id_call, 2, hash, key);
+    }
+    return RHASH(hash)->ifnone;
+}

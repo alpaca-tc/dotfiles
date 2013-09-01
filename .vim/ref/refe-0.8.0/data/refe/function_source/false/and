@@ -1,0 +1,7 @@
+object.c:486
+static VALUE
+false_and(obj, obj2)
+    VALUE obj, obj2;
+{
+    return Qfalse;
+}

@@ -1,0 +1,10 @@
+parse.y:5987
+VALUE
+rb_backref_get()
+{
+    VALUE *var = rb_svar(1);
+    if (var) {
+	return *var;
+    }
+    return Qnil;
+}

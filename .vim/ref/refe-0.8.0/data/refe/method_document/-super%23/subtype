@@ -1,0 +1,6 @@
+: subtype
+      Returns the content subtype name as defined in imap.rb"/[MIME-IMB].
+
+: subtype
+      Returns the content subtype name as defined in imap.rb"/[MIME-IMB].
+

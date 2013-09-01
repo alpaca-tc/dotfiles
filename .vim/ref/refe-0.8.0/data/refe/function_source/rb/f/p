@@ -1,0 +1,16 @@
+io.c:2721
+static VALUE
+rb_f_p(argc, argv)
+    int argc;
+    VALUE *argv;
+{
+    int i;
+
+    for (i=0; i<argc; i++) {
+	rb_p(argv[i]);
+    }
+    if (TYPE(rb_stdout) == T_FILE) {
+	rb_io_flush(rb_stdout);
+    }
+    return Qnil;
+}

@@ -1,0 +1,36 @@
+hash.c:1073
+static VALUE
+env_fetch(argc, argv)
+    int argc;
+    VALUE *argv;
+{
+    VALUE key, if_none;
+    char *nam, *env;
+
+    rb_scan_args(argc, argv, "11", &key, &if_none);
+    StringValue(key);
+    nam = RSTRING(key)->ptr;
+    if (strlen(nam) != RSTRING(key)->len) {
+	rb_raise(rb_eArgError, "bad environment variable name");
+    }
+    env = getenv(nam);
+    if (!env) {
+	if (rb_block_given_p()) {
+	    if (argc > 1) {
+		rb_raise(rb_eArgError, "wrong number of arguments");
+	    }
+	    return rb_yield(key);
+	}
+	if (argc == 1) {
+	    rb_raise(rb_eIndexError, "key not found");
+	}
+	return if_none;
+    }
+#ifdef ENV_IGNORECASE
+    if (strcasecmp(nam, PATH_ENV) == 0 && !rb_env_path_tainted())
+#else
+    if (strcmp(nam, PATH_ENV) == 0 && !rb_env_path_tainted())
+#endif
+	return rb_str_new2(env);
+    return env_str_new2(env);
+}

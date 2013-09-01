@@ -1,0 +1,8 @@
+eval.c:7984
+static int
+thread_reset_raised()
+{
+    if (!(curr_thread->flags & THREAD_RAISED)) return 0;
+    curr_thread->flags &= ~THREAD_RAISED;
+    return 1;
+}

@@ -1,0 +1,6 @@
+eval.c:5386
+ID
+rb_frame_last_func()
+{
+    return ruby_frame->last_func;
+}

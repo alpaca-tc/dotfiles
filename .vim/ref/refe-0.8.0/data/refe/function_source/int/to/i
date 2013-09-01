@@ -1,0 +1,7 @@
+numeric.c:1158
+static VALUE
+int_to_i(num)
+    VALUE num;
+{
+    return num;
+}

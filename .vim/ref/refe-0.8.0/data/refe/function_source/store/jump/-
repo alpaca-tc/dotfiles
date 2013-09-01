@@ -1,0 +1,9 @@
+regex.c:2501
+static void
+store_jump(from, opcode, to)
+     char *from, *to;
+     int opcode;
+{
+  from[0] = (char)opcode;
+  STORE_NUMBER(from + 1, to - (from + 3));
+}

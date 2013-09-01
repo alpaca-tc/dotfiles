@@ -1,0 +1,18 @@
+--- Process.detach(pid)
+
+    ruby 1.8 feature
+
+    子プロセス pid の終了を監視するスレッドを生成して返します。
+    生成したスレッドは子プロセスが終了した後に nil で終了します。
+    (指定した子プロセスが存在しなければ即座に nil で終了します)。
+
+        pid = fork {
+          # child
+          sleep 3
+        }
+
+        th = Process.detach(pid)
+        p th.value
+
+        # => nil
+

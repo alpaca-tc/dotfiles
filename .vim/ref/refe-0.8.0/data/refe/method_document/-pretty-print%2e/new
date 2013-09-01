@@ -1,0 +1,43 @@
+--- PrettyPrint.new([output[, maxwidth[, newline]]]) [{|width| ...}]
+#    creates a buffer for pretty printing.
+
+    pretty printing のためのバッファを生成します。
+
+#    output is an output target.
+#    If it is not specified, '' is assumed.
+#    It should have a << method which accepts
+#    the first argument obj of PrettyPrint#text,
+#    the first argument sep of PrettyPrint#breakable,
+#    the first argument newline of PrettyPrint.new,
+#    and
+#    the result of a given block for PrettyPrint.new.
+    output は出力先で、
+    もし指定されなければ '' が仮定されます。
+    このオブジェクトは次のものを受け付ける << 
+    メソッドを持っていなければなりません。それは、
+    PrettyPrint#text の第1引数 obj、
+    PrettyPrint#breakable の第1引数 sep、
+    PrettyPrint.new の第1引数 newline
+    および
+    PrettyPrint.new に与えられたブロックを評価した結果です。
+
+#    maxwidth specifies maximum line length.
+#    If it is not specified, 79 is assumed.
+#    However actual outputs may overflow maxwidth if
+#    long non-breakable texts are provided.
+
+    maxwidth は行の最大幅を指定します。
+    与えられない場合は 79 が仮定されます。
+    ただし、改行できないものが渡された場合は
+    実際の出力幅は maxwidth を越えることがあります。
+
+#    newline is used for line breaks.
+#    "\n" is used if it is not specified.
+    newline は改行に使われます。
+    指定されない場合は "\n" が仮定されます。
+
+#    The block is used to generate spaces.
+#    {|width| ' ' * width} is used if it is not given.
+    ブロックは空白を生成します。
+    指定されない場合は {|width| ' ' * width} が使われます。
+

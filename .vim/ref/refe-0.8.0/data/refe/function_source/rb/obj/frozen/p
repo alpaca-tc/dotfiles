@@ -1,0 +1,8 @@
+object.c:379
+static VALUE
+rb_obj_frozen_p(obj)
+    VALUE obj;
+{
+    if (OBJ_FROZEN(obj)) return Qtrue;
+    return Qfalse;
+}

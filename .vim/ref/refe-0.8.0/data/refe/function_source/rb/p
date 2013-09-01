@@ -1,0 +1,8 @@
+io.c:2713
+void
+rb_p(obj)			/* for debug print within C code */
+    VALUE obj;
+{
+    rb_io_write(rb_stdout, rb_obj_as_string(rb_inspect(obj)));
+    rb_io_write(rb_stdout, rb_default_rs);
+}

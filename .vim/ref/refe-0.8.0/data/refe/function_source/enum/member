@@ -1,0 +1,13 @@
+enum.c:484
+static VALUE
+enum_member(obj, val)
+    VALUE obj, val;
+{
+    VALUE result;
+    NODE *memo = rb_node_newnode(NODE_MEMO, val, Qfalse, 0);
+
+    rb_iterate(rb_each, obj, member_i, (VALUE)memo);
+    result = memo->u2.value;
+    rb_gc_force_recycle((VALUE)memo);
+    return result;
+}

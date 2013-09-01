@@ -1,0 +1,9 @@
+io.c:2704
+static VALUE
+rb_f_puts(argc, argv)
+    int argc;
+    VALUE *argv;
+{
+    rb_io_puts(argc, argv, rb_stdout);
+    return Qnil;
+}

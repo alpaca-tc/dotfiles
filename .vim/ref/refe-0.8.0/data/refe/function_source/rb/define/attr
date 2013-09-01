@@ -1,0 +1,9 @@
+class.c:773
+void
+rb_define_attr(klass, name, read, write)
+    VALUE klass;
+    const char *name;
+    int read, write;
+{
+    rb_attr(klass, rb_intern(name), read, write, Qfalse);
+}

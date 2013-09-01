@@ -1,0 +1,10 @@
+--- Net::FTP#getbinaryfile(remotefile, localfile, blocksize = DEFAULT_BLOCKSIZE, callback = nil)
+
+    サーバー上のバイナリファイルをgetします。 
+
+    callbackやブロックが指定された場合は
+    データが送信されるごとにそれを呼び出します。 
+
+    ruby 1.7 feature: localfile は省略可能になりました。
+    File.basename(remotefile) が省略時の値になります。
+

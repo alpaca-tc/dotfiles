@@ -1,0 +1,22 @@
+file.c:1867
+static VALUE
+rb_file_s_extname(klass, fname)
+    VALUE klass, fname;
+{
+    char *name, *p, *e;
+    VALUE extname;
+
+    name = StringValueCStr(fname);
+    p = strrdirsep(name);	/* get the last path component */
+    if (!p)
+ 	p = name;
+    else
+ 	p++;
+ 
+     e = strrchr(p, '.');	/* get the last dot of the last component */
+     if (!e || e == p)		/* no dot, or the only dot is first? */
+	 return rb_str_new2("");
+     extname = rb_str_new(e, chompdirsep(e) - e);	/* keep the dot, too! */
+     OBJ_INFECT(extname, fname);
+     return extname;
+}

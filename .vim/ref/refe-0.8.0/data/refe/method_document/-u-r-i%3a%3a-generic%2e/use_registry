@@ -1,0 +1,8 @@
+--- URI::Generic.use_registry
+
+#    構成要素 registry を受け付けるなら true を返します。(URI::Generic 
+#    クラスでは false)
+    registry 部を利用するか否かを表す真偽値。
+    この値が偽のとき、new に偽でない registry 部が与えられると
+    例外 URI::InvalidURIError が起こります。
+

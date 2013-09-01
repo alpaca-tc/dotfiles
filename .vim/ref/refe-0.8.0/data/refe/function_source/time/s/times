@@ -1,0 +1,8 @@
+time.c:1302
+static VALUE
+time_s_times(obj)
+    VALUE obj;
+{
+    rb_warn("obsolete method Time::times; use Process::times");
+    return rb_proc_times(obj);
+}

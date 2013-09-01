@@ -1,0 +1,51 @@
+eval.c:6923
+static VALUE
+proc_alloc(klass, proc)
+    VALUE klass;
+    int proc;
+{
+    volatile VALUE block;
+    struct BLOCK *data, *p;
+    struct RVarmap *vars;
+
+    if (!rb_block_given_p() && !rb_f_block_given_p()) {
+	rb_raise(rb_eArgError, "tried to create Proc object without a block");
+    }
+    if (proc && !rb_block_given_p()) {
+	rb_warn("tried to create Proc object without a block");
+    }
+
+    if (!proc && ruby_block->block_obj && CLASS_OF(ruby_block->block_obj) == klass) {
+	return ruby_block->block_obj;
+    }
+    block = Data_Make_Struct(klass, struct BLOCK, blk_mark, blk_free, data);
+    *data = *ruby_block;
+
+    data->orig_thread = rb_thread_current();
+    data->wrapper = ruby_wrapper;
+    data->iter = data->prev?Qtrue:Qfalse;
+    frame_dup(&data->frame);
+    if (data->iter) {
+	blk_copy_prev(data);
+    }
+    else {
+	data->prev = 0;
+    }
+
+    for (p = data; p; p = p->prev) {
+	for (vars = p->dyna_vars; vars; vars = vars->next) {
+	    if (FL_TEST(vars, DVAR_DONT_RECYCLE)) break;
+	    FL_SET(vars, DVAR_DONT_RECYCLE);
+	}
+    }
+    scope_dup(data->scope);
+    proc_save_safe_level(block);
+    if (proc) {
+	data->flags |= BLOCK_LAMBDA;
+    }
+    else {
+	ruby_block->block_obj = block;
+    }
+
+    return block;
+}

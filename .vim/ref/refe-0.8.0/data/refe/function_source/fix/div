@@ -1,0 +1,13 @@
+numeric.c:1406
+static VALUE
+fix_div(x, y)
+    VALUE x, y;
+{
+    if (FIXNUM_P(y)) {
+	long div;
+
+	fixdivmod(FIX2LONG(x), FIX2LONG(y), &div, 0);
+	return LONG2NUM(div);
+    }
+    return rb_num_coerce_bin(x, y);
+}

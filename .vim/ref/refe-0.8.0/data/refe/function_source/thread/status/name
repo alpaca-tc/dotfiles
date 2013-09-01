@@ -1,0 +1,18 @@
+eval.c:8027
+static const char *
+thread_status_name(status)
+    enum thread_status status;
+{
+    switch (status) {
+      case THREAD_RUNNABLE:
+	return "run";
+      case THREAD_STOPPED:
+	return "sleep";
+      case THREAD_TO_KILL:
+	return "aborting";
+      case THREAD_KILLED:
+	return "dead";
+      default:
+	return "unknown";
+    }
+}

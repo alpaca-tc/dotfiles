@@ -1,0 +1,18 @@
+--- SystemCallError.new(error_message)
+--- SystemCallError.new(error_message, errno)    ruby 1.8 feature
+--- SystemCallError.new(errno)                   ruby 1.8 feature
+
+    errno を指定しない一番目の形式では、SystemCallError オ
+    ブジェクトを生成して返します。それ以外では、整数 errno に該
+    当するErrno::EXXX オブジェクトを生成して返します。
+
+        p SystemCallError.new("message")
+        p SystemCallError.new("message", 2)
+        p SystemCallError.new(2)
+        p SystemCallError.new(256)
+
+        # => #<SystemCallError: unknown error - message>
+             #<Errno::ENOENT: No such file or directory - message>
+             #<Errno::ENOENT: No such file or directory>
+             #<SystemCallError: Unknown error 256>
+

@@ -1,0 +1,8 @@
+eval.c:1880
+static VALUE
+rb_mod_alias_method(mod, newname, oldname)
+    VALUE mod, newname, oldname;
+{
+    rb_alias(mod, rb_to_id(newname), rb_to_id(oldname));
+    return mod;
+}

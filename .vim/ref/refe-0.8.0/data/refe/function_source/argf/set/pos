@@ -1,0 +1,11 @@
+io.c:3755
+static VALUE
+argf_set_pos(self, offset)
+     VALUE self, offset;
+{
+    if (!next_argv()) {
+	rb_raise(rb_eArgError, "no stream to set position");
+    }
+    ARGF_FORWARD();
+    return rb_io_set_pos(current_file, offset);
+}

@@ -1,0 +1,2 @@
+: void rb_exc_raise(VALUE mesg)
+

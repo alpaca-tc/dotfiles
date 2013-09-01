@@ -1,0 +1,9 @@
+enum.c:140
+static VALUE
+collect_i(i, ary)
+    VALUE i, ary;
+{
+    rb_ary_push(ary, rb_yield(i));
+    
+    return Qnil;
+}

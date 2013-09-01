@@ -1,0 +1,16 @@
+--- untrace_var(varname[, hook])
+
+    グローバル変数 varname に関連付けられたフックを
+    解除します。hook が指定された場合にはそのフックだけを
+    解除します。hook が省略されるかまたは nil を
+    与えた場合は varname のフックを全て解除します。
+    解除されたフックの配列を返します。
+
+    例:
+
+      $v = nil
+      trace_var(:$v) {|val| puts "$v=#{val.inspect}" }
+      $v = 'str'        #=> $v="str"
+      untrace_var :$v
+      $v = 'str'        # なにも出力されない
+

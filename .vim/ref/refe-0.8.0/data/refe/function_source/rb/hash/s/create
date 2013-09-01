@@ -1,0 +1,30 @@
+hash.c:223
+static VALUE
+rb_hash_s_create(argc, argv, klass)
+    int argc;
+    VALUE *argv;
+    VALUE klass;
+{
+    VALUE hash;
+    int i;
+
+    if (argc == 1 && TYPE(argv[0]) == T_HASH) {
+	hash = hash_alloc(klass);
+	    
+	RHASH(hash)->ifnone = Qnil;
+	RHASH(hash)->tbl = st_copy(RHASH(argv[0])->tbl);
+
+	return hash;
+    }
+
+    if (argc % 2 != 0) {
+	rb_raise(rb_eArgError, "odd number args for Hash");
+    }
+
+    hash = hash_alloc(klass);
+    for (i=0; i<argc; i+=2) {
+        rb_hash_aset(hash, argv[i], argv[i + 1]);
+    }
+
+    return hash;
+}

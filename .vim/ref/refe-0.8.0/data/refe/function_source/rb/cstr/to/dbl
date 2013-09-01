@@ -1,0 +1,69 @@
+object.c:1133
+double
+rb_cstr_to_dbl(p, badcheck)
+    const char *p;
+    int badcheck;
+{
+    const char *q;
+    char *end;
+    double d;
+
+    if (!p) return 0.0;
+    q = p;
+    if (badcheck) {
+	while (ISSPACE(*p)) p++;
+    }
+    else {
+	while (ISSPACE(*p) || *p == '_') p++;
+    }
+    d = strtod(p, &end);
+    if (errno == ERANGE) {
+	rb_warn("Float %*s out of range", end-p, p);
+	errno = 0;
+    }
+    if (p == end) {
+	if (badcheck) {
+	  bad:
+	    rb_invalid_str(q, "Float()");
+	}
+	return d;
+    }
+    if (*end) {
+	char *buf = ALLOCA_N(char, strlen(p)+1);
+	char *n = buf;
+
+	while (p < end) *n++ = *p++;
+	while (*p) {
+	    if (*p == '_') {
+		/* remove underscores between digits */
+		if (badcheck) {
+		    if (n == buf || !ISDIGIT(n[-1])) goto bad;
+		    ++p;
+		    if (!ISDIGIT(*p)) goto bad;
+		}
+		else {
+		    while (*++p == '_');
+		    continue;
+		}
+	    }
+	    *n++ = *p++;
+	}
+	*n = '\0';
+	p = buf;
+	d = strtod(p, &end);
+	if (errno == ERANGE) {
+	    rb_warn("Float %*s out of range", end-p, p);
+	    errno = 0;
+	}
+	if (badcheck) {
+	    if (p == end) goto bad;
+	    while (*end && ISSPACE(*end)) end++;
+	    if (*end) goto bad;
+	}
+    }
+    if (errno == ERANGE) {
+	errno = 0;
+	rb_raise(rb_eArgError, "Float %s out of range", q);
+    }
+    return d;
+}

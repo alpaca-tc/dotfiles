@@ -1,0 +1,26 @@
+dln.c:263
+static struct relocation_info *
+load_reloc(fd, hdrp, disp)
+     int fd;
+     struct exec *hdrp;
+     long disp;
+{
+    struct relocation_info *reloc;
+    int size;
+
+    lseek(fd, disp + N_TXTOFF(*hdrp) + hdrp->a_text + hdrp->a_data, 0);
+    size = hdrp->a_trsize + hdrp->a_drsize;
+    reloc = (struct relocation_info*)xmalloc(size);
+    if (reloc == NULL) {
+	dln_errno = errno;
+	return NULL;
+    }
+
+    if (read(fd, reloc, size) !=  size) {
+	dln_errno = errno;
+	free(reloc);
+	return NULL;
+    }
+
+    return reloc;
+}

@@ -1,0 +1,4 @@
+--- File.setgid?(path)
+
+    FileTest.setgid? と同じです。
+

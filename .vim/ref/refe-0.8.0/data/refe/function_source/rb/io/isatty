@@ -1,0 +1,12 @@
+io.c:1310
+static VALUE
+rb_io_isatty(io)
+    VALUE io;
+{
+    OpenFile *fptr;
+
+    GetOpenFile(io, fptr);
+    if (isatty(fileno(fptr->f)) == 0)
+	return Qfalse;
+    return Qtrue;
+}

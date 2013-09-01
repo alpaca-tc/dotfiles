@@ -1,0 +1,7 @@
+object.c:394
+static VALUE
+nil_to_f(obj)
+    VALUE obj;
+{
+    return rb_float_new(0.0);
+}

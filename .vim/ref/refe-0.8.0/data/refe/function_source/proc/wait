@@ -1,0 +1,27 @@
+process.c:419
+static VALUE
+proc_wait(argc, argv)
+    int argc;
+    VALUE *argv;
+{
+    VALUE vpid, vflags;
+    int pid, flags, status;
+
+    flags = 0;
+    rb_scan_args(argc, argv, "02", &vpid, &vflags);
+    if (argc == 0) {
+	pid = -1;
+    }
+    else {
+	pid = NUM2INT(vpid);
+	if (argc == 2 && !NIL_P(vflags)) {
+	    flags = NUM2UINT(vflags);
+	}
+    }
+    if ((pid = rb_waitpid(pid, &status, flags)) < 0)
+	rb_sys_fail(0);
+    if (pid == 0) {
+	return rb_last_status = Qnil;
+    }
+    return INT2FIX(pid);
+}

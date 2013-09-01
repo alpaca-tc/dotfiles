@@ -1,0 +1,5 @@
+: inspect -> String
+    以前は #decoded の別名でしたがバージョン 0.9 からは
+    "#<TMail::Mail port=<StringPort:str=...>>"
+    のような簡潔な文字列化を行います。
+

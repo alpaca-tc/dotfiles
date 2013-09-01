@@ -11,6 +11,7 @@ export BROWSER=google-chrome
 export GITHUB_HOST='github.com'
 export CONFIGURE_OPTS="--with-gcc=clang"
 export ECLIPSE_HOME='/Applications/eclipse'
+export SSL_CERT_FILE=/usr/local/etc/cacert.pem
 
 # 各種の設定 古いgccを使う場合
 # export CC='/usr/local/bin/gcc-4.2'
@@ -42,6 +43,7 @@ export RSENSE_HOME=$HOME/.bundle/rsense-0.3
 
 # node
 export NODE_PATH=/usr/local/lib/node
+export NODE_PATH=/usr/local/lib/node_modules:$NODE_PATH
 export PATH=/usr/local/mysql/bin:/usr/local/share/npm/bin:$PATH
 
 # XAMPP
@@ -74,6 +76,7 @@ export PATH=/Applications/MacVim.app/Contents/MacOS:$PATH
 
 # export PYTHONPATH=/usr/local/Cellar/python32/3.2.3/Frameworks/Python.framework/Versions/3.2
 # alias python=python3.2
+export PATH=$HOME/usr/bin:$PATH
 # }}}
 
 # for vim

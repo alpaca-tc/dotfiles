@@ -1,0 +1,625 @@
+include javascript.dom.attribute.snip
+include javascript.dom.event.snip
+
+# document{{{
+snippet adoptNode
+abbr    adoptNode(node) :Returns an adapded node from another document to this document.
+regexp  '.*document.'
+options word
+  adoptNode(${1:node})
+
+snippet anchors
+abbr    Returns a collection of all the anchors in the document
+regexp  '.*document.'
+options word
+  anchors
+
+snippet applets
+abbr    Returns a collection of all the applets in the document
+regexp  '.*document.'
+options word
+  applets
+
+snippet baseURI
+abbr    Returns the absolute base URI of a document
+regexp  '.*document.'
+options word
+  baseURI${1:#:notice! Not work on IE}
+
+snippet body
+abbr    Returns the body element of the document
+regexp  '.*document.'
+options word
+  body
+
+snippet close
+abbr    close() :Closes the output stream previously opened with document.open()
+regexp  '.*document.'
+options word
+  close()
+
+snippet cookie
+abbr    Returns all name/value pairs of cookies in the document
+regexp  '.*document.'
+options word
+  cookie
+
+snippet createAttribute
+abbr    createAttribute(attribute_name) :Creates an attribute node
+regexp  '.*document.'
+options word
+  createAttribute(${1:attribute_name})
+
+snippet createComment
+abbr    createComment(text) :Creates a Comment node with the specified text
+regexp  '.*document.'
+options word
+  createComment(${1:text})
+
+snippet createDocumentFragment
+abbr    createDocumentFragment() :Creates an empty DocumentFragment node
+regexp  '.*document.'
+options word
+  createDocumentFragment()
+
+snippet createElement
+abbr    createElement(node_name) :Creates an Element node
+regexp  '.*document.'
+options word
+  createElement(${1:node_name})
+
+snippet createTextNode
+abbr    createTextNode(text) :Creates a Text node
+regexp  '.*document.'
+options word
+  createTextNode(${1:text})
+
+snippet doctype
+abbr    Returns the Document Type Declaration associated with the document
+regexp  '.*document.'
+options word
+  doctype
+
+snippet documentElement
+abbr    Returns the Document Element of the document (the HTML element)
+regexp  '.*document.'
+options word
+  documentElement
+
+snippet documentURI
+abbr    Sets or returns the location of the document
+regexp  '.*document.'
+options word
+  documentURI${1:#:notice! Not work on IE}
+
+snippet domain
+abbr    Returns the domain name of the server that loaded the document
+regexp  '.*document.'
+options word
+  domain
+
+snippet domConfig
+abbr    Returns the configuration used when normalizeDocument() is invoked
+regexp  '.*document.'
+options word
+  domConfig
+
+snippet forms
+abbr    Returns a collection of all the forms in the document
+regexp  '.*document.'
+options word
+  forms
+
+snippet getElementById
+abbr    getElementById(id) :Returns the element that has the ID attribute with the specified value
+regexp  '.*document.'
+options word
+  getElementById(${1:id})
+
+snippet getElementsByName
+abbr    getElementsByName(name) :Accesses all elements with a specified name
+regexp  '.*document.'
+options word
+  getElementsByName(${1:name})
+
+snippet getElementsByTagName
+abbr    getElementsByTagName(tag_name) :Returns a NodeList containing all elements with the specified tagname
+regexp  '.*document.'
+options word
+  getElementsByTagName(${1:tag_name})
+
+snippet images
+abbr    Returns a collection of all the images in the document
+regexp  '.*document.'
+options word
+  images
+
+snippet implementation
+abbr    Returns the DOMImplementation object that handles this document
+regexp  '.*document.'
+options word
+  implementation
+
+snippet importNode
+abbr    importNode(node, deep) :Imports a node from another document
+regexp  '.*document.'
+options word
+  importNode(${1:node}, ${2:true_or_false})
+
+snippet inputEncoding
+abbr    Returns the encoding, character set, used for the document
+regexp  '.*document.'
+options word
+  inputEncoding
+
+snippet lastModified
+abbr    Returns the date and time the document was last modified
+regexp  '.*document.'
+options word
+  lastModified
+
+snippet links
+abbr    Returns a collection of all the links in the document
+regexp  '.*document.'
+options word
+  links
+
+snippet normalize
+abbr    normalize() :Removes empty Text nodes, and joins adjacent nodes
+regexp  '.*document.'
+options word
+  normalize()
+
+snippet open
+abbr    open(MIMEtype = '', replace = '') :Opens an HTML output stream to collect output from document.write()
+regexp  '.*document.'
+options word
+  open(${1:'text/html'}, ${2:replace})
+
+snippet readyState
+abbr    Returns the (loading) status of the document
+regexp  '.*document.'
+options word
+  readyState
+
+snippet referrer
+abbr    Returns the URL of the document that loaded the current document
+regexp  '.*document.'
+options word
+  referrer
+
+snippet title
+abbr    Sets or returns the title of the document
+regexp  '.*document.'
+options word
+  title
+
+snippet URL
+abbr    Returns the full URL of the document
+regexp  '.*document.'
+options word
+  URL
+
+snippet write
+abbr    write(*expr) :Writes HTML expressions or JavaScript code to a document
+regexp  '.*document.'
+options word
+  write(${1:*expr})
+
+snippet writeln
+abbr    writeln(*expr) :Same as write(), but adds a newline character after each statement
+regexp  '.*document.'
+options word
+  writeln(${1:*expr})
+#}}}
+
+# Window  {{{
+snippet closed
+abbr    Returns a Boolean value indicating whether a window has been closed or not
+regexp  '.*window\.'
+options word
+  closed
+
+snippet defaultStatus
+abbr    Sets or returns the default text in the statusbar of a window
+regexp  '.*window\.'
+options word
+  defaultStatus
+
+snippet document
+abbr    Returns the Document object for the window (See Document object)
+regexp  '.*window\.'
+options word
+  document
+
+snippet frames
+abbr    Returns an array of all the frames (including iframes) in the current window
+regexp  '.*window\.'
+options word
+  frames
+
+snippet history
+abbr    Returns the History object for the window (See History object)
+regexp  '.*window\.'
+options word
+  history
+
+snippet innerHeight
+abbr    Sets or returns the inner height of a window's content area
+regexp  '.*window\.'
+options word
+  innerHeight
+
+snippet innerWidth
+abbr    Sets or returns the inner width of a window's content area
+regexp  '.*window\.'
+options word
+  innerWidth
+
+snippet length
+abbr    Returns the number of frames (including iframes) in a window
+regexp  '.*window\.'
+options word
+  length
+
+snippet location
+abbr    Returns the Location object for the window (See Location object)
+regexp  '.*window\.'
+options word
+  location
+
+snippet name
+abbr    Sets or returns the name of a window
+regexp  '.*window\.'
+options word
+  name
+
+snippet navigator
+abbr    Returns the Navigator object for the window (See Navigator object)
+regexp  '.*window\.'
+options word
+  navigator
+
+snippet opener
+abbr    Returns a reference to the window that created the window
+regexp  '.*window\.'
+options word
+  opener
+
+snippet outerHeight
+abbr    Sets or returns the outer height of a window, including toolbars/scrollbars
+regexp  '.*window\.'
+options word
+  outerHeight
+
+snippet outerWidth
+abbr    Sets or returns the outer width of a window, including toolbars/scrollbars
+regexp  '.*window\.'
+options word
+  outerWidth
+
+snippet pageXOffset
+abbr    Returns the pixels the current document has been scrolled (horizontally) from the upper left corner of the window
+regexp  '.*window\.'
+options word
+  pageXOffset
+
+snippet pageYOffset
+abbr    Returns the pixels the current document has been scrolled (vertically) from the upper left corner of the window
+regexp  '.*window\.'
+options word
+  pageYOffset
+
+snippet parent
+abbr    Returns the parent window of the current window
+regexp  '.*window\.'
+options word
+  parent
+
+snippet screen
+abbr    Returns the Screen object for the window (See Screen object)
+regexp  '.*window\.'
+options word
+  screen
+
+snippet screenLeft
+abbr    Returns the x coordinate of the window relative to the screen
+regexp  '.*window\.'
+options word
+  screenLeft
+
+snippet screenTop
+abbr    Returns the y coordinate of the window relative to the screen
+regexp  '.*window\.'
+options word
+  screenTop
+
+snippet screenX
+abbr    Returns the x coordinate of the window relative to the screen
+regexp  '.*window\.'
+options word
+  screenX
+
+snippet screenY
+abbr    Returns the y coordinate of the window relative to the screen
+regexp  '.*window\.'
+options word
+  screenY
+
+snippet status
+abbr    Sets the text in the statusbar of a window
+regexp  '.*window\.'
+options word
+  status
+
+snippet top
+abbr    Returns the topmost browser window
+regexp  '.*window\.'
+options word
+  top
+# }}}
+
+# Window Methods#{{{
+snippet alert
+abbr    Displays an alert box with a message and an OK button
+regexp  '.*window\.'
+options word
+  alert(${1:text})
+
+snippet blur()
+abbr    Removes focus from the current window
+regexp  '.*window\.'
+options word
+  blur()
+
+snippet close()
+abbr    Closes the current window
+regexp  '.*window\.'
+options word
+  close()
+
+snippet confirm
+abbr    Displays a dialog box with a message and an OK and a Cancel button
+regexp  '.*window\.'
+options word
+  confirm(${1:message})
+
+snippet focus
+abbr    Sets focus to the current window
+regexp  '.*window\.'
+options word
+  focus()
+
+snippet moveBy
+abbr    moveBy(x, y) :Moves a window relative to its current position
+regexp  '.*window\.'
+options word
+  moveBy(${1:x}, ${2:y})
+
+snippet moveTo
+abbr    moveTo(x, y) :Moves a window to the specified position
+regexp  '.*window\.'
+options word
+  moveTo(${1:x}, ${2:y})
+
+snippet open()
+abbr    open(URL, name, spacs, replace) :Opens a new browser window
+regexp  '.*window\.'
+options word
+  open(${1:URL}, ${2:'_blank'}, ${3:#:specs}${4:, ${replace true\}})
+
+snippet print()
+abbr    Prints the content of the current window
+regexp  '.*window\.'
+options word
+  print()
+
+snippet prompt
+abbr    prompt(message, defaultText = '') :Displays a dialog box that prompts the visitor for input
+regexp  '.*window\.'
+options word
+  prompt(${1:message}${2:, ${3:default\}})
+
+snippet resizeTo
+abbr    resizeTo(width, height) :Resizes the window to the specified width and height
+regexp  '.*window\.'
+options word
+  resizeTo(${1:width}, ${2:height})
+
+snippet scrollBy
+abbr    scrollBy(x, y) :Scrolls the content by the specified number of pixels
+regexp  '.*window\.'
+options word
+  scrollBy(${1:x}, ${2:y})
+
+snippet scrollTo
+abbr    scrollTo(x, y) :Scrolls the content to the specified coordinates
+regexp  '.*window\.'
+options word
+  scrollTo(${1:x}, ${2:y})
+#}}}
+
+# Navigator #{{{
+snippet appCodeName
+abbr    Returns the code name of the browser
+regexp  '.*navigator\.'
+options word
+  appCodeName
+
+snippet appName
+abbr    Returns the name of the browser
+regexp  '.*navigator\.'
+options word
+  appName
+
+snippet appVersion
+abbr    Returns the version information of the browser
+regexp  '.*navigator\.'
+options word
+  appVersion
+
+snippet cookieEnabled
+abbr    Determines whether cookies are enabled in the browser
+regexp  '.*navigator\.'
+options word
+  cookieEnabled
+
+snippet onLine
+abbr    Boolean, returns true if the browser is on line, otherwise false.
+regexp  '.*navigator\.'
+options word
+  onLine
+
+snippet platform
+abbr    Returns for which platform the browser is compiled
+regexp  '.*navigator\.'
+options word
+  platform
+
+snippet userAgent
+abbr    Returns the user-agent header sent by the browser to the server
+regexp  '.*navigator\.'
+options word
+  userAgent
+
+snippet javaEnabled
+abbr    javaEnabled() :Specifies whether or not the browser has Java enabled
+regexp  '.*navigator\.'
+options word
+  javaEnabled()
+
+#}}}
+
+# Screen#{{{
+snippet availHeight
+abbr    Returns the height of the screen (excluding the Windows Taskbar)
+regexp  '.*navigator\.'
+options word
+  availHeight
+
+snippet availWidth
+abbr    Returns the width of the screen (excluding the Windows Taskbar)
+regexp  '.*navigator\.'
+options word
+  availWidth
+
+snippet colorDepth
+abbr    Returns the bit depth of the color palette for displaying images
+regexp  '.*navigator\.'
+options word
+  colorDepth
+
+snippet height
+abbr    Returns the total height of the screen
+regexp  '.*navigator\.'
+options word
+  height
+
+snippet pixelDepth
+abbr    Returns the color resolution (in bits per pixel) of the screen
+regexp  '.*navigator\.'
+options word
+  pixelDepth
+
+snippet width
+abbr    Returns the total width of the screen
+regexp  '.*navigator\.'
+options word
+  width
+#}}}
+
+# History#{{{
+snippet length
+abbr    Returns the number of URLs in the history list
+regexp  '.*history\.'
+options word
+  length
+
+snippet back
+abbr    back() :Loads the previous URL in the history list
+regexp  '.*history\.'
+options word
+  back()
+
+snippet forward
+abbr    forward() :Loads the next URL in the history list
+regexp  '.*history\.'
+options word
+  forward()
+
+snippet go
+abbr    go() :Loads a specific URL from the history list
+regexp  '.*history\.'
+options word
+  go(${1:number_or_URI})
+#}}}
+
+# Location#{{{
+snippet hash
+abbr    Returns the anchor portion of a URL
+regexp  '.*location\.'
+options word
+  hash
+
+snippet host
+abbr    Returns the hostname and port of a URL
+regexp  '.*location\.'
+options word
+  host
+
+snippet hostname
+abbr    Returns the hostname of a URL
+regexp  '.*location\.'
+options word
+  hostname
+
+snippet href
+abbr    Returns the entire URL
+regexp  '.*location\.'
+options word
+  href
+
+snippet pathname
+abbr    Returns the path name of a URL
+regexp  '.*location\.'
+options word
+  pathname
+
+snippet port
+abbr    Returns the port number the server uses for a URL
+regexp  '.*location\.'
+options word
+  port
+
+snippet protocol
+abbr    Returns the protocol of a URL
+regexp  '.*location\.'
+options word
+  protocol
+
+snippet search
+abbr    Returns the query portion of a URL
+regexp  '.*location\.'
+options word
+  search
+
+snippet assign
+abbr    assign(URI) :Loads a new document
+regexp  '.*location\.'
+options word
+  assign(${1:URI})
+
+snippet reload
+abbr    reload(forceGet = true) :Reloads the current document
+regexp  '.*location\.'
+options word
+  reload(${1:forceGet = true})
+
+snippet replace
+abbr    replace(newURI) :Replaces the current document with a new one
+regexp  '.*location\.'
+options word
+  replace(${1:newURI})
+#}}}
+# Canvas#{{{
+#}}}

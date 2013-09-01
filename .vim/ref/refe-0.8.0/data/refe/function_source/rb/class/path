@@ -1,0 +1,31 @@
+variable.c:180
+VALUE
+rb_class_path(klass)
+    VALUE klass;
+{
+    VALUE path = classname(klass);
+
+    if (!NIL_P(path)) return path;
+    if (RCLASS(klass)->iv_tbl && st_lookup(RCLASS(klass)->iv_tbl,
+					   tmp_classpath, &path)) {
+	return path;
+    }
+    else {
+	char *s = "Class";
+
+	if (TYPE(klass) == T_MODULE) {
+	    if (rb_obj_class(klass) == rb_cModule) {
+		s = "Module";
+	    }
+	    else {
+		s = rb_class2name(RBASIC(klass)->klass);
+	    }
+	}
+	path = rb_str_new(0, 2 + strlen(s) + 3 + 2 * SIZEOF_LONG + 1);
+	sprintf(RSTRING(path)->ptr, "#<%s:0x%lx>", s, klass);
+	RSTRING(path)->len = strlen(RSTRING(path)->ptr);
+	rb_ivar_set(klass, tmp_classpath, path);
+
+	return path;
+    }
+}

@@ -1,0 +1,7 @@
+eval.c:4259
+VALUE
+rb_yield(val)
+    VALUE val;
+{
+    return rb_yield_0(val, 0, 0, Qfalse, Qfalse);
+}

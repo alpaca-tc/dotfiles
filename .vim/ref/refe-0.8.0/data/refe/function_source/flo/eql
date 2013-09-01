@@ -1,0 +1,14 @@
+numeric.c:710
+static VALUE
+flo_eql(x, y)
+    VALUE x, y;
+{
+    if (TYPE(y) == T_FLOAT) {
+	double a = RFLOAT(x)->value;
+	double b = RFLOAT(y)->value;
+
+	if (isnan(a) || isnan(b)) return Qfalse;
+	if (a == b) return Qtrue;
+    }
+    return Qfalse;
+}

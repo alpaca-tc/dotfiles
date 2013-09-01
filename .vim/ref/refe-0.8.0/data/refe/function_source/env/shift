@@ -1,0 +1,19 @@
+hash.c:1667
+static VALUE
+env_shift()
+{
+    char **env;
+
+    env = GET_ENVIRON(environ);
+    if (*env) {
+	char *s = strchr(*env, '=');
+	if (s) {
+	    VALUE key = env_str_new(*env, s-*env);
+	    VALUE val = env_str_new2(getenv(RSTRING(key)->ptr));
+	    env_delete(Qnil, key);
+	    return rb_assoc_new(key, val);
+	}
+    }
+    FREE_ENVIRON(environ);
+    return Qnil;
+}

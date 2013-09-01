@@ -1,0 +1,5 @@
+: message_id?( str ) -> bool
+    str: String
+
+    str がメッセージ ID を含むとき真。
+

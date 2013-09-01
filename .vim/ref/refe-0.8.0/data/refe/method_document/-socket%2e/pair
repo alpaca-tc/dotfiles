@@ -1,0 +1,5 @@
+--- Socket.pair(domain, type, protocol)
+--- Socket.socketpair(domain, type, protocol)
+    相互に結合されたソケットのペアを含む2要素の配列を返します。
+    引数の指定はSocket.openと同じです。
+

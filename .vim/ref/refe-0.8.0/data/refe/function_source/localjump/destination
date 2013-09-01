@@ -1,0 +1,26 @@
+eval.c:4058
+static void
+localjump_destination(state, scope, retval)
+    int state;
+    struct SCOPE *scope;
+    VALUE retval;
+{
+    struct tag *tt = prot_tag;
+    VALUE tag = (state == TAG_BREAK) ? PROT_ITER : PROT_FUNC;
+
+    if (retval == Qundef) retval = Qnil;
+    while (tt) {
+	if (tt->tag == PROT_PCALL || (tt->tag == PROT_THREAD && state == TAG_BREAK) ||
+	    (tt->tag == PROT_CALL || tt->tag == tag) && tt->scope == scope) {
+	    tt->dst = (VALUE)scope;
+	    tt->retval = retval;
+	    JUMP_TAG(state);
+	}
+	if (tt->tag == PROT_FUNC && tt->scope == scope) break;
+	if (tt->tag == PROT_THREAD) {
+	    rb_raise(rb_eThreadError, "return jump can't across threads");
+	}
+	tt = tt->prev;
+    }
+    jump_tag_but_local_jump(state);
+}

@@ -1,0 +1,7 @@
+io.c:441
+VALUE
+rb_io_write(io, str)
+    VALUE io, str;
+{
+    return rb_funcall(io, id_write, 1, str);
+}

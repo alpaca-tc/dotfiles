@@ -1,0 +1,10 @@
+array.c:24
+void
+rb_mem_clear(mem, size)
+    register VALUE *mem;
+    register long size;
+{
+    while (size--) {
+	*mem++ = Qnil;
+    }
+}

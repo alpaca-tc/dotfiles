@@ -1,0 +1,12 @@
+pack.c:337
+static U32
+num2u32(x)
+    VALUE x;
+{
+    unsigned long num = NUM2ULONG(x);
+
+    if (U32_MAX < num) {
+	rb_raise(rb_eRangeError, "integer %ld too big to convert to `U32'", num);
+    }
+    return (U32)num;
+}

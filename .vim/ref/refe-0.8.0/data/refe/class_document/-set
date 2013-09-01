@@ -1,0 +1,12 @@
+# Set implements a collection of unordered values with no duplicates.
+# This is a hybrid of Array's intuitive inter-operation facilities and
+# Hash's fast lookup.
+
+Set は重複のないオブジェクトの順序づけられていない集まりの実装です。
+Arrayの持つ演算機能とHashのような高速な検索を合わせ持ちます。
+
+# The equality of each couple of elements is determined according to
+# Object#eql? and Object#hash, since Set uses Hash as storage.
+
+2つのオブジェクトの等価性は Object#eql? と Object#hash によります。
+なぜなら、Set は Hash を記憶として使っているからです。

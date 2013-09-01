@@ -1,0 +1,6 @@
+: sync
+    要素の変更をファイルに反映します．FASTモード
+    (GDBM#open() の第3引数にGDBM::FAST を指定)のときだけ意味があります．
+
+    注) GNU gdbm version 1.8 以降よりFASTモードがデフォルトになりました．
+

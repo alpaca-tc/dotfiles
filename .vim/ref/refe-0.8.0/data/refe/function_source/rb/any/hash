@@ -1,0 +1,25 @@
+hash.c:88
+static int
+rb_any_hash(a)
+    VALUE a;
+{
+    VALUE hval;
+
+    switch (TYPE(a)) {
+      case T_FIXNUM:
+      case T_SYMBOL:
+	return (int)a;
+	break;
+
+      case T_STRING:
+	return rb_str_hash(a);
+	break;
+
+      default:
+	hval = rb_funcall(a, id_hash, 0);
+	if (!FIXNUM_P(hval)) {
+	    hval = rb_funcall(hval, '%', 1, INT2FIX(536870923));
+	}
+	return (int)FIX2LONG(hval);
+    }
+}

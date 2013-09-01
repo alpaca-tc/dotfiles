@@ -1,0 +1,11 @@
+regex.c:2539
+static void
+store_jump_n(from, opcode, to, n)
+     char *from, *to;
+     int opcode;
+     unsigned n;
+{
+  from[0] = (char)opcode;
+  STORE_NUMBER(from + 1, to - (from + 3));
+  STORE_NUMBER(from + 3, n);
+}

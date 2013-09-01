@@ -1,0 +1,10 @@
+io.c:573
+static VALUE
+rb_io_sync(io)
+    VALUE io;
+{
+    OpenFile *fptr;
+
+    GetOpenFile(io, fptr);
+    return (fptr->mode & FMODE_SYNC) ? Qtrue : Qfalse;
+}

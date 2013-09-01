@@ -1,0 +1,9 @@
+hash.c:793
+static int
+values_i(key, value, ary)
+    VALUE key, value, ary;
+{
+    if (key == Qundef) return ST_CONTINUE;
+    rb_ary_push(ary, value);
+    return ST_CONTINUE;
+}

@@ -1,0 +1,18 @@
+range.c:134
+static VALUE
+range_eql(range, obj)
+    VALUE range, obj;
+{
+    if (range == obj) return Qtrue;
+    if (!rb_obj_is_instance_of(obj, rb_obj_class(range)))
+	return Qfalse;
+
+    if (!rb_eql(rb_ivar_get(range, id_beg), rb_ivar_get(obj, id_beg)))
+	return Qfalse;
+    if (!rb_eql(rb_ivar_get(range, id_end), rb_ivar_get(obj, id_end)))
+	return Qfalse;
+
+    if (EXCL(range) != EXCL(obj)) return Qfalse;
+
+    return Qtrue;
+}

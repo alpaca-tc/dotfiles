@@ -1,0 +1,10 @@
+eval.c:6202
+static VALUE
+rb_mod_public_method(argc, argv, obj)
+    int argc;
+    VALUE *argv;
+    VALUE obj;
+{
+    set_method_visibility(CLASS_OF(obj), argc, argv, NOEX_PUBLIC);
+    return obj;
+}

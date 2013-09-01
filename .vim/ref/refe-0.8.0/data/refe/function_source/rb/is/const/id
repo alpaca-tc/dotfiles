@@ -1,0 +1,8 @@
+parse.y:5934
+int
+rb_is_const_id(id)
+    ID id;
+{
+    if (is_const_id(id)) return Qtrue;
+    return Qfalse;
+}

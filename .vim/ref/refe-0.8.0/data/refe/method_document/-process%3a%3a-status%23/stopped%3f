@@ -1,0 +1,6 @@
+--- stopped?
+
+    プロセスが現在停止(終了ではない)している場合に真を返します。
+    Process.waitpid に Process::WUNTRACED フラグを設定した
+    場合にだけ真になりえます。
+

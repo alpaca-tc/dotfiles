@@ -1,0 +1,143 @@
+process.c:1363
+static VALUE
+p_uid_change_privilege(obj, id)
+    VALUE obj, id;
+{
+    extern int errno;
+    int uid;
+
+    rb_secure(2);
+    if (under_uid_switch) {
+	rb_raise(rb_eRuntimeError, "can't handle UID during evaluating the block given to the Process::UID.switch method");
+    }
+
+    uid = NUM2INT(id);
+
+    if (geteuid() == 0) { /* root-user */
+#if defined(HAVE_SETRESUID)
+	if (setresuid(uid, uid, uid) < 0) rb_sys_fail(0);
+	SAVED_USER_ID = uid;
+#elif defined(HAVE_SETUID)
+	if (setuid(uid) < 0) rb_sys_fail(0);
+	SAVED_USER_ID = uid;
+#elif defined(HAVE_SETREUID) && !defined(OBSOLETE_SETREUID)
+	if (getuid() == uid) {
+	    if (SAVED_USER_ID == uid) {
+		if (setreuid(-1, uid) < 0) rb_sys_fail(0);
+	    } else {
+		if (uid == 0) { /* (r,e,s) == (root, root, x) */
+		    if (setreuid(-1, SAVED_USER_ID) < 0) rb_sys_fail(0);
+		    if (setreuid(SAVED_USER_ID, 0) < 0) rb_sys_fail(0);
+		    SAVED_USER_ID = 0; /* (r,e,s) == (x, root, root) */
+		    if (setreuid(uid, uid) < 0) rb_sys_fail(0);
+		    SAVED_USER_ID = uid;
+		} else {
+		    if (setreuid(0, -1) < 0) rb_sys_fail(0);
+		    SAVED_USER_ID = 0;
+		    if (setreuid(uid, uid) < 0) rb_sys_fail(0);
+		    SAVED_USER_ID = uid;
+		}
+	    }
+	} else {
+	    if (setreuid(uid, uid) < 0) rb_sys_fail(0);
+	    SAVED_USER_ID = uid;
+	}
+#elif defined(HAVE_SETRUID) && defined(HAVE_SETEUID)
+	if (getuid() == uid) {
+	    if (SAVED_USER_ID == uid) {
+		if (seteuid(uid) < 0) rb_sys_fail(0);
+	    } else {
+		if (uid == 0) {
+		    if (setruid(SAVED_USER_ID) < 0) rb_sys_fail(0);
+		    SAVED_USER_ID = 0;
+		    if (setruid(0) < 0) rb_sys_fail(0);
+		} else {
+		    if (setruid(0) < 0) rb_sys_fail(0);
+		    SAVED_USER_ID = 0;
+		    if (seteuid(uid) < 0) rb_sys_fail(0);
+		    if (setruid(uid) < 0) rb_sys_fail(0);
+		    SAVED_USER_ID = uid;
+		}
+	    }
+	} else {
+	    if (seteuid(uid) < 0) rb_sys_fail(0);
+	    if (setruid(uid) < 0) rb_sys_fail(0);
+	    SAVED_USER_ID = uid;
+	}
+#else
+	rb_notimplement();
+#endif
+    } else { /* unprivileged user */
+#if defined(HAVE_SETRESUID)
+	if (setresuid((getuid() == uid)? -1: uid, 
+		      (geteuid() == uid)? -1: uid, 
+		      (SAVED_USER_ID == uid)? -1: uid) < 0) rb_sys_fail(0);
+	SAVED_USER_ID = uid;
+#elif defined(HAVE_SETREUID) && !defined(OBSOLETE_SETREUID)
+	if (SAVED_USER_ID == uid) {
+	    if (setreuid((getuid() == uid)? -1: uid, 
+			 (geteuid() == uid)? -1: uid) < 0) rb_sys_fail(0);
+	} else if (getuid() != uid) {
+	    if (setreuid(uid, (geteuid() == uid)? -1: uid) < 0) rb_sys_fail(0);
+	    SAVED_USER_ID = uid;
+	} else if (/* getuid() == uid && */ geteuid() != uid) {
+	    if (setreuid(geteuid(), uid) < 0) rb_sys_fail(0);
+	    SAVED_USER_ID = uid;
+	    if (setreuid(uid, -1) < 0) rb_sys_fail(0);
+	} else { /* getuid() == uid && geteuid() == uid */
+	    if (setreuid(-1, SAVED_USER_ID) < 0) rb_sys_fail(0);
+	    if (setreuid(SAVED_USER_ID, uid) < 0) rb_sys_fail(0);
+	    SAVED_USER_ID = uid;
+	    if (setreuid(uid, -1) < 0) rb_sys_fail(0);
+	}
+#elif defined(HAVE_SETRUID) && defined(HAVE_SETEUID)
+	if (SAVED_USER_ID == uid) {
+	    if (geteuid() != uid && seteuid(uid) < 0) rb_sys_fail(0);
+	    if (getuid() != uid && setruid(uid) < 0) rb_sys_fail(0);
+	} else if (/* SAVED_USER_ID != uid && */ geteuid() == uid) {
+	    if (getuid() != uid) {
+		if (setruid(uid) < 0) rb_sys_fail(0);
+		SAVED_USER_ID = uid;
+	    } else {
+		if (setruid(SAVED_USER_ID) < 0) rb_sys_fail(0);
+		SAVED_USER_ID = uid;
+		if (setruid(uid) < 0) rb_sys_fail(0);
+	    }
+	} else if (/* geteuid() != uid && */ getuid() == uid) {
+	    if (seteuid(uid) < 0) rb_sys_fail(0);
+	    if (setruid(SAVED_USER_ID) < 0) rb_sys_fail(0);
+	    SAVED_USER_ID = uid;
+	    if (setruid(uid) < 0) rb_sys_fail(0);
+	} else {
+	    errno = EPERM;
+	    rb_sys_fail(0);
+	}
+#elif defined HAVE_44BSD_SETUID
+	if (getuid() == uid) {
+	    /* (r,e,s)==(uid,?,?) ==> (uid,uid,uid) */
+	    if (setuid(uid) < 0) rb_sys_fail(0);
+	    SAVED_USER_ID = uid;
+	} else {
+	    errno = EPERM;
+	    rb_sys_fail(0);
+	}
+#elif defined HAVE_SETEUID
+	if (getuid() == uid && SAVED_USER_ID == uid) {
+	    if (seteuid(uid) < 0) rb_sys_fail(0);
+	} else {
+	    errno = EPERM;
+	    rb_sys_fail(0);
+	}
+#elif defined HAVE_SETUID
+	if (getuid() == uid && SAVED_USER_ID == uid) {
+	    if (setuid(uid) < 0) rb_sys_fail(0);
+	} else {
+	    errno = EPERM;
+	    rb_sys_fail(0);
+	}
+#else
+	rb_notimplement();
+#endif
+    }
+    return INT2FIX(uid);
+}

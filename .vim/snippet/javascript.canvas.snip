@@ -1,0 +1,12 @@
+snippet get_ctx
+abbr    var ctx = canvas.getContext('2d')
+options word
+  var ctx = canvas.getContext('2d')
+
+snippet circle
+abbr    Stroke circle
+regexp  'ctx\.'
+options word
+  .beginPath();
+  ctx.arc(70, 70, 60, 0, Math.PI * 2, true);
+  ctx.stroke();

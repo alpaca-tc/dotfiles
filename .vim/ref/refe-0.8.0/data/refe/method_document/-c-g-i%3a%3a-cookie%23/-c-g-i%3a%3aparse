@@ -1,0 +1,10 @@
+--- CGI::parse(query)
+      QUERY_STRINGの解析
+        例：    
+        params = CGI::parse("query_string")
+          # {"name1" => ["value1", "value2", ...],
+          #  "name2" => ["value1", "value2", ...], ... }
+# module QueryExtension どうしよ
+
+#=== HTML PRETTY FORMAT
+

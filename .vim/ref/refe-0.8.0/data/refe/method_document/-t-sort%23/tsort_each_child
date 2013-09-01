@@ -1,0 +1,9 @@
+--- tsort_each_child(node) {|child| ...}
+#    should be implemented by a extended class.
+    TSort で拡張されるクラスで定義されていなければならないメソッドです。
+
+    tsort_each_child is used to iterate for child nodes of node.
+
+#== More Realistic Example
+#Very simple `make' like tool can be implemented as follows:
+

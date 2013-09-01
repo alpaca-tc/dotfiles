@@ -1,0 +1,16 @@
+--- OptionParser.with([banner[, width[, indent]]]) [{...}]
+    Initializes new instance, and evaluates the block in context of
+    the instance if called as iterator.  This behavior is equivalent
+    to older new.  This is ((*deprecated*)) method.
+    
+    cf. OptionParser.new
+    :Parameters:
+      : banner
+        banner message.
+      : width
+        summary width.
+      : indent
+        summary indent.
+      : Block
+        to be evaluated in the new instance context.
+

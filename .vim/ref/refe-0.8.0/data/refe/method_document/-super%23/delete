@@ -1,0 +1,3 @@
+: delete(mailbox)
+      Sends a DELETE command to remove the mailbox.
+

@@ -1,0 +1,9 @@
+time.c:802
+static VALUE
+time_dup(time)
+    VALUE time;
+{
+    VALUE dup = time_s_alloc(rb_cTime);
+    time_init_copy(dup, time);
+    return dup;
+}

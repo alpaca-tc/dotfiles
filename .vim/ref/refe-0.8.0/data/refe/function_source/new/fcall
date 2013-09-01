@@ -1,0 +1,12 @@
+parse.y:5467
+static NODE*
+new_fcall(m,a)
+    ID m;
+    NODE *a;
+{
+    if (a && nd_type(a) == NODE_BLOCK_PASS) {
+	a->nd_iter = NEW_FCALL(m,a->nd_head);
+	return a;
+    }
+    return NEW_FCALL(m,a);
+}

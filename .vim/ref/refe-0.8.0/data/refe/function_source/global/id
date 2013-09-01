@@ -1,0 +1,16 @@
+variable.c:460
+static ID
+global_id(name)
+    const char *name;
+{
+    ID id;
+
+    if (name[0] == '$') id = rb_intern(name);
+    else {
+	char *buf = ALLOCA_N(char, strlen(name)+2);
+	buf[0] = '$';
+	strcpy(buf+1, name);
+	id = rb_intern(buf);
+    }
+    return id;
+}

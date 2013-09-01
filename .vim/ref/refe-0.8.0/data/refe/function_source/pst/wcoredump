@@ -1,0 +1,16 @@
+process.c:298
+static VALUE
+pst_wcoredump(st)
+    VALUE st;
+{
+#ifdef WCOREDUMP
+    int status = NUM2INT(st);
+
+    if (WCOREDUMP(status))
+	return Qtrue;
+    else
+	return Qfalse;
+#else
+    return Qfalse;
+#endif
+}

@@ -1,0 +1,16 @@
+range.c:152
+static VALUE
+range_hash(range)
+    VALUE range;
+{
+    long hash = EXCL(range);
+    VALUE v;
+
+    v = rb_hash(rb_ivar_get(range, id_beg));
+    hash ^= v << 1;
+    v = rb_hash(rb_ivar_get(range, id_end));
+    hash ^= v << 9;
+    hash ^= EXCL(range) << 24;
+
+    return LONG2FIX(hash);
+}

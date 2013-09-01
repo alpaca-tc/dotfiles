@@ -1,0 +1,4 @@
+--- File.chardev?(path)
+
+    FileTest.chardev? と同じです。
+

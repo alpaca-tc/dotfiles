@@ -1,0 +1,29 @@
+object.c:595
+static VALUE
+rb_mod_le(mod, arg)
+    VALUE mod, arg;
+{
+    VALUE start = mod;
+
+    if (mod == arg) return Qtrue;
+    switch (TYPE(arg)) {
+      case T_MODULE:
+      case T_CLASS:
+	break;
+      default:
+	rb_raise(rb_eTypeError, "compared with non class/module");
+    }
+
+    while (mod) {
+	if (RCLASS(mod)->m_tbl == RCLASS(arg)->m_tbl)
+	    return Qtrue;
+	mod = RCLASS(mod)->super;
+    }
+    /* not mod < arg; check if mod > arg */
+    while (arg) {
+	if (RCLASS(arg)->m_tbl == RCLASS(start)->m_tbl)
+	    return Qfalse;
+	arg = RCLASS(arg)->super;
+    }
+    return Qnil;
+}

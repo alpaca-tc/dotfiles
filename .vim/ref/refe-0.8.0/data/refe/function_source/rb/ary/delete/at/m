@@ -1,0 +1,7 @@
+array.c:1345
+static VALUE
+rb_ary_delete_at_m(ary, pos)
+    VALUE ary, pos;
+{
+    return rb_ary_delete_at(ary, NUM2LONG(pos));
+}

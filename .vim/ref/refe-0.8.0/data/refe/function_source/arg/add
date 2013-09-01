@@ -1,0 +1,14 @@
+parse.y:4890
+static NODE *
+arg_add(node1, node2)
+    NODE *node1;
+    NODE *node2;
+{
+    if (!node1) return NEW_LIST(node2);
+    if (nd_type(node1) == NODE_ARRAY) {
+	return list_append(node1, node2);
+    }
+    else {
+	return NEW_ARGSPUSH(node1, node2);
+    }
+}

@@ -1,0 +1,24 @@
+regex.c:4402
+void
+re_copy_registers(regs1, regs2)
+     struct re_registers *regs1, *regs2;
+{
+  int i;
+
+  if (regs1 == regs2) return;
+  if (regs1->allocated == 0) {
+    regs1->beg = TMALLOC(regs2->num_regs, int);
+    regs1->end = TMALLOC(regs2->num_regs, int);
+    regs1->allocated = regs2->num_regs;
+  }
+  else if (regs1->allocated < regs2->num_regs) {
+    TREALLOC(regs1->beg, regs2->num_regs, int);
+    TREALLOC(regs1->end, regs2->num_regs, int);
+    regs1->allocated = regs2->num_regs;
+  }
+  for (i=0; i<regs2->num_regs; i++) {
+    regs1->beg[i] = regs2->beg[i];
+    regs1->end[i] = regs2->end[i];
+  }
+  regs1->num_regs = regs2->num_regs;
+}

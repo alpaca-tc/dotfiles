@@ -1,0 +1,8 @@
+file.c:1161
+static VALUE
+rb_file_s_lchown(argc, argv)
+    int argc;
+    VALUE *argv;
+{
+    rb_notimplement();
+}

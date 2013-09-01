@@ -1,0 +1,8 @@
+--- instance_method(name)
+
+    self のインスタンスメソッドをオブジェクト化した
+    UnboundMethod を返します。name は Symbol か文字
+    列です。
+
+    Object#method [Object/method] も参照してください。
+

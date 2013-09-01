@@ -1,0 +1,18 @@
+--- pop
+
+    末尾の要素を取り除いてそれを返します。空配列の時は
+    nil を返します。
+
+    push, shift, unshift も参照し
+    てください。
+
+    例:
+          array = [1, [2, 3], 4]
+          p array.pop      # => 4
+          p array.pop      # => [2, 3]
+          p array          # => [1]
+
+          p array.pop      # => 1
+          p array.pop      # => nil
+          p array          # => []
+

@@ -1,0 +1,24 @@
+re.c:917
+static VALUE
+match_array(match, start)
+    VALUE match;
+    int start;
+{
+    struct re_registers *regs = RMATCH(match)->regs;
+    VALUE ary = rb_ary_new2(regs->num_regs);
+    VALUE target = RMATCH(match)->str;
+    int i;
+    int taint = OBJ_TAINTED(match);
+    
+    for (i=start; i<regs->num_regs; i++) {
+	if (regs->beg[i] == -1) {
+	    rb_ary_push(ary, Qnil);
+	}
+	else {
+	    VALUE str = rb_str_substr(target, regs->beg[i], regs->end[i]-regs->beg[i]);
+	    if (taint) OBJ_TAINT(str);
+	    rb_ary_push(ary, str);
+	}
+    }
+    return ary;
+}

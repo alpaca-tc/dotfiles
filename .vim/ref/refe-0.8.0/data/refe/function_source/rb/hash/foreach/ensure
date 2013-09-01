@@ -1,0 +1,15 @@
+hash.c:149
+static VALUE
+rb_hash_foreach_ensure(hash)
+    VALUE hash;
+{
+    RHASH(hash)->iter_lev--;
+
+    if (RHASH(hash)->iter_lev == 0) {
+	if (FL_TEST(hash, HASH_DELETED)) {
+	    st_cleanup_safe(RHASH(hash)->tbl, Qundef);
+	    FL_UNSET(hash, HASH_DELETED);
+	}
+    }
+    return 0;
+}

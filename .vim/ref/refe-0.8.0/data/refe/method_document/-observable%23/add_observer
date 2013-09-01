@@ -1,0 +1,7 @@
+--- Observable#add_observer(observer)
+            オブザーバを追加する。
+            オブザーバはupdateメソッドを備えている必要がある。
+
+            observerがupdateメソッドを持たないときは
+            例外NameErrorを発生する。
+

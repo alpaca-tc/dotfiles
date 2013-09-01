@@ -1,0 +1,3 @@
+: VALUE rb_obj_class(VALUE obj)
+    Object#class の実体です。
+

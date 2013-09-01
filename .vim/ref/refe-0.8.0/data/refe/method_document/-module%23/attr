@@ -1,0 +1,20 @@
+--- attr(name[, assignable])
+
+    属性読み込みのためのインスタンスメソッド name を定義します。
+    name は Symbol か文字列で指定します。戻り値は常に
+    nil です。
+
+    このメソッドで定義されるアクセスメソッドの定義は次の通りです。
+
+      def name
+        @name
+      end
+
+    省略可能な第 2 引数 assignable が指定されその値が真である
+    場合には、属性の書きこみ用メソッド name= も同時に定義されます。
+    その定義は次の通りです。
+
+      def name=(val)
+        @name = val
+      end
+

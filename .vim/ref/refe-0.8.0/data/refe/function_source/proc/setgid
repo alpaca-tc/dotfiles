@@ -1,0 +1,31 @@
+process.c:1610
+static VALUE
+proc_setgid(obj, id)
+    VALUE obj, id;
+{
+    int gid = NUM2INT(id);
+
+    rb_secure(2);
+    if (under_gid_switch) {
+	rb_raise(rb_eRuntimeError, "can't handle GID during evaluating the block given to the Process::GID.switch method");
+    }
+#if defined(HAVE_SETRESGID) && !defined(__CHECKER__)
+    if (setresgid(gid, -1, -1) < 0) rb_sys_fail(0);
+#elif defined HAVE_SETREGID
+    if (setregid(gid, -1) < 0) rb_sys_fail(0);
+#elif defined HAVE_SETRGID
+    if (setrgid((GIDTYPE)gid) < 0) rb_sys_fail(0);
+#elif defined HAVE_SETGID
+    {
+	if (getegid() == gid) {
+	    if (setgid(gid) < 0) rb_sys_fail(0);
+	}
+	else {
+	    rb_notimplement();
+	}
+    }
+#else
+    rb_notimplement();
+#endif
+    return INT2FIX(gid);
+}

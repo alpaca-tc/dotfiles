@@ -1,0 +1,12 @@
+array.c:1071
+static VALUE
+rb_ary_to_a(ary)
+    VALUE ary;
+{
+    if (rb_obj_class(ary) != rb_cArray) {
+	VALUE dup = rb_ary_new2(RARRAY(ary)->len);
+	rb_ary_replace(dup, ary);
+	return dup;
+    }
+    return ary;
+}

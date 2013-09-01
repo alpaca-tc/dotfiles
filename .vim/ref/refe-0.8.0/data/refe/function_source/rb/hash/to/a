@@ -1,0 +1,13 @@
+hash.c:683
+static VALUE
+rb_hash_to_a(hash)
+    VALUE hash;
+{
+    VALUE ary;
+
+    ary = rb_ary_new();
+    st_foreach(RHASH(hash)->tbl, to_a_i, ary);
+    if (OBJ_TAINTED(hash)) OBJ_TAINT(ary);
+
+    return ary;
+}

@@ -1,0 +1,16 @@
+variable.c:1705
+VALUE
+rb_mod_class_variables(obj)
+    VALUE obj;
+{
+    VALUE ary = rb_ary_new();
+
+    for (;;) {
+	if (RCLASS(obj)->iv_tbl) {
+	    st_foreach(RCLASS(obj)->iv_tbl, cv_i, ary);
+	}
+	obj = RCLASS(obj)->super;
+	if (!obj) break;
+    }
+    return ary;
+}

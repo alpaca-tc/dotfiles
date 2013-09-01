@@ -1,0 +1,16 @@
+eval.c:8565
+static int
+find_bad_fds(dst, src, max)
+    fd_set *dst, *src;
+    int max;
+{
+    int i, test = Qfalse;
+
+    for (i=0; i<=max; i++) {
+	if (FD_ISSET(i, src) && !FD_ISSET(i, dst)) {
+	    FD_CLR(i, src);
+	    test = Qtrue;
+	}
+    }
+    return test;
+}

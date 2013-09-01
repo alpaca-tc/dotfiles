@@ -1,0 +1,55 @@
+--- singleton_methods
+--- singleton_methods([inherited_too])  ruby 1.7 feature
+
+    そのオブジェクトに対して定義されている特異メソッド名の一覧を文字列
+    の配列で返します。
+
+    ruby 1.7 feature: 引数が指定できるようになりました。
+    inherited_too が偽であれば(デフォルトは真)、スーパークラスで
+    定義されたメソッドは対象になりません。
+
+        obj = Object.new
+
+        module Foo
+          def foo
+          end
+        end
+
+        class <<obj
+          include Foo
+          def bar
+          end
+        end
+        p obj.singleton_methods       #=> ["bar"]
+        p obj.singleton_methods(true) #=> ["bar", "foo"]
+
+    あるいは、Object#extend [Object/extend] は特異クラスに対するイ
+    ンクルードなので以下も同様になります。
+
+        obj = Object.new
+
+        module Foo
+          def foo
+          end
+        end
+
+        obj.extend(Foo)
+        p obj.singleton_methods       #=> []
+        p obj.singleton_methods(true) #=> ["foo"]
+
+    クラスメソッド(クラスオブジェクトの特異メソッド)に関してはスーパー
+    クラスのクラスメソッドも対象になります。
+
+        class Foo
+          def Foo.foo
+          end
+        end
+
+        class Bar < Foo
+          def Bar.bar
+          end
+        end
+
+        p Bar.singleton_methods       #=> ["bar"]
+        p Bar.singleton_methods(true) #=> ["bar", "foo"]
+

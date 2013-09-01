@@ -1,0 +1,21 @@
+time.c:724
+static VALUE
+time_cmp(time1, time2)
+    VALUE time1, time2;
+{
+    struct time_object *tobj1, *tobj2;
+
+    GetTimeval(time1, tobj1);
+    if (TYPE(time2) == T_DATA && RDATA(time2)->dfree == time_free) {
+	GetTimeval(time2, tobj2);
+	if (tobj1->tv.tv_sec == tobj2->tv.tv_sec) {
+	    if (tobj1->tv.tv_usec == tobj2->tv.tv_usec) return INT2FIX(0);
+	    if (tobj1->tv.tv_usec > tobj2->tv.tv_usec) return INT2FIX(1);
+	    return INT2FIX(-1);
+	}
+	if (tobj1->tv.tv_sec > tobj2->tv.tv_sec) return INT2FIX(1);
+	return INT2FIX(-1);
+    }
+
+    return Qnil;
+}

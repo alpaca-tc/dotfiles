@@ -1,0 +1,21 @@
+eval.c:9076
+VALUE
+rb_thread_list()
+{
+    rb_thread_t th;
+    VALUE ary = rb_ary_new();
+
+    FOREACH_THREAD(th) {
+	switch (th->status) {
+	  case THREAD_RUNNABLE:
+	  case THREAD_STOPPED:
+	  case THREAD_TO_KILL:
+	    rb_ary_push(ary, th->thread);
+	  default:
+	    break;
+	}
+    }
+    END_FOREACH(th);
+
+    return ary;
+}

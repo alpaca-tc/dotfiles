@@ -1,0 +1,4 @@
+: static void rb_clear_cache_by_id(ID id) 
+    メソッドキャシュから id という名前のメソッドの
+    キャッシュエントリを全て消去します。
+

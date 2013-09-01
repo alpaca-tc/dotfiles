@@ -1,0 +1,8 @@
+--- CGI.rfc1123_date(time)
+      RFC:1123の日付文字列を作成
+
+        例：
+        CGI::rfc1123_date(Time.now)
+          # => Sat, 1 Jan 2000 00:00:00 GMT
+#=== MAKE HTTP HEADER STRING
+

@@ -1,0 +1,6 @@
+--- ObjectSpace._id2ref(id)
+
+    オブジェクト ID(Object#id [Object/id])からオブジェクトを得ます。
+    対応するオブジェクトが存在しなければ例外 RangeError が発生し
+    ます。
+

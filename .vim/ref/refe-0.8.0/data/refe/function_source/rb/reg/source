@@ -1,0 +1,12 @@
+re.c:367
+static VALUE
+rb_reg_source(re)
+    VALUE re;
+{
+    VALUE str;
+
+    rb_reg_check(re);
+    str = rb_str_new(RREGEXP(re)->str,RREGEXP(re)->len);
+    if (OBJ_TAINTED(re)) OBJ_TAINT(str);
+    return str;
+}

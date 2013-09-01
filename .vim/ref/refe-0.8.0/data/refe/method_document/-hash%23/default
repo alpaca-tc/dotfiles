@@ -1,0 +1,11 @@
+--- default
+--- default([key])                ruby 1.7 feature
+
+    ハッシュのデフォルト値を返します。
+
+    ruby 1.7 feature:
+    2 番目の形式はハッシュがデフォルト値としてブロックを持つ場合
+    (Hash.new参照)に指定できます。self と 引数 
+    key を引数にブロックを実行してその結果を返します。
+    key の省略値は nil です。
+

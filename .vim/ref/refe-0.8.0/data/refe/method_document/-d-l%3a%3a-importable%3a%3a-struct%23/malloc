@@ -1,0 +1,5 @@
+--- malloc(size = nil)
+
+    sizeバイトの領域を確保してDL::PtrDataオブジェクトを生成し、その
+    DL::PtrDataオブジェクトを保持するMemoryオブジェクトを返す。
+

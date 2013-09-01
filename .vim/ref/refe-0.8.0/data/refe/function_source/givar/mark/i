@@ -1,0 +1,9 @@
+variable.c:881
+static int
+givar_mark_i(key, value)
+    ID key;
+    VALUE value;
+{
+    rb_gc_mark(value);
+    return ST_CONTINUE;
+}

@@ -1,0 +1,24 @@
+eval.c:4266
+VALUE
+#ifdef HAVE_STDARG_PROTOTYPES
+rb_yield_values(int n, ...)
+#else
+rb_yield_values(n, va_alist)
+    int n;
+    va_dcl
+#endif
+{
+    va_list args;
+    VALUE ary;
+
+    if (n == 0) {
+	return rb_yield_0(Qundef, 0, 0, Qfalse, Qfalse);
+    }
+    ary = rb_ary_new2(n);
+    va_init_list(args, n);
+    while (n--) {
+	rb_ary_push(ary, va_arg(args, VALUE));
+    }
+    va_end(args);
+    return rb_yield_0(ary, 0, 0, Qfalse, Qtrue);
+}

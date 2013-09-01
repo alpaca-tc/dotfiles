@@ -1,0 +1,23 @@
+error.c:398
+static VALUE
+check_backtrace(bt)
+    VALUE bt;
+{
+    long i;
+    static char *err = "backtrace must be Array of String";
+
+    if (!NIL_P(bt)) {
+	int t = TYPE(bt);
+
+	if (t == T_STRING) return rb_ary_new3(1, bt);
+	if (t != T_ARRAY) {
+	    rb_raise(rb_eTypeError, err);
+	}
+	for (i=0;i<RARRAY(bt)->len;i++) {
+	    if (TYPE(RARRAY(bt)->ptr[i]) != T_STRING) {
+		rb_raise(rb_eTypeError, err);
+	    }
+	}
+    }
+    return bt;
+}

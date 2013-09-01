@@ -1,0 +1,4 @@
+--- OptionParser::List#prepend(switch, short_opts, long_opts, nolong_opts)
+    Inserts switch at head of the list, and associates short,
+    long and negated long options.
+

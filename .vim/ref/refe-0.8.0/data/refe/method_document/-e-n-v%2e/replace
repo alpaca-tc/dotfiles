@@ -1,0 +1,6 @@
+--- ENV.replace(hash)
+
+    ruby 1.8 feature
+
+    環境変数を hash に設定します。self を返します。
+

@@ -1,0 +1,15 @@
+math.c:204
+static VALUE
+math_log(obj, x)
+    VALUE obj, x;
+{
+    double d;
+
+    Need_Float(x);
+    errno = 0;
+    d = log(RFLOAT(x)->value);
+    if (errno) {
+	rb_sys_fail("log");
+    }
+    return rb_float_new(d);
+}

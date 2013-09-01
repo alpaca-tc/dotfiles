@@ -1,0 +1,11 @@
+string.c:1571
+static VALUE
+rb_str_sub(argc, argv, str)
+    int argc;
+    VALUE *argv;
+    VALUE str;
+{
+    str = rb_str_dup(str);
+    rb_str_sub_bang(argc, argv, str);
+    return str;
+}

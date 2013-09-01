@@ -1,0 +1,19 @@
+re.c:1154
+static VALUE
+rb_reg_hash(re)
+    VALUE re;
+{
+    int hashval, len;
+    char *p;
+
+    rb_reg_check(re);
+    hashval = RREGEXP(re)->ptr->options;
+    len = RREGEXP(re)->len;
+    p  = RREGEXP(re)->str;
+    while (len--) {
+	hashval = hashval * 33 + *p++;
+    }
+    hashval = hashval + (hashval>>5);
+    
+    return INT2FIX(hashval);
+}

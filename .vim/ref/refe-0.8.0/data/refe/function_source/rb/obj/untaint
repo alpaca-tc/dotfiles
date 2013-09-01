@@ -1,0 +1,14 @@
+object.c:345
+VALUE
+rb_obj_untaint(obj)
+    VALUE obj;
+{
+    rb_secure(3);
+    if (OBJ_TAINTED(obj)) {
+	if (OBJ_FROZEN(obj)) {
+	    rb_error_frozen("object");
+	}
+	FL_UNSET(obj, FL_TAINT);
+    }
+    return obj;
+}

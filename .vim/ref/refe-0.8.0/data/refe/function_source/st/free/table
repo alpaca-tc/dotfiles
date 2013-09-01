@@ -1,0 +1,19 @@
+st.c:209
+void
+st_free_table(table)
+    st_table *table;
+{
+    register st_table_entry *ptr, *next;
+    int i;
+
+    for(i = 0; i < table->num_bins; i++) {
+	ptr = table->bins[i];
+	while (ptr != 0) {
+	    next = ptr->next;
+	    free(ptr);
+	    ptr = next;
+	}
+    }
+    free(table->bins);
+    free(table);
+}

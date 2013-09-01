@@ -1,0 +1,7 @@
+file.c:238
+static VALUE
+rb_stat_size(self)
+    VALUE self;
+{
+    return OFFT2NUM(get_stat(self)->st_size);
+}

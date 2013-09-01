@@ -1,0 +1,8 @@
+hash.c:649
+static VALUE
+rb_hash_each_key(hash)
+    VALUE hash;
+{
+    rb_hash_foreach(hash, each_key_i, 0);
+    return hash;
+}

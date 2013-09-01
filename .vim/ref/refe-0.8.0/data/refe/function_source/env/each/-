@@ -1,0 +1,25 @@
+hash.c:1342
+static VALUE
+env_each(ehash)
+    VALUE ehash;
+{
+    char **env;
+    VALUE ary = rb_ary_new();
+    long i;
+
+    env = GET_ENVIRON(environ);
+    while (*env) {
+	char *s = strchr(*env, '=');
+	if (s) {
+	    rb_ary_push(ary, env_str_new(*env, s-*env));
+	    rb_ary_push(ary, env_str_new2(s+1));
+	}
+	env++;
+    }
+    FREE_ENVIRON(environ);
+
+    for (i=0; i<RARRAY(ary)->len; i+=2) {
+	rb_yield_values(2, RARRAY(ary)->ptr[i], RARRAY(ary)->ptr[i+1]);
+    }
+    return ehash;
+}

@@ -1,0 +1,43 @@
+array.c:491
+VALUE
+rb_ary_aref(argc, argv, ary)
+    int argc;
+    VALUE *argv;
+    VALUE ary;
+{
+    VALUE arg;
+    long beg, len;
+
+    if (argc == 2) {
+	if (SYMBOL_P(argv[0])) {
+	    rb_raise(rb_eTypeError, "Symbol as array index");
+	}
+	beg = NUM2LONG(argv[0]);
+	len = NUM2LONG(argv[1]);
+	if (beg < 0) {
+	    beg += RARRAY(ary)->len;
+	}
+	return rb_ary_subseq(ary, beg, len);
+    }
+    if (argc != 1) {
+	rb_scan_args(argc, argv, "11", 0, 0);
+    }
+    arg = argv[0];
+    /* special case - speeding up */
+    if (FIXNUM_P(arg)) {
+	return rb_ary_entry(ary, FIX2LONG(arg));
+    }
+    if (SYMBOL_P(arg)) {
+	rb_raise(rb_eTypeError, "Symbol as array index");
+    }
+    /* check if idx is Range */
+    switch (rb_range_beg_len(arg, &beg, &len, RARRAY(ary)->len, 0)) {
+      case Qfalse:
+	break;
+      case Qnil:
+	return Qnil;
+      default:
+	return rb_ary_subseq(ary, beg, len);
+    }
+    return rb_ary_entry(ary, NUM2LONG(arg));
+}

@@ -1,0 +1,23 @@
+--- ThreadsWait.all_waits(thread1,...)
+    waits until all of specified threads are terminated.
+    if a block is supplied for the method, evaluates it for
+    each thread termination.
+
+        require 'thwait'
+
+        threads = []
+        5.times {|i|
+          threads << Thread.new { sleep 1; p Thread.current }
+        }
+        ThreadsWait.all_waits(*threads) {|th| p th }
+        => #<Thread:0x401a0ca8 run>
+           #<Thread:0x401a0d70 run>
+           #<Thread:0x401a1130 run>
+           #<Thread:0x401a13ec run>
+           #<Thread:0x401a17d4 run>
+           #<Thread:0x401a0ca8 dead>
+           #<Thread:0x401a0d70 dead>
+           #<Thread:0x401a1130 dead>
+           #<Thread:0x401a13ec dead>
+           #<Thread:0x401a17d4 dead>
+

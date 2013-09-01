@@ -1,0 +1,6 @@
+parse.y:3271
+static void
+arg_ambiguous()
+{
+    rb_warning("ambiguous first argument; put parentheses or even spaces");
+}

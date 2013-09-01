@@ -1,0 +1,9 @@
+array.c:856
+static VALUE
+rb_ary_empty_p(ary)
+    VALUE ary;
+{
+    if (RARRAY(ary)->len == 0)
+	return Qtrue;
+    return Qfalse;
+}

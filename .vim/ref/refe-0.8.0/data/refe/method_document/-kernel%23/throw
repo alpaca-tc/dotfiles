@@ -1,0 +1,17 @@
+--- throw(tag[, value=nil])
+
+    同じ tag を指定した catch のブロックの
+    終わりまで(メソッドを越えて)脱出します。もし同じ tag で
+    待っている catch が存在しない場合は NameError で
+    スレッドが終了します。tag は文字列またはシンボルです。
+    value は catch の戻り値になります。
+
+    例:
+
+      ret = catch(:exit) {
+         throw :exit, 25
+         some_process()    # 絶対に実行されない
+         10
+      }
+      p ret   #=> 25
+

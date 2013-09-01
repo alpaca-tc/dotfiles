@@ -1,0 +1,14 @@
+hash.c:179
+static VALUE hash_alloc _((VALUE));
+static VALUE
+hash_alloc(klass)
+    VALUE klass;
+{
+    NEWOBJ(hash, struct RHash);
+    OBJSETUP(hash, klass, T_HASH);
+
+    hash->ifnone = Qnil;
+    hash->tbl = st_init_table(&objhash);
+
+    return (VALUE)hash;
+}

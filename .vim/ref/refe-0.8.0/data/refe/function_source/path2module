@@ -1,0 +1,12 @@
+marshal.c:942
+static VALUE
+path2module(path)
+    char *path;
+{
+    VALUE v = rb_path2class(path);
+
+    if (TYPE(v) != T_MODULE) {
+	rb_raise(rb_eArgError, "%s does not refer module", path);
+    }
+    return v;
+}

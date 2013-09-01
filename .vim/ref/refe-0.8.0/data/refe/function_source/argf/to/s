@@ -1,0 +1,6 @@
+io.c:3961
+static VALUE
+argf_to_s()
+{
+    return rb_str_new2("ARGF");
+}

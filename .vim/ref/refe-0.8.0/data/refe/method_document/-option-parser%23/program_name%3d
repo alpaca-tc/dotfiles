@@ -1,0 +1,5 @@
+--- OptionParser#program_name
+--- OptionParser#program_name=(name)
+    Program name to be emitted in error message and default banner,
+    defaulted to $0.
+

@@ -1,0 +1,13 @@
+regex.c:2517
+static void
+insert_jump(op, from, to, current_end)
+     int op;
+     char *from, *to, *current_end;
+{
+  register char *pfrom = current_end;		/* Copy from here...  */
+  register char *pto = current_end + 3;		/* ...to here.  */
+
+  while (pfrom != from)			       
+    *--pto = *--pfrom;
+  store_jump(from, op, to);
+}

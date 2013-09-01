@@ -1,0 +1,16 @@
+numeric.c:482
+static VALUE
+flo_pow(x, y)
+    VALUE x, y;
+{
+    switch (TYPE(y)) {
+      case T_FIXNUM:
+        return rb_float_new(pow(RFLOAT(x)->value, (double)FIX2LONG(y)));
+      case T_BIGNUM:
+	return rb_float_new(pow(RFLOAT(x)->value, rb_big2dbl(y)));
+      case T_FLOAT:
+        return rb_float_new(pow(RFLOAT(x)->value, RFLOAT(y)->value));
+      default:
+        return rb_num_coerce_bin(x, y);
+    }
+}

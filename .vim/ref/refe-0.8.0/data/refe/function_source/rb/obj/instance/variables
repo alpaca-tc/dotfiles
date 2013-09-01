@@ -1,0 +1,29 @@
+variable.c:1037
+VALUE
+rb_obj_instance_variables(obj)
+    VALUE obj;
+{
+    VALUE ary;
+
+    ary = rb_ary_new();
+    switch (TYPE(obj)) {
+      case T_OBJECT:
+      case T_CLASS:
+      case T_MODULE:
+	if (ROBJECT(obj)->iv_tbl) {
+	    st_foreach(ROBJECT(obj)->iv_tbl, ivar_i, ary);
+	}
+	break;
+      default:
+	if (!generic_iv_tbl) break;
+	if (FL_TEST(obj, FL_EXIVAR) || rb_special_const_p(obj)) {
+	    st_table *tbl;
+
+	    if (st_lookup(generic_iv_tbl, obj, (st_data_t *)&tbl)) {
+		st_foreach(tbl, ivar_i, ary);
+	    }
+	}
+	break;
+    }
+    return ary;
+}

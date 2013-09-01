@@ -1,0 +1,9 @@
+class.c:596
+VALUE
+rb_class_public_instance_methods(argc, argv, mod)
+    int argc;
+    VALUE *argv;
+    VALUE mod;
+{
+    return class_instance_method_list(argc, argv, mod, ins_methods_pub_i);
+}

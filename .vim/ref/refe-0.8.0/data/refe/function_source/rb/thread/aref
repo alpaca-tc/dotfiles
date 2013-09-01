@@ -1,0 +1,7 @@
+eval.c:9839
+static VALUE
+rb_thread_aref(thread, id)
+    VALUE thread, id;
+{
+    return rb_thread_local_aref(thread, rb_to_id(id));
+}

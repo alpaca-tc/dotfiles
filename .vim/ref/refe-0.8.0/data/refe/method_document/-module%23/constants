@@ -1,0 +1,39 @@
+--- constants
+
+    そのモジュール(またはクラス)で定義されている定数名の配列を返
+    します。
+    スーパークラスやインクルードしているモジュールの定数も含みます。
+
+    Module.constants や
+    local_variables,
+    global_variables,
+    Object#instance_variables [Object/instance_variables],
+    Module#class_variables [Module/class_variables]
+    も参照してください。
+
+
+    例: Module.constnats と Module#constnats の違い
+
+        # 出力の簡略化のため起動時の定数一覧を取得して後で差し引く
+        $clist = Module.constants
+
+        class Foo
+          FOO = 1
+        end
+        class Bar
+          BAR = 1
+
+          # 出力に FOO は含まれない
+          p constants - $clist                # => ["BAR", "Bar", "Foo"]
+          # Module.constants も同様
+          p Module.constants - $clist         # => ["BAR", "Bar", "Foo"]
+          class Baz
+            p constants - $clist              # => ["Bar", "Foo"]
+
+            # ネストしたクラスでは、外側のクラスで定義した定数は
+            # 参照可能なので、BAR は、Module.constants には含まれる
+            # (クラス Baz も Bar の定数なので同様)
+            p Module.constants - $clist       # => ["BAR", "Baz", "Bar", "Foo"]
+          end
+        end
+

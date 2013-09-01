@@ -1,0 +1,14 @@
+error.c:108
+static void
+warn_print(fmt, args)
+    const char *fmt;
+    va_list args;
+{
+    char buf[BUFSIZ];
+    int len;
+
+    err_snprintf(buf, BUFSIZ, fmt, args);
+    len = strlen(buf);
+    buf[len++] = '\n';
+    rb_write_error2(buf, len);
+}

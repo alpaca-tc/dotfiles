@@ -1,0 +1,23 @@
+: pop( dest = '' )
+    メールを受信して dest に << メソッドを使って書きこみます。
+    dest を返します。
+
+        # example
+        allmails = nil
+        POP3.start( 'your.pop3.server', 110,
+                    'YourAccount, 'YourPassword' ) {|pop|
+            allmails = pop.mails.collect {|popmail| popmail.pop }
+        }
+
+: pop {|str| .... }
+    メールの文字列を少しづつ読みこみ、順次ブロックに与えます。
+
+        # example
+        POP3.start( 'localhost', 110 ) {|pop3|
+          pop3.each_mail do |m|
+            m.pop do |str|
+              # do anything
+            end
+          end
+        }
+

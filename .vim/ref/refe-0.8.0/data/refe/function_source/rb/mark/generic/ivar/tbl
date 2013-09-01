@@ -1,0 +1,8 @@
+variable.c:901
+void
+rb_mark_generic_ivar_tbl()
+{
+    if (!generic_iv_tbl) return;
+    if (special_generic_ivar == 0) return;
+    st_foreach(generic_iv_tbl, givar_i, 0);
+}

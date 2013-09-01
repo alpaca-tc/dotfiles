@@ -1,0 +1,7 @@
+process.c:517
+static VALUE
+proc_detach(obj, pid)
+    VALUE pid;
+{
+    return rb_detach_process(NUM2INT(pid));
+}

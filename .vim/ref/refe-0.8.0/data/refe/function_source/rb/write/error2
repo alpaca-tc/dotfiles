@@ -1,0 +1,8 @@
+io.c:2754
+void
+rb_write_error2(mesg, len)
+    const char *mesg;
+    long len;
+{
+    rb_io_write(rb_stderr, rb_str_new(mesg, len));
+}

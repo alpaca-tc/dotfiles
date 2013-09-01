@@ -1,0 +1,61 @@
+eval.c:1228
+static int
+error_handle(ex)
+    int ex;
+{
+    int status = EXIT_FAILURE;
+
+    if (thread_set_raised()) return EXIT_FAILURE;
+    switch (ex & TAG_MASK) {
+      case 0:
+	status = EXIT_SUCCESS;
+	break;
+
+      case TAG_RETURN:
+	error_pos();
+	warn_print(": unexpected return\n");
+	break;
+      case TAG_NEXT:
+	error_pos();
+	warn_print(": unexpected next\n");
+	break;
+      case TAG_BREAK:
+	error_pos();
+	warn_print(": unexpected break\n");
+	break;
+      case TAG_REDO:
+	error_pos();
+	warn_print(": unexpected redo\n");
+	break;
+      case TAG_RETRY:
+	error_pos();
+	warn_print(": retry outside of rescue clause\n");
+	break;
+      case TAG_THROW:
+	if (prot_tag && prot_tag->frame && prot_tag->frame->node) {
+	    NODE *tag = prot_tag->frame->node;
+	    warn_printf("%s:%d: uncaught throw\n",
+		    tag->nd_file, nd_line(tag));
+	}
+	else {
+	    error_pos();
+	    warn_printf(": unexpected throw\n");
+	}
+	break;
+      case TAG_RAISE:
+      case TAG_FATAL:
+	if (rb_obj_is_kind_of(ruby_errinfo, rb_eSystemExit)) {
+	    VALUE st = rb_iv_get(ruby_errinfo, "status");
+	    status = NUM2INT(st);
+	}
+	else {
+	    error_print();
+	}
+	break;
+      default:
+	rb_bug("Unknown longjmp status %d", ex);
+	break;
+    }
+    thread_reset_raised();
+    return status;
+}

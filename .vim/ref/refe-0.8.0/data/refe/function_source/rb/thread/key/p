@@ -1,0 +1,12 @@
+eval.c:9878
+static VALUE
+rb_thread_key_p(thread, id)
+    VALUE thread, id;
+{
+    rb_thread_t th = rb_thread_check(thread);
+
+    if (!th->locals) return Qfalse;
+    if (st_lookup(th->locals, rb_to_id(id), 0))
+	return Qtrue;
+    return Qfalse;
+}

@@ -1,0 +1,14 @@
+hash.c:1537
+static VALUE
+env_empty_p()
+{
+    char **env;
+
+    env = GET_ENVIRON(environ);
+    if (env[0] == 0) {
+	FREE_ENVIRON(environ);
+	return Qtrue;
+    }
+    FREE_ENVIRON(environ);
+    return Qfalse;
+}

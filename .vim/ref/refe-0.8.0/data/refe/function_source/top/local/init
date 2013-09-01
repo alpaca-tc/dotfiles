@@ -1,0 +1,18 @@
+parse.y:5589
+static void
+top_local_init()
+{
+    local_push(1);
+    lvtbl->cnt = ruby_scope->local_tbl?ruby_scope->local_tbl[0]:0;
+    if (lvtbl->cnt > 0) {
+	lvtbl->tbl = ALLOC_N(ID, lvtbl->cnt+3);
+	MEMCPY(lvtbl->tbl, ruby_scope->local_tbl, ID, lvtbl->cnt+1);
+    }
+    else {
+	lvtbl->tbl = 0;
+    }
+    if (ruby_dyna_vars)
+	lvtbl->dlev = 1;
+    else
+	lvtbl->dlev = 0;
+}

@@ -1,0 +1,13 @@
+--- each_pair {|member, value| ... }    ruby 1.7 feature
+
+    構造体のメンバ名(Symbol)と値の組を引数にブロックを繰り返し実
+    行します。
+
+    self を返します。
+
+        Foo = Struct.new(:foo, :bar)
+        Foo.new('FOO', 'BAR').each_pair {|m, v| p [m,v]}
+
+        # => [:foo, "FOO"]
+             [:bar, "BAR"]
+

@@ -1,0 +1,9 @@
+: new(host, port = 143, usessl = false, certs = nil, verify = false)
+      Creates a new Net::IMAP object and connects it to the specified
+      port on the named host.  If usessl is true, then an attempt will
+      be made to use SSL (now TLS) to connect to the server.  For this
+      to work OpenSSLimap.rb"/[OSSL] and the Ruby OpenSSLimap.rb"/[RSSL]
+      extension need to be installed.  The certs parameter indicates
+      the path or file containing the CA cert of the server, and the
+      verify parameter is for the OpenSSL verification callback.
+

@@ -1,0 +1,14 @@
+eval.c:8062
+static void
+safe_setter(val)
+    VALUE val;
+{
+    int level = NUM2INT(val);
+
+    if (level < ruby_safe_level) {
+	rb_raise(rb_eSecurityError, "tried to downgrade safe level from %d to %d",
+		 ruby_safe_level, level);
+    }
+    ruby_safe_level = level;
+    curr_thread->safe = level;
+}

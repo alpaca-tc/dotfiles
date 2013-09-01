@@ -1,0 +1,10 @@
+file.c:2414
+static VALUE
+rb_stat_grpowned(obj)
+    VALUE obj;
+{
+#ifndef _WIN32
+    if (get_stat(obj)->st_gid == getegid()) return Qtrue;
+#endif
+    return Qfalse;
+}

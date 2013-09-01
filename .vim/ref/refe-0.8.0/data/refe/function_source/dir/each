@@ -1,0 +1,15 @@
+dir.c:351
+static VALUE
+dir_each(dir)
+    VALUE dir;
+{
+    struct dir_data *dirp;
+    struct dirent *dp;
+
+    GetDIR(dir, dirp);
+    for (dp = readdir(dirp->dir); dp != NULL; dp = readdir(dirp->dir)) {
+	rb_yield(rb_tainted_str_new(dp->d_name, NAMLEN(dp)));
+	if (dirp->dir == NULL) dir_closed();
+    }
+    return dir;
+}

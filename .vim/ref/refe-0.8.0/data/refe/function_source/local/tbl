@@ -1,0 +1,7 @@
+parse.y:5534
+static ID*
+local_tbl()
+{
+    lvtbl->nofree = 1;
+    return lvtbl->tbl;
+}

@@ -1,0 +1,6 @@
+: reverse_each_port {|port| ... }
+: reverse_each {|port| ... }
+    port: TMail::FilePort
+
+    ディレクトリ中のメールに対して新しいメールから順番に繰り返します。
+

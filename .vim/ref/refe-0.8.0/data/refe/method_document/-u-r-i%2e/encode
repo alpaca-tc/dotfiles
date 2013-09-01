@@ -1,0 +1,15 @@
+--- URI.escape(str[, unsafe])
+--- URI.encode(str[, unsafe])
+
+    URI 文字列をエンコードした文字列を返します。unsafe には、URI 
+    として指定できない文字を正規表現か文字列で指定します(デフォルトは、
+    定数 URI::UNSAFE
+        /[^-_.!~*'()a-zA-Z\d;\/?:@&=+$,\[\]]/n
+    です)。
+
+        require 'uri'
+        $KCODE = 'EUC'
+        p URI.escape('http://www.ruby-lang.org/ja/man-1.6/?cmd=view;name=Rubyリファレンスマニュアル')
+
+        => "http://www.ruby-lang.org/ja/man-1.6/?cmd=view;name=Ruby%A5%EA%A5%D5%A5%A1%A5%EC%A5%F3%A5%B9%A5%DE%A5%CB%A5%E5%A5%A2%A5%EB"
+

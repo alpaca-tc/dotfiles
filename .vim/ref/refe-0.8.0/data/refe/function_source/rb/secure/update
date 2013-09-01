@@ -1,0 +1,7 @@
+eval.c:156
+void
+rb_secure_update(obj)
+    VALUE obj;
+{
+    if (!OBJ_TAINTED(obj)) rb_secure(4);
+}

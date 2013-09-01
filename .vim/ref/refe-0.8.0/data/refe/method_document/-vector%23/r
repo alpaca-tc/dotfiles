@@ -1,0 +1,6 @@
+--- Vector#r
+    Returns the absolute value.
+
+    ベクトルの絶対値を返す。
+    ベクトルの絶対値は、各要素の２乗の和の平方根を取ったものである。
+

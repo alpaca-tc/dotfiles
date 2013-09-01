@@ -1,0 +1,37 @@
+eval.c:1456
+VALUE
+rb_eval_string_wrap(str, state)
+    const char *str;
+    int *state;
+{
+    int status;
+    VALUE self = ruby_top_self;
+    VALUE wrapper = ruby_wrapper;
+    VALUE val;
+
+    PUSH_CLASS(ruby_wrapper = rb_module_new());
+    ruby_top_self = rb_obj_clone(ruby_top_self);
+    rb_extend_object(ruby_top_self, ruby_wrapper);
+    PUSH_FRAME();
+    ruby_frame->last_func = 0;
+    ruby_frame->orig_func = 0;
+    ruby_frame->last_class = 0;
+    ruby_frame->self = self;
+    PUSH_CREF(ruby_wrapper);
+    PUSH_SCOPE();
+
+    val = rb_eval_string_protect(str, &status);
+    ruby_top_self = self;
+
+    POP_SCOPE();
+    POP_FRAME();
+    POP_CLASS();
+    ruby_wrapper = wrapper;
+    if (state) {
+	*state = status;
+    }
+    else if (status) {
+	JUMP_TAG(status);
+    }
+    return val;
+}

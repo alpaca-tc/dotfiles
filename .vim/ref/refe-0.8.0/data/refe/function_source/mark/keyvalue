@@ -1,0 +1,10 @@
+gc.c:597
+static int
+mark_keyvalue(key, value)
+    VALUE key;
+    VALUE value;
+{
+    rb_gc_mark(key);
+    rb_gc_mark(value);
+    return ST_CONTINUE;
+}

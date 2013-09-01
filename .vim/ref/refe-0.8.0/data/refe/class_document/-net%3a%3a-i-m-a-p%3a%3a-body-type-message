@@ -1,0 +1,1 @@
+Net::IMAP::BodyTypeMessage represents MESSAGE/RFC822 body structures of messages.

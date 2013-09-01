@@ -1,0 +1,21 @@
+marshal.c:754
+static int
+r_byte(arg)
+    struct load_arg *arg;
+{
+    int c;
+
+    if (!arg->end) {
+	VALUE src = (VALUE)arg->ptr;
+	VALUE v = rb_funcall2(src, s_getc, 0, 0);
+	if (NIL_P(v)) rb_eof_error();
+	c = (unsigned char)FIX2INT(v);
+    }
+    else if (arg->ptr < arg->end) {
+	c = *(unsigned char*)arg->ptr++;
+    }
+    else {
+	rb_raise(rb_eArgError, "marshal data too short");
+    }
+    return c;
+}

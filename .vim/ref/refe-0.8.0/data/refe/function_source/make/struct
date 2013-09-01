@@ -1,0 +1,42 @@
+struct.c:149
+static VALUE
+make_struct(name, member, klass)
+    VALUE name, member, klass;
+{
+    VALUE nstr;
+    ID id;
+    long i;
+
+    if (NIL_P(name)) {
+	nstr = rb_class_new(klass);
+	rb_make_metaclass(nstr, RBASIC(klass)->klass);
+	rb_class_inherited(klass, nstr);
+    }
+    else {
+	char *cname = StringValuePtr(name);
+	id = rb_intern(cname);
+	if (!rb_is_const_id(id)) {
+	    rb_name_error(id, "identifier %s needs to be constant", cname);
+	}
+	nstr = rb_define_class_under(klass, cname, klass);
+    }
+    rb_iv_set(nstr, "__size__", LONG2NUM(RARRAY(member)->len));
+    rb_iv_set(nstr, "__member__", member);
+
+    rb_define_alloc_func(nstr, struct_alloc);
+    rb_define_singleton_method(nstr, "new", rb_class_new_instance, -1);
+    rb_define_singleton_method(nstr, "[]", rb_class_new_instance, -1);
+    rb_define_singleton_method(nstr, "members", rb_struct_s_members, 0);
+    for (i=0; i< RARRAY(member)->len; i++) {
+	ID id = SYM2ID(RARRAY(member)->ptr[i]);
+	if (i<10) {
+	    rb_define_method_id(nstr, id, ref_func[i], 0);
+	}
+	else {
+	    rb_define_method_id(nstr, id, rb_struct_ref, 0);
+	}
+	rb_define_method_id(nstr, rb_id_attrset(id), rb_struct_set, 1);
+    }
+
+    return nstr;
+}

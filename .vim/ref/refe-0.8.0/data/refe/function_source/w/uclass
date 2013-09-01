@@ -1,0 +1,15 @@
+marshal.c:384
+static void
+w_uclass(obj, base_klass, arg)
+    VALUE obj, base_klass;
+    struct dump_arg *arg;
+{
+    VALUE klass = CLASS_OF(obj);
+
+    w_extended(klass, arg);
+    klass = rb_class_real(klass);
+    if (klass != base_klass) {
+	w_byte(TYPE_UCLASS, arg);
+	w_unique(rb_class2name(klass), arg);
+    }
+}

@@ -1,0 +1,19 @@
+parse.y:5104
+static NODE *
+remove_begin(node)
+    NODE *node;
+{
+    NODE **n = &node;
+    while (*n) {
+	switch (nd_type(*n)) {
+	  case NODE_NEWLINE:
+	    n = &(*n)->nd_next;
+	    continue;
+	  case NODE_BEGIN:
+	    *n = (*n)->nd_body;
+	  default:
+	    return node;
+	}
+    }
+    return node;
+}

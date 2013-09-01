@@ -1,0 +1,4 @@
+--- File.executable_real?(path)
+
+    FileTest.executable_real? と同じです。
+

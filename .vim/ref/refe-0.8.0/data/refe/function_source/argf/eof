@@ -1,0 +1,14 @@
+io.c:3861
+static VALUE
+argf_eof()
+{
+    if (current_file) {
+	if (init_p == 0) return Qtrue;
+	ARGF_FORWARD();
+	if (rb_io_eof(current_file)) {
+	    next_p = 1;
+	    return Qtrue;
+	}
+    }
+    return Qfalse;
+}

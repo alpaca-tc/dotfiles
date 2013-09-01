@@ -1,0 +1,10 @@
+bignum.c:776
+unsigned LONG_LONG
+rb_big2ull(x)
+    VALUE x;
+{
+    unsigned LONG_LONG num = big2ull(x, "unsigned long long");
+
+    if (!RBIGNUM(x)->sign) return -num;
+    return num;
+}

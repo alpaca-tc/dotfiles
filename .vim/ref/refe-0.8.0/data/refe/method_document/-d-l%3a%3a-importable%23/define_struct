@@ -1,0 +1,6 @@
+--- define_struct(contents), struct(contents)
+
+    構造体を定義する。
+    contentsについてはDL::Importable::Struct#initialize
+    を参照せよ。
+

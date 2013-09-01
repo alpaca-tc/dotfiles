@@ -1,0 +1,23 @@
+numeric.c:107
+static int
+do_coerce(x, y, err)
+    VALUE *x, *y;
+    int err;
+{
+    VALUE ary;
+    VALUE a[2];
+
+    a[0] = *x; a[1] = *y;
+
+    ary = rb_rescue(coerce_body, (VALUE)a, err?coerce_rescue:0, (VALUE)a);
+    if (TYPE(ary) != T_ARRAY || RARRAY(ary)->len != 2) {
+	if (err) {
+	    rb_raise(rb_eTypeError, "coerce must return [x, y]");
+	}
+	return Qfalse;
+    }
+
+    *x = RARRAY(ary)->ptr[0];
+    *y = RARRAY(ary)->ptr[1];
+    return Qtrue;
+}

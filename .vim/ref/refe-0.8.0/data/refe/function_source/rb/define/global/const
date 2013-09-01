@@ -1,0 +1,8 @@
+variable.c:1540
+void
+rb_define_global_const(name, val)
+    const char *name;
+    VALUE val;
+{
+    rb_define_const(rb_cObject, name, val);
+}

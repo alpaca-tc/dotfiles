@@ -1,0 +1,13 @@
+--- PP.pp(obj[, out[, width]])
+#    outputs obj to out in pretty printed format of
+#    width columns in width.
+    obj を out に幅 width で pretty print します。
+
+#    If out is ommitted, $> is assumed.
+#    If width is ommitted, 79 is assumed.
+    out を省略した場合は、$> が指定されたものとみなされます。
+    width を省略した場合は、79 が指定されたものとみなされます。
+
+#    PP.pp returns out.
+    PP.pp は out を返します。
+

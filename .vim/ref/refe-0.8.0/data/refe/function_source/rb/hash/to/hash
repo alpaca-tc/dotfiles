@@ -1,0 +1,7 @@
+hash.c:765
+static VALUE
+rb_hash_to_hash(hash)
+    VALUE hash;
+{
+    return hash;
+}

@@ -1,0 +1,16 @@
+array.c:1723
+static VALUE
+rb_ary_hash(ary)
+    VALUE ary;
+{
+    long i, h;
+    VALUE n;
+
+    h = RARRAY(ary)->len;
+    for (i=0; i<RARRAY(ary)->len; i++) {
+	h = (h << 1) | (h<0 ? 1 : 0);
+	n = rb_hash(RARRAY(ary)->ptr[i]);
+	h ^= NUM2LONG(n);
+    }
+    return LONG2FIX(h);
+}

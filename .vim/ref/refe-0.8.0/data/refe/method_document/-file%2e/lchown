@@ -1,0 +1,17 @@
+--- File.chown(owner, group[, filename[, ...]])
+--- File.lchown(owner, group[, filename[, ...]])     ruby 1.7 feature
+
+    ファイルのオーナーとグループを変更します。スーパーユーザだけがファ
+    イルのオーナーとグループを変更できます。変更を行ったファイルの数を
+    返します。変更に失敗した場合は例外 Errno::EXXX が発生します。
+
+    owner と group は、chown(2) [manual page] と同様に
+    数値で指定します。
+    片方だけ変更したいような場合は nil または -1 を指定する
+    ことでオーナーやグループを現在のままにすることができます。
+
+    lchown は、シンボリックリンクに関してリンクそのもののオーナー、
+    グループを変更します。lchown(2) [manual page] を実装していない
+    システムでこのメソッドを呼び出すと NotImplementedError 例外
+    が発生します。
+

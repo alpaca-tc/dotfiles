@@ -1,0 +1,7 @@
+--- assert_match(pattern, string, message="")
+--- assert_no_match(regexp, string, message="")
+
+    string =~ pattern が真なら pass
+
+    regexp !~ string が真なら pass
+

@@ -1,0 +1,6 @@
+--- WUNTRACED
+
+    Process#waitpid [Process/waitpid] の第二引数に指定するフラグで
+    す。子プロセスの停止によりステータスを報告していない子プロセスがあ
+    る時に waitpid がブロックしません。
+

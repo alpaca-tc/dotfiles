@@ -1,0 +1,29 @@
+--- SCRIPT_LINES__
+
+    この定数は、デフォルトでは定義されていません。
+
+    この定数がハッシュとして定義された後に、ソースが((*コンパイル*))さ
+    れると、そのソースファイル名をキーに、ソースを行毎に分割した配列を値
+    にしたハッシュ要素が設定されます。この定数はデバッガ(debug.rb)
+    などで利用されています。
+
+#       require 'pp'
+        SCRIPT_LINES__ = {}
+        require 'English'
+#       pp SCRIPT_LINES__
+        p SCRIPT_LINES__
+
+        # 注: 出力は加工してあります。
+        # => {"/usr/local/lib/ruby/1.6/English.rb"=>
+              ["alias $ERROR_INFO              $!\n",
+               "alias $ERROR_POSITION          $@\n",
+               "alias $LOADED_FEATURES         $\"\n",
+                        :
+                        :
+               "alias $POSTMATCH               $'\n",
+               "alias $LAST_PAREN_MATCH        $+\n"]}
+
+    なお、$SAFEレベルが 0 でなければ有効にはなりませ
+    ん。また、eval によるコンパイルは対象にはなりませ
+    ん。
+

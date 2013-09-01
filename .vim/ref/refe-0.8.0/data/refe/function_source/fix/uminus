@@ -1,0 +1,7 @@
+numeric.c:1235
+static VALUE
+fix_uminus(num)
+    VALUE num;
+{
+    return LONG2NUM(-FIX2LONG(num));
+}

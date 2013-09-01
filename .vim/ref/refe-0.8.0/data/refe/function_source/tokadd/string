@@ -1,0 +1,79 @@
+parse.y:2961
+static int
+tokadd_string(func, term, paren, nest)
+    int func, term, paren, *nest;
+{
+    int c;
+
+    while ((c = nextc()) != -1) {
+	if (paren && c == paren) {
+	    ++*nest;
+	}
+	else if (c == term) {
+	    if (!nest || !*nest) {
+		pushback(c);
+		break;
+	    }
+	    --*nest;
+	}
+	else if ((func & STR_FUNC_EXPAND) && c == '#' && lex_p < lex_pend) {
+	    int c2 = *lex_p;
+	    if (c2 == '$' || c2 == '@' || c2 == '{') {
+		pushback(c);
+		break;
+	    }
+	}
+	else if (c == '\\') {
+	    c = nextc();
+	    switch (c) {
+	      case '\n':
+		if (func & STR_FUNC_QWORDS) break;
+		if (func & STR_FUNC_EXPAND) continue;
+		tokadd('\\');
+		break;
+
+	      case '\\':
+		if (func & STR_FUNC_ESCAPE) tokadd(c);
+		break;
+
+	      default:
+		if (func & STR_FUNC_REGEXP) {
+		    pushback(c);
+		    if (tokadd_escape(term) < 0)
+			return -1;
+		    continue;
+		}
+		else if (func & STR_FUNC_EXPAND) {
+		    pushback(c);
+		    if (func & STR_FUNC_ESCAPE) tokadd('\\');
+		    c = read_escape();
+		}
+		else if ((func & STR_FUNC_QWORDS) && ISSPACE(c)) {
+		    /* ignore backslashed spaces in %w */
+		}
+		else if (c != term && !(paren && c == paren)) {
+		    tokadd('\\');
+		}
+	    }
+	}
+	else if (ismbchar(c)) {
+	    int i, len = mbclen(c)-1;
+
+	    for (i = 0; i < len; i++) {
+		tokadd(c);
+		c = nextc();
+	    }
+	}
+	else if ((func & STR_FUNC_QWORDS) && ISSPACE(c)) {
+	    pushback(c);
+	    break;
+	}
+	if (!c && (func & STR_FUNC_SYMBOL)) {
+	    func &= ~STR_FUNC_SYMBOL;
+	    rb_compile_error("symbol cannot contain '\\0'");
+	    continue;
+	}
+	tokadd(c);
+    }
+    return c;
+}

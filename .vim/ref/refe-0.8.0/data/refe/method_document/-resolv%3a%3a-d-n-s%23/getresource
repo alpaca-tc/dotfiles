@@ -1,0 +1,24 @@
+--- Resolv::DNS#getresource(name, typeclass)
+--- Resolv::DNS#getresources(name, typeclass)
+--- Resolv::DNS#each_resource(name, typeclass) {|resource| ...}
+    They lookup DNS resources of name.
+    name must be a instance of Resolv::Name or String.
+
+    typeclass should be one of follows:
+    * Resolv::DNS::Resource::IN::ANY
+    * Resolv::DNS::Resource::IN::NS
+    * Resolv::DNS::Resource::IN::CNAME
+    * Resolv::DNS::Resource::IN::SOA
+    * Resolv::DNS::Resource::IN::HINFO
+    * Resolv::DNS::Resource::IN::MINFO
+    * Resolv::DNS::Resource::IN::MX
+    * Resolv::DNS::Resource::IN::TXT
+    * Resolv::DNS::Resource::IN::ANY
+    * Resolv::DNS::Resource::IN::A
+    * Resolv::DNS::Resource::IN::WKS
+    * Resolv::DNS::Resource::IN::PTR
+    * Resolv::DNS::Resource::IN::AAAA
+
+    Lookupped resource is represented as an instance of (a subclass of)
+    Resolv::DNS::Resource.
+

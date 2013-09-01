@@ -1,0 +1,3 @@
+--- ThreadsWait#next_wait
+    waits until any of specified threads is terminated.
+

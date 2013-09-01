@@ -1,0 +1,5 @@
+--- Readline.basic_word_break_characters=(str)
+--- Readline.basic_word_break_characters
+    補完時の単語同士の区切りを指定する basic な文字列。デフォルトでは
+    Bash用の文字列 " \t\n\"\\'`@$><=;|&{(" (スペース含む)になっています。
+

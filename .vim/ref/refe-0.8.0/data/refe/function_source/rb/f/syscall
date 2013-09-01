@@ -1,0 +1,101 @@
+io.c:3487
+static VALUE
+rb_f_syscall(argc, argv)
+    int argc;
+    VALUE *argv;
+{
+#if defined(HAVE_SYSCALL) && !defined(__CHECKER__)
+#ifdef atarist
+    unsigned long arg[14]; /* yes, we really need that many ! */
+#else
+    unsigned long arg[8];
+#endif
+    int retval = -1;
+    int i = 1;
+    int items = argc - 1;
+
+    /* This probably won't work on machines where sizeof(long) != sizeof(int)
+     * or where sizeof(long) != sizeof(char*).  But such machines will
+     * not likely have syscall implemented either, so who cares?
+     */
+
+    rb_secure(2);
+    if (argc == 0)
+	rb_raise(rb_eArgError, "too few arguments for syscall");
+    arg[0] = NUM2LONG(argv[0]); argv++;
+    while (items--) {
+	VALUE v = rb_check_string_type(*argv);
+
+	if (!NIL_P(v)) {
+	    StringValue(v);
+	    rb_str_modify(v);
+	    arg[i] = (unsigned long)RSTRING(v)->ptr;
+	}
+	else {
+	    arg[i] = (unsigned long)NUM2LONG(*argv);
+	}
+	argv++;
+	i++;
+    }
+    TRAP_BEG;
+    switch (argc) {
+      case 1:
+	retval = syscall(arg[0]);
+	break;
+      case 2:
+	retval = syscall(arg[0],arg[1]);
+	break;
+      case 3:
+	retval = syscall(arg[0],arg[1],arg[2]);
+	break;
+      case 4:
+	retval = syscall(arg[0],arg[1],arg[2],arg[3]);
+	break;
+      case 5:
+	retval = syscall(arg[0],arg[1],arg[2],arg[3],arg[4]);
+	break;
+      case 6:
+	retval = syscall(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5]);
+	break;
+      case 7:
+	retval = syscall(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6]);
+	break;
+      case 8:
+	retval = syscall(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],
+	  arg[7]);
+	break;
+#ifdef atarist
+      case 9:
+	retval = syscall(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],
+	  arg[7], arg[8]);
+	break;
+      case 10:
+	retval = syscall(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],
+	  arg[7], arg[8], arg[9]);
+	break;
+      case 11:
+	retval = syscall(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],
+	  arg[7], arg[8], arg[9], arg[10]);
+	break;
+      case 12:
+	retval = syscall(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],
+	  arg[7], arg[8], arg[9], arg[10], arg[11]);
+	break;
+      case 13:
+	retval = syscall(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],
+	  arg[7], arg[8], arg[9], arg[10], arg[11], arg[12]);
+	break;
+      case 14:
+	retval = syscall(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],
+	  arg[7], arg[8], arg[9], arg[10], arg[11], arg[12], arg[13]);
+	break;
+#endif /* atarist */
+    }
+    TRAP_END;
+    if (retval < 0) rb_sys_fail(0);
+    return INT2NUM(retval);
+#else
+    rb_notimplement();
+    return Qnil;		/* not reached */
+#endif
+}

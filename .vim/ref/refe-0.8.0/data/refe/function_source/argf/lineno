@@ -1,0 +1,6 @@
+io.c:1138
+static VALUE
+argf_lineno()
+{
+    return lineno;
+}

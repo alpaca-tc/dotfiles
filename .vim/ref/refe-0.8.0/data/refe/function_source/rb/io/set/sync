@@ -1,0 +1,16 @@
+io.c:583
+static VALUE
+rb_io_set_sync(io, mode)
+    VALUE io, mode;
+{
+    OpenFile *fptr;
+
+    GetOpenFile(io, fptr);
+    if (RTEST(mode)) {
+	fptr->mode |= FMODE_SYNC;
+    }
+    else {
+	fptr->mode &= ~FMODE_SYNC;
+    }
+    return mode;
+}

@@ -1,0 +1,399 @@
+# Element#{{{
+snippet accessKey
+abbr    Sets or returns the accesskey for an element
+regexp  '.\+\.'
+options word
+  accessKey
+
+snippet appendChild
+abbr    appendChild(node) :Adds a new child node, to an element, as the last child node
+regexp  '.\+\.'
+options word
+  appendChild(node)
+
+snippet attributes
+abbr    Returns a NamedNodeMap of an element's attributes
+regexp  '.\+\.'
+options word
+  attributes
+
+snippet childNodes
+abbr    Returns a NodeList of child nodes for an element
+regexp  '.\+\.'
+options word
+  childNodes
+
+snippet className
+abbr    Sets or returns the class attribute of an element
+regexp  '.\+\.'
+options word
+  className
+
+snippet clientHeight
+abbr    Returns the viewable height of an element
+regexp  '.\+\.'
+options word
+  clientHeight
+
+snippet clientWidth
+abbr    Returns the viewable width of an element
+regexp  '.\+\.'
+options word
+  clientWidth
+
+snippet cloneNode
+abbr    cloneNode(deep) :Clones an element
+regexp  '.\+\.'
+options word
+  cloneNode(deep)
+
+snippet compareDocumentPosition
+abbr    compareDocumentPosition(node) :Compares the document position of two elements
+regexp  '.\+\.'
+options word
+  compareDocumentPosition(node)
+
+snippet dir
+abbr    Sets or returns the text direction of an element
+regexp  '.\+\.'
+options word
+  dir
+
+snippet firstChild
+abbr    Returns the first child of an element
+regexp  '.\+\.'
+options word
+  firstChild
+
+snippet getAttribute
+abbr    getAttribute(attribute_name) :Returns the specified attribute value of an element node
+regexp  '.\+\.'
+options word
+  getAttribute(attribute_name)
+
+snippet getAttributeNode
+abbr    getAttributeNode(attribute_name) :Returns the specified attribute node
+regexp  '.\+\.'
+options word
+  getAttributeNode(attribute_name)
+
+snippet getElementsByTagName
+abbr    getElementsByTagName(tag_name) :Returns a collection of all child elements with the specified tagname
+regexp  '.\+\.'
+options word
+  getElementsByTagName(tag_name)
+
+snippet getFeature
+abbr    getFeature() :Returns an object which implements the APIs of a specified feature
+regexp  '.\+\.'
+options word
+  getFeature()
+
+snippet getUserData
+abbr    getUserData() :Returns the object associated to a key on an element
+regexp  '.\+\.'
+options word
+  getUserData()
+
+snippet hasAttribute
+abbr    hasAttribute(attribute_name) :Returns true if an element has the specified attribute, otherwise false
+regexp  '.\+\.'
+options word
+  hasAttribute(attribute_name)
+
+snippet hasAttributes
+abbr    hasAttributes() :Returns true if an element has any attributes, otherwise false
+regexp  '.\+\.'
+options word
+  hasAttributes()
+
+snippet hasChildNodes
+abbr    hasChildNodes() :Returns true if an element has any child nodes, otherwise false
+regexp  '.\+\.'
+options word
+  hasChildNodes()
+
+snippet id
+abbr    Sets or returns the id of an element
+regexp  '.\+\.'
+options word
+  id
+
+snippet innerHTML
+abbr    Sets or returns the content of an element
+regexp  '.\+\.'
+options word
+  innerHTML
+
+snippet insertBefore
+abbr    insertBefore(now_node, existing_node) :Inserts a new child node before a specified, existing, child node
+regexp  '.\+\.'
+options word
+  insertBefore(now_node, existing_node)
+
+snippet isDefaultNamespace
+abbr    isDefaultNamespace(URI) :Returns true if a specified namespaceURI is the default, otherwise false
+regexp  '.\+\.'
+options word
+  isDefaultNamespace(URI)
+
+snippet isEqualNode
+abbr    isEqualNode(node) :Checks if two elements are equal
+regexp  '.\+\.'
+options word
+  isEqualNode(node)
+
+snippet isSameNode
+abbr    isSameNode(node) :Checks if two elements are the same node
+regexp  '.\+\.'
+options word
+  isSameNode(node)
+
+snippet isSupported
+abbr    isSupported(feature, version) :Returns true if a specified feature is supported on the element
+regexp  '.\+\.'
+options word
+  isSupported(feature, version)
+
+snippet lang
+abbr    Sets or returns the language code for an element
+regexp  '.\+\.'
+options word
+  lang
+
+snippet lastChild
+abbr    Returns the last child of an element
+regexp  '.\+\.'
+options word
+  lastChild
+
+snippet namespaceURI
+abbr    Returns the namespace URI of an element
+regexp  '.\+\.'
+options word
+  namespaceURI
+
+snippet nextSibling
+abbr    Returns the next node at the same node tree level
+regexp  '.\+\.'
+options word
+  nextSibling
+
+snippet nodeName
+abbr    Returns the name of an element
+regexp  '.\+\.'
+options word
+  nodeName
+
+snippet nodeType
+abbr    Returns the node type of an element
+regexp  '.\+\.'
+options word
+  nodeType
+
+snippet nodeValue
+abbr    Sets or returns the value of an element
+regexp  '.\+\.'
+options word
+  nodeValue
+
+snippet normalize
+abbr    normalize() :Joins adjacent text nodes and removes empty text nodes in an element
+regexp  '.\+\.'
+options word
+  normalize()
+
+snippet offsetHeight
+abbr    Returns the height of an element
+regexp  '.\+\.'
+options word
+  offsetHeight
+
+snippet offsetWidth
+abbr    Returns the width of an element
+regexp  '.\+\.'
+options word
+  offsetWidth
+
+snippet offsetLeft
+abbr    Returns the horizontal offset position of an element
+regexp  '.\+\.'
+options word
+  offsetLeft
+
+snippet offsetParent
+abbr    Returns the offset container of an element
+regexp  '.\+\.'
+options word
+  offsetParent
+
+snippet offsetTop
+abbr    Returns the vertical offset position of an element
+regexp  '.\+\.'
+options word
+  offsetTop
+
+snippet ownerDocument
+abbr    Returns the root element (document object) for an element
+regexp  '.\+\.'
+options word
+  ownerDocument
+
+snippet parentNode
+abbr    Returns the parent node of an element
+regexp  '.\+\.'
+options word
+  parentNode
+
+snippet previousSibling
+abbr    Returns the previous element at the same node tree level
+regexp  '.\+\.'
+options word
+  previousSibling
+
+snippet removeAttribute
+abbr    removeAttribute(attribute_name) :Removes a specified attribute from an element
+regexp  '.\+\.'
+options word
+  removeAttribute(attribute_name)
+
+snippet removeChild
+abbr    removeChild(node) :Removes a child node from an element
+regexp  '.\+\.'
+options word
+  removeChild(node)
+
+snippet replaceChild
+abbr    replaceChild(new_node, old_node) :Replaces a child node in an element
+regexp  '.\+\.'
+options word
+  replaceChild(new_node, old_node)
+
+snippet scrollHeight
+abbr    Returns the entire height of an element
+regexp  '.\+\.'
+options word
+  scrollHeight
+
+snippet scrollLeft
+abbr    Returns the distance between the left edge of an element and the view
+regexp  '.\+\.'
+options word
+  scrollLeft
+
+snippet scrollTop
+abbr    Returns the distance between the top edge of an element and the view
+regexp  '.\+\.'
+options word
+  scrollTop
+
+snippet scrollWidth
+abbr    Returns the entire width of an element
+regexp  '.\+\.'
+options word
+  scrollWidth
+
+snippet setAttribute
+abbr    setAttribute(attribute_name, attribute_value) :Sets or changes the specified attribute, to the specified value
+regexp  '.\+\.'
+options word
+  setAttribute(attribute_name, attribute_value)
+
+snippet setAttributeNode
+abbr    setAttributeNode(attribute_node) :Sets or changes the specified attribute node
+regexp  '.\+\.'
+options word
+  setAttributeNode(attribute_node)
+
+snippet setIdAttribute
+abbr    setIdAttribute(attribute_name, attribute_value) :
+regexp  '.\+\.'
+options word
+  setIdAttribute(attribute_name, attribute_value)
+
+snippet setIdAttributeNode
+abbr    setIdAttributeNode(attribute_node) :
+regexp  '.\+\.'
+options word
+  setIdAttributeNode(attribute_node)
+
+snippet setUserData
+abbr    setUserData() :Associates an object to a key on an element
+regexp  '.\+\.'
+options word
+  setUserData()
+
+snippet style
+abbr    Sets or returns the style attribute of an element
+regexp  '.\+\.'
+options word
+  style
+
+snippet tabIndex
+abbr    Sets or returns the tab order of an element
+regexp  '.\+\.'
+options word
+  tabIndex
+
+snippet tagName
+abbr    Returns the tag name of an element
+regexp  '.\+\.'
+options word
+  tagName
+
+snippet textContent
+abbr    Sets or returns the textual content of a node and its descendants
+regexp  '.\+\.'
+options word
+  textContent
+
+snippet title
+abbr    Sets or returns the title attribute of an element
+regexp  '.\+\.'
+options word
+  title
+
+snippet toString
+abbr    toString() :Converts an element to a string
+regexp  '.\+\.'
+options word
+  toString()
+
+snippet item
+abbr    item(num) :
+regexp  '.\+\.'
+options word
+  item(${1:num})
+#}}}
+
+# nodemap#{{{
+snippet getNamedItem
+abbr    getNamedItem(name) :Returns a specified attribute node from a NamedNodeMap.
+regexp  '.\+\.'
+options word
+  getNamedItem(name)
+
+snippet item
+abbr    item(idx) :Returns the node at a specified index in a NamedNodeMap
+regexp  '.\+\.'
+options word
+  item(idx)
+
+snippet length
+abbr    Returns the number of nodes in a NamedNodeMap
+regexp  '.\+\.'
+options word
+  length
+
+snippet removeNamedItem
+abbr    removeNamedItem(node_name) :Removes a specified attribute node
+regexp  '.\+\.'
+options word
+  removeNamedItem(node_name)
+
+snippet setNamedItem
+abbr    setNamedItem(node) :Sets the specified attribute node (by name)
+regexp  '.\+\.'
+options word
+  setNamedItem(node)
+#}}}

@@ -1,0 +1,8 @@
+file.c:1889
+static VALUE
+rb_file_s_split(klass, path)
+    VALUE klass, path;
+{
+    StringValue(path);		/* get rid of converting twice */
+    return rb_assoc_new(rb_file_s_dirname(Qnil, path), rb_file_s_basename(1,&path));
+}

@@ -1,0 +1,20 @@
+variable.c:1557
+static void
+cvar_override_check(id, a)
+    ID id;
+    VALUE a;
+{
+    VALUE base = original_module(a);
+
+    a = RCLASS(a)->super;
+    while (a) {
+	if (RCLASS(a)->iv_tbl) {
+	    if (st_lookup(RCLASS(a)->iv_tbl,id,0)) {
+		rb_warning("class variable %s of %s is overridden by %s",
+			   rb_id2name(id), rb_class2name(original_module(a)),
+			   rb_class2name(base));
+	    }
+	}
+	a = RCLASS(a)->super;
+    }
+}

@@ -1,0 +1,47 @@
+bignum.c:1095
+VALUE
+rb_big_mul(x, y)
+    VALUE x, y;
+{
+    long i, j;
+    BDIGIT_DBL n = 0;
+    VALUE z;
+    BDIGIT *zds;
+
+    if (FIXNUM_P(x)) x = rb_int2big(FIX2LONG(x));
+    switch (TYPE(y)) {
+      case T_FIXNUM:
+	y = rb_int2big(FIX2LONG(y));
+	break;
+
+      case T_BIGNUM:
+	break;
+
+      case T_FLOAT:
+	return rb_float_new(rb_big2dbl(x) * RFLOAT(y)->value);
+
+      default:
+	return rb_num_coerce_bin(x, y);
+    }
+
+    j = RBIGNUM(x)->len + RBIGNUM(y)->len + 1;
+    z = bignew(j, RBIGNUM(x)->sign==RBIGNUM(y)->sign);
+    zds = BDIGITS(z);
+    while (j--) zds[j] = 0;
+    for (i = 0; i < RBIGNUM(x)->len; i++) {
+	BDIGIT_DBL dd = BDIGITS(x)[i]; 
+	if (dd == 0) continue;
+	n = 0;
+	for (j = 0; j < RBIGNUM(y)->len; j++) {
+	    BDIGIT_DBL ee = n + (BDIGIT_DBL)dd * BDIGITS(y)[j];
+	    n = zds[i + j] + ee;
+	    if (ee) zds[i + j] = BIGLO(n);
+	    n = BIGDN(n);
+	}
+	if (n) {
+	    zds[i + j] = n;
+	}
+    }
+
+    return bignorm(z);
+}

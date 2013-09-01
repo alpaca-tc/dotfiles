@@ -1,0 +1,6 @@
+: message_id( default = nil ) -> String
+: message_id=( id )
+    id: String
+
+    メールのメッセージ ID。
+

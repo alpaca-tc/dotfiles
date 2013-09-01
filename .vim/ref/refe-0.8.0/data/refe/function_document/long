@@ -1,0 +1,3 @@
+: long FIXNUM_MIN
+    Fixnum にできる整数の下限値。
+

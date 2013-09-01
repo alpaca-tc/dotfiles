@@ -1,0 +1,19 @@
+--- push(obj1[, obj2 ...])
+--- push([obj1[, obj2 ...]])    ruby 1.8 feature
+
+    obj1, obj2 ... を順番に配列の末尾に追加します。
+
+    pop, shift, unshift も参照して
+    ください。
+
+    self を返します。
+
+    例:
+          array = [1, 2, 3]
+          array.push 4
+          array.push [5, 6]
+          array.push 7, 8
+          p array          # => [1, 2, 3, 4, [5, 6], 7, 8]
+
+    ruby 1.8 feature: 引数を指定しなければ何もしません。
+

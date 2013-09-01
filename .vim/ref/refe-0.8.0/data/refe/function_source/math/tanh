@@ -1,0 +1,8 @@
+math.c:141
+static VALUE
+math_tanh(obj, x)
+    VALUE obj, x;
+{
+    Need_Float(x);
+    return rb_float_new(tanh(RFLOAT(x)->value));
+}

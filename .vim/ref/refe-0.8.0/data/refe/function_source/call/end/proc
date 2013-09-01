@@ -1,0 +1,15 @@
+eval.c:6481
+static void
+call_end_proc(data)
+    VALUE data;
+{
+    PUSH_ITER(ITER_NOT);
+    PUSH_FRAME();
+    ruby_frame->self = ruby_frame->prev->self;
+    ruby_frame->node = 0;
+    ruby_frame->last_func = 0;
+    ruby_frame->last_class = 0;
+    proc_invoke(data, rb_ary_new2(0), Qundef, 0);
+    POP_FRAME();
+    POP_ITER();
+}

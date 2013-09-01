@@ -1,0 +1,16 @@
+io.c:456
+static VALUE
+rb_io_flush(io)
+    VALUE io;
+{
+    OpenFile *fptr;
+    FILE *f;
+
+    GetOpenFile(io, fptr);
+    rb_io_check_writable(fptr);
+    f = GetWriteFile(fptr);
+
+    io_fflush(f, fptr);
+
+    return io;
+}

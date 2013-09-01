@@ -1,0 +1,8 @@
+--- Precision.induced_from(number)
+
+    number を自分のクラスに変換した結果を返します。 デフォルトの
+    定義は、例外 TypeError を発生させるので、Mix-in したクラスで
+    このメソッドを再定義する必要があります。再定義に、
+    Precision#prec [Precision/prec] を使うと、 無限ループになる可
+    能性があります。
+

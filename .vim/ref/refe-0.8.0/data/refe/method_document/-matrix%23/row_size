@@ -1,0 +1,5 @@
+--- Matrix#row_size
+    returns the number of rows
+
+    行の大きさを返す。
+

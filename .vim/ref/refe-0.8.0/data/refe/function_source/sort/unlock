@@ -1,0 +1,8 @@
+array.c:1162
+static VALUE
+sort_unlock(ary)
+    VALUE ary;
+{
+    FL_UNSET(ary, ARY_TMPLOCK);
+    return ary;
+}

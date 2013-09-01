@@ -1,0 +1,8 @@
+process.c:2153
+static VALUE
+p_uid_sw_ensure(id)
+    int id;
+{
+    under_uid_switch = 0;
+    return rb_seteuid_core(id);
+}

@@ -1,0 +1,4 @@
+--- Float.induced_from(num)
+
+    num を Float に変換した結果を返します。
+

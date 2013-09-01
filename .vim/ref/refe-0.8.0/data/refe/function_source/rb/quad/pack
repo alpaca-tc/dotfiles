@@ -1,0 +1,24 @@
+bignum.c:259
+void
+rb_quad_pack(buf, val)
+    char *buf;
+    VALUE val;
+{
+    long len;
+
+    memset(buf, 0, QUAD_SIZE);
+    val = rb_to_int(val);
+    if (FIXNUM_P(val)) {
+	val = rb_int2big(FIX2LONG(val));
+    }
+    len = RBIGNUM(val)->len * SIZEOF_BDIGITS;
+    if (len > QUAD_SIZE) len = QUAD_SIZE;
+    memcpy(buf, (char*)BDIGITS(val), len);
+    if (!RBIGNUM(val)->sign) {
+	len = QUAD_SIZE;
+	while (len--) {
+	    *buf = ~*buf;
+	    buf++;
+	}
+    }
+}

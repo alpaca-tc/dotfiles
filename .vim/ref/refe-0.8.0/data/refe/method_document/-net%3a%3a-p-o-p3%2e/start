@@ -1,0 +1,13 @@
+: start( address, port = 110, account, password )
+: start( address, port = 110, account, password ) {|pop| .... }
+    address の port 番ポートに接続し、アカウント account パスワード
+    password で POP ログインします。第二引数 port に nil を渡すと
+    POP3 のデフォルトポート(110)を使います。
+
+      Net::POP3.start( addr, port, account, password ) {|pop|
+        pop.each_mail do |m|
+          file.write m.pop
+          m.delete
+        end
+      }
+

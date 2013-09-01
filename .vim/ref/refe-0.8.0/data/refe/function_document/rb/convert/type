@@ -1,0 +1,7 @@
+: VALUE rb_convert_type(VALUE val, int type, const char *tname, const char *method)
+    オブジェクトvalをクラスtypeのインスタンスに変換します。
+    変換には、val.methodの戻り値が使われます。
+
+    valがもともとtypeクラスのインスタンスならvalを
+    そのまま返します。
+

@@ -1,0 +1,16 @@
+ruby.c:1011
+static void
+init_ids()
+{
+    uid = (int)getuid();
+    euid = (int)geteuid();
+    gid = (int)getgid();
+    egid = (int)getegid();
+#ifdef VMS
+    uid |= gid << 16;
+    euid |= egid << 16;
+#endif
+    if (uid && (euid != uid || egid != gid)) {
+	rb_set_safe_level(1);
+    }
+}

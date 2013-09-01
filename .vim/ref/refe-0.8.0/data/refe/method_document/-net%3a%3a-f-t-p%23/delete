@@ -1,0 +1,4 @@
+--- Net::FTP#delete(filename)
+
+    ファイルを削除します。
+

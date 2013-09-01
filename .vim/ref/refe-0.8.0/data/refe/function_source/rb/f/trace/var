@@ -1,0 +1,30 @@
+variable.c:527
+VALUE
+rb_f_trace_var(argc, argv)
+    int argc;
+    VALUE *argv;
+{
+    VALUE var, cmd;
+    struct global_entry *entry;
+    struct trace_var *trace;
+
+    rb_secure(4);
+    if (rb_scan_args(argc, argv, "11", &var, &cmd) == 1) {
+	cmd = rb_block_proc();
+    }
+    if (NIL_P(cmd)) {
+	return rb_f_untrace_var(argc, argv);
+    }
+    entry = rb_global_entry(rb_to_id(var));
+    if (OBJ_TAINTED(cmd)) {
+	rb_raise(rb_eSecurityError, "Insecure: tainted variable trace");
+    }
+    trace = ALLOC(struct trace_var);
+    trace->next = entry->var->trace;
+    trace->func = rb_trace_eval;
+    trace->data = cmd;
+    trace->removed = 0;
+    entry->var->trace = trace;
+
+    return Qnil;
+}

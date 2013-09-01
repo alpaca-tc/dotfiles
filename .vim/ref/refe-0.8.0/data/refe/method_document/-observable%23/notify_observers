@@ -1,0 +1,5 @@
+--- Observable#notify_observers(*arg)
+            更新フラグが立っていたら、オブザーバのupdateメソッドを呼び出す。
+            与えられた引数はそのupdateメソッドに渡される。
+            更新フラグはfalseになる。
+

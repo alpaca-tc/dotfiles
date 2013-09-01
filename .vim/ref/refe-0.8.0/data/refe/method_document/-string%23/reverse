@@ -1,0 +1,10 @@
+--- reverse
+--- reverse!
+
+    文字列をひっくり返します。
+
+        p "foobar".reverse # => "raboof"
+
+    reverse は変更後の文字列を生成して返します。
+    reverse! は self を変更してそれを返します。
+

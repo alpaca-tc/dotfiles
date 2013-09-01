@@ -1,0 +1,6 @@
+--- ObjectSpace.finalizers
+
+    現在登録されているファイナライザの配列を返します。
+
+    このメソッドは、obsolete です。
+

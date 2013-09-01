@@ -1,0 +1,13 @@
+--- UID         ruby 1.8 feature
+--- GID         ruby 1.8 feature
+--- Sys         ruby 1.8 feature
+
+    プロセスのユーザ/グループ属性に関する操作をまとめたモジュール。モ
+    ジュール UID、GID は各種 Unix システム間の違いを吸収したインタフェー
+    スを提供します。
+
+    モジュール Sys は、システムコール相当のメソッドを提供します。
+
+    それぞれ、Process::UID, Process::GID, Process::Sys 
+    を参照してください。
+
