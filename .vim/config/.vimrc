@@ -595,10 +595,10 @@ NeoBundleLazy 'operator-camelize', {
 " NeoBundle 'tyru/operator-html-escape.vim'
 
 " unite
-NeoBundle 'thinca/vim-qfreplace', { 'autoload' : {
-      \ 'filetypes' : ['unite', 'quickfix'],
-      \ 'functions' : 'qfreplace#start',
-      \ }}
+" NeoBundle 'thinca/vim-qfreplace', { 'autoload' : {
+"       \ 'filetypes' : ['unite', 'quickfix'],
+"       \ 'functions' : 'qfreplace#start',
+"       \ }}
 command! -nargs=? -buffer Qfreplace call qfreplace#start(<q-args>)
 NeoBundleLazy 'Shougo/unite-build', {
       \ 'depends' : 'Shougo/unite.vim',
@@ -1617,6 +1617,13 @@ if empty( s:surround_mapping )
         \   '#':  "#{\r}",
         \ }
         \ })
+call add( s:surround_mapping, {
+        \ 'filetypes' : ['snippet'],
+        \ 'mappings' : {
+        \   '$' : "${\r}",
+        \ }
+        \ })
+
 endif
 
 function! s:let_surround_mapping(mapping_dict)
@@ -1805,7 +1812,7 @@ unlet bundle
 
 let bundle = NeoBundleGet('emmet-vim')
 function! bundle.hooks.on_source(bundle) "{{{
-  " imap <buffer><C-E> <Plug>(EmmetExpandAbbr)
+  imap <buffer><C-E> <Plug>(EmmetExpandAbbr)
   augroup MyAutoCmd
     execute 'autocmd FileType ' . join(g:my.ft.html_files, ',') . ' imap <buffer><C-E> <Plug>(EmmetExpandAbbr)'
   augroup END
@@ -1816,7 +1823,6 @@ function! bundle.hooks.on_source(bundle) "{{{
         \ 'lang' : 'ja',
         \ 'html' : {
         \   'filters' : 'html',
-        \   'indentation' : ' ' * &tabstop,
         \ },
         \ 'css' : {
         \   'filters' : 'fc',
@@ -1826,6 +1832,10 @@ function! bundle.hooks.on_source(bundle) "{{{
         \   'filters' : 'html',
         \ },
         \}
+  augroup EmmitVim
+    autocmd!
+    autocmd FileType * let g:user_emmet_settings.html.indentation = '               '[:&tabstop]
+  augroup END
 endfunction"}}}
 unlet bundle
 
@@ -2668,6 +2678,9 @@ let s:switch_define = {
       \   ['.map', '.map!'],
       \   ['attr_accessor', 'attr_reader', 'attr_writer'],
       \ ],
+      \ 'coffee' : [
+      \   ['if', 'unless'],
+      \ ],
       \ 'Gemfile,Berksfile' : [
       \   ['=', '<', '<=', '>', '>=', '~>'],
       \ ],
@@ -3248,7 +3261,7 @@ function! bundle.hooks.on_source(bundle) "{{{
 
   call unite#custom_action('neosnippet/user', 'open', 'neosnippet_source')
   call unite#custom_action('neosnippet/runtime', 'open', 'neosnippet_source')
-  imap <silent><C-K>     <Plug>(neosnippet_start_unite_snippet)
+  imap <silent><C-K>     <ESC>:<C-U>call unite#start(['snippet'], { 'input': expand('<cword>')})<CR>
   imap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
   smap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
   function! s:unite_snippet() "{{{

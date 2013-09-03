@@ -7,3 +7,6 @@ tags
 .tern-port
 npm-debug.log
 node_modules/*
+.o
+.yui
+yui

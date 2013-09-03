@@ -1,5 +1,17 @@
 setl dict+=~/.vim/dict/coffee.dict,~/.vim/dict/javascript.dict,~/.vim/dict/jquery.dict
 
+augroup MyCoffee
+  autocmd!
+  autocmd BufWritePost <buffer> %s/;$//ge
+  autocmd FileType <buffer> call <SID>remove_autocmd()
+augroup END
+
+function! s:remove_autocmd()
+  if &ft != 'coffee' 
+    autocmd! MyCoffee 
+  endif
+endfunction
+
 if executable('coffeetags') "{{{
   let g:tagbar_type_coffee = {
         \ 'ctagsbin' : 'coffeetags',

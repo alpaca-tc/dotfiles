@@ -1,3 +1,4 @@
+# Common#{{{
 snippet get_ctx
 abbr    var ctx = canvas.getContext('2d')
 options word
@@ -10,3 +11,359 @@ options word
   .beginPath();
   ctx.arc(70, 70, 60, 0, Math.PI * 2, true);
   ctx.stroke();
+
+snippet shadowColor
+abbr    The CSS color value to use for shadows.
+regexp  'ctx\.'
+options word
+  shadowColor = ${1:color};
+
+snippet shadowBlur
+abbr    The blur level for the shadow.
+regexp  'ctx\.'
+options word
+  shadowBlur = ${1:number};
+
+snippet shadowOffsetX
+abbr    A positive or negative number that defines the horizontal distance of the shadow from the shape.
+regexp  'ctx\.'
+options word
+  shadowOffsetX = ${1:number};
+
+snippet shadowOffsetY
+abbr    A positive or negative number that defines the vertical distance of the shadow from the shape.
+regexp  'ctx\.'
+options word
+  shadowOffsetY = ${1:number};
+
+snippet strokeStyle
+abbr    The strokeStyle property sets or returns the color, gradient, or pattern used for strokes.
+regexp  'ctx\.'
+options word
+  strokeStyle = ${1:color or gradient_object} 
+
+snippet fillStyle
+abbr    The fillStyle property sets or returns the color, gradient, or pattern used to fill the drawing.
+regexp  'ctx\.'
+options word
+  fillStyle = ${1:color or gradient_object}
+#}}}
+
+# Common Methods#{{{
+snippet createLinearGradient
+abbr    createLinearGradient(x0, y0, x1, y1)
+regexp  'ctx\.'
+options word
+  createLinearGradient(${1:x0}, ${2:y0}, ${3:x1}, ${4:y1})
+
+snippet get_linear_gradient
+abbr    var gradient = createLinearGradient(x0, y0, x1, y1)
+regexp  'ctx\.'
+options word
+  var gradient = createLinearGradient(${1:x0}, ${2:y0}, ${3:x1}, ${4:y1})
+
+snippet createPattern
+abbr    createPattern(image, 'repeat_type')
+regexp  'ctx\.'
+options word
+  createPattern(${1:image}, '${2:repeat|repeat-x|repeat-y|no-repeat}')
+
+snippet get_pattern
+abbr    var pat = createPattern(image, 'repeat_type')
+options word
+  var pat = createPattern(${1:image}, '${2:repeat|repeat-x|repeat-y|no-repeat}')
+
+snippet createRadialGradient
+abbr    createRadialGradient(x0, y0, r0, x1, y1, r1)
+regexp  'ctx\.'
+options word
+  createRadialGradient(${1:x0}, ${2:y0}, ${3:r0}, ${4:x1}, ${5:y1}, ${6:r1})
+
+snippet get_radial_gradient
+abbr    var gradient = createRadialGradient(x0, y0, r0, x1, y1, r1)
+options word
+  var gradient = createRadialGradient(${1:x0}, ${2:y0}, ${3:r0}, ${4:x1}, ${5:y1}, ${6:r1})
+
+snippet addColorStop
+abbr    addColorStop(0.0...1.0, color)
+regexp  'gradient\.'
+options word
+  addColorStop(${1:0.0...1.0}, ${2:color})
+#}}}
+
+# Line Styles#{{{
+snippet lineCap
+abbr    lineCap
+regexp  'ctx\.'
+options word
+  lineCap = '${1:butt|round|square}'
+
+snippet lineJoin
+abbr    lineJoin
+regexp  'ctx\.'
+options word
+  lineJoin = '${1:beval|round|miter}'
+
+snippet lineWidth
+abbr    lineWidth
+regexp  'ctx\.'
+options word
+  lineWidth = ${1:number}
+
+snippet miterLimit
+abbr    miterLimit
+regexp  'ctx\.'
+options word
+  miterLimit = ${1:number}
+#}}}
+
+# Rectangles#{{{
+snippet clearRect
+abbr    clearRect(x, y, width, height)
+regexp  'ctx\.'
+options word
+  clearRect(${1:x}, ${2:y}, ${3:width}, ${4:height})
+
+snippet strokeRect
+abbr    strokeRect(x, y, width, height)
+regexp  'ctx\.'
+options word
+  strokeRect(${1:x}, ${2:y}, ${3:width}, ${4:height})
+
+snippet fillRect
+abbr    fillRect(x, y, width, height)
+regexp  'ctx\.'
+options word
+  fillRect(${1:x}, ${2:y}, ${3:width}, ${4:height})
+
+snippet rect
+abbr    rect(x, y, width, height)
+regexp  'ctx\.'
+options word
+  rect(${1:x}, ${2:y}, ${3:width}, ${4:height})
+#}}}
+
+# Paths#{{{
+snippet fill
+abbr    fill()
+regexp  'ctx\.'
+options word
+  fill()
+
+snippet stroke
+abbr    stroke()
+regexp  'ctx\.'
+options word
+  stroke()
+
+snippet beginPath
+abbr    beginPath()
+regexp  'ctx\.'
+options word
+  beginPath()
+
+snippet moveTo
+abbr    moveTo(x, y)
+regexp  'ctx\.'
+options word
+  moveTo(${1:x}, ${2:y})
+
+snippet closePath
+abbr    closePath()
+regexp  'ctx\.'
+options word
+  closePath()
+
+snippet lineTo
+abbr    lineTo(x, y)
+regexp  'ctx\.'
+options word
+  lineTo(${1:x}, ${2:y})
+
+snippet clip
+abbr    clip()
+regexp  'ctx\.'
+options word
+  clip()
+
+snippet quadraticCurveTo
+abbr    quadraticCurveTo(cpx, cpy, x, y)
+regexp  'ctx\.'
+options word
+  quadraticCurveTo(${1:cpx}, ${2:cpy}, ${3:x}, ${4:y})
+
+snippet bezierCurveto
+abbr    bezierCurveto(cp1x, cp1y, cp2x, cp2y, x, y)
+regexp  'ctx\.'
+options word
+  bezierCurveto(${1:cp1x}, ${2:cp1y}, ${3:cp2x}, ${4:cp2y}, ${5:x}, ${6:y})
+
+snippet arc
+abbr    arc(x, y, r, sAngle, eAngle, counterclockwise)
+regexp  'ctx\.'
+options word
+  arc(${1:x}, ${2:y}, ${3:r}, ${4:sAngle}, ${5:eAngle}, ${6:counterclockwise})
+
+snippet isPointInPath
+abbr    isPointInPath(x, y)
+regexp  'ctx\.'
+options word
+  isPointInPath(${1:x}, ${2:y})
+#}}}
+
+# Transformations#{{{
+snippet scale
+abbr    scale(width, height)
+regexp  'ctx\.'
+options word
+  scale(${1:width}, ${2:height})
+
+snippet rotate
+abbr    rotate(angle)
+regexp  'ctx\.'
+options word
+  rotate(${1:angle})
+
+snippet translate
+abbr    translate(x, y)
+regexp  'ctx\.'
+options word
+  translate(${1:x}, ${2:y})
+
+snippet transform
+abbr    transform(scale_h, skew_h, skew_v, scale_v, move_h, move_v)
+regexp  'ctx\.'
+options word
+  transform(${1:scale_h}, ${2:skew_h}, ${3:skew_v}, ${4:scale_v}, ${5:move_h}, ${6:move_v})
+
+snippet setTransform
+abbr    setTransform(scale_h, skew_h, skew_v, scale_v, move_h, move_v)
+regexp  'ctx\.'
+options word
+  setTransform(${1:scale_h}, ${2:skew_h}, ${3:skew_v}, ${4:scale_v}, ${5:move_h}, ${6:move_v})
+#}}}
+
+# Font#{{{
+snippet font
+abbr    font
+regexp  'ctx\.'
+options word
+  font = '${1:30px Arial}'
+
+snippet textAlign
+abbr    textAlign
+regexp  'ctx\.'
+options word
+  textAlign = '${1:center|end|left|right|start}'
+
+snippet textBaseline
+abbr    textBaseline
+regexp  'ctx\.'
+options word
+  textBaseline = '${1:alphabetic|top|hanging|middle|ideographic|bottom}'
+
+snippet fillText
+abbr    fillText(text, x, y, maxWidth)
+regexp  'ctx\.'
+options word
+  fillText(${1:text}, ${2:x}, ${3:y}, ${4:maxWidth})
+
+snippet strokeText
+abbr    strokeText(text, x, y, maxWidth)
+regexp  'ctx\.'
+options word
+  strokeText(${1:text}, ${2:x}, ${3:y}, ${4:maxWidth})
+
+snippet measureText
+abbr    measureText(text)
+regexp  'ctx\.'
+options word
+  measureText(${1:text}).width
+#}}}
+
+# Image Drawing#{{{
+snippet drawImage
+abbr    drawImage(img_object, sx, sy, swidth, sheight, x, y, width, height)
+regexp  'ctx\.'
+options word
+  drawImage(${1:img_object}, ${2:sx}, ${3:sy}, ${4:swidth}, ${5:sheight}, ${6:x}, ${7:y}, ${8:width}, ${9:height})
+#}}}
+
+# image#{{{
+snippet createImageData
+abbr    createImageData(width, height)
+regexp  'ctx\.'
+options word
+  createImageData(${1:width}, ${2:height})
+
+snippet createImageData
+abbr    createImageData(imageData)
+regexp  'ctx\.'
+options word
+  createImageData(${1:imageData})
+
+snippet get_image_data
+abbr    var imgData = createImageData(${1:imageData})
+regexp  'ctx\.'
+options word
+  var imgData = createImageData(${1:imageData})
+
+snippet getImageData
+abbr    getImageData(x, y, width, height)
+regexp  'ctx\.'
+options word
+  getImageData(${1:x}, ${2:y}, ${3:width}, ${4:height})
+
+snippet putImageData
+abbr    putImageData(imgData, x, y, dirtyX, dirtyY, dirthWidth, dirtyHeight)
+regexp  'ctx\.'
+options word
+  putImageData(${1:imgData}, ${2:x}, ${3:y}, ${4:dirtyX}, ${5:dirtyY}, ${6:dirthWidth}, ${7:dirtyHeight})
+
+# imgData
+snippet data
+abbr    data
+regexp  'imgData\.'
+options word
+  data
+
+snippet height
+abbr    height
+regexp  'imgData\.'
+options word
+  height
+
+snippet width
+abbr    width
+regexp  'imgData\.'
+options word
+  width
+#}}}
+
+# Composition#{{{
+snippet globalAlpha
+abbr    globalAlpha
+regexp  'ctx\.'
+options word
+  globalAlpha = ${1:< 1.0number}
+
+snippet globalCompositeOperation
+abbr    globalCompositeOperation
+regexp  'ctx\.'
+options word
+  globalCompositeOperation = '${1:source-over|source-atop|source-in|source-out|destination-over|destination-atop|destination-in|destination-out|lighter|copy|xor}'
+#}}}
+
+# Other#{{{
+snippet save
+abbr    save()
+regexp  'ctx\.'
+options word
+  save()
+
+snippet restore
+abbr    restore()
+regexp  'ctx\.'
+options word
+  restore()
+#}}}

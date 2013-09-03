@@ -1,0 +1,417 @@
+# Common#{{{
+snippet     if
+abbr        if () {}
+options word
+    if (${1:condition}) {
+        ${0:code}
+    }
+
+# Directives
+# 2.1 aio
+snippet     aio
+abbr        aio [default:off]
+options word
+    aio ${0:on|off|sendfile};
+
+# 2.2 alias
+snippet     alias
+abbr        alias [default:no]
+options word
+    alias ${0:filepath|directory-path};
+
+# 2.3 chunked_transfer_encoding
+snippet     chunked_transfer_encoding
+abbr        chunked_transfer_encoding [default:on]
+options word
+    chunked_transfer_encoding ${0:on|off};
+
+# 2.4 client_body_in_file_only
+snippet     client_body_in_file_only
+abbr        client_body_in_file_only [default:off]
+options word
+    client_body_in_file_only ${0:on|off};
+
+# 2.5 client_body_in_single_buffer
+snippet     client_body_in_single_buffer
+abbr        client_body_in_single_buffer [default:off]
+options word
+    client_body_in_single_buffer ${0:on|off};
+
+# 2.6 client_body_buffer_size
+snippet     client_body_buffer_size
+abbr        client_body_buffer_size [default:8k/16k]
+options word
+    client_body_buffer_size ${0:the page size};
+
+# 2.7 client_body_temp_path
+snippet     client_body_temp_path
+abbr        client_body_temp_path [default:client_body_temp]
+options word
+    client_body_temp_path ${1:dir-path} ${2:level1} ${3:level2};
+
+# 2.8 client_body_timeout
+snippet     client_body_timeout
+abbr        client_body_timeout [default:60]
+options word
+    client_body_timeout ${0:time};
+
+# 2.9 client_header_buffer_size
+snippet     client_header_buffer_size
+abbr        client_header_buffer_size [default:1k]
+options word
+    client_header_buffer_size ${0:buffer size};
+
+# 2.10 client_header_timeout
+snippet     client_header_timeout
+abbr        client_header_timeout [default:60]
+options word
+    client_header_timeout ${0:time};
+
+# 2.11 client_max_body_size
+snippet     client_max_body_size
+abbr        client_max_body_size [default:1m]
+options word
+    client_max_body_size ${0:size};
+
+# 2.12 connection_pool_size
+snippet     connection_pool_size
+abbr        connection_pool_size [default:256]
+options word
+    connection_pool_size the_size ${0:size};
+
+# 2.13 default_type
+snippet     default_type
+abbr        default_type [default_type:text/plain]
+options word
+    default_type ${0:type};
+
+# 2.14 directio
+snippet     directio
+abbr        directio [default:off]
+options word
+    directio ${0:size};
+
+# 2.15 error_page
+snippet     error_page
+abbr        error_page [default:no]
+options word
+    error_page ${0} ${2:=|=answer-code} ${3:uri|@named_location};
+
+# 2.16 if_modified_since
+snippet     if_modified_since
+abbr        if_modified_since [default:exact]
+options word
+    if_modified_since ${0:off|exact|before};
+
+# 2.17 internal
+snippet     internal
+abbr        internal [default:no]
+options word
+    internal;
+
+# 2.18 keepalive_disable
+snippet     keepalive_disable
+abbr        keepalive_disable [default:msie6 safari]
+options word
+    keepalive_disable ${0:msie6|safari|none|...};
+
+# 2.19 keepalive_timeout
+snippet     keepalive_timeout
+abbr        keepalive_timeout [default:75]
+options word
+    keepalive_timeout ${0:time};
+
+# 2.20 keepalive_requests
+snippet     keepalive_requests
+abbr        keepalive_requests [default:100]
+options word
+    keepalive_requests ${0:number};
+
+# 2.21 large_client_header_buffers
+snippet     large_client_header_buffers
+abbr        large_client_header_buffers [default:4 8k]
+options word
+    large_client_header_buffers ${1:number} ${2:size};
+
+# 2.22 limit_except
+snippet     limit_except
+abbr        limit_except [default:no]
+options word
+    limit_except ${1:GET|POST|PUT|DELETE} {
+        ${0:code}
+    }
+
+# 2.23 limit_rate
+snippet     limit_rate
+abbr        limit_rate [default:no]
+options word
+    ${1:set} limit_rate ${0:speed};
+
+# 2.24 limit_rate_after
+snippet     limit_rate_after
+abbr        limit_rate_after [default;1m]
+options word
+    limit_rate_after ${0:time};
+
+# 2.25 lingering_close
+snippet     lingering_close
+abbr        lingering_close [default:on]
+options word
+    lingering_close ${0:on|off|always};
+
+# 2.26 lingering_time
+snippet     lingering_time
+abbr        lingering_time [default:30s]
+options word
+    lingering_time ${0:time};
+
+# 2.27 lingering_timeout
+snippet     lingering_timeout
+abbr        lingering_timeout [default:5s]
+options word
+    lingering_timeout ${0:time};
+
+# 2.28 listen
+snippet     listen
+abbr        listen [default:listen 80]
+options word
+    listen ${1:address}:${2:port};
+
+# 2.29 location
+snippet     location
+abbr        location [default:no]
+options word
+    location ${1:case} {
+        ${0:configuration}
+    }
+
+# 2.30 log_not_found
+snippet     log_not_found
+abbr        log_not_found [default:on]
+options word
+    log_not_found ${on|off};
+
+# 2.31 log_subrequest
+snippet     log_subrequest
+abbr        log_subrequest [default:off]
+options word
+    log_subrequest ${0:on|off};
+
+# 2.32 merge_slashes
+snippet     merge_slashes
+abbr        merge_slashes [default:on]
+options word
+    merge_slashes ${0:on|off};
+
+# 2.33 msie_padding
+snippet     msie_padding
+abbr        msie_padding [default:on]
+options word
+    msie_padding ${0:on|off};
+
+# 2.34 msie_refresh
+snippet     msie_refresh
+abbr        msie_refresh [default:off]
+options word
+    msie_refresh ${0:on|off};
+
+# 2.35 open_file_cache
+snippet     open_file_cache
+abbr        open_file_cache [default:off]
+options word
+    open_file_cache ${1:max=}${2:number} ${3:inactive=}${4:time};
+
+# 2.36 open_file_cache_errors
+snippet     open_file_cache_errors
+abbr        open_file_cache_errors [default:off]
+options word
+    open_file_cache_errors ${0:on|off};
+
+# 2.37 open_file_cache_min_uses
+snippet     open_file_cache_min_uses
+abbr        open_file_cache_min_uses [default:1]
+options word
+    open_file_cache_min_uses ${0:number};
+
+# 2.38 open_file_cache_valid
+snippet     open_file_cache_valid
+abbr        open_file_cache_valid [default:60]
+options word
+    open_file_cache_valid ${0:time};
+
+# 2.39 optimize_server_names
+snippet     optimize_server_names
+abbr        optimize_server_names [default:on]
+options word
+    optimize_server_names ${0:on|off};
+
+# 2.40 port_in_redirect
+snippet     port_in_redirect
+abbr        port_in_redirect [default:on]
+options word
+    port_in_redirect ${0:on|off};
+
+# 2.41 post_action
+snippet     post_action
+abbr        post_action [default:off]
+options word
+    post_action ${0:uri|off};
+
+# 2.42 recursive_error_pages
+snippet     recursive_error_pages
+abbr        recursive_error_pages [default:off]
+options word
+    recursive_error_pages ${0:on|off};
+
+# 2.43 request_pool_size
+snippet     request_pool_size
+abbr        request_pool_size [default:256]
+options word
+    request_pool_size ${0:the_size};
+
+# 2.44 reset_timedout_connection
+snippet     reset_timedout_connection
+abbr        reset_timedout_connection [default:off]
+options word
+    reset_timedout_connection ${0:on|off};
+
+# 2.45 resolver
+snippet     resolver
+abbr        resolver [default:no]
+options word
+    resolver ${0:address};
+
+# 2.46 resolver_timeout
+snippet     resolver_timeout
+abbr        resolver_timeout [default:30s]
+options word
+    resolver_timeout ${0:time};
+
+# 2.47 root
+snippet     root
+abbr        root [default:html]
+options word
+    root ${0:path};
+
+# 2.48 satisfy
+snippet     satisfy
+abbr        satisfy [default:all]
+options word
+    satisfy ${0:all|any};
+
+# 2.49 satisfy_any
+snippet     satisfy_any
+abbr        satisfy_any [default:off]
+options word
+    satisfy_any ${0:on|off};
+
+# 2.50 send_timeout
+snippet     send_timeout
+abbr        send_timeout [default:60]
+options word
+    send_timeout ${0:the_time};
+
+# 2.51 sendfile
+snippet     sendfile
+abbr        sendfile [default:off]
+options word
+    sendfile ${0:on|off};
+
+# 2.52 server
+snippet     server
+abbr        virtual server [default:no]
+options word
+    server {
+        server_name ${1:host};
+        ${0:configuration}
+    }
+
+# 2.53 server_name
+snippet     server_name
+abbr        server_name
+options word
+    server_name ${0:host};
+
+# 2.54 server_name_in_redirect
+snippet     server_name_in_redirect
+abbr        server_name_in_redirect [default:on]
+options word
+    server_name_in_redirect ${0:on|off};
+
+# 2.55 server_names_hash_max_size
+snippet     server_names_hash_max_size
+abbr        server_names_hash_max_size [default:512]
+options word
+    server_names_hash_max_size ${0:size};
+
+# 2.56 server_names_hash_bucket_size
+snippet     server_names_hash_bucket_size
+abbr        server_names_hash_bucket_size [default:32/64/128]
+options word
+    server_names_hash_bucket_size ${0:size};
+
+# 2.57 server_tokens
+snippet     server_tokens
+abbr        server_tokens [default:on]
+options word
+    server_tokens ${0:on|off};
+
+# 2.58 tcp_nodelay
+snippet     tcp_nodelay
+abbr        tcp_nodelay [default:on]
+options word
+    tcp_nodelay ${0:on|off};
+
+# 2.59 tcp_nopush
+snippet     tcp_nopush
+abbr        tcp_nopush [default:off]
+options word
+    tcp_nopush ${0:on|off};
+
+# 2.60 try_files
+snippet     try_files
+abbr        checks for the existence of files in order
+options word
+    try_files ${1:path1} ${2:path2} ${0:uri};
+
+# 2.61 type
+snippet     types
+abbr        types (Specifies one or more mappings)
+options word
+    types {
+        ${0:code}
+    }
+
+# 2.62 underscores_in_headers
+snippet     underscores_in_headers
+abbr        underscores_in_headers [default:off]
+options word
+    underscores_in_headers ${0:on|off};
+
+# 2.63 variables_hash_bucket_size
+snippet     variables_hash_bucket_size
+abbr        variables_hash_bucket_size [default:64]
+options word
+    variables_hash_bucket_size ${0:size};
+
+# 2.64 variables_hash_max_size
+snippet     variables_hash_max_size
+abbr        variables_hash_max_size [default:512]
+options word
+    variables_hash_max_size ${0:size};
+#}}}
+
+# Server
+snippet server_html
+abbr    server { html settings ... }
+options word
+  server {
+    listen       8090;
+    server_name  localhost;
+
+    location / {
+      root /Users/alpaca/src/enfac;
+      index  index.html index.htm;
+    }
+  }
+
