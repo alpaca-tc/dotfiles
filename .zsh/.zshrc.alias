@@ -17,6 +17,10 @@ alias vze="vim ~/.zsh/.zshrc.extends"
 alias vzp="vim ~/.zsh/.zshrc.prompt"
 # }}}
 
+# XAMPP {{{
+alias apache='sudo /Applications/XAMPP/bin/apachectl'
+# }}}
+
 # emacs# {{{
 alias em="emacs"
 alias e="emacs"
@@ -107,7 +111,7 @@ alias hp='hub pull-request'
 alias hn='hub --noop'
 # }}}
 
-# rals# {{{
+# rails# {{{
 alias r='rails'
 alias rg='rails generate'
 alias rc='rails console'

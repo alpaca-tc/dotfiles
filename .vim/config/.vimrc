@@ -2746,6 +2746,9 @@ let s:switch_define = {
       \   [510, ':not_extended'],
       \   [511, ':network_authentication_required'],
       \ ],
+      \ 'apache': [
+      \   ['None', 'All']
+      \ ],
       \ 'c' : [
       \   ['signed', 'unsigned'],
       \ ],
@@ -3581,9 +3584,11 @@ function! bundle.hooks.on_post_source(bundle) "{{{
 endfunction"}}}
 unlet bundle
 
-let g:lightline = {
-      \ 'colorscheme': 'wombat',
-      \ }
+if has('vim_starting')
+  let g:lightline = {
+        \ 'colorscheme': 'wombat',
+        \ }
+endif
 "}}}
 
 "----------------------------------------
@@ -3702,7 +3707,7 @@ command! -nargs=? SendPullRequest call s:send_pull_request(<q-args>)
 "}}}
 
 " ----------------------------------------
-" Complete FileType 
+" Completing FileType 
 command! -nargs=? -complete=filetype FileType execute 'set filetype=' . <q-args>
 
 " ----------------------------------------
