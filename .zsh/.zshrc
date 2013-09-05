@@ -11,7 +11,7 @@ export BROWSER=google-chrome
 export GITHUB_HOST='github.com'
 export CONFIGURE_OPTS="--with-gcc=clang"
 export ECLIPSE_HOME='/Applications/eclipse'
-export SSL_CERT_FILE=/usr/local/etc/cacert.pem
+# export SSL_CERT_FILE=/usr/local/etc/cacert.pem
 
 # 各種の設定 古いgccを使う場合
 # export CC='/usr/local/bin/gcc-4.2'
@@ -59,7 +59,8 @@ export CLASSPATH=$JAVA_HOME'/lib/ext'
 export SCALA_HOME=/usr/local/Cellar/scala/2.9.2
 
 # rbenv
-export PATH=$HOME/.rbenv/bin:$HOME/.rbenv:$PATH
+export RBENV_ROOT=/usr/rbenv
+export PATH=$HOME/.rbenv/bin:/usr/rbenv/bin:$PATH
 eval "$(rbenv init -)"
 
 # MacVim
