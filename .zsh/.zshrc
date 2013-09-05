@@ -59,8 +59,13 @@ export CLASSPATH=$JAVA_HOME'/lib/ext'
 export SCALA_HOME=/usr/local/Cellar/scala/2.9.2
 
 # rbenv
-export RBENV_ROOT=/usr/rbenv
-export PATH=$HOME/.rbenv/bin:/usr/rbenv/bin:$PATH
+if [ -d '/usr/rbenv' ];then
+  export RBENV_ROOT=/usr/rbenv
+  export PATH=/usr/rbenv/bin:$PATH
+else
+  export PATH=$HOME/.rbenv/bin:$PATH
+fi
+
 eval "$(rbenv init -)"
 
 # MacVim
