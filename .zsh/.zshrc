@@ -5,11 +5,11 @@ export GIT_EDITOR=/usr/local/bin/vim
 export LC_CTYPE=en_US.UTF-8
 export LANG=en_US.UTF-8
 # export SHELL=/usr/local/bin/zsh
-export BROWSER=google-chrome
+export BROWSER=/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome
 # export ARCHFLAGS="-arch x86_64"
 # export APXS2=/usr/sbin/apxs
 export GITHUB_HOST='github.com'
-export CONFIGURE_OPTS="--with-gcc=clang"
+# export CONFIGURE_OPTS="--with-gcc=clang"
 export ECLIPSE_HOME='/Applications/eclipse'
 # export SSL_CERT_FILE=/usr/local/etc/cacert.pem
 
@@ -19,8 +19,8 @@ export ECLIPSE_HOME='/Applications/eclipse'
 # }}}
 
 # rbenvの設定
-export CPPFLAGS="-I/usr/local/Cellar/readline/6.2.4/include"
-export LDFLAGS="-L/usr/local/Cellar/readline/6.2.4/lib"
+# export CPPFLAGS="-I/usr/local/Cellar/readline/6.2.4/include"
+# export LDFLAGS="-L/usr/local/Cellar/readline/6.2.4/lib"
 
 # PATH
 # {{{

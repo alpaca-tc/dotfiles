@@ -1,3 +1,2 @@
-setl omnifunc=ccomplete#Complete
-setl cindent shiftwidth=2
+setl omnifunc=ccomplete#Complete shiftwidth=2 nocindent
 setl noexpandtab

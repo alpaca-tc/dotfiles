@@ -26,6 +26,10 @@ augroup MyAutoCmd
   autocmd!
 augroup END
 
+augroup MyWindow
+  autocmd!
+augroup END
+
 augroup MyFtDetect
   autocmd!
 augroup END
@@ -73,14 +77,6 @@ function! s:current_git()
   return s:git_root_cache[current_dir]
 endfunction
 
-function! s:convert_bufname(name)
-  let bufname = a:name
-  if bufname =~# '^[[:alnum:].+-]\+:\\\\'
-    let bufname = substitute(bufname, '\\', '/', 'g')
-  endif
-
-  return bufname
-endfunction
 function! s:filetype()
   if empty(&filetype) | return '' | endif
 
@@ -214,6 +210,8 @@ let g:my.dir = {
       \ 'snippets'  : expand('~/.vim/snippet'),
       \ 'swap_dir'  : expand('~/.vim.trash/vimswap'),
       \ 'trash_dir' : expand('~/.vim.trash/'),
+      \ 'viminfo'   : expand('~/.vim.trash/viminfo'),
+      \ 'undodir'   : expand('~/.vim.trash/undodir'),
       \ 'unite'     : expand('~/.vim.trash/unite'),
       \ 'vimref'    : expand('~/.vim.trash/vim-ref'),
       \ 'vimfiler'  : expand('~/.vim.trash/vimfiler'),
@@ -259,6 +257,8 @@ endif
 "----------------------------------------
 " basic settings "{{{
 execute "set directory=".g:my.dir.swap_dir
+execute "set viminfo+=n".g:my.dir.viminfo
+execute "set undodir=".g:my.dir.undodir
 set nocompatible
 set backspace=indent,eol,start
 set clipboard+=autoselect,unnamed
@@ -595,16 +595,19 @@ NeoBundleLazy 'operator-camelize', {
 " NeoBundle 'tyru/operator-html-escape.vim'
 
 " unite
-" NeoBundle 'thinca/vim-qfreplace', { 'autoload' : {
-"       \ 'filetypes' : ['unite', 'quickfix'],
-"       \ 'functions' : 'qfreplace#start',
-"       \ }}
+NeoBundle 'thinca/vim-qfreplace', { 'autoload' : {
+      \ 'filetypes' : ['unite', 'quickfix'],
+      \ 'functions' : 'qfreplace#start',
+      \ }}
 command! -nargs=? -buffer Qfreplace call qfreplace#start(<q-args>)
 NeoBundleLazy 'Shougo/unite-build', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload': {
       \   'unite_sources' : 'build'
       \ }}
+NeoBundleLazy 'Shougo/unite-session', { 'autoload' : { 
+      \ 'unite_sources': 'session',
+      \ 'commands' : ['UniteSessionSave', 'UniteSessionLoad'] }}
 NeoBundleLazy 'Shougo/unite-outline', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload' : {
@@ -966,6 +969,8 @@ NeoBundleLazy 'mutewinter/nginx.vim', {
 " NeoBundle 'Pydiction'
 NeoBundleLazy 'yuroyoro/vim-python', { 'autoload' : {
       \ 'filetypes' : g:my.ft.python_files }}
+NeoBundleLazy 'alfredodeza/coveragepy.vim', { 'autoload': {
+      \ 'filetypes': g:my.ft.python_files }}
 NeoBundleLazy 'hynek/vim-python-pep8-indent', { 'autoload' : {
       \ 'filetypes' : g:my.ft.python_files }}
 if has("python")
@@ -1252,6 +1257,20 @@ au Filetype php nnoremap ,R :! phptohtml<CR>
 "}}}
 
 "----------------------------------------
+" Buffer {{{
+augroup MyAutoCmd
+  autocmd BufNew * call <SID>remove_unwanted_buffer()
+augroup END
+
+function! s:remove_unwanted_buffer() "{{{
+  if empty(expand('%:p'))
+    setlocal buftype=nofile nobuflisted noswapfile bufhidden=hide
+    autocmd BufWritePre <buffer> setlocal buftype= buflisted noswapfile bufhidden=
+  endif
+endfunction"}}}
+" }}}
+
+"----------------------------------------
 " Searching"{{{
 set hlsearch
 set ignorecase
@@ -1427,18 +1446,23 @@ set foldnestmax=2
 if v:version >= 703
   highlight ColorColumn guibg=#012345
   set conceallevel=2 concealcursor=iv
-  set colorcolumn=80
+  set colorcolumn=81
 endif
 
 if has('gui')
-  autocmd VimEnter set guioptions-=egLrm
+  augroup MyWindow
+    autocmd VimEnter set guioptions-=egLrm
+  augroup END
 endif
+
+augroup MyWindow
+  autocmd VimResized * exe "normal! \<c-w>="
+augroup END
 
 syntax on
 
 " カレントウィンドウにのみ罫線を引く
-augroup cch
-  autocmd!
+augroup MyWindow
   " autocmd WinLeave * set nocursorline
   " autocmd WinEnter,BufRead * set cursorline
 augroup END
@@ -1918,6 +1942,7 @@ unlet bundle
 "----------------------------------------
 nnoremap <silent>gM :<C-U>Gcommit --amend<CR>
 nnoremap <silent>gb :<C-U>Gblame<CR>
+nnoremap <silent>gB :<C-U>Gbrowse<CR>
 nnoremap <silent>gm :<C-U>Gcommit<CR>
 let bundle = NeoBundleGet('vim-fugitive')
 function bundle.hooks.on_source(bundle) "{{{
@@ -2689,6 +2714,9 @@ let s:switch_define = {
       \   ['lib', 'initializer', 'file', 'vendor', 'rakefile'],
       \   ['controller', 'model', 'view', 'migration', 'scaffold'],
       \ ],
+      \ 'html,php' : [
+      \   { '<!--\([a-zA-Z0-9 /]\+\)--></\(div\|ul\|li\|a\)>' : '</\2><!--\1-->' },
+      \ ],
       \ 'rails' : [
       \   [100, ':continue', ':information'],
       \   [101, ':switching_protocols'],
@@ -3392,10 +3420,10 @@ function! bundle.hooks.on_source(bundle) "{{{
   let s:unite_kuso_hooks = {}
 
   function! s:unite_my_settings()
-    aug MyUniteBufferCmd
-      autocmd!
+    augroup MyUniteBufferCmd
+      autocmd! * <buffer>
       autocmd BufEnter <buffer> if winnr('$') == 1 |quit| endif
-    aug END
+    augroup END
 
     setl nolist
     setl cursorline
@@ -3416,10 +3444,13 @@ function! bundle.hooks.on_source(bundle) "{{{
 
     " hook
     let unite = unite#get_current_unite()
+    if unite.source_names == ['grep']
+      let unite.buffer_name = 'grep'
+    endif
     let buffer_name = unite.buffer_name != '' ? unite.buffer_name : '_'
 
     " バッファ名に基づいたフックを実行
-    if has_key( s:unite_kuso_hooks, buffer_name )
+    if has_key(s:unite_kuso_hooks, buffer_name)
       call s:unite_kuso_hooks[buffer_name]()
     endif
   endfunction
@@ -3453,8 +3484,10 @@ function! bundle.hooks.on_source(bundle) "{{{
         \ 'gitignore'  : 'Unite file_rec:' . neobundle#get_neobundle_dir() . "/gitignore",
         \ }
   function! s:unite_kuso_hooks.line_fast()
-    autocmd WinLeave <buffer> call <SID>buffer_auto_fold(1)
-    autocmd WinEnter <buffer> call <SID>buffer_auto_fold(0)
+    augroup MyUniteBufferCmd
+      autocmd WinLeave <buffer> call <SID>buffer_auto_fold(1)
+      autocmd WinEnter <buffer> call <SID>buffer_auto_fold(0)
+    augroup END
   endfunction
 
   call unite#custom_source('line', 'max_candidates', 5000)
@@ -3489,9 +3522,15 @@ function! bundle.hooks.on_source(bundle) "{{{
     let g:unite_source_grep_command =  "grep"
     let g:unite_source_grep_recursive_opt = "-R"
   endif
+
   " let g:unite_source_grep_ignore_pattern = ''
   function! s:unite_kuso_hooks.grep()
     nnoremap <expr><buffer>re unite#do_action('replace')
+
+    augroup MyUniteBufferCmd
+      autocmd WinLeave <buffer> call <SID>buffer_auto_fold(1)
+      autocmd WinEnter <buffer> call <SID>buffer_auto_fold(0)
+    augroup END
   endfunction
 
   "------------------------------------
@@ -3504,6 +3543,11 @@ function! bundle.hooks.on_source(bundle) "{{{
   " let g:unite_source_outline_highlight
   function! s:unite_kuso_hooks.outline()
     nnoremap <buffer><C-J> gj
+
+    augroup MyUniteBufferCmd
+      autocmd WinLeave <buffer> call <SID>buffer_auto_fold(1)
+      autocmd WinEnter <buffer> call <SID>buffer_auto_fold(0)
+    augroup END
   endfunction
 
   "------------------------------------
@@ -3589,6 +3633,17 @@ if has('vim_starting')
         \ 'colorscheme': 'wombat',
         \ }
 endif
+
+let bundle = NeoBundleGet('unite-session')
+function! bundle.hooks.on_source(bundle)
+  " let g:unite_source_session_path=
+  " let g:unite_source_session_options='blank,buffers,curdir,folds,help,tabpages,winsize'
+  let g:unite_source_session_options='buffers,curdir,tabpages,winsize'
+  let g:unite_source_session_enable_auto_save=1
+endfunction
+" augroup MyAutoCmd
+"   autocmd VimEnter * UniteSessionLoad
+" augroup END
 "}}}
 
 "----------------------------------------
@@ -3685,15 +3740,15 @@ function! s:do_lang8_autocmd() "{{{
     let g:neorspec_command = 'Dispatch rspec {spec}'
   endif
 endfunction"}}}
-function! s:lang8_settings()
+function! s:lang8_settings() "{{{
   let g:neorspec_command = 'Dispatch spec {spec}'
 
   nnoremap <buffer>[plug]c           :<C-U>UniteGit config<CR>
   nnoremap <buffer>[plug]j           :<C-U>UniteGit public/static/javascripts<CR>
   nnoremap <buffer>[plug]a           :<C-U>UniteGit public/static/sass<CR>
   nnoremap <buffer>[plug]m           :<C-U>UniteGit app/models/mailer<CR>
-  let g:user_zen_settings.filters.html.indentation = ''
-endfunction
+  " let g:user_zen_settings.filters.html.indentation = ''
+endfunction"}}}
 augroup MyAutoCmd
   autocmd User Rails call <SID>do_lang8_autocmd()
 augroup END
