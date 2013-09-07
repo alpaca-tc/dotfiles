@@ -9,7 +9,7 @@ alias ls="ls -G"
 
 # すぐに編修出来る# {{{
 alias sz="source ~/.zshrc"
-alias vv="vim ~/.vim/config/.vimrc"
+alias vv="vim ~/.vim/vimrc"
 alias vz="vim ~/.zsh/.zshrc"
 alias vza="vim ~/.zsh/.zshrc.alias"
 alias vzb="vim ~/.zsh/.zshrc.basic"
