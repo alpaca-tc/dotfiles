@@ -101,3 +101,8 @@ source ~/.zsh/.zshrc.bindkey
 # source ~/.zsh/.zshrc.tmuxauto
 # source ~/.zsh/.zshrc.command
 # }}}
+
+# For cookpad
+export ACCESS_TOKEN=97817677bb076026d1d56f018fa5fa75f7c7f72bf5dc3d3833400d9db37a102e
+alias pantryman='ruby /Users/alpaca/src/client.rb'
+

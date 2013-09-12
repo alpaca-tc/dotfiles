@@ -85,7 +85,7 @@ endfunction
 function! s:smart_close()
   if winnr('$') == 1 |quit| endif
 endfunction
-function! s:get_cursor_word() "{{{
+function! s:get_cursor_word()
   return expand("<cword>")
 
   " let [line, start] = [getline('.'), col('.') - 1]
@@ -93,7 +93,7 @@ function! s:get_cursor_word() "{{{
   "   let start -= 1
   " endwhile
   " return getline(".")[start : col(".") - 1]
-endfunction"}}}
+endfunction
 function! s:buffer_auto_fold(to_close)
   if !exists("b:__buffer_winheight")
     let b:__buffer_winheight = winheight("1")
@@ -153,7 +153,6 @@ function! NeoBundleGet(name)
   let bundle = neobundle#get(a:name)
   return empty(bundle) ? s:dummy : bundle
 endfunction
-
 
 function! s:compare_asc(me, target) "{{{
   if a:me > a:target
@@ -284,8 +283,8 @@ if v:version >= 703
   let &undodir=&directory
 endif
 
-nnoremap <Space><Space>s :<C-U>source ~/.vimrc<CR>
-nnoremap <Space><Space>v :<C-U>tabnew ~/.vim/config/.vimrc<CR>
+nnoremap <Space><Space>s :<C-U>source ~/.vim/vimrc<CR>
+nnoremap <Space><Space>v :<C-U>tabnew ~/.vim/vimrc<CR>
 "}}}
 
 "----------------------------------------
@@ -312,7 +311,7 @@ NeoBundle 'Shougo/vimproc', {
       \   'unix' : 'make -f make_unix.mak',
       \ }}
 " An awesome improvement to the Vim status bar.
-NeoBundle 'itchyny/lightline.vim'
+" NeoBundle 'itchyny/lightline.vim'
 " if has('python')
 "   " NeoBundle 'Lokaltog/powerline'
 "   NeoBundle 'alpaca-tc/powerline', {
@@ -411,15 +410,9 @@ NeoBundleLazy 'Shougo/vimfiler', {
       \   'mappings' : ['<Plug>(vimfiler_switch)'],
       \   'explorer' : 1,
       \ }}
-if has("lua")
-  NeoBundleLazy 'Shougo/neocomplete', { 'autoload' : {
-        \   'insert' : 1,
-        \ }}
-else
-  NeoBundleLazy 'Shougo/neocomplcache', { 'autoload' : {
-        \   'insert' : 1,
-        \ }}
-endif
+NeoBundleLazy 'Shougo/neocomplete', { 'autoload' : {
+      \   'insert' : 1,
+      \ }}
 NeoBundleLazy 'Shougo/neosnippet', {
       \ 'autoload' : {
       \   'commands' : [
@@ -494,9 +487,9 @@ NeoBundleLazy 'mattn/gist-vim', {
 NeoBundleLazy 'glidenote/memolist.vim', { 'autoload' :
       \ { 'commands' : ['MemoNew', 'MemoGrep'] }}
 NeoBundleLazy 'h1mesuke/vim-alignta', {
-      \ 'autoload' : { 
+      \ 'autoload' : {
       \   'unite_sources' : 'alignta',
-      \   'commands' : ['Align'] 
+      \   'commands' : ['Align']
       \ }}
 NeoBundleLazy 'junegunn/vim-easy-align', { 'autoload': {
       \ 'commands' : ['EasyAlign'] }}
@@ -605,7 +598,7 @@ NeoBundleLazy 'Shougo/unite-build', {
       \ 'autoload': {
       \   'unite_sources' : 'build'
       \ }}
-NeoBundleLazy 'Shougo/unite-session', { 'autoload' : { 
+NeoBundleLazy 'Shougo/unite-session', { 'autoload' : {
       \ 'unite_sources': 'session',
       \ 'commands' : ['UniteSessionSave', 'UniteSessionLoad'] }}
 NeoBundleLazy 'Shougo/unite-outline', {
@@ -631,7 +624,7 @@ NeoBundleLazy 'tsukkee/unite-tag', {
       \ 'autoload' : {
       \   'unite_sources' : ['tag', 'tag/file', 'tag/include']
       \ }}
-NeoBundleLazy 'mattn/qiita-vim', { 
+NeoBundleLazy 'mattn/qiita-vim', {
       \ 'depends' : ['Shougo/unite.vim', 'mattn/webapi-vim'],
       \ 'autoload': {
       \   'unite_sources' : 'qiita'
@@ -747,11 +740,11 @@ NeoBundle 'terryma/vim-multiple-cursors', { 'autload': {
 
 " リポジトリをクローンするのみ
 NeoBundleFetch 'github/gitignore'
-" NeoBundleFetch 'alpaca-tc/rsense-0.3', {
-"       \ 'build' : {
-"       \    'mac': 'ruby etc/config.rb > ~/.rsense',
-"       \    'unix': 'ruby etc/config.rb > ~/.rsense',
-"       \ } }
+NeoBundleFetch 'alpaca-tc/rsense-0.3', {
+      \ 'build' : {
+      \    'mac': 'ruby etc/config.rb > ~/.rsense',
+      \    'unix': 'ruby etc/config.rb > ~/.rsense',
+      \ } }
 " Generating Ricty Font.
 let g:ricty_generate_command = join([
       \   'sh ricty_generator.sh',
@@ -779,7 +772,7 @@ NeoBundleLazy 'AtsushiM/sass-compile.vim', {
 NeoBundleLazy 'vim-less', {
       \ 'autoload': { 'filetypes': ['less'] }
       \ }
-NeoBundleLazy 'mattn/livestyle-vim', { 'autoload' : 
+NeoBundleLazy 'mattn/livestyle-vim', { 'autoload' :
       \ { 'commands' : ['LiveStyle'] } }
 
 " html
@@ -818,7 +811,7 @@ NeoBundleLazy 'leafgarland/typescript-vim', { 'autoload' : {
 NeoBundleLazy 'kchmck/vim-coffee-script', { 'autoload' : {
       \ 'filetypes' : 'coffee' }}
 if has("python") && executable('npm')
-  NeoBundleLazy 'marijnh/tern_for_vim', { 
+  NeoBundleLazy 'marijnh/tern_for_vim', {
         \ 'build' : 'npm install',
         \ 'autoload' : {
         \ 'functions': ['tern#Complete', 'tern#Enable'],
@@ -885,6 +878,8 @@ NeoBundleLazy 'alpaca-tc/vim-endwise.git', {
       \ 'autoload' : {
       \   'insert' : 1,
       \ }}
+" NeoBundleLazy 'supermomonga/neocomplete-rsense.vim', { 'autoload' : {
+"       \ 'filetypes' : 'ruby' }}
 " NeoBundleLazy 'vim-ruby/vim-ruby', { 'autoload' : {
 "       \ 'filetypes': ['ruby', 'eruby'] } }
 
@@ -935,10 +930,10 @@ NeoBundleLazy 'alpaca-tc/neorspec.vim', {
       \ }}
 NeoBundleLazy 'taka84u9/vim-ref-ri', {
       \ 'depends': ['Shougo/unite.vim', 'thinca/vim-ref'],
-      \ 'autoload': { 
+      \ 'autoload': {
       \   'filetypes': g:my.ft.ruby_files,
       \   'unite_sources' : 'ref/ri',
-      \ }} 
+      \ }}
 NeoBundleLazy 'alpaca-tc/unite-reek', {
       \ 'build' : {
       \   'mac': 'gem install reek',
@@ -1259,7 +1254,7 @@ au Filetype php nnoremap ,R :! phptohtml<CR>
 "----------------------------------------
 " Buffer {{{
 augroup MyAutoCmd
-  autocmd BufNew * call <SID>remove_unwanted_buffer()
+  " autocmd BufNew * call <SID>remove_unwanted_buffer()
 augroup END
 
 function! s:remove_unwanted_buffer() "{{{
@@ -1498,11 +1493,11 @@ augroup AlpacaTags
   endif
 augroup END
 
-function! s:set_update_tags()
+function! s:set_update_tags() "{{{
   augroup TagsUpdate
   autocmd! TagsUpdate
   execute 'autocmd TagsUpdate BufWritePost <buffer> TagsUpdate ' . s:filetype()
-endfunction
+endfunction"}}}
 
 "tags_jumpを使い易くする
 nnoremap [tag_or_tab]t  <C-]>
@@ -2359,15 +2354,15 @@ unlet bundle
 
 "------------------------------------
 "loadのときに、syntaxCheckをする
-let g:syntastic_auto_jump = 1
-let g:syntastic_auto_loc_list=1
+let g:syntastic_auto_jump = 0
+let g:syntastic_auto_loc_list=0
 let g:syntastic_check_on_open = 0
-let g:syntastic_echo_current_error = 1
+let g:syntastic_echo_current_error = 0
 let g:syntastic_enable_balloons = has("balloon_eval")
-let g:syntastic_enable_highlighting = 1
-let g:syntastic_enable_signs = 1
-let g:syntastic_loc_list_height=3
-let g:syntastic_quiet_warnings = 1
+let g:syntastic_enable_highlighting = 0
+let g:syntastic_enable_signs = 0
+let g:syntastic_loc_list_height=2
+let g:syntastic_quiet_warnings = 0
 let g:syntastic_error_symbol = '>'
 let g:syntastic_warning_symbol = 'X'
 " let g:syntastic_error_symbol='✗'
@@ -2997,12 +2992,30 @@ function! bundle.hooks.on_source(bundle) "{{{
 endfunction"}}}
 unlet bundle
 
-let bundle = NeoBundleGet('neocomplcache-rsense')
-function! bundle.hooks.on_source(bundle)"{{{
-  let g:neocomplete#sources#rsense#home_directory = neobundle#get_neobundle_dir() . '/rsense-0.3'
-  " let g:neocomplete#sources#rsense#home_directory = "/usr/local/Cellar/rsense/0.3"
+let bundle = NeoBundleGet('neocomplete-rsense')
+function! bundle.hooks.on_source(bundle) "{{{
+  let path = s:rsense_path()
+  if path
+    let g:neocomplete#sources#rsense#home_directory = path
+  endif
+
+  augroup MyAutoCmd
+    autocmd FileType ruby set omnifunc=
+  augroup END
 endfunction"}}}
 unlet bundle
+
+function! s:rsense_path() "{{{
+  let bundle_path = neobundle#get_neobundle_dir() . '/rsense-0.3'
+  let brew_path = '/usr/local/Cellar/rsense/0.3'
+  if executable(path)
+    return bundle_path
+  elseif executable(brew_path)
+    return brew_path
+  endif
+
+  return 0
+endfunction"}}}
 
 "----------------------------------------
 let g:neocomplete#enable_at_startup = 1
@@ -3762,7 +3775,17 @@ command! -nargs=? SendPullRequest call s:send_pull_request(<q-args>)
 "}}}
 
 " ----------------------------------------
-" Completing FileType 
+command! JSBeautify call <SID>run_js_beautify()
+
+function! s:run_js_beautify() "{{{
+  let current_file = expand('%:p')
+  " Backup
+  %delete
+  execute 'r!js-beautify ' . current_file
+endfunction"}}}
+
+" ----------------------------------------
+" Completing FileType
 command! -nargs=? -complete=filetype FileType execute 'set filetype=' . <q-args>
 
 " ----------------------------------------

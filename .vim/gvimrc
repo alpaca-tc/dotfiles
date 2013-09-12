@@ -1,1 +1,4 @@
-/Users/taichou/dotfiles/.vimrc
+augroup MyGvimSetting
+  autocmd!
+  autocmd VimEnter * set guifont=Ricty\ Regular\ for\ Powerline:h16
+augroup END
