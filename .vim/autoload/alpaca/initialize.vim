@@ -1,5 +1,6 @@
 " initialize
 augroup AbbrDefine
+  autocmd!
 augroup END
 
 function! s:get_autcmd_with_filetype(filetype, cmd) "{{{

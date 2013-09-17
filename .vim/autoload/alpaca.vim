@@ -1,5 +1,4 @@
-" XXX vimprocが読み込まれているか、動的に判別
-let s:is_vimproc = 1
+let s:system = neobundle#is_installed('vimproc') ? 'vimproc#system_bg' : 'system'
 function! s:let(scope, name, value) "{{{
   let global_variable_name = a:scope . ':' . a:name
   if !exists(global_variable_name)
@@ -8,14 +7,9 @@ function! s:let(scope, name, value) "{{{
   endif
 endfunction"}}}
 
-" XXX vimprocの使い方というか仕様が分からない...
 function! alpaca#system(...) "{{{
   let command = join(a:000)
-  if s:is_vimproc
-    return vimproc#system(command)
-  else
-    return system(command)
-  endif
+  return {s:system}(command)
 endfunction"}}}
 
 function! alpaca#system_bg(...) "{{{
@@ -64,8 +58,3 @@ function! alpaca#parse_arg(arg) "{{{
 
   return args
 endfunction"}}}
-
-" vimrc用
-command! -nargs=+ SmartHighlight
-      \ call alpaca#syntax#smart_define(
-      \   substitute(<q-args>, '\s"[^"]\+$', '', ''))
