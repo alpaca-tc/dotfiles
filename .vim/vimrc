@@ -287,7 +287,7 @@ NeoBundle 'Shougo/vimproc', {
       \   'unix' : 'make -f make_unix.mak',
       \ }}
 " An awesome improvement to the Vim status bar.
-" NeoBundle 'itchyny/lightline.vim'
+NeoBundle 'itchyny/lightline.vim'
 
 " if has('python')
 "   " NeoBundle 'Lokaltog/powerline'
@@ -509,6 +509,7 @@ NeoBundleLazy 'mattn/emmet-vim', {
       \ 'autoload': {
       \   'function_prefix': 'emmet',
       \   'filetypes': g:my.ft.html_files + g:my.ft.style_files,
+      \   'mappings' : ['<Plug>(EmmetExpandAbbr)']
       \ }}
 NeoBundleLazy 't9md/vim-textmanip', { 'autoload' : {
       \ 'mappings' : [
@@ -755,9 +756,15 @@ NeoBundleLazy 'vim-scripts/jQuery', { 'autoload' : {
 NeoBundleLazy 'jelera/vim-javascript-syntax', { 'autoload' : {
       \ 'filetypes' : ['javascript', 'json'],
       \ }}
-NeoBundleLazy 'alpaca-tc/js-beautify.vim', { 'autoload' : {
-      \ 'commands' : 'JsBeautify'
+NeoBundle 'alpaca-tc/php_beautifier.vim'
+NeoBundle 'alpaca-tc/beautify.vim', {
+      \ 'build' : {
+      \   'mac': 'npm install -g js-beautify',
+      \ },
+      \ 'autoload' : {
+      \   'commands' : ['JsBeautify', 'Beautify', 'CssBeautify', 'HtmlBeautify']
       \ }}
+
 NeoBundleLazy 'alpaca-tc/js2coffee.vim.git', {
       \ 'build' : {
       \   'mac' : 'npm install -g',
@@ -900,11 +907,16 @@ NeoBundleLazy 'alpaca-tc/unite-reek', {
       \   'unite_sources': 'reek',
       \ },
       \ 'depends' : 'Shougo/unite.vim' }
-NeoBundleLazy "depuracao/vim-rdoc", { "autoload" : {
-      \   "filetypes" : "rdoc"
+NeoBundleLazy 'depuracao/vim-rdoc', { 'autoload' : {
+      \   'filetypes' : 'rdoc'
       \ }}
 " NeoBundleLazy 'tpope/vim-cucumber', { 'autoload': {
 "       \ 'filetypes': g:my.ft.ruby_files }}
+
+" slim
+" ----------------------------------------
+NeoBundleLazy 'slim-template/vim-slim', { 'autolaod' : {
+      \ 'filetypes' : 'slim' }}
 
 " nginx
 " ----------------------------------------
@@ -1670,7 +1682,6 @@ endfunction"}}}
 unlet bundle
 
 "----------------------------------------
-imap <C-E> <C-Y>,
 let bundle = NeoBundleGet("zencoding-vim")
 function! bundle.hooks.on_source(bundle) "{{{
   let g:user_zen_complete_tag = 1
@@ -1700,12 +1711,12 @@ function! bundle.hooks.on_source(bundle) "{{{
 endfunction "}}}
 unlet bundle
 
+augroup MyAutoCmd
+  execute 'autocmd FileType ' . join(g:my.ft.html_files, ',') . ' imap <buffer><C-E> <C-Y>,'
+augroup END
+
 let bundle = NeoBundleGet('emmet-vim')
 function! bundle.hooks.on_source(bundle) "{{{
-  imap <buffer><C-E> <Plug>(EmmetExpandAbbr)
-  augroup MyAutoCmd
-    execute 'autocmd FileType ' . join(g:my.ft.html_files, ',') . ' imap <buffer><C-E> <Plug>(EmmetExpandAbbr)'
-  augroup END
   let g:user_emmet_mode = 'iv'
   let g:user_emmet_leader_key = '<C-Y>'
   let g:use_emmet_complete_tag = 1
@@ -1740,7 +1751,6 @@ nnoremap ri  :<C-U>Unite ref/ri -immediately -input=
 nnoremap rm  :<C-U>Unite ref/man -immediately -input=
 nnoremap rpy :<C-U>Unite ref/pydoc -immediately -input=
 nnoremap rpe :<C-U>Unite ref/perldoc -immediately -input=
-
 function bundle.hooks.on_source(bundle) "{{{
   let g:ref_open                    = 'tabnew'
   let g:ref_cache_dir               = g:my.dir.vimref
@@ -1748,6 +1758,10 @@ function bundle.hooks.on_source(bundle) "{{{
   " let g:ref_refe_cmd                = expand('~/.vim/ref/refe-0.8.0/bin/refe')
   " let g:ref_refe_encoding           = 'utf-8'
   let g:ref_no_default_key_mappings = 1
+  augroup MyAutoCmd
+    execute 'autocmd FileType ' . join(g:my.ft.program_files, ',') . ' nmap <silent><buffer><unique> K <Plug>(ref-keyword)'
+  augroup END
+
 
   "webdictサイトの設定
   let g:ref_source_webdict_sites = {
@@ -2233,7 +2247,7 @@ function! bundle.hooks.on_source(bundle) "{{{
 
   let g:jedi#rename_command = ",R"
   let g:jedi#use_tabs_not_buffers = 0
-  let g:vinarise_objdump_command='gobjdump' 
+  let g:vinarise_objdump_command='gobjdump'
 endfunction"}}}
 unlet bundle
 
@@ -2304,15 +2318,15 @@ let g:scala_use_default_keymappings = 0
 " ------------------------------------
 " alpaca_remove_dust
 "------------------------------------
-let bundle = NeoBundleGet("alpaca_remove_dust.vim")
-function bundle.hooks.on_source(bundle) "{{{
+" let bundle = NeoBundleGet("alpaca_remove_dust.vim")
+" function bundle.hooks.on_source(bundle) "{{{
   let g:remove_dust_enable=1
-  augroup RemoveDust
-    autocmd!
-    autocmd BufWritePre * RemoveDust
-  augroup END
-endfunction"}}}
-unlet bundle
+  " augroup RemoveDust
+  "   autocmd!
+  "   autocmd BufWritePre * RemoveDust
+  " augroup END
+" endfunction"}}}
+" unlet bundle
 
 " ------------------------------------
 " vim-niceblock
@@ -2444,7 +2458,9 @@ let s:switch_definition = {
       \   { 'expect(\([^. ]\+\))\.to\(_not\|\)': '\1.should\2' },
       \ ],
       \ 'vim' : [
-      \   { '\vhttps{,1}://github.com/([^/]+)/([^/]+)(\.git){,1}': '\1/\2' }
+      \   { '\vhttps{,1}://github.com/([^/]+)/([^/]+)(\.git){,1}': '\1/\2' },
+      \   ['call', 'return'],
+      \   ['echo', 'echomsg'],
       \ ],
       \ 'markdown' : [
       \   ['[ ]', '[x]']
@@ -2494,7 +2510,7 @@ unlet bundle
 " ------------------------------------
 let bundle = NeoBundleGet('alpaca_tags')
 function! bundle.hooks.on_source(bundle) "{{{
-  let g:alpaca_tags_ctags_bin = g:my.bin.ctags
+  " let g:alpaca_tags_ctags_bin = g:my.bin.ctags
   let g:alpaca_tags_config = {
         \ '_' : '-R --sort=yes --languages=+Ruby --languages=-js,JavaScript',
         \ 'default' : '--languages=-css,scss,html,js,JavaScript',
@@ -3010,12 +3026,14 @@ function! bundle.hooks.on_source(bundle) "{{{
   let g:unite_source_file_mru_time_format="(%m-%d %H:%M) "
   let g:unite_source_file_mru_filename_format=":~:."
   let g:unite_source_file_mru_limit = 300
+  let g:unite_source_directory_mru_ignore_pattern = ''
 
   let g:unite_winheight = 20
   let g:unite_marked_icon = "✓"
   let g:unite_force_overwrite_statusline=1
   let g:unite_source_history_yank_enable = 0
   let s:unite_hooks = {}
+
 
   function! s:unite_my_settings()
     augroup MyUniteBufferCmd
@@ -3065,7 +3083,7 @@ function! bundle.hooks.on_source(bundle) "{{{
     "       \'\|^\%(\\\\\|/mnt/\|/media/\|/temp/\|/tmp/\|\%(/private\)\=/var/folders/\)'
     "       \'\|\%(^\%(fugitive\)://\)'
     "       \)
-    " call unite#util#set_default('g:unite_source_directory_mru_ignore_pattern',
+    " call unite#util#set_default('g:unite_source_directory_mru_ignore_pattern', '')
     "       \'\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'
     "       \'\|^\%(\\\\\|/mnt/\|/media/\|/temp/\|/tmp/\|\%(/private\)\=/var/folders/\)')
   endfunction
@@ -3103,6 +3121,7 @@ function! bundle.hooks.on_source(bundle) "{{{
   call unite#custom_source('file_rec', 'max_candidates', 5000)
   call unite#custom_source('file_rec/async', 'max_candidates', 5000)
   call unite#custom_source('giti/log', 'max_candidates', 5000)
+  let g:giti_git_command = executable('hub') ? 'hub' : 'git'
   let g:giti_log_default_line_count = 500
   call unite#custom_source('giti/branch_all', 'max_candidates', 5000)
   call unite#custom_source('line/fast', 'max_candidates', 5000)
@@ -3253,6 +3272,13 @@ endfunction
 " augroup MyAutoCmd
 "   autocmd VimEnter * UniteSessionLoad
 " augroup END
+
+" ----------------------------------------
+let bundle = NeoBundleGet('beautify.vim')
+function! bundle.hooks.on_source(bundle) "{{{
+  " let g:beautify#default_outputter = 'tabnew'
+endfunction"}}}
+unlet bundle
 "}}}
 
 "----------------------------------------
@@ -3295,7 +3321,7 @@ endfunction "}}}
 "       let s:eclimd_process = vimproc#popen2(eclimd)
 "       autocmd VimLeave * call <SID>kill_eclimd()
 "     endif
-" 
+"
 "     NeoBundleSource eclim
 "     autocmd! EclimLoader
 "   endif

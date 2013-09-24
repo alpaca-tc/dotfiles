@@ -162,3 +162,9 @@ snippet     get
 abbr        let ${1:g}:${2:variable_name} = get($1:, '$2', ${3:default_value})
 options     word
   let ${1:g}:${2:variable_name} = get($1:, '$2', ${3:default_value})
+
+snippet auto_name
+abbr    Get autoload function name
+options word
+  `join(split(substitute(expand("%:p"), '.*/autoload/\(.*\).vim$', '\1', 'g'), '/'), '#') . '#'`${1}
+
