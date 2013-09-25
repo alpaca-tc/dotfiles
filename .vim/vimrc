@@ -278,7 +278,7 @@ call neobundle#rc(g:my.dir.neobundle)
 "}}}
 
 "----------------------------------------
-" NeoBundle  "{{{
+" NeoBundle  " {{{
 NeoBundleFetch 'Shougo/neobundle.vim'
 " For asynchronous communication
 NeoBundle 'Shougo/vimproc', {
@@ -886,6 +886,10 @@ NeoBundleLazy 'alpaca-tc/unite-rails_best_practices', {
 "       \ 'autoload': {
 "       \   'filetypes': ['ruby.rspec', 'ruby'],
 "       \   'commands' : ['RunSpec'],
+"       \ }}
+" NeoBundleLazy 'Keithbsmiley/rspec.vim', {
+"       \ 'autoload': {
+"       \   'filetypes': ['ruby.rspec', 'ruby'],
 "       \ }}
 NeoBundleLazy 'alpaca-tc/neorspec.vim', {
       \ 'depends' : ['alpaca-tc/vim-rails', 'tpope/vim-dispatch'],
