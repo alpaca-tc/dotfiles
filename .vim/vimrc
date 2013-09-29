@@ -112,7 +112,7 @@ endfunction
 function! s:gsub(str,pat,rep)
   return substitute(a:str,'\v\C'.a:pat,a:rep,'g')
 endfunction
-function! s:directory_delimiter_complete(path)
+function! s:complete_directory_delimiter(path)
   return isdirectory(a:path) ? a:path . '/' : a:path
 endfunction
 function! s:directory(path)
@@ -193,6 +193,7 @@ let g:my.dir = {
       \ 'vimshell'  : expand('~/.vim.trash/vimshell'),
       \ 'neocomplete' : expand('~/.vim.trash/neocomplete'),
       \ 'vim-session' : expand('~/.vim.trash/vimsession'),
+      \ 'evernote' : expand('~/.vim.trash/evernote'),
       \ }
 
 " other settings
@@ -261,6 +262,7 @@ endif
 
 nnoremap <Space><Space>s :<C-U>source ~/.vim/vimrc<CR>
 nnoremap <Space><Space>v :<C-U>tabnew ~/.vim/vimrc<CR>
+nnoremap <Space><Space>b :<C-U>tabnew ~/.bundle<CR>
 "}}}
 
 "----------------------------------------
@@ -463,8 +465,13 @@ NeoBundleLazy 'mattn/gist-vim', {
       \ 'depends': ['mattn/webapi-vim' ],
       \ 'autoload' : {
       \   'commands' : 'Gist' }}
-NeoBundleLazy 'glidenote/memolist.vim', { 'autoload' :
-      \ { 'commands' : ['MemoNew', 'MemoGrep'] }}
+NeoBundle 'glidenote/memolist.vim', { 'autoload' : { 
+      \ 'commands' : ['MemoNew', 'MemoGrep']
+      \ }}
+NeoBundleLazy 'kakkyz81/evervim', { 'autoload': {
+      \ 'commands' : ['EvervimCreateNote', 'EvervimNotebookList'],
+      \ 'unite_sources' : ['evervim/notebook']
+      \ }}
 NeoBundleLazy 'h1mesuke/vim-alignta', {
       \ 'autoload' : {
       \   'unite_sources' : 'alignta',
@@ -491,7 +498,7 @@ NeoBundleLazy 'majutsushi/tagbar', {
       \   'fuctions': ['tagbar#currenttag'] }}
 NeoBundleLazy 'open-browser.vim', { 'autoload' : {
       \ 'mappings' : [ '<Plug>(open-browser-wwwsearch)', '<Plug>(openbrowser-open)',  ],
-      \ 'commands' : ['OpenBrowserSearch'] }}
+      \ 'commands' : ['OpenBrowserSearch', 'OpenBrowser', 'OpenBrowserSmartSearch'] }}
 
 " Commenting out code
 NeoBundleLazy 'tomtom/tcomment_vim', { 'autoload' : {
@@ -578,6 +585,10 @@ NeoBundleLazy 'alpaca-tc/vim-qfreplace', { 'autoload' : {
 NeoBundleLazy 'Shougo/unite-session', { 'autoload' : {
       \ 'unite_sources': 'session',
       \ 'commands' : ['UniteSessionSave', 'UniteSessionLoad'] }}
+NeoBundleLazy 'mattn/qiita-vim', {
+      \ 'autoload' : {
+      \   'unite_sources' : 'qiita',
+      \ }}
 NeoBundleLazy 'Shougo/unite-outline', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload' : {
@@ -1763,7 +1774,7 @@ function bundle.hooks.on_source(bundle) "{{{
   " let g:ref_refe_encoding           = 'utf-8'
   let g:ref_no_default_key_mappings = 1
   augroup MyAutoCmd
-    execute 'autocmd FileType ' . join(g:my.ft.program_files, ',') . ' nmap <silent><buffer><unique> K <Plug>(ref-keyword)'
+    execute 'autocmd FileType ' . join(g:my.ft.program_files, ',') . ' nmap <silent><buffer>K <Plug>(ref-keyword)'
   augroup END
 
 
@@ -1930,22 +1941,44 @@ unlet bundle
 "------------------------------------
 " memolist.vim
 "------------------------------------
-let g:memolist_path              = g:my.dir.memolist
-let g:memolist_template_dir_path = g:my.dir.memolist
-let g:memolist_memo_suffix       = "md"
-" let g:memolist_memo_date         = "%Y-%m-%d %H:%M"
-let g:memolist_memo_date         = "%D %T"
-let g:memolist_memo_date         = "%D %T"
-let g:memolist_memo_date         = ""
-let g:memolist_vimfiler          = 1
+let bundle = NeoBundleGet('memolist.vim')
+function! bundle.hooks.on_source(bundle) "{{{
+  let g:memolist_path              = g:my.dir.memolist
+  let g:memolist_template_dir_path = g:my.dir.memolist
+  let g:memolist_memo_suffix       = "md"
+  " let g:memolist_memo_date         = "%Y-%m-%d %H:%M"
+  let g:memolist_memo_date         = "%D %T"
+  let g:memolist_memo_date         = "%D %T"
+  let g:memolist_memo_date         = ""
+  let g:memolist_vimfiler          = 1
 
-function! s:edit_memolist() "{{{
-  lcd ~/.memolist
-  Unite file
+  function! s:edit_memolist() "{{{
+    lcd ~/.memolist
+    Unite file
+  endfunction"}}}
+  nnoremap <silent><Space>mn  :<C-U>MemoNew<CR>
+  nnoremap <silent><Space>ml :call <SID>edit_memolist()<CR>
+  nnoremap <Space>mg  :<C-U>MemoGrep<CR>
 endfunction"}}}
-nnoremap <silent><Space>mn  :<C-U>MemoNew<CR>
-nnoremap <silent><Space>ml :call <SID>edit_memolist()<CR>
-nnoremap <Space>mg  :<C-U>MemoGrep<CR>
+
+" ----------------------------------------
+let bundle = NeoBundleGet('evervim')
+function! bundle.hooks.on_source(bundle) "{{{
+  nnoremap <Space>mn :<C-U>EvervimCreateNote<CR>
+  nnoremap <Space>ml :<C-U>EvervimNotebookList<CR>
+  let evernote_dir = get(g:my.dir, 'evernote', '~/.evernote')
+  let evernote_path = evernote_dir . '/.evernote_token'
+
+  if !filereadable(evernote_path)
+    execute 'OpenBrowser https://www.evernote.com/api/DeveloperToken.action'
+    let evernote = input('DeveloperToken:')
+    call writefile([evernote], evernote_path)
+  endif
+
+  let g:evervim_workdir = evernote_dir
+  let g:evervim_devtoken = substitute(system('cat ' . evernote_path), '\n$', '', 'g')
+endfunction"}}}
+unlet bundle
 
 "------------------------------------
 " coffee script
@@ -2359,6 +2392,7 @@ let s:switch_definition = {
       \   ['.inject', '.delete_if'],
       \   ['.map', '.map!'],
       \   ['attr_accessor', 'attr_reader', 'attr_writer'],
+      \   ['else', 'elsif'],
       \ ],
       \ 'coffee' : [
       \   ['if', 'unless'],
@@ -2465,6 +2499,7 @@ let s:switch_definition = {
       \   { '\vhttps{,1}://github.com/([^/]+)/([^/]+)(\.git){,1}': '\1/\2' },
       \   ['call', 'return'],
       \   ['echo', 'echomsg'],
+      \   ['if', 'elseif'],
       \ ],
       \ 'markdown' : [
       \   ['[ ]', '[x]']
@@ -2938,14 +2973,14 @@ nnoremap <silent>g#             :<C-U>call <SID>unite_with_same_syntax('Unite -b
 
 cnoremap <expr><silent><C-g>     (getcmdtype() == '/') ?  "\<ESC>:Unite -buffer-name=search line -input=".getcmdline()."\<CR>" : "\<C-g>"
 nnoremap [unite]f                :<C-U>Unite -buffer-name=file file_rec:
-nnoremap <silent>[unite]<C-F>    :<C-U>call <SID>unite_git_root()<CR>
+nnoremap <silent>[unite]<C-F>    :<C-U>UniteGit<CR>
 function! s:unite_git_root(...) "{{{
   let git_root = s:current_git()
   let path = empty(a:000) ? '' : a:1
-  let absolute_path = s:directory_delimiter_complete(git_root) . path
+  let absolute_path = s:complete_directory_delimiter(git_root) . path
 
   if isdirectory(absolute_path)
-    execute "Unite -buffer-name=file file_rec/async:".absolute_path
+    execute 'Unite -buffer-name=file file_rec/async:'.absolute_path
     lcd `=absolute_path`
     file `='*unite* - ' . path`
   elseif filereadable(absolute_path)
@@ -2955,10 +2990,10 @@ function! s:unite_git_root(...) "{{{
   endif
 endfunction"}}}
 function! s:unite_git_complete(arg_lead, cmd_line, cursor_pos) "{{{
-  let git_root = s:directory_delimiter_complete(s:current_git())
+  let git_root = s:complete_directory_delimiter(s:current_git())
   let files = globpath(git_root, a:arg_lead . '*')
   let file_list = split(files, '\n')
-  let file_list = map(file_list, 's:directory_delimiter_complete(v:val)')
+  let file_list = map(file_list, 's:complete_directory_delimiter(v:val)')
   let file_list = map(file_list, "substitute(v:val, git_root, '', 'g')")
 
   return file_list
@@ -3268,9 +3303,8 @@ endif
 
 let bundle = NeoBundleGet('unite-session')
 function! bundle.hooks.on_source(bundle)
-  " let g:unite_source_session_path=
   " let g:unite_source_session_options='blank,buffers,curdir,folds,help,tabpages,winsize'
-  let g:unite_source_session_options='buffers,curdir,tabpages,winsize'
+  let g:unite_source_session_options='buffers,curdir,tabpages'
   let g:unite_source_session_enable_auto_save=1
 endfunction
 " augroup MyAutoCmd
@@ -3395,6 +3429,11 @@ augroup END
 
 " ----------------------------------------
 let g:git_aliases#author_name = g:my.info.github
+let g:snail_csv2google_sheet_hourly_rete = 2200
+
+" ----------------------------------------
+" unite-geeknote
+let g:geeknote#bin = '~/dotfiles/local/geeknote/geeknote.py'
 
 if !has('vim_starting')
   " Call on_source hook when reloading .vimrc.

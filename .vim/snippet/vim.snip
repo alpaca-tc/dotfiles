@@ -168,3 +168,12 @@ abbr    Get autoload function name
 options word
   `join(split(substitute(expand("%:p"), '.*/autoload/\(.*\).vim$', '\1', 'g'), '/'), '#') . '#'`${1}
 
+snippet neobundle_get
+abbr    neobundle_get
+options word
+  let bundle = NeoBundleGet('${1}')
+  function! bundle.hooks.on_source(bundle)
+    ${2}
+  endfunction
+  unlet bundle
+

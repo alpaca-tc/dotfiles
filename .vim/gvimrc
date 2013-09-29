@@ -4,3 +4,4 @@ augroup MyGvimSetting
 augroup END
 
 syntax on
+set imdisable

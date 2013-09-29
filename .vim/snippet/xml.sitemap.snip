@@ -1,0 +1,22 @@
+snippet sitemap
+abbr    Extends sitemap default snippet
+options word
+  <?xml version="1.0" encoding="UTF-8"?>
+  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+      ${1:url}
+  </urlset>
+
+snippet url
+abbr    <url> ... </url>
+options word
+  <url>
+      <loc>${1:root_url} ${2}</loc>
+      <lastmod>${3:date_day} </lastmod>
+      <changefreq>${4:#:always|hourly|daily|weekly|monthly|yearly|never}</changefreq>
+      <priority>${5:0.5}</priority>
+  </url>
+
+snippet root_url
+abbr    http://...
+options word
+  `XmlSitempRootUrl()`
