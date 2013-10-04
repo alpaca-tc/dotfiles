@@ -348,13 +348,13 @@ NeoBundle 'kana/vim-smartword', { 'autoload' : {
 NeoBundleLazy 'thinca/vim-quickrun', { 'autoload' : {
       \   'mappings' : [['nxo', '<Plug>(quickrun)']],
       \   'commands' : 'QuickRun' }}
-NeoBundleLazy 'scrooloose/syntastic', {
-      \ 'autoload': {
-      \   'filetypes' : g:my.ft.program_files
-      \ },
-      \ 'build' : {
-      \   'mac' : join(['brew install tidy', 'brew install csslint', 'gem install sass', 'npm install -g jslint', 'gem install rubocop'], ' && ')
-      \ }}
+" NeoBundleLazy 'scrooloose/syntastic', {
+"       \ 'autoload': {
+"       \   'filetypes' : g:my.ft.program_files
+"       \ },
+"       \ 'build' : {
+"       \   'mac' : join(['brew install tidy', 'brew install csslint', 'gem install sass', 'npm install -g jslint', 'gem install rubocop'], ' && ')
+"       \ }}
 NeoBundleLazy 'vim-scripts/sudo.vim', {
       \ 'autoload': { 'commands': ['SudoRead', 'SudoWrite'] }}
 NeoBundleLazy 'thinca/vim-ref', { 'autoload' : {
@@ -428,6 +428,7 @@ NeoBundleLazy 'alpaca-tc/alpaca_remove_dust.vim', {
       \ }}
 " Asynchronous updating tags
 NeoBundleLazy 'alpaca-tc/alpaca_tags', {
+      \ 'branch': 'v0.2',
       \ 'depends': ['Shougo/vimproc', 'Shougo/unite.vim'],
       \ 'autoload' : {
       \   'commands' : ['Tags', 'TagsSet', 'TagsBundle', 'TagsCleanCache'],
@@ -468,7 +469,7 @@ NeoBundleLazy 'mattn/gist-vim', {
 NeoBundle 'glidenote/memolist.vim', { 'autoload' : { 
       \ 'commands' : ['MemoNew', 'MemoGrep']
       \ }}
-NeoBundleLazy 'kakkyz81/evervim', { 'autoload': {
+NeoBundle 'kakkyz81/evervim', { 'autoload': {
       \ 'commands' : ['EvervimCreateNote', 'EvervimNotebookList'],
       \ 'unite_sources' : ['evervim/notebook']
       \ }}
@@ -769,6 +770,7 @@ NeoBundleLazy 'jelera/vim-javascript-syntax', { 'autoload' : {
       \ }}
 NeoBundle 'alpaca-tc/php_beautifier.vim'
 NeoBundle 'alpaca-tc/beautify.vim', {
+      \ 'branch': 'v0.2',
       \ 'build' : {
       \   'mac': 'npm install -g js-beautify',
       \ },
@@ -2915,6 +2917,7 @@ function! bundle.hooks.on_source(bundle) "{{{
     nnoremap <buffer>b :<C-U>UniteBookmarkAdd<CR>
     nnoremap <buffer><expr>p vimfiler#do_action('preview')
     nnoremap <buffer>v v
+    nnoremap <buffer>u :<C-U>Unite file -buffer-name=file<CR>
   endfunction"}}}
   augroup VimFilerKeyMapping
     autocmd!
