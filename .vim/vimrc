@@ -3011,6 +3011,7 @@ nnoremap <silent>[unite]q        :<C-U>Unite qiita -buffer-name=qiita<CR>
 nnoremap <silent>[unite]ra       :<C-U>Unite -buffer-name=rake rake<CR>
 nnoremap <silent>[unite]/        :<C-U>Unite -buffer-name=history_search -no-empty history/search<CR>
 nnoremap <silent><expr>[unite]t  ':Unite tags -horizontal -buffer-name=tags -input='.expand("<cword>").'<CR>'
+nnoremap <silent><expr>[tag_or_tab]t ':Unite tags -immediately -horizontal -auto-preview -buffer-name=tags -input='.expand("<cword>").'<CR>'
 nnoremap <silent><expr>[unite]s  ':Unite tag -horizontal -buffer-name=tags -input='.expand("<cword>").'<CR>'
 
 nnoremap <silent>[unite]y        :<C-U>Unite -buffer-name=history_yank -no-empty history/yank<CR>
