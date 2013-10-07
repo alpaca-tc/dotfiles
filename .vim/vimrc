@@ -1419,22 +1419,34 @@ nnoremap [tag_or_tab]s  :<C-u>tselect<CR>
 " 辞書:dict "{{{
 " カスタムファイルタイプでも、自動でdictを読み込む
 " そして、編集画面までさくっと移動。
-function! s:auto_dict_setting()
+function! s:auto_dict_setting() "{{{
   let file_type_name = &filetype
+  let dict_name = split(file_type_name, '\.')
 
-  let dict_name = split( file_type_name, '\.' )
-
-  if empty( dict_name ) || count(g:my.ft.ignore_patterns, dict_name) > 0
+  if empty(dict_name) || count(g:my.ft.ignore_patterns, dict_name) > 0
     return
   endif
 
-  execute "setl dict+=~/.vim/dict/".dict_name[0].".dict"
+  setl dictionary=
 
-  let b:dict_path = expand('~/.vim/dict/'.file_type_name.'.dict')
-  execute "setl dictionary+=".b:dict_path
+  let filetypes = []
+  let filetype_path = []
+  for ft in dict_name
+    call add(filetypes, ft)
 
-  nnoremap <buffer><Space>d :execute join([alpaca_window#util#get_smart_split_command("split"), b:dict_path], " ")<CR>
-endfunc
+    let dict_path = '~/.vim/dict/'. join(filetypes, '.') .'.dict'
+    execute 'setl dictionary+=' . dict_path
+
+    let snippet_path = '~/.vim/snippet/'. join(filetypes, '.') .'.snip'
+    if filereadable(snippet_path)
+      execute 'NeoSnippetSource '. snippet_path
+    endif
+  endfor
+
+  nnoremap <buffer><Space>d :execute join([alpaca_window#util#get_smart_split_command("split"), split(&dictionary, ',')[-1]], " ")<CR>
+  nnoremap <buffer><Space><Space>d :execute join([alpaca_window#util#get_smart_split_command("split"), split(&dictionary, ',')[-2]], " ")<CR>
+  nnoremap <buffer><Space><Space><Space>d :execute join([alpaca_window#util#get_smart_split_command("split"), split(&dictionary, ',')[-3]], " ")<CR>
+endfunc"}}}
 augroup MyAutoCmd
   autocmd FileType * call <SID>auto_dict_setting()
 augroup END
@@ -2022,17 +2034,9 @@ function! s:set_up_rails_setting() "{{{
   nnoremap <Space>r :R<CR>
   nnoremap <Space>a :A<CR>
 
-  let buf = rails#buffer()
-  let type_name = buf.calculate_file_type()
-  let dict_name = "rails." . type_name
-
-  set dict+=~/.vim/dict/ruby.rails.dict
-  for s:syntax in split(glob($HOME.'/.vim/syntax/ruby.rails.*.vim'))
-    execute 'source ' . s:syntax
+  for syntax in split(glob($HOME . '/.vim/syntax/ruby.rails.*.vim'))
+    execute 'source ' . syntax
   endfor
-
-  execute 'nnoremap <buffer><Space><Space>d  :<C-U>Edit ~/.vim/dict/' . dict_name .'.dict<CR>'
-  execute 'set dict+=~/.vim/dict/' . dict_name . '.dict'
 endfunction"}}}
 
 function! s:unite_rails_setting() "{{{
@@ -2064,38 +2068,37 @@ function! s:unite_rails_setting() "{{{
 endfunction"}}}
 
 function! s:do_rails_autocmd() "{{{
-  if !exists("b:rails_root")
+  if !exists('b:rails_root')
     return
   endif
 
   let buf = rails#buffer()
-  let type = "-" . buf.type_name()
+  let type = '-' . buf.type_name()
   let path = '/' . buf.name()
   if path =~ '[ !#$%\,]'
     let path = ''
   endif
 
   if type != '-'
-    execute "silent doautocmd User Rails" . s:gsub(type, '-', '.')
+    execute 'silent doautocmd User Rails' . s:gsub(type, '-', '.')
   endif
 
   if path != ''
-    execute "silent doautocmd User Rails" . path
+    execute 'silent doautocmd User Rails' . path
   endif
 endfunction"}}}
 augroup RailsDictSetting
   autocmd!
-  " 別の関数に移そうか..
   autocmd User Rails call <SID>unite_rails_setting()
-  autocmd User Rails.controller*           NeoSnippetSource ~/.vim/snippet/ruby.rails.controller.snip
-  autocmd User Rails.view*                 NeoSnippetSource ~/.vim/snippet/ruby.rails.view.snip
-  autocmd User Rails.model*                NeoSnippetSource ~/.vim/snippet/ruby.rails.model.snip
-  autocmd User Rails/db/migrate/*          NeoSnippetSource ~/.vim/snippet/ruby.rails.migrate.snip
-  autocmd User Rails/config/environment.rb NeoSnippetSource ~/.vim/snippet/ruby.rails.environment.snip
-  autocmd User Rails/config/routes.rb      NeoSnippetSource ~/.vim/snippet/ruby.rails.route.snip
-  autocmd User Rails/spec/controllers/*    NeoSnippetSource ~/.vim/snippet/ruby.rspec.controller.snip
-  autocmd User Rails/spec/models/*         NeoSnippetSource ~/.vim/snippet/ruby.rspec.controller.snip
-  autocmd User Rails/spec/features/*       NeoSnippetSource ~/.vim/snippet/ruby.capybara.snip
+  autocmd User Rails.controller*           set filetype=ruby.rails.controller
+  autocmd User Rails.view*                 set filetype=ruby.rails.view
+  autocmd User Rails.model*                set filetype=ruby.rails.model
+  autocmd User Rails/db/migrate/*          set filetype=ruby.rails.migrate
+  autocmd User Rails/config/environment.rb set filetype=ruby.rails.environment
+  autocmd User Rails/config/routes.rb      set filetype=ruby.rails.route
+  autocmd User Rails/spec/controllers/*    set filetype=ruby.rspec.controller
+  autocmd User Rails/spec/models/*         set filetype=ruby.rspec.controller
+  autocmd User Rails/spec/features/*       set filetype=ruby.capybara
   " autocmd User Rails/spec/views/*    NeoSnippetSource ~/.vim/snippet/ruby.rspec.controller.snip
   " autocmd User Rails/spec/features/*    NeoSnippetSource ~/.vim/snippet/ruby.rspec.controller.snip
   " autocmd User Rails/spec/routes/*    NeoSnippetSource ~/.vim/snippet/ruby.rspec.controller.snip

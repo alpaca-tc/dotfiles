@@ -272,6 +272,7 @@ if !exists("ruby_no_special_methods")
   syn match   rubyInclude   "\<include\>[?!]\@!"
   syn keyword rubyInclude   autoload extend load prepend require require_relative
   syn keyword rubyKeyword   callcc caller lambda proc
+  syn keyword rubyKeywordConstant   Rational
 endif
 
 " Comments and Documentation
@@ -306,6 +307,7 @@ syn region rubyData matchgroup=rubyDataDirective start="^__END__$" end="\%$" fol
 
 hi def link rubyClass      rubyDefine
 hi def link rubyModule      rubyDefine
+hi def link rubyKeywordConstant      rubyDefine
 hi def link rubyMethodExceptional  rubyDefine
 hi def link rubyDefine      Define
 hi def link rubyFunction    Function

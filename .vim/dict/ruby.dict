@@ -772,3 +772,4 @@ only_integer
 numericality
 singularize
 constantize
+Rational
