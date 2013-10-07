@@ -10,3 +10,4 @@ node_modules/*
 .o
 .yui
 yui
+*.pyc
