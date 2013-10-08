@@ -2096,9 +2096,9 @@ augroup RailsDictSetting
   autocmd User Rails call <SID>unite_rails_setting()
   autocmd User Rails.controller*           set filetype=ruby.rails.controller
   autocmd User Rails.view*.rb              set filetype=ruby.rails.view
-  autocmd User Rails.view*.haml*           set filetype=haml.rails.view
-  autocmd User Rails.view*.erb*            set filetype=erb.rails.view
-  autocmd User Rails.view*.coffee*         set filetype=coffee.rails.view
+  autocmd User Rails.view*.haml            set filetype=haml.rails.view
+  autocmd User Rails.view*.erb             set filetype=erb.rails.view
+  autocmd User Rails.view*.coffee          set filetype=coffee.rails.view
   autocmd User Rails.model*                set filetype=ruby.rails.model
   autocmd User Rails/db/migrate/*          set filetype=ruby.rails.migrate
   autocmd User Rails/config/environment.rb set filetype=ruby.rails.environment
