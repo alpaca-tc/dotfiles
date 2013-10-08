@@ -470,6 +470,7 @@ NeoBundle 'glidenote/memolist.vim', { 'autoload' : {
       \ 'commands' : ['MemoNew', 'MemoGrep']
       \ }}
 NeoBundle 'kakkyz81/evervim', { 'autoload': {
+      \ 'branch' : 'unite',
       \ 'commands' : ['EvervimCreateNote', 'EvervimNotebookList'],
       \ 'unite_sources' : ['evervim/notebook']
       \ }}
@@ -768,7 +769,6 @@ NeoBundleLazy 'vim-scripts/jQuery', { 'autoload' : {
 NeoBundleLazy 'jelera/vim-javascript-syntax', { 'autoload' : {
       \ 'filetypes' : ['javascript', 'json'],
       \ }}
-NeoBundle 'alpaca-tc/php_beautifier.vim'
 NeoBundle 'alpaca-tc/beautify.vim', {
       \ 'branch': 'v0.2',
       \ 'build' : {
@@ -1980,7 +1980,7 @@ let bundle = NeoBundleGet('evervim')
 function! bundle.hooks.on_source(bundle) "{{{
   nnoremap <Space>mn :<C-U>EvervimCreateNote<CR>
   nnoremap <Space>ml :<C-U>EvervimNotebookList<CR>
-  let evernote_dir = get(g:my.dir, 'evernote', '~/.evernote')
+  let evernote_dir = get(g:my.dir, 'evernote', '~/.evervim')
   let evernote_path = evernote_dir . '/.evernote_token'
 
   if !filereadable(evernote_path)
