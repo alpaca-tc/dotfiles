@@ -1,0 +1,22 @@
+# ~/.tmuxinator/enfac.yml
+
+name: enfac
+root: ~/project/enfac.tv
+
+# Optional tmux socket
+# socket_name: foo
+
+# Runs before everything. Use it to start daemons etc.
+pre: mysql.server start
+
+# Runs in each window and pane before window/pane specific commands. Useful for setting up interpreter versions.
+# pre_window: rbenv shell 2.0.0-p247
+
+# Pass command line options to tmux. Useful for specifying a different tmux.conf.
+# tmux_options: -f ~/.tmux.mac.conf
+
+windows:
+  - editor: vim
+  - console: rails console
+  - guard: guard
+  - server: rails server

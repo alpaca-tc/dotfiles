@@ -466,7 +466,7 @@ NeoBundleLazy 'mattn/gist-vim', {
       \ 'depends': ['mattn/webapi-vim' ],
       \ 'autoload' : {
       \   'commands' : 'Gist' }}
-NeoBundle 'glidenote/memolist.vim', { 'autoload' : { 
+NeoBundle 'glidenote/memolist.vim', { 'autoload' : {
       \ 'commands' : ['MemoNew', 'MemoGrep']
       \ }}
 NeoBundle 'kakkyz81/evervim', { 'autoload': {
@@ -499,7 +499,9 @@ NeoBundleLazy 'majutsushi/tagbar', {
       \   'commands': ["TagbarToggle", "TagbarTogglePause", "TagbarOpen"],
       \   'fuctions': ['tagbar#currenttag'] }}
 NeoBundleLazy 'open-browser.vim', { 'autoload' : {
-      \ 'mappings' : [ '<Plug>(open-browser-wwwsearch)', '<Plug>(openbrowser-open)',  ],
+      \ 'mappings' : [ '<Plug>(open-browser-wwwsearch)', '<Plug>(openbrowser-open)',],
+      \ 'function_prefix' : 'openbrowser',
+      \ 'functions' : ['openbrowser#open'],
       \ 'commands' : ['OpenBrowserSearch', 'OpenBrowser', 'OpenBrowserSmartSearch'] }}
 
 " Commenting out code
@@ -513,12 +515,6 @@ NeoBundleLazy 'tyru/caw.vim', {
 
 NeoBundleLazy 'AndrewRadev/switch.vim', { 'autoload' : {
       \ 'commands' : 'Switch',
-      \ }}
-NeoBundleLazy 'mattn/emmet-vim', {
-      \ 'autoload': {
-      \   'function_prefix': 'emmet',
-      \   'filetypes': g:my.ft.html_files + g:my.ft.style_files,
-      \   'mappings' : ['<Plug>(EmmetExpandAbbr)']
       \ }}
 NeoBundleLazy 't9md/vim-textmanip', { 'autoload' : {
       \ 'mappings' : [
@@ -745,6 +741,12 @@ NeoBundleLazy 'alpaca-tc/html5.vim', { 'autoload' : {
       \   'filetypes' : g:my.ft.markup_files,
       \   'functions' : ['HtmlIndentGet']
       \ }}
+NeoBundleLazy 'mattn/emmet-vim', {
+      \ 'autoload': {
+      \   'function_prefix': 'emmet',
+      \   'filetypes': g:my.ft.html_files + g:my.ft.style_files,
+      \   'mappings' : ['<Plug>(EmmetExpandAbbr)']
+      \ }}
 
 " haml
 " ----------------------------------------
@@ -777,6 +779,8 @@ NeoBundle 'alpaca-tc/beautify.vim', {
       \ 'autoload' : {
       \   'commands' : ['JsBeautify', 'Beautify', 'CssBeautify', 'HtmlBeautify']
       \ }}
+NeoBundle 'alpaca-tc/documentation', { 'autoload' : {
+      \ 'commands' : 'Documentation' }}
 
 NeoBundleLazy 'alpaca-tc/js2coffee.vim.git', {
       \ 'build' : {
@@ -1764,7 +1768,7 @@ function! bundle.hooks.on_source(bundle) "{{{
         \}
   augroup EmmitVim
     autocmd!
-    autocmd FileType * let g:user_emmet_settings.html.indentation = '               '[:&tabstop]
+    autocmd FileType * let g:user_emmet_settings.indentation = '               '[:&tabstop]
   augroup END
 endfunction"}}}
 unlet bundle
@@ -2030,18 +2034,16 @@ let g:rails_mappings=1
 let g:rails_modelines=0
 let g:rails_syntax = 1
 let g:rails_url='http://localhost:3000'
-function! s:set_up_rails_setting() "{{{
-  nnoremap <Space>r :R<CR>
-  nnoremap <Space>a :A<CR>
+
+function! s:unite_rails_setting() "{{{
+  call s:do_rails_autocmd()
+  nnoremap <buffer><Space>r :R<CR>
+  nnoremap <buffer><Space>a :A<CR>
 
   for syntax in split(glob($HOME . '/.vim/syntax/ruby.rails.*.vim'))
     execute 'source ' . syntax
   endfor
-endfunction"}}}
 
-function! s:unite_rails_setting() "{{{
-  call s:do_rails_autocmd()
-  call s:set_up_rails_setting()
   nnoremap <buffer>[plug]            :<C-U>UniteGit app/models<CR>
   nnoremap <buffer>[plug]<C-H>       :<C-U>UniteGit app/controllers<CR>
   nnoremap <buffer>[plug]<C-H><C-H>  :<C-U>UniteGit app/views<CR>
@@ -2073,25 +2075,30 @@ function! s:do_rails_autocmd() "{{{
   endif
 
   let buf = rails#buffer()
-  let type = '-' . buf.type_name()
-  let path = '/' . buf.name()
+  let type = buf.type_name()
+  let path = buf.name()
+
   if path =~ '[ !#$%\,]'
     let path = ''
   endif
 
   if type != '-'
-    execute 'silent doautocmd User Rails' . s:gsub(type, '-', '.')
+    execute 'silent doautocmd User Rails.' . s:gsub(type, '-', '.')
   endif
 
-  if path != ''
-    execute 'silent doautocmd User Rails' . path
+  if !empty(path)
+    execute 'silent doautocmd User Rails/' . path
   endif
 endfunction"}}}
+
 augroup RailsDictSetting
   autocmd!
   autocmd User Rails call <SID>unite_rails_setting()
   autocmd User Rails.controller*           set filetype=ruby.rails.controller
-  autocmd User Rails.view*                 set filetype=ruby.rails.view
+  autocmd User Rails.view*.rb              set filetype=ruby.rails.view
+  autocmd User Rails.view*.haml*           set filetype=haml.rails.view
+  autocmd User Rails.view*.erb*            set filetype=erb.rails.view
+  autocmd User Rails.view*.coffee*         set filetype=coffee.rails.view
   autocmd User Rails.model*                set filetype=ruby.rails.model
   autocmd User Rails/db/migrate/*          set filetype=ruby.rails.migrate
   autocmd User Rails/config/environment.rb set filetype=ruby.rails.environment
@@ -2363,10 +2370,10 @@ let g:scala_use_default_keymappings = 0
 " let bundle = NeoBundleGet("alpaca_remove_dust.vim")
 " function bundle.hooks.on_source(bundle) "{{{
   let g:remove_dust_enable=1
-  " augroup RemoveDust
-  "   autocmd!
-  "   autocmd BufWritePre * RemoveDust
-  " augroup END
+  augroup RemoveDust
+    autocmd!
+    autocmd BufWritePre * RemoveDustForce
+  augroup END
 " endfunction"}}}
 " unlet bundle
 
