@@ -7,7 +7,7 @@ root: ~/project/enfac.tv
 # socket_name: foo
 
 # Runs before everything. Use it to start daemons etc.
-pre: mysql.server start
+pre: pkill -f mysql.server && mysql.server start
 
 # Runs in each window and pane before window/pane specific commands. Useful for setting up interpreter versions.
 # pre_window: rbenv shell 2.0.0-p247
