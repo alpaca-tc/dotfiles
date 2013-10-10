@@ -41,7 +41,7 @@ function! alpaca#initialize#redefine_with_each_filetypes(ft_dictionary) "{{{
   return result
 endfunction"}}}
 
-function! alpaca#initialize#ruby_initialize()
+function! alpaca#initialize#ruby_initialize() "{{{
   ruby << CODE
   module VIM
     class << self
@@ -65,4 +65,4 @@ function! alpaca#initialize#ruby_initialize()
     end
   end
 CODE
-endfunction
+endfunction"}}}
