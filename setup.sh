@@ -77,11 +77,11 @@ if [ $yn = "y" -o $yn = "Y" ]; then
         chmod 700 $HOME/.ssh
         chmod 600 $HOME/.ssh/github
         echo "\n...clone from github\n"
-        rm -rf `pwd`/serclet
-        git clone github:taichouchou2/serclet.git `pwd`/serclet
-        chmod +x `pwd`/serclet/setup.sh
-        echo "...run serclet setup.sh \n"
-        `pwd`/serclet/setup.sh
+        rm -rf `pwd`/secret
+        git clone github:taichouchou2/secret.git `pwd`/secret
+        chmod +x `pwd`/secret/setup.sh
+        echo "...run secret setup.sh \n"
+        `pwd`/secret/setup.sh
     else
         echo "failed decode :p"
     fi
