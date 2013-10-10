@@ -190,4 +190,6 @@ alias chrome='open -a Google\ chrome'
 alias ftpd_load='sudo launchctl load -w /System/Library/LaunchDaemons/ftp.plist'
 alias ftpd_unload='sudo launchctl unload -w /System/Library/LaunchDaemons/ftp.plist'
 
+alias gem_uninstall_all_gems='gem uninstall -axI `gem list --no-versions`'
+
 alias geeknote='python ~/dotfiles/local/geeknote/geeknote.py'

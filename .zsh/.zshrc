@@ -11,7 +11,7 @@ export BROWSER=/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome
 export GITHUB_HOST='github.com'
 # export CONFIGURE_OPTS="--with-gcc=clang"
 export ECLIPSE_HOME='/Applications/eclipse'
-# export SSL_CERT_FILE=/usr/local/etc/cacert.pem
+# export SSL_CERT_FILE=/usr/local/share/ca-bundle.crt
 
 # 各種の設定 古いgccを使う場合
 # export CC='/usr/local/bin/gcc-4.2'
@@ -83,7 +83,7 @@ export PATH=$HOME/usr/bin:$PATH
 # }}}
 
 # for vim
-# export DYLD_FORCE_FLAT_NAMESPACE=1 
+# export DYLD_FORCE_FLAT_NAMESPACE=1
 # export DYLD_INSERT_LIBRARIES=/Users/taichou/.pythonbrew/pythons/Python-2.7.2/lib/libpython2.7.dylib
 
 

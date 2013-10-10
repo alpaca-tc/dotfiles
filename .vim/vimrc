@@ -470,6 +470,7 @@ NeoBundle 'glidenote/memolist.vim', { 'autoload' : {
       \ 'commands' : ['MemoNew', 'MemoGrep']
       \ }}
 NeoBundle 'kakkyz81/evervim', { 'autoload': {
+      \ 'branch' : 'unite',
       \ 'commands' : ['EvervimCreateNote', 'EvervimNotebookList'],
       \ 'unite_sources' : ['evervim/notebook']
       \ }}
@@ -1983,7 +1984,7 @@ let bundle = NeoBundleGet('evervim')
 function! bundle.hooks.on_source(bundle) "{{{
   nnoremap <Space>mn :<C-U>EvervimCreateNote<CR>
   nnoremap <Space>ml :<C-U>EvervimNotebookList<CR>
-  let evernote_dir = get(g:my.dir, 'evernote', '~/.evernote')
+  let evernote_dir = get(g:my.dir, 'evernote', '~/.evervim')
   let evernote_path = evernote_dir . '/.evernote_token'
 
   if !filereadable(evernote_path)
@@ -2095,9 +2096,9 @@ augroup RailsDictSetting
   autocmd User Rails call <SID>unite_rails_setting()
   autocmd User Rails.controller*           set filetype=ruby.rails.controller
   autocmd User Rails.view*.rb              set filetype=ruby.rails.view
-  autocmd User Rails.view*.haml*           set filetype=haml.rails.view
-  autocmd User Rails.view*.erb*            set filetype=erb.rails.view
-  autocmd User Rails.view*.coffee*         set filetype=coffee.rails.view
+  autocmd User Rails.view*.haml            set filetype=haml.rails.view
+  autocmd User Rails.view*.erb             set filetype=erb.rails.view
+  autocmd User Rails.view*.coffee          set filetype=coffee.rails.view
   autocmd User Rails.model*                set filetype=ruby.rails.model
   autocmd User Rails/db/migrate/*          set filetype=ruby.rails.migrate
   autocmd User Rails/config/environment.rb set filetype=ruby.rails.environment
