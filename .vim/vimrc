@@ -289,7 +289,7 @@ NeoBundle 'Shougo/vimproc', {
       \   'unix' : 'make -f make_unix.mak',
       \ }}
 " An awesome improvement to the Vim status bar.
-" NeoBundle 'itchyny/lightline.vim'
+NeoBundle 'itchyny/lightline.vim'
 
 " WebAPI utils
 NeoBundleLazy 'mattn/webapi-vim', {
@@ -1245,8 +1245,8 @@ set cmdheight=2
 set equalalways       " 画面の自動サイズ調整
 
 " ここら辺を設定すると、描写が遅くなる
-" set laststatus=2
-set laststatus=1
+set laststatus=2
+" set laststatus=1
 set lazyredraw
 " set linebreak
 " set balloondelay=300
@@ -1423,16 +1423,7 @@ endfunction "}}}
 unlet bundle
 
 "------------------------------------
-xnoremap m      :Align<Space>
-xnoremap mm     :Align =<CR>
-let bundle = NeoBundleGet('vim-alignta')
-function! bundle.hooks.on_source(bundle) "{{{
-  let g:Align_xstrlen = 3
-endfunction "}}}
-unlet bundle
-
-"------------------------------------
-xnoremap <silent>a :EasyAlign<CR>
+xnoremap <silent>a :<C-U>EasyAlign<CR>
 
 "------------------------------------
 " surround.vim"{{{
@@ -1451,55 +1442,53 @@ xmap s   <Plug>VSurround
 " append custom mappings
 let s:surround_mapping = []
 
-if empty( s:surround_mapping )
+if empty(s:surround_mapping)
   call add( s:surround_mapping, {
         \ 'filetypes' : g:my.ft.ruby_files,
         \ 'mappings' : {
-        \   '#':  "#{\r}",
-        \   '%':  "<% \r %>",
-        \   '-':  "<% \r -%>",
-        \   '=':  "<%= \r %>",
-        \   'w':  "%w!\r!",
-        \   'W':  "%W!\r!",
-        \   'q':  "%q!\r!",
-        \   'Q':  "%Q!\r!",
-        \   'r':  "%r!\r!",
-        \   'R':  "%R!\r!",
+        \   '#':  '#{\r}',
+        \   '%':  '<% \r %>',
+        \   '-':  '<% \r -%>',
+        \   '=':  '<%= \r %>',
+        \   'w':  '%w!\r!',
+        \   'W':  '%W!\r!',
+        \   'q':  '%q!\r!',
+        \   'Q':  '%Q!\r!',
+        \   'r':  '%r!\r!',
+        \   'R':  '%R!\r!',
         \   '\"':  '\"\r\"',
         \   "'":  "'\r'",
-        \   '{':  "{ \r }",
-        \   'd':  "do\n \r end",
+        \   '{':  '{ \r }',
+        \   'd':  'do\n \r end',
         \ }
         \ })
 
-  call add( s:surround_mapping, {
+  call add(s:surround_mapping, {
         \ 'filetypes' : g:my.ft.php_files,
         \ 'mappings' : {
-        \   '<' : "<?php \r ?>",
+        \   '<' : '<?php \r ?>',
         \ }
         \ })
 
-  call add( s:surround_mapping, {
+  call add(s:surround_mapping, {
         \ 'filetypes' : ['_'],
         \ 'mappings' : {
-        \   '(' : "(\r)",
-        \   '[' : "[\r]",
-        \   '{' : "{ \r }",
-        \   '#':  "#{\r}",
+        \   '(' : '(\r)',
+        \   '[' : '[\r]',
+        \   '{' : '{ \r }',
+        \   '#':  '#{\r}',
         \ }
         \ })
-call add( s:surround_mapping, {
+  call add(s:surround_mapping, {
         \ 'filetypes' : ['snippet'],
         \ 'mappings' : {
-        \   '$' : "${\r}",
+        \   '$' : '${\r}',
         \ }
         \ })
-
 endif
 
 function! s:let_surround_mapping(mapping_dict)
-  for [ key, mapping ] in items(a:mapping_dict)
-    " XXX filetype変わったときに、unletできない
+  for [key, mapping] in items(a:mapping_dict)
     call alpaca#let_b:('surround_'.char2nr(key), mapping )
   endfor
 endfunction
@@ -1511,7 +1500,6 @@ function! s:surround_mapping_filetype()
   if empty(&filetype) |return| endif
   let filetype = <SID>filetype()
 
-  " メモ化してある場合は設定
   if has_key( s:surround_mapping_memo, filetype )
     for mappings in s:surround_mapping_memo[filetype]
       call <SID>let_surround_mapping( mappings )
@@ -1519,7 +1507,6 @@ function! s:surround_mapping_filetype()
     return
   endif
 
-  " filetypeに当てはまる設定を追加
   let memo = []
   for mapping_settings in s:surround_mapping
     if <SID>include( mapping_settings, 'filetypes' ) && <SID>include( mapping_settings, 'mappings')
@@ -1634,17 +1621,16 @@ function! bundle.hooks.on_source(bundle) "{{{
         \ 'command': 'rspec',
         \ 'exec': 'bundle exec %c %o %s', }
 
-  aug QuickRunAutoCmd
+  augroup QuickRunAutoCmd
     autocmd!
-    " au FileType quickrun au BufEnter <buffer> if winnr('$') == 1 |quit| endif
     autocmd FileType quickrun au BufEnter <buffer> call <SID>smart_close()
     autocmd FileType racc.ruby,racc nnoremap <buffer>,R :<C-U>QuickRun racc.run<CR>
-  aug END
+  augroup END
 endfunction"}}}
 unlet bundle
 
 "----------------------------------------
-let bundle = NeoBundleGet("zencoding-vim")
+let bundle = NeoBundleGet('zencoding-vim')
 function! bundle.hooks.on_source(bundle) "{{{
   let g:user_zen_complete_tag = 1
   let g:user_zen_expandabbr_key = '<C-E>'
@@ -1673,12 +1659,9 @@ function! bundle.hooks.on_source(bundle) "{{{
 endfunction "}}}
 unlet bundle
 
-augroup MyAutoCmd
-  execute 'autocmd FileType ' . join(g:my.ft.html_files, ',') . ' imap <buffer><C-E> <C-Y>,'
-augroup END
-
 let bundle = NeoBundleGet('emmet-vim')
 function! bundle.hooks.on_source(bundle) "{{{
+  imap <buffer><C-E> <C-Y>,
   let g:user_emmet_mode = 'iv'
   let g:user_emmet_leader_key = '<C-Y>'
   let g:use_emmet_complete_tag = 1
@@ -1686,9 +1669,6 @@ function! bundle.hooks.on_source(bundle) "{{{
         \ 'lang' : 'ja',
         \ 'html' : {
         \   'filters' : 'html',
-        \ },
-        \ 'css' : {
-        \   'filters' : 'fc',
         \ },
         \ 'php' : {
         \   'extends' : 'html',
@@ -2176,9 +2156,9 @@ function! bundle.hooks.on_source(bundle) "{{{
   let g:syntastic_auto_jump = 1
   let g:syntastic_auto_loc_list=1
   let g:syntastic_check_on_open = 0
-  let g:syntastic_echo_current_error = 1
+  let g:syntastic_echo_current_error = 0
   let g:syntastic_enable_balloons = has("balloon_eval")
-  let g:syntastic_enable_highlighting = 1
+  let g:syntastic_enable_highlighting = 0
   let g:syntastic_enable_signs = 1
   let g:syntastic_loc_list_height=2
   let g:syntastic_error_symbol = '>'
@@ -3281,18 +3261,6 @@ function! s:update_ruby_ctags() "{{{
 endfunction"}}}
 command! UpdateRubyTags call <SID>update_ruby_ctags()
 
-function! s:set_tmux_env() "{{{
-  if !executable("tmux") | return -1 |endif
-
-  if exists("$TMUX") && exists("$PWD")
-    call system("tmux setenv TMUXPWD_$(tmux display -p '#D' | tr -d %) " . $PWD)
-  endif
-endfunction"}}}
-augroup TmuxSetPwd
-  autocmd!
-  autocmd FileReadPre,BufNewFile * call <SID>set_tmux_env()
-augroup END
-
 " ----------------------------------------
 " for eclim"{{{
 function! s:kill_eclimd() "{{{
@@ -3343,8 +3311,8 @@ function! s:clear_memory() "{{{
   execute 'bdelete' join(s:buffer_nr_list(), ' ')
 endfunction "}}}
 command! Clean call <SID>clear_memory()
-command! CleanSwap call vimproc#system('rm -rf ' . g:my.dir.swap_dir . '/*')
-command! CleanAll call vimproc#system('rm -rf ' . g:my.dir.trash_dir . '*')
+command! CleanSwap call vimproc#system_bg('rm -rf ' . g:my.dir.swap_dir . '/*')
+command! CleanAll call vimproc#system_bg('rm -rf ' . g:my.dir.trash_dir . '*')
 "}}}
 
 " ----------------------------------------
@@ -3385,10 +3353,6 @@ augroup END
 " ----------------------------------------
 let g:git_aliases#author_name = g:my.info.github
 let g:snail_csv2google_sheet_hourly_rete = 2200
-
-" ----------------------------------------
-" unite-geeknote
-let g:geeknote#bin = '~/dotfiles/local/geeknote/geeknote.py'
 
 if !has('vim_starting')
   " Call on_source hook when reloading .vimrc.
