@@ -303,9 +303,9 @@ NeoBundle 'rhysd/accelerated-jk', {
       \   'mappings' : [
       \     ['n', '<Plug>(accelerated_jk_gj)'], ['n', '<Plug>(accelerated_jk_gk)']
       \ ] }}
-" NeoBundleLazy 'edsono/vim-matchit', { 'autoload' : {
-"       \ 'filetypes': g:my.ft.program_files,
-"       \ 'mappings' : ['nx', '%'] }}
+NeoBundleLazy 'edsono/vim-matchit', { 'autoload' : {
+      \ 'filetypes': g:my.ft.program_files,
+      \ 'mappings' : ['nx', '%'] }}
 NeoBundleLazy 'tpope/vim-surround', {
       \ 'autoload' : {
       \   'mappings' : [
@@ -747,10 +747,15 @@ NeoBundleLazy 'jiangmiao/simple-javascript-indenter', { 'autoload' : {
 NeoBundleLazy 'alpaca-tc/beautify.vim', {
       \ 'branch': 'v0.2',
       \ 'build' : {
-      \   'mac': 'npm install -g js-beautify',
+      \   'mac': 'npm install -g js-beautify && gem install html2haml --pre',
       \ },
       \ 'autoload' : {
-      \   'commands' : ['JsBeautify', 'Beautify', 'CssBeautify', 'HtmlBeautify']
+      \   'commands' : [
+      \     {
+      \       'name' : 'Beautify',
+      \       'complete' : 'customlist,beautify#complete_options'
+      \     }
+      \ ]
       \ }}
 NeoBundleLazy 'alpaca-tc/documentation', { 'autoload' : {
       \ 'commands' : ['Documentation', 'DocumentationAppend'] }}
@@ -1074,6 +1079,7 @@ function! s:toggle_set_spell() "{{{
     echo 'nospell'
     AlpacaEnglishDisable
   else
+    call english#autocollect#load()
     setl spell
     echo 'spell'
     AlpacaEnglishEnable
@@ -3250,6 +3256,7 @@ endfunction
 let bundle = NeoBundleGet('beautify.vim')
 function! bundle.hooks.on_source(bundle) "{{{
   " let g:beautify#default_outputter = 'tabnew'
+  let g:beautify#beautifier#html2haml#ruby19_attributes = 1
 endfunction"}}}
 unlet bundle
 "}}}
