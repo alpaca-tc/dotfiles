@@ -281,7 +281,7 @@ call neobundle#rc(g:my.dir.neobundle)
 
 "----------------------------------------
 " NeoBundle  " {{{
-" NeoBundleFetch 'Shougo/neobundle.vim'
+NeoBundleFetch 'Shougo/neobundle.vim'
 " For asynchronous communication
 NeoBundle 'Shougo/vimproc', {
       \ 'build' : {
@@ -431,6 +431,7 @@ NeoBundleLazy 'alpaca-tc/alpaca_window.vim', {
       \     'alpaca_window#set_smart_close', 'alpaca_window#smart_close', 'alpaca_window#open_buffer'
       \   ],
       \ }}
+
 " Git操作
 NeoBundleLazy 'tpope/vim-fugitive', { 'autoload': {
       \ 'commands': ['Gcommit', 'Gblame', 'Ggrep', 'Gdiff']}}
@@ -476,7 +477,7 @@ NeoBundleLazy 'majutsushi/tagbar', {
       \   'commands': ["TagbarToggle", "TagbarTogglePause", "TagbarOpen"],
       \   'fuctions': ['tagbar#currenttag'] }}
 NeoBundleLazy 'open-browser.vim', { 'autoload' : {
-      \ 'mappings' : [ '<Plug>(open-browser-wwwsearch)', '<Plug>(openbrowser-open)',],
+      \ 'mappings' : ['<Plug>(open-browser-wwwsearch)', '<Plug>(openbrowser-open)'],
       \ 'function_prefix' : 'openbrowser',
       \ 'functions' : ['openbrowser#open'],
       \ 'commands' : ['OpenBrowserSearch', 'OpenBrowser', 'OpenBrowserSmartSearch'] }}
@@ -776,7 +777,9 @@ NeoBundleLazy 'alpaca-tc/documentation', { 'autoload' : {
 "       \ 'filetypes' : ['typescript']
 "       \ }}
 NeoBundleLazy 'kchmck/vim-coffee-script', { 'autoload' : {
-      \ 'filetypes' : 'coffee' }}
+      \ 'filetypes' : 'coffee',
+      \ 'commands' : ['CoffeeCompile', 'CoffeeWatch', 'CoffeeMake'],
+      \ }}
 if has("python") && executable('npm')
   NeoBundleLazy 'marijnh/tern_for_vim', {
         \ 'build' : 'npm install',
@@ -1284,7 +1287,7 @@ set shortmess=aTI
 "折り畳み
 set foldenable
 set foldmethod=marker
-set foldlevel=0
+" set foldlevel=0
 set foldlevelstart=0
 set foldminlines=2
 set foldnestmax=2
@@ -1452,19 +1455,19 @@ if empty(s:surround_mapping)
   call add( s:surround_mapping, {
         \ 'filetypes' : g:my.ft.ruby_files,
         \ 'mappings' : {
-        \   '#':  '#{\r}',
-        \   '%':  '<% \r %>',
-        \   '-':  '<% \r -%>',
-        \   '=':  '<%= \r %>',
-        \   'w':  '%w!\r!',
-        \   'W':  '%W!\r!',
-        \   'q':  '%q!\r!',
-        \   'Q':  '%Q!\r!',
-        \   'r':  '%r!\r!',
-        \   'R':  '%R!\r!',
+        \   '#':  "#{\r}",
+        \   '%':  "<% \r %>",
+        \   '-':  "<% \r -%>",
+        \   '=':  "<%= \r %>",
+        \   'w':  "%w!\r!",
+        \   'W':  "%W!\r!",
+        \   'q':  "%q!\r!",
+        \   'Q':  "%Q!\r!",
+        \   'r':  "%r!\r!",
+        \   'R':  "%R!\r!",
         \   '\"':  '\"\r\"',
         \   "'":  "'\r'",
-        \   '{':  '{ \r }',
+        \   '{':  "{ \r }",
         \   'd':  'do\n \r end',
         \ }
         \ })
@@ -1479,16 +1482,16 @@ if empty(s:surround_mapping)
   call add(s:surround_mapping, {
         \ 'filetypes' : ['_'],
         \ 'mappings' : {
-        \   '(' : '(\r)',
-        \   '[' : '[\r]',
-        \   '{' : '{ \r }',
-        \   '#':  '#{\r}',
+        \   '(' : "(\r)",
+        \   '[' : "[\r]",
+        \   '{' : "{ \r }",
+        \   '#':  "#{\r}",
         \ }
         \ })
   call add(s:surround_mapping, {
         \ 'filetypes' : ['snippet'],
         \ 'mappings' : {
-        \   '$' : '${\r}',
+        \   '$' : "${\r}",
         \ }
         \ })
 endif
@@ -1917,15 +1920,60 @@ endfunction"}}}
 unlet bundle
 
 "------------------------------------
-" coffee script
+" coffee-script
 "------------------------------------
 " 保存するたびに、コンパイル
 function! AutoCoffeeCompile() "{{{
   augroup MyCofeeSetting
     autocmd!
-    autocmd BufWritePost *.coffee silent CoffeeMake! -cb | cwindow | redraw!
+    autocmd BufWritePost <buffer> silent CoffeeMake! -cb | cwindow | redraw!
+    autocmd User User CoffeeWatch set filetype=javascript
   augroup END
 endfunction"}}}
+
+let bundle = NeoBundleGet('vim-coffee-script')
+
+function! s:evaluate_text_selected() "{{{
+  if &previewwindow
+    return
+  endif
+
+  let current_file = expand('%:p')
+  let sid = 's:'
+
+  if filereadable(current_file)
+    redir => script_names
+      silent scriptnames
+    redir END
+
+    for line in split(script_names, '\n')
+      let sid_and_filepath = split(line, ': ')
+      if fnamemodify(sid_and_filepath[1], ':p') =~ current_file . '$'
+        let sid = sid_and_filepath[0]
+      endif
+    endfor
+  endif
+
+  let text_selected = @*
+  let text_selected = substitute(text_selected, 's:', '<SNR>' . sid . '_', 'g')
+  sandbox let result = eval(text_selected)
+  let result_as_string = string(result)
+  let result_as_array = split(result_as_string, '\n')
+
+  let temp_path = tempname()
+  call writefile(result_as_array, temp_path)
+
+  silent pedit `=temp_path`
+
+  " let filetype = getbufvar(a:candidate.action__buffer_nr, '&filetype')
+  " if filetype != ''
+  "   let winnr = winnr()
+  "   execute bufwinnr(a:candidate.action__buffer_nr) . 'wincmd w'
+  "   execute 'setfiletype' filetype
+  "   execute winnr . 'wincmd w'
+  " endif
+endfunction"}}}
+vmap <C-L><C-L> :<C-U>call <SID>evaluate_text_selected()<CR>
 
 "------------------------------------
 " t_comment
@@ -3259,6 +3307,7 @@ function! bundle.hooks.on_source(bundle) "{{{
   let g:beautify#beautifier#html2haml#ruby19_attributes = 1
 endfunction"}}}
 unlet bundle
+
 "}}}
 
 "----------------------------------------
@@ -3365,5 +3414,51 @@ if !has('vim_starting')
   " Call on_source hook when reloading .vimrc.
   call neobundle#call_hook('on_source')
 endif
+
+
+""{{{
+function! s:SCaller(...)
+  try
+    throw
+  catch /.*/
+    let [functions, variables] = split(v:throwpoint, ', ')
+    let function_list = split(v:throwpoint, '((\.\.))'')
+
+    if a:0
+      let prefunc = a:1
+      let result = matchstr(v:throwpoint, '^.*\.\.\zs.*\ze\.\.'.prefunc)
+      if empty(result)
+        let result = matchstr(v:throwpoint, '^function \zs.*\ze\.\.'.prefunc)
+      endif
+
+      return result
+    else
+      return matchstr(v:throwpoint, '^function \zs.\{-}\ze\.\.')
+    endif
+  endtry
+endfunction
+
+function! g:call_funcname()
+  return s:SCaller("g:call_funcname")
+endfunction
+
+function! g:SID_function_prefix()
+  return matchstr(s:SCaller("g:SID_function_prefix"), '^\zs<SNR>\d\+_\ze.*$')
+endfunction
+
+function! g:SID()
+  return matchstr(s:SCaller("g:SID"), '^<SNR>\zs\d\+\ze.*$')
+endfunction
+
+function! g:huga()
+  return s:SCaller()
+endfunction
+
+function! g:script_function(name)
+  let SID = matchstr(s:SCaller("g:script_function"), '^\zs<SNR>\d\+_\ze.*$')
+  let funcname = substitute(a:name, "s:", SID, "g")
+  return function(funcname)
+endfunction
+"}}}
 
 set secure
