@@ -25,7 +25,7 @@ function! alpaca#initialize#define_abbrev(define, ...) "{{{
   let command = join(defines, "|")
   execute a:0 > 0 ? s:get_autcmd_with_filetype(a:1, command) : command
 endfunction"}}}
-function! alpaca#initialize#redefine_with_each_filetypes(ft_dictionary) "{{{
+function! alpaca#initialize#define_dict_to_each_filetypes(ft_dictionary) "{{{
   let result = {}
 
   for [filetypes, value] in items(a:ft_dictionary)
@@ -57,7 +57,7 @@ function! alpaca#initialize#ruby_initialize() "{{{
       def get(name)
         value = evaluate(name)
         if value.is_a? String
-          value.force_encoding(encode) 
+          value.force_encoding(encode)
         else
           value
         end
