@@ -438,6 +438,7 @@ NeoBundleLazy 'tpope/vim-fugitive', { 'autoload': {
       \ 'commands': ['Gcommit', 'Gblame', 'Ggrep', 'Gdiff']}}
 NeoBundleLazy 'Shougo/git-vim', {
       \ 'autoload' : {
+      \ 'function_prefix' : 'git',
       \ 'commands': [
       \   { 'name': 'GitDiff',     'complete' : 'customlist,git#list_commits' },
       \   { 'name': 'GitVimDiff',  'complete' : 'customlist,git#list_commits' },
@@ -900,7 +901,7 @@ unlet abbr_dictionary
 "}}}
 
 let g:end_tag_commant_format = '<!-- /%tag_name%id%class -->'
-nnoremap ,t :<C-U>call alpaca#function#endtag_comment()<CR>
+nnoremap ,t :call alpaca#function#html#endtag_comment()<CR>
 
 nnoremap ¥ \
 inoremap ¥ \
@@ -963,6 +964,30 @@ nmap <silent>H            <Plug>(alpaca_window_move_previous_window_or_tab)
 nmap <silent><C-W>n       <Plug>(alpaca_window_smart_new)
 nmap <silent><C-W><C-N>   <Plug>(alpaca_window_smart_new)
 
+function! s:search_same_indent_line(to_next) "{{{
+  let current_line = getline('.')
+  let current_indent_level = len(matchstr((current_line), '^\s*'))
+  let current_pos = line('.')
+
+  for line_pos in a:to_next ? range(current_pos + 1, line('$')) : range(current_pos - 1, 1, -1)
+    let line = getline(line_pos)
+    let indent_level = len(matchstr((line), '^\s*'))
+    if indent_level == current_indent_level && line != ''
+      return cursor(line_pos, current_indent_level + 1)
+    endif
+  endfor
+
+  echomsg 'Not found'
+endfunction"}}}
+nnoremap <silent>{{ :<C-U>call <SID>search_same_indent_line(1)<CR>
+nnoremap <silent>}} :<C-U>call <SID>search_same_indent_line(0)<CR>
+augroup MyAutoCmd
+  autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line('$') | execute "normal g`\"" | endif
+augroup END
+"}}}
+
+" ----------------------------------------
+" Tab {{{
 nmap [tag_or_tab] <Nop>
 nmap t [tag_or_tab]
 nmap <silent>[tag_or_tab]c      <Plug>(alpaca_window_tabnew)
@@ -991,10 +1016,6 @@ function! s:move_tab_to(increasing_or_decreasing) "{{{
 endfunction"}}}
 nnoremap <silent>[tag_or_tab]<C-L> :<C-U>call <SID>move_tab_to(1)<CR>
 nnoremap <silent>[tag_or_tab]<C-H> :<C-U>call <SID>move_tab_to(-1)<CR>
-
-augroup MyAutoCmd
-  autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line('$') | execute "normal g`\"" | endif
-augroup END
 "}}}
 
 " ----------------------------------------
@@ -1201,7 +1222,7 @@ endfunction "}}}
 unlet bundle
 
 " ------------------------------------
-xnoremap <silent>a :<C-U>EasyAlign<CR>
+xnoremap <silent>n :<C-U>EasyAlign<CR>
 
 " ------------------------------------
 " surround.vim"{{{
@@ -1467,7 +1488,6 @@ endfunction"}}}
 unlet bundle
 
 " ----------------------------------------
-let bundle = NeoBundleGet('vim-ref')
 nnoremap <C-K> :<C-U>Ref alc <Space><C-R><C-W><CR>
 xnoremap <C-K> :<C-U>Ref alc <Space><C-R><C-W><CR>
 nnoremap ra  :<C-U>Ref alc<Space>
@@ -1478,6 +1498,8 @@ nnoremap rm  :<C-U>Unite ref/man -immediately -input=
 nnoremap rpy :<C-U>Unite ref/pydoc -immediately -input=
 nnoremap rpe :<C-U>Unite ref/perldoc -immediately -input=
 nmap <silent><buffer>K <Plug>(ref-keyword)
+
+let bundle = NeoBundleGet('vim-ref')
 function bundle.hooks.on_source(bundle) "{{{
   let g:ref_open                    = 'tabnew'
   let g:ref_cache_dir               = g:my.dir.vimref
@@ -2405,7 +2427,7 @@ let g:echodoc_enable_at_startup = 1
 
 " ------------------------------------
 " VimFiler "{{{
-nnoremap <silent>ff  :call <SID>vim_filer_explorer_git()<CR>
+nnoremap <silent><Space>f  :call <SID>vim_filer_explorer_git()<CR>
 nnoremap <silent>,,  :VimFilerBufferDir<CR>
 nnoremap <silent>,n  :VimFilerCreate<CR>
 
@@ -2805,30 +2827,42 @@ function! bundle.hooks.on_source(bundle) "{{{
   let g:beautify#beautifier#html2haml#ruby19_attributes = 1
 endfunction"}}}
 unlet bundle
-"}}}
 
 " ----------------------------------------
 " alpaca_english
 function! s:toggle_spell() "{{{
   if &spell
     setl nospell
-    echo 'nospell'
+    echo 'English mode enabled'
     AlpacaEnglishDisable
+    call english#autocollect#unload()
   else
-    call english#autocollect#load()
     setl spell
-    echo 'spell'
+    echo 'English mode disabled'
     AlpacaEnglishEnable
+    call english#autocollect#load()
   endif
-  nnoremap <silent>,s :<C-U>call <SID>toggle_spell()<CR>
+
   nnoremap ;; :<C-U>AlpacaEnglishSay<CR>
   xnoremap ;; :AlpacaEnglishSay<CR>
 endfunction"}}}
+nnoremap <silent>,s :<C-U>call <SID>toggle_spell()<CR>
+
+" ----------------------------------------
+" Other plugin settings {{{
+let g:git_aliases#author_name = g:my.info.github
+let g:snail_csv2google_sheet_hourly_rete = 2200
+let g:lang8_email_address = 'alpaca_tc@ezweb.ne.jp'
+"}}}
+
+"}}}
+
+
 
 " ----------------------------------------
 function! s:update_ruby_ctags() "{{{
-  echo vimproc#system('rbenv ctags')
-  echo vimproc#system('gem ctags')
+  call alpaca#system_bg('rbenv ctags')
+  call alpaca#system_bg('gem ctags')
 endfunction"}}}
 command! UpdateRubyTags call <SID>update_ruby_ctags()
 
@@ -2884,6 +2918,7 @@ function! s:do_lang8_autocmd() "{{{
     let g:neorspec_command = 'Dispatch rspec {spec}'
   endif
 endfunction"}}}
+
 function! s:lang8_settings() "{{{
   let g:neorspec_command = 'Dispatch spec {spec}'
 
@@ -2893,38 +2928,14 @@ function! s:lang8_settings() "{{{
   nnoremap <buffer>[plug]m           :<C-U>UniteGit app/models/mailer<CR>
   " let g:user_zen_settings.filters.html.indentation = ''
 endfunction"}}}
+
 augroup MyAutoCmd
   autocmd User Rails call <SID>do_lang8_autocmd()
 augroup END
 "}}}
 
-" ----------------------------------------
-" Other plugin settings {{{
-let g:git_aliases#author_name = g:my.info.github
-let g:snail_csv2google_sheet_hourly_rete = 2200
-let g:lang8_email_address = 'alpaca_tc@ezweb.ne.jp'
-"}}}
-
 if !has('vim_starting')
   call neobundle#call_hook('on_source')
 endif
-
-function! s:search_same_indent_line(to_next) "{{{
-  let current_line = getline('.')
-  let current_indent_level = len(matchstr((current_line), '^\s*'))
-  let current_pos = line('.')
-
-  for line_pos in a:to_next ? range(current_pos + 1, line('$')) : range(current_pos - 1, 1, -1)
-    let line = getline(line_pos)
-    let indent_level = len(matchstr((line), '^\s*'))
-    if indent_level == current_indent_level && line != ''
-      return cursor(line_pos, current_indent_level + 1)
-    endif
-  endfor
-
-  echomsg string('Not found')
-endfunction"}}}
-nnoremap <silent>{{ :<C-U>call <SID>search_same_indent_line(1)<CR>
-nnoremap <silent>}} :<C-U>call <SID>search_same_indent_line(0)<CR>
 
 set secure
