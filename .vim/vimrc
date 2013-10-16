@@ -103,23 +103,6 @@ function! NeoBundleGet(name) "{{{
   let bundle = neobundle#get(a:name)
   return empty(bundle) ? s:dummy : bundle
 endfunction"}}}
-
-function! s:buffer_nr_list() "{{{
-  redir => output
-  silent! ls
-  redir END
-
-  let buffer_nr_list = []
-  for line in map(split(output, '\n'), 'split(v:val)')
-    call add(buffer_nr_list, line[0])
-  endfor
-
-
-  function! s:compare_buffer(me, target) "{{{
-    return a:me > a:target
-  endfunction "}}}
-  return sort(buffer_nr_list, 's:compare_buffer')
-endfunction "}}}
 "}}}
 
 " ----------------------------------------
@@ -241,29 +224,33 @@ endif
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 " For asynchronous communication
-NeoBundle 'Shougo/vimproc', {
+NeoBundleLazy 'Shougo/vimproc', {
+      \ 'autoload' : {
+      \   'function_prefix' : 'vimproc',
+      \ },
       \ 'build' : {
       \   'mac' : 'make -f make_mac.mak',
       \   'unix' : 'make -f make_unix.mak',
       \ }}
 
 " An awesome improvement to the Vim status bar.
-NeoBundle 'itchyny/lightline.vim'
+NeoBundleLazy 'itchyny/lightline.vim', {
+      \ 'autoload' : {
+      \   'insert' : 1,
+      \ }}
 
-" WebAPI utils
 NeoBundleLazy 'mattn/webapi-vim', {
       \ 'autoload' : {
       \   'function_prefix': 'webapi'
       \ }}
 
 " Accelerator Up-Down moving
-NeoBundle 'rhysd/accelerated-jk', {
+NeoBundleLazy 'rhysd/accelerated-jk', {
       \ 'autoload' : {
       \   'mappings' : [
       \     ['n', '<Plug>(accelerated_jk_gj)'], ['n', '<Plug>(accelerated_jk_gk)']
       \ ] }}
 
-" For extending matchit
 NeoBundleLazy 'edsono/vim-matchit', { 'autoload' : {
       \ 'filetypes': g:my.ft.program_files,
       \ 'mappings' : ['nx', '%'] }}
@@ -435,7 +422,7 @@ NeoBundleLazy 'mattn/gist-vim', {
       \ 'autoload' : {
       \   'commands' : 'Gist' }}
 
-" Memo viewer and writer
+" Viewer and writer for memo
 NeoBundleLazy 'glidenote/memolist.vim', { 'autoload' : {
       \ 'commands' : ['MemoNew', 'MemoGrep']
       \ }}
@@ -1920,12 +1907,12 @@ unlet bundle
 nnoremap U :<C-U>GundoToggle<CR>
 
 " ------------------------------------
-let bundle = NeoBundleGet('accelerated-jk')
-function! bundle.hooks.on_source(bundle) "{{{
-  nmap <silent>j <Plug>(accelerated_jk_gj)
-  nmap <silent>k <Plug>(accelerated_jk_gk)
-endfunction"}}}
-unlet bundle
+" let bundle = NeoBundleGet('accelerated-jk')
+" function! bundle.hooks.on_source(bundle) "{{{
+nmap <silent>j <Plug>(accelerated_jk_gj)
+nmap <silent>k <Plug>(accelerated_jk_gk)
+" endfunction"}}}
+" unlet bundle
 
 " ------------------------------------
 let bundle = NeoBundleGet('alpaca_wordpress.vim')
@@ -2798,9 +2785,8 @@ nnoremap <silent>,s :<C-U>call <SID>toggle_spell()<CR>
 " Other plugin settings {{{
 let g:git_aliases#author_name = g:my.info.github
 let g:snail_csv2google_sheet_hourly_rete = 2200
-let g:lang8_email_address = 'alpaca_tc@ezweb.ne.jp'
+" let g:lang8_email_address = 'alprhcp666@gmail.com'
 "}}}
-
 "}}}
 
 
@@ -2820,18 +2806,13 @@ function! s:clear_memory() "{{{
     NeoCompleteEnable
   endif
 
-  if exists(':SessionRemove')
-    SessionRemove
-  endif
-
   if exists(':TagsCleanCache')
     TagsCleanCache
     TagsSet
     set tags=
   endif
-  " execute 'bwipeout' join(s:buffer_nr_list(), ' ')
-  " execute 'bunload' join(s:buffer_nr_list(), ' ')
-  execute 'bdelete' join(s:buffer_nr_list(), ' ')
+
+  execute '1,' . bufnr('$') . 'bwipeout'
 endfunction "}}}
 
 command! UnwatchBuffer setlocal buftype=nofile nobuflisted noswapfile bufhidden=hide
