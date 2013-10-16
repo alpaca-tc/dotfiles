@@ -73,23 +73,6 @@ endfunction"}}}
 function! s:get_cursor_word() "{{{
   return expand("<cword>")
 endfunction"}}}
-function! s:buffer_auto_fold(to_close) "{{{
-  if !exists("b:__buffer_winheight")
-    let b:__buffer_winheight = winheight('1')
-    let b:__buffer_winwidth = winwidth('1')
-  endif
-
-  if a:to_close
-    1 wincmd _
-  else
-    execute get(b:, '__buffer_winheight', 15) 'wincmd _'
-  endif
-
-  if !a:to_close && exists("b:__buffer_winheight")
-    unlet b:__buffer_winheight
-    unlet b:__buffer_winwidth
-  endif
-endfunction"}}}
 function! s:complement_delimiter_of_directory(path) "{{{
   return isdirectory(a:path) ? a:path . '/' : a:path
 endfunction"}}}
@@ -306,6 +289,7 @@ NeoBundleLazy 'Shougo/unite.vim', {
 NeoBundleLazy 'Shougo/vimfiler', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload' : {
+      \   'explorer' : 1,
       \   'commands' : [
       \     { 'name' : 'VimFiler',
       \       'complete' : 'customlist,vimfiler#complete' },
@@ -1888,16 +1872,6 @@ function! bundle.hooks.on_source(bundle) "{{{
   xmap <C-j> <Plug>(textmanip-move-down)
   xmap <C-k> <Plug>(textmanip-move-up)
   xmap <C-l> <Plug>(textmanip-move-right)
-
-  xmap <Space>d <Plug>(textmanip-duplicate-down)
-  nmap <Space>d <Plug>(textmanip-duplicate-down)
-  xmap <Space>D <Plug>(textmanip-duplicate-up)
-  nmap <Space>D <Plug>(textmanip-duplicate-up)
-
-  xmap <C-j> <Plug>(textmanip-move-down)
-  xmap <C-k> <Plug>(textmanip-move-up)
-  xmap <C-h> <Plug>(textmanip-kickout)
-  xmap <C-l> <Plug>(textmanip-move-right)
 endfunction"}}}
 unlet bundle
 
@@ -2531,11 +2505,6 @@ endfunction"}}}
 
 let bundle = NeoBundleGet('unite.vim')
 function! bundle.hooks.on_source(bundle) "{{{
-  augroup MyUniteCmd
-    autocmd!
-    autocmd FileType unite call <SID>unite_my_settings()
-  augroup END
-
   highlight UniteCursorLine ctermbg=236 cterm=none
   let g:unite_cursor_line_highlight='UniteCursorLine'
   let g:unite_data_directory=g:my.dir.unite
@@ -2557,14 +2526,7 @@ function! bundle.hooks.on_source(bundle) "{{{
   let g:unite_source_history_yank_enable = 0
   let s:unite_hooks = {}
 
-  " command menu
   call alpaca#let_g:('unite_source_menu_menus', {})
-  " let g:unite_source_menu_menus.command = {
-  "       \ 'description' : 'command alias',
-  "       \ }
-  " let g:unite_source_menu_menus.command.command_candidates = {
-  "       \ 'gitignore'  : 'Unite file_rec:' . neobundle#get_neobundle_dir() . "/gitignore",
-  "       \ }
 
   call unite#custom_source('line', 'max_candidates', 5000)
   call unite#custom_source('file_rec', 'max_candidates', 5000)
@@ -2576,6 +2538,11 @@ function! bundle.hooks.on_source(bundle) "{{{
   call unite#custom_source('line/fast', 'max_candidates', 5000)
   call unite#custom_source('tags', 'max_candidates', 5000)
   call unite#custom_source('tag', 'max_candidates', 5000)
+
+  augroup MyUniteCmd
+    autocmd!
+    autocmd FileType unite call <SID>unite_my_settings()
+  augroup END
 
   function! s:unite_my_settings() "{{{
     augroup MyUniteBufferCmd
@@ -2591,8 +2558,6 @@ function! bundle.hooks.on_source(bundle) "{{{
     highlight link uniteMarkedLine Identifier
     highlight link uniteCandidateInputKeyword Statement
 
-    " inoremap <silent><buffer><C-J> <Plug>(unite_loop_cursor_down)
-    " inoremap <silent><buffer><C-K> <Plug>(unite_loop_cursor_up)
     nmap     <silent><buffer>f <Plug>(unite_toggle_mark_current_candidate)
     xmap     <silent><buffer>f <Plug>(unite_toggle_mark_selected_candidates)
     nmap     <silent><buffer><C-H> <Plug>(unite_toggle_transpose_window)
@@ -2613,43 +2578,34 @@ function! bundle.hooks.on_source(bundle) "{{{
       call s:unite_hooks[buffer_name]()
     endif
   endfunction"}}}
+
+  " ----------------------------------------
+  " Hooks
   function! s:unite_hooks.file_mru() "{{{
     syntax match uniteSource__FileMru_Dir /.*\// containedin=uniteSource__FileMru contains=uniteSource__FileMru_Time,uniteCandidateInputKeyword nextgroup=uniteSource__FileMru_Dir
 
     highlight link uniteSource__FileMru_Dir Directory
     highlight link uniteSource__FileMru_Time Comment
     call unite#custom#source('file_mru', 'ignore_pattern', '')
-    " call unite#util#set_default(
-    "       \ 'g:unite_source_file_mru_ignore_pattern',
-    "       \'\~$\|\.\%(o\|exe\|dll\|bak\|zwc\|pyc\|sw[po]\)$'
-    "       \'\|\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'
-    "       \'\|^\%(\\\\\|/mnt/\|/media/\|/temp/\|/tmp/\|\%(/private\)\=/var/folders/\)'
-    "       \'\|\%(^\%(fugitive\)://\)'
-    "       \)
-    " call unite#util#set_default('g:unite_source_directory_mru_ignore_pattern', '')
-    "       \'\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'
-    "       \'\|^\%(\\\\\|/mnt/\|/media/\|/temp/\|/tmp/\|\%(/private\)\=/var/folders/\)')
   endfunction"}}}
+
   function! s:unite_hooks.file() "{{{
     inoremap <buffer><Tab> <CR>
     syntax match uniteFileDirectory '.*\/'
     highlight link uniteFileDirectory Directory
   endfunction"}}}
+
   function! s:unite_hooks.line_fast() "{{{
     augroup MyUniteBufferCmd
-      autocmd!
-      autocmd WinLeave <buffer> call <SID>buffer_auto_fold(1)
-      autocmd WinEnter <buffer> call <SID>buffer_auto_fold(0)
+      call alpaca_window#util#fold_buffer_automatically()
     augroup END
   endfunction"}}}
 
-  " ------------------------------------
   function! s:unite_hooks.history_command() "{{{
     setl syntax=vim
   endfunction"}}}
 
-  " ------------------------------------
-  " Unite-grep.vim
+  " grep {{{
   if executable('ag')
     let g:unite_source_grep_command = 'ag'
     let g:unite_source_grep_default_opts = '--nocolor --nogroup'
@@ -2658,37 +2614,26 @@ function! bundle.hooks.on_source(bundle) "{{{
     let g:unite_source_grep_command =  'grep'
     let g:unite_source_grep_recursive_opt = '-R'
   endif
-  " let g:unite_source_grep_ignore_pattern = ''
+
 
   function! s:unite_hooks.grep() "{{{
     nnoremap <expr><buffer>re unite#do_action('replace')
 
     augroup MyUniteBufferCmd
-      autocmd WinLeave <buffer> call <SID>buffer_auto_fold(1)
-      autocmd WinEnter <buffer> call <SID>buffer_auto_fold(0)
+      call alpaca_window#util#fold_buffer_automatically()
     augroup END
   endfunction"}}}
+  "}}}
 
-  " ------------------------------------
-  " Unite-outline
-  " let g:unite_source_outline_filetype_options
-  " let g:unite_source_outline_info
-  " let g:unite_source_outline_indent_width
-  " let g:unite_source_outline_max_headings
-  " let g:unite_source_outline_cache_limit
-  " let g:unite_source_outline_highlight
   function! s:unite_hooks.outline() "{{{
     nnoremap <buffer><C-J> gj
 
     augroup MyUniteBufferCmd
-      autocmd WinLeave <buffer> call <SID>buffer_auto_fold(1)
-      autocmd WinEnter <buffer> call <SID>buffer_auto_fold(0)
+      call alpaca_window#util#fold_buffer_automatically()
     augroup END
   endfunction"}}}
 
-  " ----------------------------------------
-  " vim-unite-giti
-  " ----------------------------------------
+  " vim-unite-giti {{{
   function! s:unite_hooks.giti_status() "{{{
     " nnoremap <silent><buffer><expr>gM unite#do_action('ammend')
     nnoremap <silent><buffer><expr>ga unite#do_action('stage')
@@ -2701,6 +2646,7 @@ function! bundle.hooks.on_source(bundle) "{{{
     nnoremap <silent><buffer><expr>gd unite#do_action('diff')
     nnoremap <silent><buffer><expr>d unite#do_action('diff')
   endfunction"}}}
+  "}}}
 endfunction"}}}
 unlet bundle
 "}}}
@@ -2768,12 +2714,12 @@ function! s:toggle_spell() "{{{
     setl nospell
     echo 'English mode enabled'
     AlpacaEnglishDisable
-    call english#autocollect#unload()
+    call english#autocollect#load()
   else
     setl spell
     echo 'English mode disabled'
     AlpacaEnglishEnable
-    call english#autocollect#load()
+    call english#autocollect#unload()
   endif
 
   nnoremap ;; :<C-U>AlpacaEnglishSay<CR>
