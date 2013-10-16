@@ -277,7 +277,7 @@ NeoBundleLazy 'tpope/vim-surround', {
       \     ['nx', '<Plug>YSsurround'], ['nx', '<Plug>VgSurround'],
       \     ['nx', '<Plug>VSurround']
       \ ] }}
-NeoBundle 'camelcasemotion', { 'autoload' : {
+NeoBundleLazy 'camelcasemotion', { 'autoload' : {
       \ 'mappings' : ['<Plug>CamelCaseMotion_w', '<Plug>CamelCaseMotion_b',
       \   '<Plug>CamelCaseMotion_e', '<Plug>CamelCaseMotion_iw',
       \   '<Plug>CamelCaseMotion_ib', '<Plug>CamelCaseMotion_ie']
@@ -475,12 +475,22 @@ NeoBundleLazy 'alpaca-tc/vim-qfreplace', { 'autoload' : {
       \ 'functions' : 'qfreplace#start',
       \ 'commands' : 'Qfreplace',
       \ }}
-NeoBundle 'alpaca-tc/unite-session', { 'autoload' : {
+NeoBundleLazy 'alpaca-tc/unite-session', { 'autoload' : {
       \ 'unite_sources': 'session',
       \ 'commands' : [
-      \   { 'name' : 'UniteSessionSave', 'complete' : 'customlist,unite#sources#session#_complete' },
-      \   { 'name' : 'UniteSessionLoad', 'complete' : 'customlist,unite#sources#session#_complete' }
+      \   { 'name' : 'UniteSessionSave',
+      \     'complete' : 'customlist,CustomlistUniteSession' },
+      \   { 'name' : 'UniteSessionLoad',
+      \     'complete' : 'customlist,CustomlistUniteSession' }
       \   ] }}
+function! CustomlistUniteSession(arglead, cmdline, cursorpos) "{{{
+  call unite#util#set_default('g:unite_source_session_path', g:my.dir.unite . '/session')
+  let sessions = split(glob(g:unite_source_session_path . '/*'), '\n')
+  call filter(sessions, 'stridx(v:val, a:arglead) == 0')
+
+  return map(sessions, 'fnamemodify(v:val, ":t:r")')
+endfunction"}}}
+
 NeoBundleLazy 'Shougo/unite-outline', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload' : {
@@ -924,6 +934,7 @@ nnoremap <silent> N Nvv
 nnoremap <silent>,mc :<C-u>call alpaca#function#macdict#close()<CR>
 nnoremap <silent>,mf :<C-u>call alpaca#function#macdict#focus()<CR>
 nnoremap <silent>,mo :<C-u>call alpaca#function#macdict#with_cursor_word()<CR>
+command! -nargs=1 Dict call alpaca#function#macdict#search(<q-args>)
 "}}}
 
 " ----------------------------------------
@@ -1530,8 +1541,8 @@ endfunction "}}}
 unlet bundle
 
 " ------------------------------------
-let bundle = NeoBundleGet('camelcasemotion')
-function bundle.hooks.on_source(bundle) "{{{
+" let bundle = NeoBundleGet('camelcasemotion')
+" function bundle.hooks.on_source(bundle) "{{{
   map <silent> w <Plug>CamelCaseMotion_w
   map <silent> b <Plug>CamelCaseMotion_b
   map <silent> e <Plug>CamelCaseMotion_e
@@ -1553,8 +1564,8 @@ function bundle.hooks.on_source(bundle) "{{{
   xmap <silent>ib <Plug>CamelCaseMotion_ib
   omap <silent>ie <Plug>CamelCaseMotion_ie
   xmap <silent>ie <Plug>CamelCaseMotion_ie
-endfunction "}}}
-unlet bundle
+" endfunction "}}}
+" unlet bundle
 
 " ------------------------------------
 nnoremap <silent>,v  :<C-U>VimShell<CR>
