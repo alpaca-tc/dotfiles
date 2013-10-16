@@ -2546,7 +2546,6 @@ nnoremap <silent><expr>[tag_or_tab]t ':Unite tags -immediately -horizontal -auto
 " vim-unite-giti
 nnoremap <silent>gl :<C-U>Unite giti/log -buffer-name=giti_log -no-start-insert -horizontal<CR>
 nnoremap <silent>gP :<C-U>Unite giti/pull_request/base -buffer-name=giti_pull_request -no-start-insert -horizontal<CR>
-nnoremap <silent>gS :<C-U>Unite versions/git/status -buffer-name=versions_status -no-start-insert -horizontal<CR>
 nnoremap <silent>gs :<C-U>Unite giti/status -buffer-name=giti_status -no-start-insert -horizontal<CR>
 nnoremap <silent>gh :<C-U>Unite giti/branch_all -buffer-name=giti_branchall -no-start-insert<CR>
 
@@ -2837,6 +2836,7 @@ function! s:clear_memory() "{{{
       NeoCompleteClean
       NeoCompleteDisable
       NeoCompleteEnable
+    endif
     if exists(':SessionRemove')
       SessionRemove
     endif
@@ -2865,7 +2865,7 @@ function! s:open_macvim() "{{{
   let current_dir = getcwd()
   Clean
 
-  call alpaca#system_bg('mvim', current_dir)
+  call alpaca#system_bg('mvim -c "UniteSessionLoad for_mvim"')
 endfunction"}}}
 command! -nargs=0 Mvim call s:open_macvim()
 "}}}
