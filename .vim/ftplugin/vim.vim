@@ -46,6 +46,6 @@ function! s:evaluate_text_selected() "{{{
 
   silent pedit `=temp_path`
 endfunction"}}}
-vmap <buffer><C-L><C-L> :<C-U>call <SID>evaluate_text_selected()<CR>
+vmap <buffer>\ :<C-U>call <SID>evaluate_text_selected()<CR>
 
 let &cpo = s:save_cpo

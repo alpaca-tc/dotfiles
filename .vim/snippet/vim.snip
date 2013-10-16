@@ -58,7 +58,7 @@ snippet     mit
   "=============================================================================
   " FILE: ${1:file_name}
   " AUTHOR: `g:my.info.author` <`g:my.info.email`>
-  " Last Modified: `alpaca#function#today()`
+      " Last Modified: `strftime('%Y-%m-%d')`
   " License: MIT license  {{{
   "     Permission is hereby granted, free of charge, to any person obtaining
   "     a copy of this software and associated documentation files (the
@@ -184,3 +184,7 @@ options word
     autocmd!${1}
   augroup END
 
+snippet let_default
+abbr    let g:... = get(g:, ..., '')
+options word
+  let ${1:g:}${2:name} = get($1, '$2', ${3:#:''})
