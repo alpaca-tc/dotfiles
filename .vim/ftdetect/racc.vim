@@ -1,3 +1,6 @@
 augroup MyFtDetect
-  autocmd BufNewFile,BufRead *.y setl ft=racc.ruby
+augroup END
+augroup MyFtracc
+  autocmd!
+  autocmd BufNewFile,BufRead *.y setl ft=ruby.racc
 augroup END

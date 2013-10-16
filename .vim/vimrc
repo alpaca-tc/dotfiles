@@ -30,10 +30,6 @@ augroup MyWindow
   autocmd!
 augroup END
 
-augroup MyFtDetect
-  autocmd!
-augroup END
-
 " ----------------------------------------
 " Utils "{{{
 function! s:include(target, value) "{{{
@@ -199,10 +195,9 @@ endif
 
 " ----------------------------------------
 " basic settings "{{{
-execute 'set directory='.g:my.dir.swap_dir
-execute 'set viminfo+=n'.g:my.dir.viminfo
-execute 'set undodir='.g:my.dir.undodir
 set nocompatible
+execute 'set viminfo+=n'.g:my.dir.viminfo
+let &directory = g:my.dir.swap_dir
 set backspace=indent,eol,start
 set clipboard+=autoselect,unnamed
 set formatoptions+=lcqmM
@@ -213,7 +208,7 @@ set nobackup
 set nowritebackup
 set norestorescreen
 set noshowmode
-set timeout timeoutlen=300 ttimeoutlen=90
+set timeout timeoutlen=200 ttimeoutlen=90
 set updatetime=500
 set viminfo='1000,<800,s300,\"1000,f1,:1000,/1000
 set visualbell t_vb=
@@ -223,7 +218,7 @@ language en_US.UTF-8
 
 if v:version >= 703
   set undofile
-  let &undodir=&directory
+  let &undodir = g:my.dir.undodir
 endif
 
 nnoremap <Space><Space>s :<C-U>source ~/.vim/vimrc<CR>

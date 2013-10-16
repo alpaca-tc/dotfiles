@@ -1,4 +1,4 @@
-if exists('g:loaded_mac_dictionary') 
+if exists('g:loaded_mac_dictionary')
   finish
 endif
 let g:loaded_mac_dictionary = 1

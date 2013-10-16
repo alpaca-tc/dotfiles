@@ -1,11 +1,11 @@
-if has("gui_running") && !has("gui_win32")
+if has('gui_running') && !has('gui_win32')
   setlocal keywordprg=ri\ -T
 else
   setlocal keywordprg=ri
 endif
 
 " Matchit support
-if exists("loaded_matchit") && !exists("b:match_words")
+if exists('loaded_matchit') && !exists('b:match_words')
   let b:match_ignorecase = 0
 
   let b:match_words =
@@ -38,5 +38,5 @@ setlocal includeexpr=substitute(substitute(v:fname,'::','/','g'),'$','.rb','')
 
 augroup Gemfile
   autocmd!
-  autocmd BufWritePost <buffer> call vimproc#system_bg('gem ctags')
+  autocmd BufWritePost <buffer> call vimproc#system_bg('bundle && gem ctags')
 augroup END

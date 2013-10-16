@@ -1,4 +1,4 @@
-if exists("b:did_ftplugin")
+if exists('b:did_ftplugin')
   finish
 endif
 
@@ -19,5 +19,3 @@ let g:tagbar_type_php = {
       \ ]
       \ }
 "}}}
-
-

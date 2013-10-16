@@ -1,1 +1,0 @@
-setl omnifunc=pythoncomplete#Complete

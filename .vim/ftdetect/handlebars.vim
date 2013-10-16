@@ -1,3 +1,4 @@
-augroup MyFtDetect
+augroup MyFthandlebars
+  autocmd!
   autocmd BufNewFile,BufRead *.{handlebars,hb,hbs,hbt}{,.erb} set ft=html syntax=handlebars | runtime! ftplugin/handlebars.vim ftplugin/handlebars*.vim ftplugin/handlebars/*.vim
 augroup END

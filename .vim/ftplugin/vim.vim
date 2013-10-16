@@ -1,18 +1,16 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-" For gf.
+setl suffixesadd=.vim includeexpr=fnamemodify(substitute(v:fname,'#','/','g'),':h')
 let &l:path = join(map(split(&runtimepath, ','), 'v:val."/autoload"'), ',')
 let &l:path = join(map(split(&runtimepath, ','), 'v:val.""'), ',')
-setl suffixesadd=.vim
-setl includeexpr=fnamemodify(substitute(v:fname,'#','/','g'),':h')
 let &keywordprg=':help'
 
-" colorschemeの編集時は自動で読み込む
-if expand("%:p:h") =~ '.vim/colors'
+if expand('%:p:h') =~ '.vim/colors'
   augroup MySyntaxCmd
     autocmd!
-    autocmd FileWritePost,InsertLeave <buffer> write | source `=expand("%")`
+    autocmd FileWritePost <buffer> write | source `=expand('%')`
+    autocmd FileType <buffer> autocmd! MySyntaxCmd
   augroup END
 endif
 

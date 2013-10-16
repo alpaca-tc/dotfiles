@@ -3,7 +3,7 @@
 " Maintainer:       Nikolai Weibull <now@bitwi.se>
 " Latest Revision:  2008-07-09
 
-if exists("b:did_ftplugin")
+if exists('b:did_ftplugin')
   finish
 endif
 let b:did_ftplugin = 1

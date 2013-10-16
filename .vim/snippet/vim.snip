@@ -177,3 +177,10 @@ options word
   endfunction
   unlet bundle
 
+snippet ft_detect
+abbr    augroup MyFt... augroup END
+options word
+  augroup MyFt`expand('%:r')`
+    autocmd!${1}
+  augroup END
+

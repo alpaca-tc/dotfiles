@@ -1,3 +1,4 @@
-augroup MyFtDetect
-  au bufnewfile,bufread *.scpt,*.applescript,*.script :setl ft=applescript
+augroup MyFtapplescript
+  autocmd!
+  autocmd bufnewfile,bufread *.scpt,*.applescript,*.script setl filetype=applescript
 augroup END
