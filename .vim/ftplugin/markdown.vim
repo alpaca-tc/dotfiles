@@ -9,6 +9,7 @@ endif
 runtime! ftplugin/html.vim ftplugin/html_*.vim ftplugin/html/*.vim
 
 setl omnifunc=htmlcomplete#CompleteTags
+setl filetype=markdown autoindent formatoptions=tcroqn2 comments=n:> shiftwidth=2 softtabstop=2 tabstop=2
 
 setlocal comments=fb:*,fb:-,fb:+,n:> commentstring=>\ %s
 setlocal formatoptions+=tcqln formatoptions-=r formatoptions-=o
