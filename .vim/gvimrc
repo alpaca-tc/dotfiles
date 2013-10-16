@@ -5,3 +5,13 @@ augroup END
 
 syntax on
 set imdisable
+
+nnoremap ¥ \
+inoremap ¥ \
+cnoremap ¥ \
+snoremap ¥ \
+
+augroup MyGuiWindow
+  autocmd!
+  autocmd VimEnter set guioptions-=egLrm
+augroup END
