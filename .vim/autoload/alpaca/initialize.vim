@@ -1,9 +1,5 @@
-function! s:get_autcmd_with_filetype(filetype, cmd) "{{{
-  return join(['autocmd AbbrDefine FileType', a:filetype, a:cmd], ' ')
-endfunction"}}}
-
-function! alpaca#initialize#directory(array) "{{{
-  for dir_path in a:array
+function! alpaca#initialize#directory(directories) "{{{
+  for dir_path in a:directories
     if !isdirectory(dir_path)
       call mkdir(dir_path, 'p')
       echomsg 'create directory : ' . dir_path
@@ -19,10 +15,13 @@ function! alpaca#initialize#define_abbreviations(definition, filetype) "{{{
 
   call map(definition, '"inoreabbrev <buffer> " . v:val')
   let command = join(definition, '|')
-  execute 'autocmd Abbreviations FileType' a:filetype command
+
+  augroup Abbreviations
+    execute 'autocmd FileType' a:filetype command
+  augroup END
 endfunction"}}}
 
-function! alpaca#initialize#redefine_dict_to_each_filetypes(difinitions, type) "{{{
+function! alpaca#initialize#redefine_dict_to_each_filetype(difinitions, type) "{{{
   let result = {}
 
   for [filetypes, value] in items(a:difinitions)

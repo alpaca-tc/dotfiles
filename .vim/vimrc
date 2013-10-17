@@ -150,8 +150,7 @@ set nobackup
 set nowritebackup
 set norestorescreen
 set noshowmode
-set timeout timeoutlen=200 ttimeoutlen=90
-set updatetime=500
+set timeout timeoutlen=400 ttimeoutlen=90 updatetime=1000
 set viminfo='1000,<800,s300,\"1000,f1,:1000,/1000
 execute 'set viminfo+=n' . g:my.dir.viminfo . '/.viminfo'
 set visualbell t_vb=
@@ -796,7 +795,7 @@ nnoremap <silent><Space>s :SudoWrite %<CR>
 
 nnoremap <silent><C-L> :call <SID>redraw_and_doautocmd()<CR>
 function! s:redraw_and_doautocmd() "{{{
-  doautocmd CursorHoldI <buffer>
+  silent doautocmd CursorHoldI <buffer>
   redraw!
 endfunction"}}}
 
@@ -1187,7 +1186,7 @@ function! bundle.hooks.on_source(bundle) "{{{
         \ }
 
   let s:surround_definitions =
-        \ alpaca#initialize#redefine_dict_to_each_filetypes(s:surround_definitions, {})
+        \ alpaca#initialize#redefine_dict_to_each_filetype(s:surround_definitions, {})
 
   function! s:define_variable_for_surround(mapping_dict) "{{{
     for [key, mapping] in items(a:mapping_dict)
@@ -1221,14 +1220,14 @@ function! bundle.hooks.on_source(bundle) "{{{
   endfunction"}}}
 
   function! s:define_variables_for_surround() "{{{
-    let s:surrond_definitions_memo = get(s:, 'surrond_definitions_memo', {})
+    let s:surrond_definitions_cache = get(s:, 'surrond_definitions_cache', {})
     let filetype = &filetype
 
-    if !has_key(s:surrond_definitions_memo, filetype)
-      let s:surrond_definitions_memo[filetype] = s:get_definition_by_filetype(filetype)
+    if !has_key(s:surrond_definitions_cache, filetype)
+      let s:surrond_definitions_cache[filetype] = s:get_definition_by_filetype(filetype)
     endif
 
-    for mappings in s:surrond_definitions_memo[filetype]
+    for mappings in s:surrond_definitions_cache[filetype]
       call s:define_variable_for_surround(mappings)
     endfor
   endfunction"}}}
@@ -1256,7 +1255,7 @@ endfunction "}}}
 unlet bundle
 
 " ------------------------------------
-nnoremap <Space>t :<C-U>TagbarToggle<CR>
+nnoremap <Space>t :TagbarToggle<CR>
 let bundle = NeoBundleGet('tagbar')
 function! bundle.hooks.on_source(bundle) "{{{
   augroup MyTagbarCmd
@@ -1272,7 +1271,7 @@ function! bundle.hooks.on_source(bundle) "{{{
     let g:tagbar_ctags_bin  = 'ctags'
   endif
 
-  let g:tagbar_autoclose = 1
+  let g:tagbar_autoclose = 0
   " let g:tagbar_sort = 0
   let g:tagbar_compact    = 1
   let g:tagbar_autofocus  = 1
@@ -1566,7 +1565,7 @@ unlet bundle
 " ------------------------------------
 " coffee-script
 " ------------------------------------
-function! AutoCoffeeCompile() "{{{
+function! CompileCoffeeAutomatically() "{{{
   augroup MyCofeeSetting
     autocmd!
     autocmd BufWritePost <buffer> silent CoffeeMake! -cb | cwindow | redraw!
@@ -1710,8 +1709,8 @@ let g:sass_compile_cssdir = ['css', 'stylesheet']
 let g:sass_compile_file = ['scss', 'sass']
 let g:sass_started_dirs = []
 let g:sass_compile_beforecmd = ''
-function! AutoSassCompile() "{{{
-  augroup AutoSassCompile
+function! CompileSassAutomatically() "{{{
+  augroup CompileSassAutomatically
     autocmd!
     autocmd BufWritePost <buffer> SassCompile
     autocmd FileType <buffer> autocmd! AutoSassCompile
@@ -2021,7 +2020,7 @@ function! bundle.hooks.on_source(bundle) "{{{
   "}}}
 
   let s:switch_definition =
-        \ alpaca#initialize#redefine_dict_to_each_filetypes(s:switch_definition, [])
+        \ alpaca#initialize#redefine_dict_to_each_filetype(s:switch_definition, [])
 
   function! s:define_switch_mappings() "{{{
     if exists('b:switch_custom_definitions')
@@ -2090,7 +2089,7 @@ endfunction"}}}
 unlet bundle
 
 " ------------------------------------
-function! GitGutterToggle() "{{{
+function! s:toggle_gitgutter() "{{{
   let is_active = get(g:, 'gitgutter_enabled', 0)
 
   if is_active
@@ -2103,7 +2102,7 @@ function! GitGutterToggle() "{{{
 endfunction"}}}
 
 if exists(':GitGutterEnable')
-  nnoremap <silent><Space>g :call GitGutterToggle()<CR>
+  nnoremap <silent><Space>g :call <SID>toggle_gitgutter()<CR>
 endif
 
 " ------------------------------------
@@ -2349,7 +2348,7 @@ function! bundle.hooks.on_source(bundle) "{{{
     nnoremap <buffer>b :<C-U>UniteBookmarkAdd<CR>
     nnoremap <buffer><expr>p vimfiler#do_action('preview')
     nnoremap <buffer>v v
-    nnoremap <buffer>u :<C-U>Unite file -buffer-name=file<CR>
+    nnoremap <buffer>u :<C-U>Unite file -no-start-insert -buffer-name=file<CR>
   endfunction"}}}
 
   augroup VimFilerKeyMapping
@@ -2389,19 +2388,20 @@ unlet bundle
 nmap [unite] <Nop>
 nmap <C-J> [unite]
 
-nnoremap <silent><Space>b       :<C-u>UniteBookmarkAdd<CR>
-nnoremap <silent>[unite]b       :<C-u>Unite buffer -buffer-name=buffer<CR>
-nnoremap <silent>[unite]j       :<C-u>Unite file_mru -buffer-name=file_mru<CR>
-" nnoremap <silent>[unite]u       :<C-u>UniteWithBufferDir -buffer-name=file file<CR>
-nnoremap <silent>[unite]e       :<C-u>Unite english_dictionary -buffer-name=english_dictionary<CR>
-nnoremap <silent>[unite]x       :<C-u>Unite english_example -horizontal -buffer-name=example<CR>
-nnoremap <silent>[unite]a       :<C-u>Unite web_search -horizontal -buffer-name=web_search<CR>
-nnoremap <silent>[unite]T       :<C-u>Unite english_thesaurus -horizontal -buffer-name=thesaurus<CR>
-nnoremap <silent>[unite]B       :<C-u>Unite bookmark -buffer-name=bookmark<CR>
-nnoremap <silent>g/             :<C-U>call <SID>unite_with_same_syntax('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast')<CR>
-nnoremap <silent>g#             :<C-U>call <SID>unite_with_same_syntax('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast -input=<C-R><C-W>')<CR>
-nnoremap [unite]f                :<C-U>Unite -buffer-name=file file_rec:
-nnoremap <silent>[unite]<C-F>    :<C-U>UniteGit<CR>
+nnoremap [unite]f               :Unite -buffer-name=file -no-start-insert file_rec:
+nnoremap <silent><Space>b       :UniteBookmarkAdd<CR>
+nnoremap <silent>[unite]b       :Unite buffer -buffer-name=buffer<CR>
+nnoremap <silent>[unite]j       :Unite file_mru -buffer-name=file_mru<CR>
+nnoremap <silent>[unite]B       :Unite bookmark -buffer-name=bookmark<CR>
+nnoremap <silent>[unite]<C-F>   :UniteGit<CR>
+
+nnoremap <silent>[unite]e       :Unite english_dictionary -buffer-name=english_dictionary<CR>
+nnoremap <silent>[unite]x       :Unite english_example -horizontal -buffer-name=example<CR>
+nnoremap <silent>[unite]a       :Unite web_search -horizontal -buffer-name=web_search<CR>
+nnoremap <silent>[unite]T       :Unite english_thesaurus -horizontal -buffer-name=thesaurus<CR>
+
+nnoremap <silent>g/             :call <SID>unite_with_same_syntax('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast')<CR>
+nnoremap <silent>g*             :call <SID>unite_with_same_syntax('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast -input=<C-R><C-W>')<CR>
 
 function! s:unite_git_root(...) "{{{
   let git_root = s:current_git()
@@ -2429,9 +2429,7 @@ function! s:unite_git_complete(arg_lead, cmd_line, cursor_pos) "{{{
 endfunction "}}}
 command! -nargs=? -complete=customlist,s:unite_git_complete UniteGit call <SID>unite_git_root(<f-args>)
 
-" nnoremap <silent>[unite]q        :<C-U>Unite qiita -buffer-name=qiita<CR>
 " nnoremap <silent>[unite]ra       :<C-U>Unite -buffer-name=rake rake<CR>
-" nnoremap <silent><expr>[unite]s  ':Unite tag -horizontal -buffer-name=tags -input='.expand("<cword>").'<CR>'
 nnoremap <silent>[unite]s        :Unite session -buffer-name=session -no-empty<CR>
 nnoremap <silent>[unite]/        :Unite history/search -buffer-name=history_search -no-empty<CR>
 nnoremap <silent>[unite]:        :Unite history/command -buffer-name=history_command -no-empty<CR>
@@ -2481,16 +2479,16 @@ function! bundle.hooks.on_source(bundle) "{{{
 
   call alpaca#let_g:('unite_source_menu_menus', {})
 
-  call unite#custom_source('line', 'max_candidates', 5000)
   call unite#custom_source('file_rec', 'max_candidates', 5000)
   call unite#custom_source('file_rec/async', 'max_candidates', 5000)
+  call unite#custom_source('giti/branch_all', 'max_candidates', 5000)
   call unite#custom_source('giti/log', 'max_candidates', 5000)
+  call unite#custom_source('line', 'max_candidates', 5000)
+  call unite#custom_source('line/fast', 'max_candidates', 5000)
+  call unite#custom_source('tag', 'max_candidates', 5000)
+  call unite#custom_source('tags', 'max_candidates', 5000)
   let g:giti_git_command = executable('hub') ? 'hub' : 'git'
   let g:giti_log_default_line_count = 500
-  call unite#custom_source('giti/branch_all', 'max_candidates', 5000)
-  call unite#custom_source('line/fast', 'max_candidates', 5000)
-  call unite#custom_source('tags', 'max_candidates', 5000)
-  call unite#custom_source('tag', 'max_candidates', 5000)
 
   augroup MyUniteCmd
     autocmd!
@@ -2543,7 +2541,7 @@ function! bundle.hooks.on_source(bundle) "{{{
   endfunction"}}}
 
   function! s:unite_hooks.file() "{{{
-    inoremap <buffer><Tab> <CR>
+    nmap <buffer><Tab> <Plug>(unite_do_default_action)
     syntax match uniteFileDirectory '.*\/'
     highlight link uniteFileDirectory Directory
   endfunction"}}}
@@ -2733,29 +2731,29 @@ command! -nargs=0 Mvim call s:open_macvim()
 
 " ----------------------------------------
 " For lang-8 product {{{
-function! s:do_lang8_autocmd() "{{{
+function! s:doautocmd_for_lang8() "{{{
   let pwd = getcwd()
+
   if pwd =~ 'lang-8'
-    call s:lang8_settings()
+    let g:neorspec_command = 'Dispatch spec {spec}'
+    nnoremap <buffer>[plug]c           :UniteGit config<CR>
+    nnoremap <buffer>[plug]j           :UniteGit public/static/javascripts<CR>
+    nnoremap <buffer>[plug]a           :UniteGit public/static/sass<CR>
+    nnoremap <buffer>[plug]m           :UniteGit app/models/mailer<CR>
   else
     let g:neorspec_command = 'Dispatch rspec {spec}'
   endif
 endfunction"}}}
 
-function! s:lang8_settings() "{{{
-  let g:neorspec_command = 'Dispatch spec {spec}'
-
-  nnoremap <buffer>[plug]c           :UniteGit config<CR>
-  nnoremap <buffer>[plug]j           :UniteGit public/static/javascripts<CR>
-  nnoremap <buffer>[plug]a           :UniteGit public/static/sass<CR>
-  nnoremap <buffer>[plug]m           :UniteGit app/models/mailer<CR>
-  " let g:user_zen_settings.filters.html.indentation = ''
-endfunction"}}}
-
 augroup MyAutoCmd
-  autocmd User Rails call <SID>do_lang8_autocmd()
+  autocmd User Rails call <SID>doautocmd_for_lang8()
 augroup END
 "}}}
+
+" for evaluate_text_selected
+function! s:get_script_variables() "{{{
+  return s:
+endfunction"}}}
 
 if !has('vim_starting')
   call neobundle#call_hook('on_source')

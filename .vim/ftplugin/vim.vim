@@ -20,32 +20,68 @@ function! s:evaluate_text_selected() "{{{
   endif
 
   let current_file = expand('%:p')
-  let sid = 's:'
+  let s:sid = ''
 
-  if filereadable(current_file)
+  " Get SID
+  if filereadable(current_file) "{{{
     redir => script_names
       silent scriptnames
     redir END
 
     for line in split(script_names, '\n')
-      let sid_and_filepath = split(line, ': ')
-      if fnamemodify(sid_and_filepath[1], ':p') =~ current_file . '$'
-        let sid = sid_and_filepath[0]
+      let [sid, filepath] = split(line, ': ')
+      if fnamemodify(filepath, ':p') =~ current_file . '$'
+        let s:sid = matchstr(sid, '\d\+')
       endif
     endfor
-  endif
+  endif"}}}
 
   let text_selected = @*
-  let text_selected = substitute(text_selected, 's:', '<SNR>' . sid . '_', 'g')
-  sandbox let result = eval(text_selected)
+
+  try
+  " Replace script variable to raw value"{{{
+  let script_variables_function = '<SNR>' . s:sid . '_get_script_variables'
+
+  if !empty(s:sid) && text_selected =~ 's:\S\+()'
+    let function_full_name = substitute(matchstr(text_selected, 's:\S\+()'), '()', '', 'g')
+    let function_name = split(function_full_name, ':')[-1]
+    let function_scope = '<SNR>' . s:sid . '_' . function_name
+    let function_result = {function_scope}()
+
+    let result = function_result
+  elseif !empty(s:sid) && text_selected =~ 's:' && exists('*' . script_variables_function . '()')
+    let script_variables = {script_variables_function}()
+    let var_full_name = matchstr(text_selected, 's:\S\+')
+    let var_name = split(var_full_name, ':')[-1]
+    let var_value = get(script_variables, var_name)
+
+    echomsg 'Replaced ' . var_full_name . ' to ' . var_value
+    let text_selected = substitute(text_selected, var_full_name, var_value, 'g')
+
+    " evaluate text_selected
+    echomsg text_selected
+    sandbox let result = eval(text_selected)
+  else
+    " evaluate text_selected
+    echomsg text_selected
+    sandbox let result = eval(text_selected)
+  endif
+  "}}}
+
+  " Write result to tempfile"{{{
   let result_as_string = string(result)
   let result_as_array = split(result_as_string, '\n')
 
   let temp_path = tempname()
   call writefile(result_as_array, temp_path)
+  "}}}
 
   silent pedit `=temp_path`
+
+  catch /.*/
+    echomsg v:errmsg
+  endtry
 endfunction"}}}
-vmap <buffer>\ :<C-U>call <SID>evaluate_text_selected()<CR>
+xmap <silent><buffer>\ :<C-U>call <SID>evaluate_text_selected()<CR>
 
 let &cpo = s:save_cpo
