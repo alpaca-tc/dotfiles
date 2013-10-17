@@ -22,15 +22,12 @@ function! alpaca#initialize#define_abbreviations(definition, filetype) "{{{
   execute 'autocmd Abbreviations FileType' a:filetype command
 endfunction"}}}
 
-function! alpaca#initialize#define_dict_to_each_filetypes(ft_dictionary) "{{{
+function! alpaca#initialize#redefine_dict_to_each_filetypes(difinitions, type) "{{{
   let result = {}
 
-  for [filetypes, value] in items(a:ft_dictionary)
+  for [filetypes, value] in items(a:difinitions)
     for ft in split(filetypes, ',')
-      if !has_key(result, ft)
-        let result[ft] = []
-      endif
-
+      let result[ft] = get(result, ft, a:type)
       call extend(result[ft], copy(value))
     endfor
   endfor

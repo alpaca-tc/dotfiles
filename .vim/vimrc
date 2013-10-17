@@ -32,22 +32,6 @@ augroup END
 
 " ----------------------------------------
 " Utils "{{{
-function! s:include(target, value) "{{{
-  let target_type = type(a:target)
-
-  if type({}) == target_type
-    return has_key(a:target, a:value)
-
-  elseif type([]) == target_type || type('') == target_type
-    return match(a:target, a:value) > -1
-
-  elseif type(0) == target_type
-    return a:target == a:value
-
-  endif
-
-  return 0
-endfunction"}}}
 function! s:current_git() "{{{
   let current_dir = getcwd()
   if !exists("s:git_root_cache") | let s:git_root_cache = {} | endif
@@ -1171,91 +1155,82 @@ xmap s   <Plug>VSurround
 let bundle = NeoBundleGet('vim-surround')
 function! bundle.hooks.on_source(bundle) "{{{
   let g:surround_no_mappings = 1
-  let s:surrond_definitions = []
+  let s:surround_definitions = {
+        \ join(g:my.ft.ruby_files, ',') : {
+        \   '#':  "#{\r}",
+        \   '%':  "<% \r %>",
+        \   '-':  "<% \r -%>",
+        \   '=':  "<%= \r %>",
+        \   'w':  "%w!\r!",
+        \   'W':  "%W!\r!",
+        \   'q':  "%q!\r!",
+        \   'Q':  "%Q!\r!",
+        \   'r':  "%r!\r!",
+        \   'R':  "%R!\r!",
+        \   '\"':  '\"\r\"',
+        \   "'":  "'\r'",
+        \   '{':  "{ \r }",
+        \   'd':  'do\n \r end',
+        \ },
+        \ join(g:my.ft.php_files, ',') : {
+        \   '<' : '<?php \r ?>',
+        \ },
+        \ '_' : {
+        \   '(' : "(\r)",
+        \   '[' : "[\r]",
+        \   '{' : "{ \r }",
+        \   '#':  "#{\r}",
+        \ },
+        \ 'snippet' : {
+        \   '$' : "${\r}",
+        \ }
+        \ }
 
-  if empty(s:surrond_definitions)
-    call add(s:surrond_definitions, {
-          \ 'filetypes' : g:my.ft.ruby_files,
-          \ 'mappings' : {
-          \   '#':  "#{\r}",
-          \   '%':  "<% \r %>",
-          \   '-':  "<% \r -%>",
-          \   '=':  "<%= \r %>",
-          \   'w':  "%w!\r!",
-          \   'W':  "%W!\r!",
-          \   'q':  "%q!\r!",
-          \   'Q':  "%Q!\r!",
-          \   'r':  "%r!\r!",
-          \   'R':  "%R!\r!",
-          \   '\"':  '\"\r\"',
-          \   "'":  "'\r'",
-          \   '{':  "{ \r }",
-          \   'd':  'do\n \r end',
-          \ }
-          \ })
-
-    call add(s:surrond_definitions, {
-          \ 'filetypes' : g:my.ft.php_files,
-          \ 'mappings' : {
-          \   '<' : '<?php \r ?>',
-          \ }
-          \ })
-
-    call add(s:surrond_definitions, {
-          \ 'filetypes' : ['_'],
-          \ 'mappings' : {
-          \   '(' : "(\r)",
-          \   '[' : "[\r]",
-          \   '{' : "{ \r }",
-          \   '#':  "#{\r}",
-          \ }
-          \ })
-
-    call add(s:surrond_definitions, {
-          \ 'filetypes' : ['snippet'],
-          \ 'mappings' : {
-          \   '$' : "${\r}",
-          \ }
-          \ })
-  endif
+  let s:surround_definitions =
+        \ alpaca#initialize#redefine_dict_to_each_filetypes(s:surround_definitions, {})
 
   function! s:define_variable_for_surround(mapping_dict) "{{{
     for [key, mapping] in items(a:mapping_dict)
-      call alpaca#let_b:('surround_'.char2nr(key), mapping)
+      let var_name = 'surround_'.char2nr(key)
+      call alpaca#let_b:(var_name, mapping)
     endfor
   endfunction"}}}
-  function! s:define_variables_for_surround() "{{{
-    if !exists('s:surrond_definitions_memo')
-      let s:surrond_definitions_memo = {}
-    endif
 
-    if empty(&filetype)
-      return
-    endif
-
-    let filetype = s:filetype()
-
-    if has_key( s:surrond_definitions_memo, filetype )
-      for mappings in s:surrond_definitions_memo[filetype]
-        call s:define_variable_for_surround( mappings )
-      endfor
-      return
-    endif
+  function! s:get_definition_by_filetype(filetype) "{{{
+    let filetype = a:filetype
 
     let memo = []
-    for mapping_settings in s:surrond_definitions
-      if s:include(mapping_settings, 'filetypes') && s:include(mapping_settings, 'mappings')
-        let filetypes = mapping_settings.filetypes
-        let mappings  = mapping_settings.mappings
+    let filetypes = []
 
-        if s:include(filetypes, filetype) || s:include(filetypes, '_')
-          call s:define_variable_for_surround(mappings)
-          call add(memo, mappings)
-        endif
+    for ft in split(filetype, '\.')
+      call add(filetypes, ft)
+      let ft_name = join(filetypes, '.')
+
+      if has_key(s:surround_definitions, ft_name)
+        let definition = s:surround_definitions[ft_name]
+        call add(memo, definition)
       endif
     endfor
 
-    let s:surrond_definitions_memo[filetype] = memo
+    if has_key(s:surround_definitions, '_')
+      let definition = s:surround_definitions['_']
+      call add(memo, definition)
+    endif
+
+    return memo
+  endfunction"}}}
+
+  function! s:define_variables_for_surround() "{{{
+    let s:surrond_definitions_memo = get(s:, 'surrond_definitions_memo', {})
+    let filetype = &filetype
+
+    if !has_key(s:surrond_definitions_memo, filetype)
+      let s:surrond_definitions_memo[filetype] = s:get_definition_by_filetype(filetype)
+    endif
+
+    for mappings in s:surrond_definitions_memo[filetype]
+      call s:define_variable_for_surround(mappings)
+    endfor
   endfunction"}}}
 
   augroup MySurroundMapping
@@ -2044,7 +2019,9 @@ function! bundle.hooks.on_source(bundle) "{{{
         \ ]
         \ }
   "}}}
-  let s:switch_definition = alpaca#initialize#define_dict_to_each_filetypes(s:switch_definition)
+
+  let s:switch_definition =
+        \ alpaca#initialize#redefine_dict_to_each_filetypes(s:switch_definition, [])
 
   function! s:define_switch_mappings() "{{{
     if exists('b:switch_custom_definitions')
