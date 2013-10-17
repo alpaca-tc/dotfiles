@@ -2,7 +2,7 @@ setl dict+=~/.vim/dict/javascript.dict,~/.vim/dict/jquery.dict
 
 augroup MyCoffee
   autocmd!
-  autocmd BufWritePost <buffer> %s/;$//g
+  autocmd BufWritePost <buffer> %s/;$//ge
   autocmd FileType <buffer> autocmd! MyCoffee
 augroup END
 

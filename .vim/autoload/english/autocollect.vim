@@ -8,7 +8,7 @@ endfunction"}}}
 
 function! english#autocollect#unload() "{{{
   if !exists('b:loaded_english_autocollect')
-    return 
+    return
   endif
 
   for definition in s:get_definitions()

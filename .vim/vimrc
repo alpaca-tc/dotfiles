@@ -56,9 +56,9 @@ function! s:current_git() "{{{
   endif
 
   let git_root = system('git rev-parse --show-toplevel')
-  if git_root =~ "fatal: Not a git repository"
+  if git_root =~ 'fatal: Not a git repository'
     " throw "No a git repository."
-    return ""
+    return ''
   endif
 
   let s:git_root_cache[current_dir] = substitute(git_root, '\n', '', 'g')
@@ -823,44 +823,52 @@ xnoremap rep y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!g<Left><Left>
 nnoremap ,f :FileType<Space>
 command! -nargs=? -complete=filetype FileType execute 'set filetype=' . <q-args>
 
-" Abbreviations {{{
-let s:abbr_dictionary = {
-      \ 'javascript' : [
-      \   'elsif else if',
-      \   'elseif else if',
-      \ ],
-      \ 'vim' : [
-      \   'sh should',
-      \   "reqs require 'spec_helper'",
-      \   'req require',
-      \ ],
-      \ 'yaml': [
-      \   '<< << : *'
-      \ ],
-      \ 'ruby.rspec' : [
-      \   'sh should',
-      \   "reqs require 'spec_helper'",
-      \ ],
-      \ 'ruby' : [
-      \   'req require',
-      \ ],
-      \ 'scss': [
-      \   'in include',
-      \   'im import',
-      \   'mi mixin',
-      \ ],
-      \ 'python' : [
-      \   'im import'
-      \ ],
-      \ 'gitcommit' : [
-      \   'wip [WIP]'
-      \ ],
-      \ }
-for [filetype, abbr_dictionary] in items(s:abbr_dictionary)
-  call alpaca#initialize#define_abbrev(abbr_dictionary, filetype)
-endfor
-unlet filetype
-unlet abbr_dictionary
+function! s:define_abbreviations() "{{{
+  " Abbreviations {{{
+  let s:abbr_dictionary = {
+        \ 'javascript' : [
+        \   'elsif else if',
+        \   'elseif else if',
+        \ ],
+        \ 'vim' : [
+        \ ],
+        \ 'yaml': [
+        \   '<< << : *'
+        \ ],
+        \ 'ruby.rspec' : [
+        \   'sh should',
+        \   "reqs require 'spec_helper'",
+        \ ],
+        \ 'ruby' : [
+        \   'req require',
+        \ ],
+        \ 'scss': [
+        \   'in include',
+        \   'im import',
+        \   'mi mixin',
+        \ ],
+        \ 'python' : [
+        \   'im import',
+        \ ],
+        \ 'gitcommit' : [
+        \   'wip [WIP]',
+        \   'imo IMO',
+        \ ],
+        \ }
+  "}}}
+
+  autocmd! Abbreviations
+  for [filetype, abbreviation_definitions] in items(s:abbr_dictionary)
+    call alpaca#initialize#define_abbreviations(abbreviation_definitions, filetype)
+  endfor
+endfunction
+
+if has('vim_starting')
+  augroup Abbreviations
+    autocmd!
+    autocmd FileType * call <SID>define_abbreviations()
+  augroup END
+endif
 "}}}
 
 let g:end_tag_commant_format = '<!-- /%tag_name%id%class -->'
@@ -916,6 +924,7 @@ nnoremap <silent>j gj
 nnoremap <silent>k gk
 nnoremap <silent>gj j
 nnoremap <silent>gk k
+nnoremap <silent>Y y$
 
 let g:alpaca_window_default_filetype='ruby'
 nmap <silent>L            <Plug>(alpaca_window_move_next_window_or_tab)
@@ -938,8 +947,8 @@ function! s:search_same_indent_line(to_next) "{{{
 
   echomsg 'Not found'
 endfunction"}}}
-nnoremap <silent>{{ :<C-U>call <SID>search_same_indent_line(1)<CR>
-nnoremap <silent>}} :<C-U>call <SID>search_same_indent_line(0)<CR>
+nnoremap <silent>_ :<C-U>call <SID>search_same_indent_line(1)<CR>
+nnoremap <silent>_ :<C-U>call <SID>search_same_indent_line(0)<CR>
 
 augroup MyAutoCmd
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line('$') | execute "normal g`\"" | endif
@@ -958,25 +967,10 @@ nnoremap <silent>[tag_or_tab]x  :tabclose<CR>
 nnoremap <silent>[tag_or_tab]o  <C-W>T
 
 for num in range(0, 9)
-  execute 'nnoremap <silent>[tag_or_tab]'.num.'  :<C-U>tabnext '.num'<CR>'
-  execute 'nnoremap <silent>[tag_or_tab]m'.num.'  :<C-U>tabmove '.num'<CR>'
+  execute 'nnoremap <silent>[tag_or_tab]'.num.'  :tabnext '.num'<CR>'
+  execute 'nnoremap <silent>[tag_or_tab]m'.num.'  :tabmove '.num'<CR>'
 endfor
 unlet num
-
-function! s:move_tab_to(increasing_or_decreasing) "{{{
-  let target_tab_nr = tabpagenr() + a:increasing_or_decreasing -1
-  let last_tab_nr = tabpagenr('$') - 1
-
-  if target_tab_nr > last_tab_nr
-    let target_tab_nr = last_tab_nr
-  elseif target_tab_nr < 1
-    let target_tab_nr = 0
-  endif
-
-  tabmove `=target_tab_nr`
-endfunction"}}}
-nnoremap <silent>[tag_or_tab]<C-L> :<C-U>call <SID>move_tab_to(1)<CR>
-nnoremap <silent>[tag_or_tab]<C-H> :<C-U>call <SID>move_tab_to(-1)<CR>
 "}}}
 
 " ----------------------------------------
@@ -1064,8 +1058,7 @@ syntax on
 
 " ----------------------------------------
 " Tags {{{
-set tags-=tags
-set tags+=tags;
+set tags=./tags
 
 " Vim's bug.
 if v:version < 703 || (v:version == 7.3 && !has('patch336'))
@@ -1093,16 +1086,15 @@ augroup END
 " Dictionary {{{
 function! s:set_dictionary_automatically() "{{{
   let file_type_name = &filetype
-  let dict_name = split(file_type_name, '\.')
-
-  if empty(dict_name) || count(g:my.ft.ignore_patterns, dict_name) > 0
+  if empty(file_type_name) || count(g:my.ft.ignore_patterns, file_type_name) > 0
     return
   endif
+
+  let dict_name = split(file_type_name, '\.')
 
   setl dictionary=
 
   let filetypes = []
-  let filetype_path = []
   for ft in dict_name
     call add(filetypes, ft)
 
@@ -1124,9 +1116,6 @@ augroup END
 nnoremap <buffer><Space>d :execute join([alpaca_window#util#get_smart_split_command('split'), split(&dictionary, ',')[-1]], ' ')<CR>
 nnoremap <buffer><Space><Space>d :execute join([alpaca_window#util#get_smart_split_command('split'), split(&dictionary, ',')[-2]], ' ')<CR>
 nnoremap <buffer><Space><Space><Space>d :execute join([alpaca_window#util#get_smart_split_command('split'), split(&dictionary, ',')[-3]], ' ')<CR>
-
-nnoremap [plug] <Nop>
-nmap <C-H> [plug]
 "}}}
 
 " ----------------------------------------
@@ -1149,6 +1138,8 @@ cnoremap <C-N> <Down>
 
 " ----------------------------------------
 " Plugin settings {{{
+nnoremap [plug] <Nop>
+nmap <C-H> [plug]
 
 " ------------------------------------
 let bundle = NeoBundleGet('vim-arpeggio')
@@ -1409,9 +1400,10 @@ endfunction "}}}
 unlet bundle
 
 " ----------------------------------------
+imap <buffer><C-E> <C-Y>,
+
 let bundle = NeoBundleGet('emmet-vim')
 function! bundle.hooks.on_source(bundle) "{{{
-  imap <buffer><C-E> <C-Y>,
   let g:user_emmet_mode = 'iv'
   let g:user_emmet_leader_key = '<C-Y>'
   let g:use_emmet_complete_tag = 1
