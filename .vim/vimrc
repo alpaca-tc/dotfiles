@@ -1250,9 +1250,9 @@ nnoremap <silent><C-G><C-G> :<C-u>Rgrep<Space><C-r><C-w> *<CR><CR>
 nnoremap <silent><C-G><C-B> :<C-u>GrepBuffer<Space><C-r><C-w><CR>
 let bundle = NeoBundleGet('grep.vim')
 function! bundle.hooks.on_source(bundle) "{{{
+  let Grep_Find_Use_Xargs = 0
   let Grep_Skip_Dirs = '.svn .git .swp .hg cache compile'
   let Grep_Skip_Files = '*.bak *~ .swp .swa .swo'
-  let Grep_Find_Use_Xargs = 0
   let Grep_Xargs_Options = '--print0'
 endfunction "}}}
 unlet bundle
@@ -1429,10 +1429,10 @@ endfunction "}}}
 unlet bundle
 
 " ----------------------------------------
-nnoremap <silent>gM :<C-U>Gcommit --amend<CR>
-nnoremap <silent>gb :<C-U>Gblame<CR>
-nnoremap <silent>gB :<C-U>Gbrowse<CR>
-nnoremap <silent>gm :<C-U>Gcommit<CR>
+nnoremap <silent>gM :Gcommit --amend<CR>
+nnoremap <silent>gb :Gblame<CR>
+nnoremap <silent>gB :Gbrowse<CR>
+nnoremap <silent>gm :Gcommit<CR>
 let bundle = NeoBundleGet('vim-fugitive')
 function! bundle.hooks.on_source(bundle) "{{{
   augroup MyGitCmd
@@ -1457,8 +1457,8 @@ nnoremap gp :<C-U>Git push<Space>
 nnoremap gD :<C-U>GitDiff<Space>
 let bundle = NeoBundleGet('git-vim')
 function! bundle.hooks.on_source(bundle) "{{{
-  let g:git_command_edit = 'vnew'
   let g:git_bin = g:my.bin.git
+  let g:git_command_edit = 'vnew'
   let g:git_no_default_mappings = 1
 endfunction "}}}
 unlet bundle
@@ -1579,7 +1579,7 @@ endfunction"}}}
 " ------------------------------------
 " t_comment
 " ------------------------------------
-let g:tcommentmaps=0
+let g:tcommentmaps = 0
 noremap <silent><C-_><c-_> :TComment<CR>
 noremap <silent><C-_>c :TComment<CR>
 
@@ -1663,11 +1663,7 @@ endif
 " ------------------------------------
 let g:RspecKeymap = 0
 function! s:rspec_settings() "{{{
-  setl foldmethod=syntax
-  setl foldlevel=2
-  setl foldlevelstart=1
-  setl foldminlines=10
-  setl foldnestmax=10
+  setl foldmethod=syntax foldlevel=2 foldlevelstart=1 foldminlines=10 foldnestmax=10
 
   augroup RspecSetting
     autocmd!
@@ -1791,7 +1787,7 @@ unlet bundle
 " ------------------------------------
 " vim-endwise
 " ------------------------------------
-let g:endwise_no_mappings=1
+let g:endwise_no_mappings = 1
 
 " ------------------------------------
 let bundle = NeoBundleGet('jedi-vim')
@@ -1813,7 +1809,6 @@ function! bundle.hooks.on_source(bundle) "{{{
   let g:vinarise_objdump_command = 'gobjdump'
 endfunction"}}}
 unlet bundle
-
 
 " ------------------------------------
 let bundle = NeoBundleGet('vim-textmanip')
@@ -1874,7 +1869,7 @@ let g:scala_use_default_keymappings = 0
 " ------------------------------------
 " alpaca_remove_dust
 " ------------------------------------
-let g:remove_dust_enable=1
+let g:remove_dust_enable = 1
 if exists(':RemoveDust')
   augroup RemoveDust
     autocmd!
@@ -2127,12 +2122,12 @@ unlet bundle
 " ------------------------------------
 let bundle = NeoBundleGet('alpaca_english')
 function! bundle.hooks.on_source(bundle) "{{{
-  let g:alpaca_english_enable=1
-  let g:alpaca_english_max_candidates=100
-  let g:alpaca_english_enable_duplicate_candidates=1
+  let g:alpaca_english_enable                      = 1
+  let g:alpaca_english_max_candidates              = 100
+  let g:alpaca_english_enable_duplicate_candidates = 1
 
   " DEVELOPMENT VERSION
-  let g:alpaca_english_web_search_url = 'http://eow.alc.co.jp/%s/UTF-8/'
+  let g:alpaca_english_web_search_url   = 'http://eow.alc.co.jp/%s/UTF-8/'
   let g:alpaca_english_web_search_xpath = "div[@id='resultsList']/ul/li"
 endfunction"}}}
 unlet bundle
@@ -2160,30 +2155,30 @@ let g:neocomplete#enable_at_startup = 1
 
 let bundle = NeoBundleGet(has('lua') ? 'neocomplete' : 'nothing!!')
 function! bundle.hooks.on_source(bundle) "{{{
-  let g:neocomplete#auto_completion_start_length=3
-  let g:neocomplete#sources#syntax#min_keyword_length=3
-  let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-  let g:neocomplete#auto_completion_start_length=g:neocomplete#sources#syntax#min_keyword_length
+  let g:neocomplete#auto_completion_start_length      = 3
+  let g:neocomplete#sources#syntax#min_keyword_length = 3
+  let g:neocomplete#lock_buffer_name_pattern          = '\*ku\*'
+  let g:neocomplete#auto_completion_start_length      = g:neocomplete#sources#syntax#min_keyword_length
   " let g:neocomplete#ctags_arguments = g:alpaca_update_tags_config
-  let g:neocomplete#data_directory=g:my.dir.neocomplete
-  let g:neocomplete#enable_auto_close_preview=0
-  let g:neocomplete#enable_auto_select=0
-  " let g:neocomplete_caching_limit_file_size=500000
-  " let g:neocomplete_max_keyword_width=120
-  " " let g:neocomplete_enable_cursor_hold_i=0
-  " let g:neocomplete#enable_smart_case = 1
-  " let g:neocomplete#enable_refresh_always = 0
+  let g:neocomplete#data_directory                    = g:my.dir.neocomplete
+  let g:neocomplete#enable_auto_close_preview         = 0
+  let g:neocomplete#enable_auto_select                = 0
+  " let g:neocomplete_caching_limit_file_size = 500000
+  " let g:neocomplete_max_keyword_width       = 120
+  " let g:neocomplete_enable_cursor_hold_i    = 0
+  " let g:neocomplete#enable_smart_case       = 1
+  " let g:neocomplete#enable_refresh_always   = 0
 
-  let g:neocomplete#enable_complete_select = 0
-  let g:neocomplete#enable_fuzzy_completion=0
-  let g:neocomplete#force_overwrite_completefunc = 1
-  let g:neocomplete#manual_completion_start_length=0
+  let g:neocomplete#enable_complete_select          = 0
+  let g:neocomplete#enable_fuzzy_completion         = 0
+  let g:neocomplete#force_overwrite_completefunc    = 1
+  let g:neocomplete#manual_completion_start_length  = 0
 
-  let g:neocomplete#sources#buffer#cache_limit_size=700000
-  let g:neocomplete#sources#tags#cache_limit_size=1000000
-  let g:neocomplete#sources#include#max_proceslses = 30
-  let g:neocomplete#max_list=100
-  let g:neocomplete#skip_auto_completion_time='0.1'
+  let g:neocomplete#sources#buffer#cache_limit_size = 700000
+  let g:neocomplete#sources#tags#cache_limit_size   = 1000000
+  let g:neocomplete#sources#include#max_proceslses  = 30
+  let g:neocomplete#max_list                        = 100
+  let g:neocomplete#skip_auto_completion_time       = '0.1'
 
   let g:neocomplete#disable_auto_select_buffer_name_pattern =
         \ '\[Command Line\]'
@@ -2272,9 +2267,11 @@ function! bundle.hooks.on_source(bundle) "{{{
         \ }
 
   for dict in split(glob($HOME.'/.vim/dict/*.dict'))
-    let s:ft = matchstr(dict, '[a-zA-Z0-9.]\+\ze\.dict$')
-    let neocomplete#sources#dictionary#dictionaries[s:ft] = dict
+    let ft = matchstr(dict, '[a-zA-Z0-9.]\+\ze\.dict$')
+    let neocomplete#sources#dictionary#dictionaries[ft] = dict
   endfor
+  unlet dict
+  unlet ft
 
   augroup MyAutoCmd
     autocmd BufReadPre *
@@ -2617,17 +2614,16 @@ unlet bundle
 " ----------------------------------------
 let bundle = NeoBundleGet('vim-ruby')
 function! bundle.hooks.on_source(bundle) "{{{
-  let g:rubycomplete_buffer_loading = 0
+  let g:rubycomplete_buffer_loading    = 0
   let g:rubycomplete_classes_in_global = 0
-  let g:rubycomplete_rails = 0
+  let g:rubycomplete_rails             = 0
 endfunction "}}}
 unlet bundle
 
 " ----------------------------------------
 let bundle = NeoBundleGet('jekyll.vim')
 function! bundle.hooks.on_source(bundle) "{{{
-  let git_dir = s:current_git()
-  let g:jekyll_path = git_dir
+  let g:jekyll_path = s:current_git()
 endfunction"}}}
 unlet bundle
 
