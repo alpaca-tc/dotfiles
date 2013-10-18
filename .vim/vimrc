@@ -645,9 +645,12 @@ NeoBundleLazy 'tpope/vim-markdown', { 'autoload' : {
 
 " Binary
 " ----------------------------------------
-" NeoBundleLazy 'Shougo/vinarise', {
-"       \ 'depends': ['s-yukikaze/vinarise-plugin-peanalysis'],
-"       \ 'autoload': { 'commands': 'Vinarise' }}
+NeoBundleLazy 'Shougo/vinarise', {
+      \ 'depends': ['s-yukikaze/vinarise-plugin-peanalysis'],
+      \ 'build' : {
+      \   'mac' : 'brew install binutils',
+      \ },
+      \ 'autoload': { 'commands': 'Vinarise' }}
 
 " Objective-c
 " ----------------------------------------
@@ -1266,9 +1269,9 @@ function! bundle.hooks.on_source(bundle) "{{{
   augroup END
 
   if exists('g:my.bin.ctags') && executable(g:my.bin.ctags)
-    let g:tagbar_ctags_bin  = g:my.bin.ctags
+    let g:tagbar_ctags_bin = g:my.bin.ctags
   else
-    let g:tagbar_ctags_bin  = 'ctags'
+    let g:tagbar_ctags_bin = 'ctags'
   endif
 
   let g:tagbar_autoclose = 0
@@ -1375,7 +1378,6 @@ unlet bundle
 
 " ----------------------------------------
 imap <buffer><C-E> <C-Y>,
-
 let bundle = NeoBundleGet('emmet-vim')
 function! bundle.hooks.on_source(bundle) "{{{
   let g:user_emmet_mode = 'iv'
@@ -1659,7 +1661,7 @@ endif
 " ------------------------------------
 " vim-rspec
 " ------------------------------------
-let g:RspecKeymap=0
+let g:RspecKeymap = 0
 function! s:rspec_settings() "{{{
   setl foldmethod=syntax
   setl foldlevel=2
@@ -1680,11 +1682,11 @@ augroup END
 " ------------------------------------
 let bundle = NeoBundleGet('gist-vim')
 function! bundle.hooks.on_source(bundle) "{{{
-  let g:gist_browser_command = 'w3m %URL%'
-  let g:gist_clip_command = 'pbcopy'
-  let g:gist_detect_filetype = 1
+  let g:gist_browser_command         = 'w3m %URL%'
+  let g:gist_clip_command            = 'pbcopy'
+  let g:gist_detect_filetype         = 1
   let g:gist_open_browser_after_post = 1
-  let g:github_user = g:my.info.github
+  let g:github_user                  = g:my.info.github
 endfunction"}}}
 unlet bundle
 
@@ -1694,9 +1696,9 @@ nnoremap <silent>tv :<C-U>TweetVimSay<CR>
 
 let bundle = NeoBundleGet('TweetVim')
 function! bundle.hooks.on_source(bundle) "{{{
-  let g:tweetvim_async_post = 1
-  let g:tweetvim_display_source = 1
-  let g:tweetvim_display_time = 1
+  let g:tweetvim_async_post      = 1
+  let g:tweetvim_display_source  = 1
+  let g:tweetvim_display_time    = 1
   let g:tweetvim_open_buffer_cmd = 'tabnew'
 endfunction"}}}
 unlet bundle
@@ -1704,11 +1706,16 @@ unlet bundle
 " ------------------------------------
 " sass-compile.vim
 " ------------------------------------
-let g:sass_compile_cdloop = 5
-let g:sass_compile_cssdir = ['css', 'stylesheet']
-let g:sass_compile_file = ['scss', 'sass']
-let g:sass_started_dirs = []
-let g:sass_compile_beforecmd = ''
+let bundle = NeoBundleGet('sass-compile.vim')
+function! bundle.hooks.on_source(bundle) "{{{
+  let g:sass_compile_cdloop = 5
+  let g:sass_compile_cssdir = ['css', 'stylesheet']
+  let g:sass_compile_file = ['scss', 'sass']
+  let g:sass_started_dirs = []
+  let g:sass_compile_beforecmd = ''
+endfunction"}}}
+unlet bundle
+
 function! CompileSassAutomatically() "{{{
   augroup CompileSassAutomatically
     autocmd!
@@ -1741,20 +1748,20 @@ unlet bundle
 " ------------------------------------
 let bundle = NeoBundleGet('syntastic')
 function! bundle.hooks.on_source(bundle) "{{{
-  let g:syntastic_auto_jump = 1
-  let g:syntastic_auto_loc_list=1
-  let g:syntastic_check_on_open = 0
-  let g:syntastic_echo_current_error = 0
-  let g:syntastic_enable_balloons = has('balloon_eval')
+  let g:syntastic_auto_jump           = 1
+  let g:syntastic_auto_loc_list       = 1
+  let g:syntastic_check_on_open       = 0
+  let g:syntastic_echo_current_error  = 0
+  let g:syntastic_enable_balloons     = has('balloon_eval')
   let g:syntastic_enable_highlighting = 0
-  let g:syntastic_enable_signs = 1
-  let g:syntastic_loc_list_height=2
-  let g:syntastic_error_symbol = '>'
-  let g:syntastic_warning_symbol = 'X'
+  let g:syntastic_enable_signs        = 1
+  let g:syntastic_loc_list_height     = 2
+  let g:syntastic_error_symbol        = '>'
+  let g:syntastic_warning_symbol      = 'X'
 
-  let s:passive_filetypes = ['html', 'yaml', 'racc.ruby', 'eruby']
+  let s:passive_filetypes       = ['html', 'yaml', 'racc.ruby', 'eruby']
   let g:syntastic_ruby_checkers = ['mri', 'rubocop']
-  let g:syntastic_mode_map = {
+  let g:syntastic_mode_map      = {
         \ 'mode'              : 'active',
         \ 'active_filetypes'  : g:my.ft.program_files,
         \ 'passive_filetypes' : copy(s:passive_filetypes),
@@ -1765,12 +1772,12 @@ unlet bundle
 " ------------------------------------
 let bundle = NeoBundleGet('vim-indent-guides')
 function! bundle.hooks.on_source(bundle) "{{{
-  let g:indent_guides_auto_colors=0
-  let g:indent_guides_color_change_percent = 20
-  let g:indent_guides_enable_on_vim_startup=1
-  let g:indent_guides_guide_size=1
-  let g:indent_guides_space_guides = 1
-  let g:indent_guides_start_level = 2
+  let g:indent_guides_auto_colors           = 0
+  let g:indent_guides_color_change_percent  = 20
+  let g:indent_guides_enable_on_vim_startup = 1
+  let g:indent_guides_guide_size            = 1
+  let g:indent_guides_space_guides          = 1
+  let g:indent_guides_start_level           = 2
   highlight IndentGuidesOdd  ctermbg=235
   highlight IndentGuidesEven ctermbg=233
   nnoremap <Space>i :IndentGuidesToggle<CR>
@@ -1789,19 +1796,24 @@ let g:endwise_no_mappings=1
 " ------------------------------------
 let bundle = NeoBundleGet('jedi-vim')
 function! bundle.hooks.on_source(bundle) "{{{
-  let g:jedi#auto_initialization = 1
-  let g:jedi#goto_definitions_command = ',d'
+  let g:jedi#auto_initialization      = 1
+  let g:jedi#documentation_command    = 'K'
   let g:jedi#goto_assignments_command = ',g'
+  let g:jedi#goto_definitions_command = ',d'
+  let g:jedi#popup_on_dot             = 0
+  let g:jedi#rename_command           = ',R'
+  let g:jedi#usages_command           = ',n'
+  let g:jedi#use_tabs_not_buffers     = 0
+endfunction"}}}
+unlet bundle
 
-  let g:jedi#popup_on_dot = 0
-  let g:jedi#documentation_command = 'K'
-  let g:jedi#usages_command = ',n'
-
-  let g:jedi#rename_command = ',R'
-  let g:jedi#use_tabs_not_buffers = 0
+" ------------------------------------
+let bundle = NeoBundleGet('vinarise')
+function! bundle.hooks.on_source(bundle) "{{{
   let g:vinarise_objdump_command = 'gobjdump'
 endfunction"}}}
 unlet bundle
+
 
 " ------------------------------------
 let bundle = NeoBundleGet('vim-textmanip')
@@ -2685,7 +2697,6 @@ let g:snail_csv2google_sheet_hourly_rete = 2200
 " let g:lang8_email_address = 'alprhcp666@gmail.com'
 "}}}
 "}}}
-
 
 " ----------------------------------------
 function! s:update_ruby_ctags() "{{{
