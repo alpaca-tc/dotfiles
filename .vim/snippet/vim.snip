@@ -188,3 +188,10 @@ snippet let_default
 abbr    let g:... = get(g:, ..., '')
 options word
   let ${1:g:}${2:name} = get($1, '$2', ${3:#:''})
+
+snippet eval_variable
+abbr    eval_variable
+options word
+  function! s:get_script_variables() "{{{
+    return s:
+  endfunction"}}}

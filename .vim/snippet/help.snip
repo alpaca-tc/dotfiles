@@ -1,10 +1,12 @@
 snippet     g:
 abbr        g:... *...*
 options     word
-  g:${1}				*g:$1*
+  g:${1}        *g:$1*
 
 snippet variable
-abbr    g:variable_name				*$1*
+abbr    g:variable_name        *$1*
 options word
-  ${1:#:g:variable_name}				*$1*
-			${2}
+  ${1:#:g:variable_name}        *$1*
+      ${2}
+
+# set noexpandtab
