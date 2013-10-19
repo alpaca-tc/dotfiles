@@ -1242,7 +1242,7 @@ function! bundle.hooks.on_source(bundle) "{{{
       let s:surrond_definitions_cache[filetype] = s:get_definition(filetype)
     endif
 
-    for mappings in s:surrond_definitions_cache[filetype]
+    for mappings in get(s:surrond_definitions_cache, filetype, [])
       call s:define_variable_for_surround(mappings)
     endfor
   endfunction"}}}
@@ -2749,6 +2749,16 @@ function! s:open_macvim() "{{{
   call alpaca#system_bg('mvim -c "UniteSessionLoad for_mvim"')
 endfunction"}}}
 command! -nargs=0 Mvim call s:open_macvim()
+
+function! s:open_vim() "{{{
+  if has('gui')
+    UniteSessionSave for_vim
+    Clean
+  else
+    UniteSessionLoad for_vim
+  endif
+endfunction"}}}
+command! -nargs=0 Vim call s:open_vim()
 "}}}
 
 " ----------------------------------------
