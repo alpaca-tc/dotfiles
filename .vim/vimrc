@@ -32,6 +32,14 @@ augroup END
 
 " ----------------------------------------
 " Utils {{{
+function s:SID() "{{{
+  if exists('s:sid')
+    return s:sid
+  else
+    let s:sid = matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$')
+    return s:sid
+  endif
+endfun"}}}
 function! s:current_git() "{{{
   let current_dir = getcwd()
   let s:git_root_cache = get(s:, 'git_root_cache', {})
@@ -137,6 +145,15 @@ if has('vim_starting') && g:my.conf.initialize
   call alpaca#initialize#directory(values(g:my.dir))
 endif
 "}}}
+
+let g:loaded_matchparen = 1
+let g:loaded_getscriptPlugin = 1
+let g:loaded_netrwPlugin = 1
+let loaded_spellfile_plugin = 1
+let g:loaded_tarPlugin = 1
+let g:loaded_2html_plugin = 1
+let g:loaded_vimballPlugin = 1
+let g:loaded_zipPlugin = 1
 
 " ----------------------------------------
 " basic settings "{{{
@@ -379,10 +396,12 @@ NeoBundleLazy 'tyru/caw.vim', {
 
 " For Git
 NeoBundleLazy 'tpope/vim-fugitive', { 'autoload': {
+      \ 'functions' : ['fugitive#head'],
       \ 'commands': ['Gcommit', 'Gblame', 'Ggrep', 'Gdiff'] }}
 NeoBundleLazy 'Shougo/git-vim', {
       \ 'autoload' : {
       \ 'function_prefix' : 'git',
+      \ 'functions' : 'git#get_current_branch',
       \ 'commands': [
       \   { 'name': 'GitDiff',     'complete' : 'customlist,git#list_commits' },
       \   { 'name': 'GitVimDiff',  'complete' : 'customlist,git#list_commits' },
@@ -586,7 +605,7 @@ NeoBundleLazy 'vim-less', {
 " ----------------------------------------
 NeoBundleLazy 'alpaca-tc/html5.vim', { 'autoload' : {
       \   'filetypes' : g:my.ft.markup_files,
-      \   'functions' : ['HtmlIndentGet']
+      \   'commands' : ['HtmlIndentGet']
       \ }}
 NeoBundleLazy 'mattn/emmet-vim', {
       \ 'autoload': {
@@ -1699,8 +1718,9 @@ endfunction"}}}
 unlet bundle
 
 " ------------------------------------
-nnoremap <silent>[unite]w  :<C-U>Unite tweetvim -buffer-name=tweetvim -no-start-insert<CR>
-nnoremap <silent>[tag_or_tab]v :<C-U>TweetVimSay<CR>
+nnoremap <silent>[unite]w  :Unite tweetvim -buffer-name=tweetvim -no-start-insert<CR>
+nnoremap <silent>[tag_or_tab]v :TweetVimSay<CR>
+nnoremap [tag_or_tab]a :TweetVimSwitchAccount<Space>
 
 let bundle = NeoBundleGet('TweetVim')
 function! bundle.hooks.on_source(bundle) "{{{
@@ -2425,8 +2445,9 @@ nnoremap <silent>[unite]x       :Unite english_example -horizontal -buffer-name=
 nnoremap <silent>[unite]a       :Unite web_search -horizontal -buffer-name=web_search<CR>
 nnoremap <silent>[unite]T       :Unite english_thesaurus -horizontal -buffer-name=thesaurus<CR>
 
-nnoremap <silent>g/             :call <SID>unite_with_same_syntax('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast')<CR>
-nnoremap <silent>g*             :call <SID>unite_with_same_syntax('Unite -buffer-name=line_fast -hide-source-names -horizontal -no-empty -start-insert -no-quit line/fast -input=<C-R><C-W>')<CR>
+nnoremap <silent>g/             :call <SID>unite_with_same_syntax('Unite line/fast -buffer-name=line_fast -hide-source-names -horizontal -start-insert -no-quit')<CR>
+nnoremap <silent>g*             :call <SID>unite_with_same_syntax('Unite line/fast:forward -buffer-name=line_fast -start-insert -no-quit -input=' . expand('<cword>'))<CR>
+nnoremap <silent>g#             :call <SID>unite_with_same_syntax('Unite line/fast:backword -buffer-name=line_fast -start-insert -no-quit -input=' . expand('<cword>'))<CR>
 
 function! s:unite_git_root(...) "{{{
   let git_root = s:current_git()
@@ -2498,8 +2519,8 @@ function! bundle.hooks.on_source(bundle) "{{{
 
   let g:unite_winheight = 20
   " let g:unite_marked_icon = "✓"
-  let g:unite_force_overwrite_statusline=1
   let g:unite_source_history_yank_enable = 0
+  let g:unite_force_overwrite_statusline = 0
   let s:unite_hooks = {}
 
   call alpaca#let_g:('unite_source_menu_menus', {})
@@ -2658,11 +2679,77 @@ unlet bundle
 " lightline
 " ----------------------------------------
 "{{{
-if has('vim_starting')
+let bundle = NeoBundleGet('lightline.vim')
+function! bundle.hooks.on_source(bundle) "{{{
+  let s:lightline = { 'updatetime' : 5 } "{{{
+
+  function! s:lightline.new(options) "{{{
+    let options = a:options
+    let instance = copy(self)
+    call remove(instance, 'new')
+    call extend(instance, options)
+
+    return instance
+  endfunction"}}}
+
+  function! s:lightline.update(object) "{{{
+    let object = a:object
+    let now = localtime()
+    let object.updatedtime = get(object, 'updatedtime', localtime())
+
+    if !has_key(object, 'initialized') || (now - object.updatedtime >= get(object, 'updatetime', &updatetime / 1000))
+      let object.initialized = 1
+      let object.updatedtime = now
+      return 1
+    else
+      return 0
+    endif
+  endfunction"}}}
+
+  function! s:lightline.statusline() "{{{
+    let self.cache = self.update(self) ? self.func() : get(self, 'cache', '')
+    return self.cache
+  endfunction"}}}
+  "}}}
+
+  let g:lightline#functions#git_branch = s:lightline.new({ 'updatetime' : 5 })
+  function! g:lightline#functions#git_branch.func() "{{{
+    if neobundle#is_sourced('vim-fugitive')
+      let branch = fugitive#head()
+    elseif neobundle#is_sourced('git-vim')
+      let branch = git#get_current_branch()
+    elseif neobundle#is_sourced('vim-unite-giti')
+      let branch = giti#branch#current_name()
+    else
+      let branch = ''
+    endif
+
+    return branch
+  endfunction"}}}
+
+  let g:lightline#functions#syntastic = s:lightline.new({ 'updatetime' : 0 })
+  function! g:lightline#functions#syntastic.func() " {{{
+    return neobundle#is_sourced('syntastic') ? SyntasticStatuslineFlag() : ''
+  endfunction "}}}
+
+  let g:lightline#functions#tagbar = s:lightline.new({ 'updatetime' : 0 })
+  function! g:lightline#functions#tagbar.func() " {{{
+    return neobundle#is_sourced('tagbar') && bufwinnr("__Tagbar__") != -1 ? tagbar#currenttag("[%s]", "") : ''
+  endfunction "}}}
+
   let g:lightline = {
         \ 'colorscheme': 'wombat',
+        \ 'active': {
+        \   'left': [
+        \     ['mode', 'paste'], ['git_branch', 'tagbar', 'syntastic'], ['filename', 'readonly', 'modified']]
+        \ },
+        \ 'component_function' : {
+        \   'git_branch': 'g:lightline#functions#git_branch.statusline',
+        \   'tagbar':     'g:lightline#functions#tagbar.statusline',
+        \   'syntastic':  'g:lightline#functions#syntastic.statusline',
+        \ },
         \ }
-endif
+endfunction"}}}
 "}}}
 
 " ----------------------------------------
