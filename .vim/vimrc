@@ -32,7 +32,7 @@ augroup END
 
 " ----------------------------------------
 " Utils {{{
-function s:SID() "{{{
+function! s:SID() "{{{
   if exists('s:sid')
     return s:sid
   else
@@ -72,6 +72,9 @@ function! NeoBundleGet(name) "{{{
 
   let bundle = neobundle#get(a:name)
   return empty(bundle) ? s:dummy_neobundle_source : bundle
+endfunction"}}}
+function! s:reltime() "{{{
+  return str2float(reltimestr(reltime()))
 endfunction"}}}
 "}}}
 
@@ -833,8 +836,7 @@ nnoremap re :%s!
 xnoremap re :s!
 xnoremap rep y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!g<Left><Left>
 
-nnoremap ,f :FileType<Space>
-command! -nargs=? -complete=filetype FileType execute 'set filetype=' . <q-args>
+nnoremap ,f :setfiletype<Space>
 
 function! s:define_abbreviations() "{{{
   " Abbreviations {{{
@@ -2049,7 +2051,7 @@ function! bundle.hooks.on_source(bundle) "{{{
         \   ['NeoBundle', 'NeoBundleLazy'],
         \   { 'let\s\+\([gstb]:\a\+\|\a\+\)\s*\(.\|+\|-\|*\|\\\)\{,1}=\s*\(\a\+\)\s*.*$' : 'unlet \1' },
         \   ['echo', 'echomsg'],
-        \   ['if', 'elseif'],
+        \   ['if', 'else', 'elseif'],
         \ ],
         \ 'markdown' : [
         \   ['[ ]', '[x]'],
@@ -2367,6 +2369,7 @@ command! VimFilerExplorerGit call <SID>vim_filer_explorer_git()
 let bundle = NeoBundleGet('vimfiler')
 function! bundle.hooks.on_source(bundle) "{{{
   let g:vimfiler_data_directory = g:my.dir.vimfiler
+  let g:vimfiler_force_overwrite_statusline = 0
   let g:vimfiler_safe_mode_by_default = 0
   let g:vimfiler_as_default_explorer = 1
   let g:vimfiler_sort_type = 'filename'
@@ -2694,10 +2697,10 @@ function! bundle.hooks.on_source(bundle) "{{{
 
   function! s:lightline.update(object) "{{{
     let object = a:object
-    let now = localtime()
-    let object.updatedtime = get(object, 'updatedtime', localtime())
+    let now = s:reltime()
+    let object.updatedtime = get(object, 'updatedtime', s:reltime())
 
-    if !has_key(object, 'initialized') || (now - object.updatedtime >= get(object, 'updatetime', &updatetime / 1000))
+    if !has_key(object, 'initialized') || (now - object.updatedtime >= object.updatetime)
       let object.initialized = 1
       let object.updatedtime = now
       return 1
@@ -2714,12 +2717,12 @@ function! bundle.hooks.on_source(bundle) "{{{
 
   let g:lightline#functions#git_branch = s:lightline.new({ 'updatetime' : 5 })
   function! g:lightline#functions#git_branch.func() "{{{
-    if neobundle#is_sourced('vim-fugitive')
-      let branch = fugitive#head()
+    if neobundle#is_sourced('vim-unite-giti')
+      let branch = giti#branch#current_name()
     elseif neobundle#is_sourced('git-vim')
       let branch = git#get_current_branch()
-    elseif neobundle#is_sourced('vim-unite-giti')
-      let branch = giti#branch#current_name()
+    elseif neobundle#is_sourced('vim-fugitive')
+      let branch = fugitive#head()
     else
       let branch = ''
     endif
@@ -2727,26 +2730,50 @@ function! bundle.hooks.on_source(bundle) "{{{
     return branch
   endfunction"}}}
 
-  let g:lightline#functions#syntastic = s:lightline.new({ 'updatetime' : 0 })
+  let g:lightline#functions#syntastic = s:lightline.new({ 'updatetime' : 5 })
   function! g:lightline#functions#syntastic.func() " {{{
     return neobundle#is_sourced('syntastic') ? SyntasticStatuslineFlag() : ''
   endfunction "}}}
 
-  let g:lightline#functions#tagbar = s:lightline.new({ 'updatetime' : 0 })
+  let g:lightline#functions#tagbar = s:lightline.new({ 'updatetime' : 3 })
   function! g:lightline#functions#tagbar.func() " {{{
-    return neobundle#is_sourced('tagbar') && bufwinnr("__Tagbar__") != -1 ? tagbar#currenttag("[%s]", "") : ''
+    return neobundle#is_sourced('tagbar') && bufwinnr('__Tagbar__') != -1 ? tagbar#currenttag('[%s]', '') : ''
   endfunction "}}}
+
+  let g:lightline#functions#plugin_information = s:lightline.new({ 'updatetime' : 0.5 })
+  function! g:lightline#functions#plugin_information.func() "{{{
+    if &filetype == 'unite'
+      return unite#get_status_string()
+    elseif &filetype == 'vimfiler'
+      return vimfiler#get_status_string()
+    elseif &filetype == 'vimshell'
+      return vimshell#get_status_string()
+    elseif exists('b:tweetvim_say_count')
+      return tweetvim#account#current().screen_name
+    else
+      return empty(bufname('%')) ? '' : expand('%:p:~')
+    endif
+  endfunction"}}}
 
   let g:lightline = {
         \ 'colorscheme': 'wombat',
         \ 'active': {
         \   'left': [
-        \     ['mode', 'paste'], ['git_branch', 'tagbar', 'syntastic'], ['filename', 'readonly', 'modified']]
+        \     ['mode'],
+        \     ['information'],
+        \     ['git_branch', 'tagbar', 'syntastic', 'readonly', 'modified'],
+        \   ],
+        \   'right': [
+        \     ['lineinfo'],
+        \     ['percent'],
+        \     ['fileformat', 'fileencoding', 'filetype']
+        \   ],
         \ },
         \ 'component_function' : {
-        \   'git_branch': 'g:lightline#functions#git_branch.statusline',
-        \   'tagbar':     'g:lightline#functions#tagbar.statusline',
-        \   'syntastic':  'g:lightline#functions#syntastic.statusline',
+        \   'git_branch':  'g:lightline#functions#git_branch.statusline',
+        \   'tagbar':      'g:lightline#functions#tagbar.statusline',
+        \   'syntastic':   'g:lightline#functions#syntastic.statusline',
+        \   'information': 'g:lightline#functions#plugin_information.statusline',
         \ },
         \ }
 endfunction"}}}
