@@ -421,10 +421,11 @@ NeoBundleLazy 'mattn/gist-vim', {
 NeoBundleLazy 'glidenote/memolist.vim', { 'autoload' : {
       \ 'commands' : ['MemoNew', 'MemoGrep']
       \ }}
-NeoBundleLazy 'kakkyz81/evervim', { 'autoload': {
+" NeoBundleLazy 'kakkyz81/evervim', { 'autoload': {
+NeoBundleLazy 'alpaca-tc/evervim', { 'autoload': {
       \ 'branch' : 'unite',
       \ 'commands' : ['EvervimCreateNote', 'EvervimNotebookList'],
-      \ 'unite_sources' : ['evervim/notebook', 'evernote/note', 'evernote/tag', 'evernote/query']
+      \ 'unite_sources' : ['evervim/notebook', 'evervim/note', 'evervim/tag', 'evervim/query']
       \ }}
 
 " The awesome plugin looks for one of a few specific patterns under
@@ -720,6 +721,10 @@ NeoBundleLazy 'taka84u9/vim-ref-ri', {
 "       \ 'autoload' : {
 "       \   'commands' : ['RSpec', 'RSpecAll', 'RSpecCurrent', 'RSpecNearest', 'RSpecRetry']
 "       \ }}
+NeoBundle 'alpaca-tc/vim-chef', { 'autoload' : {
+      \ 'functions' : ['chef#detect'],
+      \ 'filetypes': 'ruby.chef',
+      \ }}
 
 " Slim
 " ----------------------------------------
@@ -791,7 +796,7 @@ NeoBundleLazy 'mattn/excitetranslate-vim', {
 " Installation check.
 if has('vim_starting') && g:my.conf.initialize && neobundle#exists_not_installed_bundles()
   echomsg 'Not installed bundles : ' .  string(neobundle#get_not_installed_bundle_names())
-  NeoBundleInstall!
+  execute 'NeoBundleInstall' join(neobundle#get_not_installed_bundle_names(), ' ')
 endif
 
 filetype plugin indent on
@@ -2452,19 +2457,52 @@ nnoremap <silent>g/             :call <SID>unite_with_same_syntax('Unite line/fa
 nnoremap <silent>g*             :call <SID>unite_with_same_syntax('Unite line/fast:forward -buffer-name=line_fast -start-insert -no-quit -input=' . expand('<cword>'))<CR>
 nnoremap <silent>g#             :call <SID>unite_with_same_syntax('Unite line/fast:backword -buffer-name=line_fast -start-insert -no-quit -input=' . expand('<cword>'))<CR>
 
+function! s:parse_git_root_option(input) "{{{
+  let reg_multi =  '\*\*/'
+  let reg_bad_pattern =  '\v(\*\*[^/])'
+  let reg_single = '[^/*]\{,1}\*[^*]'
+
+  let input = a:input
+  if input =~ reg_bad_pattern
+    next
+  elseif input =~ reg_multi
+    " echo 'multi'
+    let input = substitute(input, '.*/\([^/]\+\)$', '\1', 'g')
+  elseif input =~ reg_single
+    " echo 'single'
+    let input = '^' . input
+  else
+    " echo 'non'
+  endif
+
+  return input
+endfunction"}}}
+
 function! s:unite_git_root(...) "{{{
   let git_root = s:current_git()
-  let path = empty(a:000) ? '' : a:1
-  let absolute_path = s:complement_delimiter_of_directory(git_root) . path
+  let root_path = s:complement_delimiter_of_directory(git_root)
+
+  let argument = empty(a:000) ? '' : a:1
+  let [args, context] = unite#helper#parse_options_args(argument)
+  let full_path = get(unite#helper#get_source_names(args), 0, '')
+  let wild_sep = split(full_path, '\*')
+  let relative_path = get(wild_sep, 0, '')
+  let absolute_path = root_path . relative_path
+
+  let prefilter = len(wild_sep) > 1 ? '*' . join(wild_sep[1:-1], '*') : ''
+  let prefilter = s:parse_git_root_option(prefilter)
+  let context.source__prefilters = [prefilter]
+  let context.source__absolute_path = absolute_path
+  let context.source__project_root_path = git_root
 
   if isdirectory(absolute_path)
-    execute 'Unite -buffer-name=file file_rec/async:'.absolute_path
     lcd `=absolute_path`
-    file `='*unite* - ' . path`
+    call unite#start([['file_rec', absolute_path]], context)
+    file `='*unite* - ' . relative_path . ' - prefilter "' . join(context.source__prefilters, ',') . '"'`
   elseif filereadable(absolute_path)
     edit `=absolute_path`
   else
-    echomsg path . ' is not exists!'
+    echomsg absolute_path . ' is not exists!'
   endif
 endfunction"}}}
 function! s:unite_git_complete(arg_lead, cmd_line, cursor_pos) "{{{
@@ -2544,12 +2582,78 @@ function! bundle.hooks.on_source(bundle) "{{{
     autocmd FileType unite call <SID>unite_my_settings()
   augroup END
 
+  function! s:extend_file_rec_source() "{{{
+    if exists('g:loaded_extend_file_rec_source')
+      return
+    endif
+    let g:loaded_extend_file_rec_source = 1
+
+    let filter_name = 'pre_filter'
+    let pre_filter = { 'name' : filter_name }
+
+    function! pre_filter.filter(candidates, context) "{{{
+      let candidates = a:candidates
+      if has_key(a:context, 'source__prefilters')
+            \ && has_key(a:context, 'source__absolute_path') && has_key(a:context, 'source__project_root_path')
+        let prefilters = a:context.source__prefilters
+
+        let reg_multi =  '\*\*/'
+        let reg_bad_pattern =  '\v(\*\*[^/])'
+        let reg_single = '[^/*]\{,1}\*[^*]'
+
+
+        for input in prefilters
+          if input =~ reg_bad_pattern
+            next
+          elseif input =~ reg_multi
+            " echo 'multi'
+            let input = substitute(input, '.*/\([^/]\+\)$', '\1', 'g')
+            let single = 1
+          elseif input =~ reg_single
+            " echo 'single'
+            " let input = input
+          else
+            " echo 'non'
+          endif
+
+          if input =~ '\\\@<![*|]'
+            let input = substitute(unite#util#escape_match(input), '\\\@<!|', '\\|', 'g')
+            let expr = 'v:val.word =~ ' . string(input)
+          else
+            let input = substitute(input, '\\\(.\)', '\1', 'g')
+            let expr = &ignorecase ?
+                  \ printf('stridx(tolower(v:val.word), %s) != -1',
+                  \     string(tolower(input))) :
+                  \ printf('stridx(v:val.word, %s) != -1',
+                  \     string(input))
+          endif
+
+          if exists('single')
+            let input = '^' . single
+          endif
+
+          " let candidates = unite#filters#matcher_glob#glob_matcher(candidates, input, a:context)
+          let candidates = unite#filters#filter_matcher(candidates, expr, a:context)
+        endfor
+      endif
+
+      return candidates
+    endfunction"}}}
+
+    call unite#define_filter(pre_filter)
+    let default_filters = ['matcher_default', 'sorter_default', 'matcher_hide_hidden_files' , 'converter_relative_word']
+    call unite#custom#source('file_rec', 'filters', add(default_filters, filter_name))
+  endfunction"}}}
+  call s:extend_file_rec_source()
+
   function! s:unite_my_settings() "{{{
     augroup MyUniteBufferCmd
       autocmd!
       autocmd! * <buffer>
       autocmd BufEnter <buffer> if winnr('$') == 1 |quit| endif
     augroup END
+
+    call s:extend_file_rec_source()
 
     setl nolist
     if has('gui')
@@ -2742,9 +2846,9 @@ function! bundle.hooks.on_source(bundle) "{{{
 
   let g:lightline#functions#plugin_information = s:lightline.new({ 'updatetime' : 0.5 })
   function! g:lightline#functions#plugin_information.func() "{{{
-    if &filetype == 'unite'
-      return unite#get_status_string()
-    elseif &filetype == 'vimfiler'
+    " if &filetype == 'unite'
+    "   return unite#get_status_string()
+    if &filetype == 'vimfiler'
       return vimfiler#get_status_string()
     elseif &filetype == 'vimshell'
       return vimshell#get_status_string()
@@ -2817,6 +2921,31 @@ endfunction"}}}
 nnoremap <silent>,s :<C-U>call <SID>toggle_spell()<CR>
 
 " ----------------------------------------
+" vim-chef
+function! s:detect_chef() "{{{
+  if chef#detect() && &filetype !~ '\(unite\|vimfiler\)'
+    NeoBundleSource ~/.vim/snippet/ruby.chef.snip
+    runtime syntax/chef.vim
+
+    let ft = &filetype
+    if ft =~ '\(ruby\|eruby\)'
+      let &filetype = ft . '.chef'
+    endif
+
+    nnoremap <C-H>c :UniteGit cookbooks/**/*.rb<CR>
+  endif
+endfunction"}}}
+
+augroup MyAutoCmd
+  autocmd VimEnter * call <SID>detect_chef()
+augroup END
+command! Chef edit ~/.bundle/vim-chef/syntax/chef.vim
+
+let bundle = NeoBundleGet('vim-chef')
+function! bundle.hooks.on_source(bundle) "{{{
+endfunction"}}}
+
+" ----------------------------------------
 " Other plugin settings {{{
 let g:git_aliases#author_name = g:my.info.github
 let g:snail_csv2google_sheet_hourly_rete = 2200
@@ -2842,7 +2971,6 @@ function! s:clear_memory() "{{{
 
   if exists(':TagsCleanCache')
     TagsCleanCache
-    TagsSet
     set tags=
   endif
 

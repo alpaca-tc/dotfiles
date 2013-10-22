@@ -84,4 +84,7 @@ function! s:evaluate_text_selected() "{{{
 endfunction"}}}
 xmap <silent><buffer>\ :<C-U>call <SID>evaluate_text_selected()<CR>
 
+iabbrev ehco echo
+iabbrev ecoh echo
+
 let &cpo = s:save_cpo
