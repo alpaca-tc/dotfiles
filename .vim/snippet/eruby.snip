@@ -15,4 +15,19 @@ abbr        class
 prev_word   '^'
     class: '${1: name}'
 
+#
+snippet =
+abbr    <%= ... %>
+options word
+  <%= ${1} %>
+
+snippet %
+abbr    <% ... %>
+options word
+  <% ${1} %>
+
+snippet -
+abbr    -%>
+options word
+  -%>
 

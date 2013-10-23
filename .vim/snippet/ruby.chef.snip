@@ -1,6 +1,3 @@
-snippet action
-  action :${1:nothing}
-
 snippet ignore_failure
   ignore_failure ${1:true}
 
@@ -179,12 +176,6 @@ snippet meta
   long_description IO.read(File.join(File.dirname(__FILE__), 'README.rdoc'))
   version          "${5:0.0.1}"
 
-snippet notifies
-  notifies :${1:restart}, "${2:service}[${3:name}]"
-
-snippet subscribes
-  subscribes :${1:restart}, "${2:template}[${3:name}]"
-
 snippet pak
   package "${1:name}" do
     action :${2:install}
@@ -258,25 +249,11 @@ snippet python
     EOH
   end
 
-snippet service
-  service "${1:name}" do
-    supports :status => ${2:true}, :restart => ${3:true}, :truereload => ${4:true}
-    action ${5:[ :enable, :start ]}
-  end
-
 snippet servicep
   service "${1:name}" do
     pattern "${2:pattern}"
     supports :status => ${3:true}, :restart => ${4:true}, :reload => ${5:true}
     action ${6:[ :enable, :start ]}
-  end
-
-snippet template
-  template "${1:name}" do
-    source "${2:source}.erb"
-    owner "root"
-    group "root"
-    mode "0644"
   end
 
 snippet templatev
@@ -310,9 +287,79 @@ abbr    cookbook_path [path]
 options word
   cookbook_path [${1:path/to/cookbook}]
 
+# - - -
+# Resources {{{
+
 snippet package
 abbr    package do ... end
 options word
   package '${1:package_name}' do
     ${2:action :install}
   end
+
+snippet service
+abbr    service(name, &block)
+options word
+  service "${1:name}" do
+    supports :status => ${2:true}, :restart => ${3:true}, :truereload => ${4:true}
+    action ${5:[ :enable, :start ]}
+  end
+
+snippet supports
+abbr    supports(options)
+options word
+  supports ${1:#:status: true}${2:#:, reload: true}${3:#:, restart: true}
+
+snippet template
+abbr    template 'name' do ... end
+  template '${1:name}' do
+    path ''
+    source 'path/to/file'
+    owner 'root'
+    group 'root'
+    mode '0644'
+    notifies :reload, 'service[nginx]'
+  end
+#}}}
+
+# Template attributes {{{
+snippet path
+abbr    path 'path/to_file'
+options word
+  path '${1:path/to/file}'
+
+snippet source
+abbr    source 'path/to/file'
+options word
+  source '${1:path/to/file}'
+
+snippet owner
+abbr    owner 'user_name'
+options word
+  owner '${1:user_name}'
+
+snippet group
+abbr    group 'group_name'
+options word
+  group '${1:group_name}'
+
+snippet mode
+abbr    mode 0644
+options word
+  mode ${1:0644}
+
+snippet action
+abbr    action(synbom_or_array)
+options word
+  action :${1:action_name}
+
+snippet notifies
+abbr    notifies :action_name, 'service_name', :immediately
+  notifies :${1:restart}, '${2:service}[${3:name}]'${4:#:, :immediately}
+
+snippet subscribes
+abbr    subscribes :action_name, 'service_name'
+options word
+  subscribes :${1:restart}, '${2:service}[${3:name}]'
+
+#}}}

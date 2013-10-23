@@ -430,7 +430,7 @@ NeoBundleLazy 'alpaca-tc/evervim', { 'autoload': {
 
 " The awesome plugin looks for one of a few specific patterns under
 " the cursor and performs a substition depending on the pattern.
-NeoBundleLazy 'AndrewRadev/switch.vim', { 'autoload' : {
+NeoBundleLazy 'alpaca-tc/switch.vim', { 'autoload' : {
       \ 'commands' : 'Switch',
       \ }}
 NeoBundleLazy 't9md/vim-textmanip', { 'autoload' : {
@@ -1929,14 +1929,34 @@ nnoremap ! :Switch<CR>
 let bundle = NeoBundleGet('switch.vim')
 function! bundle.hooks.on_source(bundle) "{{{
   "{{{
+  let g:switch_no_builtins = 0
+  let s:switch_definition_builtins = {
+        \ }
   let s:switch_definition = {
         \ '*': [
         \   ['is', 'are'],
-        \   ['true', 'false'],
+        \   { '\Cenable': '\Cdisable' },
+        \   { '\CEnable': '\CDisable' },
+        \   { '\Ctrue': 'false' },
+        \   { '\CTrue': 'False' },
+        \   { '\Cfalse': 'true' },
+        \   { '\CFalse': 'True' },
+        \   { '（\([^）]\+\)）' : '(\1)' },
         \ ],
         \ 'sass,scss,css' : [
         \   ['solid', 'dotted'],
         \   ['left', 'right'],
+        \ ],
+        \ 'coffee' : [
+        \   ['if', 'unless'],
+        \   { '^\(.*\)->': '\1=>' },
+        \   { '^\(.*\)=>': '\1->' },
+        \ ],
+        \ 'Gemfile,Berksfile' : [
+        \   ['=', '<', '<=', '>', '>=', '~>'],
+        \ ],
+        \ 'html,php' : [
+        \   { '<!--\([a-zA-Z0-9 /]\+\)--></\(div\|ul\|li\|a\)>' : '</\2><!--\1-->' },
         \ ],
         \ 'ruby,eruby,haml' : [
         \   ['if', 'unless'],
@@ -1947,21 +1967,28 @@ function! bundle.hooks.on_source(bundle) "{{{
         \   ['.inject', '.delete_if'],
         \   ['.map', '.map!'],
         \   ['attr_accessor', 'attr_reader', 'attr_writer'],
-        \   ['else', 'elsif'],
-        \ ],
-        \ 'coffee' : [
-        \   ['if', 'unless'],
-        \ ],
-        \ 'Gemfile,Berksfile' : [
-        \   ['=', '<', '<=', '>', '>=', '~>'],
+        \   { ':\(\k\+\)\s*=>\s*': '\1: ' },
+        \   { '\<\(\k\+\): ':      ':\1 => ' },
+        \   { '\.\%(tap\)\@!\(\k\+\)':   '.tap { |o| puts o.inspect }.\1' },
+        \   { '\.tap { |o| \%(.\{-}\) }': '' },
+        \   { '\(\k\+\)(&:\(\S\+\))': '\1 { |x| x\.\2 }' },
+        \   { '\(\k\+\)\s\={ |\(\k\+\)| \2.\(\S\+\) }': '\1(&:\3)' },
         \ ],
         \ 'ruby.application_template' : [
         \   ['yes?', 'no?'],
         \   ['lib', 'initializer', 'file', 'vendor', 'rakefile'],
         \   ['controller', 'model', 'view', 'migration', 'scaffold'],
         \ ],
-        \ 'html,php' : [
-        \   { '<!--\([a-zA-Z0-9 /]\+\)--></\(div\|ul\|li\|a\)>' : '</\2><!--\1-->' },
+        \ 'ruby.rspec': [
+        \   ['describe', 'context', 'specific', 'example'],
+        \   ['before', 'after'],
+        \   ['be_true', 'be_false'],
+        \   ['get', 'post', 'put', 'delete'],
+        \   ['==', 'eql', 'equal'],
+        \   { '\.should_not': '\.should' },
+        \   ['\.to_not', '\.to'],
+        \   { '\([^. ]\+\)\.should\(_not\|\)': 'expect(\1)\.to\2' },
+        \   { 'expect(\([^. ]\+\))\.to\(_not\|\)': '\1.should\2' },
         \ ],
         \ 'rails' : [
         \   [100, ':continue', ':information'],
@@ -2039,24 +2066,13 @@ function! bundle.hooks.on_source(bundle) "{{{
         \   ['^f', 'fixup '],
         \   ['^e', 'exec '],
         \ ],
-        \ 'rspec': [
-        \   ['describe', 'context', 'specific', 'example'],
-        \   ['before', 'after'],
-        \   ['be_true', 'be_false'],
-        \   ['get', 'post', 'put', 'delete'],
-        \   ['==', 'eql', 'equal'],
-        \   { '\.should_not': '\.should' },
-        \   ['\.to_not', '\.to'],
-        \   { '\([^. ]\+\)\.should\(_not\|\)': 'expect(\1)\.to\2' },
-        \   { 'expect(\([^. ]\+\))\.to\(_not\|\)': '\1.should\2' },
-        \ ],
         \ 'vim' : [
         \   { '\vhttps{,1}://github.com/([^/]+)/([^/]+)(\.git){,1}': '\1/\2' },
         \   ['call', 'return', 'echo'],
         \   ['NeoBundle', 'NeoBundleLazy'],
         \   { 'let\s\+\([gstb]:\a\+\|\a\+\)\s*\(.\|+\|-\|*\|\\\)\{,1}=\s*\(\a\+\)\s*.*$' : 'unlet \1' },
         \   ['echo', 'echomsg'],
-        \   ['if', 'else', 'elseif'],
+        \   ['if', 'else'],
         \ ],
         \ 'markdown' : [
         \   ['[ ]', '[x]'],
@@ -2070,23 +2086,22 @@ function! bundle.hooks.on_source(bundle) "{{{
   let s:switch_definition =
         \ alpaca#initialize#redefine_dict_to_each_filetype(s:switch_definition, [])
 
-  function! s:define_switch_mappings() "{{{
-    if exists('b:switch_custom_definitions')
-      unlet b:switch_custom_definitions
-    endif
-
-    if empty(&filetype)
-      return
-    endif
-
+  function! s:get_switch_mappings() "{{{
     let definitions = []
-    for filetype in split(&ft, '\.')
-      if has_key(s:switch_definition, filetype)
-        let definitions = extend(definitions, s:switch_definition[filetype])
-      endif
-    endfor
 
-    if exists('b:rails_root')
+    if !empty(&filetype)
+      let filetypes = []
+      for filetype in split(&filetype, '\.')
+        call add(filetypes, filetype)
+        let filetype_name = join(filetypes, '.')
+
+        if has_key(s:switch_definition, filetype_name)
+          let definitions = extend(definitions, s:switch_definition[filetype_name])
+        endif
+      endfor
+    endif
+
+    if exists('b:rails_root') && has_key(s:switch_definition, 'rails')
       let definitions = extend(definitions, s:switch_definition['rails'])
     endif
 
@@ -2094,13 +2109,26 @@ function! bundle.hooks.on_source(bundle) "{{{
       let definitions = extend(definitions, s:switch_definition['*'])
     endif
 
-    if !empty('definitions')
-      call alpaca#let_b:('switch_custom_definitions', definitions)
+    return definitions
+  endfunction"}}}
+
+  function! s:define_switch_mappings() "{{{
+    if exists('b:switch_custom_definitions')
+      unlet b:switch_custom_definitions
     endif
+
+    let s:switch_definition_cache = get(s:, 'switch_definition_cache', {})
+    let ft = empty(&filetype) ? '*' : &filetype
+
+    if !has_key(s:switch_definition_cache, ft)
+      let s:switch_definition_cache[ft] = s:get_switch_mappings()
+    endif
+
+    call alpaca#let_b:('switch_custom_definitions', s:switch_definition_cache[ft])
   endfunction"}}}
 
   augroup MyAutoCmd
-    autocmd Filetype * call <SID>define_switch_mappings()
+    autocmd Filetype * call s:define_switch_mappings()
   augroup END
 
   call s:define_switch_mappings()
@@ -2922,9 +2950,10 @@ nnoremap <silent>,s :<C-U>call <SID>toggle_spell()<CR>
 
 " ----------------------------------------
 " vim-chef
-function! s:detect_chef() "{{{
-  if chef#detect() && &filetype !~ '\(unite\|vimfiler\)'
-    NeoBundleSource ~/.vim/snippet/ruby.chef.snip
+function! s:load_chef() "{{{
+  if get(g:, 'chef#enable', 0) && &filetype !~ '\(unite\|vimfiler\)'
+    NeoSnippetSource ~/.vim/snippet/ruby.chef.snip
+    NeoBundleSource chef-vim
     runtime syntax/chef.vim
 
     let ft = &filetype
@@ -2932,14 +2961,15 @@ function! s:detect_chef() "{{{
       let &filetype = ft . '.chef'
     endif
 
-    nnoremap <C-H>c :UniteGit cookbooks/**/*.rb<CR>
+    nnoremap <buffer><C-H>c :UniteGit cookbooks/**/*.rb<CR>
   endif
 endfunction"}}}
 
 augroup MyAutoCmd
-  autocmd VimEnter * call <SID>detect_chef()
+  autocmd VimEnter *.rb call <SID>load_chef()
 augroup END
-command! Chef edit ~/.bundle/vim-chef/syntax/chef.vim
+command! ChefEnable let g:chef#enable = 1
+command! ChefDisable let g:chef#enable = 0
 
 let bundle = NeoBundleGet('vim-chef')
 function! bundle.hooks.on_source(bundle) "{{{

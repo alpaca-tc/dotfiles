@@ -26,7 +26,7 @@ function! alpaca#initialize#redefine_dict_to_each_filetype(difinitions, type) "{
 
   for [filetypes, value] in items(a:difinitions)
     for ft in split(filetypes, ',')
-      let result[ft] = get(result, ft, a:type)
+      let result[ft] = get(result, ft, copy(a:type))
       call extend(result[ft], copy(value))
     endfor
   endfor

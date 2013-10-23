@@ -146,6 +146,7 @@ alias yg='yard server --gems'
 alias gemset="rbenv gemset"
 alias gemset_set="echo >.rbenv-gemsets"
 alias remove_all_gem='for gem in `gem list | cut -d " " -f 1`; do yes | gem uninstall $gem -a; done'
+alias gem_from_url='gem specific_install -l'
 # }}}
 
 # postgres {{{

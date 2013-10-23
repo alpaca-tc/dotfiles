@@ -68,6 +68,9 @@ fi
 
 eval "$(rbenv init -)"
 
+# Vagrant
+export PATH=/Applications/Vagrant/bin:$PATH
+
 # MacVim
 export PATH=/Applications/MacVim.app/Contents/MacOS:$PATH
 
