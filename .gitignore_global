@@ -6,6 +6,7 @@ tags
 .sass-cache
 .tern-port
 npm-debug.log
+.vagrant/*
 node_modules/*
 .o
 .yui

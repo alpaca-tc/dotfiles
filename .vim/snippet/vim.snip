@@ -195,3 +195,11 @@ options word
   function! s:get_script_variables() "{{{
     return s:
   endfunction"}}}
+
+snippet function
+alias   func
+abbr    function! ...() { }
+options word
+  function! ${1:`join(split(substitute(expand("%:p"), '.*/autoload/\(.*\).vim$', '\1', 'g'), '/'), '#') . '#'`}${2}(${3})
+    ${4}
+  endfunction

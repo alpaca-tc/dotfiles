@@ -1,0 +1,143 @@
+# Variables {{{
+snippet $blueprint-grid-columns
+abbr    The number of columns in the grid.
+options word
+  $blueprint-grid-columns: ${1:24}
+
+snippet $blueprint-grid-width
+abbr    The width of a column
+options word
+  $blueprint-grid-width: ${1:10}px
+
+snippet $blueprint-grid-margin
+abbr    The amount of margin between columns
+options word
+  $blueprint-grid-margin: ${10}px
+
+snippet $blueprint-grid-outer-width
+abbr    The width of a column including the margin. With default settings this is 40px.
+options word
+ $blueprint-grid-outer-width: $blueprint-grid-width + $blueprint-grid-margin
+
+snippet $blueprint-container-size
+abbr    The width of the container. With default settings this is 950px.
+options word
+ $blueprint-container-size: $blueprint-grid-outer-width * $blueprint-grid-columns - $blueprint-grid-margin
+#}}}
+
+# Functions#{{{
+snippet span
+abbr    span($n): Return the width in pixels of $n columns.
+options word
+  span(${1:n})
+#}}}
+
+# Mixin {{{
+snippet blueprint-grid
+abbr    Generates presentational class names that you can use in your html to layout your pages.
+options word
+regexp  '+'
+  blueprint-grid
+
+snippet container
+abbr    A container for your columns.
+options word
+regexp  '+'
+  container
+
+snippet last
+abbr    The last column in a row needs this mixin or it will end up on the next row in some browsers.
+options word
+regexp  '+'
+  last
+
+snippet column
+abbr    column($n, $last): Use this mixins to set the width of n columns.
+options word
+regexp  '+'
+  column(${1:n}, ${2:last})
+
+snippet column-base
+abbr    column-base($last): The basic set of styles needed to make an element behave like a column:
+options word
+regexp  '+'
+  column-base(${1:last})
+
+snippet append
+abbr    append($n): Mixin to a column to append n empty columns to the right by adding right padding to the column.
+options word
+regexp  '+'
+  append(${1:n})
+
+snippet append-bottom
+abbr    append-bottom($amount): Adds trailing margin.
+options word
+regexp  '+'
+  append-bottom(${1:amount})
+
+snippet prepend
+abbr    prepend($amount): Adds leading margin.
+options word
+regexp  '+'
+  prepend(${1:amount})
+
+snippet pull-base
+abbr    Base styles that make it possible to pull an element to the left.
+options word
+regexp  '+'
+  pull-base
+
+snippet pull-margins
+abbr    pull-margins($n, $last): The amount of pulling for element to the left.
+options word
+regexp  '+'
+  pull-margins(${1:n}, ${2:last})
+
+snippet pull
+abbr    pull($n, $last): Moves a column n columns to the left.
+options word
+regexp  '+'
+  pull(${1:n}, ${2:last})
+
+snippet push-base
+abbr    Base styles that make it possible to pull an element to the right.
+options word
+regexp  '+'
+  push-base
+
+snippet push-margins
+abbr    push-margins($n): The amount of pulling for element to the right.
+options word
+regexp  '+'
+  push-margins(${1:n})
+
+snippet push
+abbr    push($n): mixin to a column to push it n columns to the right
+options word
+regexp  '+'
+  push(${1:n})
+
+snippet border
+abbr    border($border-color, $border-width): Border on right hand side of a column.
+options word
+regexp  '+'
+  border(${1:border-color}, ${2:border-width})
+
+snippet colborder
+abbr    colborder($border-color, $border-width): Border with more whitespace, spans one column.
+options word
+regexp  '+'
+  colborder(${1:border-color}, ${2:border-width})
+
+snippet colruler
+abbr    colruler($border-color): Mixin this to an hr to make a horizontal ruler across a column.
+options word
+regexp  '+'
+  colruler(${1:border-color})
+
+snippet colspacer
+abbr    Mixin this to an hr to make a horizontal spacer across a column.
+options word
+regexp  '+'
+  colspacer
+#}}}

@@ -11,3 +11,9 @@ let g:tagbar_type_css = {
       \ ]
       \ }
 "}}}
+
+augroup CssGroup
+  autocmd!
+  autocmd FileType <buffer> autocmd! CssGroup
+  autocmd BufWritePre <buffer> silent! %substitute/:$/;/g
+augroup END

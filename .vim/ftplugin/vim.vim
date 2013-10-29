@@ -20,21 +20,7 @@ function! s:evaluate_text_selected() "{{{
   endif
 
   let current_file = expand('%:p')
-  let s:sid = ''
-
-  " Get SID
-  if filereadable(current_file) "{{{
-    redir => script_names
-      silent scriptnames
-    redir END
-
-    for line in split(script_names, '\n')
-      let [sid, filepath] = split(line, ': ')
-      if fnamemodify(filepath, ':p') =~ current_file . '$'
-        let s:sid = matchstr(sid, '\d\+')
-      endif
-    endfor
-  endif"}}}
+  let s:sid = alpaca#function#get_sid(current_file)
 
   let text_selected = @*
 
@@ -43,6 +29,7 @@ function! s:evaluate_text_selected() "{{{
   let script_variables_function = '<SNR>' . s:sid . '_get_script_variables'
 
   if !empty(s:sid) && text_selected =~ 's:\S\+()'
+    " Given script function
     let function_full_name = substitute(matchstr(text_selected, 's:\S\+()'), '()', '', 'g')
     let function_name = split(function_full_name, ':')[-1]
     let function_scope = '<SNR>' . s:sid . '_' . function_name
@@ -50,6 +37,7 @@ function! s:evaluate_text_selected() "{{{
 
     let result = function_result
   elseif !empty(s:sid) && text_selected =~ 's:' && exists('*' . script_variables_function . '()')
+    " Given script variable
     let script_variables = {script_variables_function}()
     let var_full_name = matchstr(text_selected, 's:\S\+')
     let var_name = split(var_full_name, ':')[-1]
@@ -62,7 +50,7 @@ function! s:evaluate_text_selected() "{{{
     echomsg text_selected
     sandbox let result = eval(text_selected)
   else
-    " evaluate text_selected
+    " Given global variable
     echomsg text_selected
     sandbox let result = eval(text_selected)
   endif

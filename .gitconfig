@@ -1,7 +1,7 @@
 [user]
   email= alprhcp666@gmail.com
   ; name= Hiroyuki Ishii
-  name= alpaca_taichou
+  name= alpaca-tc
 
 [core]
   excludesfile = ~/.gitignore_global
@@ -78,6 +78,6 @@
 [branch]
   autosetuprebase = always
 [url "https://"]
-	insteadOf = git://
+  insteadOf = git://
 [hub]
-	protocol = https
+  protocol = https
