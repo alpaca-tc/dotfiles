@@ -6,6 +6,10 @@ function! s:substitute(dict) "{{{
   endfor
 endfunction"}}}
 
+function! s:tabstop() "{{{
+  return '                           '[:&tabstop]
+endfunction"}}}
+
 function! alpaca#substitute#number() "{{{
   let converter_table = {
         \ '０': '0' ,
@@ -74,9 +78,10 @@ endfunction"}}}
 
 function! alpaca#substitute#invisible()
   let converter_table = {
-        \ '\t' : &tabstop,
+        \ '\t' : s:tabstop(),
         \ '　' : ' ',
         \ 'ː' : ':',
+        \ '：' : ':',
         \ }
   call s:substitute(converter_table)
 endfunction
@@ -90,7 +95,8 @@ function! alpaca#substitute#mark() "{{{
         \ 'ー' : '-',
         \ '＝' : '=',
         \ '〜' : '~',
-        \ '～' : '~',
+        \ '～' : '\~',
+        \ '／' : '/',
         \ '｜' : '|',
         \ '＾' : '^',
         \ '％' : '%',

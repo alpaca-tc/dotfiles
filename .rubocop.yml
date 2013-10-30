@@ -1,282 +1,569 @@
-# This is the default configuration file with all checking enabled. It is also
-# the configuration used to check the rubocop source code.
-
-# Use UTF-8 as the source file encoding.
-Encoding:
-  Enabled: false
-
-# Limit lines to 80 characters.
-LineLength:
-  Enabled: false
-  Max: 79
-
-# Avoid methods longer than 10 lines of code
-MethodLength:
-  Enabled: true
-  CountComments: false  # count full line comments?
-  Max: 65
-
-# No hard tabs.
-Tab:
-  Enabled: true
-
-# Avoid trailing whitespace.
-TrailingWhitespace:
-  Enabled: true
-
-# Indent when as deep as case.
-Indentation:
-  Enabled: true
-
-# Use empty lines between defs.
-EmptyLines:
-  Enabled: true
-
-# Use spaces around operators.
-SpaceAroundOperators:
-  Enabled: true
-
-# Use spaces around { and before }.
-SpaceAroundBraces:
-  Enabled: true
-
-# No spaces after ( or before ).
-SpaceInsideParens:
-  Enabled: true
-
-# No spaces after [ or before ].
-SpaceInsideBrackets:
-  Enabled: true
-
-# Use spaces after commas.
-SpaceAfterComma:
-  Enabled: true
-
-# Use spaces after semicolons.
-SpaceAfterSemicolon:
-  Enabled: true
-
-# Use spaces after colons.
-SpaceAfterColon:
-  Enabled: true
-
-# Prefer symbols instead of strings as hash keys.
-HashSyntax:
-  Enabled: false
-
-# Use Unix-style line endings.
-EndOfLine:
-  Enabled: true
-
-# Add underscores to large numeric literals to improve their readability.
-NumericLiterals:
-  Enabled: true
-
-# Align the parameters of a method call if they span more than one line.
-AlignParameters:
-  Enabled: true
-
-# Use def with parentheses when there are arguments.
-DefWithParentheses:
-  Enabled: true
-
-# Omit the parentheses when the method doesn't accept any arguments.
-DefWithoutParentheses:
-  Enabled: true
-
-# Never use if x; .... Use the ternary operator instead.
-IfWithSemicolon:
-  Enabled: true
-
-# Never use then for multi-line if/unless.
-MultilineIfThen:
-  Enabled: true
-
-# Favor the ternary operator(?:) over if/then/else/end constructs.
-OneLineConditional:
-  Enabled: true
-
-# Avoid using {...} for multi-line blocks (multiline chaining is always ugly).
-MultilineBlocks:
-  Enabled: true
-
-# Prefer {...} over do...end for single-line blocks.
-SingleLineBlocks:
-  Enabled: true
-
-# Avoid parameter lists longer than three or four parameters.
-ParameterLists:
-  Enabled: true
-
-# Prefer ' strings when you don't need string interpolation or special symbols.
-StringLiterals:
-  Enabled: false
-
-# Avoid multi-line ?: (the ternary operator); use if/unless instead.
-MultilineTernaryOperator:
-  Enabled: true
-
-# Use one expression per branch in a ternary operator.
-NestedTernaryOperator:
-  Enabled: true
-
-# Never use unless with else. Rewrite these with the positive case first.
-UnlessElse:
-  Enabled: true
-
-# Use &&/|| for boolean expressions, and/or for control flow.
-AmpersandsPipesVsAndOr:
-  Enabled: true
-
-# Use when x then ... for one-line cases.
-WhenThen:
-  Enabled: true
-
-# Favor modifier if/unless usage when you have a single-line body.
-IfUnlessModifier:
-  Enabled: true
-
-# Favor modifier while/until usage when you have a single-line body.
-WhileUntilModifier:
-  Enabled: true
-
-# Favor unless over if for negative conditions (or control flow or).
-FavorUnlessOverNegatedIf:
-  Enabled: true
-
-# Favor until over while for negative conditions.
-FavorUntilOverNegatedWhile:
-  Enabled: true
-
-# Use spaces around the = operator when assigning default values in def params.
-SpaceAroundEqualsInParameterDefault:
-  Enabled: true
-
-# Use the new lambda literal syntax.
-NewLambdaLiteral:
-  Enabled: false
-
-# Don't use parentheses around the condition of an if/unless/while.
-ParenthesesAroundCondition:
-  Enabled: true
-
-# Use snake_case for symbols, methods and variables.
-MethodAndVariableSnakeCase:
-  Enabled: true
-
-# Use CamelCase for classes and modules.
-ClassAndModuleCamelCase:
-  Enabled: true
-
-# Causes Ruby to check the syntax of the script and exit without executing.
-Syntax:
-  Enabled: false
-
-# Preferred collection methods.
-CollectionMethods:
-  Enabled: false
-
-# Prefer each over for.
-AvoidFor:
-  Enabled: true
-
-# Avoid Perl-style global variables.
-AvoidPerlisms:
-  Enabled: true
-
-# Avoid Perl-style regex back references.
-AvoidPerlBackrefs:
-  Enabled: false
-
-# Avoid the use of class variables.
-AvoidClassVars:
-  Enabled: false
-
-# Symbol literals should use snake_case.
-SymbolSnakeCase:
-  Enabled: false
-
-# Don't interpolate global, instance and class variables directly in strings.
-VariableInterpolation:
-  Enabled: true
-
-# Don't use semicolons to terminate expressions.
-Semicolon:
-  Enabled: true
-  # For example; def area(height, width); height * width end
-  AllowAfterParameterListInOneLineMethods: false
-  # For example; def area(height, width) height * width; end
-  AllowBeforeEndInOneLineMethods: true
-
-# Use sprintf instead of %
-FavorSprintf:
-  Enabled: true
-
-# Use alias_method instead of alias.
-Alias:
-  Enabled: true
-
-# Avoid using rescue in its modifier form.
-RescueModifier:
-  Enabled: false
-
-# Avoid the use of %q, %Q, %s and %x.
-PercentLiterals:
-  Enabled: true
-
-# Prefer () as delimiters for all % literals.
-BraceAfterPercent:
-  Enabled: true
-
-# Never use return in an ensure block.
+AssignmentInCondition:
+   Description: Don't use assignment in conditions.
+   Enabled: true
+   AllowSafeAssignment: true
+   SupportsAutoCorrection: false
+BlockAlignment:
+   Description: Align block ends correctly.
+   Enabled: true
+   SupportsAutoCorrection: false
+Debugger:
+   Description: Check for debugger calls.
+   Enabled: true
+   SupportsAutoCorrection: false
+EmptyEnsure:
+   Description: Checks for empty ensure block.
+   Enabled: true
+   SupportsAutoCorrection: false
+EndAlignment:
+   Description: Align ends correctly.
+   Enabled: true
+   SupportsAutoCorrection: false
+EndInMethod:
+   Description: END blocks should not be placed inside method definitions.
+   Enabled: true
+   SupportsAutoCorrection: false
 EnsureReturn:
-  Enabled: true
-
-# Don't suppress exception.
+   Description: Never use return in an ensure block.
+   Enabled: true
+   SupportsAutoCorrection: false
+Eval:
+   Description: The use of eval represents a serious security risk.
+   Enabled: true
+   SupportsAutoCorrection: false
 HandleExceptions:
-  Enabled: true
-
-# Use only ascii symbols in identifiers.
-AsciiIdentifiers:
-  Enabled: true
-
-# Use only ascii symbols in comments.
-AsciiComments:
-  Enabled: true
-
-# Avoid rescuing the Exception class.
+   Description: Don't suppress exception.
+   Enabled: true
+   SupportsAutoCorrection: false
+LiteralInCondition:
+   Description: Checks of literals used in conditions.
+   Enabled: true
+   SupportsAutoCorrection: false
+Loop:
+   Description: Use Kernel#loop with break rather than begin/end/until or begin/end/while for post-loop tests.
+   Enabled: true
+   SupportsAutoCorrection: false
+ParenthesesAsGroupedExpression:
+   Description: Checks for method calls with a space before the opening parenthesis.
+   Enabled: true
+   SupportsAutoCorrection: false
 RescueException:
-  Enabled: true
-
-# Prefer array literal to Array.new.
-ArrayLiteral:
-  Enabled: true
-
-# Prefer hash {} literail to Hash.new.
-HashLiteral:
-  Enabled: true
-
-# When defining binary operators, name the argument other.
-OpMethod:
-  Enabled: true
-
-# Name reduce arguments |a, e| (accumulator, element)
-ReduceArguments:
-  Enabled: true
-
-# Use %r only for regular expressions matching more than one '/' character.
-PercentR:
-  Enabled: true
-
-# Use %r for regular expressions matching more than one '/' character.
-FavorPercentR:
-  Enabled: true
-
-Documentation:
-  Enabled: false
-
-SingleLineMethods:
-  Enabled: false
-
+   Description: Avoid rescuing the Exception class.
+   Enabled: true
+   SupportsAutoCorrection: false
+ShadowingOuterLocalVariable:
+   Description: Do not use the same name as outer local variable for block arguments or block local variables.
+   Enabled: true
+   SupportsAutoCorrection: false
+Syntax:
+   Description: Reports several basic syntax warnings and invalid syntaxes.
+   Enabled: false
+   SupportsAutoCorrection: false
+UnreachableCode:
+   Description: Unreachable code.
+   Enabled: true
+   SupportsAutoCorrection: false
+UselessAssignment:
+   Description: Checks for useless assignment to a local variable.
+   Enabled: true
+   SupportsAutoCorrection: false
+UselessComparison:
+   Description: Checks for comparison of something with itself.
+   Enabled: true
+   SupportsAutoCorrection: false
+UselessSetterCall:
+   Description: Checks for useless setter call to a local variable.
+   Enabled: true
+   SupportsAutoCorrection: false
+Void:
+   Description: Possible use of operator/literal/variable in void context.
+   Enabled: true
+   SupportsAutoCorrection: false
+ype 'Rails' (3):
+HasAndBelongsToMany:
+   Description: Prefer has_many :through to has_and_belongs_to_many.
+   Enabled: true
+   SupportsAutoCorrection: false
+ReadAttribute:
+   Description: Prefer self[:attribute] over read_attribute(:attribute).
+   Enabled: true
+   SupportsAutoCorrection: false
+Validation:
+   Description: Use sexy validations.
+   Enabled: true
+   SupportsAutoCorrection: false
+ype 'Style' (109):
+AccessControl:
+   Description: Indent private/protected as deep as defs and keep blank lines around them.
+   Enabled: true
+   SupportsAutoCorrection: false
+Alias:
+   Description: Use alias_method instead of alias.
+   Enabled: true
+   SupportsAutoCorrection: false
+AlignArray:
+   Description: Align the elements of an array literal if they span more than one line.
+   Enabled: true
+   SupportsAutoCorrection: true
+AlignHash:
+   Description: Align the elements of a hash literal if they span more than one line.
+   Enabled: true
+   EnforcedHashRocketStyle: key
+   EnforcedColonStyle: key
+   SupportsAutoCorrection: true
+AlignParameters:
+   Description: Align the parameters of a method call if they span more than one line.
+   Enabled: true
+   SupportsAutoCorrection: true
+AndOr:
+   Description: Use &&/|| instead of and/or.
+   Enabled: true
+   SupportsAutoCorrection: true
+AsciiComments:
+   Description: Use only ascii symbols in comments.
+   Enabled: true
+   SupportsAutoCorrection: false
+AsciiIdentifiers:
+   Description: Use only ascii symbols in identifiers.
+   Enabled: true
+   SupportsAutoCorrection: false
+Attr:
+   Description: Checks for uses of Module#attr.
+   Enabled: true
+   SupportsAutoCorrection: true
+BeginBlock:
+   Description: Avoid the use of BEGIN blocks.
+   Enabled: true
+   SupportsAutoCorrection: false
+BlockComments:
+   Description: Do not use block comments.
+   Enabled: true
+   SupportsAutoCorrection: false
+BlockNesting:
+   Description: Avoid excessive block nesting
+   Enabled: true
+   Max: 3
+   SupportsAutoCorrection: false
 Blocks:
-  Enabled: false
+   Description: Avoid using {...} for multi-line blocks (multiline chaining is always ugly). Prefer {...} over do...end for single-line blocks.
+   Enabled: false
+   SupportsAutoCorrection: true
+BracesAroundHashParameters:
+   Description: Enforce braces style inside hash parameters.
+   Enabled: true
+   EnforcedStyle: no_braces
+   SupportsAutoCorrection: false
+CaseEquality:
+   Description: Avoid explicit use of the case equality operator(===).
+   Enabled: true
+   SupportsAutoCorrection: false
+CaseIndentation:
+   Description: Indent when as deep as case.
+   Enabled: true
+   SupportsAutoCorrection: false
+CharacterLiteral:
+   Description: Checks for uses of character literals.
+   Enabled: true
+   SupportsAutoCorrection: true
+ClassAndModuleCamelCase:
+   Description: Use CamelCase for classes and modules.
+   Enabled: true
+   SupportsAutoCorrection: false
+ClassLength:
+   Description: Avoid classes longer than 100 lines of code.
+   Enabled: true
+   CountComments: false
+   Max: 100
+   SupportsAutoCorrection: false
+ClassMethods:
+   Description: Use self when defining module/class methods.
+   Enabled: true
+   SupportsAutoCorrection: false
+ClassVars:
+   Description: Avoid the use of class variables.
+   Enabled: true
+   SupportsAutoCorrection: false
+CollectionMethods:
+   Description: Preferred collection methods.
+   Enabled: false
+   PreferredMethods: '{"collect"=>"map", "collect!"=>"map!", "inject"=>"reduce", "detect"=>"find", "find_all"=>"select"}'
+   SupportsAutoCorrection: true
+ColonMethodCall:
+   Description: 'Do not use :: for method call.'
+   Enabled: true
+   SupportsAutoCorrection: true
+CommentAnnotation:
+   Description: Checks formatting of special comments (TODO, FIXME, OPTIMIZE, HACK, REVIEW).
+   Enabled: true
+   Keywords: ["TODO", "FIXME", "OPTIMIZE", "HACK", "REVIEW"]
+   SupportsAutoCorrection: false
+ConstantName:
+   Description: Constants should use SCREAMING_SNAKE_CASE.
+   Enabled: true
+   SupportsAutoCorrection: false
+DefWithParentheses:
+   Description: Use def with parentheses when there are arguments.
+   Enabled: true
+   SupportsAutoCorrection: true
+DefWithoutParentheses:
+   Description: Omit the parentheses when the method doesn't accept any arguments.
+   Enabled: true
+   SupportsAutoCorrection: true
+Documentation:
+   Description: Document classes and non-namespace modules.
+   Enabled: false
+   SupportsAutoCorrection: false
+DotPosition:
+   Description: Checks the position of the dot in multi-line method calls.
+   Enabled: true
+   Style: leading
+   SupportsAutoCorrection: false
+EmptyLineBetweenDefs:
+   Description: Use empty lines between defs.
+   Enabled: true
+   AllowAdjacentOneLineDefs: false
+   SupportsAutoCorrection: false
+EmptyLines:
+   Description: Don't use several empty lines in a row.
+   Enabled: false
+   SupportsAutoCorrection: false
+EmptyLiteral:
+   Description: Prefer literals to Array.new/Hash.new/String.new.
+   Enabled: true
+   SupportsAutoCorrection: true
+Encoding:
+   Description: Use UTF-8 as the source file encoding.
+   Enabled: false
+   SupportsAutoCorrection: false
+EndBlock:
+   Description: Avoid the use of END blocks.
+   Enabled: true
+   SupportsAutoCorrection: false
+EndOfLine:
+   Description: Use Unix-style line endings.
+   Enabled: true
+   SupportsAutoCorrection: false
+EvenOdd:
+   Description: Favor the use of Fixnum#even? && Fixnum#odd?
+   Enabled: true
+   SupportsAutoCorrection: false
+FavorJoin:
+   Description: Use Array#join instead of Array#*.
+   Enabled: true
+   SupportsAutoCorrection: false
+FavorSprintf:
+   Description: Use sprintf instead of String#%.
+   Enabled: true
+   SupportsAutoCorrection: false
+FavorUnlessOverNegatedIf:
+   Description: Favor unless over if for negative conditions (or control flow or).
+   Enabled: true
+   SupportsAutoCorrection: false
+FavorUntilOverNegatedWhile:
+   Description: Favor until over while for negative conditions.
+   Enabled: true
+   SupportsAutoCorrection: false
+FinalNewline:
+   Description: Checks for a final newline in a source file.
+   Enabled: true
+   SupportsAutoCorrection: false
+For:
+   Description: Prefer each over for.
+   Enabled: true
+   SupportsAutoCorrection: false
+GlobalVars:
+   Description: Do not introduce global variables.
+   Enabled: true
+   AllowedVariables: []
+   SupportsAutoCorrection: false
+HashMethods:
+   Description: Checks for use of deprecated Hash methods.
+   Enabled: true
+   SupportsAutoCorrection: true
+HashSyntax:
+   Description: 'Prefer Ruby 1.9 hash syntax { a: 1, b: 2 } over 1.8 syntax { :a => 1, :b => 2 }.'
+   Enabled: false
+   EnforcedStyle: ruby19
+   SupportsAutoCorrection: true
+IfUnlessModifier:
+   Description: Favor modifier if/unless usage when you have a single-line body.
+   Enabled: true
+   SupportsAutoCorrection: false
+IfWithSemicolon:
+   Description: Never use if x; .... Use the ternary operator instead.
+   Enabled: true
+   SupportsAutoCorrection: false
+IndentationWidth:
+   Description: Use 2 spaces for indentation.
+   Enabled: true
+   SupportsAutoCorrection: false
+Lambda:
+   Description: Use the new lambda literal syntax for single-line blocks.
+   Enabled: true
+   SupportsAutoCorrection: false
+LambdaCall:
+   Description: Use lambda.call(...) instead of lambda.(...).
+   Enabled: true
+   EnforcedStyle: call
+   SupportsAutoCorrection: true
+LeadingCommentSpace:
+   Description: Comments should start with a space.
+   Enabled: true
+   SupportsAutoCorrection: false
+LineLength:
+   Description: Limit lines to 79 characters.
+   Enabled: false
+   Max: 79
+   SupportsAutoCorrection: false
+MethodCallParentheses:
+   Description: Do not use parentheses for method calls with no arguments.
+   Enabled: true
+   SupportsAutoCorrection: true
+MethodCalledOnDoEndBlock:
+   Description: Avoid chaining a method call on a do...end block.
+   Enabled: false
+   SupportsAutoCorrection: false
+MethodLength:
+   Description: Avoid methods longer than 10 lines of code.
+   Enabled: true
+   CountComments: false
+   Max: 65
+   SupportsAutoCorrection: false
+MethodName:
+   Description: Use the configured style when naming methods.
+   Enabled: true
+   EnforcedStyle: snake_case
+   SupportsAutoCorrection: false
+ModuleFunction:
+   Description: Checks for usage of `extend self` in modules.
+   Enabled: true
+   SupportsAutoCorrection: false
+MultilineBlockChain:
+   Description: Avoid multi-line chains of blocks.
+   Enabled: true
+   SupportsAutoCorrection: false
+MultilineIfThen:
+   Description: Never use then for multi-line if/unless.
+   Enabled: true
+   SupportsAutoCorrection: false
+MultilineTernaryOperator:
+   Description: 'Avoid multi-line ?: (the ternary operator); use if/unless instead.'
+   Enabled: true
+   SupportsAutoCorrection: false
+NestedTernaryOperator:
+   Description: Use one expression per branch in a ternary operator.
+   Enabled: true
+   SupportsAutoCorrection: false
+NilComparison:
+   Description: Prefer x.nil? to x == nil.
+   Enabled: true
+   SupportsAutoCorrection: false
+Not:
+   Description: Use ! instead of not.
+   Enabled: true
+   SupportsAutoCorrection: false
+NumericLiterals:
+   Description: Add underscores to large numeric literals to improve their readability.
+   Enabled: true
+   MinDigits: 5
+   SupportsAutoCorrection: false
+OneLineConditional:
+   Description: Favor the ternary operator(?:) over if/then/else/end constructs.
+   Enabled: true
+   SupportsAutoCorrection: false
+OpMethod:
+   Description: When defining binary operators, name the argument other.
+   Enabled: true
+   SupportsAutoCorrection: false
+ParameterLists:
+   Description: Avoid parameter lists longer than three or four parameters.
+   Enabled: true
+   Max: 5
+   CountKeywordArgs: true
+   SupportsAutoCorrection: false
+ParenthesesAroundCondition:
+   Description: Don't use parentheses around the condition of an if/unless/while.
+   Enabled: true
+   AllowSafeAssignment: true
+   SupportsAutoCorrection: false
+PerlBackrefs:
+   Description: Avoid Perl-style regex back references.
+   Enabled: true
+   SupportsAutoCorrection: true
+Proc:
+   Description: Use proc instead of Proc.new.
+   Enabled: true
+   SupportsAutoCorrection: false
+RaiseArgs:
+   Description: Checks the arguments passed to raise/fail.
+   Enabled: true
+   EnforcedStyle: exploded
+   SupportsAutoCorrection: false
+ReduceArguments:
+   Description: Name reduce arguments |a, e| (accumulator, element)
+   Enabled: true
+   SupportsAutoCorrection: false
+RedundantBegin:
+   Description: Don't use begin blocks when they are not needed.
+   Enabled: true
+   SupportsAutoCorrection: false
+RedundantException:
+   Description: Checks for an obsolete RuntimeException argument in raise/fail.
+   Enabled: true
+   SupportsAutoCorrection: false
+RedundantReturn:
+   Description: Don't use return where it's not required.
+   Enabled: true
+   AllowMultipleReturnValues: false
+   SupportsAutoCorrection: true
+RedundantSelf:
+   Description: Don't use self where it's not needed.
+   Enabled: false
+   SupportsAutoCorrection: true
+RegexpLiteral:
+   Description: Use %r for regular expressions matching more than `MaxSlashes` '/' characters. Use %r only for regular expressions matching more than `MaxSlashes` '/' character.
+   Enabled: true
+   MaxSlashes: 1
+   SupportsAutoCorrection: false
+RescueModifier:
+   Description: Avoid using rescue in its modifier form.
+   Enabled: false
+   SupportsAutoCorrection: false
+Semicolon:
+   Description: Don't use semicolons to terminate expressions.
+   Enabled: true
+   AllowAsExpressionSeparator: false
+   AllowAfterParameterListInOneLineMethods: false
+   AllowBeforeEndInOneLineMethods: true
+   SupportsAutoCorrection: false
+SignalException:
+   Description: Checks for proper usage of fail and raise.
+   Enabled: false
+   EnforcedStyle: semantic
+   SupportsAutoCorrection: true
+SingleLineMethods:
+   Description: Avoid single-line methods.
+   Enabled: false
+   AllowIfMethodIsEmpty: true
+   SupportsAutoCorrection: false
+SpaceAfterColon:
+   Description: Use spaces after colons.
+   Enabled: true
+   SupportsAutoCorrection: false
+SpaceAfterComma:
+   Description: Use spaces after commas.
+   Enabled: true
+   SupportsAutoCorrection: false
+SpaceAfterControlKeyword:
+   Description: Use spaces after if/elsif/unless/while/until/case/when.
+   Enabled: true
+   SupportsAutoCorrection: false
+SpaceAfterMethodName:
+   Description: Never put a space between a method name and the opening parenthesis.
+   Enabled: true
+   SupportsAutoCorrection: false
+SpaceAfterNot:
+   Description: Tracks redundant space after the ! operator.
+   Enabled: true
+   SupportsAutoCorrection: true
+SpaceAfterSemicolon:
+   Description: Use spaces after semicolons.
+   Enabled: true
+   SupportsAutoCorrection: false
+SpaceAroundBlockBraces:
+   Description: Checks that block braces have or don't have surrounding space. For blocks taking parameters, checks that the left brace has or doesn't have trailing space.
+   Enabled: true
+   EnforcedStyle: space_inside_braces
+   SpaceBeforeBlockParameters: true
+   SupportsAutoCorrection: false
+SpaceAroundEqualsInParameterDefault:
+   Description: Use spaces around the = operator when assigning default values in def params.
+   Enabled: true
+   SupportsAutoCorrection: false
+SpaceAroundOperators:
+   Description: Use spaces around operators.
+   Enabled: true
+   SupportsAutoCorrection: false
+SpaceBeforeModifierKeyword:
+   Description: Put a space before the modifier keyword.
+   Enabled: true
+   SupportsAutoCorrection: false
+SpaceInsideBrackets:
+   Description: No spaces after [ or before ].
+   Enabled: true
+   SupportsAutoCorrection: false
+SpaceInsideHashLiteralBraces:
+   Description: Use spaces inside hash literal braces or don't.
+   Enabled: true
+   EnforcedStyleIsWithSpaces: true
+   SupportsAutoCorrection: false
+SpaceInsideParens:
+   Description: No spaces after ( or before ).
+   Enabled: true
+   SupportsAutoCorrection: false
+SpecialGlobalVars:
+   Description: Avoid Perl-style global variables.
+   Enabled: true
+   SupportsAutoCorrection: true
+StringLiterals:
+   Description: Checks if uses of quotes match the configured preference.
+   Enabled: false
+   EnforcedStyle: single_quotes
+   SupportsAutoCorrection: true
+SymbolArray:
+   Description: Use %i or %I for arrays of symbols.
+   Enabled: false
+   SupportsAutoCorrection: false
+SymbolName:
+   Description: Symbol literals should use snake_case.
+   Enabled: true
+   AllowCamelCase: true
+   SupportsAutoCorrection: false
+Tab:
+   Description: No hard tabs.
+   Enabled: true
+   SupportsAutoCorrection: false
+TrailingBlankLines:
+   Description: Checks for superflous trailing blank lines.
+   Enabled: false
+   SupportsAutoCorrection: false
+TrailingWhitespace:
+   Description: Avoid trailing whitespace.
+   Enabled: true
+   SupportsAutoCorrection: false
+TrivialAccessors:
+   Description: Prefer attr_* methods to trivial readers/writers.
+   Enabled: true
+   ExactNameMatch: false
+   AllowPredicates: false
+   Whitelist: ["to_ary", "to_a", "to_c", "to_enum", "to_h", "to_hash", "to_i", "to_int", "to_io", "to_open", "to_path", "to_proc", "to_r", "to_regexp", "to_str", "to_s", "to_sym"]
+   SupportsAutoCorrection: false
+UnlessElse:
+   Description: Never use unless with else. Rewrite these with the positive case first.
+   Enabled: true
+   SupportsAutoCorrection: false
+VariableInterpolation:
+   Description: Don't interpolate global, instance and class variables directly in strings.
+   Enabled: true
+   SupportsAutoCorrection: false
+VariableName:
+   Description: Use the configured style when naming variables.
+   Enabled: true
+   EnforcedStyle: snake_case
+   SupportsAutoCorrection: false
+WhenThen:
+   Description: Use when x then ... for one-line cases.
+   Enabled: true
+   SupportsAutoCorrection: true
+WhileUntilDo:
+   Description: Checks for redundant do after while or until.
+   Enabled: true
+   SupportsAutoCorrection: true
+WhileUntilModifier:
+   Description: Favor modifier while/until usage when you have a single-line body.
+   Enabled: true
+   SupportsAutoCorrection: false
+WordArray:
+   Description: Use %w or %W for arrays of words.
+   Enabled: true
+   SupportsAutoCorrection: false

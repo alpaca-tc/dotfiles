@@ -190,6 +190,10 @@ endif
 " ----------------------------------------
 " NeoBundle  " {{{
 NeoBundleFetch 'Shougo/neobundle.vim'
+NeoBundleLazy 'vim-jp/vital.vim', { 'autoload' : {
+      \ 'functions' : 'vital#of',
+      \ 'commands' : 'Vitalizer',
+      \ }}
 
 " For asynchronous communication
 NeoBundleLazy 'Shougo/vimproc', {
@@ -248,7 +252,11 @@ NeoBundleLazy 'thinca/vim-quickrun', { 'autoload' : {
       \   'commands' : 'QuickRun' }}
 NeoBundleLazy 'scrooloose/syntastic', {
       \ 'autoload': {
-      \   'filetypes' : g:my.ft.program_files
+      \   'filetypes' : g:my.ft.program_files,
+      \   'commands' : [
+      \     'SyntasticCheck', 'SyntasticInfo',
+      \     'SyntasticReset', 'SyntasticToggleMode'
+      \   ]
       \ },
       \ 'build' : {
       \   'mac' : join(['brew install tidy', 'brew install csslint', 'gem install sass', 'npm install -g jslint', 'gem install rubocop'], ' && ')
@@ -481,6 +489,7 @@ NeoBundleLazy 'thinca/vim-unite-history', { 'autoload' : {
 NeoBundleLazy 'basyura/TweetVim', { 'depends' :
       \ ['basyura/twibill.vim', 'tyru/open-browser.vim', 'Shougo/unite.vim'],
       \ 'autoload' : {
+      \   'functions' : 'tweetvim#say#command',
       \   'commands' : [ 'TweetVimAccessToken', 'TweetVimAddAccount',
       \     'TweetVimBitly', 'TweetVimCommandSay', 'TweetVimCurrentLineSay',
       \     'TweetVimHomeTimeline', 'TweetVimListStatuses', 'TweetVimMentions',
@@ -970,6 +979,8 @@ nnoremap <silent>_p :<C-U>call <SID>search_same_indent_line(0)<CR>
 
 augroup MyAutoCmd
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line('$') | execute "normal g`\"" | endif
+  autocmd FileType qf wincmd J
+  autocmd FileType qf call alpaca_window#set_smart_close()
 augroup END
 "}}}
 
@@ -1796,13 +1807,40 @@ function! hooks.on_source(bundle) "{{{
   let g:syntastic_error_symbol        = '>'
   let g:syntastic_warning_symbol      = 'X'
 
-  let s:passive_filetypes       = ['html', 'yaml', 'racc.ruby', 'eruby']
+  let s:passive_filetypes       = ['html', 'yaml', 'racc.ruby', 'eruby', 'sass']
   let g:syntastic_ruby_checkers = ['mri', 'rubocop']
   let g:syntastic_mode_map      = {
         \ 'mode'              : 'active',
         \ 'active_filetypes'  : g:my.ft.program_files,
         \ 'passive_filetypes' : copy(s:passive_filetypes),
         \ }
+  function! s:check_syntastic() "{{{
+    if get(get(b:, 'syntastic_loclist', {}), '_hasErrorsOrWarningsToDisplay', 0)
+      lclose
+    endif
+  endfunction"}}}
+
+  function! s:close_quickfix() "{{{
+    let saved_bufnr = bufnr("%")
+    " let saved_view  = winsaveview()
+    let saved_cursor  = getpos('.')
+
+    windo call <SID>check_syntastic()
+
+    execute 'buffer' saved_bufnr
+    " call winrestview(saved_view)
+
+    if exists('*lightline#update')
+      call lightline#update()
+    endif
+
+    call setpos('.', saved_cursor)
+  endfunction"}}}
+
+  augroup MyAutoCmd
+    " execute 'autocmd FileType' join(g:my.ft.program_files, ',')
+    " autocmd BufWritePre * call s:close_quickfix()
+  augroup END
 endfunction"}}}
 
 function! hooks.on_post_source(bundle)
@@ -2244,7 +2282,7 @@ unlet hooks
 " ----------------------------------------
 let g:neocomplete#enable_at_startup = 1
 
-let hooks = neobundle#get_hooks(has('lua') ? 'neocomplete' : 'nothing!!')
+let hooks = neobundle#get_hooks('neocomplete')
 function! hooks.on_source(bundle) "{{{
   let g:neocomplete#auto_completion_start_length      = 3
   let g:neocomplete#sources#syntax#min_keyword_length = 3
@@ -2312,6 +2350,9 @@ function! hooks.on_source(bundle) "{{{
         \ 'c' : '[^.[:digit:]*\t]\%(\.\|->\)',
         \ 'mail' : '^\s*\w\+',
         \ 'perl' : '\h\w*->\h\w*\|\h\w*::',
+        \ 'sass' : '[@#.]\?[[:alpha:]_-][[:alnum:]_-]*',
+        \ 'css'  : '[@#.]\?[[:alpha:]_-][[:alnum:]_-]*',
+        \ 'scss' : '[@#.]\?[[:alpha:]_-][[:alnum:]_-]*',
         \ }
 
   let g:neocomplete#sources#include#patterns = {
@@ -2998,7 +3039,40 @@ let hooks = neobundle#get_hooks('alpaca_octopress.vim')
 function! hooks.on_source(bundle) "{{{
   let g:octopress#rake_command = 'bundle exec rake'
   let g:octopress#project_url = expand('~/project/octopress')
+  let g:octopress#url = 'http://alpaca-tc.github.io'
   let g:octopress#system#async = 1
+
+  function s:tweet_octopress() "{{{
+    let file = system('cat ' . g:octopress#project_url . '/_deploy/index.html')
+
+    let blog_url_is_near = 0
+    let get_link_tag = 0
+    let get_title_name = 0
+    for line in split(file, '\n')
+      if line =~ '<header class="field-items">'
+        let blog_url_is_near = 1
+      elseif blog_url_is_near &&
+            \ line =~ 'href="/blog'
+        let link_tag = line
+        let get_link_tag = 1
+      elseif get_link_tag &&
+            \ line !~ '^\s*$'
+        let title_line = line
+        break
+      endif
+    endfor
+
+    let href = substitute(link_tag, '.*href="\([^"]\+\)".*', '\1', 'g')
+    let title = substitute(title_line, '^\s*\(.\+\)\s*$', '\1', 'g')
+
+    let message = "書きました「" . title . "」" . " " . g:octopress#url . href
+    let tempname = tempname()
+    call writefile(split(message, '\n'), tempname)
+
+    TweetVimSay
+    read `=tempname`
+  endfunction"}}}
+  command! OctopressTweet call <SID>tweet_octopress()
 endfunction"}}}
 unlet hooks
 
