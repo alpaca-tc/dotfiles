@@ -118,16 +118,15 @@ if has('vim_starting') "{{{
         \ }
 
   let g:my.ft = {
-        \ 'html_files':      ['eruby', 'html', 'php', 'haml'],
         \ 'ruby_files':      ['ruby', 'Gemfile', 'haml', 'eruby', 'yaml'],
-        \ 'js_files':        ['javascript', 'coffeescript', 'node', 'json', 'typescript'],
+        \ 'js_files':        ['javascript', 'coffeescript', 'node', 'typescript'],
         \ 'python_files':    ['python', 'python*'],
         \ 'scala_files':     ['scala'],
         \ 'sh_files':        ['sh'],
         \ 'php_files':       ['php', 'phtml'],
         \ 'c_files':         ['c', 'cpp'],
         \ 'style_files':     ['css', 'scss', 'sass'],
-        \ 'markup_files':    ['html', 'haml', 'erb', 'php', 'xhtml'],
+        \ 'markup_files':    ['html', 'haml', 'eruby', 'php', 'xhtml', 'liquid'],
         \ 'english_files':   ['markdown', 'help', 'text'],
         \ 'program_files':   ['ruby', 'php', 'python', 'eruby', 'vim', 'javascript', 'coffee', 'scala', 'java', 'go', 'cpp', 'haml'],
         \ 'ignore_patterns': ['vimfiler', 'unite'],
@@ -553,23 +552,23 @@ NeoBundleLazy 'terryma/vim-multiple-cursors', { 'autload': {
 NeoBundleLazy 'alpaca-tc/auto-pairs', { 'autoload' : {
       \ 'insert': 1 }}
 
-" NeoBundleFetch 'github/gitignore'
+NeoBundleFetch 'github/gitignore'
 
 " Generating Ricty Font.
-" let g:ricty_generate_command = join([
-"       \   'sh ricty_generator.sh',
-"       \   neobundle#get_neobundle_dir().'/alpaca/fonts/Inconsolata.otf',
-"       \   neobundle#get_neobundle_dir().'/alpaca/fonts/migu-1m-regular.ttf',
-"       \   neobundle#get_neobundle_dir().'/alpaca/fonts/migu-1m-bold.ttf',
-"       \ ], ' ')
-" NeoBundleFetch 'yascentur/Ricty', {
-"       \ 'depends' : 'alpaca-tc/alpaca',
-"       \ 'autoload' : {
-"       \   'build' : {
-"       \     'mac'  : g:ricty_generate_command,
-"       \     'unix' : g:ricty_generate_command,
-"       \   }
-"       \ }}
+let g:ricty_generate_command = join([
+      \   'sh ricty_generator.sh',
+      \   neobundle#get_neobundle_dir().'/alpaca/fonts/Inconsolata.otf',
+      \   neobundle#get_neobundle_dir().'/alpaca/fonts/migu-1m-regular.ttf',
+      \   neobundle#get_neobundle_dir().'/alpaca/fonts/migu-1m-bold.ttf',
+      \ ], ' ')
+NeoBundleFetch 'yascentur/Ricty', {
+      \ 'depends' : 'alpaca-tc/alpaca',
+      \ 'autoload' : {
+      \   'build' : {
+      \     'mac'  : g:ricty_generate_command,
+      \     'unix' : g:ricty_generate_command,
+      \   }
+      \ }}
 
 " The light converter and beautifier
 NeoBundleLazy 'alpaca-tc/beautify.vim', {
@@ -606,8 +605,8 @@ NeoBundleLazy 'alpaca-tc/html5.vim', { 'autoload' : {
 NeoBundleLazy 'mattn/emmet-vim', {
       \ 'autoload': {
       \   'function_prefix': 'emmet',
-      \   'filetypes': g:my.ft.html_files + g:my.ft.style_files,
-      \   'mappings' : ['<Plug>(EmmetExpandAbbr)']
+      \   'filetypes': g:my.ft.markup_files + g:my.ft.style_files,
+      \   'mappings' : ['i', '<Plug>(EmmetExpandAbbr)']
       \ }}
 
 " HAML
@@ -641,7 +640,7 @@ if has('python') && executable('npm')
         \ 'build' : 'npm install',
         \ 'autoload' : {
         \ 'functions': ['tern#Complete', 'tern#Enable'],
-        \ 'filetypes' : g:my.ft.js_files
+        \ 'filetypes' : 'javascript'
         \ }}
 else
   NeoBundleLazy 'teramako/jscomplete-vim', { 'autoload' : {
@@ -664,8 +663,8 @@ NeoBundleLazy 'alpaca-tc/vim-markdown', { 'autoload' : {
 
 "  PHP
 " ----------------------------------------
-" NeoBundleLazy 'alpaca-tc/alpaca_wordpress.vim', { 'autoload' : {
-"       \ 'filetypes': 'php' }}
+NeoBundleLazy 'alpaca-tc/alpaca_wordpress.vim', { 'autoload' : {
+      \ 'filetypes': 'php' }}
 
 " Binary
 " ----------------------------------------
@@ -721,7 +720,10 @@ NeoBundle 'alpaca-tc/berkshelf.vim'
 NeoBundleLazy 'depuracao/vim-rdoc', { 'autoload' : {
       \   'filetypes' : 'rdoc' }}
 
-NeoBundle 'alpaca-tc/alpaca_octopress.vim', { 'autoload' : {
+NeoBundleLazy 'tpope/vim-liquid', { 'autoload' : {
+      \ 'filetypes' : 'liquid'
+      \ }}
+NeoBundleLazy 'alpaca-tc/alpaca_octopress.vim', { 'autoload' : {
       \ 'branch': 'v0.3',
       \ 'functions' : 'octopress#complete',
       \ 'commands': {
@@ -797,6 +799,10 @@ NeoBundleLazy 'mattn/excitetranslate-vim', {
       \ }
 " NeoBundle 'kana/vim-altr'
 
+NeoBundleLazy 'tsukkee/lingr-vim', { 'autoload' : {
+      \ 'commands' : ['LingrExit', 'LingrLaunch'],
+      \ }}
+
 " Installation check.
 if has('vim_starting') && g:my.conf.initialize && neobundle#exists_not_installed_bundles()
   echomsg 'Not installed bundles : ' .  string(neobundle#get_not_installed_bundle_names())
@@ -816,7 +822,7 @@ set nrformats+=alpha
 set textwidth=0
 " set gdefault
 " set splitright
-set splitbelow
+" set splitbelow
 set previewheight=5
 set helpheight=14
 set matchtime=1
@@ -1421,7 +1427,6 @@ endfunction "}}}
 unlet hooks
 
 " ----------------------------------------
-imap <buffer><C-E> <C-Y>,
 let hooks = neobundle#get_hooks('emmet-vim')
 function! hooks.on_source(bundle) "{{{
   let g:user_emmet_mode = 'iv'
@@ -1441,6 +1446,9 @@ function! hooks.on_source(bundle) "{{{
     autocmd!
     autocmd BufEnter,FileType * let g:user_emmet_settings.indentation = '               '[:&tabstop]
   augroup END
+endfunction"}}}
+function! hooks.on_post_source(bundle) "{{{
+  imap <C-E> <C-Y>,
 endfunction"}}}
 unlet hooks
 
@@ -2017,6 +2025,10 @@ function! hooks.on_source(bundle) "{{{
         \ 'html,php' : [
         \   { '<!--\([a-zA-Z0-9 /]\+\)--></\(div\|ul\|li\|a\)>' : '</\2><!--\1-->' },
         \ ],
+        \ 'liquid' : [
+        \   ['if', 'unless'],
+        \   ['endif', 'endunless'],
+        \ ],
         \ 'ruby,eruby,haml' : [
         \   ['if', 'unless'],
         \   ['while', 'until'],
@@ -2412,7 +2424,7 @@ function! hooks.on_source(bundle) "{{{
 
   imap <expr><C-G> neocomplete#undo_completion()
   imap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? neocomplete#complete_common_string() : "\<TAB>"
-  inoremap <expr><C-e> neocomplete#cancel_popup()
+  " inoremap <expr><C-e> neocomplete#cancel_popup()
 
   function! s:my_crinsert() "{{{
     return neocomplete#close_popup() . "\<CR>"
@@ -3042,7 +3054,7 @@ function! hooks.on_source(bundle) "{{{
   let g:octopress#url = 'http://alpaca-tc.github.io'
   let g:octopress#system#async = 1
 
-  function s:tweet_octopress() "{{{
+  function! s:tweet_octopress() "{{{
     let file = system('cat ' . g:octopress#project_url . '/_deploy/index.html')
 
     let blog_url_is_near = 0
@@ -3075,6 +3087,17 @@ function! hooks.on_source(bundle) "{{{
   command! OctopressTweet call <SID>tweet_octopress()
 endfunction"}}}
 unlet hooks
+
+" ----------------------------------------
+let hooks = neobundle#get_hooks('lingr-vim')
+function! hooks.on_source(bundle)
+  let g:lingr_vim_user     = 'alpaca_taichou'
+  let g:lingr_vim_remain_height_to_auto_scroll = 5
+
+  if filereadable(expand('~/.vim_secret'))
+    source ~/.vim_secret
+  endif
+endfunction
 
 " ----------------------------------------
 " Other plugin settings {{{
