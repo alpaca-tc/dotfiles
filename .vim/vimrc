@@ -58,7 +58,7 @@ function! s:current_git() "{{{
   return s:git_root_cache[current_dir]
 endfunction"}}}
 function! s:filetype() "{{{
-  return get([&filetype], 0, '')
+  return get(split(&filetype, '\.'), 0, '')
 endfunction"}}}
 function! s:complement_delimiter_of_directory(path) "{{{
   return isdirectory(a:path) ? a:path . '/' : a:path
@@ -1084,7 +1084,7 @@ if v:version >= 703
 endif
 
 augroup MyWindow
-  autocmd VimResized * execute "normal! \<c-w>="
+  autocmd VimResized * wincmd =
 augroup END
 
 colorscheme desertEx
@@ -1096,7 +1096,7 @@ syntax on
 set tags=./tags
 
 " Vim's bug.
-if v:version < 703 || (v:version == 7.3 && !has('patch336'))
+if !has('patch336')
   set notagbsearch
 endif
 
@@ -1397,36 +1397,6 @@ endfunction"}}}
 unlet hooks
 
 " ----------------------------------------
-let hooks = neobundle#get_hooks('zencoding-vim')
-function! hooks.on_source(bundle) "{{{
-  let g:user_zen_complete_tag = 1
-  let g:user_zen_expandabbr_key = '<C-E>'
-  let g:user_zen_leader_key = '<c-y>'
-  " let g:user_zen_leader_key = '<C-Y>'
-
-  let g:user_zen_settings = {
-        \ 'lang' : 'ja',
-        \ 'html' : {
-        \   'filters' : 'html',
-        \   'indentation' : ''
-        \ },
-        \ 'css' : {
-        \   'filters' : 'fc',
-        \ },
-        \ 'scss' : {
-        \   'snippets': {
-        \     'fs' : 'font-size: ${cursor};',
-        \   },
-        \ },
-        \ 'php' : {
-        \   'extends' : 'html',
-        \   'filters' : 'html,c',
-        \ },
-        \ }
-endfunction "}}}
-unlet hooks
-
-" ----------------------------------------
 let hooks = neobundle#get_hooks('emmet-vim')
 function! hooks.on_source(bundle) "{{{
   let g:user_emmet_mode = 'iv'
@@ -1453,8 +1423,8 @@ endfunction"}}}
 unlet hooks
 
 " ----------------------------------------
-nnoremap <C-K> :<C-U>Ref alc <Space><C-R><C-W><CR>
-xnoremap <C-K> :<C-U>Ref alc <Space><C-R><C-W><CR>
+nnoremap <C-K> :<C-U>Ref alc <C-R><C-W><CR>
+xnoremap <C-K> :<C-U>Ref alc <C-R><C-W><CR>
 nnoremap ra  :<C-U>Ref alc<Space>
 nnoremap rp  :<C-U>Ref phpmanual<Space>
 nnoremap rr  :<C-U>Unite ref/refe -immediately -input=
@@ -1613,7 +1583,7 @@ function! hooks.on_source(bundle) "{{{
   let evernote_path = evernote_dir . '/.evernote_token'
 
   if !filereadable(evernote_path)
-    execute 'OpenBrowser https://www.evernote.com/api/DeveloperToken.action'
+    OpenBrowser https://www.evernote.com/api/DeveloperToken.action
     let evernote = input('DeveloperToken:')
     call writefile([evernote], evernote_path)
   endif
@@ -2329,7 +2299,7 @@ function! hooks.on_source(bundle) "{{{
     let g:neocomplete#data_directory = '/tmp'
   endif
 
-  let s:neocomplete_initialize_lists = [
+  let neocomplete_initialize_lists = [
         \ 'neocomplete#sources#include#patterns',
         \ 'neocomplete#sources#omni#functions',
         \ 'neocomplete#sources#omni#input_patterns',
@@ -2342,7 +2312,7 @@ function! hooks.on_source(bundle) "{{{
         \ 'neocomplete#text_mode_filetypes',
         \ ]
 
-  for initialize_variable in s:neocomplete_initialize_lists
+  for initialize_variable in neocomplete_initialize_lists
     call alpaca#let_g:(initialize_variable, {})
   endfor
 
@@ -2466,7 +2436,7 @@ function! s:vim_filer_explorer_git() "{{{
   let path = (system('git rev-parse --is-inside-work-tree') == "true\n") ? s:current_git() : '.'
   execute 'VimFiler -explorer' path
 endfunction"}}}
-command! VimFilerExplorerGit call <SID>vim_filer_explorer_git()
+command! VimFilerExplorerGit call s:vim_filer_explorer_git()
 
 let hooks = neobundle#get_hooks('vimfiler')
 function! hooks.on_source(bundle) "{{{
@@ -2746,7 +2716,6 @@ function! hooks.on_source(bundle) "{{{
 
   function! s:unite_my_settings() "{{{
     augroup MyUniteBufferCmd
-      autocmd!
       autocmd! * <buffer>
       autocmd BufEnter <buffer> if winnr('$') == 1 |quit| endif
     augroup END
@@ -3093,6 +3062,9 @@ let hooks = neobundle#get_hooks('lingr-vim')
 function! hooks.on_source(bundle)
   let g:lingr_vim_user     = 'alpaca_taichou'
   let g:lingr_vim_remain_height_to_auto_scroll = 5
+  let g:lingr_vim_count_unread_at_current_room = 1
+  let g:lingr_vim_say_buffer_height = 4
+  let g:lingr_vim_terminate_thread_immediately = 0
 
   if filereadable(expand('~/.vim_secret'))
     source ~/.vim_secret
@@ -3175,7 +3147,7 @@ function! s:doautocmd_for_lang8() "{{{
 endfunction"}}}
 
 augroup MyAutoCmd
-  autocmd User Rails call <SID>doautocmd_for_lang8()
+  autocmd User Rails call s:doautocmd_for_lang8()
 augroup END
 "}}}
 
