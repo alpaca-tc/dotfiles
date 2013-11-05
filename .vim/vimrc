@@ -2226,7 +2226,23 @@ endif
 " ------------------------------------
 let hooks = neobundle#get_hooks('tern_for_vim')
 function! hooks.on_post_source(bundle) "{{{
-  " call tern#Enable()
+  function! s:disable_tern() "{{{
+    if &filetype =~ '^javascript'
+      autocmd! TernAutomatically <buffer>
+      call tern#Disable()
+    endif
+  endfunction"}}}
+
+  function! s:set_disable_tern_automatically() "{{{
+    augroup TernAutomatically
+      autocmd * <buffer>
+      autocmd FileType * <buffer> call s:disable_tern()
+    augroup END
+  endfunction"}}}
+
+  augroup MyAutoCmd
+    autocmd FileType javascript call s:set_disable_tern_automatically()
+  augroup END
 endfunction"}}}
 unlet hooks
 
@@ -3058,6 +3074,7 @@ endfunction"}}}
 unlet hooks
 
 " ----------------------------------------
+nnoremap <Space>l :<C-U>tabnew \| LingrLaunch<CR>
 let hooks = neobundle#get_hooks('lingr-vim')
 function! hooks.on_source(bundle)
   let g:lingr_vim_user     = 'alpaca_taichou'
@@ -3069,7 +3086,12 @@ function! hooks.on_source(bundle)
   if filereadable(expand('~/.vim_secret'))
     source ~/.vim_secret
   endif
+
 endfunction
+augroup MyAutoCmd
+  autocmd!
+  autocmd FileType lingr-* nnoremap Q :LingrExit<CR>
+augroup END
 
 " ----------------------------------------
 " Other plugin settings {{{
