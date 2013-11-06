@@ -189,7 +189,7 @@ endif
 " ----------------------------------------
 " NeoBundle  " {{{
 NeoBundleFetch 'Shougo/neobundle.vim'
-NeoBundleLazy 'vim-jp/vital.vim', { 'autoload' : {
+NeoBundle 'vim-jp/vital.vim', { 'autoload' : {
       \ 'functions' : 'vital#of',
       \ 'commands' : 'Vitalizer',
       \ }}
@@ -412,7 +412,7 @@ NeoBundleLazy 'glidenote/memolist.vim', { 'autoload' : {
       \ }}
 " NeoBundleLazy 'kakkyz81/evervim', { 'autoload': {
 NeoBundleLazy 'alpaca-tc/evervim', { 'autoload': {
-      \ 'branch' : 'unite',
+      \ 'rev' : 'unite',
       \ 'commands' : ['EvervimCreateNote', 'EvervimNotebookList'],
       \ 'unite_sources' : ['evervim/notebook', 'evervim/note', 'evervim/tag', 'evervim/query']
       \ }}
@@ -471,7 +471,7 @@ NeoBundleLazy 'Shougo/unite-outline', {
       \   'unite_sources' : 'outline' },
       \ }
 NeoBundleLazy 'alpaca-tc/vim-unite-giti', {
-      \ 'branch' : 'add_pull_request_source',
+      \ 'rev' : 'add_pull_request_source',
       \ 'autoload': {
       \   'unite_sources': [
       \     'giti', 'giti/branch', 'giti/branch/new', 'giti/branch_all',
@@ -571,17 +571,12 @@ NeoBundleFetch 'yascentur/Ricty', {
       \ }}
 
 " The light converter and beautifier
-NeoBundleLazy 'alpaca-tc/beautify.vim', {
-      \ 'branch': 'v0.2',
-      \ 'build' : {
-      \   'mac': 'npm install -g js-beautify && gem install html2haml --pre && npm install -g js2coffee',
-      \ },
-      \ 'autoload' : {
-      \   'commands' : [
-      \     {
-      \       'name' : 'Beautify',
-      \       'complete' : 'customlist,beautify#complete_options'
-      \     }
+NeoBundleLazy 'alpaca-tc/beautify.vim', { 'autoload' : {
+      \ 'commands' : [
+      \   {
+      \     'name' : 'Beautify',
+      \     'complete' : 'customlist,beautify#complete_options'
+      \   }
       \ ]
       \ }}
 
@@ -724,7 +719,6 @@ NeoBundleLazy 'tpope/vim-liquid', { 'autoload' : {
       \ 'filetypes' : 'liquid'
       \ }}
 NeoBundleLazy 'alpaca-tc/alpaca_octopress.vim', { 'autoload' : {
-      \ 'branch': 'v0.3',
       \ 'functions' : 'octopress#complete',
       \ 'commands': {
       \   'name' : 'Octopress',
@@ -1273,6 +1267,10 @@ function! hooks.on_source(bundle) "{{{
   endfunction"}}}
 
   function! s:define_variables_for_surround() "{{{
+    if empty(&filetype)
+      return
+    endif
+
     let s:surrond_definitions_cache = get(s:, 'surrond_definitions_cache', {})
     let filetype = &filetype
 
@@ -2943,6 +2941,12 @@ function! hooks.on_source(bundle) "{{{
   endfunction"}}}
 
   let g:lightline = {
+        \ 'enable' : {
+        \   'statusline': 1,
+        \   'tabline': 0
+        \ },
+        \ 'tabline_separator' : { 'left': '', 'right': '' },
+        \ 'tabline_subseparator' : { 'left': '', 'right': '' },
         \ 'colorscheme': 'wombat',
         \ 'active': {
         \   'left': [
@@ -3034,10 +3038,12 @@ nnoremap <silent>,s :<C-U>call <SID>toggle_spell()<CR>
 nnoremap <Space>on :Octopress new_post<Space>
 let hooks = neobundle#get_hooks('alpaca_octopress.vim')
 function! hooks.on_source(bundle) "{{{
-  let g:octopress#rake_command = 'bundle exec rake'
   let g:octopress#project_url = expand('~/project/octopress')
   let g:octopress#url = 'http://alpaca-tc.github.io'
-  let g:octopress#system#async = 1
+  let g:octopress#rake_command = 'cd ' . g:octopress#project_url . ' && bundle exec rake'
+  " let g:octopress#rake_command = 'bundle exec rake'
+  let g:octopress#system#async = 0
+  let g:octopress#open = 'vnew'
 
   function! s:tweet_octopress() "{{{
     let file = system('cat ' . g:octopress#project_url . '/_deploy/index.html')
@@ -3082,11 +3088,6 @@ function! hooks.on_source(bundle)
   let g:lingr_vim_count_unread_at_current_room = 1
   let g:lingr_vim_say_buffer_height = 4
   let g:lingr_vim_terminate_thread_immediately = 0
-
-  if filereadable(expand('~/.vim_secret'))
-    source ~/.vim_secret
-  endif
-
 endfunction
 augroup MyAutoCmd
   autocmd!
@@ -3096,7 +3097,6 @@ augroup END
 " ----------------------------------------
 " Other plugin settings {{{
 let g:git_aliases#author_name = g:my.info.github
-let g:snail_csv2google_sheet_hourly_rete = 2200
 " let g:lang8_email_address = 'alprhcp666@gmail.com'
 "}}}
 "}}}
@@ -3180,6 +3180,9 @@ endfunction"}}}
 
 if !has('vim_starting')
   call neobundle#call_hook('on_source')
+elseif filereadable(expand('~/.vim_secret'))
+  " snail & lingr
+  source ~/.vim_secret
 endif
 
 set secure
