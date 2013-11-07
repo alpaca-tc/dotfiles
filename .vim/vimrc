@@ -720,11 +720,13 @@ NeoBundleLazy 'tpope/vim-liquid', { 'autoload' : {
       \ }}
 NeoBundleLazy 'alpaca-tc/alpaca_octopress.vim', { 'autoload' : {
       \ 'functions' : 'octopress#complete',
-      \ 'commands': {
+      \ 'commands': [
+      \   'OctopressKillAllProcess',
+      \   {
       \   'name' : 'Octopress',
       \   'complete' : 'customlist,octopress#complete',
-      \ },
-      \ }}
+      \   },
+      \ ]}}
 
 " Slim
 " ----------------------------------------
@@ -1473,7 +1475,7 @@ endfunction"}}}
 function! hooks.on_post_source(bundle) "{{{
   call fugitive#detect(expand('<amatch>:p'))
 endfunction "}}}
-command! GitFugitiveReload call fugitive#detect(expand('<amatch>:p'))
+command! FugitiveReload call fugitive#detect(expand('<amatch>:p'))
 unlet hooks
 
 " ----------------------------------------
@@ -3038,15 +3040,13 @@ nnoremap <silent>,s :<C-U>call <SID>toggle_spell()<CR>
 nnoremap <Space>on :Octopress new_post<Space>
 let hooks = neobundle#get_hooks('alpaca_octopress.vim')
 function! hooks.on_source(bundle) "{{{
-  let g:octopress#project_url = expand('~/project/octopress')
+  let g:octopress#project_path = expand('~/project/octopress')
   let g:octopress#url = 'http://alpaca-tc.github.io'
-  let g:octopress#rake_command = 'cd ' . g:octopress#project_url . ' && bundle exec rake'
-  " let g:octopress#rake_command = 'bundle exec rake'
-  let g:octopress#system#async = 0
-  let g:octopress#open = 'vnew'
+  let g:octopress#rake_command = 'bundle exec rake'
+  let g:octopress#system#async = 1
 
   function! s:tweet_octopress() "{{{
-    let file = system('cat ' . g:octopress#project_url . '/_deploy/index.html')
+    let file = system('cat ' . g:octopress#project_path . '/_deploy/index.html')
 
     let blog_url_is_near = 0
     let get_link_tag = 0
