@@ -165,6 +165,10 @@ if v:version >= 703
   let &undodir = g:my.dir.undodir
 endif
 
+augroup MyAutoCmd
+  autocmd FileType * set iskeyword+=@-@
+augroup END
+
 nnoremap <Space><Space>s :<C-U>source ~/.vim/vimrc<CR>
 nnoremap <Space><Space>v :<C-U>tabnew ~/.vim/vimrc<CR>
 nnoremap <Space><Space>b :<C-U>tabnew ~/.bundle<CR>
@@ -249,7 +253,7 @@ NeoBundleLazy 'kana/vim-arpeggio', { 'autoload': {
 NeoBundleLazy 'thinca/vim-quickrun', { 'autoload' : {
       \   'mappings' : [['nxo', '<Plug>(quickrun)']],
       \   'commands' : 'QuickRun' }}
-NeoBundleLazy 'scrooloose/syntastic', {
+" NeoBundleLazy 'scrooloose/syntastic', {
       \ 'autoload': {
       \   'filetypes' : g:my.ft.program_files,
       \   'commands' : [
@@ -845,7 +849,7 @@ endfunction"}}}
 
 nnoremap re :%s!
 xnoremap re :s!
-xnoremap rep y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!g<Left><Left>
+xnoremap rep y:%s!\<<C-r>=substitute(@0, '!', '\\!', 'g')<CR>\>!!gI<Left><Left><Left>
 
 nnoremap ,f :setfiletype<Space>
 
@@ -1427,11 +1431,11 @@ nnoremap <C-K> :<C-U>Ref alc <C-R><C-W><CR>
 xnoremap <C-K> :<C-U>Ref alc <C-R><C-W><CR>
 nnoremap ra  :<C-U>Ref alc<Space>
 nnoremap rp  :<C-U>Ref phpmanual<Space>
-nnoremap rr  :<C-U>Unite ref/refe -immediately -input=
-nnoremap ri  :<C-U>Unite ref/ri -immediately -input=
-nnoremap rm  :<C-U>Unite ref/man -immediately -input=
-nnoremap rpy :<C-U>Unite ref/pydoc -immediately -input=
-nnoremap rpe :<C-U>Unite ref/perldoc -immediately -input=
+nnoremap rr  :<C-U>Unite ref/refe -default-action=tabopen -immediately -input=
+nnoremap ri  :<C-U>Unite ref/ri -default-action=tabopen -immediately -input=
+nnoremap rm  :<C-U>Unite ref/man -default-action=tabopen -immediately -input=
+nnoremap rpy :<C-U>Unite ref/pydoc -default-action=tabopen -immediately -input=
+nnoremap rpe :<C-U>Unite ref/perldoc -default-action=tabopen -immediately -input=
 nmap <silent><buffer>K <Plug>(ref-keyword)
 
 let hooks = neobundle#get_hooks('vim-ref')
@@ -1451,8 +1455,8 @@ function! hooks.on_source(bundle) "{{{
   augroup VimRef
     autocmd!
     autocmd User ref-after call <SID>ref_file()
-    autocmd FileType ruby,eruby,ruby.rspec nnoremap <silent><buffer>KK :<C-U>Unite -no-start-insert ref/ri -default-action=split -immediately -input=<C-R><C-W><CR>
-    autocmd FileType ruby,eruby,ruby.rspec nnoremap <silent><buffer>K  :<C-U>Unite -no-start-insert ref/refe -immediately -input=<C-R><C-W><CR>
+    autocmd FileType ruby,eruby,ruby.rspec nnoremap <silent><buffer>KK :<C-U>Unite -no-start-insert ref/ri -default-action=tabopen -immediately -input=<C-R><C-W><CR>
+    autocmd FileType ruby,eruby,ruby.rspec nnoremap <silent><buffer>K  :<C-U>Unite -no-start-insert ref/refe -immediately -default-action=tabopen -input=<C-R><C-W><CR>
   augroup END
 endfunction "}}}
 unlet hooks
@@ -1484,6 +1488,7 @@ nnoremap <silent>ga :<C-U>GitAdd<CR>
 nnoremap <silent>gd :<C-U>GitDiff HEAD<CR>
 nnoremap gp :<C-U>Git push<Space>
 nnoremap gD :<C-U>GitDiff<Space>
+nnoremap git :<C-U>Git<Space>
 let hooks = neobundle#get_hooks('git-vim')
 function! hooks.on_source(bundle) "{{{
   let g:git_bin = g:my.bin.git
@@ -2008,6 +2013,7 @@ function! hooks.on_source(bundle) "{{{
         \   ['.inject', '.delete_if'],
         \   ['.map', '.map!'],
         \   ['attr_accessor', 'attr_reader', 'attr_writer'],
+        \   { '%r\({[^}]\+\)}' : '/\1/' },
         \   { ':\(\k\+\)\s*=>\s*': '\1: ' },
         \   { '\<\(\k\+\): ':      ':\1 => ' },
         \   { '\.\%(tap\)\@!\(\k\+\)':   '.tap { |o| puts o.inspect }.\1' },
