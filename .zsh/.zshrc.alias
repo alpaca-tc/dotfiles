@@ -112,6 +112,8 @@ alias hn='hub --noop'
 # }}}
 
 # rails# {{{
+alias be='bundle exec'
+alias vagrant='bundle exec vagrant'
 alias r='rails'
 alias rg='rails generate'
 alias rc='rails console'

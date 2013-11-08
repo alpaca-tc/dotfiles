@@ -1,5 +1,3 @@
---jcode=utf8
-
 --exclude=.git
 --exclude=*.c
 --exclude=*.js
@@ -61,13 +59,13 @@
 --langmap=Ruby:+.rb
 --regex-Ruby=/^[ \t]*([A-Z][-_A-Za-z0-9]*::)*([A-Z][-_A-Za-z0-9]*)[\t ]*=/\2/C,constant/
 --regex-Ruby=/^[ \t]*([A-Z_][A-Z0-9_]*)[ \t]*=/\1/C,constant/
---regex-Ruby=/^[ \t]*context[[:space:]]+['"](.*)['"][[:space:]]+do/\1/e,rspec context/ 
---regex-Ruby=/^[ \t]*context[[:space:]]+(:?[a-zA-Z0-9?]+)[[:space:]]+do/\1/e,rspec context/ 
---regex-Ruby=/^[ \t]*describe[[:space:]]+['"](.*)['"][[:space:]]+do/\1/d,rspec describe/ 
---regex-Ruby=/^[ \t]*describe[[:space:]]+(:?[a-zA-Z0-9?]+)[[:space:]]+do/\1/d,rspec describe/ 
---regex-Ruby=/^[ \t]*its\((:?[a-zA-Z0-9?]+)\)[[:space:]]*{[[:space:]](.*)[[:space:]]}[[:space:]]*/its(\1) \2/s,rspec its/ 
---regex-Ruby=/^[ \t]*it[[:space:]]+['"](.*)['"][[:space:]]+do/\1/i,rspec it/ 
---regex-Ruby=/^[ \t]*it[[:space:]]+{[[:space:]]*(.*)[[:space:]]*}[[:space:]]*/\1/i,rspec it/ 
+--regex-Ruby=/^[ \t]*context[[:space:]]+['"](.*)['"][[:space:]]+do/\1/e,rspec context/
+--regex-Ruby=/^[ \t]*context[[:space:]]+(:?[a-zA-Z0-9?]+)[[:space:]]+do/\1/e,rspec context/
+--regex-Ruby=/^[ \t]*describe[[:space:]]+['"](.*)['"][[:space:]]+do/\1/d,rspec describe/
+--regex-Ruby=/^[ \t]*describe[[:space:]]+(:?[a-zA-Z0-9?]+)[[:space:]]+do/\1/d,rspec describe/
+--regex-Ruby=/^[ \t]*its\((:?[a-zA-Z0-9?]+)\)[[:space:]]*{[[:space:]](.*)[[:space:]]}[[:space:]]*/its(\1) \2/s,rspec its/
+--regex-Ruby=/^[ \t]*it[[:space:]]+['"](.*)['"][[:space:]]+do/\1/i,rspec it/
+--regex-Ruby=/^[ \t]*it[[:space:]]+{[[:space:]]*(.*)[[:space:]]*}[[:space:]]*/\1/i,rspec it/
 
 --langdef=scss
 --langmap=scss:.scss

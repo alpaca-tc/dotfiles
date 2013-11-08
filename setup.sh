@@ -63,28 +63,16 @@ fi
 git clone https://github.com/Shougo/neobundle.vim.git ~/.bundle/neobundle.vim
 
 # 秘密鍵を生成して、githubから残りのファイルをDLする
-echo "Do you wish to install .ssh and .memolist settings from github? "
+echo "Do you want to install .ssh and .memolist from github?"
 read -p "--notice-- remove ~/.ssh y/n " yn
 if [ $yn = "y" -o $yn = "Y" ]; then
-    echo "...re create .ssh directory"
+    echo "...Remove .ssh directory"
     rm -rf ~/.ssh
     mkdir -p ~/.ssh
-    cp `pwd`/config $HOME/.ssh/
-    echo "decode identify file. please input password!\n"
-    echo "hint: i love alpaca! ・T・"
-    openssl enc -d -aes256 -in github -out ~/.ssh/github
-    if [ -a $HOME/.ssh/github ]; then
-        chmod 700 $HOME/.ssh
-        chmod 600 $HOME/.ssh/github
-        echo "\n...clone from github\n"
-        rm -rf `pwd`/secret
-        git clone github:taichouchou2/secret.git `pwd`/secret
-        chmod +x `pwd`/secret/setup.sh
-        echo "...run secret setup.sh \n"
-        `pwd`/secret/setup.sh
-    else
-        echo "failed decode :p"
-    fi
+    git clone https://github.com/alpaca-tc/secret
+    chmod +x `pwd`/secret/setup.sh
+    echo "...run secret setup.sh \n"
+    `pwd`/secret/setup.sh
 else
     mkdir ~/.memolist
     echo "~/.memolistを生成しました"

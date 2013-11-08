@@ -94,7 +94,7 @@ if has('vim_starting') "{{{
         \ }
 
   let g:my.bin = {
-        \ 'ctags' : '/Applications/MacVim.app/Contents/MacOS/ctags',
+        \ 'ctags' : '/usr/local/bin/ctags',
         \ 'git' : executable('hub') ? 'hub' : 'git',
         \ }
 
@@ -382,13 +382,13 @@ NeoBundleLazy 'open-browser.vim', { 'autoload' : {
       \ 'commands' : ['OpenBrowserSearch', 'OpenBrowser', 'OpenBrowserSmartSearch'] }}
 
 " Comment Plugins
-NeoBundleLazy 'tomtom/tcomment_vim', { 'autoload' : {
+NeoBundle 'tomtom/tcomment_vim', { 'autoload' : {
       \ 'commands' : ['TComment', 'TCommentAs', 'TCommentMaybeInline'] }}
-NeoBundleLazy 'tyru/caw.vim', {
-      \ 'autoload' : {
-      \   'insert' : 1,
-      \   'mappings' : [ '<Plug>(caw:prefix)', '<Plug>(caw:i:toggle)'],
-      \ }}
+" NeoBundleLazy 'tyru/caw.vim', {
+"       \ 'autoload' : {
+"       \   'insert' : 1,
+"       \   'mappings' : [ '<Plug>(caw:prefix)', '<Plug>(caw:i:toggle)'],
+"       \ }}
 
 " For Git
 NeoBundleLazy 'tpope/vim-fugitive', { 'autoload': {
@@ -715,7 +715,6 @@ NeoBundle 'alpaca-tc/vim-chef', { 'autoload' : {
       \ 'functions' : ['chef#detect'],
       \ 'filetypes': 'ruby.chef',
       \ }}
-NeoBundle 'alpaca-tc/berkshelf.vim'
 NeoBundleLazy 'depuracao/vim-rdoc', { 'autoload' : {
       \   'filetypes' : 'rdoc' }}
 
@@ -801,6 +800,17 @@ NeoBundleLazy 'mattn/excitetranslate-vim', {
 
 NeoBundleLazy 'tsukkee/lingr-vim', { 'autoload' : {
       \ 'commands' : ['LingrExit', 'LingrLaunch'],
+      \ }}
+NeoBundle 'Floobits/floobits-vim', { 'autoload' : {
+      \ 'commands' : [
+      \   'FlooJoinWorkspace', 'FlooLeaveWorkspace',
+      \   'FlooPartworkspace', 'FlooToggleFollowMode',
+      \   'FlooSummon', 'FlooPing', 'FlooDeleteBuf',
+      \   'FlooPause', 'FlooUnPause', 'FlooOpenInBrowser',
+      \   'FlooClearHighlights', 'FlooToggleHighlights',
+      \   'FlooShareDir', 'FlooShareDirPrivate',
+      \   'FlooAddBuf', 'FlooInfo',
+      \ ]
       \ }}
 
 " Installation check.
@@ -1536,6 +1546,7 @@ function! hooks.on_source(bundle) "{{{
   let s:vimshell_altercmd = [
         \ 'vi vim',
         \ 'g git',
+        \ 'be bundle exec',
         \ 'r rails',
         \ 'diff diff --unified',
         \ 'du du -h',
@@ -1613,9 +1624,9 @@ endfunction"}}}
 " ------------------------------------
 " t_comment
 " ------------------------------------
-let g:tcommentmaps = 0
-noremap <silent><C-_><c-_> :TComment<CR>
-noremap <silent><C-_>c :TComment<CR>
+let g:tcommentMaps = 0
+" noremap <silent><C-_><c-_> :TComment<CR>
+" noremap <silent><C-_>c :TComment<CR>
 
 " ------------------------------------
 " vim-rails {{{
@@ -1935,12 +1946,23 @@ xnoremap E :<C-U>ExciteTranslate<CR>
 let g:jscomplete_use = ['dom', 'moz', 'ex6th']
 
 " ------------------------------------
+if has('gui_running')
+  nmap gc :TComment<CR>
+  xmap gc :TComment<CR>
+  " nmap gc <Plug>(caw:i:toggle)
+  " xmap gc <Plug>(caw:i:toggle)
+else
+  nmap <C-_> :TComment<CR>
+  xmap <C-_> :TComment<CR>
+  " nmap <C-_> <Plug>(caw:i:toggle)
+  " xmap <C-_> <Plug>(caw:i:toggle)
+endif
 let hooks = neobundle#get_hooks('caw.vim')
 function! hooks.on_source(bundle) "{{{
-  nmap gc <Plug>(caw:prefix)
-  xmap gc <Plug>(caw:prefix)
-  nmap gcc <Plug>(caw:i:toggle)
-  xmap gcc <Plug>(caw:i:toggle)
+  " nmap gc <Plug>(caw:prefix)
+  " xmap gc <Plug>(caw:prefix)
+  " nmap gcc <Plug>(caw:i:toggle)
+  " xmap gcc <Plug>(caw:i:toggle)
 endfunction"}}}
 unlet hooks
 
@@ -2543,9 +2565,9 @@ nnoremap <silent>[unite]x       :Unite english_example -horizontal -buffer-name=
 nnoremap <silent>[unite]a       :Unite web_search -horizontal -buffer-name=web_search<CR>
 nnoremap <silent>[unite]T       :Unite english_thesaurus -horizontal -buffer-name=thesaurus<CR>
 
-nnoremap <silent>g/             :call <SID>unite_with_same_syntax('Unite line/fast -buffer-name=line_fast -hide-source-names -horizontal -start-insert -no-quit')<CR>
-nnoremap <silent>g*             :call <SID>unite_with_same_syntax('Unite line/fast:forward -buffer-name=line_fast -start-insert -no-quit -input=' . expand('<cword>'))<CR>
-nnoremap <silent>g#             :call <SID>unite_with_same_syntax('Unite line/fast:backword -buffer-name=line_fast -start-insert -no-quit -input=' . expand('<cword>'))<CR>
+nnoremap <silent>g/             :call <SID>unite_with_same_syntax('Unite line -buffer-name=line_fast -hide-source-names -horizontal -start-insert -no-quit')<CR>
+nnoremap <silent>g*             :call <SID>unite_with_same_syntax('Unite line:forward -buffer-name=line_fast -start-insert -no-quit -input=' . expand('<cword>'))<CR>
+nnoremap <silent>g#             :call <SID>unite_with_same_syntax('Unite line:backword -buffer-name=line_fast -start-insert -no-quit -input=' . expand('<cword>'))<CR>
 
 function! s:parse_git_root_option(input) "{{{
   let reg_multi =  '\*\*/'
@@ -2648,6 +2670,12 @@ function! hooks.on_source(bundle) "{{{
   let g:unite_source_file_mru_limit = 300
   let g:unite_source_directory_mru_ignore_pattern = ''
 
+  if executable('gmv')
+    let rm_command = 'gmv -f --backup=numbered --target-directory ' . g:my.dir.trash . ' $srcs'
+    let g:unite_kind_file_delete_file_command = rm_command
+    let g:unite_kind_file_delete_directory_command = rm_command
+  endif
+
   let g:unite_winheight = 20
   " let g:unite_marked_icon = "✓"
   let g:unite_source_history_yank_enable = 0
@@ -2656,14 +2684,13 @@ function! hooks.on_source(bundle) "{{{
 
   call alpaca#let_g:('unite_source_menu_menus', {})
 
-  call unite#custom_source('file_rec', 'max_candidates', 5000)
-  call unite#custom_source('file_rec/async', 'max_candidates', 5000)
-  call unite#custom_source('giti/branch_all', 'max_candidates', 5000)
+  " call unite#custom_source('file_rec', 'max_candidates', 5000)
+  " call unite#custom_source('file_rec/async', 'max_candidates', 5000)
+  " call unite#custom_source('giti/branch_all', 'max_candidates', 5000)
   call unite#custom_source('giti/log', 'max_candidates', 5000)
-  call unite#custom_source('line', 'max_candidates', 5000)
-  call unite#custom_source('line/fast', 'max_candidates', 5000)
-  call unite#custom_source('tag', 'max_candidates', 5000)
-  call unite#custom_source('tags', 'max_candidates', 5000)
+  " call unite#custom_source('line', 'max_candidates', 5000)
+  " call unite#custom_source('tag', 'max_candidates', 5000)
+  " call unite#custom_source('tags', 'max_candidates', 5000)
   let g:giti_git_command = executable('hub') ? 'hub' : 'git'
   let g:giti_log_default_line_count = 500
 
@@ -3046,7 +3073,7 @@ nnoremap <silent>,s :<C-U>call <SID>toggle_spell()<CR>
 nnoremap <Space>on :Octopress new_post<Space>
 let hooks = neobundle#get_hooks('alpaca_octopress.vim')
 function! hooks.on_source(bundle) "{{{
-  let g:octopress#project_path = expand('~/project/octopress')
+  let g:octopress#project_path = expand('~/projects/alpaca-tc.github.io')
   let g:octopress#url = 'http://alpaca-tc.github.io'
   let g:octopress#rake_command = 'bundle exec rake'
   let g:octopress#system#async = 1
