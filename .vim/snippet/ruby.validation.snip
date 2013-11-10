@@ -1,0 +1,75 @@
+snippet     v_length
+abbr   length: { in: ... }
+  length: { in: ${1} }
+
+snippet     v_numericality
+abbr numericality: { only_integer: true, ... }
+  numericality: { ${1:only_integer: true,}, ${2:greater_than:, greater_than_or_equal_to:, equal_to:, less_than:, odd:, even:} }
+
+snippet     v_uniqueness
+abbr uniqueness: true
+  uniqueness: true
+
+snippet     v_presence
+abbr presence: true
+  presence: true
+
+snippet     v_confirmation
+abbr confirmation: true
+  confirmation: true
+
+snippet     v_format
+abbr format: { with: ... }
+  format: { with: /${1}/ }
+
+snippet     v_inclusion
+abbr inclusion: { in: %w!...! }
+  inclusion: { in: %w!${1}! }
+
+snippet     v_exclusion
+abbr exclusion: { in: %w!...! }
+  exclusion: { in: %w!${1}! }
+
+snippet     v_allow_blank
+abbr allow_blank: true
+  allow_blank: true
+
+snippet     v_allow_nil
+abbr allow_nil: true
+  allow_nil: true
+
+snippet     v_acceptance
+abbr acceptance: { on: ... }
+  acceptance: { on: ${1::create} }
+
+snippet     v_message
+abbr message: '%{value}...'
+  message: '${1}'
+
+snippet     v_if
+abbr if: '...'
+  if: '${1}'
+
+snippet     v_unless
+abbr unless: '...'
+  unless: '${1}'
+
+snippet     v_if_and_unless_sample
+abbr if: Proc.new { |u| u.blank }
+  unless: 'dm.blank?'
+  if: '!dm.blank?'
+  unless: :sendmail?
+  if: Proc.new { |u| u.dm.blank? }
+
+snippet     v_maximum
+abbr maximum: ...
+  maximum: ${1}
+
+snippet     v_in
+abbr in: ...
+  in: ${1}
+
+snippet     v_minimum
+abbr minimum: ...
+  minimum: ${1}
+

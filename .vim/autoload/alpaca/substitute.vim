@@ -117,6 +117,7 @@ function! alpaca#substitute#mark() "{{{
         \ '…' : '...',
         \ '＠' : '@',
         \ '►' : '>',
+        \ '□' : '- ',
         \ }
 
   call s:substitute(converter_table)

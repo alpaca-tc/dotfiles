@@ -1,0 +1,17 @@
+snippet new_task
+abbr    new_task
+options word
+  desc${1}
+  task${2}
+
+snippet desc
+abbr    desc 'description'
+options word
+  desc '${1:description}'
+
+snippet task
+abbr    task :name, *opt { |t, args| ... }
+options word
+  task :${1:task_name}${2:#, ${3::arg_name\}} do |t, args|
+    ${4}
+  end

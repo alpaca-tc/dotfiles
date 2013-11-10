@@ -1,898 +1,277 @@
-# ruby#{{{
-#/*{{{*/
-snippet     ini
-abbr        def initialize end
-    def initialize${1}
-      ${2}
-    end
+# Magic code#{{{
+snippet   utf
+abbr      utf-8 magick
+prev_word '^'
+  # coding: utf-8
 
-snippet     const_set
-abbr        const_set(name, value)
-options     word
+snippet   #!
+abbr      #!/usr/local/bin/ruby
+prev_word '^'
+  #!/usr/local/bin/ruby
+#}}}
+
+# Class / Module#{{{
+snippet module
+abbr    module Name ... end
+options word
+  module ${1:module_name}
+    ${2}
+  end
+
+snippet alias
+abbr    alias :new_name :old_name
+options word
+  alias :${1:new_name} :${2:old_name}
+
+snippet autoload
+abbr    autoload :Name, 'path/to/file'
+options word
+  autoload :${1:Name}, '${2:path/to/file}'
+
+snippet ini
+abbr    def initialize end
+  def initialize${1}
+    ${2}
+  end
+
+snippet const_set
+abbr    const_set(name, value)
+options word
   const_set(:${1:name}, ${2:value})
+#}}}
 
-snippet     lam
-abbr        lambda do end
-    lambda do ${1}
-    end
+# Keyword for method#{{{
+snippet lam
+alias   lambda
+abbr    lambda do end
+  lambda do |${1}|
+    ${2}
+  end
+
+snippet ->
+abbr    ->
+options word
+  -> { |${1}| ${2} }
 
 snippet def
-    def ${1:method_name}
-    end
+abbr    def
+options word
+  def ${1:method_name}
+    ${2}
+  end
+#}}}
 
+# Branch on condition#{{{
 snippet if
-    if ${1:condition}
-    end
+abbr    if
+options word
+  if ${1:condition}
+    ${2}
+  end
 
 snippet ife
-    if ${1:condition}
-        ${2}
-    else
-        ${3}
-    end
+abbr    if ... else ... end
+options word
+  if ${1:condition}
+    ${2}
+  else
+    ${3}
+  end
+
 snippet elsif
-    elsif ${1:condition}
-        ${2}
+abbr    elsif ...
+options word
+  elsif ${1:condition}
+    ${2}
 
 snippet unless
-    unless ${1:condition}
-    end
+abbr    unless ...
+options word
+  unless ${1:condition}
+
+snippet while
+abbr    while end
+options word
+  while ${1} do
+    ${2}
+  end
 
 snippet until
-    until ${1:condition}
-    end
+abbr    until ...
+options word
+  until ${1:condition}
+    ${2}
+  end
 
-snippet     class
-abbr        class end
-    class ${1:className}
-    end
-
-snippet defs
-    def self.${1:class_method_name}
-        ${2}
-    end
-
-snippet     begin
-abbr        begin rescue end
-    begin
-      ${1}
-    rescue => e
-      ${2}
-    end
-
-snippet     begine
-abbr        begin rescue end
-    begin
-      ${1}
-    rescue => e
-      ${2}
-    ensure
-      ${3}
-    end
-
-snippet     each
-abbr        each do
-    each do |${1}|
-      ${2}
-    end
-
-snippet     while
-abbr        while end
-    while ${1} do
-      ${2}
-    end
-
-snippet     utf
-abbr        utf-8 magick
-prev_word    '^'
-    # coding: utf-8
-
-snippet     #!
-abbr        #!/usr/local/bin/ruby
-prev_word   '^'
-    #!/usr/local/bin/ruby
-
-snippet     y
-abbr        yields
-prev_word  '^'
-    :yields: ${1:arguments}
-
-snippet req
-    require '${1}'
-
-snippet     require_relational
-abbr        require File.expand_path(File.dirname(__FILE__) + '...')
-options     word
-  require File.expand_path(File.dirname(__FILE__) + '${1}')
-
-snippet end
-    __END__
+snippet class
+abbr    class ... end
+options word
+  class ${1:className}
+    ${2}
+  end
 
 snippet case
-    case ${1:object}
-    when ${2:condition}
-        ${3}
-    end
+abbr    case
+options word
+  case ${1:object}
+  when ${2:condition}
+    ${3}
+  end
+
 snippet when
-    when ${1:condition}
-        ${2}
+abbr    when
+options word
+  when ${1:condition}
+    ${2}
 
-snippet nam
-    namespace :${1:`Filename()`} do
-        ${2}
-    end
 
-snippet am
+snippet begin
+abbr    begin rescue end
+options word
+  begin
+    ${1}
+  rescue => e
+    ${2}
+  end
+
+snippet begine
+abbr    begin rescue end
+options word
+  begine
+  begin
+    ${1}
+  rescue => e
+    ${2}
+  ensure
+    ${3}
+  end
+#}}}
+
+# Method {{{
+snippet each
+abbr    each { ... }
+options word
+regexp  '.\+\.'
+  each do |${1}|
+    ${2}
+  end
+
+snippet reject
+abbr    reject { |v| ... }
+options word
+regexp  '.\+\.'
+  reject { |v| ${1} }
+
+snippet reject!
+abbr    reject! { |v| ... }
+options word
+regexp  '.\+\.'
+  reject! { |v| ${1} }
+
+snippet map
+abbr    map { |v| ... }
+options word
+regexp  '.\+\.'
+  map { |v| ${1} }
+
+snippet map!
+abbr    map! { |v| ... }!
+options word
+regexp  '.\+\.'
+  map! { |v| ${1} }
+
+#}}}
+
+# Kernel / Module Method#{{{
+snippet require
+abbr    require
+alias   req
+options word
+  require '${1}'
+
+snippet alias_method
+abbr    alias_method
+options word
   alias_method ${1:to}, ${2:from}
 
-snippet dm
-  define_method ${1:method_name} do ${2}
-#/*}}}*/
+snippet define_method
+abbr    define_method
+options word
+  define_method :${1:method_name} do |${2:*args}|
+    ${3}
+  end
 
-# ruby_custom#{{{
-snippet     Hash.new[
+snippet method_missing
+abbr    method_missing
+options word
+  def method_missing(action, *args)
+    if action.to_s =~ ${1:regexp}
+      ${2}
+    end
+  end
+#}}}
+
+# ruby_custom {{{
+snippet     Hash[]
 abbr        Hash.new { |h,k| h[k] = [] }
 options     word
   Hash.new { |h,k| h[k] = [] }
+
+snippet     Hash{}
+  Hash.new { |h,k| h[k] = Hash.new(&h.default_proc) }
+
+snippet require_relational
+abbr    require File.expand_path(File.dirname(__FILE__) + '...')
+options word
+  require File.expand_path(File.dirname(__FILE__) + '${1}')
+
+snippet Rational
+abbr    Rational
+options word
+  Rational(${1}, ${2})
 #}}}
 
-# ruby2
-# Enumerable {{{
-snippet     enu
-abbr include Enumerable
-  include Enumerable
-
-  def each(&block)
-    ${1}
-  end
-#}}}
-#}}}
-
-# module
-snippet     alias
-abbr        alias :new_name :old_name
+# Matching#{{{
+snippet     match_japanese
+abbr        match_japanese
 options     word
-  alias :${1:new_name} :${2:old_name}
-
-snippet     autoload
-abbr        autoload :Name, 'path/to/file'
-options     word
-  autoload :${1:Name}, '${2:path/to/file}'
-
-snippet     alias_method
-abbr        alias_method :new_name, :old_name
-options     word
-  alias_method :${1:new_name}, :${2:old_name}
-
-# validates
-#{{{
-snippet     reg_email
-  %r{^(?:(?:(?:(?:[a-zA-Z0-9_!#\$\%&'*+/=?\^`{}~|\-]+)(?:\.(?:[a-zA-Z0-9_!#\$\%&'*+/=?\^`{}~|\-]+))*)|(?:"(?:\\[^\r\n]|[^\\"])*")))\@(?:(?:(?:(?:[a-zA-Z0-9_!#\$\%&'*+/=?\^`{}~|\-]+)(?:\.(?:[a-zA-Z0-9_!#\$\%&'*+/=?\^`{}~|\-]+))*)|(?:\[(?:\\\S|[\x21-\x5a\x5e-\x7e])*\])))$}
-
-snippet     reg_tell
-  /^((\d+)-?)*\d$/
-
-snippet     v_boolean
-  validates ${1:column}, :inclusion => {:in => [true, false]}
-
-snippet     v_attachiment
-abbr validate attachment, :column, ...
-  validates ${1:attachment}, presence: true,
-    content_type: { content_type: ['image/png', 'image/jpg', 'image/gif']},
-    size: { in: 0..10.kilobytes }
+  /[ぁ-んァ-ヴ一-龠亜-煕]/u
 #}}}
 
-# class etc..#{{{
-# /*{{{*/
-snippet     watcher
-prev_word        '^'
-    require 'digest/md5'
-    def calc_md5(filename)
-      Digest::MD5.hexdigest(File.open(filename, 'rb').read)
-    end
-
-    def main
-      @md5 = {}
-      Dir.glob("app/**/*.rb").each  { |f| @md5[f] = calc_md5(f) }
-      Dir.glob("spec/**/*.rb").each { |f| @md5[f] = calc_md5(f) }
-    end
-
-    main
-
-    watch('app/(.*)\.rb') {|code|
-      if @md5[code[0]] == calc_md5(code[0])
-        puts "Saved: #{code[0]}"
-      else
-        puts "Saved & Changed: #{code[0]}"
-        system "bundle exec rspec spec/#{code[1]}_spec.rb"
-        @md5[code[0]] = calc_md5(code[0])
-      end
-    }
-    watch('spec/(.*)_spec\.rb') {|code|
-      if @md5[code[0]] == calc_md5(code[0])
-        puts "Saved: #{code[0]}"
-      else
-        puts "Saved & Changed: #{code[0]}"
-        system "bundle exec rspec #{code[0]}"
-        @md5[code[0]] = calc_md5(code[0])
-      end
-    }
-
-snippet     module
-    module ${1:module_name}
-      ${2}
-    end
-
-
-
-snippet     debug
-    Rails.logger.debug ${1}
-
-snippet     Hash
-    Hash.new{|h,k| h[k]=Hash.new(&h.default_proc)}
-
-snippet     cValidate
-    class ${1:Email}Validator < ActiveModel::EachValidator
-      def validate_each(record, attribute, value)
-        ${2}
-
-        record.errors[attribute] << I18n.t('${3:errors}')
-      end
-    end
-
-snippet     cOption
-    class OptInit
-
-      def initialize( argv )
-        require 'optparse'
-        @opt = OptionParser.new
-        @opt.on( '-h', '--help', 'Show help')
-
-        opts = ARGV.getopts("m:e:", "mac:", "exist:", "list", "l", "h", "help", "j", "json" )
-        @params = opts.select {|k, v| v }
-      end
-
-#/*}}}*/
-
-# cHash_deep_merge/*{{{*/
-snippet     cHash_deep_merge
-    class Hash
-      # Returns a new hash with +self+ and +other_hash+ merged recursively.
-      def deep_merge(other_hash)
-        dup.deep_merge!(other_hash)
-      end
-
-      # Same as +deep_merge+, but modifies +self+.
-      def deep_merge!(other_hash)
-        other_hash.each_pair do |k,v|
-          tv = self[k]
-          self[k] = tv.is_a?(Hash) && v.is_a?(Hash) ? tv.deep_merge(v) : v
-        end
-        self
-      end
-    end
-
-snippet     cHash_full_join
-        class Hash
-          def full_join( str = ".", key="" )
-            dup.full_join! str, key
-          end
-
-          def full_join!( str = ".", key="")
-            res = {}
-            self.each do |k, v|
-              full_key = key.empty? ?  k : "#{key}.#{k}"
-              if v.is_a?(Hash)
-                res.deep_merge!( v.full_join( str, full_key ) )
-              else
-                res[full_key] = v
-              end
-            end
-
-            res
-          end
-        end
-#/*}}}*/
-
-# cBlank_present/*{{{*/
-snippet cBlank
-    class Object
-      def blank?
-        respond_to?(:empty?) ? empty? : !self
-      end
-
-      def present?
-        !blank?
-      end
-
-      def presence
-        self if present?
-      end
-    end
-#/*}}}*/
-
-# cToRegexp# {{{
-snippet  cToRegexp
-  class String
-    REGEXP_DELIMITERS = {
-      '%r{' => '}',
-      '/' => '/'
-    }
-
-    def to_regexp
-      str = self.dup
-      delim_start, delim_end = REGEXP_DELIMITERS.detect { |k, v| str.start_with? k }.map { |delim| ::Regexp.escape delim }
-      %r{\A#{delim_start}(.*)#{delim_end}([^#{delim_end}]*)\z} =~ str.strip
-      # TODO BUG CHANGE $ 1, $ 2
-      content = $ 1
-      options = $ 2
-      content.gsub! '\\/', '/'
-      ignore_case = options.include?('i') ? ::Regexp::IGNORECASE : nil
-      multiline = options.include?('m') ? ::Regexp::MULTILINE : nil
-      extended = options.include?('x') ? ::Regexp::EXTENDED : nil
-      ::Regexp.new content, (ignore_case|multiline|extended)
-    end
-  end
-## }}}
-
-# cTry/*{{{*/
-snippet cTry
-  class Object
-    def try(*a, &b)
-      if a.empty? && block_given?
-        yield self
-      else
-        __send__(*a, &b)
-      end
-    end
-  end
-#/*}}}*/
-
-# methods#{{{
-snippet     method_missing
-  def method_missing(action, *args)
-    if action.to_s =~ ${1:regexp}
-
-    end
-  end
-
-snippet     f_get_json
- def get_json(url)
-    require 'net/http'
-    require 'uri'
-    require 'json'
-
-    uri = URI.parse(url)
-    json = Net::HTTP.get(uri)
-
-    JSON.parse(json)
- end
-
-snippet     f_capture
-abbr        URLのキャプチャ画像を取得
-  require 'capybara-webkit'
-
-  browser = Capybara::Webkit::Driver.new('web_capture').browser
-  browser.visit 'http://qiita.com/'
-  browser.render('qiita.png', 1280, 650)
-
-snippet     f_randobet
-abbr ランダムな文字列を生成
-  def randobet(length, extendStr = "")
-    strList = 'abcdefghijklmnopqrstuvwxyz' + 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' + '0123456789' + extendStr
-
-    strListArray = strList.split('')
-
-    result = ''
-
-    0.upto(length) do |int|
-      rand_value = (Random.rand * strListArray.length).floor
-      result += strListArray[rand_value]
-    end
-
-    result
-  end
-#}}}
-
-# gem etc.. shortcut#{{{
-snippet     ActiveRecord_setting
-  ActiveRecord::Base.establish_connection adapter: "mysql2", database: "${1:db_name}"
-
-#}}}
-
-#fsimpleActiveRecord{{{
-snippet     fsimpleActiveRecord
-  require 'rubygems'
-  require 'active_record'
-  require 'pry'
-
-  ActiveRecord::Base.establish_connection adapter: "mysql2", database: "${1:db_name}"
-
-  tables = %w[${2:table_name}]
-  tables.each do |table|
-    table_name = table.pluralize
-    eval( "class #{table_name} < ActiveRecord::Base; end ")
-  end
-
-  binding.pry
-#}}}
-#}}}
-
-# Gof#{{{
-# Strategy#{{{
-snippet     gof_strategy_1
-abbr        別々のオブジェクトにアルゴリズムを引き出す
-  # Strategy pattern
-  # pattern1
-  # 別々のオブジェクトにアルゴリズムを引き出す
-  class Report
-    attr_reader :title, :text
-    attr_accessor :formatter
-
-    def initialize(formatter)
-      @title = '月次報告'
-      @text = [ '順調', '最高の調子']
-      @formatter = formatter
-    end
-
-    def output_report
-      @formatter.output_report @title, @text
-    end
-  end
-
-  report = Report.new(HTMLFormatter.new)
-  report.output_report
-
-# Gof
-snippet     gof_strategy_2
-abbr        別々のオブジェクトにアルゴリズムを引き出す
-  # Strategy pattern
-  # pattern2
-  # 別々のオブジェクトにアルゴリズムを引き出す
-  # use Proc
-  class Report
-    attr_reader :title, :text
-    attr_accessor :formatter
-
-    def initialize( &formatter )
-      @title = '月次報告'
-      @text = [ '順調', '最高の調子']
-      @formatter = formatter
-    end
-
-    def output_report
-      @formatter.call self
-    end
-  end
-  HTML_FORMATTER = lambda do |context|
-    body = ""
-    context.text.each do |line|
-      body += line
-    end
-
-    puts <<-HTML
-    <!DOCTYPE HTML>
-    <html lang="ja">
-    <head>
-     <meta charset="UTF-8">
-     <title>#{context.title}</title>
-    </head>
-    <body>
-      #{body}
-    </body>
-    </html>
-    HTML
-  end
-##}}}
-
-# Observer {{{
-snippet     gof_observer_1
-abbr        オブジェクトの変更を通知する
-  module Subject
-    def initialize
-      @observers = []
-    end
-
-    def add_observer(&observer)
-      @observers << observer
-    end
-
-    def delete_observer(observer)
-      @observers.delete(observer)
-    end
-
-    def notify_observers
-      @observers.each do |observer|
-        observer.call(self)
-      end
-    end
-  end
-
-  class Employee
-    include Subject
-
-    attr_accessor :name, :title, :salary
-
-    def initialize( name, title, salary )
-      super()
-      @name = name
-      @title = title
-      @salary = salary
-    end
-
-    def salary= (new_salary)
-      @salary = new_salary
-      notify_observers
-    end
-  end
-
-  fred = Employee.new('Fred', 'Crane Operator', 3000)
-  fred.add_observer do |changed_employee|
-    puts("Cut a new check for#{changed_employee.name}")
-    puts("His salary is now #{changed_employee.salary}")
-  end
-
-snippet     gof_observer_2
-abbr        オブジェクトの変更を通知する
-  require 'observer'
-  class AObservable
-    include Observable
-
-    def value= (v)
-      @value = v
-      changed
-      notify_observers v
-    end
-  end
-  class AObserver
-    def update(value)
-      puts("update value : #{value}")
-    end
-  end
-
-# オブジェクトを生成
-  obj = AObservable.new
-
-# オブザーバーを追加
-  observer = AObserver.new
-  obj.add_observer(observer)
-
-  obj.value = "hoge"
-#}}}
-
-# Composite {{{
-snippet     gof_composite_1
-abbr        部分から全体を組み立てる
-  class Task
-    attr_accessor :name, :parent
-
-    def initialize(name)
-      @name = name
-      @parent = nil
-    end
-
-    def get_time_required
-      0.0
-    end
-  end
-
-  class CompositeTask < Task
-    def initialize(name)
-      super(name)
-      @sub_tasks = []
-    end
-
-    def add_sub_task(task)
-      @sub_tasks << task
-      task.parent = self
-    end
-
-    def remove_sub_task(task)
-      @sub_tasks.delete(task)
-      task.parent = nil
-    end
-
-    def get_time_required
-      time = 0.0
-      @sub_tasks.each { |task| time += task.get_time_required }
-      time
-    end
-  end
-# }}}
-
-# Iterator#{{{
-snippet     gof_iterator_1
-abbr 集約オブジェクトの内部を隠蔽しながら、要素にアクセスする
-  class Account
-    attr_accessor :name, :balance
-
-    def initialize(name, balance)
-      @name = name
-      @balance = balance
-    end
-
-    def <=>(other)
-      blance <=> other.balance
-    end
-  end
-
-  class Portfolio
-    include Enumerable
-    def initialize
-      @accounts = []
-    end
-
-    def each(&block)
-      @accounts.each(&block)
-    end
-
-    def add_account(account)
-      @accounts << account
-    end
-  end
-##}}}
-
-# Command#{{{
-snippet     gof_command_1
-abbr 何を行うかの決定と、その実行を分離する
-  # アプリケーションのアクションをパッケージにする
-  class Button
-    attr_accessor :command
-
-    def initialize (cmd_object)
-      @description = cmd_object.description
-      @command = cmd_object.command
-    end
-
-    def click
-      @command.execute if @command
-    end
-  end
-
-  class Cmd
-    def execute; end
-    def unexecute; end
-    def description; end
-  end
-
-  class PutData
-    attr_accessor :name
-    def initialize name
-      @name = name
-    end
-
-    def execute
-      puts "#{@name}を実行しました"
-    end
-
-    def unexecute
-      puts "#{@name}をキャンセルしました"
-    end
-  end
-#}}}
-
-# Singleton#{{{
-snippet     gof_singleton_1
-  require 'singleton'
-  class RandomSolt
-    include Singleton
-
-    def initialize
-      @@rand = Random.rand
-    end
-
-    def solt
-      @@rand
-    end
-  end
-
-  solt_maneger =  RandomSolt.instance
-  p solt_maneger.solt
-#}}}
-
-# rdoc /*{{{*/
-snippet     =b
-abbr        =begin rdoc ...  =end
-    =begin rdoc
-        ${1}
-    =end
-
-snippet     rdoc
-    # === ${1}
-    # ${2}
-    # === 引数
-    # ${3}
-    # === 戻り値
-
-snippet     ##
-  ##
-  # ${1}
-
-snippet     @s
-abbr        @see
-  @see ${1:Class}
-
-snippet     @p
-abbr        @param [Class] ...
-  @param [${1:Class}] ${2:...}
-
-snippet     @e
-abbr        @example ...
-  @example ${1:...}
-
-    ${2:sample}
-
-snippet     @r
-abbr        @return [Class] ...
-  @return [${1:Class}] ${2:...}
-
-snippet     @ra
-abbr        @raise [${1:Class}] ...
-  @raise [${1:Class}] ${2:...}
-
-#}}}
-#}}}
-
-# rails #{{{
-# model#{{{
-# paperclip#{{{
-snippet     has_attached_file
-  has_attached_file ${1:column}, :styles => { ${1:big: '100x100'} }
-#}}}
-
-snippet     v_length
-abbr   length: { in: ... }
-  length: { in: ${1} }
-
-snippet     v_numericality
-abbr numericality: { only_integer: true, ... }
-  numericality: { ${1:only_integer: true,}, ${2:greater_than:, greater_than_or_equal_to:, equal_to:, less_than:, odd:, even:} }
-
-snippet     v_uniqueness
-abbr uniqueness: true
-  uniqueness: true
-
-snippet     v_presence
-abbr presence: true
-  presence: true
-
-snippet     v_confirmation
-abbr confirmation: true
-  confirmation: true
-
-snippet     v_format
-abbr format: { with: ... }
-  format: { with: /${1}/ }
-
-snippet     v_inclusion
-abbr inclusion: { in: %w!...! }
-  inclusion: { in: %w!${1}! }
-
-snippet     v_exclusion
-abbr exclusion: { in: %w!...! }
-  exclusion: { in: %w!${1}! }
-
-snippet     v_allow_blank
-abbr allow_blank: true
-  allow_blank: true
-
-snippet     v_allow_nil
-abbr allow_nil: true
-  allow_nil: true
-
-snippet     v_acceptance
-abbr acceptance: { on: ... }
-  acceptance: { on: ${1::create} }
-
-snippet     v_message
-abbr message: '%{value}...'
-  message: '${1}'
-
-snippet     v_if
-abbr if: '...'
-  if: '${1}'
-
-snippet     v_unless
-abbr unless: '...'
-  unless: '${1}'
-
-snippet     v_if_and_unless_sample
-abbr if: Proc.new { |u| u.blank }
-  unless: 'dm.blank?'
-  if: '!dm.blank?'
-  unless: :sendmail?
-  if: Proc.new { |u| u.dm.blank? }
-
-snippet     v_maximum
-abbr maximum: ...
-  maximum: ${1}
-
-snippet     v_in
-abbr in: ...
-  in: ${1}
-
-snippet     v_minimum
-abbr minimum: ...
-  minimum: ${1}
-#}}}
-
-# migration#{{{
-snippet     mig_change_table
-abbr        change_table
-  change_table ${1::table_name} do |t|
-    t.change ${2::column_name}, ${3::column_type}
-  end
-#}}}
-
-# controller
-# rescue all exception#{{{
-snippet     con_rescue_exceptions
-  rescue_from ::ActionController::RoutingError, ::ActionController::UnknownController, ::AbstractController::ActionNotFound, ::ActiveRecord::RecordNotFound, with: lambda { |exception| render_error 404, exception }
-    rescue_from Exception, with: lambda { |exception| render_error 500, exception }
-
-    private
-    def render_error(status, exception)# {{{
-
-      if status == 500
-        begin
-          if status == 404 then logger.debug exception else logger.error exception end
-          ContactMailer.catch_error(status, exception).deliver
-        rescue => e
-          logger.error e
-        end
-      end
-
-      respond_to do |format|
-        format.html { render template: "errors/error_#{status}", layout: 'layouts/application', status: status }
-        format.all { render nothing: true, status: status }
-      end
-    end# }}}
-#}}}
-# basic authenticate#{{{
-snippet basic_auth
-  http_basic_authenticate_with name: ${1:user_name}, password: ${2:password} if Rails.env.production?
-#}}}
-# routes#{{{
-snippet     match_not_found
-  match '*not_found', to: 'errors#error_404'
-#}}}
-
-# rspec-setting
-snippet     config.include
-abbr        config.include ..., {...}
-regexp      '^config\.'
-    config.include ${1:ModuleName}, example_group: {
-      file_path: config.escaped_path(%w[spec (${2:views|controllers})])
-    }
-
-snippet     rand
-abbr        rand
-options     word
-  offset = rand(${1}.count)
-  rand_record = $1.first(:offset => offset)
-
-#}}}
-
-
-# gem
+# Gem#{{{
 snippet     binding
 abbr        binding
 alias       pry
 options     word
   binding.pry;
 
-# japanese match
-snippet     match_japanese
-abbr        match_japanese
-options     word
-  /[ぁ-んァ-ヴ一-龠亜-煕]/u
-
 snippet     concern
 abbr        extend ActiveSupport::Concern
 options     word
   extend ActiveSupport::Concern
+#}}}
 
-snippet Rational
-abbr    Rational
+# Snippet#{{{
+snippet Stub_get
+abbr    Stub_get
 options word
-  Rational(${1}, ${2})
+  module Stub
+    def gets
+      @count = -1 unless @count
+      @count += 1
+      [
+        ${1}
+      ][@count]
+    end
+  end
+  extend Stub
+
+snippet benchmark
+abbr    benchmark
+options word
+  require 'benchmark'
+  puts Benchmark::CAPTION
+  puts Benchmark.measure {
+    ${1}
+  }
+#}}}

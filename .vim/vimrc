@@ -253,7 +253,7 @@ NeoBundleLazy 'kana/vim-arpeggio', { 'autoload': {
 NeoBundleLazy 'thinca/vim-quickrun', { 'autoload' : {
       \   'mappings' : [['nxo', '<Plug>(quickrun)']],
       \   'commands' : 'QuickRun' }}
-" NeoBundleLazy 'scrooloose/syntastic', {
+NeoBundleLazy 'scrooloose/syntastic', {
       \ 'autoload': {
       \   'filetypes' : g:my.ft.program_files,
       \   'commands' : [
@@ -711,7 +711,7 @@ NeoBundleLazy 'taka84u9/vim-ref-ri', {
 "       \ 'autoload' : {
 "       \   'commands' : ['RSpec', 'RSpecAll', 'RSpecCurrent', 'RSpecNearest', 'RSpecRetry']
 "       \ }}
-NeoBundle 'alpaca-tc/vim-chef', { 'autoload' : {
+NeoBundleLazy 'alpaca-tc/vim-chef', { 'autoload' : {
       \ 'functions' : ['chef#detect'],
       \ 'filetypes': 'ruby.chef',
       \ }}
@@ -773,17 +773,17 @@ endif
 " C++ / C / C#
 " TODO check out [here]( http://d.hatena.ne.jp/thinca/20130522/1369234427 )
 " ----------------------------------------
-" NeoBundleLazy 'Rip-Rip/clang_complete', {
-"      \ 'autoload' : {
-"      \     'filetypes' : g:my.ft.c_files,
-"      \    },
-"      \ }
+NeoBundleLazy 'Rip-Rip/clang_complete', {
+     \ 'autoload' : {
+     \     'filetypes' : g:my.ft.c_files,
+     \    },
+     \ }
 " NeoBundleLazy 'osyo-manga/neocomplcache-clang_complete', { 'autoload' : {
 "      \ 'filetypes' : g:my.ft.c_files,
 "      \ }}
-" NeoBundleLazy "vim-jp/cpp-vim", { 'autoload' : {
-"       \ 'filetypes' : g:my.ft.c_files,
-"       \ }}
+NeoBundleLazy "vim-jp/cpp-vim", { 'autoload' : {
+      \ 'filetypes' : g:my.ft.c_files,
+      \ }}
 
 " Sh
 " ----------------------------------------
@@ -796,7 +796,15 @@ NeoBundleLazy 'mattn/excitetranslate-vim', {
       \ 'depends': 'mattn/webapi-vim',
       \ 'autoload' : { 'commands': ['ExciteTranslate']}
       \ }
-" NeoBundle 'kana/vim-altr'
+NeoBundle 'kana/vim-altr', {
+      \ 'build' : 'bundle install',
+      \ 'autoload' : {
+      \   'filetypes' : 'ruby',
+      \   'mappings' : [
+      \     ['n', '<Plug>(altr-forward)'],
+      \     ['n', '<Plug>(altr-back)'],
+      \   ]
+      \ }}
 
 NeoBundleLazy 'tsukkee/lingr-vim', { 'autoload' : {
       \ 'commands' : ['LingrExit', 'LingrLaunch'],
@@ -845,9 +853,10 @@ xnoremap < <gv
 xnoremap m :sort<CR>
 xnoremap > >gv
 
-nnoremap <silent><Space><Space>q :qall!<CR>
+nnoremap <silent><Space><Space><Space>q :qall!<CR>
 nnoremap <silent><Space><Space>w :wall!<CR>
-nnoremap <silent><Space>q :q!<CR>
+nnoremap <silent><Space><Space>q :q!<CR>
+nnoremap <silent><Space>q :q<CR>
 nnoremap <silent><Space>w :wq<CR>
 nnoremap <silent><Space>s :SudoWrite %<CR>
 
@@ -1790,19 +1799,22 @@ unlet hooks
 " ------------------------------------
 let hooks = neobundle#get_hooks('syntastic')
 function! hooks.on_source(bundle) "{{{
-  let g:syntastic_auto_jump           = 1
+  let g:syntastic_auto_jump           = 0
   let g:syntastic_auto_loc_list       = 1
   let g:syntastic_check_on_open       = 0
   let g:syntastic_echo_current_error  = 0
   let g:syntastic_enable_balloons     = has('balloon_eval')
-  let g:syntastic_enable_highlighting = 0
+  let g:syntastic_quiet_warnings      = 0
+  let g:syntastic_enable_highlighting = 1
   let g:syntastic_enable_signs        = 1
   let g:syntastic_loc_list_height     = 2
   let g:syntastic_error_symbol        = '>'
   let g:syntastic_warning_symbol      = 'X'
 
   let s:passive_filetypes       = ['html', 'yaml', 'racc.ruby', 'eruby', 'sass']
-  let g:syntastic_ruby_checkers = ['mri', 'rubocop']
+  let g:syntastic_ruby_checkers = ['rubocop', 'mri']
+  let g:syntastic_Gemfile_checkers = ['rubocop', 'mri']
+  let g:syntastic_Rakefile_checkers = ['rubocop', 'mri']
   let g:syntastic_mode_map      = {
         \ 'mode'              : 'active',
         \ 'active_filetypes'  : g:my.ft.program_files,
@@ -1837,24 +1849,24 @@ function! hooks.on_source(bundle) "{{{
   augroup END
 endfunction"}}}
 
-function! hooks.on_post_source(bundle)
-  let bundle = neobundle#get('syntastic')
-  let plugin_path = bundle.path . '/plugin/syntastic.vim'
-  let s:sid = alpaca#function#get_sid(plugin_path)
-  autocmd! syntastic
-  nnoremap st :SyntasticToggleMode<CR>
-
-  function! s:update_errors()
-    execute '<SNR>' . s:sid . '_UpdateErrors(1)'
-    call lightline#update()
-  endfunction
-
-  augroup Syntastic
-    " autocmd BufReadPost * if g:syntastic_check_on_open | call <SID>update_errors() | endif
-    autocmd BufWritePost * execute 'call <SNR>' . s:sid . '_UpdateErrors(1)'
-    " autocmd BufEnter * call s:BufEnterHook()
-  augroup END
-endfunction
+" function! hooks.on_post_source(bundle) "{{{
+"   " let bundle = neobundle#get('syntastic')
+"   " let plugin_path = bundle.path . '/plugin/syntastic.vim'
+"   " let s:sid = alpaca#function#get_sid(plugin_path)
+"   " autocmd! syntastic
+"   " nnoremap st :SyntasticToggleMode<CR>
+"
+"   " function! s:update_errors()
+"   "   execute '<SNR>' . s:sid . '_UpdateErrors(1)'
+"   "   call lightline#update()
+"   " endfunction
+"
+"   " augroup Syntastic
+"   "   " autocmd BufReadPost * if g:syntastic_check_on_open | call <SID>update_errors() | endif
+"   "   autocmd BufWritePost * execute 'call <SNR>' . s:sid . '_UpdateErrors(1)'
+"   "   " autocmd BufEnter * call s:BufEnterHook()
+"   " augroup END
+" endfunction"}}}
 unlet hooks
 
 " ------------------------------------
@@ -3123,9 +3135,28 @@ function! hooks.on_source(bundle)
   let g:lingr_vim_terminate_thread_immediately = 0
 endfunction
 augroup MyAutoCmd
-  autocmd!
   autocmd FileType lingr-* nnoremap Q :LingrExit<CR>
 augroup END
+
+let hooks = neobundle#get_hooks('clang_complete')
+function! hooks.on_source(bundle) "{{{
+  let g:clang_library_path = '/usr/local/share/'
+endfunction"}}}
+unlet hooks
+
+nmap <Space>A  <Plug>(altr-forward)
+nmap <Space>a  <Plug>(altr-back)
+let hooks = neobundle#get_hooks('vim-altr')
+function! hooks.on_post_source(bundle) "{{{
+  " For ruby tdd
+  call altr#define('lib/%.rb', 'spec/lib/%_spec.rb')
+  call altr#define('%.rb', 'spec/%_spec.rb')
+  " For rails tdd
+  call altr#define('app/models/%.rb', 'spec/models/%_spec.rb', 'spec/factories/%s.rb')
+  call altr#define('app/controllers/%.rb', 'spec/controllers/%_spec.rb')
+  call altr#define('app/helpers/%.rb', 'spec/helpers/%_spec.rb')
+endfunction"}}}
+unlet hooks
 
 " ----------------------------------------
 " Other plugin settings {{{

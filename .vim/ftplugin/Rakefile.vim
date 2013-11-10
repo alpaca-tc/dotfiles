@@ -9,7 +9,7 @@ if exists('loaded_matchit') && !exists('b:match_words')
   let b:match_ignorecase = 0
 
   let b:match_words =
-        \ '\<\%(if\|unless\|case\|while\|until\|for\|do\|class\|module\|def\|begin\)\>=\@!' .
+        \ '\<\%(if\|unless\|case\|while\|until\|for\|do\|task\|class\|module\|def\|begin\)\>=\@!' .
         \ ':' .
         \ '\<\%(else\|elsif\|ensure\|when\|rescue\|break\|redo\|next\|retry\)\>' .
         \ ':' .
@@ -36,8 +36,7 @@ setlocal formatoptions-=t formatoptions+=croql
 setlocal include=^\\s*\\<\\(load\\\|\w*require\\)\\>
 setlocal includeexpr=substitute(substitute(v:fname,'::','/','g'),'$','.rb','')
 
-augroup Gemfile
-  autocmd!
-  autocmd BufWritePost <buffer> call vimproc#system_bg('bundle && gem ctags')
-  autocmd FileType <buffer> call autocmd! Gemfile
-augroup END
+if !exists('b:loaded_rubysnip') && exists(':NeoSnippetSource') && filereadable('~/.vim/snippet/ruby.snip')
+  let b:loaded_rubysnip = 1
+  NeoBundleSource ~/.vim/snippet/ruby.snip
+endif

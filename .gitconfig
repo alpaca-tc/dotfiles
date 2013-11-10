@@ -12,6 +12,7 @@
   ; cr-at-eol =
   precomposeunicode = true
   quotepath = false
+  editor = vim -c \"set fenc=utf-8\"
 
 [receive]
   fsckObjects = true
@@ -81,3 +82,5 @@
   insteadOf = git://
 [hub]
   protocol = https
+[credential]
+  helper = cache --timeout=86400

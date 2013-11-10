@@ -1,0 +1,39 @@
+# rdoc
+snippet     =b
+abbr        =begin rdoc ...  =end
+    =begin rdoc
+        ${1}
+    =end
+
+snippet     rdoc
+    # === ${1}
+    # ${2}
+    # === 引数
+    # ${3}
+    # === 戻り値
+
+snippet     ##
+  ##
+  # ${1}
+
+snippet     @s
+abbr        @see
+  @see ${1:Class}
+
+snippet     @p
+abbr        @param [Class] ...
+  @param [${1:Class}] ${2:...}
+
+snippet     @e
+abbr        @example ...
+  @example ${1:...}
+
+    ${2:sample}
+
+snippet     @r
+abbr        @return [Class] ...
+  @return [${1:Class}] ${2:...}
+
+snippet     @ra
+abbr        @raise [${1:Class}] ...
+  @raise [${1:Class}] ${2:...}

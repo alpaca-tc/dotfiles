@@ -1,0 +1,273 @@
+# Gof#{{{
+# Strategy#{{{
+snippet     gof_strategy_1
+abbr        別々のオブジェクトにアルゴリズムを引き出す
+  # Strategy pattern
+  # pattern1
+  # 別々のオブジェクトにアルゴリズムを引き出す
+  class Report
+    attr_reader :title, :text
+    attr_accessor :formatter
+
+    def initialize(formatter)
+      @title = '月次報告'
+      @text = [ '順調', '最高の調子']
+      @formatter = formatter
+    end
+
+    def output_report
+      @formatter.output_report @title, @text
+    end
+  end
+
+  report = Report.new(HTMLFormatter.new)
+  report.output_report
+
+# Gof
+snippet     gof_strategy_2
+abbr        別々のオブジェクトにアルゴリズムを引き出す
+  # Strategy pattern
+  # pattern2
+  # 別々のオブジェクトにアルゴリズムを引き出す
+  # use Proc
+  class Report
+    attr_reader :title, :text
+    attr_accessor :formatter
+
+    def initialize( &formatter )
+      @title = '月次報告'
+      @text = [ '順調', '最高の調子']
+      @formatter = formatter
+    end
+
+    def output_report
+      @formatter.call self
+    end
+  end
+  HTML_FORMATTER = lambda do |context|
+    body = ""
+    context.text.each do |line|
+      body += line
+    end
+
+    puts <<-HTML
+    <!DOCTYPE HTML>
+    <html lang="ja">
+    <head>
+     <meta charset="UTF-8">
+     <title>#{context.title}</title>
+    </head>
+    <body>
+      #{body}
+    </body>
+    </html>
+    HTML
+  end
+##}}}
+
+# Observer {{{
+snippet     gof_observer_1
+abbr        オブジェクトの変更を通知する
+  module Subject
+    def initialize
+      @observers = []
+    end
+
+    def add_observer(&observer)
+      @observers << observer
+    end
+
+    def delete_observer(observer)
+      @observers.delete(observer)
+    end
+
+    def notify_observers
+      @observers.each do |observer|
+        observer.call(self)
+      end
+    end
+  end
+
+  class Employee
+    include Subject
+
+    attr_accessor :name, :title, :salary
+
+    def initialize( name, title, salary )
+      super()
+      @name = name
+      @title = title
+      @salary = salary
+    end
+
+    def salary= (new_salary)
+      @salary = new_salary
+      notify_observers
+    end
+  end
+
+  fred = Employee.new('Fred', 'Crane Operator', 3000)
+  fred.add_observer do |changed_employee|
+    puts("Cut a new check for#{changed_employee.name}")
+    puts("His salary is now #{changed_employee.salary}")
+  end
+
+snippet     gof_observer_2
+abbr        オブジェクトの変更を通知する
+  require 'observer'
+  class AObservable
+    include Observable
+
+    def value= (v)
+      @value = v
+      changed
+      notify_observers v
+    end
+  end
+  class AObserver
+    def update(value)
+      puts("update value : #{value}")
+    end
+  end
+
+# オブジェクトを生成
+  obj = AObservable.new
+
+# オブザーバーを追加
+  observer = AObserver.new
+  obj.add_observer(observer)
+
+  obj.value = "hoge"
+#}}}
+
+# Composite {{{
+snippet     gof_composite_1
+abbr        部分から全体を組み立てる
+  class Task
+    attr_accessor :name, :parent
+
+    def initialize(name)
+      @name = name
+      @parent = nil
+    end
+
+    def get_time_required
+      0.0
+    end
+  end
+
+  class CompositeTask < Task
+    def initialize(name)
+      super(name)
+      @sub_tasks = []
+    end
+
+    def add_sub_task(task)
+      @sub_tasks << task
+      task.parent = self
+    end
+
+    def remove_sub_task(task)
+      @sub_tasks.delete(task)
+      task.parent = nil
+    end
+
+    def get_time_required
+      time = 0.0
+      @sub_tasks.each { |task| time += task.get_time_required }
+      time
+    end
+  end
+# }}}
+
+# Iterator#{{{
+snippet     gof_iterator_1
+abbr 集約オブジェクトの内部を隠蔽しながら、要素にアクセスする
+  class Account
+    attr_accessor :name, :balance
+
+    def initialize(name, balance)
+      @name = name
+      @balance = balance
+    end
+
+    def <=>(other)
+      blance <=> other.balance
+    end
+  end
+
+  class Portfolio
+    include Enumerable
+    def initialize
+      @accounts = []
+    end
+
+    def each(&block)
+      @accounts.each(&block)
+    end
+
+    def add_account(account)
+      @accounts << account
+    end
+  end
+##}}}
+
+# Command#{{{
+snippet     gof_command_1
+abbr 何を行うかの決定と、その実行を分離する
+  # アプリケーションのアクションをパッケージにする
+  class Button
+    attr_accessor :command
+
+    def initialize (cmd_object)
+      @description = cmd_object.description
+      @command = cmd_object.command
+    end
+
+    def click
+      @command.execute if @command
+    end
+  end
+
+  class Cmd
+    def execute; end
+    def unexecute; end
+    def description; end
+  end
+
+  class PutData
+    attr_accessor :name
+    def initialize name
+      @name = name
+    end
+
+    def execute
+      puts "#{@name}を実行しました"
+    end
+
+    def unexecute
+      puts "#{@name}をキャンセルしました"
+    end
+  end
+#}}}
+
+# Singleton#{{{
+snippet     gof_singleton_1
+  require 'singleton'
+  class RandomSolt
+    include Singleton
+
+    def initialize
+      @@rand = Random.rand
+    end
+
+    def solt
+      @@rand
+    end
+  end
+
+  solt_maneger =  RandomSolt.instance
+  p solt_maneger.solt
+#}}}
+
+#}}}

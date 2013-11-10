@@ -2,3 +2,29 @@ include ruby.snip
 include ruby.action_controller.snip
 include ruby.abstract_controller.snip
 
+# rescue all exception#{{{
+snippet     con_rescue_exceptions
+  rescue_from ::ActionController::RoutingError, ::ActionController::UnknownController, ::AbstractController::ActionNotFound, ::ActiveRecord::RecordNotFound, with: lambda { |exception| render_error 404, exception }
+    rescue_from Exception, with: lambda { |exception| render_error 500, exception }
+
+    private
+    def render_error(status, exception)# {{{
+
+      if status == 500
+        begin
+          if status == 404 then logger.debug exception else logger.error exception end
+          ContactMailer.catch_error(status, exception).deliver
+        rescue => e
+          logger.error e
+        end
+      end
+
+      respond_to do |format|
+        format.html { render template: "errors/error_#{status}", layout: 'layouts/application', status: status }
+        format.all { render nothing: true, status: status }
+      end
+    end# }}}
+#}}}
+
+snippet basic_auth
+  http_basic_authenticate_with name: ${1:user_name}, password: ${2:password} if Rails.env.production?
