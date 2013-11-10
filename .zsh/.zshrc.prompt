@@ -66,6 +66,7 @@ case ${UID} in
         add-zsh-hook precmd _update_vcs_info_msg
 
         _git_not_pushed() {
+
           if [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = "true" ]; then
             head="$(git rev-parse HEAD)"
             for x in $(git rev-parse --remotes)
