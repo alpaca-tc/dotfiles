@@ -1,3 +1,5 @@
+include ruby.standard_library.snip
+
 # Magic code#{{{
 snippet   utf
 abbr      utf-8 magick
@@ -51,7 +53,7 @@ abbr    lambda do end
 snippet ->
 abbr    ->
 options word
-  -> { |${1}| ${2} }
+  -> ${1:#:(${2\})} { ${3} }
 
 snippet def
 abbr    def

@@ -809,16 +809,25 @@ NeoBundle 'kana/vim-altr', {
 NeoBundleLazy 'tsukkee/lingr-vim', { 'autoload' : {
       \ 'commands' : ['LingrExit', 'LingrLaunch'],
       \ }}
-NeoBundle 'Floobits/floobits-vim', { 'autoload' : {
-      \ 'commands' : [
-      \   'FlooJoinWorkspace', 'FlooLeaveWorkspace',
-      \   'FlooPartworkspace', 'FlooToggleFollowMode',
-      \   'FlooSummon', 'FlooPing', 'FlooDeleteBuf',
-      \   'FlooPause', 'FlooUnPause', 'FlooOpenInBrowser',
-      \   'FlooClearHighlights', 'FlooToggleHighlights',
-      \   'FlooShareDir', 'FlooShareDirPrivate',
-      \   'FlooAddBuf', 'FlooInfo',
-      \ ]
+" NeoBundle 'Floobits/floobits-vim', { 'autoload' : {
+"       \ 'commands' : [
+"       \   'FlooJoinWorkspace', 'FlooLeaveWorkspace',
+"       \   'FlooPartworkspace', 'FlooToggleFollowMode',
+"       \   'FlooSummon', 'FlooPing', 'FlooDeleteBuf',
+"       \   'FlooPause', 'FlooUnPause', 'FlooOpenInBrowser',
+"       \   'FlooClearHighlights', 'FlooToggleHighlights',
+"       \   'FlooShareDir', 'FlooShareDirPrivate',
+"       \   'FlooAddBuf', 'FlooInfo',
+"       \ ]
+"       \ }}
+NeoBundle 'alpaca-tc/assignment'
+NeoBundle 'tyru/operator-camelize.vim', {
+      \ 'depends' : 'kana/vim-operator-user',
+      \ 'autoload' : {
+      \   'mappings' : [
+      \     ['nx', '<Plug>(operator-camelize)'],
+      \     ['nx', '<Plug>(operator-decamelize)'],
+      \   ]
       \ }}
 
 " Installation check.
@@ -1778,8 +1787,8 @@ endfunction"}}}
 " ------------------------------------
 " operator-camelize.vim
 " ------------------------------------
-xmap ,u <Plug>(operator-camelize)
-xmap ,U <Plug>(operator-decamelize)
+vmap ,u <Plug>(operator-camelize)
+vmap ,U <Plug>(operator-decamelize)
 
 " ------------------------------------
 let hooks = neobundle#get_hooks('vim-smartchr')
@@ -1805,8 +1814,8 @@ function! hooks.on_source(bundle) "{{{
   let g:syntastic_echo_current_error  = 0
   let g:syntastic_enable_balloons     = has('balloon_eval')
   let g:syntastic_quiet_warnings      = 0
-  let g:syntastic_enable_highlighting = 1
-  let g:syntastic_enable_signs        = 1
+  let g:syntastic_enable_highlighting = 0
+  let g:syntastic_enable_signs        = 0
   let g:syntastic_loc_list_height     = 2
   let g:syntastic_error_symbol        = '>'
   let g:syntastic_warning_symbol      = 'X'
@@ -1849,24 +1858,24 @@ function! hooks.on_source(bundle) "{{{
   augroup END
 endfunction"}}}
 
-" function! hooks.on_post_source(bundle) "{{{
-"   " let bundle = neobundle#get('syntastic')
-"   " let plugin_path = bundle.path . '/plugin/syntastic.vim'
-"   " let s:sid = alpaca#function#get_sid(plugin_path)
-"   " autocmd! syntastic
-"   " nnoremap st :SyntasticToggleMode<CR>
-"
-"   " function! s:update_errors()
-"   "   execute '<SNR>' . s:sid . '_UpdateErrors(1)'
-"   "   call lightline#update()
-"   " endfunction
-"
-"   " augroup Syntastic
-"   "   " autocmd BufReadPost * if g:syntastic_check_on_open | call <SID>update_errors() | endif
-"   "   autocmd BufWritePost * execute 'call <SNR>' . s:sid . '_UpdateErrors(1)'
-"   "   " autocmd BufEnter * call s:BufEnterHook()
-"   " augroup END
-" endfunction"}}}
+function! hooks.on_post_source(bundle) "{{{
+  let bundle = neobundle#get('syntastic')
+  let plugin_path = bundle.path . '/plugin/syntastic.vim'
+  let s:sid = alpaca#function#get_sid(plugin_path)
+  autocmd! syntastic
+  nnoremap st :SyntasticToggleMode<CR>
+
+  function! s:update_errors()
+    execute '<SNR>' . s:sid . '_UpdateErrors(1)'
+    call lightline#update()
+  endfunction
+
+  augroup Syntastic
+    " autocmd BufReadPost * if g:syntastic_check_on_open | call <SID>update_errors() | endif
+    autocmd BufWritePost * execute 'call <SNR>' . s:sid . '_UpdateErrors(1)'
+    " autocmd BufEnter * call s:BufEnterHook()
+  augroup END
+endfunction"}}}
 unlet hooks
 
 " ------------------------------------
@@ -3161,6 +3170,7 @@ unlet hooks
 " ----------------------------------------
 " Other plugin settings {{{
 let g:git_aliases#author_name = g:my.info.github
+let g:assignment#path = expand('~/projects/assignment')
 " let g:lang8_email_address = 'alprhcp666@gmail.com'
 "}}}
 "}}}

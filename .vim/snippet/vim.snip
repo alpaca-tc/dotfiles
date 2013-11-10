@@ -203,3 +203,10 @@ options word
   function! ${1:`join(split(substitute(expand("%:p"), '.*/autoload/\(.*\).vim$', '\1', 'g'), '/'), '#') . '#'`}${2}(${3})
     ${4}
   endfunction
+
+snippet complete_function
+abbr    function ...
+options word
+  function! auto_name${1}#complete(arg_lead, cmd_line, cursor_pos)
+    ${2}
+  endfunction

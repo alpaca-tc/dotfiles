@@ -1,0 +1,7 @@
+snippet Struct.new
+abbr    class Name < Struct.new(...)
+alias   struct
+options word
+  class ${1:ClassName} < Struct.new(%i!${2:attributes}!)
+    ${2}
+  end
