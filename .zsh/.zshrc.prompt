@@ -34,7 +34,8 @@ case ${UID} in
     # Prompt
     setopt prompt_subst
     # PROMPT='${RESET}${GREEN}${WINDOW:+"[$WINDOW]"}${RESET}%{$BLUE_BOLD%}${USER}@%m:${RESET}${WHITE}%~ ${RESET}${WHITE}$ '$'\n'
-    PROMPT='${RESET}%{$BLUE_BOLD%}${USER}@%m: %1(v|%F${CYAN}%1v%2v%f|)${vcs_info_git_pushed} ${RESET}${WHITE}${RESET}${WHITE}%~${RESET}${WHITE} '$' \n'
+    # PROMPT='${RESET}%{$BLUE_BOLD%}${USER}@%m: %1(v|%F${CYAN}%1v%2v%f|)${vcs_info_git_pushed} ${RESET}${WHITE}${RESET}${WHITE}%~${RESET}${WHITE} '$' \n'
+    PROMPT='${RESET}%{$BLUE_BOLD%}${USER}@%m: %1(v|%F${CYAN}%1v%2v%f|) ${RESET}${WHITE}${RESET}${WHITE}%~${RESET}${WHITE} '$' \n'
     set_tmux_pwd
 
         # Show git branch when you are in git repository# {{{
@@ -42,11 +43,11 @@ case ${UID} in
         autoload -Uz add-zsh-hook
         autoload -Uz vcs_info
 
-        zstyle ':vcs_info:*' enable git svn hg bzr
-        zstyle ':vcs_info:*' formats '(%s)-[%b]'
-        zstyle ':vcs_info:*' actionformats '(%s)-[%b|%a]'
-        zstyle ':vcs_info:(svn|bzr):*' branchformat '%b:r%r'
-        zstyle ':vcs_info:bzr:*' use-simple true
+        # zstyle ':vcs_info:*' enable git svn hg bzr
+        # zstyle ':vcs_info:*' formats '(%s)-[%b]'
+        # zstyle ':vcs_info:*' actionformats '(%s)-[%b|%a]'
+        # zstyle ':vcs_info:(svn|bzr):*' branchformat '%b:r%r'
+        # zstyle ':vcs_info:bzr:*' use-simple true
 
         autoload -Uz is-at-least
         if is-at-least 4.3.10; then
@@ -60,24 +61,24 @@ case ${UID} in
         _update_vcs_info_msg() {
           psvar=()
           LANG=en_US.UTF-8 vcs_info
-          psvar[2]=$(_git_not_pushed)
+          # psvar[2]=$(_git_not_pushed)
           [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
         }
         add-zsh-hook precmd _update_vcs_info_msg
 
-        _git_not_pushed() {
-          if [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = "true" ]; then
-            head="$(git rev-parse HEAD)"
-            for x in $(git rev-parse --remotes)
-            do
-              if [ "$head" = "$x" ]; then
-                return 0
-              fi
-            done
-            echo "{?}"
-          fi
-          return 0
-        }
+        # _git_not_pushed() {
+        #   if [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = "true" ]; then
+        #     head="$(git rev-parse HEAD)"
+        #     for x in $(git rev-parse --remotes)
+        #     do
+        #       if [ "$head" = "$x" ]; then
+        #         return 0
+        #       fi
+        #     done
+        #     echo "{?}"
+        #   fi
+        #   return 0
+        # }
 
         # PROMPT="%1(v|%F${CYAN}%1v%2v%f|)${vcs_info_git_pushed}${RESET}${WHITE}[${BLUE}%(5~,%-2~/.../%2~,%~)% ${WHITE}]${WINDOW:+"[$WINDOW]"} ${RESET}"
         # RPROMPT="%1(v|%F${CYAN}%1v%2v%f|)${vcs_info_git_pushed}${RESET}${WHITE}[${WHITE}%(5~,%-2~/.../%2~,%~)% ${WHITE}]${WINDOW:+"[$WINDOW]"} ${RESET}"
