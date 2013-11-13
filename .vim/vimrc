@@ -166,7 +166,7 @@ if v:version >= 703
 endif
 
 augroup MyAutoCmd
-  autocmd FileType * set iskeyword+=@-@
+  " autocmd FileType * set iskeyword+=@-@
 augroup END
 
 nnoremap <Space><Space>s :<C-U>source ~/.vim/vimrc<CR>
@@ -226,10 +226,6 @@ NeoBundleLazy 'rhysd/accelerated-jk', {
       \   'mappings' : [
       \     ['n', '<Plug>(accelerated_jk_gj)'], ['n', '<Plug>(accelerated_jk_gk)']
       \ ] }}
-
-NeoBundleLazy 'edsono/vim-matchit', { 'autoload' : {
-      \ 'filetypes': g:my.ft.program_files,
-      \ 'mappings' : ['nx', '%'] }}
 
 NeoBundleLazy 'tpope/vim-surround', {
       \ 'autoload' : {
@@ -392,7 +388,7 @@ NeoBundle 'tomtom/tcomment_vim', { 'autoload' : {
 
 " For Git
 NeoBundleLazy 'tpope/vim-fugitive', { 'autoload': {
-      \ 'functions' : ['fugitive#head'],
+      \ 'functions' : ['fugitive#head', 'fugitive#detect'],
       \ 'commands': ['Gcommit', 'Gblame', 'Ggrep', 'Gdiff'] }}
 NeoBundleLazy 'Shougo/git-vim', {
       \ 'autoload' : {
@@ -405,6 +401,7 @@ NeoBundleLazy 'Shougo/git-vim', {
       \   { 'name': 'GitCheckout', 'complete' : 'customlist,git#list_commits' },
       \   { 'name': 'GitAdd',      'complete' : 'file' },
       \   'GitLog', 'GitCommit', 'GitBlame', 'GitPush'] }}
+" NeoBundle 'motemen/git-vim'
 NeoBundleLazy 'mattn/gist-vim', {
       \ 'depends': ['mattn/webapi-vim' ],
       \ 'autoload' : {
@@ -527,7 +524,7 @@ if has('ruby')
         \ }}
 
   " For payroll accounting
-  NeoBundleLazy 'alpaca-tc/snail_csv2google_sheet', { 'autoload': {
+  NeoBundleLazy 'alpaca-tc/snail.vim', { 'autoload': {
         \ 'commands' : [
         \   { 'name': 'Snail', 'complete' : 'file' },
         \ ],
@@ -840,6 +837,12 @@ filetype plugin indent on
 "}}}
 
 " ----------------------------------------
+" Other Plugins
+if !exists('loaded_matchit')
+  runtime macros/matchit.vim
+endif
+
+" ----------------------------------------
 " Editing"{{{
 set autoread
 set nostartofline
@@ -864,8 +867,8 @@ xnoremap > >gv
 
 nnoremap <silent><Space><Space><Space>q :qall!<CR>
 nnoremap <silent><Space><Space>w :wall!<CR>
-nnoremap <silent><Space><Space>q :q!<CR>
-nnoremap <silent><Space>q :q<CR>
+nnoremap <silent><Space><Space>q :qall!<CR>
+nnoremap <silent><Space>q :q!<CR>
 nnoremap <silent><Space>w :wq<CR>
 nnoremap <silent><Space>s :SudoWrite %<CR>
 
@@ -876,8 +879,9 @@ function! s:redraw_and_doautocmd() "{{{
 endfunction"}}}
 
 nnoremap re :%s!
-xnoremap re :s!
-xnoremap rep y:%s!\<<C-r>=substitute(@0, '!', '\\!', 'g')<CR>\>!!gI<Left><Left><Left>
+xnoremap :s :s!
+xnoremap re y:%s!\<<C-r>=substitute(@0, '!', '\\!', 'g')<CR>\>!!gI<Left><Left><Left>
+xnoremap rep y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
 
 nnoremap ,f :setfiletype<Space>
 
@@ -929,8 +933,29 @@ if has('vim_starting')
 endif
 "}}}
 
+function! s:load_cabbrev_definition() "{{{
+  let cabbrev_definition = [
+        \ 'be !bundle exec rake',
+        \ 'f FugitiveReload',
+        \ 'U Unite',
+        \ 'G Git',
+        \ 'g Git',
+        \ 'Un UnwatchBuffer',
+        \ 'git UniteGit',
+        \ ]
+  for definition in cabbrev_definition
+    execute 'cabbrev' definition
+  endfor
+endfunction"}}}
+function! s:load_cabbrev_definition_automatically() "{{{
+  call s:load_cabbrev_definition()
+  nunmap :
+  call feedkeys(':', 'n')
+endfunction"}}}
+nnoremap <silent>: :call <SID>load_cabbrev_definition_automatically()<CR>
+
 let g:end_tag_commant_format = '<!-- /%tag_name%id%class -->'
-nnoremap ,t :call alpaca#function#html#endtag_comment()<CR>
+nnoremap ,t :call alpaca#function#html#endtag_comment()<CR>:
 
 inoremap <C-R> <C-R><C-R>
 inoremap <C-R><C-R> <C-R>"
