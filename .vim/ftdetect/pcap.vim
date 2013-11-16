@@ -1,4 +1,1 @@
-augroup MyFtpcap
-  autocmd!
-  autocmd BufNewFile,BufRead *.pcap set filetype=pcap
-augroup END
+autocmd BufNewFile,BufRead *.pcap set filetype=pcap

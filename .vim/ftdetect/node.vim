@@ -4,7 +4,4 @@ function! s:detect_ft_for_node() "{{{
   endif
 endfunction"}}}
 
-augroup MyFtnode
-  autocmd!
-  autocmd BufRead * call s:detect_ft_for_node()
-augroup END
+autocmd BufRead * call s:detect_ft_for_node()
