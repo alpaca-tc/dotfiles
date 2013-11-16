@@ -91,71 +91,18 @@ abbr        raise_error(ErrorKlass)
 options     word
   raise_error(${1:NameError})
 #}}}
-# controller#{{{
-snippet     controller.class.skip_before_filter
-abbr        controller.class.skip_before_filter :method
-options     word
-  controller.class.skip_before_filter :${1:method}
 
-snippet     controller
-abbr        controller do ... end
-options     word
-  controller do
-    ${1}
-  end
+# Basic2 {{{
+snippet change
+abbr    change {}.from().to()
+options word
+  change { ${1} }.from(${2}).to(${3})
+
+snippet change_by
+abbr    change_by
+options word
+  change_ { ${1} }.by(${2})
 #}}}
-
-# routes#{{{
-snippet     route_to
-abbr        route_to(controller: name, action: name)
-options     word
-  route_to(controller: ${1}, action: ${2})
-
-snippet     route_test
-abbr        route_test
-options     word
-  { ${1:method}: ${2:path} }.should route_to(controller: ${1}, action: ${2})
-#}}}
-
-# view#{{{
-snippet     assign
-abbr        assign(:instance_var, value)
-options     word
-  assign(:${1:instance_var}, ${2:value})
-
-snippet     controller_request
-abbr        controller.request.path_parameters[...].should ...
-options     word
-  controller.request.path_parameters['${1:action|controller}'].should ${2:eq('${3:new\}')}
-
-snippet     have_tag
-abbr        have_tag(name, attributes={}, &bloc)
-alias       match_tag
-options     word
-  have_tag('${1:selector}', ${2:value})
-
-snippet     assert_have_tag
-abbr        assert_have_tag(name, attributes={}, &bloc)
-alias       assert_have_sselector
-options     word
-  assert_have_tag('${1:selector}', ${2:value})
-
-snippet     have_selector
-abbr        have_selector(name, attributes={}, &block)
-alias       match_selector
-options     word
-  have_selector('${1:selector}', ${2})
-
-snippet     contain
-abbr        contain(content)
-options     word
-  contain(${1:content})
-
-snippet     asset_contain
-abbr        asset_contain(reg_or_str_content)
-options     word
-  asset_contain(${1:content})
-##}}}
 
 # stub#{{{
 snippet     stub
@@ -309,4 +256,5 @@ snippet     given
 abbr        context 'given'
 options     word
   context 'given ${1}'
+
 #}}}

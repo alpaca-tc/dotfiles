@@ -178,6 +178,7 @@ function extract() {
     *.tar) tar xvf $1;;
     *.arj) unarj $1;;
     *.sqlite3) sqlite3 $1;;
+    *.rar) unrar e $1;;
     *.rb) ruby $1;;
   esac
 }

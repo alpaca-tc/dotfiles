@@ -82,7 +82,7 @@ export PATH=/Applications/MacVim.app/Contents/MacOS:$PATH
 
 # export PYTHONPATH=/usr/local/Cellar/python32/3.2.3/Frameworks/Python.framework/Versions/3.2
 # alias python=python3.2
-export PATH=$HOME/usr/bin:$PATH
+export PATH=$PATH:$HOME/usr/binl
 # }}}
 
 # for vim
@@ -93,6 +93,9 @@ export PATH=$HOME/usr/bin:$PATH
 # http://stackoverflow.com/questions/13942443/error-installing-rmagick-on-mountain-lion
 
 fpath=( $HOME/dotfiles/.zsh/zsh-completions/src $HOME/.zsh/site-functions $fpath)
+
+# For rust
+export PATH=$PATH:/usr/local/bin/bin
 
 # 各種読み込み
 # {{{
