@@ -178,12 +178,11 @@ function extract() {
     *.tar) tar xvf $1;;
     *.arj) unarj $1;;
     *.sqlite3) sqlite3 $1;;
-
     *.rar) unrar e $1;;
     *.rb) ruby $1;;
   esac
 }
-alias -s {rb,sqlite3,gz,tgz,zip,lzh,bz2,tbz,Z,tar,arj,xz,bzip2,c}=extract
+alias -s {rar,rb,sqlite3,gz,tgz,zip,lzh,bz2,tbz,Z,tar,arj,xz,bzip2,c}=extract
 
 function runcpp () { g++ $1 && shift && ./a.out $@ }
 alias -s {c,cpp}=runcpp
