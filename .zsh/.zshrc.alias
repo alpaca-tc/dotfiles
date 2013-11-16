@@ -15,6 +15,7 @@ alias vza="vim ~/.zsh/.zshrc.alias"
 alias vzb="vim ~/.zsh/.zshrc.basic"
 alias vze="vim ~/.zsh/.zshrc.extends"
 alias vzp="vim ~/.zsh/.zshrc.prompt"
+alias avim="ALPACA_MODE=1 vim"
 # }}}
 
 # XAMPP {{{
