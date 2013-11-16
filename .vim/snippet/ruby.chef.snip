@@ -299,6 +299,15 @@ abbr    template 'name' do ... end
     mode '0644'
     notifies :reload, 'service[nginx]'
   end
+
+snippet execute
+abbr    execute name {...}
+options word
+  execute ${1:'command'} do
+    command ${2:command}
+    not_if { ${3: condition } }
+    ${4:#:cwd, environment, group, path, provider, returns, timeout, userumask}
+  end
 #}}}
 
 # Template attributes {{{

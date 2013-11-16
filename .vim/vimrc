@@ -131,7 +131,7 @@ if s:on_init() "{{{
         \ 'style_files':     ['css', 'scss', 'sass'],
         \ 'markup_files':    ['html', 'haml', 'eruby', 'php', 'xhtml', 'liquid'],
         \ 'english_files':   ['markdown', 'help', 'text'],
-        \ 'program_files':   ['ruby', 'php', 'python', 'eruby', 'vim', 'javascript', 'coffee', 'scala', 'java', 'go', 'cpp', 'haml'],
+        \ 'program_files':   ['ruby', 'php', 'python', 'eruby', 'vim', 'javascript', 'coffee', 'scala', 'java', 'go', 'cpp', 'haml', 'rust'],
         \ 'ignore_patterns': ['vimfiler', 'unite'],
         \ }
 endif"}}}
@@ -170,6 +170,7 @@ endif
 
 augroup MyAutoCmd
   " autocmd FileType * set iskeyword+=@-@
+  autocmd BufEnter * setl formatoptions-=ro
 augroup END
 
 nnoremap <Space><Space>s :<C-U>source ~/.vim/vimrc<CR>
@@ -773,11 +774,11 @@ endif
 " C++ / C / C#
 " TODO check out [here]( http://d.hatena.ne.jp/thinca/20130522/1369234427 )
 " ----------------------------------------
-NeoBundleLazy 'Rip-Rip/clang_complete', {
-     \ 'autoload' : {
-     \     'filetypes' : g:my.ft.c_files,
-     \    },
-     \ }
+" NeoBundleLazy 'Rip-Rip/clang_complete', {
+"      \ 'autoload' : {
+"      \     'filetypes' : g:my.ft.c_files,
+"      \    },
+"      \ }
 " NeoBundleLazy 'osyo-manga/neocomplcache-clang_complete', { 'autoload' : {
 "      \ 'filetypes' : g:my.ft.c_files,
 "      \ }}
@@ -829,6 +830,11 @@ NeoBundle 'tyru/operator-camelize.vim', {
       \     ['nx', '<Plug>(operator-decamelize)'],
       \   ]
       \ }}
+
+NeoBundleLazy 'alpaca-tc/vim-rust', { 'autoload' : {
+      \ 'filetypes' : 'rust'
+      \ }}
+
 
 " Installation check.
 if s:on_init() && g:my.conf.initialize && neobundle#exists_not_installed_bundles()
@@ -939,6 +945,7 @@ endif
 function! s:load_cabbrev_definition() "{{{
   let cabbrev_definition = [
         \ 'be !bundle exec rake',
+        \ 'berks !bundle exec berks install --path cookbooks',
         \ 'f FugitiveReload',
         \ 'U Unite',
         \ 'G Git',
@@ -2110,6 +2117,10 @@ function! hooks.on_source(bundle) "{{{
         \   { '\(\k\+\)(&:\(\S\+\))': '\1 { |x| x\.\2 }' },
         \   { '\(\k\+\)\s\={ |\(\k\+\)| \2.\(\S\+\) }': '\1(&:\3)' },
         \ ],
+        \ 'ruby,rdoc' : [
+        \   ['=', '==', '===', '====', '====='],
+        \   [':nodoc:', ':doc:', ':notnew:'],
+        \ ],
         \ 'ruby.application_template' : [
         \   ['yes?', 'no?'],
         \   ['lib', 'initializer', 'file', 'vendor', 'rakefile'],
@@ -2202,8 +2213,10 @@ function! hooks.on_source(bundle) "{{{
         \   ['^f', 'fixup '],
         \   ['^e', 'exec '],
         \ ],
-        \ 'vim' : [
+        \ 'vim,Berksfile,Gemfile' : [
         \   { '\vhttps{,1}://github.com/([^/]+)/([^/]+)(\.git){,1}': '\1/\2' },
+        \ ],
+        \ 'vim' : [
         \   ['call', 'return', 'echo'],
         \   ['NeoBundle', 'NeoBundleLazy'],
         \   ['echo', 'echomsg'],
@@ -3193,11 +3206,14 @@ augroup MyAutoCmd
   autocmd FileType lingr-* nnoremap Q :LingrExit<CR>
 augroup END
 
-let hooks = neobundle#get_hooks('clang_complete')
-function! hooks.on_source(bundle) "{{{
-  let g:clang_library_path = '/usr/local/share/'
-endfunction"}}}
-unlet hooks
+" let hooks = neobundle#get_hooks('clang_complete')
+" function! hooks.on_source(bundle) "{{{
+" let g:clang_library_path = '/Library/Developer/CommandLineTools/usr/lib/libclang.dylib'
+let g:clang_library_path = '/Library/Developer/CommandLineTools/usr/lib'
+'
+let g:clang_use_library = 1
+" endfunction"}}}
+" unlet hooks
 
 nmap <Space>A  <Plug>(altr-forward)
 nmap <Space>a  <Plug>(altr-back)
@@ -3206,10 +3222,9 @@ function! hooks.on_post_source(bundle) "{{{
   " For ruby tdd
   call altr#define('lib/%.rb', 'spec/lib/%_spec.rb')
   call altr#define('%.rb', 'spec/%_spec.rb')
-  " For rails tdd
-  call altr#define('app/models/%.rb', 'spec/models/%_spec.rb', 'spec/factories/%s.rb')
-  call altr#define('app/controllers/%.rb', 'spec/controllers/%_spec.rb')
-  call altr#define('app/helpers/%.rb', 'spec/helpers/%_spec.rb')
+
+  " For Berksfile
+  call altr#define('Berksfile', $HOME . '/.berkshelf/cookbooks')
 endfunction"}}}
 unlet hooks
 

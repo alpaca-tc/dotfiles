@@ -1,0 +1,89 @@
+# Default syntax#{{{
+snippet if
+abbr    if condition {...}
+options word
+  if ${1:/* condition */} {
+      ${0:/* code */}
+  }
+
+snippet fn
+abbr    fn
+options word
+  fn ${1:name}(${2}) ${3:-> ${4:type\}} {
+      ${5:#:do_something}
+  }
+
+snippet loop
+abbr    loop {...}
+options word
+  loop {
+      ${1:#:do_something}
+  }
+
+snippet while
+abbr    while condition {...}
+options word
+  while ${1:#:condition} {
+      ${1:#:do_something}
+  }
+
+snippet for
+abbr    for condition {...}
+options word
+  for ${1:#:condition} {
+    ${2}
+  }
+
+snippet for_with_init
+abbr    for condition {...}
+options word
+  for (${1:i} = 0; $1 < ${2:count}; ${3:$1++}) {
+      ${1:#:do_something}
+  }
+
+snippet struct
+abbr    struct Name {...}
+options word
+  struct ${1:Name} {
+      ${2:#:var: type}
+  }
+
+snippet enum
+abbr    enum Name {...}
+options word
+  enum ${1:Name} {
+      ${2:#:attr = val}
+  }
+
+snippet match
+abbr    match $name {...}
+options word
+  match ${1:name} {
+      ${2:pat}
+  }
+
+
+#}}}
+
+# Function syntax#{{{
+snippet println
+abbr    println(...)
+options word
+  println(fmt!("${1:%?}", ${2}))
+
+#}}}
+
+# Alias syntax#{{{
+snippet main
+abbr    main
+options word
+  fn main() {
+    ${1}
+  }
+
+snippet pattern
+abbr    condition => {...}
+alias   pat
+options word
+  ${1} => { ${2} }
+#}}}

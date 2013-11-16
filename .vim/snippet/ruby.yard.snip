@@ -1,0 +1,26 @@
+# Comment Syntax {{{
+snippet @p
+abbr    @param [Class] ...
+alias   @param
+options word
+  @param [${1:Class}] ${2:name} ${3:#:description}
+
+snippet @r
+abbr    @return [Class] ...
+alias   @return
+options word
+  @return [${1:Class}] ${2:description}
+
+snippet @o
+abbr    @option name [Class] key description
+alias   @option
+options word
+  @option ${1:name} [${2:Class}] ${3:#:key description}
+
+snippet @e
+abbr    @example Title ...
+alias   @example
+options word
+  @example ${1:Title}
+  ${2}
+#}}}

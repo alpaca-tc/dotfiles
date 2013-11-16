@@ -14,6 +14,7 @@ let g:tagbar_type_ruby = {
       \ ],
       \ 'sro' : '.',
       \ }
+setl formatoptions-=ro
 " let g:tagbar_type_ruby = {
 "       \ 'ctagstype' : 'ruby',
 "       \ 'kinds' : [

@@ -1,4 +1,6 @@
 include ruby.standard_library.snip
+include ruby.rdoc.snip
+include ruby.yard.snip
 
 # Magic code#{{{
 snippet   utf
@@ -283,4 +285,9 @@ options word
   puts Benchmark.measure {
     ${1}
   }
+
+snippet parent_directory
+abbr    parent_directory
+options word
+  parent_directory = File.expand_path('..', ${1:Dir.pwd})
 #}}}

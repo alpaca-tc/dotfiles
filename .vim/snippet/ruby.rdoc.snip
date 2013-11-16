@@ -1,39 +1,48 @@
-# rdoc
-snippet     =b
-abbr        =begin rdoc ...  =end
-    =begin rdoc
-        ${1}
-    =end
+# Major Syntax #{{{
+snippet h1
+abbr    # = title
+options word
+  # = ${1}
 
-snippet     rdoc
-    # === ${1}
-    # ${2}
-    # === 引数
-    # ${3}
-    # === 戻り値
+snippet h2
+abbr    # == title
+options word
+  # == ${1}
 
-snippet     ##
-  ##
-  # ${1}
+snippet h3
+abbr    # === title
+options word
+  # === ${1}
 
-snippet     @s
-abbr        @see
-  @see ${1:Class}
+snippet h4
+abbr    # ==== title
+options word
+  # ==== ${1}
 
-snippet     @p
-abbr        @param [Class] ...
-  @param [${1:Class}] ${2:...}
+snippet h5
+abbr    # ===== title
+options word
+  # ===== ${1}
 
-snippet     @e
-abbr        @example ...
-  @example ${1:...}
+snippet comment
+abbr    # -- ... # ++
+options word
+  #--
+  # ${1:#:comment}
+  #++
 
-    ${2:sample}
+snippet link
+abbr    name[http://...]
+options word
+  ${1:title}[${2:http://}]
 
-snippet     @r
-abbr        @return [Class] ...
-  @return [${1:Class}] ${2:...}
+snippet bold
+abbr    *word*
+options word
+  *${1:word}*
 
-snippet     @ra
-abbr        @raise [${1:Class}] ...
-  @raise [${1:Class}] ${2:...}
+snippet italic
+abbr    _word_
+options word
+  _${1:word}_
+#}}}
