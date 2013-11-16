@@ -77,9 +77,8 @@ setopt auto_pushd
 # コマンド名に / が含まれているとき PATH 中のサブディレクトリを探す
 setopt path_dirs
 
-# コマンド オプションも補完
-# autoload -U compinit
-autoload -Uz compinit && compinit
+# # コマンド オプションも補完
+autoload -Uz compinit && compinit -u
 
 # 大文字小文字 補完する
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
