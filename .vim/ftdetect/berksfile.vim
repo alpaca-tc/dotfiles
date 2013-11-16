@@ -1,4 +1,1 @@
-augroup MyFtberksfile
-  autocmd!
-  autocmd BufNewFile,BufReadPost Berksfile set filetype=Berksfile
-augroup END
+autocmd BufNewFile,BufReadPost Berksfile set filetype=Berksfile

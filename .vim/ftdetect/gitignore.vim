@@ -1,4 +1,1 @@
-augroup MyFtgitignore
-  autocmd!
-  autocmd BufNewFile,BufRead .gitignore setl ft=conf
-augroup END
+autocmd BufNewFile,BufRead .gitignore setl ft=conf
