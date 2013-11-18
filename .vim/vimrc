@@ -901,6 +901,7 @@ endfunction"}}}
 if exists(':OverCommandLine')
   nnoremap re :OverCommandLine<CR>%s!
   xnoremap :s :OverCommandLine<CR>s!
+  xnoremap re y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
   " xnoremap re y:OverCommandLine<CR>%s!<C-R>=@0
   " xnoremap rep y:OverCommandLine<CR>%s!<C-R>=substitute(@0, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
 else
@@ -1698,8 +1699,7 @@ let g:tcommentMaps = 0
 " noremap <silent><C-_>c :TComment<CR>
 
 " ------------------------------------
-" vim-rails {{{
-let hooks = neobundle#get_hooks('vim-rails')
+let hooks = neobundle#get_hooks('vim-rails') " {{{
 function! hooks.on_source(bundle) "{{{
   let g:dbext_default_SQLITE_bin = 'mysql2'
   let g:rails_default_file='config/database.yml'
@@ -1710,7 +1710,7 @@ function! hooks.on_source(bundle) "{{{
   let g:rails_syntax = 1
   let g:rails_url='http://localhost:3000'
 
-  function! s:source_snippet() "{{{
+  function! s:test()
     let buf = rails#buffer()
     let type = "-" . buf.type_name()
     let path = '/' . buf.name()
@@ -1719,8 +1719,33 @@ function! hooks.on_source(bundle) "{{{
     endif
 
     if type != '-'
-      let path = substitute(type, '-', '.', 'g')
-      execute "silent doautocmd User Rails" . path
+      let type = substitute(type, '-', '.', 'g')
+      execute 'doautocmd User Rails' . type
+      execute 'doautocmd User Rails' . path
+
+      echo 'doautocmd User Rails' . type
+      echo 'doautocmd User Rails' . path
+    endif
+
+    return path
+  endfunction
+  command! Test echo <SID>test()
+
+  function! s:source_snippet() " {{{
+    let buf = rails#buffer()
+    let type = "-" . buf.type_name()
+    let path = '/' . buf.name()
+    if path =~ '[ !#$%\,]'
+      let path = ''
+    endif
+
+    if type != '-'
+      let type = substitute(type, '-', '.', 'g')
+      execute 'silent doautocmd User Rails' . type
+    endif
+
+    if !empty(path)
+      execute 'silent doautocmd User Rails' . path
     endif
   endfunction"}}}
 
@@ -1752,17 +1777,35 @@ function! hooks.on_source(bundle) "{{{
   augroup RailsDictSetting
     autocmd!
     autocmd User Rails call <SID>unite_rails_setting()
-    autocmd User Rails.view*                 NeoSnippetSource ~/.vim/snippet/ruby.rails.view.snip
-    autocmd User Rails.view/*.haml           NeoSnippetSource ~/.vim/snippet/haml.rails.view.snip
-    autocmd User Rails.view/*.erb            NeoSnippetSource ~/.vim/snippet/eruby.rails.view.snip
-    autocmd User Rails.model*                NeoSnippetSource ~/.vim/snippet/ruby.rails.model.snip
-    autocmd User Rails.controller*           NeoSnippetSource ~/.vim/snippet/ruby.rails.controller.snip
-    autocmd User Rails/db/migrate/*          NeoSnippetSource ~/.vim/snippet/ruby.rails.migrate.snip
-    autocmd User Rails/config/environment.rb NeoSnippetSource ~/.vim/snippet/ruby.rails.environment.snip
-    autocmd User Rails/config/routes.rb      NeoSnippetSource ~/.vim/snippet/ruby.rails.route.snip
-    autocmd User Rails/spec/controllers/*    NeoSnippetSource ~/.vim/snippet/ruby.rspec.controller.snip
-    autocmd User Rails/spec/models/*         NeoSnippetSource ~/.vim/snippet/ruby.rspec.controller.snip
-    autocmd User Rails/spec/features/*       NeoSnippetSource ~/.vim/snippet/ruby.capybara.snip
+  augroup END
+endfunction"}}}
+
+function! s:define_rails_autocmd() "{{{
+  let s:rails_snippets = {
+        \ '.view*':                 ['ruby.rails.view.snip'],
+        \ '.view.haml':             ['haml.rails.view.snip'],
+        \ '.view.erb':              ['eruby.rails.view.snip'],
+        \ '.model':                ['ruby.rails.model.snip'],
+        \ '.controller':           ['ruby.rails.controller.snip'],
+        \ '.db.migration':          ['ruby.rails.migrate.snip'],
+        \ '/config/environment.rb': ['ruby.rails.environment.snip'],
+        \ '/config/routes.rb':      ['ruby.rails.route.snip'],
+        \ '.spec.controller':       ['ruby.rspec.controller.snip'],
+        \ '.spec.model':            ['ruby.rspec.controller.snip'],
+        \ '.fixtures.replacement':  ['ruby.factory_girl.snip'],
+        \ '.spec.helper':           ['ruby.rspec.helper.snip'],
+        \ '.spec.feature':          ['ruby.capybara.snip'],
+        \ '.spec.routing':          ['ruby.rspec.routing.snip']
+        \ }
+
+  augroup MyRailsSetting
+    autocmd!
+    for [type_or_path, snippets] in items(s:rails_snippets)
+      for snippet in snippets
+        let definition = ['autocmd User Rails', type_or_path, ' NeoSnippetSource', ' ~/.vim/snippet/', snippet]
+        execute join(definition, '')
+      endfor
+    endfor
   augroup END
 endfunction"}}}
 
@@ -1779,6 +1822,7 @@ function! s:load_vim_rails() "{{{
     augroup! LoadVimRails
     NeoBundleSource vim-rails
     call RailsDetect('%:p')
+    call s:define_rails_autocmd()
   endif
 endfunction"}}}
 

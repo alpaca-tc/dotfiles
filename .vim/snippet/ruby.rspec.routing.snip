@@ -1,0 +1,16 @@
+snippet template
+abbr    describe ...
+options word
+  describe 'routes for ${1:target}' do
+    it 'routes ${2:matcher} to the $1' do
+      {
+        ${3}
+      }.
+        should route_to(${4})
+    end
+  end
+
+snippet route_to
+abbr    route_to(controller: ..., action: ...)
+options word
+  route_to(controller: ${1}, action: ${2})
