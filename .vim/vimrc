@@ -66,11 +66,14 @@ endfunction"}}}
 function! s:reltime() "{{{
   return str2float(reltimestr(reltime()))
 endfunction"}}}
+function! s:on_init()
+  return has('vim_starting') || !exists('s:loaded_vimrc')
+endfunction
 "}}}
 
 " ----------------------------------------
 " initialize "{{{
-if has('vim_starting') "{{{
+if s:on_init() "{{{
   let g:my = {}
 
   " OS
@@ -133,7 +136,7 @@ if has('vim_starting') "{{{
         \ }
 endif"}}}
 
-if has('vim_starting') && g:my.conf.initialize
+if s:on_init() && g:my.conf.initialize
   call alpaca#initialize#directory(values(g:my.dir))
 endif
 "}}}
@@ -181,11 +184,11 @@ filetype plugin indent off
 let g:neobundle#types#git#default_protocol = 'https'
 let g:neobundle#install_max_processes = s:is_mac ? 50 : 10
 
-if has('vim_starting') && g:my.conf.initialize && !isdirectory(g:my.dir.neobundle.'/neobundle.vim')
+if s:on_init() && g:my.conf.initialize && !isdirectory(g:my.dir.neobundle.'/neobundle.vim')
   call system('git clone https://github.com/Shougo/neobundle.vim.git '. g:my.dir.neobundle . '/neobundle.vim')
 endif
 
-if has('vim_starting')
+if s:on_init()
   execute 'set runtimepath+=' . g:my.dir.neobundle . '/neobundle.vim'
   call neobundle#rc(g:my.dir.neobundle)
 endif
@@ -678,7 +681,7 @@ NeoBundleLazy 'Shougo/vinarise', {
 
 " Ruby
 " ----------------------------------------
-NeoBundleLazy 'tpope/vim-rails', { 'autoload' : {
+NeoBundleLazy 'alpaca-tc/vim-rails', { 'autoload' : {
       \ 'filetypes' : g:my.ft.ruby_files }}
 NeoBundleLazy 'alpaca-tc/vim-endwise.git', {
       \ 'autoload' : {
@@ -845,7 +848,7 @@ NeoBundleLazy 'osyo-manga/vim-over', { 'autoload' : {
       \ }}
 
 " Installation check.
-if has('vim_starting') && g:my.conf.initialize && neobundle#exists_not_installed_bundles()
+if s:on_init() && g:my.conf.initialize && neobundle#exists_not_installed_bundles()
   echomsg 'Not installed bundles : ' .  string(neobundle#get_not_installed_bundle_names())
   execute 'NeoBundleInstall' join(neobundle#get_not_installed_bundle_names(), ' ')
 endif
@@ -947,7 +950,7 @@ function! s:define_abbreviations() "{{{
   endfor
 endfunction
 
-if has('vim_starting')
+if s:on_init()
   augroup Abbreviations
     autocmd!
     autocmd FileType * call <SID>define_abbreviations()
@@ -1707,7 +1710,22 @@ function! hooks.on_source(bundle) "{{{
   let g:rails_syntax = 1
   let g:rails_url='http://localhost:3000'
 
+  function! s:source_snippet() "{{{
+    let buf = rails#buffer()
+    let type = "-" . buf.type_name()
+    let path = '/' . buf.name()
+    if path =~ '[ !#$%\,]'
+      let path = ''
+    endif
+
+    if type != '-'
+      let path = substitute(type, '-', '.', 'g')
+      execute "silent doautocmd User Rails" . path
+    endif
+  endfunction"}}}
+
   function! s:unite_rails_setting() "{{{
+    call s:source_snippet()
     nnoremap <buffer><Space>r :R<CR>
     nnoremap <buffer><Space>a :A<CR>
 
@@ -1729,20 +1747,22 @@ function! hooks.on_source(bundle) "{{{
     nnoremap <buffer>[plug]g           :<C-U>UniteGit Gemfile<CR>
     nnoremap <buffer>[plug]r           :<C-U>UniteGit config/routes.rb<CR>
     nnoremap <buffer>[plug]h           :<C-U>UniteGit app/helpers<CR>
-
-    " for syntax in split(glob($HOME . '/.vim/syntax/ruby.rails.*.vim'))
-    "   execute 'source ' . syntax
-    " endfor
-
-    " nnoremap <buffer><silent>,cr  :<C-U>RSpecCurrent<CR>
-    " nnoremap <buffer><silent>,nr :<C-U>RSpecNearest<CR>
-    " nnoremap <buffer><silent>,lr :<C-U>RSpecRetry<CR>
-    " nnoremap <buffer><silent>,ar :<C-U>RSpecAll<CR>
   endfunction"}}}
 
   augroup RailsDictSetting
     autocmd!
     autocmd User Rails call <SID>unite_rails_setting()
+    autocmd User Rails.view*                 NeoSnippetSource ~/.vim/snippet/ruby.rails.view.snip
+    autocmd User Rails.view/*.haml           NeoSnippetSource ~/.vim/snippet/haml.rails.view.snip
+    autocmd User Rails.view/*.erb            NeoSnippetSource ~/.vim/snippet/eruby.rails.view.snip
+    autocmd User Rails.model*                NeoSnippetSource ~/.vim/snippet/ruby.rails.model.snip
+    autocmd User Rails.controller*           NeoSnippetSource ~/.vim/snippet/ruby.rails.controller.snip
+    autocmd User Rails/db/migrate/*          NeoSnippetSource ~/.vim/snippet/ruby.rails.migrate.snip
+    autocmd User Rails/config/environment.rb NeoSnippetSource ~/.vim/snippet/ruby.rails.environment.snip
+    autocmd User Rails/config/routes.rb      NeoSnippetSource ~/.vim/snippet/ruby.rails.route.snip
+    autocmd User Rails/spec/controllers/*    NeoSnippetSource ~/.vim/snippet/ruby.rspec.controller.snip
+    autocmd User Rails/spec/models/*         NeoSnippetSource ~/.vim/snippet/ruby.rspec.controller.snip
+    autocmd User Rails/spec/features/*       NeoSnippetSource ~/.vim/snippet/ruby.capybara.snip
   augroup END
 endfunction"}}}
 
@@ -1758,10 +1778,11 @@ function! s:load_vim_rails() "{{{
     autocmd! LoadVimRails
     augroup! LoadVimRails
     NeoBundleSource vim-rails
+    call RailsDetect('%:p')
   endif
 endfunction"}}}
 
-if has('vim_starting') && !exists('s:loaded_vim_rails')
+if s:on_init() && !exists('s:loaded_vim_rails')
   augroup LoadVimRails
     autocmd!
     autocmd BufEnter * call <SID>load_vim_rails()
@@ -3313,11 +3334,13 @@ function! s:get_script_variables() "{{{
   return s:
 endfunction"}}}
 
-if !has('vim_starting')
+if !s:on_init()
   call neobundle#call_hook('on_source')
 elseif filereadable(expand('~/.vim_secret'))
   " snail & lingr
   source ~/.vim_secret
 endif
+
+let s:loaded_vimrc = 1
 
 set secure
