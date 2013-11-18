@@ -832,6 +832,17 @@ NeoBundleLazy 'alpaca-tc/vim-rust', { 'autoload' : {
       \ 'filetypes' : 'rust'
       \ }}
 
+NeoBundleLazy 'LeafCage/yankround.vim', { 'autoload' : {
+      \ 'functions' : ['yankround#is_active'],
+      \ 'mappings' : [
+      \   ['nx', '<Plug>(yankround-p)'],
+      \   ['nx', '<Plug>(yankround-P)'],
+      \   ['nx', '<Plug>(yankround-prev)'],
+      \   ['nx', '<Plug>(yankround-next)']
+      \ ]}}
+NeoBundleLazy 'osyo-manga/vim-over', { 'autoload' : {
+      \ 'commands' : ['OverCommandLine']
+      \ }}
 
 " Installation check.
 if has('vim_starting') && g:my.conf.initialize && neobundle#exists_not_installed_bundles()
@@ -884,11 +895,16 @@ function! s:redraw_and_doautocmd() "{{{
   redraw!
 endfunction"}}}
 
-nnoremap re :%s!
-xnoremap :s :s!
-xnoremap re y:%s!\<<C-r>=substitute(@0, '!', '\\!', 'g')<CR>\>!!gI<Left><Left><Left>
-xnoremap rep y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
-
+if exists(':OverCommandLine')
+  nnoremap re :OverCommandLine<CR>%s!
+  xnoremap :s :OverCommandLine<CR>s!
+  " xnoremap re y:OverCommandLine<CR>%s!<C-R>=@0
+  " xnoremap rep y:OverCommandLine<CR>%s!<C-R>=substitute(@0, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
+else
+  nnoremap re :%s!
+  xnoremap :s :s!
+  xnoremap re y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
+endif
 nnoremap ,f :setfiletype<Space>
 
 function! s:define_abbreviations() "{{{
@@ -2505,9 +2521,9 @@ function! hooks.on_source(bundle) "{{{
   inoremap <silent><CR> <C-R>=<SID>my_crinsert()<CR>
   inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
   inoremap <expr><C-X><C-F>  neocomplete#start_manual_complete('file')
-  inoremap <expr><C-G>     neocomplete#undo_completion()
-  inoremap <expr><C-N>  pumvisible() ? "\<C-N>" : "\<C-X>\<C-U>\<C-P>\<Down>"
-  inoremap <expr><C-P>  pumvisible() ? "\<C-P>" : "\<C-P>\<C-N>"
+  inoremap <expr><C-G> neocomplete#undo_completion()
+  inoremap <expr><C-N> pumvisible() ? "\<C-N>" : "\<C-X>\<C-U>\<C-P>\<Down>"
+  inoremap <expr><C-P> pumvisible() ? "\<C-P>" : "\<C-P>\<C-N>"
   inoremap <expr><C-@> neocomplete#start_manual_complete(['neosnippet'])
 
   inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
@@ -3206,6 +3222,11 @@ function! hooks.on_post_source(bundle) "{{{
   call altr#define('Berksfile', $HOME . '/.berkshelf/cookbooks')
 endfunction"}}}
 unlet hooks
+
+nmap p <Plug>(yankround-p)
+nmap P <Plug>(yankround-P)
+nmap <C-p> <Plug>(yankround-prev)
+nmap <C-n> <Plug>(yankround-next)
 
 " ----------------------------------------
 " Other plugin settings {{{

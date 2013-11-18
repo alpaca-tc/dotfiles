@@ -242,6 +242,11 @@ options     word
   slow: true
 #}}}
 
+snippet assings
+abbr    assings
+options word
+  expect(assigns(:${1:name})).to ${2}
+
 snippet     respond_to
 abbr        be_respond_to(...)
 options     word
@@ -256,5 +261,4 @@ snippet     given
 abbr        context 'given'
 options     word
   context 'given ${1}'
-
 #}}}

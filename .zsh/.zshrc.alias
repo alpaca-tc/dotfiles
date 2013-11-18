@@ -67,6 +67,7 @@ alias tm='tmux'
 alias tma='tmux attach'
 alias tml='tmux list-window'
 alias tmux='SHELL=/bin/zsh tmux -f ~/.tmux.conf'
+alias tmc="tmux capture-pane -S -10000\; show-buffer | vim +10000 -R -"
 # alias tmux='SHELL=/bin/zsh ~/Downloads/tmux/tmux -f ~/.tmux.conf'
 # }}}
 
