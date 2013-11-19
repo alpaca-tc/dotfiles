@@ -1,6 +1,6 @@
 augroup MyGvimSetting
   autocmd!
-  " autocmd VimEnter * set guifont=Ricty\ Regular\ for\ Powerline:h16
+  autocmd VimEnter * set guifont=Ricty\ Regular\ for\ Powerline:h16
 augroup END
 
 syntax on

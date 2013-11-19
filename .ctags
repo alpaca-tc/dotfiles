@@ -1,5 +1,4 @@
 --exclude=.git
---exclude=*.c
 --exclude=*.js
 --exclude=log
 

@@ -301,9 +301,9 @@ NeoBundleLazy 'Shougo/vimfiler', {
       \   ],
       \   'mappings' : ['<Plug>(vimfiler_switch)'],
       \ }}
-NeoBundleLazy 'Shougo/neocomplete', { 'autoload' : {
-      \   'insert' : 1,
-      \ }}
+" NeoBundleLazy 'Shougo/neocomplete', { 'autoload' : {
+"       \   'insert' : 1,
+"       \ }}
 NeoBundleLazy 'Shougo/neosnippet', {
       \ 'autoload' : {
       \   'commands' : [
@@ -551,7 +551,7 @@ NeoBundleLazy 'DirDiff.vim', { 'autoload' : {
 NeoBundleLazy 'repeat.vim', { 'autoload' : {
       \ 'mappings' : '.',
       \ }}
-NeoBundleLazy 'terryma/vim-multiple-cursors', { 'autload': {
+NeoBundle 'terryma/vim-multiple-cursors', { 'autload': {
       \ 'function_prefix': 'multiple_cursors',
       \ }}
 NeoBundleLazy 'alpaca-tc/auto-pairs', { 'autoload' : {
@@ -1059,8 +1059,8 @@ function! s:search_same_indent_line(next) "{{{
 
   echomsg 'Not found'
 endfunction"}}}
-nnoremap <silent>_n :<C-U>call <SID>search_same_indent_line(1)<CR>
-nnoremap <silent>_p :<C-U>call <SID>search_same_indent_line(0)<CR>
+nnoremap <silent>[n :<C-U>call <SID>search_same_indent_line(1)<CR>
+nnoremap <silent>[p :<C-U>call <SID>search_same_indent_line(0)<CR>
 
 augroup MyAutoCmd
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line('$') | execute "normal g`\"" | endif
@@ -2080,8 +2080,10 @@ let g:jscomplete_use = ['dom', 'moz', 'ex6th']
 
 " ------------------------------------
 if has('gui_running')
-  nmap gc :TComment<CR>
-  xmap gc :TComment<CR>
+  nmap <silent><C-_> :TComment<CR>
+  xmap <silent><C-_> :TComment<CR>
+  nmap <silent>_ <C-_>
+  xmap <silent>_ <C-_>
   " nmap gc <Plug>(caw:i:toggle)
   " xmap gc <Plug>(caw:i:toggle)
 else
@@ -2462,6 +2464,12 @@ unlet hooks
 " ----------------------------------------
 xnoremap <C-N> :<C-U>call multiple_cursors#new('n')<CR>
 nnoremap <C-N> :<C-U>call multiple_cursors#new('n')<CR>
+let g:multi_cursor_use_default_mapping=0
+let g:multi_cursor_start_key='<C-N>'
+let g:multi_cursor_next_key='<C-N>'
+let g:multi_cursor_prev_key='<C-P>'
+let g:multi_cursor_skip_key='<C-X>'
+let g:multi_cursor_quit_key='<Esc>'
 
 " ----------------------------------------
 nnoremap <Space>i :<C-U>IndentLinesToggle<CR>
