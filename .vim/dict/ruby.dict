@@ -773,3 +773,4 @@ numericality
 singularize
 constantize
 Rational
+initialize

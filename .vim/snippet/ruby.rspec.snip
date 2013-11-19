@@ -255,10 +255,14 @@ options     word
 snippet     when
 abbr        context 'when'
 options     word
-  context 'when ${1}'
+  context 'when ${1}' do
+    ${2}
+  end
 
 snippet     given
 abbr        context 'given'
 options     word
-  context 'given ${1}'
+  context 'given ${1}' do
+    ${2}
+  end
 #}}}

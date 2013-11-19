@@ -1229,9 +1229,9 @@ augroup MyAutoCmd
   autocmd FileType * call <SID>set_dictionary_automatically()
 augroup END
 
-nnoremap <buffer><Space>d :execute join([alpaca_window#util#get_smart_split_command('split'), split(&dictionary, ',')[-1]], ' ')<CR>
-nnoremap <buffer><Space><Space>d :execute join([alpaca_window#util#get_smart_split_command('split'), split(&dictionary, ',')[-2]], ' ')<CR>
-nnoremap <buffer><Space><Space><Space>d :execute join([alpaca_window#util#get_smart_split_command('split'), split(&dictionary, ',')[-3]], ' ')<CR>
+nnoremap <Space>d :execute join([alpaca_window#util#get_smart_split_command('split'), split(&dictionary, ',')[-1]], ' ')<CR>
+nnoremap <Space><Space>d :execute join([alpaca_window#util#get_smart_split_command('split'), split(&dictionary, ',')[-2]], ' ')<CR>
+nnoremap <Space><Space><Space>d :execute join([alpaca_window#util#get_smart_split_command('split'), split(&dictionary, ',')[-3]], ' ')<CR>
 "}}}
 
 " ----------------------------------------
@@ -2131,7 +2131,7 @@ function! hooks.on_source(bundle) "{{{
   let s:switch_definition_builtins = {
         \ }
   let s:switch_definition = {
-        \ '*': [
+        \ '_': [
         \   ['is', 'are'],
         \   { '\Cenable': '\Cdisable' },
         \   { '\CEnable': '\CDisable' },
@@ -2140,6 +2140,37 @@ function! hooks.on_source(bundle) "{{{
         \   { '\Cfalse': 'true' },
         \   { '\CFalse': 'True' },
         \   { '（\([^）]\+\)）' : '(\1)' },
+        \   ['left', 'right'],
+        \   ['top', 'bottom'],
+        \   ['north', 'south'],
+        \   ['east', 'west'],
+        \   ['under', 'over'],
+        \   ['start', 'stop'],
+        \   ['begin', 'end', 'finish'],
+        \   ['up', 'down'],
+        \   ['next', 'previous'],
+        \   ['read', 'write'],
+        \   ['draw', 'erase'],
+        \   ['old', 'new'],
+        \   ['open', 'close'],
+        \   ['first', 'last'],
+        \   ['minminimun', 'maxmaxinum'],
+        \   ['yes', 'no'],
+        \   ['head', 'tail'],
+        \   ['lose', 'find'],
+        \   ['in', 'out'],
+        \   ['input', 'output'],
+        \   ['export', 'import'],
+        \   ['large', 'big', 'small'],
+        \   ['parent', 'child'],
+        \   ['push', 'pull'],
+        \   ['fast', 'slow'],
+        \   ['good', 'bad'],
+        \   ['same', 'different'],
+        \   ['add', 'remove'],
+        \   ['insert', 'delete'],
+        \   ['create', 'destroy'],
+        \   ['prefix', 'suffix'],
         \ ],
         \ 'sass,scss,css' : [
         \   ['solid', 'dotted'],
@@ -2164,7 +2195,7 @@ function! hooks.on_source(bundle) "{{{
         \   ['if', 'unless'],
         \   ['while', 'until'],
         \   ['.blank?', '.present?'],
-        \   ['include', 'extend'],
+        \   ['include', 'extend', 'prepend'],
         \   ['class', 'module'],
         \   ['.inject', '.delete_if'],
         \   ['.map', '.map!'],
@@ -2314,8 +2345,8 @@ function! hooks.on_source(bundle) "{{{
       let definitions = extend(definitions, s:switch_definition['rails'])
     endif
 
-    if has_key(s:switch_definition, '*')
-      let definitions = extend(definitions, s:switch_definition['*'])
+    if has_key(s:switch_definition, '_')
+      let definitions = extend(definitions, s:switch_definition['_'])
     endif
 
     return definitions
