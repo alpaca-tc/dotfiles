@@ -901,9 +901,11 @@ endfunction"}}}
 if exists(':OverCommandLine')
   nnoremap re :OverCommandLine<CR>%s!
   xnoremap :s :OverCommandLine<CR>s!
-  xnoremap re y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
-  " xnoremap re y:OverCommandLine<CR>%s!<C-R>=@0
-  " xnoremap rep y:OverCommandLine<CR>%s!<C-R>=substitute(@0, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
+  function! s:replace() "{{{
+    let word = substitute(@0, '!', '\\!', 'g')
+    call feedkeys(":OverCommandLine\<CR>%s!". word . "!!gI\<Left>\<Left>\<Left>", 'n')
+  endfunction"}}}
+  xnoremap re y:call <SID>replace()<CR>
 else
   nnoremap re :%s!
   xnoremap :s :s!
