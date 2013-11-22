@@ -27,3 +27,7 @@ endfunction"}}}
 function! alpaca#print_error(string) "{{{
   echohl Error | echomsg a:string | echohl None
 endfunction"}}}
+
+function! alpaca#print_message(string) "{{{
+  echohl Comment | echomsg a:string | echohl None
+endfunction"}}}

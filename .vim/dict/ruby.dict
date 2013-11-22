@@ -774,3 +774,4 @@ singularize
 constantize
 Rational
 initialize
+Enumerable

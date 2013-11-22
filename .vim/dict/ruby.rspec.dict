@@ -217,3 +217,4 @@ has_xpath?
 be_a
 be_an
 Enumerable
+serializable_hash

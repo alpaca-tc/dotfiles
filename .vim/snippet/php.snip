@@ -399,3 +399,15 @@ snippet     ob
   ${1}
   ob_get_clean();
 #}}}
+
+# PHP < 5.3
+
+snippet namespace
+abbr    namespace name;
+options word
+  namespace ${1:name};
+
+snippet use
+abbr    use name;
+options word
+  use ${1}${2: as ${3\}};

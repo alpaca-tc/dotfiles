@@ -1,3 +1,8 @@
 include ruby.snip
 include ruby.active_record.snip
 include ruby.validation.snip
+
+snippet accepts_nested_attributes_for
+abbr    accepts_nested_attributes_for(:table_name, *opts)
+options word
+  accepts_nested_attributes_for(${1:table_namel}, ${2:allow_destory: true, reject_if: :proc_or_defname, limit: n, update_only: bool})

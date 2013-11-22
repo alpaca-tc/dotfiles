@@ -1,0 +1,61 @@
+include ruby.snip
+
+# Guard DSL#{{{
+snippet guard
+abbr    guard :name { ... }
+options word
+  guard :${1:name} do
+    ${2}
+  end
+
+snippet watch
+abbr    watch(pat) { ... }
+options word
+  watch(%r!${1:pat}!)${2: { |m| ${3\} \}}
+
+snippet group
+abbr    group :name { ... }
+options word
+  group :${1:name} do
+    ${2}
+  end
+
+snippet scope
+abbr    scope key: :value
+options word
+  scope ${1:plugins}: %i!${2:#:value}!
+
+snippet notification
+abbr    notification :name
+options word
+  notification :${1:notification_name}
+
+snippet interactor
+abbr    interactor guard_rc: ..., history_file: ...
+options word
+  interactor guard_rc: ${1}, history_file: ${2}
+
+snippet ignore
+abbr    ignore *[pat]
+alias   filter
+options word
+  ignore *[%r!${1:pattern}!]
+
+snippet logger
+abbr    logger(*opts)
+options word
+  logger level: :${1:warn, :error, :debug},
+    template:   ${2:[severity - :time - :progname]} :message,
+    time_formato: 'at %I:%M:%p',
+    only:   [:rspec, :jasmine],
+    except:   :jammit,
+    device:   'guard.log'
+#}}}
+
+# Side-ware#{{{
+snippet coffeescript
+abbr    coffeescript
+options word
+  guard :coffeescript, input: '${1}', output: '${2}'
+#}}}
+

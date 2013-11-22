@@ -131,7 +131,7 @@ if s:on_init() "{{{
         \ 'style_files':     ['css', 'scss', 'sass'],
         \ 'markup_files':    ['html', 'haml', 'eruby', 'php', 'xhtml', 'liquid'],
         \ 'english_files':   ['markdown', 'help', 'text'],
-        \ 'program_files':   ['ruby', 'php', 'python', 'eruby', 'vim', 'javascript', 'coffee', 'scala', 'java', 'go', 'cpp', 'haml', 'rust'],
+        \ 'program_files':   ['ruby', 'php', 'python', 'eruby', 'vim', 'javascript', 'coffee', 'scala', 'java', 'go', 'cpp', 'haml', 'rust', 'c'],
         \ 'ignore_patterns': ['vimfiler', 'unite'],
         \ }
 endif"}}}
@@ -146,7 +146,7 @@ endif
 set nocompatible
 let &directory = g:my.dir.swap_dir
 set backspace=indent,eol,start
-set clipboard+=autoselect,unnamed
+set clipboard+=unnamed
 set formatoptions+=lcqmM
 set modelines=1
 set ttymouse=xterm2
@@ -167,11 +167,6 @@ if v:version >= 703
   set undofile
   let &undodir = g:my.dir.undodir
 endif
-
-augroup MyAutoCmd
-  " autocmd FileType * set iskeyword+=@-@
-  autocmd BufEnter * setl formatoptions-=ro
-augroup END
 
 nnoremap <Space><Space>s :<C-U>source ~/.vim/vimrc<CR>
 nnoremap <Space><Space>v :<C-U>tabnew ~/.vim/vimrc<CR>
@@ -250,9 +245,12 @@ NeoBundleLazy 'kana/vim-arpeggio', { 'autoload': {
       \ 'functions': ['arpeggio#map'],
       \ 'insert' : 1,
       \ }}
-NeoBundleLazy 'thinca/vim-quickrun', { 'autoload' : {
+NeoBundleLazy 'thinca/vim-quickrun', {
+      \ 'depends' : 'Shougo/vimproc',
+      \ 'autoload' : {
       \   'mappings' : [['nxo', '<Plug>(quickrun)']],
       \   'commands' : 'QuickRun' }}
+
 NeoBundleLazy 'scrooloose/syntastic', {
       \ 'autoload': {
       \   'filetypes' : g:my.ft.program_files,
@@ -301,9 +299,9 @@ NeoBundleLazy 'Shougo/vimfiler', {
       \   ],
       \   'mappings' : ['<Plug>(vimfiler_switch)'],
       \ }}
-" NeoBundleLazy 'Shougo/neocomplete', { 'autoload' : {
-"       \   'insert' : 1,
-"       \ }}
+NeoBundleLazy 'Shougo/neocomplete', { 'autoload' : {
+      \   'insert' : 1,
+      \ }}
 NeoBundleLazy 'Shougo/neosnippet', {
       \ 'autoload' : {
       \   'commands' : [
@@ -576,7 +574,7 @@ NeoBundleFetch 'yascentur/Ricty', {
       \ }}
 
 " The light converter and beautifier
-NeoBundleLazy 'alpaca-tc/beautify.vim', { 'autoload' : {
+NeoBundle 'alpaca-tc/beautify.vim', { 'autoload' : {
       \ 'commands' : [
       \   {
       \     'name' : 'Beautify',
@@ -821,7 +819,14 @@ NeoBundleLazy 'tsukkee/lingr-vim', { 'autoload' : {
 "       \   'FlooAddBuf', 'FlooInfo',
 "       \ ]
 "       \ }}
-NeoBundle 'alpaca-tc/assignment'
+NeoBundleLazy 'alpaca-tc/assignment', {
+      \ 'commands' : [
+      \   {
+      \     'name' : 'Assignment',
+      \     'complete' : 'customlist,assignment#complete',
+      \   }
+      \ ]
+      \ }
 NeoBundle 'tyru/operator-camelize.vim', {
       \ 'depends' : 'kana/vim-operator-user',
       \ 'autoload' : {
@@ -846,6 +851,9 @@ NeoBundleLazy 'LeafCage/yankround.vim', { 'autoload' : {
 NeoBundleLazy 'osyo-manga/vim-over', { 'autoload' : {
       \ 'commands' : ['OverCommandLine']
       \ }}
+NeoBundleLazy 'sgur/unite-git_grep', { 'autoload' : {
+      \ 'unite_sources': ['vcs_grep/git', 'vcs_grep/hg', 'vcs_grep']
+      \ }}
 
 " Installation check.
 if s:on_init() && g:my.conf.initialize && neobundle#exists_not_installed_bundles()
@@ -864,18 +872,21 @@ endif
 
 " ----------------------------------------
 " Editing"{{{
-set autoread
-set nostartofline
-set hidden
-set nrformats-=octal
-set nrformats+=alpha
-set textwidth=0
-" set gdefault
-" set splitright
-" set splitbelow
-set previewheight=5
-set helpheight=14
-set matchtime=1
+if s:on_init()
+  set autoread
+  set nostartofline
+  set hidden
+  set nrformats-=octal
+  set nrformats+=alpha
+  set textwidth=0
+  " set gdefault
+  " set splitright
+  " set splitbelow
+  set previewheight=5
+  set helpheight=14
+  set matchtime=1
+  set winheight=5
+endif
 
 if has('multi_byte_ime')
   set iminsert=0 imsearch=0
@@ -899,13 +910,9 @@ function! s:redraw_and_doautocmd() "{{{
 endfunction"}}}
 
 if exists(':OverCommandLine')
-  nnoremap re :OverCommandLine<CR>%s!
-  xnoremap :s :OverCommandLine<CR>s!
-  function! s:replace() "{{{
-    let word = substitute(@0, '!', '\\!', 'g')
-    call feedkeys(":OverCommandLine\<CR>%s!". word . "!!gI\<Left>\<Left>\<Left>", 'n')
-  endfunction"}}}
-  xnoremap re y:call <SID>replace()<CR>
+  nnoremap re :OverCommandLine<CR>%s!!<Left>
+  xnoremap :s :OverCommandLine<CR>s!!<Left>
+  xnoremap re "zy:OverCommandLine<CR>%s!<C-R>=substitute(@z, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
 else
   nnoremap re :%s!
   xnoremap :s :s!
@@ -916,6 +923,11 @@ nnoremap ,f :setfiletype<Space>
 function! s:define_abbreviations() "{{{
   " Abbreviations {{{
   let s:abbr_dictionary = {
+        \ '*' : [
+        \   'fix [fix] -',
+        \   'review [review] -',
+        \   'todo [todo] -',
+        \ ],
         \ 'javascript' : [
         \   'elsif else if',
         \   'elseif else if',
@@ -970,6 +982,7 @@ function! s:load_cabbrev_definition() "{{{
         \ 'G Git',
         \ 'Un UnwatchBuffer',
         \ 'git UniteGit',
+        \ 'gitgrep Unite vcs_grep',
         \ ]
   for definition in cabbrev_definition
     execute 'cabbrev' definition
@@ -1005,11 +1018,13 @@ augroup END
 
 " ----------------------------------------
 " Searching {{{
-set hlsearch
-set ignorecase
-set incsearch
-set smartcase
-set wrapscan
+if s:on_init()
+  set hlsearch
+  set ignorecase
+  set incsearch
+  set smartcase
+  set wrapscan
+endif
 
 nnoremap <silent> n nvv
 nnoremap <silent> N Nvv
@@ -1022,8 +1037,10 @@ command! -nargs=1 Dict call alpaca#function#macdict#search(<q-args>)
 
 " ----------------------------------------
 " Moving {{{
-set virtualedit+=block
-set whichwrap=b,s,h,l,~,<,>,[,]
+if s:on_init()
+  set virtualedit+=block
+  set whichwrap=b,s,h,l,~,<,>,[,]
+endif
 
 inoremap <silent><C-A> <End>
 inoremap <silent><C-L> <Right>
@@ -1091,13 +1108,15 @@ unlet num
 
 " ----------------------------------------
 " Encoding {{{
-set ambiwidth=double
-set encoding=utf-8
-set fileencodings=utf-8,sjis,shift-jis,euc-jp,utf-16,ascii,ucs-bom,cp932,iso-2022-jp
-set fileformat=unix
-set fileformats=unix,dos,mac
-set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc
-set termencoding=utf8
+if s:on_init()
+  set ambiwidth=double
+  set encoding=utf-8
+  set fileencodings=utf-8,sjis,shift-jis,euc-jp,utf-16,ascii,ucs-bom,cp932,iso-2022-jp
+  set fileformat=unix
+  set fileformats=unix,dos,mac
+  set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc
+  set termencoding=utf8
+endif
 
 command! -bang -bar -complete=file -nargs=? Cp932 edit<bang> ++enc=cp932 <args>
 command! -bang -bar -complete=file -nargs=? Euc edit<bang> ++enc=euc-jp <args>
@@ -1112,51 +1131,55 @@ command! -bang -bar -complete=file -nargs=? Utf8 edit<bang> ++enc=utf-8 <args>
 
 " ----------------------------------------
 " Indent {{{
-set autoindent
-set expandtab
-set smartindent
-set smarttab
-set softtabstop=2
-set shiftwidth=2
-set tabstop=2
+if s:on_init()
+  set autoindent
+  set expandtab
+  set smartindent
+  set smarttab
+  set softtabstop=2
+  set shiftwidth=2
+  set tabstop=2
+endif
 filetype indent on
 "}}}
 
 " ----------------------------------------
 " Display {{{
-" set noequalalways
-" set cursorline
-" set titlelen=95
-set pumheight=20
-set breakat=\\;:,!?
-set cdpath+=~
-set cmdheight=2
-set equalalways
-set laststatus=2
-set lazyredraw
-set browsedir=buffer
-set list
-set listchars=tab:␣.,trail:›,extends:>,precedes:<
-set fillchars=stl:\ ,stlnc:\ ,fold:\ ,diff:-
-set matchpairs+=<:>
-set number
-set scrolloff=8
-set noshowcmd
-set showfulltag
-set showmatch
-set showtabline=1
-set spelllang=en
-set nospell
-set t_Co=256
-set title
-set ttyfast
-set shortmess=aTI
+if s:on_init()
+  " set noequalalways
+  " set cursorline
+  " set titlelen=95
+  set pumheight=20
+  set breakat=\\;:,!?
+  set cdpath+=~
+  set cmdheight=2
+  set equalalways
+  set laststatus=2
+  set lazyredraw
+  set browsedir=buffer
+  set list
+  set listchars=tab:␣.,trail:›,extends:>,precedes:<
+  set fillchars=stl:\ ,stlnc:\ ,fold:\ ,diff:-
+  set matchpairs+=<:>
+  set number
+  set scrolloff=8
+  set noshowcmd
+  set showfulltag
+  set showmatch
+  set showtabline=1
+  set spelllang=en
+  set nospell
+  set t_Co=256
+  set title
+  set ttyfast
+  set shortmess=aTI
 
-set foldenable
-set foldmethod=marker
-set foldlevelstart=0
-set foldminlines=2
-set foldnestmax=2
+  set foldenable
+  set foldmethod=marker
+  set foldlevelstart=0
+  set foldminlines=2
+  set foldnestmax=2
+endif
 
 if v:version >= 703
   highlight ColorColumn guibg=#012345
@@ -1215,7 +1238,7 @@ function! s:set_dictionary_automatically() "{{{
     call add(filetypes, ft)
 
     let dict_path = '~/.vim/dict/'. join(filetypes, '.') .'.dict'
-    execute 'setl dictionary+=' . dict_path
+    execute 'setl dictionary+=' . expand(dict_path)
 
     if exists(':NeoSnippetSource')
       let snippet_path = '~/.vim/snippet/'. join(filetypes, '.') .'.snip'
@@ -1791,9 +1814,9 @@ function! s:define_rails_autocmd() "{{{
         \ '.db.migration':          ['ruby.rails.migrate.snip'],
         \ '/config/environment.rb': ['ruby.rails.environment.snip'],
         \ '/config/routes.rb':      ['ruby.rails.route.snip'],
-        \ '.spec.controller':       ['ruby.rspec.controller.snip'],
-        \ '.spec.model':            ['ruby.rspec.controller.snip'],
         \ '.fixtures.replacement':  ['ruby.factory_girl.snip'],
+        \ '.spec.controller':       ['ruby.rspec.controller.snip'],
+        \ '.spec.model':            ['ruby.rspec.model.snip'],
         \ '.spec.helper':           ['ruby.rspec.helper.snip'],
         \ '.spec.feature':          ['ruby.capybara.snip'],
         \ '.spec.routing':          ['ruby.rspec.routing.snip']
@@ -1967,7 +1990,6 @@ function! hooks.on_source(bundle) "{{{
   endfunction"}}}
 
   augroup MyAutoCmd
-    " execute 'autocmd FileType' join(g:my.ft.program_files, ',')
     " autocmd BufWritePre * call s:close_quickfix()
   augroup END
 endfunction"}}}
@@ -1986,7 +2008,7 @@ function! hooks.on_post_source(bundle) "{{{
 
   augroup Syntastic
     " autocmd BufReadPost * if g:syntastic_check_on_open | call <SID>update_errors() | endif
-    autocmd BufWritePost * execute 'call <SNR>' . s:sid . '_UpdateErrors(1)'
+    " autocmd BufWritePost * execute 'call <SNR>' . s:sid . '_UpdateErrors(1)'
     " autocmd BufEnter * call s:BufEnterHook()
   augroup END
 endfunction"}}}
@@ -2464,14 +2486,16 @@ unlet hooks
 " ----------------------------------------
 " vim-multiple-cursors
 " ----------------------------------------
-xnoremap <C-N> :<C-U>call multiple_cursors#new('n')<CR>
-nnoremap <C-N> :<C-U>call multiple_cursors#new('n')<CR>
+nnoremap <C-N> :call <SID>yankround_or_multiple_cursor()<CR>
+xnoremap <C-N> :call multiple_cursors#new('n')<CR>
+
 let g:multi_cursor_use_default_mapping=0
 let g:multi_cursor_start_key='<C-N>'
 let g:multi_cursor_next_key='<C-N>'
 let g:multi_cursor_prev_key='<C-P>'
 let g:multi_cursor_skip_key='<C-X>'
 let g:multi_cursor_quit_key='<Esc>'
+
 
 " ----------------------------------------
 nnoremap <Space>i :<C-U>IndentLinesToggle<CR>
@@ -2540,6 +2564,7 @@ function! hooks.on_source(bundle) "{{{
     call alpaca#let_g:(initialize_variable, {})
   endfor
 
+
   let g:neocomplete#text_mode_filetypes = {
         \ 'markdown' : 1,
         \ 'gitcommit' : 1,
@@ -2570,12 +2595,12 @@ function! hooks.on_source(bundle) "{{{
   let g:neocomplete#sources#omni#input_patterns.php =
         \ '[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
   let g:neocomplete#sources#omni#input_patterns.c =
-    \ '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?'
+        \ '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?'
   let g:neocomplete#sources#omni#input_patterns.cpp =
-    \ '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+        \ '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
 
   let g:neocomplete#force_omni_input_patterns.c =
-        \ '[^.[:digit:] *\t]\%(\.\|->\)'
+        \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
   let g:neocomplete#force_omni_input_patterns.cpp =
         \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
   let g:neocomplete#force_omni_input_patterns.objc =
@@ -2848,7 +2873,7 @@ function! hooks.on_source(bundle) "{{{
   let g:unite_source_file_mru_time_format="(%m-%d %H:%M) "
   let g:unite_source_file_mru_filename_format=":~:."
   let g:unite_source_file_mru_limit = 300
-  let g:unite_source_directory_mru_ignore_pattern = ''
+  let g:unite_source_directory_mru_ignore_pattern = '\(/private/var/\|\.git\)'
 
   if executable('gmv')
     let rm_command = 'gmv -f --backup=numbered --target-directory ' . g:my.dir.trash . ' $srcs'
@@ -3310,7 +3335,8 @@ augroup END
 " function! hooks.on_source(bundle) "{{{
 " let g:clang_library_path = '/Library/Developer/CommandLineTools/usr/lib/libclang.dylib'
 let g:clang_library_path = '/Library/Developer/CommandLineTools/usr/lib'
-'
+let g:clang_complete_auto = 0
+let g:clang_auto_select = 0
 let g:clang_use_library = 1
 " endfunction"}}}
 " unlet hooks
@@ -3330,8 +3356,21 @@ unlet hooks
 
 nmap p <Plug>(yankround-p)
 nmap P <Plug>(yankround-P)
-nmap <C-p> <Plug>(yankround-prev)
-nmap <C-n> <Plug>(yankround-next)
+nmap <C-P> <Plug>(yankround-prev)
+nmap <C-N> <Plug>(yankround-next)
+
+" ----------------------------------------
+" vim-over
+let g:over_command_line_key_mappings = {
+      \ "\<C-L>" : "\<C-F>",
+      \ }
+
+let hooks = neobundle#get_hooks('vim-over')
+function! hooks.on_post_source(bundle) "{{{
+  OverCommandLineNoremap <C-J> <Plug>(over-cmdline-substitute-jump-pattern)
+  OverCommandLineNoremap <C-K> <Plug>(over-cmdline-substitute-jump-string)
+endfunction"}}}
+unlet hooks
 
 " ----------------------------------------
 " Other plugin settings {{{
@@ -3417,6 +3456,8 @@ augroup END
 function! s:get_script_variables() "{{{
   return s:
 endfunction"}}}
+
+command! Make call alpaca#system#new('make')
 
 if !s:on_init()
   call neobundle#call_hook('on_source')

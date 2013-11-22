@@ -1,5 +1,4 @@
-setl omnifunc=ccomplete#Complete shiftwidth=2 nocindent
-setl noexpandtab
+setl omnifunc=ccomplete#Complete shiftwidth=2 nocindent nolist noexpandtab
 
 if exists(':RemoveDustDisable')
   RemoveDustDisable
