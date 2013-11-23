@@ -3331,15 +3331,10 @@ augroup MyAutoCmd
   autocmd FileType lingr-* nnoremap Q :LingrExit<CR>
 augroup END
 
-" let hooks = neobundle#get_hooks('clang_complete')
-" function! hooks.on_source(bundle) "{{{
-" let g:clang_library_path = '/Library/Developer/CommandLineTools/usr/lib/libclang.dylib'
 let g:clang_library_path = '/Library/Developer/CommandLineTools/usr/lib'
 let g:clang_complete_auto = 0
 let g:clang_auto_select = 0
 let g:clang_use_library = 1
-" endfunction"}}}
-" unlet hooks
 
 nmap <Space>A  <Plug>(altr-forward)
 nmap <Space>a  <Plug>(altr-back)
@@ -3364,7 +3359,6 @@ nmap <C-N> <Plug>(yankround-next)
 let g:over_command_line_key_mappings = {
       \ "\<C-L>" : "\<C-F>",
       \ }
-
 let hooks = neobundle#get_hooks('vim-over')
 function! hooks.on_post_source(bundle) "{{{
   OverCommandLineNoremap <C-J> <Plug>(over-cmdline-substitute-jump-pattern)
