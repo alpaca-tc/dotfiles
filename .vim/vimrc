@@ -121,7 +121,7 @@ if s:on_init() "{{{
         \ }
 
   let g:my.ft = {
-        \ 'ruby_files':      ['ruby', 'Gemfile', 'haml', 'eruby', 'yaml'],
+        \ 'ruby_files':      ['ruby', 'Gemfile', 'haml', 'eruby', 'yaml', 'ruby.rspec'],
         \ 'js_files':        ['javascript', 'coffeescript', 'node', 'typescript'],
         \ 'python_files':    ['python', 'python*'],
         \ 'scala_files':     ['scala'],
@@ -681,6 +681,8 @@ NeoBundleLazy 'Shougo/vinarise', {
 " ----------------------------------------
 NeoBundleLazy 'alpaca-tc/vim-rails', { 'autoload' : {
       \ 'filetypes' : g:my.ft.ruby_files }}
+NeoBundleLazy 'vim-ruby/vim-ruby', { 'autoload' : {
+      \ 'filetypes' : g:my.ft.ruby_files }}
 NeoBundleLazy 'alpaca-tc/vim-endwise.git', {
       \ 'autoload' : {
       \   'insert' : 1,
@@ -854,6 +856,7 @@ NeoBundleLazy 'osyo-manga/vim-over', { 'autoload' : {
 NeoBundleLazy 'sgur/unite-git_grep', { 'autoload' : {
       \ 'unite_sources': ['vcs_grep/git', 'vcs_grep/hg', 'vcs_grep']
       \ }}
+NeoBundle 'alpaca-tc/vim-unite-watson.vim'
 
 " Installation check.
 if s:on_init() && g:my.conf.initialize && neobundle#exists_not_installed_bundles()
@@ -910,8 +913,8 @@ function! s:redraw_and_doautocmd() "{{{
 endfunction"}}}
 
 if exists(':OverCommandLine')
-  nnoremap re :OverCommandLine<CR>%s!!<Left>
-  xnoremap :s :OverCommandLine<CR>s!!<Left>
+  nnoremap re :OverCommandLine<CR>%s!!!<Left><Left>
+  xnoremap :s :OverCommandLine<CR>s!!!<Left><Left>
   xnoremap re "zy:OverCommandLine<CR>%s!<C-R>=substitute(@z, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
 else
   nnoremap re :%s!
@@ -923,7 +926,7 @@ nnoremap ,f :setfiletype<Space>
 function! s:define_abbreviations() "{{{
   " Abbreviations {{{
   let s:abbr_dictionary = {
-        \ '*' : [
+        \ 'ruby,php,ruby.spec' : [
         \   'fix [fix] -',
         \   'review [review] -',
         \   'todo [todo] -',
@@ -1078,8 +1081,8 @@ function! s:search_same_indent_line(next) "{{{
 
   echomsg 'Not found'
 endfunction"}}}
-nnoremap <silent>[n :<C-U>call <SID>search_same_indent_line(1)<CR>
-nnoremap <silent>[p :<C-U>call <SID>search_same_indent_line(0)<CR>
+" nnoremap <silent>[n :<C-U>call <SID>search_same_indent_line(1)<CR>
+" nnoremap <silent>[p :<C-U>call <SID>search_same_indent_line(0)<CR>
 
 augroup MyAutoCmd
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line('$') | execute "normal g`\"" | endif

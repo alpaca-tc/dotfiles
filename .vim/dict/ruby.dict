@@ -775,3 +775,5 @@ constantize
 Rational
 initialize
 Enumerable
+FileUtils
+block_given?
