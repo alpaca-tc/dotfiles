@@ -681,8 +681,6 @@ NeoBundleLazy 'Shougo/vinarise', {
 " ----------------------------------------
 NeoBundleLazy 'alpaca-tc/vim-rails', { 'autoload' : {
       \ 'filetypes' : g:my.ft.ruby_files }}
-NeoBundleLazy 'vim-ruby/vim-ruby', { 'autoload' : {
-      \ 'filetypes' : g:my.ft.ruby_files }}
 NeoBundleLazy 'alpaca-tc/vim-endwise.git', {
       \ 'autoload' : {
       \   'insert' : 1,
@@ -3343,6 +3341,8 @@ nmap <Space>A  <Plug>(altr-forward)
 nmap <Space>a  <Plug>(altr-back)
 let hooks = neobundle#get_hooks('vim-altr')
 function! hooks.on_post_source(bundle) "{{{
+  call altr#remove_all()
+
   " For ruby tdd
   call altr#define('lib/%.rb', 'spec/lib/%_spec.rb')
   call altr#define('%.rb', 'spec/%_spec.rb')
