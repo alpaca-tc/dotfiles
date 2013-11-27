@@ -570,3 +570,8 @@ options word
   parent_directory = File.expand_path('..', ${1:Dir.pwd})
 
 #}}}
+
+snippet auto_name
+abbr    Get autoload function name
+options word
+  `join(map(split(substitute(expand("%:p"), '.*/lib/\(.*\).rb$', '\1', 'g'), '/'), 'ToUpperCamel(v:val)'), '::')`

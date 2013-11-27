@@ -777,3 +777,4 @@ initialize
 Enumerable
 FileUtils
 block_given?
+HashWithIndifferentAccess
