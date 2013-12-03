@@ -118,6 +118,11 @@ abbr        .stub(:method).and_return(value)
 options     word
   stub(:${1:method})${2:.with(${3\})}.and_return(${4:value})
 
+snippet allow
+abbr    allow
+options word
+  allow(${1}).to receive(:${2}).and_return(${3})
+
 snippet     and_return
 abbr        and_return
 options     word

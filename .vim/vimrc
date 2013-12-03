@@ -304,24 +304,27 @@ NeoBundleLazy 'Shougo/vimfiler', {
       \   ],
       \   'mappings' : ['<Plug>(vimfiler_switch)'],
       \ }}
-NeoBundleLazy 'alpaca-tc/YouCompleteMe', {
-      \ 'depends' : 'Shougo/neosnippet',
-      \ 'build' : {
-      \   'mac' : './install.sh && git submodule update --init --recursive',
-      \ },
-      \ 'autoload' : {
-      \   'insert' : 1,
-      \   'functions' : 'youcompleteme#Enable',
-      \   'commands' : [
-      \     'YcmRestartServer', 'YcmDiags', 'YcmShowDetailedDiagnostic',
-      \     'YcmDebugInfo', 'YcmCompleter'
-      \   ],
-      \   'filetypes' : g:my.ft.youcomplete_me
-      \ }}
-" NeoBundleLazy 'Shougo/neocomplete', { 'autoload' : {
-"       \ 'functions' : ['neocomplete#init#disable', 'neocomplete#is_enabled'],
-"       \ 'insert' : 1,
-"       \ }}
+if $NEO
+  NeoBundleLazy 'Shougo/neocomplete', { 'autoload' : {
+        \ 'functions' : ['neocomplete#init#disable', 'neocomplete#is_enabled'],
+        \ 'insert' : 1,
+        \ }}
+else
+  NeoBundleLazy 'alpaca-tc/YouCompleteMe', {
+        \ 'depends' : 'Shougo/neosnippet',
+        \ 'build' : {
+        \   'mac' : './install.sh && git submodule update --init --recursive',
+        \ },
+        \ 'autoload' : {
+        \   'insert' : 1,
+        \   'functions' : 'youcompleteme#Enable',
+        \   'commands' : [
+        \     'YcmRestartServer', 'YcmDiags', 'YcmShowDetailedDiagnostic',
+        \     'YcmDebugInfo', 'YcmCompleter'
+        \   ],
+        \   'filetypes' : g:my.ft.youcomplete_me
+        \ }}
+endif
 NeoBundleLazy 'Shougo/neosnippet', {
       \ 'autoload' : {
       \   'commands' : [
@@ -957,7 +960,7 @@ function! s:define_abbreviations() "{{{
         \ 'vim' : [
         \ ],
         \ 'yaml': [
-        \   '<< << : *'
+        \   '<: << : *'
         \ ],
         \ 'ruby.rspec' : [
         \   'sh should',
@@ -2473,23 +2476,7 @@ endif
 " ------------------------------------
 let hooks = neobundle#get_hooks('tern_for_vim')
 function! hooks.on_post_source(bundle) "{{{
-  function! s:disable_tern() "{{{
-    if &filetype =~ '^javascript'
-      autocmd! TernAutomatically <buffer>
-      call tern#Disable()
-    endif
-  endfunction"}}}
-
-  function! s:set_disable_tern_automatically() "{{{
-    augroup TernAutomatically
-      autocmd * <buffer>
-      autocmd FileType * <buffer> call s:disable_tern()
-    augroup END
-  endfunction"}}}
-
-  augroup MyAutoCmd
-    autocmd FileType javascript call s:set_disable_tern_automatically()
-  augroup END
+  call tern#Disable()
 endfunction"}}}
 unlet hooks
 
@@ -2533,172 +2520,167 @@ endfunction"}}}
 unlet hooks
 
 " ----------------------------------------
-let g:neocomplete#enable_at_startup = 0
+let g:neocomplete#enable_at_startup = 1
 
-" nnoremap U :call youcompleteme#Enable()
-" let hooks = neobundle#get_hooks('neocomplete')
-" function! hooks.on_source(bundle) "{{{
-"   let g:neocomplete#auto_completion_start_length      = 3
-"   let g:neocomplete#sources#syntax#min_keyword_length = 3
-"   let g:neocomplete#lock_buffer_name_pattern          = '\*ku\*'
-"   let g:neocomplete#lock_iminsert = 1
-"   let g:neocomplete#auto_completion_start_length      = g:neocomplete#sources#syntax#min_keyword_length
-"   " let g:neocomplete#ctags_arguments = g:alpaca_update_tags_config
-"   let g:neocomplete#data_directory                    = g:my.dir.neocomplete
-"   let g:neocomplete#enable_auto_close_preview         = 0
-"   let g:neocomplete#enable_auto_select                = 0
-"   " let g:neocomplete_caching_limit_file_size = 500000
-"   " let g:neocomplete_max_keyword_width       = 120
-"   " let g:neocomplete_enable_cursor_hold_i    = 0
-"   " let g:neocomplete#enable_smart_case       = 1
-"   " let g:neocomplete#enable_refresh_always   = 0
-"
-"   let g:neocomplete#enable_complete_select          = 0
-"   let g:neocomplete#enable_fuzzy_completion         = 0
-"   let g:neocomplete#force_overwrite_completefunc    = 1
-"   let g:neocomplete#manual_completion_start_length  = 0
-"
-"   let g:neocomplete#sources#buffer#cache_limit_size = 700000
-"   let g:neocomplete#sources#tags#cache_limit_size   = 1000000
-"   let g:neocomplete#sources#include#max_proceslses  = 30
-"   let g:neocomplete#max_list                        = 100
-"   let g:neocomplete#skip_auto_completion_time       = '0.1'
-"
-"   let g:neocomplete#disable_auto_select_buffer_name_pattern =
-"         \ '\[Command Line\]'
-"   let g:neocomplete#sources = {
-"         \ '_' : []
-"         \ }
-"   "       'vim' : ['neosnippet', 'vim']
-"   "       }
-"
-"   if $USER == 'root'
-"     let g:neocomplete#data_directory = '/tmp'
-"   endif
-"
-"   let neocomplete_initialize_lists = [
-"         \ 'neocomplete#sources#include#patterns',
-"         \ 'neocomplete#sources#omni#functions',
-"         \ 'neocomplete#sources#omni#input_patterns',
-"         \ 'neocomplete#force_omni_input_patterns',
-"         \ 'neocomplete#keyword_patterns',
-"         \ 'neocomplete#sources#vim#complete_functions',
-"         \ 'neocomplete#delimiter_patterns',
-"         \ 'neocomplete#sources#dictionary#dictionaries',
-"         \ 'neocomplete#sources',
-"         \ 'neocomplete#text_mode_filetypes',
-"         \ ]
-"
-"   for initialize_variable in neocomplete_initialize_lists
-"     call alpaca#let_g:(initialize_variable, {})
-"   endfor
-"
-"   let g:neocomplete#text_mode_filetypes = {
-"         \ 'markdown' : 1,
-"         \ 'gitcommit' : 1,
-"         \ 'text' : 1,
-"         \ }
-"
-"   let g:neocomplete#sources#omni#functions.java = 'eclim#java#complete#CodeComplete'
-"   if has('python')
-"     let g:neocomplete#sources#omni#functions.javascript = 'tern#Complete'
-"   endif
-"
-"   let g:neocomplete#keyword_patterns = {
-"         \ '_' : '[0-9a-zA-Z:#_]\+',
-"         \ 'c' : '[^.[:digit:]*\t]\%(\.\|->\)',
-"         \ 'mail' : '^\s*\w\+',
-"         \ 'perl' : '\h\w*->\h\w*\|\h\w*::',
-"         \ 'sass' : '[@#.]\?[[:alpha:]_-][[:alnum:]_-]*',
-"         \ 'css'  : '[@#.]\?[[:alpha:]_-][[:alnum:]_-]*',
-"         \ 'scss' : '[@#.]\?[[:alpha:]_-][[:alnum:]_-]*',
-"         \ }
-"
-"   let g:neocomplete#sources#include#patterns = {
-"         \ 'scala' : '^import',
-"         \ 'scss'  : '^\s*\<\%(@import\)\>',
-"         \ 'php'   : '^\s*\<\%(inlcude\|\|include_once\|require\|require_once\)\>',
-"         \ }
-"
-"   let g:neocomplete#sources#omni#input_patterns.php =
-"         \ '[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
-"   let g:neocomplete#sources#omni#input_patterns.c =
-"         \ '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?'
-"   let g:neocomplete#sources#omni#input_patterns.cpp =
-"         \ '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
-"
-"   let g:neocomplete#force_omni_input_patterns.c =
-"         \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
-"   let g:neocomplete#force_omni_input_patterns.cpp =
-"         \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-"   let g:neocomplete#force_omni_input_patterns.objc =
-"         \ '[^.[:digit:] *\t]\%(\.\|->\)'
-"   let g:neocomplete#force_omni_input_patterns.objcpp =
-"         \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-"
-"   let g:neocomplete#sources#vim#complete_functions = {
-"         \ 'Ref' : 'ref#complete',
-"         \ 'Unite' : 'unite#complete_source',
-"         \ 'VimShellExecute' :
-"         \      'vimshell#vimshell_execute_complete',
-"         \ 'VimShellInteractive' :
-"         \      'vimshell#vimshell_execute_complete',
-"         \ 'VimShellTerminal' :
-"         \      'vimshell#vimshell_execute_complete',
-"         \ 'VimShell' : 'vimshell#complete',
-"         \ 'VimFiler' : 'vimfiler#complete',
-"         \ 'Vinarise' : 'vinarise#complete',
-"         \}
-"
-"   let neocomplete#sources#dictionary#dictionaries = {
-"         \ 'default'             : '',
-"         \ 'javascript.timobile' : $HOME.'/.vim/dict/timobile.dict',
-"         \ 'coffee.timobile'     : $HOME.'/.vim/dict/timobile.dict',
-"         \ 'vimshell' : g:my.dir.vimshell . '/command-history',
-"         \ }
-"   for dict in split(glob($HOME.'/.vim/dict/*.dict'))
-"     let ft = matchstr(dict, '[a-zA-Z0-9.]\+\ze\.dict$')
-"     let neocomplete#sources#dictionary#dictionaries[ft] = dict
-"   endfor
-"
-"   augroup MyAutoCmd
-"     autocmd BufReadPre * if &previewwindow | call alpaca_window#set_smart_close() | endif
-"     autocmd FileType qf call alpaca_window#set_smart_close()
-"   augroup END
-"
-"   imap <expr><C-G> neocomplete#undo_completion()
-"   imap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? neocomplete#complete_common_string() : "\<TAB>"
-"   " inoremap <expr><C-e> neocomplete#cancel_popup()
-"
-"   function! s:my_crinsert() "{{{
-"     return neocomplete#close_popup() . "\<CR>"
-"   endfunction"}}}
-"   inoremap <silent><CR> <C-R>=<SID>my_crinsert()<CR>
-"   inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-"   inoremap <expr><C-X><C-F>  neocomplete#start_manual_complete('file')
-"   inoremap <expr><C-J> neocomplete#start_manual_complete('neosnippet')
-"   inoremap <expr><C-G> neocomplete#undo_completion()
-"   inoremap <expr><C-N> pumvisible() ? "\<C-N>" : "\<C-X>\<C-U>\<C-P>\<Down>"
-"   inoremap <expr><C-P> pumvisible() ? "\<C-P>" : "\<C-P>\<C-N>"
-"   inoremap <expr><C-@> neocomplete#start_manual_complete(['neosnippet'])
-"
-"   inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
-"   inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
-"   inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
-"   inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
-"
-"   inoremap <expr><TAB>  pumvisible() ? "\<C-n>" :
-"         \ <SID>check_back_space() ? "\<TAB>" :
-"         \ neocomplete#start_manual_complete()
-"   function! s:check_back_space() "{{{
-"     let col = col('.') - 1
-"     return !col || getline('.')[col - 1]  =~ '\s'
-"   endfunction"}}}
-" endfunction"}}}
-" function! hooks.on_post_source(bundle) "{{{
-"   NeoCompleteDisable
-" endfunction"}}}
-" unlet hooks
+let hooks = neobundle#get_hooks('neocomplete')
+function! hooks.on_source(bundle) "{{{
+  let g:neocomplete#auto_completion_start_length      = 1
+  let g:neocomplete#sources#syntax#min_keyword_length = 1
+  let g:neocomplete#lock_buffer_name_pattern          = '\*ku\*'
+  " let g:neocomplete#lock_iminsert = 1
+  let g:neocomplete#auto_completion_start_length      = g:neocomplete#sources#syntax#min_keyword_length
+  " let g:neocomplete#ctags_arguments = g:alpaca_update_tags_config
+  let g:neocomplete#data_directory                    = g:my.dir.neocomplete
+  let g:neocomplete#enable_auto_close_preview         = 0
+  let g:neocomplete#enable_auto_select                = 0
+  " let g:neocomplete_caching_limit_file_size = 500000
+  " let g:neocomplete_max_keyword_width       = 120
+  " let g:neocomplete_enable_cursor_hold_i    = 0
+  " let g:neocomplete#enable_smart_case       = 1
+  " let g:neocomplete#enable_refresh_always   = 0
+
+  let g:neocomplete#enable_complete_select          = 0
+  let g:neocomplete#enable_fuzzy_completion         = 1
+  let g:neocomplete#force_overwrite_completefunc    = 1
+  let g:neocomplete#manual_completion_start_length  = 0
+
+  " let g:neocomplete#sources#buffer#cache_limit_size = 700000
+  " let g:neocomplete#sources#tags#cache_limit_size   = 1000000
+  " let g:neocomplete#sources#include#max_proceslses  = 30
+  " let g:neocomplete#max_list                        = 100
+  " let g:neocomplete#skip_auto_completion_time       = '0.1'
+
+  let g:neocomplete#disable_auto_select_buffer_name_pattern =
+        \ '\[Command Line\]'
+  " let g:neocomplete#sources = {
+  "       \ '_' : []
+  "       \ }
+  "       'vim' : ['neosnippet', 'vim']
+  "       }
+
+  if $USER == 'root'
+    let g:neocomplete#data_directory = '/tmp'
+  endif
+
+  let neocomplete_initialize_lists = [
+        \ 'neocomplete#sources#include#patterns',
+        \ 'neocomplete#sources#omni#functions',
+        \ 'neocomplete#sources#omni#input_patterns',
+        \ 'neocomplete#force_omni_input_patterns',
+        \ 'neocomplete#keyword_patterns',
+        \ 'neocomplete#sources#vim#complete_functions',
+        \ 'neocomplete#sources#dictionary#dictionaries',
+        \ 'neocomplete#sources',
+        \ 'neocomplete#text_mode_filetypes',
+        \ ]
+
+  for initialize_variable in neocomplete_initialize_lists
+    call alpaca#let_g:(initialize_variable, {})
+  endfor
+
+  let g:neocomplete#text_mode_filetypes = {
+        \ 'markdown' : 1,
+        \ 'gitcommit' : 1,
+        \ 'text' : 1,
+        \ }
+
+  let g:neocomplete#sources#omni#functions.java = 'eclim#java#complete#CodeComplete'
+  if has('python')
+    let g:neocomplete#sources#omni#functions.javascript = 'tern#Complete'
+  endif
+
+  let g:neocomplete#keyword_patterns = {
+        \ '_' : '[0-9a-zA-Z:#_]\+',
+        \ 'c' : '[^.[:digit:]*\t]\%(\.\|->\)',
+        \ 'mail' : '^\s*\w\+',
+        \ 'perl' : '\h\w*->\h\w*\|\h\w*::',
+        \ 'sass' : '[@#.]\?[[:alpha:]_-][[:alnum:]_-]*',
+        \ 'css'  : '[@#.]\?[[:alpha:]_-][[:alnum:]_-]*',
+        \ 'scss' : '[@#.]\?[[:alpha:]_-][[:alnum:]_-]*',
+        \ }
+
+  let g:neocomplete#sources#include#patterns = {
+        \ 'scala' : '^import',
+        \ 'scss'  : '^\s*\<\%(@import\)\>',
+        \ 'php'   : '^\s*\<\%(inlcude\|\|include_once\|require\|require_once\)\>',
+        \ }
+
+  let g:neocomplete#sources#omni#input_patterns.php =
+        \ '[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+  let g:neocomplete#sources#omni#input_patterns.c =
+        \ '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?'
+  let g:neocomplete#sources#omni#input_patterns.cpp =
+        \ '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+
+  let g:neocomplete#force_omni_input_patterns.c =
+        \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+  let g:neocomplete#force_omni_input_patterns.cpp =
+        \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+  let g:neocomplete#force_omni_input_patterns.objc =
+        \ '[^.[:digit:] *\t]\%(\.\|->\)'
+  let g:neocomplete#force_omni_input_patterns.objcpp =
+        \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+
+  let g:neocomplete#sources#vim#complete_functions = {
+        \ 'Ref' : 'ref#complete',
+        \ 'Unite' : 'unite#complete_source',
+        \ 'VimShellExecute' :
+        \      'vimshell#vimshell_execute_complete',
+        \ 'VimShellInteractive' :
+        \      'vimshell#vimshell_execute_complete',
+        \ 'VimShellTerminal' :
+        \      'vimshell#vimshell_execute_complete',
+        \ 'VimShell' : 'vimshell#complete',
+        \ 'VimFiler' : 'vimfiler#complete',
+        \ 'Vinarise' : 'vinarise#complete',
+        \}
+
+  let neocomplete#sources#dictionary#dictionaries = {
+        \ 'default'             : '',
+        \ 'javascript.timobile' : $HOME.'/.vim/dict/timobile.dict',
+        \ 'coffee.timobile'     : $HOME.'/.vim/dict/timobile.dict',
+        \ 'vimshell' : g:my.dir.vimshell . '/command-history',
+        \ }
+  for dict in split(glob($HOME.'/.vim/dict/*.dict'))
+    let ft = matchstr(dict, '[a-zA-Z0-9.]\+\ze\.dict$')
+    let neocomplete#sources#dictionary#dictionaries[ft] = dict
+  endfor
+
+  augroup MyAutoCmd
+    autocmd BufReadPre * if &previewwindow | call alpaca_window#set_smart_close() | endif
+    autocmd FileType qf call alpaca_window#set_smart_close()
+  augroup END
+
+  imap <expr><C-G> neocomplete#undo_completion()
+  imap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? neocomplete#complete_common_string() : "\<TAB>"
+  " inoremap <expr><C-e> neocomplete#cancel_popup()
+
+  function! s:my_crinsert() "{{{
+    return neocomplete#close_popup() . "\<CR>"
+  endfunction"}}}
+  inoremap <silent><CR> <C-R>=<SID>my_crinsert()<CR>
+  inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+  inoremap <expr><C-X><C-F>  neocomplete#start_manual_complete('file')
+  inoremap <expr><C-J> neocomplete#start_manual_complete('neosnippet')
+  inoremap <expr><C-G> neocomplete#undo_completion()
+  inoremap <expr><C-N> pumvisible() ? "\<C-N>" : "\<C-X>\<C-U>\<C-P>\<Down>"
+  inoremap <expr><C-P> pumvisible() ? "\<C-P>" : "\<C-P>\<C-N>"
+  inoremap <expr><C-@> neocomplete#start_manual_complete(['neosnippet'])
+
+  inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
+  inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
+  inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
+  inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
+
+  inoremap <expr><TAB>  pumvisible() ? "\<C-n>" :
+        \ <SID>check_back_space() ? "\<TAB>" :
+        \ neocomplete#start_manual_complete()
+  function! s:check_back_space() "{{{
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
+  endfunction"}}}
+endfunction"}}}
+unlet hooks
 
 " ----------------------------------------
 let hooks = neobundle#get_hooks('YouCompleteMe')
@@ -2719,7 +2701,7 @@ function! hooks.on_source(bundle) "{{{
   let g:ycm_filetype_specific_completion_to_disable = {}
   let g:ycm_register_as_syntastic_checker = 1
   let g:ycm_allow_changing_updatetime = 1
-  let g:ycm_complete_in_comments = 0
+  let g:ycm_complete_in_comments = 1
   let g:ycm_complete_in_strings = 1
   let g:ycm_collect_identifiers_from_tags_files = 0
   let g:ycm_collect_identifiers_from_comments_and_strings = 0
@@ -2839,6 +2821,8 @@ nnoremap <silent>[unite]j       :Unite file_mru -buffer-name=file_mru<CR>
 nnoremap <silent>[unite]B       :Unite bookmark -buffer-name=bookmark<CR>
 nnoremap <silent>[unite]<C-F>   :UniteGit<CR>
 
+nnoremap <silent>[unite]d       :Unite watson/dirty -buffer-name=watson_dirty<CR>
+
 nnoremap <silent>[unite]e       :Unite english_dictionary -buffer-name=english_dictionary<CR>
 nnoremap <silent>[unite]x       :Unite english_example -horizontal -buffer-name=example<CR>
 nnoremap <silent>[unite]a       :Unite web_search -horizontal -buffer-name=web_search<CR>
@@ -2928,9 +2912,9 @@ function! s:unite_with_same_syntax(cmd) "{{{
   execute a:cmd
   let b:original_syntax = old_syntax
 
-  if !empty(b:original_syntax)
-    execute 'setl syntax=' . b:original_syntax
-  endif
+  " if !empty(b:original_syntax)
+  "   execute 'setl syntax=' . b:original_syntax
+  " endif
 endfunction"}}}
 
 let hooks = neobundle#get_hooks('unite.vim')
@@ -2998,7 +2982,6 @@ function! hooks.on_source(bundle) "{{{
         let reg_bad_pattern =  '\v(\*\*[^/])'
         let reg_single = '[^/*]\{,1}\*[^*]'
 
-
         for input in prefilters
           if input =~ reg_bad_pattern
             next
@@ -3038,8 +3021,11 @@ function! hooks.on_source(bundle) "{{{
     endfunction"}}}
 
     call unite#define_filter(pre_filter)
-    let default_filters = ['matcher_default', 'sorter_default', 'matcher_hide_hidden_files' , 'converter_relative_word']
-    call unite#custom#source('file_rec', 'filters', add(default_filters, filter_name))
+    let file_rec_filters = ['matcher_default', 'sorter_default', 'matcher_hide_hidden_files' , 'converter_relative_word']
+    call unite#custom#source('file_rec', 'filters', add(file_rec_filters, filter_name))
+
+    let file_filters = [ 'matcher_default', 'matcher_hide_hidden_files' ]
+    call unite#custom#source('file', 'filters', add(file_filters, filter_name))
   endfunction"}}}
   call s:extend_file_rec_source()
 
