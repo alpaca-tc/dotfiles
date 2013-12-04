@@ -3331,39 +3331,41 @@ function! hooks.on_source(bundle) "{{{
   let g:octopress#rake_command = 'bundle exec rake'
   let g:octopress#system#async = 1
 
-  function! s:tweet_octopress() "{{{
-    let file = system('cat ' . g:octopress#project_path . '/_deploy/index.html')
-
-    let blog_url_is_near = 0
-    let get_link_tag = 0
-    let get_title_name = 0
-    for line in split(file, '\n')
-      if line =~ '<header class="field-items">'
-        let blog_url_is_near = 1
-      elseif blog_url_is_near &&
-            \ line =~ 'href="/blog'
-        let link_tag = line
-        let get_link_tag = 1
-      elseif get_link_tag &&
-            \ line !~ '^\s*$'
-        let title_line = line
-        break
-      endif
-    endfor
-
-    let href = substitute(link_tag, '.*href="\([^"]\+\)".*', '\1', 'g')
-    let title = substitute(title_line, '^\s*\(.\+\)\s*$', '\1', 'g')
-
-    let message = "書きました「" . title . "」" . " " . g:octopress#url . href
-    let tempname = tempname()
-    call writefile(split(message, '\n'), tempname)
-
-    TweetVimSay
-    read `=tempname`
-  endfunction"}}}
-  command! OctopressTweet call <SID>tweet_octopress()
 endfunction"}}}
 unlet hooks
+
+function! s:tweet_octopress() "{{{
+  NeoBundleSource alpaca_octopress.vim
+  let file = system('cat ' . g:octopress#project_path . '/_deploy/index.html')
+
+  let blog_url_is_near = 0
+  let get_link_tag = 0
+  let get_title_name = 0
+  for line in split(file, '\n')
+    if line =~ '<header class="field-items">'
+      let blog_url_is_near = 1
+    elseif blog_url_is_near &&
+          \ line =~ 'href="/blog'
+      let link_tag = line
+      let get_link_tag = 1
+    elseif get_link_tag &&
+          \ line !~ '^\s*$'
+      let title_line = line
+      break
+    endif
+  endfor
+
+  let href = substitute(link_tag, '.*href="\([^"]\+\)".*', '\1', 'g')
+  let title = substitute(title_line, '^\s*\(.\+\)\s*$', '\1', 'g')
+
+  let message = "書きました「" . title . "」" . " " . g:octopress#url . href
+  let tempname = tempname()
+  call writefile(split(message, '\n'), tempname)
+
+  TweetVimSay
+  read `=tempname`
+endfunction"}}}
+command! OctopressTweet call <SID>tweet_octopress()
 
 " ----------------------------------------
 nnoremap <Space>l :<C-U>tabnew \| LingrLaunch<CR>
