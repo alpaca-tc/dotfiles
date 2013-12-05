@@ -878,7 +878,11 @@ NeoBundleLazy 'osyo-manga/vim-over', { 'autoload' : {
 NeoBundleLazy 'sgur/unite-git_grep', { 'autoload' : {
       \ 'unite_sources': ['vcs_grep/git', 'vcs_grep/hg', 'vcs_grep']
       \ }}
-NeoBundle 'alpaca-tc/vim-unite-watson.vim'
+NeoBundleLazy 'alpaca-tc/vim-unite-watson.vim', {
+      \ 'depends' : 'Shougo/unite.vim',
+      \ 'autoload' : {
+      \   'unite_sources' : ['watson', 'watson/dirty', 'watson/clean'],
+      \ }}
 
 " Installation check.
 if s:on_init() && g:my.conf.initialize && neobundle#exists_not_installed_bundles()
@@ -935,8 +939,8 @@ function! s:redraw_and_doautocmd() "{{{
 endfunction"}}}
 
 if exists(':OverCommandLine')
-  nnoremap re :OverCommandLine<CR>%s!!!<Left><Left>
-  xnoremap :s :OverCommandLine<CR>s!!!<Left><Left>
+  nnoremap re :OverCommandLine<CR>%s!!!g<Left><Left><Left>
+  xnoremap :s :OverCommandLine<CR>s!!!g<Left><Left><Left>
   xnoremap re "zy:OverCommandLine<CR>%s!<C-R>=substitute(@z, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
 else
   nnoremap re :%s!
@@ -1008,6 +1012,7 @@ function! s:load_cabbrev_definition() "{{{
         \ 'Un UnwatchBuffer',
         \ 'git UniteGit',
         \ 'gitgrep Unite vcs_grep',
+        \ 'sudowrite w !sudo tee %'
         \ ]
   for definition in cabbrev_definition
     execute 'cabbrev' definition
