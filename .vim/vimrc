@@ -1084,6 +1084,7 @@ nnoremap <silent>k gk
 nnoremap <silent>gj j
 nnoremap <silent>gk k
 nnoremap <silent>Y y$
+nnoremap J mzJ`z
 
 let g:alpaca_window_default_filetype = 'ruby'
 let g:alpaca_window_max_height = g:my.conf.winheight
@@ -1619,9 +1620,9 @@ unlet hooks
 " ----------------------------------------
 nnoremap gA :<C-U>GitAdd<Space>
 nnoremap <silent>ga :<C-U>GitAdd<CR>
-nnoremap <silent>gd :<C-U>GitDiff HEAD<CR>
 nnoremap gp :<C-U>Git push<Space>
 nnoremap gD :<C-U>GitDiff<Space>
+nnoremap gDD :<C-U>GitDiff HEAD<CR>
 nnoremap git :<C-U>Git<Space>
 let hooks = neobundle#get_hooks('git-vim')
 function! hooks.on_source(bundle) "{{{

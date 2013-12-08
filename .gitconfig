@@ -20,6 +20,7 @@
   ui = true
 
 [alias]
+  first = !"fun() { git init; git add -A; git commit -m 'First commit'; }; fun"
   assume = !"fun() { git update-index --assume-unchanged `git ls-files $@ --no-empty-directory`; }; fun"
   no-assume = !"fun() { git update-index --no-assume-unchanged `git ls-files $@ --no-empty-directory`; }; fun"
   assume-list = !"git ls-files -v | grep -e "^[a-z]""
