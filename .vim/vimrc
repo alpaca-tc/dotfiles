@@ -305,10 +305,10 @@ NeoBundleLazy 'Shougo/vimfiler', {
       \   'mappings' : ['<Plug>(vimfiler_switch)'],
       \ }}
 " if $NEO
-  NeoBundleLazy 'Shougo/neocomplete', { 'autoload' : {
-        \ 'functions' : ['neocomplete#init#disable', 'neocomplete#is_enabled'],
-        \ 'insert' : 1,
-        \ }}
+NeoBundle 'Shougo/neocomplete', { 'autoload' : {
+      \ 'functions' : ['neocomplete#init#disable', 'neocomplete#is_enabled'],
+      \ 'insert' : 1,
+      \ }}
 " else
   " NeoBundleLazy 'alpaca-tc/YouCompleteMe', {
   "       \ 'depends' : 'Shougo/neosnippet',
@@ -2557,11 +2557,11 @@ function! hooks.on_source(bundle) "{{{
 
   let g:neocomplete#disable_auto_select_buffer_name_pattern =
         \ '\[Command Line\]'
-  " let g:neocomplete#sources = {
-  "       \ '_' : []
-  "       \ }
-  "       'vim' : ['neosnippet', 'vim']
-  "       }
+
+  " 'include',
+  let g:neocomplete#sources = {
+        \ '_' : ['file', 'vim', 'dictionary', 'omni', 'member', 'buffer']
+        \ }
 
   if $USER == 'root'
     let g:neocomplete#data_directory = '/tmp'
@@ -2659,6 +2659,8 @@ function! hooks.on_source(bundle) "{{{
   imap <expr><C-G> neocomplete#undo_completion()
   imap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? neocomplete#complete_common_string() : "\<TAB>"
   " inoremap <expr><C-e> neocomplete#cancel_popup()
+
+  call neocomplete#custom#source('file', 'rank', 10)
 
   function! s:my_crinsert() "{{{
     return neocomplete#close_popup() . "\<CR>"
