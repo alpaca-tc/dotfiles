@@ -1,5 +1,4 @@
 --exclude=.git
---exclude=*.js
 --exclude=log
 
 --langdef=js

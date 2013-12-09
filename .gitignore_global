@@ -12,3 +12,5 @@ node_modules/*
 .yui
 yui
 *.pyc
+.watsonrc
+.watsonresults
