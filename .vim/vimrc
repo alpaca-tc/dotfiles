@@ -965,9 +965,6 @@ function! s:load_cabbrev_definition() "{{{
         \ 'berks !bundle exec berks install --path cookbooks',
         \ 'f FugitiveReload',
         \ 'U Unite',
-        \ 'G Git',
-        \ 'g Git',
-        \ 'Un UnwatchBuffer',
         \ 'git UniteGit',
         \ ]
   for definition in cabbrev_definition
