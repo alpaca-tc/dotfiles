@@ -1,3 +1,4 @@
+# Standard validations #{{{
 snippet     v_length
 abbr   length: { in: ... }
   length: { in: ${1} }
@@ -72,4 +73,9 @@ abbr in: ...
 snippet     v_minimum
 abbr minimum: ...
   minimum: ${1}
+#}}}
 
+snippet validates_associated
+abbr    validates_associated :name
+options word
+  validates_associated :${1:table_name}

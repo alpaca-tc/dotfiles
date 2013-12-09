@@ -2,15 +2,32 @@ snippet template
 abbr    describe ...
 options word
   describe 'routes for ${1:target}' do
-    it 'routes ${2:matcher} to the $1' do
-      {
-        ${3}
-      }.
-        should route_to(${4})
-    end
+    it_route${1}
   end
 
+# matcher #{{{
 snippet route_to
 abbr    route_to(controller: ..., action: ...)
 options word
   route_to(controller: ${1}, action: ${2})
+
+snippet routable
+abbr    routable
+alias   be_routable
+options word
+  be_routable
+#}}}
+
+snippet it_route
+abbr    it_route
+options word
+  it 'routes ${1:#:request/:to} to ${2:#:target#action}' do
+    expect(${3}).to route_to${4}
+  end
+
+snippet it_not_route
+abbr    it 'does not expose a ...' { ... }
+options word
+  it 'does not expose a ${1}' do
+    expect(${1}).not_to be_routable
+  end

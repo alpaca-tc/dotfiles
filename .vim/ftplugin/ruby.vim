@@ -8,13 +8,13 @@ let g:tagbar_type_ruby = {
       \   'F:singleton methods',
       \   'd:describes',
       \   'e:contexts',
+      \   'C:contexts',
       \   'i:it',
       \   's:its',
       \   'a:association',
       \ ],
       \ 'sro' : '.',
       \ }
-setl formatoptions-=ro
 " let g:tagbar_type_ruby = {
 "       \ 'ctagstype' : 'ruby',
 "       \ 'kinds' : [

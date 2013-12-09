@@ -1,1 +1,1 @@
-autocmd BufNewFile,BufRead Guardfile setl ft=ruby
+autocmd BufNewFile,BufRead Guardfile setl ft=Guardfile syntax=ruby

@@ -42,6 +42,7 @@ alias vi='vim'
 
 # vim# {{{
 # alias st='/Applications/Sublime\ Text\ 2.app/Contents/MacOS/Sublime\ Text\ 2 "$@"'
+alias nim='NEO=1 vim'
 # }}}
 
 # 省略# {{{

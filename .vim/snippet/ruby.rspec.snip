@@ -1,3 +1,4 @@
+include ruby.snip
 # rspec#{{{
 # basic#{{{
 snippet     con
@@ -11,6 +12,13 @@ snippet     bef
 alias       before
 abbr        before do ... end
   before do
+    ${1}
+  end
+
+snippet after
+abbr    after
+options word
+  after do
     ${1}
   end
 
@@ -109,6 +117,11 @@ snippet     stub
 abbr        .stub(:method).and_return(value)
 options     word
   stub(:${1:method})${2:.with(${3\})}.and_return(${4:value})
+
+snippet allow
+abbr    allow
+options word
+  allow(${1}).to receive(:${2}).and_return(${3})
 
 snippet     and_return
 abbr        and_return
@@ -255,10 +268,14 @@ options     word
 snippet     when
 abbr        context 'when'
 options     word
-  context 'when ${1}'
+  context 'when ${1}' do
+    ${2}
+  end
 
 snippet     given
 abbr        context 'given'
 options     word
-  context 'given ${1}'
+  context 'given ${1}' do
+    ${2}
+  end
 #}}}

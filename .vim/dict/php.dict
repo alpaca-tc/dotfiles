@@ -2616,3 +2616,4 @@ zip_entry_read
 zip_open
 zip_read
 zlib_get_coding_type
+ArrayObject

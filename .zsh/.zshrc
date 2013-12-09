@@ -97,6 +97,9 @@ fpath=( $HOME/dotfiles/.zsh/zsh-completions/src $HOME/.zsh/site-functions $fpath
 # For rust
 export PATH=$PATH:/usr/local/bin/bin
 
+# For watson
+export LESS="-R"
+
 # 各種読み込み
 # {{{
 source ~/.zsh/.zshrc.basic

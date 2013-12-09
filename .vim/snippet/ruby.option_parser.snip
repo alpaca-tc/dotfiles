@@ -1,0 +1,38 @@
+snippet requre_option_parse
+abbr    require 'optparse'
+options word
+  require 'optparse'
+
+# Class Methods#{{{
+snippet new
+abbr    OptionParser.new { ... }
+regexp  OptionParser\.
+options word
+  OptionParser.new do |parser|
+    ${1}
+  end
+#}}}
+
+# Instance Methods #{{{
+snippet banner
+abbr    parser.banner
+options word
+regexp  parser\.
+  parser.banner = ${1}
+
+snippet on
+abbr    parser.on(*opts, &block)
+options word
+regexp  parser\.
+  on('${1:-short_opt}', '${2:--long_option ARG}', '${3:description}') do |${4}|
+    ${5}
+  end
+
+snippet separator
+abbr    parser.separator
+options word
+regexp  parser\.
+  separator '${1}'
+#}}}
+
+

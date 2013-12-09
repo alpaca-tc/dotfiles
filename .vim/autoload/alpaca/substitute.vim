@@ -80,6 +80,7 @@ function! alpaca#substitute#invisible()
   let converter_table = {
         \ '\t' : s:tabstop(),
         \ '　' : ' ',
+        \ '◯' : '## ',
         \ 'ː' : ':',
         \ '：' : ':',
         \ }
