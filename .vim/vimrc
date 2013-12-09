@@ -878,7 +878,7 @@ NeoBundleLazy 'osyo-manga/vim-over', { 'autoload' : {
 NeoBundleLazy 'sgur/unite-git_grep', { 'autoload' : {
       \ 'unite_sources': ['vcs_grep/git', 'vcs_grep/hg', 'vcs_grep']
       \ }}
-NeoBundleLazy 'alpaca-tc/vim-unite-watson.vim', {
+NeoBundle 'alpaca-tc/vim-unite-watson.vim', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload' : {
       \   'unite_sources' : ['watson', 'watson/dirty', 'watson/clean'],
