@@ -575,3 +575,5 @@ snippet auto_name
 abbr    Get autoload function name
 options word
   `join(map(split(substitute(expand("%:p"), '.*/lib/\(.*\).rb$', '\1', 'g'), '/'), 'ToUpperCamel(v:val)'), '::')`
+
+
