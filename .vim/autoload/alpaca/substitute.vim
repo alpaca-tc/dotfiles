@@ -80,9 +80,6 @@ function! alpaca#substitute#invisible()
   let converter_table = {
         \ '\t' : s:tabstop(),
         \ '　' : ' ',
-        \ '◯' : '## ',
-        \ 'ː' : ':',
-        \ '：' : ':',
         \ }
   call s:substitute(converter_table)
 endfunction
@@ -119,6 +116,13 @@ function! alpaca#substitute#mark() "{{{
         \ '＠' : '@',
         \ '►' : '>',
         \ '□' : '- ',
+        \ '◯' : '## ',
+        \ '○' : '## ',
+        \ '■' : '## ',
+        \ 'ː' : ':',
+        \ '：' : ':',
+        \ '—' : '-',
+        \ '━' : '-',
         \ }
 
   call s:substitute(converter_table)

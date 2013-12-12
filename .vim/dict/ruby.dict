@@ -778,3 +778,4 @@ Enumerable
 FileUtils
 block_given?
 HashWithIndifferentAccess
+Mechanize

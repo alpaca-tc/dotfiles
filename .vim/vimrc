@@ -41,21 +41,7 @@ function! s:SID() "{{{
   endif
 endfun"}}}
 function! s:current_git() "{{{
-  let current_dir = getcwd()
-  let s:git_root_cache = get(s:, 'git_root_cache', {})
-  if has_key(s:git_root_cache, current_dir)
-    return s:git_root_cache[current_dir]
-  endif
-
-  let git_root = system('git rev-parse --show-toplevel')
-  if git_root =~ 'fatal: Not a git repository'
-    " throw "No a git repository."
-    return ''
-  endif
-
-  let s:git_root_cache[current_dir] = substitute(git_root, '\n', '', 'g')
-
-  return s:git_root_cache[current_dir]
+  return unite#util#path2project_directory(getcwd())
 endfunction"}}}
 function! s:filetype() "{{{
   return get(split(&filetype, '\.'), 0, '')
@@ -66,80 +52,78 @@ endfunction"}}}
 function! s:reltime() "{{{
   return str2float(reltimestr(reltime()))
 endfunction"}}}
-function! s:on_init()
+function! s:on_init() "{{{
   return has('vim_starting') || !exists('s:loaded_vimrc')
-endfunction
-function! ToUpperCamel(string)
+endfunction"}}}
+function! ToUpperCamel(string) "{{{
   return substitute(a:string, '^[a-z]\|_\zs[a-z]\C', '\=toupper(submatch(0))', 'g')
-endfunction
+endfunction"}}}
 "}}}
 
 " ----------------------------------------
 " initialize "{{{
-if s:on_init() "{{{
-  let g:my = {}
+let g:my = {}
 
-  " OS
-  let s:is_windows = has('win32') || has('win64')
-  let s:is_mac     = has('mac')
-  let s:is_unix    = has('unix')
+" OS
+let s:is_windows = has('win32') || has('win64')
+let s:is_mac     = has('mac')
+let s:is_unix    = has('unix')
 
-  " user information
-  let g:my.info = {
-        \ 'author':  'Ishii Hiroyuki',
-        \ 'email':   'alprhcp666@gmail.com',
-        \ 'github':  'alpaca-tc',
-        \ 'lingr':   'alpaca_taichou',
-        \ 'twitter': 'alpaca_taichou'
-        \ }
+" user information
+let g:my.info = {
+      \ 'author':  'Ishii Hiroyuki',
+      \ 'email':   'alprhcp666@gmail.com',
+      \ 'github':  'alpaca-tc',
+      \ 'lingr':   'alpaca_taichou',
+      \ 'twitter': 'alpaca_taichou'
+      \ }
 
-  let g:my.conf = {
-        \ 'initialize' : 1,
-        \ 'winheight' : winheight(0),
-        \ 'winwidth' : winwidth(0),
-        \ }
+let g:my.conf = {
+      \ 'initialize' : 1,
+      \ 'winheight' : winheight(0),
+      \ 'winwidth' : winwidth(0),
+      \ }
 
-  let g:my.bin = {
-        \ 'ctags' : '/usr/local/bin/ctags',
-        \ 'git' : executable('hub') ? 'hub' : 'git',
-        \ }
+let g:my.bin = {
+      \ 'ctags' : '/usr/local/bin/ctags',
+      \ 'git' : executable('hub') ? 'hub' : 'git',
+      \ }
 
-  let g:my.dir = {
-        \ 'neobundle':   expand('~/.bundle'),
-        \ 'ctrlp':       expand('~/.vim.trash/ctrlp'),
-        \ 'memolist':    expand('~/.memolist'),
-        \ 'snippets':    expand('~/.vim/snippet'),
-        \ 'swap_dir':    expand('~/.vim.trash/vimswap'),
-        \ 'trash_dir':   expand('~/.vim.trash/'),
-        \ 'viminfo':     expand('~/.vim.trash/viminfo'),
-        \ 'undodir':     expand('~/.vim.trash/undodir'),
-        \ 'unite':       expand('~/.vim.trash/unite'),
-        \ 'vimref':      expand('~/.vim.trash/vim-ref'),
-        \ 'vimfiler':    expand('~/.vim.trash/vimfiler'),
-        \ 'vimshell':    expand('~/.vim.trash/vimshell'),
-        \ 'neocomplete': expand('~/.vim.trash/neocomplete'),
-        \ 'vim-session': expand('~/.vim.trash/vimsession'),
-        \ 'evernote':    expand('~/.vim.trash/evernote'),
-        \ 'trash':       expand('~/.Trash'),
-        \ }
+let g:my.dir = {
+      \ 'neobundle':   expand('~/.bundle'),
+      \ 'ctrlp':       expand('~/.vim.trash/ctrlp'),
+      \ 'memolist':    expand('~/.memolist'),
+      \ 'snippets':    expand('~/.vim/snippet'),
+      \ 'swap_dir':    expand('~/.vim.trash/vimswap'),
+      \ 'trash_dir':   expand('~/.vim.trash/'),
+      \ 'viminfo':     expand('~/.vim.trash/viminfo'),
+      \ 'undodir':     expand('~/.vim.trash/undodir'),
+      \ 'unite':       expand('~/.vim.trash/unite'),
+      \ 'vimref':      expand('~/.vim.trash/vim-ref'),
+      \ 'vimfiler':    expand('~/.vim.trash/vimfiler'),
+      \ 'vimshell':    expand('~/.vim.trash/vimshell'),
+      \ 'neocomplete': expand('~/.vim.trash/neocomplete'),
+      \ 'vim-session': expand('~/.vim.trash/vimsession'),
+      \ 'evernote':    expand('~/.vim.trash/evernote'),
+      \ 'trash':       expand('~/.Trash'),
+      \ }
 
-  let g:my.ft = {
-        \ 'ruby_files':      ['ruby', 'Gemfile', 'haml', 'eruby', 'yaml', 'ruby.rspec'],
-        \ 'js_files':        ['javascript', 'coffeescript', 'node', 'typescript'],
-        \ 'python_files':    ['python', 'python*'],
-        \ 'scala_files':     ['scala'],
-        \ 'sh_files':        ['sh'],
-        \ 'php_files':       ['php', 'phtml'],
-        \ 'c_files':         ['c', 'cpp'],
-        \ 'style_files':     ['css', 'scss', 'sass'],
-        \ 'markup_files':    ['html', 'haml', 'eruby', 'php', 'xhtml', 'liquid'],
-        \ 'english_files':   ['markdown', 'help', 'text'],
-        \ 'program_files':   ['ruby', 'php', 'python', 'eruby', 'vim', 'javascript', 'coffee', 'scala', 'java', 'go', 'cpp', 'haml', 'rust', 'c'],
-        \ 'ignore_patterns': ['vimfiler', 'unite'],
-        \ }
-  let g:my.ft.youcomplete_me = g:my.ft.ruby_files + g:my.ft.js_files + g:my.ft.python_files + g:my.ft.scala_files + g:my.ft.sh_files + g:my.ft.php_files + g:my.ft.c_files + g:my.ft.style_files
-  let g:my.ft.neocomplete = ['vim'] + g:my.ft.english_files
-endif"}}}
+let g:my.ft = {
+      \ 'ruby_files':      ['ruby', 'Gemfile', 'haml', 'eruby', 'yaml', 'ruby.rspec'],
+      \ 'js_files':        ['javascript', 'coffeescript', 'node', 'typescript'],
+      \ 'python_files':    ['python', 'python*'],
+      \ 'scala_files':     ['scala'],
+      \ 'sh_files':        ['sh'],
+      \ 'php_files':       ['php', 'phtml'],
+      \ 'c_files':         ['c', 'cpp'],
+      \ 'style_files':     ['css', 'scss', 'sass'],
+      \ 'markup_files':    ['html', 'haml', 'eruby', 'php', 'xhtml', 'liquid'],
+      \ 'english_files':   ['markdown', 'help', 'text'],
+      \ 'program_files':   ['ruby', 'php', 'python', 'eruby', 'vim', 'javascript', 'coffee', 'scala', 'java', 'go', 'cpp', 'haml', 'rust', 'c'],
+      \ 'ignore_patterns': ['vimfiler', 'unite'],
+      \ }
+let g:my.ft.youcomplete_me = g:my.ft.ruby_files + g:my.ft.js_files + g:my.ft.python_files + g:my.ft.scala_files + g:my.ft.sh_files + g:my.ft.php_files + g:my.ft.c_files + g:my.ft.style_files
+let g:my.ft.neocomplete = ['vim'] + g:my.ft.english_files
 
 if s:on_init() && g:my.conf.initialize
   call alpaca#initialize#directory(values(g:my.dir))
@@ -197,7 +181,7 @@ endif
 " ----------------------------------------
 " NeoBundle  " {{{
 NeoBundleFetch 'Shougo/neobundle.vim'
-NeoBundle 'vim-jp/vital.vim', { 'autoload' : {
+NeoBundleLazy 'vim-jp/vital.vim', { 'autoload' : {
       \ 'functions' : 'vital#of',
       \ 'commands' : 'Vitalizer',
       \ }}
@@ -283,6 +267,7 @@ NeoBundleLazy 'alpaca-tc/vim-ref', { 'autoload' : {
 " 暗黒美夢王
 NeoBundleLazy 'Shougo/unite.vim', {
       \ 'autoload' : {
+      \   'functions' : 'unite#util#path2project_directory',
       \   'commands' : [ {
       \     'name' : 'Unite',
       \     'complete' : 'customlist,unite#complete_source'},
@@ -305,7 +290,7 @@ NeoBundleLazy 'Shougo/vimfiler', {
       \   'mappings' : ['<Plug>(vimfiler_switch)'],
       \ }}
 " if $NEO
-NeoBundle 'Shougo/neocomplete', { 'autoload' : {
+NeoBundleLazy 'Shougo/neocomplete', { 'autoload' : {
       \ 'functions' : ['neocomplete#init#disable', 'neocomplete#is_enabled'],
       \ 'insert' : 1,
       \ }}
@@ -573,7 +558,7 @@ NeoBundleLazy 'DirDiff.vim', { 'autoload' : {
 NeoBundleLazy 'repeat.vim', { 'autoload' : {
       \ 'mappings' : '.',
       \ }}
-NeoBundle 'terryma/vim-multiple-cursors', { 'autload': {
+NeoBundleLazy 'terryma/vim-multiple-cursors', { 'autload': {
       \ 'function_prefix': 'multiple_cursors',
       \ }}
 NeoBundleLazy 'alpaca-tc/auto-pairs', { 'autoload' : {
@@ -598,7 +583,7 @@ NeoBundleFetch 'yascentur/Ricty', {
       \ }}
 
 " The light converter and beautifier
-NeoBundle 'alpaca-tc/beautify.vim', { 'autoload' : {
+NeoBundleLazy 'alpaca-tc/beautify.vim', { 'autoload' : {
       \ 'commands' : [
       \   {
       \     'name' : 'Beautify',
@@ -819,7 +804,7 @@ NeoBundleLazy 'mattn/excitetranslate-vim', {
       \ 'depends': 'mattn/webapi-vim',
       \ 'autoload' : { 'commands': ['ExciteTranslate']}
       \ }
-NeoBundle 'kana/vim-altr', {
+NeoBundleLazy 'kana/vim-altr', {
       \ 'build' : 'bundle install',
       \ 'autoload' : {
       \   'filetypes' : 'ruby',
@@ -878,10 +863,10 @@ NeoBundleLazy 'osyo-manga/vim-over', { 'autoload' : {
 NeoBundleLazy 'sgur/unite-git_grep', { 'autoload' : {
       \ 'unite_sources': ['vcs_grep/git', 'vcs_grep/hg', 'vcs_grep']
       \ }}
-NeoBundle 'alpaca-tc/vim-unite-watson.vim', {
+NeoBundleLazy 'alpaca-tc/vim-unite-watson.vim', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload' : {
-      \   'unite_sources' : ['watson', 'watson/dirty', 'watson/clean'],
+      \   'unite_sources' : ['watson', 'watson/dirty', 'watson/clean', 'watson/current_file'],
       \ }}
 
 " Installation check.
@@ -952,7 +937,7 @@ nnoremap ,f :setfiletype<Space>
 function! s:define_abbreviations() "{{{
   " Abbreviations {{{
   let s:abbr_dictionary = {
-        \ 'ruby,php,ruby.spec,python,vim' : [
+        \ 'javascript,coffee,scss,sass,c,cpp,eruby,haml,ruby,php,ruby.spec,python,vim' : [
         \   'fix [fix] -',
         \   'review [review] -',
         \   'todo [todo] -',
@@ -1926,7 +1911,9 @@ let hooks = neobundle#get_hooks('TweetVim')
 function! hooks.on_source(bundle) "{{{
   let g:tweetvim_async_post      = 1
   let g:tweetvim_display_source  = 1
+  let g:tweetvim_config_dir = expand('~/src/tweetvim')
   let g:tweetvim_display_time    = 1
+  let g:tweetvim_display_icon = 1
   let g:tweetvim_open_buffer_cmd = 'tabnew'
 endfunction"}}}
 unlet hooks
@@ -2518,8 +2505,8 @@ nnoremap <Space>i :<C-U>IndentLinesToggle<CR>
 let hooks = neobundle#get_hooks('indentLine')
 function! hooks.on_source(bundle) "{{{
   let g:indentLine_color_term = 239
+  let g:indentLine_color_gui = '#444444'
   let g:indentLine_fileType = g:my.ft.program_files
-  " let g:indentLine_color_gui = '#A4E57E'
   " let g:indentLine_char = 'c'
 endfunction"}}}
 unlet hooks
@@ -2536,23 +2523,23 @@ function! hooks.on_source(bundle) "{{{
   let g:neocomplete#auto_completion_start_length      = g:neocomplete#sources#syntax#min_keyword_length
   " let g:neocomplete#ctags_arguments = g:alpaca_update_tags_config
   let g:neocomplete#data_directory                    = g:my.dir.neocomplete
-  let g:neocomplete#enable_auto_close_preview         = 0
+  let g:neocomplete#enable_auto_close_preview         = 1
   let g:neocomplete#enable_auto_select                = 0
+  let g:neocomplete#enable_complete_select          = 0
+  let g:neocomplete#enable_fuzzy_completion         = 1
+  let g:neocomplete#force_overwrite_completefunc    = 1
+  let g:neocomplete#manual_completion_start_length  = 0
+  let g:neocomplete#sources#include#max_proceslses  = 10
+  let g:neocomplete#max_list                        = 20
   " let g:neocomplete_caching_limit_file_size = 500000
   " let g:neocomplete_max_keyword_width       = 120
   " let g:neocomplete_enable_cursor_hold_i    = 0
   " let g:neocomplete#enable_smart_case       = 1
   " let g:neocomplete#enable_refresh_always   = 0
 
-  let g:neocomplete#enable_complete_select          = 0
-  let g:neocomplete#enable_fuzzy_completion         = 1
-  let g:neocomplete#force_overwrite_completefunc    = 1
-  let g:neocomplete#manual_completion_start_length  = 0
 
   " let g:neocomplete#sources#buffer#cache_limit_size = 700000
   " let g:neocomplete#sources#tags#cache_limit_size   = 1000000
-  " let g:neocomplete#sources#include#max_proceslses  = 30
-  " let g:neocomplete#max_list                        = 100
   " let g:neocomplete#skip_auto_completion_time       = '0.1'
 
   let g:neocomplete#disable_auto_select_buffer_name_pattern =
@@ -2829,6 +2816,7 @@ nnoremap <silent>[unite]B       :Unite bookmark -buffer-name=bookmark<CR>
 nnoremap <silent>[unite]<C-F>   :UniteGit<CR>
 
 nnoremap <silent>[unite]d       :Unite watson/dirty -buffer-name=watson_dirty<CR>
+nnoremap <silent>[unite]c       :Unite watson/current_file -buffer-name=watson_current_file<CR>
 
 nnoremap <silent>[unite]e       :Unite english_dictionary -buffer-name=english_dictionary<CR>
 nnoremap <silent>[unite]x       :Unite english_example -horizontal -buffer-name=example<CR>
@@ -3469,7 +3457,13 @@ function! s:open_macvim() "{{{
   UniteSessionSave for_mvim
   Clean
 
-  call alpaca#system_bg('mvim -c "UniteSessionLoad for_mvim"')
+  if executable('mvim')
+    let bin = 'mvim'
+  elseif executable('MacVim')
+    let bin = 'MacVim'
+  endif
+
+  call alpaca#system_bg(bin . ' -c "UniteSessionLoad for_mvim"')
 endfunction"}}}
 command! -nargs=0 Mvim call s:open_macvim()
 
