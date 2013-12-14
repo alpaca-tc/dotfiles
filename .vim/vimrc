@@ -483,7 +483,6 @@ NeoBundleLazy 'Shougo/unite-outline', {
       \   'unite_sources' : 'outline' },
       \ }
 NeoBundleLazy 'alpaca-tc/vim-unite-giti', {
-      \ 'rev' : 'add_pull_request_source',
       \ 'autoload': {
       \   'unite_sources': [
       \     'giti', 'giti/branch', 'giti/branch/new', 'giti/branch_all',
@@ -491,6 +490,7 @@ NeoBundleLazy 'alpaca-tc/vim-unite-giti', {
       \     'giti/config', 'giti/log', 'giti/remote', 'giti/status'
       \   ]
       \ }}
+NeoBundle 'thinca/vim-github'
 NeoBundleLazy 'Shougo/unite-help', { 'autoload' : {
       \ 'unite_sources' : 'help'
       \ }}
@@ -2468,7 +2468,7 @@ endif
 " ------------------------------------
 let hooks = neobundle#get_hooks('tern_for_vim')
 function! hooks.on_post_source(bundle) "{{{
-  call tern#Disable()
+  " call tern#Disable()
 endfunction"}}}
 unlet hooks
 
@@ -2655,6 +2655,7 @@ function! hooks.on_source(bundle) "{{{
   inoremap <silent><CR> <C-R>=<SID>my_crinsert()<CR>
   inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
   inoremap <expr><C-X><C-F>  neocomplete#start_manual_complete('file')
+  inoremap <expr><C-X><C-E>  neocomplete#start_manual_complete('english')
   inoremap <expr><C-J> neocomplete#start_manual_complete('neosnippet')
   inoremap <expr><C-G> neocomplete#undo_completion()
   inoremap <expr><C-N> pumvisible() ? "\<C-N>" : "\<C-X>\<C-U>\<C-P>\<Down>"
@@ -3400,6 +3401,7 @@ nmap p <Plug>(yankround-p)
 nmap P <Plug>(yankround-P)
 nmap <C-P> <Plug>(yankround-prev)
 nmap <C-N> <Plug>(yankround-next)
+" let g:yankround_use_region_hl = 1
 
 " ----------------------------------------
 " vim-over
@@ -3410,6 +3412,12 @@ let hooks = neobundle#get_hooks('vim-over')
 function! hooks.on_post_source(bundle) "{{{
   OverCommandLineNoremap <C-J> <Plug>(over-cmdline-substitute-jump-pattern)
   OverCommandLineNoremap <C-K> <Plug>(over-cmdline-substitute-jump-string)
+endfunction"}}}
+unlet hooks
+
+let hooks = neobundle#get_hooks('vim-github')
+function! hooks.on_source(bundle) "{{{
+  let g:github#user = g:my.info.github
 endfunction"}}}
 unlet hooks
 
@@ -3510,6 +3518,11 @@ if !s:on_init()
   call neobundle#call_hook('on_source')
 elseif filereadable(expand('~/.vim_secret'))
   " snail & lingr
+
+  " let g:snail_csv2google_sheet_hourly_rete
+  " let g:lingr_vim_password
+  " let g:github#password
+  " let g:github#token
   source ~/.vim_secret
 endif
 
