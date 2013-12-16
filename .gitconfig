@@ -80,10 +80,10 @@
   autosetuprebase = always
 [url "https://"]
   insteadOf = git://
-[url "github:"]
-  insteadOf = https://github.com/
-[url "github:"]
-  insteadOf = https://github.com/
+; [url "github:"]
+;   insteadOf = https://github.com/
+; [url "github:"]
+;   insteadOf = https://github.com/
 [hub]
   protocol = https
 [credential]

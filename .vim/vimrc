@@ -868,6 +868,7 @@ NeoBundleLazy 'alpaca-tc/vim-unite-watson.vim', {
       \ 'autoload' : {
       \   'unite_sources' : ['watson', 'watson/dirty', 'watson/clean', 'watson/current_file'],
       \ }}
+NeoBundle 'mopp/AOJ.vim'
 
 " Installation check.
 if s:on_init() && g:my.conf.initialize && neobundle#exists_not_installed_bundles()
@@ -1075,6 +1076,7 @@ let g:alpaca_window_max_height = g:my.conf.winheight
 let g:alpaca_window_max_width = g:my.conf.winwidth
 nmap <silent>L            <Plug>(alpaca_window_move_next_window_or_tab)
 nmap <silent>H            <Plug>(alpaca_window_move_previous_window_or_tab)
+
 nmap <silent><C-W>n       <Plug>(alpaca_window_smart_new)
 nmap <silent><C-W><C-N>   <Plug>(alpaca_window_smart_new)
 
@@ -2516,7 +2518,7 @@ let g:neocomplete#enable_at_startup = 1
 
 let hooks = neobundle#get_hooks('neocomplete')
 function! hooks.on_source(bundle) "{{{
-  let g:neocomplete#auto_completion_start_length      = 1
+  let g:neocomplete#auto_completion_start_length      = 2
   let g:neocomplete#sources#syntax#min_keyword_length = 1
   let g:neocomplete#lock_buffer_name_pattern          = '\*ku\*'
   " let g:neocomplete#lock_iminsert = 1
