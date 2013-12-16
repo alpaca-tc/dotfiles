@@ -400,8 +400,8 @@ NeoBundle 'tomtom/tcomment_vim', { 'autoload' : {
 " For Git
 NeoBundleLazy 'tpope/vim-fugitive', { 'autoload': {
       \ 'functions' : ['fugitive#head', 'fugitive#detect'],
-      \ 'commands': ['Gcommit', 'Gblame', 'Ggrep', 'Gdiff'] }}
-NeoBundleLazy 'Shougo/git-vim', {
+      \ 'commands': ['Gcommit', 'Gblame', 'Ggrep', 'Gdiff', 'Gcd'] }}
+NeoBundleLazy 'alpaca-tc/git-vim', {
       \ 'autoload' : {
       \ 'function_prefix' : 'git',
       \ 'functions' : 'git#get_current_branch',
@@ -483,6 +483,7 @@ NeoBundleLazy 'Shougo/unite-outline', {
       \   'unite_sources' : 'outline' },
       \ }
 NeoBundleLazy 'alpaca-tc/vim-unite-giti', {
+      \ 'rev' : 'dev',
       \ 'autoload': {
       \   'unite_sources': [
       \     'giti', 'giti/branch', 'giti/branch/new', 'giti/branch_all',
@@ -490,7 +491,7 @@ NeoBundleLazy 'alpaca-tc/vim-unite-giti', {
       \     'giti/config', 'giti/log', 'giti/remote', 'giti/status'
       \   ]
       \ }}
-NeoBundle 'thinca/vim-github'
+" NeoBundle 'thinca/vim-github'
 NeoBundleLazy 'Shougo/unite-help', { 'autoload' : {
       \ 'unite_sources' : 'help'
       \ }}
@@ -694,6 +695,16 @@ NeoBundleLazy 'alpaca-tc/vim-endwise.git', {
       \ 'autoload' : {
       \   'insert' : 1,
       \ }}
+NeoBundleLazy 'alpaca-tc/rake.vim', {
+      \ 'autoload' : {
+      \   'commands' : [
+      \     {
+      \       'name' : 'Rake',
+      \       'complete' : 'customlist,rake#complete',
+      \     }
+      \   ]
+      \ }}
+
 
 " Rails
 NeoBundleLazy 'basyura/unite-rails', {
@@ -866,9 +877,11 @@ NeoBundleLazy 'sgur/unite-git_grep', { 'autoload' : {
 NeoBundleLazy 'alpaca-tc/vim-unite-watson.vim', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload' : {
+      \   'functions' : 'watson#complete',
+      \   'commands' : [{ 'name' : 'Watson', 'complete' : 'customlist,watson#complete' }],
       \   'unite_sources' : ['watson', 'watson/dirty', 'watson/clean', 'watson/current_file'],
       \ }}
-NeoBundle 'mopp/AOJ.vim'
+" NeoBundle 'mopp/AOJ.vim'
 
 " Installation check.
 if s:on_init() && g:my.conf.initialize && neobundle#exists_not_installed_bundles()
@@ -938,7 +951,7 @@ nnoremap ,f :setfiletype<Space>
 function! s:define_abbreviations() "{{{
   " Abbreviations {{{
   let s:abbr_dictionary = {
-        \ 'javascript,coffee,scss,sass,c,cpp,eruby,haml,ruby,php,ruby.spec,python,vim' : [
+        \ 'liquid,html,javascript,coffee,scss,sass,c,cpp,eruby,haml,ruby,php,ruby.spec,python,vim' : [
         \   'fix [fix] -',
         \   'review [review] -',
         \   'todo [todo] -',
