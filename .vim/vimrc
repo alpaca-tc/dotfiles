@@ -483,7 +483,7 @@ NeoBundleLazy 'Shougo/unite-outline', {
       \   'unite_sources' : 'outline' },
       \ }
 NeoBundleLazy 'alpaca-tc/vim-unite-giti', {
-      \ 'rev' : 'dev',
+      \ 'rev' : 'add_pull_request_source',
       \ 'autoload': {
       \   'unite_sources': [
       \     'giti', 'giti/branch', 'giti/branch/new', 'giti/branch_all',
@@ -2944,7 +2944,7 @@ function! hooks.on_source(bundle) "{{{
   let g:unite_source_file_mru_time_format="(%m-%d %H:%M) "
   let g:unite_source_file_mru_filename_format=":~:."
   let g:unite_source_file_mru_limit = 300
-  let g:unite_source_directory_mru_ignore_pattern = '\(/private/var/\|\.git\)'
+  let g:unite_source_directory_mru_ignore_pattern = '\(/private/var/\|\.git\|.pygments-cache\|.pygments-cache\)'
 
   if executable('gmv')
     let rm_command = 'gmv -f --backup=numbered --target-directory ' . g:my.dir.trash . ' $srcs'
@@ -2956,7 +2956,6 @@ function! hooks.on_source(bundle) "{{{
   " let g:unite_marked_icon = "✓"
   let g:unite_source_history_yank_enable = 0
   let g:unite_force_overwrite_statusline = 0
-  let s:unite_hooks = {}
 
   call alpaca#let_g:('unite_source_menu_menus', {})
 
@@ -3066,20 +3065,16 @@ function! hooks.on_source(bundle) "{{{
     nnoremap <silent><buffer>C gg0wC
     nnoremap <expr><buffer>re unite#do_action('replace')
 
-    let unite = unite#get_current_unite()
-    if unite.source_names == ['grep']
-      let unite.buffer_name = 'grep'
-    endif
-    let buffer_name = unite.buffer_name != '' ? unite.buffer_name : '_'
-
-    if has_key(s:unite_hooks, buffer_name)
-      call s:unite_hooks[buffer_name]()
+    let profile_name = substitute(unite#get_current_unite().profile_name, '[-/]', '_', 'g')
+    if !empty(profile_name) && has_key(s:unite_hooks, profile_name)
+      call s:unite_hooks[profile_name]()
     endif
   endfunction"}}}
 
   " ----------------------------------------
   " Hooks
-  function! s:unite_hooks.file_mru() "{{{
+  let s:unite_hooks = {}
+  function! s:unite_hooks.source_file_mru() "{{{
     syntax match uniteSource__FileMru_Dir /.*\// containedin=uniteSource__FileMru contains=uniteSource__FileMru_Time,uniteCandidateInputKeyword nextgroup=uniteSource__FileMru_Dir
 
     highlight link uniteSource__FileMru_Dir Directory
@@ -3087,13 +3082,13 @@ function! hooks.on_source(bundle) "{{{
     call unite#custom#source('file_mru', 'ignore_pattern', '')
   endfunction"}}}
 
-  function! s:unite_hooks.file() "{{{
+  function! s:unite_hooks.source_file() "{{{
     nmap <buffer><Tab> <Plug>(unite_do_default_action)
     syntax match uniteFileDirectory '.*\/'
     highlight link uniteFileDirectory Directory
   endfunction"}}}
 
-  function! s:unite_hooks.line_fast() "{{{
+  function! s:unite_hooks.source_line_fast() "{{{
     function! s:toggle_syntax() "{{{
       let syntax = empty(&syntax) ? b:original_syntax : ''
       let &syntax = syntax
@@ -3108,7 +3103,7 @@ function! hooks.on_source(bundle) "{{{
     augroup END
   endfunction"}}}
 
-  function! s:unite_hooks.history_command() "{{{
+  function! s:unite_hooks.source_history_command() "{{{
     setl syntax=vim
   endfunction"}}}
 
@@ -3132,7 +3127,7 @@ function! hooks.on_source(bundle) "{{{
   endfunction"}}}
   "}}}
 
-  function! s:unite_hooks.outline() "{{{
+  function! s:unite_hooks.source_outline() "{{{
     nnoremap <buffer><C-J> gj
 
     augroup MyUniteBufferCmd
@@ -3141,15 +3136,28 @@ function! hooks.on_source(bundle) "{{{
   endfunction"}}}
 
   " vim-unite-giti {{{
-  function! s:unite_hooks.giti_status() "{{{
+  function! s:unite_hooks.source_giti_status() "{{{
+    " set previewheight=20
     " nnoremap <silent><buffer><expr>gM unite#do_action('ammend')
+    " nnoremap <silent><buffer><expr>gm unite#do_action('commit')
     nnoremap <silent><buffer><expr>ga unite#do_action('stage')
     nnoremap <silent><buffer><expr>gc unite#do_action('checkout')
     nnoremap <silent><buffer><expr>gd unite#do_action('diff')
     nnoremap <silent><buffer><expr>gu unite#do_action('unstage')
   endfunction"}}}
 
-  function! s:unite_hooks.giti_log() "{{{
+  function! s:unite_hooks.source_giti_branch()
+    nnoremap <silent><buffer><expr>d unite#do_action('delete')
+    nnoremap <silent><buffer><expr>D unite#do_action('delete_force')
+    nnoremap <silent><buffer><expr>rd unite#do_action('delete_remote')
+    nnoremap <silent><buffer><expr>rD unite#do_action('delete_remote_force')
+  endfunction
+
+  function! s:unite_hooks.source_giti_branch_all()
+    call s:unite_hooks.source_giti_branch()
+  endfunction
+
+  function! s:unite_hooks.source_giti_log() "{{{
     nnoremap <silent><buffer><expr>gd unite#do_action('diff')
     nnoremap <silent><buffer><expr>d unite#do_action('diff')
   endfunction"}}}

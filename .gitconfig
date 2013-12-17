@@ -45,6 +45,7 @@
   ignore = !"f() { local s=$1; shift; while [ $# -gt 0 ]; do s="$s,$1"; shift; done; curl "http://gitignore.io/api/$s"; }; f"
   soft=reset --soft HEAD^
 
+  shallow=clone --depth 1
   dm = !git branch --merged | grep -v '*' | xargs -I % git branch -d %
   rs = reset
   sn = shortlog -sn
@@ -76,8 +77,14 @@
 [issue]
   type = github
 
-[branch]
-  autosetuprebase = always
+[merge]
+  ff = false
+
+[pull]
+  rebase = true
+; [branch]
+;   autosetuprebase = always
+
 [url "https://"]
   insteadOf = git://
 [url "github:"]
