@@ -15,3 +15,5 @@ augroup MyGuiWindow
   autocmd!
   autocmd VimEnter set guioptions-=egLrm
 augroup END
+
+let $PATH='/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin:/Applications/MacVim.app/Contents/MacOS:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin:/Users/alpaca-tc/.autojump/bin:/Applications/MacVim.app/Contents/MacOS:/Applications/Vagrant/bin:/Users/alpaca-tc/.rbenv/shims:/Users/alpaca-tc/.rbenv/bin:/Library/Java/JavaVirtualMachines/jdk1.7.0_07.jdk/Contents/Home/bin:/usr/local/sbin:/usr/local/mysql/bin:/usr/local/share/npm/bin:/Users/alpaca-tc/.bundle/powerline/scripts:/Users/alpaca-tc/bin:/Users/alpaca-tc/usr/binl:/usr/local/bin/bin'

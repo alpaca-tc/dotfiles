@@ -559,7 +559,7 @@ NeoBundleLazy 'DirDiff.vim', { 'autoload' : {
 NeoBundleLazy 'repeat.vim', { 'autoload' : {
       \ 'mappings' : '.',
       \ }}
-NeoBundleLazy 'terryma/vim-multiple-cursors', { 'autload': {
+NeoBundle 'terryma/vim-multiple-cursors', { 'autload': {
       \ 'function_prefix': 'multiple_cursors',
       \ }}
 NeoBundleLazy 'alpaca-tc/auto-pairs', { 'autoload' : {
@@ -910,7 +910,7 @@ if s:on_init()
   " set gdefault
   " set splitright
   " set splitbelow
-  set previewheight=5
+  set previewheight=10
   set helpheight=14
   set matchtime=1
   set winheight=5
