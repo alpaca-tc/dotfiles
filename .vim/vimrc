@@ -3044,6 +3044,7 @@ function! hooks.on_source(bundle) "{{{
       autocmd! * <buffer>
       autocmd BufEnter <buffer> if winnr('$') == 1 |quit| endif
     augroup END
+    call alpaca_window#util#fold_buffer_automatically()
 
     call s:extend_file_rec_source()
 
@@ -3096,10 +3097,6 @@ function! hooks.on_source(bundle) "{{{
 
     nnoremap <buffer><C-K> :call <SID>toggle_syntax()<CR>
     inoremap <buffer><C-K> <ESC>:call <SID>toggle_syntax()<CR>
-
-    augroup MyUniteBufferCmd
-      call alpaca_window#util#fold_buffer_automatically()
-    augroup END
   endfunction"}}}
 
   function! s:unite_hooks.source_history_command() "{{{
@@ -3119,53 +3116,38 @@ function! hooks.on_source(bundle) "{{{
 
   function! s:unite_hooks.grep() "{{{
     nnoremap <expr><buffer>re unite#do_action('replace')
-
-    augroup MyUniteBufferCmd
-      call alpaca_window#util#fold_buffer_automatically()
-    augroup END
   endfunction"}}}
   "}}}
 
   function! s:unite_hooks.source_outline() "{{{
     nnoremap <buffer><C-J> gj
-
-    augroup MyUniteBufferCmd
-      call alpaca_window#util#fold_buffer_automatically()
-    augroup END
   endfunction"}}}
 
   " vim-unite-giti {{{
   function! s:unite_hooks.source_giti_status() "{{{
     " set previewheight=20
-    " nnoremap <silent><buffer><expr>gM unite#do_action('ammend')
-    " nnoremap <silent><buffer><expr>gm unite#do_action('commit')
+    nnoremap <silent><buffer><expr>gM unite#do_action('ammend')
+    nnoremap <silent><buffer><expr>gm unite#do_action('commit')
     nnoremap <silent><buffer><expr>ga unite#do_action('stage')
     nnoremap <silent><buffer><expr>gc unite#do_action('checkout')
     nnoremap <silent><buffer><expr>gd unite#do_action('diff')
     nnoremap <silent><buffer><expr>gu unite#do_action('unstage')
   endfunction"}}}
 
-  function! s:unite_hooks.source_giti_branch()
+  function! s:unite_hooks.source_giti_branch() "{{{
     nnoremap <silent><buffer><expr>d unite#do_action('delete')
     nnoremap <silent><buffer><expr>D unite#do_action('delete_force')
     nnoremap <silent><buffer><expr>rd unite#do_action('delete_remote')
     nnoremap <silent><buffer><expr>rD unite#do_action('delete_remote_force')
-    augroup MyUniteBufferCmd
-      call alpaca_window#util#fold_buffer_automatically()
-    augroup END
-  endfunction
+  endfunction"}}}
 
-  function! s:unite_hooks.source_giti_branch_all()
+  function! s:unite_hooks.source_giti_branch_all() "{{{
     call s:unite_hooks.source_giti_branch()
-  endfunction
+  endfunction"}}}
 
   function! s:unite_hooks.source_giti_log() "{{{
     nnoremap <silent><buffer><expr>gd unite#do_action('diff')
     nnoremap <silent><buffer><expr>d unite#do_action('diff')
-
-    augroup MyUniteBufferCmd
-      call alpaca_window#util#fold_buffer_automatically()
-    augroup END
   endfunction"}}}
   "}}}
 endfunction"}}}
