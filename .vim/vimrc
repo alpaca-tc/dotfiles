@@ -389,7 +389,7 @@ NeoBundleLazy 'open-browser.vim', { 'autoload' : {
       \ 'commands' : ['OpenBrowserSearch', 'OpenBrowser', 'OpenBrowserSmartSearch'] }}
 
 " Comment Plugins
-NeoBundle 'tomtom/tcomment_vim', { 'autoload' : {
+NeoBundleLazy 'tomtom/tcomment_vim', { 'autoload' : {
       \ 'commands' : ['TComment', 'TCommentAs', 'TCommentMaybeInline'] }}
 " NeoBundleLazy 'tyru/caw.vim', {
 "       \ 'autoload' : {
@@ -847,7 +847,7 @@ NeoBundleLazy 'alpaca-tc/assignment', { 'autoload': {
       \   }
       \ ]
       \ }}
-NeoBundle 'tyru/operator-camelize.vim', {
+NeoBundleLazy 'tyru/operator-camelize.vim', {
       \ 'depends' : 'kana/vim-operator-user',
       \ 'autoload' : {
       \   'mappings' : [
@@ -938,9 +938,10 @@ function! s:redraw_and_doautocmd() "{{{
 endfunction"}}}
 
 if exists(':OverCommandLine')
-  nnoremap re :OverCommandLine<CR>%s!!!g<Left><Left><Left>
-  xnoremap :s :OverCommandLine<CR>s!!!g<Left><Left><Left>
-  xnoremap re "zy:OverCommandLine<CR>%s!<C-R>=substitute(@z, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
+  xnoremap :s :OverCommandLine<CR>
+  " nnoremap re :OverCommandLine<CR>%s!!!g<Left><Left><Left>
+  " xnoremap :s :OverCommandLine<CR>s!!!g<Left><Left><Left>
+  " xnoremap re "zy:OverCommandLine<CR>%s!<C-R>=substitute(@z, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
 else
   nnoremap re :%s!
   xnoremap :s :s!
@@ -1957,8 +1958,8 @@ endfunction"}}}
 " ------------------------------------
 " operator-camelize.vim
 " ------------------------------------
-vmap ,u <Plug>(operator-camelize)
-vmap ,U <Plug>(operator-decamelize)
+xmap ,u <Plug>(operator-camelize)
+xmap ,U <Plug>(operator-decamelize)
 
 " ------------------------------------
 let hooks = neobundle#get_hooks('vim-smartchr')
