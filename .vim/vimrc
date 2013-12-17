@@ -938,10 +938,9 @@ function! s:redraw_and_doautocmd() "{{{
 endfunction"}}}
 
 if exists(':OverCommandLine')
-  xnoremap :s :OverCommandLine<CR>
-  " nnoremap re :OverCommandLine<CR>%s!!!g<Left><Left><Left>
-  " xnoremap :s :OverCommandLine<CR>s!!!g<Left><Left><Left>
-  " xnoremap re "zy:OverCommandLine<CR>%s!<C-R>=substitute(@z, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
+  nnoremap re :OverCommandLine<CR>%s!!!g<Left><Left><Left>
+  xnoremap :s :OverCommandLine<CR>s!!!g<Left><Left><Left>
+  xnoremap re "zy:OverCommandLine<CR>%s!<C-R>=substitute(@z, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
 else
   nnoremap re :%s!
   xnoremap :s :s!
@@ -2825,24 +2824,24 @@ unlet hooks
 nmap [unite] <Nop>
 nmap <C-J> [unite]
 
-nnoremap [unite]f               :Unite -buffer-name=file -no-start-insert file_rec:
+nnoremap [unite]f               :Unite -no-start-insert file_rec:
 nnoremap <silent><Space>b       :UniteBookmarkAdd<CR>
-nnoremap <silent>[unite]b       :Unite buffer -buffer-name=buffer<CR>
-nnoremap <silent>[unite]j       :Unite file_mru -buffer-name=file_mru<CR>
-nnoremap <silent>[unite]B       :Unite bookmark -buffer-name=bookmark<CR>
+nnoremap <silent>[unite]b       :Unite buffer<CR>
+nnoremap <silent>[unite]j       :Unite file_mru<CR>
+nnoremap <silent>[unite]B       :Unite bookmark<CR>
 nnoremap <silent>[unite]<C-F>   :UniteGit<CR>
 
-nnoremap <silent>[unite]d       :Unite watson/dirty -buffer-name=watson_dirty<CR>
-nnoremap <silent>[unite]c       :Unite watson/current_file -buffer-name=watson_current_file<CR>
+nnoremap <silent>[unite]d       :Unite watson/dirty<CR>
+nnoremap <silent>[unite]c       :Unite watson/current_file<CR>
 
-nnoremap <silent>[unite]e       :Unite english_dictionary -buffer-name=english_dictionary<CR>
-nnoremap <silent>[unite]x       :Unite english_example -horizontal -buffer-name=example<CR>
-nnoremap <silent>[unite]a       :Unite web_search -horizontal -buffer-name=web_search<CR>
-nnoremap <silent>[unite]T       :Unite english_thesaurus -horizontal -buffer-name=thesaurus<CR>
+nnoremap <silent>[unite]e       :Unite english_dictionary<CR>
+nnoremap <silent>[unite]x       :Unite english_example -horizontal<CR>
+nnoremap <silent>[unite]a       :Unite web_search -horizontal<CR>
+nnoremap <silent>[unite]T       :Unite english_thesaurus -horizontal<CR>
 
-nnoremap <silent>g/             :call <SID>unite_with_same_syntax('Unite line -buffer-name=line_fast -hide-source-names -horizontal -start-insert -no-quit')<CR>
-nnoremap <silent>g*             :call <SID>unite_with_same_syntax('Unite line:forward -buffer-name=line_fast -start-insert -no-quit -input=' . expand('<cword>'))<CR>
-nnoremap <silent>g#             :call <SID>unite_with_same_syntax('Unite line:backword -buffer-name=line_fast -start-insert -no-quit -input=' . expand('<cword>'))<CR>
+nnoremap <silent>g/             :call <SID>unite_with_same_syntax('Unite line -hide-source-names -horizontal -start-insert -no-quit')<CR>
+nnoremap <silent>g*             :call <SID>unite_with_same_syntax('Unite line:forward -start-insert -no-quit -input=' . expand('<cword>'))<CR>
+nnoremap <silent>g#             :call <SID>unite_with_same_syntax('Unite line:backword -start-insert -no-quit -input=' . expand('<cword>'))<CR>
 
 function! s:parse_git_root_option(input) "{{{
   let reg_multi =  '\*\*/'
@@ -2904,19 +2903,19 @@ endfunction "}}}
 command! -nargs=? -complete=customlist,s:unite_git_complete UniteGit call <SID>unite_git_root(<f-args>)
 
 " nnoremap <silent>[unite]ra       :<C-U>Unite -buffer-name=rake rake<CR>
-nnoremap <silent>[unite]s        :Unite session -buffer-name=session -no-empty<CR>
-nnoremap <silent>[unite]/        :Unite history/search -buffer-name=history_search -no-empty<CR>
-nnoremap <silent>[unite]:        :Unite history/command -buffer-name=history_command -no-empty<CR>
-nnoremap <silent>[unite]h        :Unite help -no-quit -buffer-name=help<CR>
-nnoremap <silent>[unite]o        :Unite outline -no-start-insert -horizontal -no-quit -buffer-name=outline -hide-source-names<CR>
-nnoremap <silent><expr>[unite]t  ':Unite tags -horizontal -buffer-name=tags -input='.expand("<cword>").'<CR>'
-nnoremap <silent><expr>[tag_or_tab]t ':Unite tags -immediately -horizontal -auto-preview -buffer-name=tags -input='.expand("<cword>").'<CR>'
+nnoremap <silent>[unite]s        :Unite session -no-empty<CR>
+nnoremap <silent>[unite]/        :Unite history/search -no-empty<CR>
+nnoremap <silent>[unite]:        :Unite history/command -no-empty<CR>
+nnoremap <silent>[unite]h        :Unite help -no-quit<CR>
+nnoremap <silent>[unite]o        :Unite outline -no-start-insert -horizontal -no-quit -hide-source-names<CR>
+nnoremap <silent><expr>[unite]t  ':Unite tags -horizontal -input='.expand("<cword>").'<CR>'
+nnoremap <silent><expr>[tag_or_tab]t ':Unite tags -immediately -horizontal -auto-preview -input='.expand("<cword>").'<CR>'
 
 " vim-unite-giti
-nnoremap <silent>gl :Unite giti/log -buffer-name=giti_log -no-start-insert -horizontal<CR>
-nnoremap <silent>gP :Unite giti/pull_request/base -buffer-name=giti_pull_request -no-start-insert -horizontal<CR>
-nnoremap <silent>gs :Unite giti/status -buffer-name=giti_status -no-start-insert -horizontal<CR>
-nnoremap <silent>gh :Unite giti/branch_all -buffer-name=giti_branchall -no-start-insert<CR>
+nnoremap <silent>gl :Unite giti/log -no-start-insert -horizontal<CR>
+nnoremap <silent>gP :Unite giti/pull_request/base -no-start-insert -horizontal<CR>
+nnoremap <silent>gs :Unite giti/status -no-start-insert -horizontal<CR>
+nnoremap <silent>gh :Unite giti/branch_all -no-start-insert<CR>
 
 function! s:unite_with_same_syntax(cmd) "{{{
   let old_syntax = &syntax
@@ -3088,7 +3087,7 @@ function! hooks.on_source(bundle) "{{{
     highlight link uniteFileDirectory Directory
   endfunction"}}}
 
-  function! s:unite_hooks.source_line_fast() "{{{
+  function! s:unite_hooks.source_line() "{{{
     function! s:toggle_syntax() "{{{
       let syntax = empty(&syntax) ? b:original_syntax : ''
       let &syntax = syntax
@@ -3151,6 +3150,9 @@ function! hooks.on_source(bundle) "{{{
     nnoremap <silent><buffer><expr>D unite#do_action('delete_force')
     nnoremap <silent><buffer><expr>rd unite#do_action('delete_remote')
     nnoremap <silent><buffer><expr>rD unite#do_action('delete_remote_force')
+    augroup MyUniteBufferCmd
+      call alpaca_window#util#fold_buffer_automatically()
+    augroup END
   endfunction
 
   function! s:unite_hooks.source_giti_branch_all()
@@ -3160,6 +3162,10 @@ function! hooks.on_source(bundle) "{{{
   function! s:unite_hooks.source_giti_log() "{{{
     nnoremap <silent><buffer><expr>gd unite#do_action('diff')
     nnoremap <silent><buffer><expr>d unite#do_action('diff')
+
+    augroup MyUniteBufferCmd
+      call alpaca_window#util#fold_buffer_automatically()
+    augroup END
   endfunction"}}}
   "}}}
 endfunction"}}}
