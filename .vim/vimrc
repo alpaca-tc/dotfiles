@@ -483,7 +483,7 @@ NeoBundleLazy 'Shougo/unite-outline', {
       \   'unite_sources' : 'outline' },
       \ }
 NeoBundleLazy 'alpaca-tc/vim-unite-giti', {
-      \ 'rev' : 'add_pull_request_source',
+      \ 'rev' : 'dev',
       \ 'autoload': {
       \   'unite_sources': [
       \     'giti', 'giti/branch', 'giti/branch/new', 'giti/branch_all',
@@ -741,6 +741,7 @@ NeoBundleLazy 'tpope/vim-liquid', { 'autoload' : {
       \ 'filetypes' : 'liquid'
       \ }}
 NeoBundleLazy 'alpaca-tc/alpaca_octopress.vim', { 'autoload' : {
+      \ 'filetypes' : 'liquid',
       \ 'functions' : 'octopress#complete',
       \ 'commands': [
       \   'OctopressKillAllProcess',
@@ -2249,7 +2250,7 @@ function! hooks.on_source(bundle) "{{{
         \   ['if', 'unless'],
         \   ['endif', 'endunless'],
         \ ],
-        \ 'ruby,eruby,haml' : [
+        \ 'Rakefile,Gemfile,ruby,eruby,haml' : [
         \   ['if', 'unless'],
         \   ['while', 'until'],
         \   ['.blank?', '.present?'],
@@ -2497,6 +2498,7 @@ function! hooks.on_source(bundle) "{{{
   " DEVELOPMENT VERSION
   let g:alpaca_english_web_search_url   = 'http://eow.alc.co.jp/%s/UTF-8/'
   let g:alpaca_english_web_search_xpath = "div[@id='resultsList']/ul/li"
+  let g:neocomplete#sources._ += ['english']
 endfunction"}}}
 unlet hooks
 
@@ -2532,7 +2534,7 @@ let g:neocomplete#enable_at_startup = 1
 let hooks = neobundle#get_hooks('neocomplete')
 function! hooks.on_source(bundle) "{{{
   let g:neocomplete#auto_completion_start_length      = 2
-  let g:neocomplete#sources#syntax#min_keyword_length = 1
+  let g:neocomplete#sources#syntax#min_keyword_length = 2
   let g:neocomplete#lock_buffer_name_pattern          = '\*ku\*'
   " let g:neocomplete#lock_iminsert = 1
   let g:neocomplete#auto_completion_start_length      = g:neocomplete#sources#syntax#min_keyword_length
@@ -3403,6 +3405,7 @@ function! hooks.on_post_source(bundle) "{{{
   " For ruby tdd
   call altr#define('lib/%.rb', 'spec/lib/%_spec.rb')
   call altr#define('%.rb', 'spec/%_spec.rb')
+  call altr#define('_posts/%.markdown', 'images/blog/')
 
   " For Berksfile
   call altr#define('Berksfile', $HOME . '/.berkshelf/cookbooks')
