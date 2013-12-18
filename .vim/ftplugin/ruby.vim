@@ -28,15 +28,7 @@ let g:tagbar_type_ruby = {
 "       \ }
 "}}}
 
-
-" Vim filetype plugin
-" Language:    Ruby
-" Maintainer:    Tim Pope <vimNOSPAM@tpope.org>
-" URL:      https://github.com/vim-ruby/vim-ruby
-" Release Coordinator:  Doug Kearns <dougkearns@gmail.com>
-" ----------------------------------------------------------------------------
-
-if (exists("b:did_ftplugin"))
+if (exists('b:did_ftplugin'))
   finish
 endif
 let b:did_ftplugin = 1
@@ -44,14 +36,14 @@ let b:did_ftplugin = 1
 let s:cpo_save = &cpo
 set cpo&vim
 
-if has("gui_running") && !has("gui_win32")
+if has('gui_running') && !has('gui_win32') "{{{
   setlocal keywordprg=ri\ -T\ -f\ bs
 else
   setlocal keywordprg=ri
-endif
+endif"}}}
 
 " Matchit support
-if exists("loaded_matchit") && !exists("b:match_words")
+if exists('loaded_matchit') && !exists('b:match_words') "{{{
   let b:match_ignorecase = 0
 
   let b:match_words =
@@ -69,7 +61,7 @@ if exists("loaded_matchit") && !exists("b:match_words")
   \ "ConditionalModifier\\|RepeatModifier\\|OptionalDo\\|" .
   \ "Function\\|BlockArgument\\|KeywordAsMethod\\|ClassVariable\\|" .
   \ "InstanceVariable\\|GlobalVariable\\|Symbol\\)\\>'"
-endif
+endif"}}}
 
 setlocal formatoptions-=t formatoptions+=croql
 
@@ -77,14 +69,14 @@ setlocal include=^\\s*\\<\\(load\\>\\\|require\\>\\\|autoload\\s*:\\=[\"']\\=\\h
 setlocal includeexpr=substitute(substitute(v:fname,'::','/','g'),'$','.rb','')
 setlocal suffixesadd=.rb
 
-if exists("&ofu") && has("ruby")
+if exists('&ofu') && has('ruby') "{{{
   setlocal omnifunc=rubycomplete#Complete
-endif
+endif"}}}
 
 " To activate, :set ballooneval
-if has('balloon_eval') && exists('+balloonexpr')
+if has('balloon_eval') && exists('+balloonexpr') "{{{
   setlocal balloonexpr=RubyBalloonexpr()
-endif
+endif"}}}
 
 
 " TODO:
@@ -93,11 +85,11 @@ endif
 setlocal comments=:#
 setlocal commentstring=#\ %s
 
-if !exists('g:ruby_version_paths')
+if !exists('g:ruby_version_paths') "{{{
   let g:ruby_version_paths = {}
-endif
+endif"}}}
 
-function! s:query_path(root)
+function! s:query_path(root) "{{{
   let code = "print $:.join %q{,}"
   if &shell =~# 'sh' && $PATH !~# '\s'
     let prefix = 'env PATH='.$PATH.' '
@@ -120,17 +112,19 @@ function! s:query_path(root)
   finally
     exe cd fnameescape(cwd)
   endtry
-endfunction
+endfunction"}}}
 
-function! s:build_path(path)
+function! s:build_path(path) "{{{
   let path = join(map(copy(a:path), 'v:val ==# "." ? "" : v:val'), ',')
   if &g:path !~# '\v^\.%(,/%(usr|emx)/include)=,,$'
     let path = substitute(&g:path,',,$',',','') . ',' . path
   endif
   return path
-endfunction
+endfunction"}}}
 
-if !exists('b:ruby_version') && !exists('g:ruby_path') && isdirectory(expand('%:p:h'))
+" b:ruby_version {{{
+if !exists('b:ruby_version') &&
+      \ !exists('g:ruby_path') && isdirectory(expand('%:p:h'))
   let s:version_file = findfile('.ruby-version', '.;')
   if !empty(s:version_file)
     let b:ruby_version = get(readfile(s:version_file, '', 1), '')
@@ -138,9 +132,9 @@ if !exists('b:ruby_version') && !exists('g:ruby_path') && isdirectory(expand('%:
       let g:ruby_version_paths[b:ruby_version] = s:query_path(fnamemodify(s:version_file, ':p:h'))
     endif
   endif
-endif
+endif"}}}
 
-if exists("g:ruby_path")
+if exists("g:ruby_path") "{{{
   let s:ruby_path = type(g:ruby_path) == type([]) ? join(g:ruby_path, ',') : g:ruby_path
 elseif has_key(g:ruby_version_paths, get(b:, 'ruby_version', ''))
   let s:ruby_paths = g:ruby_version_paths[b:ruby_version]
@@ -157,26 +151,31 @@ else
   endif
   let s:ruby_paths = g:ruby_default_path
   let s:ruby_path = s:build_path(s:ruby_paths)
-endif
+endif"}}}
 
-if stridx(&l:path, s:ruby_path) == -1
+if stridx(&l:path, s:ruby_path) == -1 "{{{
   let &l:path = s:ruby_path
-endif
-if exists('s:ruby_paths') && stridx(&l:tags, join(map(copy(s:ruby_paths),'v:val."/tags"'),',')) == -1
-  let &l:tags = &tags . ',' . join(map(copy(s:ruby_paths),'v:val."/tags"'),',')
-endif
+endif"}}}
+if exists(':Tags') "{{{
+  if exists('s:ruby_paths') && stridx(&l:tags, join(map(copy(s:ruby_paths),'v:val."/tags"'),',')) == -1
+    let &l:tags = &tags . ',' . join(map(copy(s:ruby_paths),'v:val."/tags"'),',')
+  endif
+  let b_undo_ftplugin = 'tags<'
+else
+  let b_undo_ftplugin = ''
+endif"}}}
 
-if has("gui_win32") && !exists("b:browsefilter")
+if has('gui_win32') && !exists('b:browsefilter') "{{{
   let b:browsefilter = "Ruby Source Files (*.rb)\t*.rb\n" .
                      \ "All Files (*.*)\t*.*\n"
-endif
+endif"}}}
 
-let b:undo_ftplugin = "setl fo< inc< inex< sua< def< com< cms< path< tags< kp<"
+let b:undo_ftplugin = "setl fo< inc< inex< sua< def< com< cms< path< " . b_undo_ftplugin . " kp<"
       \."| unlet! b:browsefilter b:match_ignorecase b:match_words b:match_skip"
       \."| if exists('&ofu') && has('ruby') | setl ofu< | endif"
       \."| if has('balloon_eval') && exists('+bexpr') | setl bexpr< | endif"
 
-if !exists("g:no_plugin_maps") && !exists("g:no_ruby_maps")
+if !exists("g:no_plugin_maps") && !exists("g:no_ruby_maps") "{{{
   nnoremap <silent> <buffer> [m :<C-U>call <SID>searchsyn('\<def\>','rubyDefine','b','n')<CR>
   nnoremap <silent> <buffer> ]m :<C-U>call <SID>searchsyn('\<def\>','rubyDefine','','n')<CR>
   nnoremap <silent> <buffer> [M :<C-U>call <SID>searchsyn('\<end\>','rubyDefine','b','n')<CR>
@@ -246,7 +245,7 @@ if !exists("g:no_plugin_maps") && !exists("g:no_ruby_maps")
     let b:undo_ftplugin = b:undo_ftplugin
           \."| sil! exe 'nunmap <buffer> gf' | sil! exe 'nunmap <buffer> <C-W>f' | sil! exe 'nunmap <buffer> <C-W><C-F>' | sil! exe 'nunmap <buffer> <C-W>gf'"
   endif
-endif
+endif"}}}
 
 let &cpo = s:cpo_save
 unlet s:cpo_save
@@ -256,7 +255,7 @@ if exists("g:did_ruby_ftplugin_functions")
 endif
 let g:did_ruby_ftplugin_functions = 1
 
-function! RubyBalloonexpr()
+function! RubyBalloonexpr() "{{{
   if !exists('s:ri_found')
     let s:ri_found = executable('ri')
   endif
@@ -303,9 +302,9 @@ function! RubyBalloonexpr()
   else
     return ""
   endif
-endfunction
+endfunction"}}}
 
-function! s:searchsyn(pattern,syn,flags,mode)
+function! s:searchsyn(pattern,syn,flags,mode) "{{{
   norm! m'
   if a:mode ==# 'v'
     norm! gv
@@ -325,13 +324,13 @@ function! s:searchsyn(pattern,syn,flags,mode)
       return
     endif
   endwhile
-endfunction
+endfunction"}}}
 
-function! s:synname()
+function! s:synname() "{{{
   return synIDattr(synID(line('.'),col('.'),0),'name')
-endfunction
+endfunction"}}}
 
-function! s:wrap_i(back,forward)
+function! s:wrap_i(back,forward) "{{{
   execute 'norm k'.a:forward
   let line = line('.')
   execute 'norm '.a:back
@@ -339,9 +338,9 @@ function! s:wrap_i(back,forward)
     return s:wrap_a(a:back,a:forward)
   endif
   execute 'norm jV'.a:forward.'k'
-endfunction
+endfunction"}}}
 
-function! s:wrap_a(back,forward)
+function! s:wrap_a(back,forward) "{{{
   execute 'norm '.a:forward
   if line('.') < line('$') && getline(line('.')+1) ==# ''
     let after = 1
@@ -357,9 +356,9 @@ function! s:wrap_a(back,forward)
   else
     execute 'norm V'.a:forward
   endif
-endfunction
+endfunction"}}}
 
-function! RubyCursorIdentifier()
+function! RubyCursorIdentifier() "{{{
   let asciicode    = '\%(\w\|[]})\"'."'".']\)\@<!\%(?\%(\\M-\\C-\|\\C-\\M-\|\\M-\\c\|\\c\\M-\|\\c\|\\C-\|\\M-\)\=\%(\\\o\{1,3}\|\\x\x\{1,2}\|\\\=\S\)\)'
   let number       = '\%(\%(\w\|[]})\"'."'".']\s*\)\@<!-\)\=\%(\<[[:digit:]_]\+\%(\.[[:digit:]_]\+\)\=\%([Ee][[:digit:]_]\+\)\=\>\|\<0[xXbBoOdD][[:xdigit:]_]\+\>\)\|'.asciicode
   let operator     = '\%(\[\]\|<<\|<=>\|[!<>]=\=\|===\=\|[!=]\~\|>>\|\*\*\|\.\.\.\=\|=>\|[~^&|*/%+-]\)'
@@ -371,9 +370,9 @@ function! RubyCursorIdentifier()
   let raw          = matchstr(getline('.')[col-1 : ],pattern)
   let stripped     = substitute(substitute(raw,'\s\+=$','=',''),'^\s*:\=','','')
   return stripped == '' ? expand("<cword>") : stripped
-endfunction
+endfunction"}}}
 
-function! s:gf(count,map,edit) abort
+function! s:gf(count,map,edit) abort "{{{
   if getline('.') =~# '^\s*require_relative\s*\(["'']\).*\1\s*$'
     let target = matchstr(getline('.'),'\(["'']\)\zs.\{-\}\ze\1')
     return a:edit.' %:h/'.target.'.rb'
@@ -391,36 +390,6 @@ function! s:gf(count,map,edit) abort
   else
     return a:edit.' '.fnameescape(found)
   endif
-endfunction
-
-"
-" Instructions for enabling "matchit" support:
-"
-" 1. Look for the latest "matchit" plugin at
-"
-"         http://www.vim.org/scripts/script.php?script_id=39
-"
-"    It is also packaged with Vim, in the $VIMRUNTIME/macros directory.
-"
-" 2. Copy "matchit.txt" into a "doc" directory (e.g. $HOME/.vim/doc).
-"
-" 3. Copy "matchit.vim" into a "plugin" directory (e.g. $HOME/.vim/plugin).
-"
-" 4. Ensure this file (ftplugin/ruby.vim) is installed.
-"
-" 5. Ensure you have this line in your $HOME/.vimrc:
-"         filetype plugin on
-"
-" 6. Restart Vim and create the matchit documentation:
-"
-"         :helptags ~/.vim/doc
-"
-"    Now you can do ":help matchit", and you should be able to use "%" on Ruby
-"    keywords.  Try ":echo b:match_words" to be sure.
-"
-" Thanks to Mark J. Reed for the instructions.  See ":help vimrc" for the
-" locations of plugin directories, etc., as there are several options, and it
-" differs on Windows.  Email gsinclair@soyabean.com.au if you need help.
-"
+endfunction"}}}
 
 " vim: nowrap sw=2 sts=2 ts=8:
