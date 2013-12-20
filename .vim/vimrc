@@ -181,10 +181,10 @@ endif
 " ----------------------------------------
 " NeoBundle  " {{{
 NeoBundleFetch 'Shougo/neobundle.vim'
-NeoBundleLazy 'vim-jp/vital.vim', { 'autoload' : {
-      \ 'functions' : 'vital#of',
-      \ 'commands' : 'Vitalizer',
-      \ }}
+" NeoBundleLazy 'vim-jp/vital.vim', { 'autoload' : {
+"       \ 'functions' : 'vital#of',
+"       \ 'commands' : 'Vitalizer',
+"       \ }}
 
 " For asynchronous communication
 NeoBundleLazy 'Shougo/vimproc', {
@@ -829,6 +829,7 @@ NeoBundleLazy 'kana/vim-altr', {
 NeoBundleLazy 'tsukkee/lingr-vim', { 'autoload' : {
       \ 'commands' : ['LingrExit', 'LingrLaunch'],
       \ }}
+NeoBundle 'alpaca-tc/chatwork.vim'
 " NeoBundle 'Floobits/floobits-vim', { 'autoload' : {
 "       \ 'commands' : [
 "       \   'FlooJoinWorkspace', 'FlooLeaveWorkspace',
@@ -882,6 +883,10 @@ NeoBundleLazy 'alpaca-tc/vim-unite-watson.vim', {
       \   'commands' : [{ 'name' : 'Watson', 'complete' : 'customlist,watson#complete' }],
       \   'unite_sources' : ['watson', 'watson/dirty', 'watson/clean', 'watson/current_file'],
       \ }}
+NeoBundleLazy 'h1mesuke/vim-benchmark', { 'autoload' : {
+      \ 'functions' : 'benchmark#new',
+      \ }}
+
 " NeoBundle 'mopp/AOJ.vim'
 
 " Installation check.
@@ -1244,11 +1249,11 @@ nnoremap [tag_or_tab]s  :<C-u>tselect<CR>
 
 augroup AlpacaTags
   autocmd!
-  if exists(':Tags')
-    autocmd BufWritePost Gemfile TagsBundle
-    autocmd BufRead,BufNew * TagsSet
-    " autocmd BufWritePost * TagsUpdate
-  endif
+  " if exists(':Tags')
+  "   autocmd BufWritePost Gemfile TagsBundle
+  "   autocmd BufRead,BufNew * TagsSet
+  "   " autocmd BufWritePost * TagsUpdate
+  " endif
 augroup END
 "}}}
 
@@ -2533,8 +2538,8 @@ let g:neocomplete#enable_at_startup = 1
 
 let hooks = neobundle#get_hooks('neocomplete')
 function! hooks.on_source(bundle) "{{{
-  let g:neocomplete#auto_completion_start_length      = 2
-  let g:neocomplete#sources#syntax#min_keyword_length = 2
+  let g:neocomplete#auto_completion_start_length      = 1
+  let g:neocomplete#sources#syntax#min_keyword_length = 1
   let g:neocomplete#lock_buffer_name_pattern          = '\*ku\*'
   " let g:neocomplete#lock_iminsert = 1
   let g:neocomplete#auto_completion_start_length      = g:neocomplete#sources#syntax#min_keyword_length
@@ -2564,7 +2569,7 @@ function! hooks.on_source(bundle) "{{{
 
   " 'include',
   let g:neocomplete#sources = {
-        \ '_' : ['file', 'vim', 'dictionary', 'omni', 'member', 'buffer']
+        \ '_' : ['file', 'vim', 'dictionary', 'omni', 'member', 'buffer', 'file/include']
         \ }
 
   if $USER == 'root'
@@ -2607,11 +2612,23 @@ function! hooks.on_source(bundle) "{{{
         \ 'css'  : '[@#.]\?[[:alpha:]_-][[:alnum:]_-]*',
         \ 'scss' : '[@#.]\?[[:alpha:]_-][[:alnum:]_-]*',
         \ }
-
   let g:neocomplete#sources#include#patterns = {
         \ 'scala' : '^import',
         \ 'scss'  : '^\s*\<\%(@import\)\>',
         \ 'php'   : '^\s*\<\%(inlcude\|\|include_once\|require\|require_once\)\>',
+        \ 'liquid' : '\({%\(\s\+\w\+\)\+\(\s*\|\s\+[a-zA-Z0-9_#\?\!]\+\)\@=\|{{\(\s\+\w\+\)\+\(\s*\|\s\+[a-zA-Z0-9_#\?\!]\+\)\@=\)'
+        \ }
+  let g:neocomplete#sources#include#paths = {
+        \ 'liquid' : '/Users/alpaca-tc/projects/alpaca-tc.github.io/source',
+        \ }
+  let g:neocomplete#sources#file_include#exprs = {
+        \ 'liquid' : 'substitute(v:fname, "^/", "", "")',
+        \ }
+  let g:neocomplete#sources#file_include#delimiters = {
+        \ 'liquid' : '/',
+        \ }
+  let g:neocomplete#sources#file_include#exts = {
+        \ 'liquid' : ['png', 'jpg', 'gif', 'jpeg', 'ico']
         \ }
 
   let g:neocomplete#sources#omni#input_patterns.php =
@@ -2672,8 +2689,8 @@ function! hooks.on_source(bundle) "{{{
   inoremap <silent><CR> <C-R>=<SID>my_crinsert()<CR>
   inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
   inoremap <expr><C-X><C-F>  neocomplete#start_manual_complete('file')
+  inoremap <expr><C-X><C-J>  neocomplete#start_manual_complete('file/include')
   inoremap <expr><C-X><C-E>  neocomplete#start_manual_complete('english')
-  inoremap <expr><C-J> neocomplete#start_manual_complete('neosnippet')
   inoremap <expr><C-G> neocomplete#undo_completion()
   inoremap <expr><C-N> pumvisible() ? "\<C-N>" : "\<C-X>\<C-U>\<C-P>\<Down>"
   inoremap <expr><C-P> pumvisible() ? "\<C-P>" : "\<C-P>\<C-N>"
@@ -2818,6 +2835,9 @@ function! hooks.on_source(bundle) "{{{
   imap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
   smap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
 endfunction "}}}
+function! hooks.on_post_source(bundle) "{{{
+  let g:neocomplete#sources._ += ['neosnippet']
+endfunction"}}}
 unlet hooks
 
 " ----------------------------------------
@@ -3186,7 +3206,6 @@ unlet hooks
 " ----------------------------------------
 " lightline
 " ----------------------------------------
-"{{{
 let hooks = neobundle#get_hooks('lightline.vim')
 function! hooks.on_source(bundle) "{{{
   let s:lightline = { 'updatetime' : 5 } "{{{
@@ -3293,7 +3312,7 @@ function! hooks.on_source(bundle) "{{{
         \ },
         \ }
 endfunction"}}}
-"}}}
+unlet hooks
 
 " ----------------------------------------
 let hooks = neobundle#get_hooks('unite-session')
@@ -3527,6 +3546,74 @@ function! s:get_script_variables() "{{{
   return s:
 endfunction"}}}
 
+" For Gem
+" Gem"{{{
+
+function! s:get_gem_paths() " {{{
+  if !exists('s:gem_path')
+    let s:gem_path = {}
+  endif
+
+  let project_dir = s:V.path2project_directory(getcwd())
+
+  if !has_key(s:gem_path, project_dir)
+    let result = system('bundle show --paths')
+
+    if result =~ 'Could not locate Gemfile'
+      let s:gem_path[project_dir] = []
+    else
+      let s:gem_path[project_dir] = map(split(result, '\n'), 'v:val . "/lib"')
+    endif
+  endif
+
+  return s:gem_path[project_dir]
+endfunction " }}}
+
+function! s:build_path(path) "{{{
+  let path = join(map(copy(a:path), 'v:val ==# "." ? "" : v:val'), ',')
+  if &g:path !~# '\v^\.%(,/%(usr|emx)/include)=,,$'
+    let path = substitute(&g:path,',,$',',','') . ',' . path
+  endif
+
+  return path
+endfunction"}}}
+
+function! s:set_gem_paths() "{{{
+  let gem_paths = join(s:get_gem_paths(), ',')
+
+  if stridx(&l:path, gem_paths) == -1
+    execute 'setlocal path+=' . gem_paths
+  endif
+endfunction"}}}
+
+function! s:get_vital() "{{{
+  if !exists('s:V')
+    if exists('*neocomplete#util#get_vital')
+      let s:V = neocomplete#util#get_vital()
+    elseif exists('*unite#util#get_vital')
+      let s:V = unite#util#get_vital()
+    elseif exists('*vital#of')
+      let s:V = vital#of('vital')
+    else
+      echomsg 'vital.vim is not found!!'
+    endif
+  endif
+
+  return s:V
+endfunction"}}}
+
+function! s:load_gem_paths() "{{{
+  if !empty(s:get_vital())
+    call s:set_gem_paths()
+  endif
+endfunction"}}}
+
+augroup GemPath
+  autocmd!
+  autocmd FileType Rakefile,ruby call s:load_gem_paths()
+augroup END
+"}}}
+
 command! Make call alpaca#system#new('make')
 
 if !s:on_init()
@@ -3542,5 +3629,9 @@ elseif filereadable(expand('~/.vim_secret'))
 endif
 
 let s:loaded_vimrc = 1
+
+if !empty($TEST)
+  source ~/.bundle/chatwork.vim/test.vim
+endif
 
 set secure

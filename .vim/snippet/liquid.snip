@@ -1,7 +1,7 @@
 snippet image_on_frame
 abbr    image_on_frame
 options word
-  {% img image_on_frame center ${2:path} ${3:title} %}
+  {% img image_on_frame center ${1:`'/images/blog/' . substitute(expand('%:r'), '\d\+-\d\+-\d\+-', '', '')`}/${2:path} ${3:title} %}
 
 snippet image
 abbr    image

@@ -54,6 +54,22 @@ options     word
   let &cpo = s:save_cpo
   unlet s:save_cpo
 
+snippet did_ftplugin
+abbr    did_ftplugin
+options word
+  if (exists("b:did_ftplugin"))
+    finish
+  endif
+  let b:did_ftplugin = 1
+
+  let s:cpo_save = &cpo
+  set cpo&vim
+
+  ${1}
+
+  let &cpo = s:cpo_save
+  unlet s:cpo_save
+
 snippet     mit
   "=============================================================================
   " FILE: ${1:file_name}
