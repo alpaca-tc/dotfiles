@@ -290,10 +290,10 @@ NeoBundleLazy 'Shougo/vimfiler', {
       \   'mappings' : ['<Plug>(vimfiler_switch)'],
       \ }}
 " if $NEO
-NeoBundleLazy 'Shougo/neocomplete', { 'autoload' : {
-      \ 'functions' : ['neocomplete#init#disable', 'neocomplete#is_enabled'],
-      \ 'insert' : 1,
-      \ }}
+" NeoBundleLazy 'Shougo/neocomplete', { 'autoload' : {
+"       \ 'functions' : ['neocomplete#init#disable', 'neocomplete#is_enabled'],
+"       \ 'insert' : 1,
+"       \ }}
 " else
   " NeoBundleLazy 'alpaca-tc/YouCompleteMe', {
   "       \ 'depends' : 'Shougo/neosnippet',
@@ -559,9 +559,9 @@ NeoBundleLazy 'DirDiff.vim', { 'autoload' : {
 NeoBundleLazy 'repeat.vim', { 'autoload' : {
       \ 'mappings' : '.',
       \ }}
-NeoBundle 'terryma/vim-multiple-cursors', { 'autload': {
-      \ 'function_prefix': 'multiple_cursors',
-      \ }}
+" NeoBundle 'terryma/vim-multiple-cursors', { 'autload': {
+"       \ 'function_prefix': 'multiple_cursors',
+"       \ }}
 NeoBundleLazy 'alpaca-tc/auto-pairs', { 'autoload' : {
       \ 'insert': 1 }}
 
@@ -2503,22 +2503,24 @@ function! hooks.on_source(bundle) "{{{
   " DEVELOPMENT VERSION
   let g:alpaca_english_web_search_url   = 'http://eow.alc.co.jp/%s/UTF-8/'
   let g:alpaca_english_web_search_xpath = "div[@id='resultsList']/ul/li"
-  let g:neocomplete#sources._ += ['english']
+  if exists('g:neocomplete#sources')
+    let g:neocomplete#sources._ += ['english']
+  endif
 endfunction"}}}
 unlet hooks
 
 " ----------------------------------------
 " vim-multiple-cursors
 " ----------------------------------------
-nnoremap <C-N> :call <SID>yankround_or_multiple_cursor()<CR>
-xnoremap <C-N> :call multiple_cursors#new('n')<CR>
-
-let g:multi_cursor_use_default_mapping=0
-let g:multi_cursor_start_key='<C-N>'
-let g:multi_cursor_next_key='<C-N>'
-let g:multi_cursor_prev_key='<C-P>'
-let g:multi_cursor_skip_key='<C-X>'
-let g:multi_cursor_quit_key='<Esc>'
+" nnoremap <C-N> :call <SID>yankround_or_multiple_cursor()<CR>
+" xnoremap <C-N> :call multiple_cursors#new('n')<CR>
+"
+" let g:multi_cursor_use_default_mapping=0
+" let g:multi_cursor_start_key='<C-N>'
+" let g:multi_cursor_next_key='<C-N>'
+" let g:multi_cursor_prev_key='<C-P>'
+" let g:multi_cursor_skip_key='<C-X>'
+" let g:multi_cursor_quit_key='<Esc>'
 
 
 " ----------------------------------------
@@ -2688,9 +2690,9 @@ function! hooks.on_source(bundle) "{{{
   endfunction"}}}
   inoremap <silent><CR> <C-R>=<SID>my_crinsert()<CR>
   inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-  inoremap <expr><C-X><C-F>  neocomplete#start_manual_complete('file')
-  inoremap <expr><C-X><C-J>  neocomplete#start_manual_complete('file/include')
-  inoremap <expr><C-X><C-E>  neocomplete#start_manual_complete('english')
+  " inoremap <expr><C-X><C-F>  neocomplete#start_manual_complete('file')
+  " inoremap <expr><C-X><C-J>  neocomplete#start_manual_complete('file/include')
+  " inoremap <expr><C-X><C-E>  neocomplete#start_manual_complete('english')
   inoremap <expr><C-G> neocomplete#undo_completion()
   inoremap <expr><C-N> pumvisible() ? "\<C-N>" : "\<C-X>\<C-U>\<C-P>\<Down>"
   inoremap <expr><C-P> pumvisible() ? "\<C-P>" : "\<C-P>\<C-N>"
@@ -2836,7 +2838,9 @@ function! hooks.on_source(bundle) "{{{
   smap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
 endfunction "}}}
 function! hooks.on_post_source(bundle) "{{{
-  let g:neocomplete#sources._ += ['neosnippet']
+  if exists('g:neocomplete#sources')
+    let g:neocomplete#sources._ += ['neosnippet']
+  endif
 endfunction"}}}
 unlet hooks
 
@@ -3239,6 +3243,12 @@ function! hooks.on_source(bundle) "{{{
   endfunction"}}}
   "}}}
 
+  let g:lightline#functions#file_size = s:lightline.new({ 'updatetime' : 1 })
+  function! g:lightline#functions#file_size.func() "{{{
+    return line('$')
+  endfunction"}}}
+
+
   let g:lightline#functions#git_branch = s:lightline.new({ 'updatetime' : 5 })
   function! g:lightline#functions#git_branch.func() "{{{
     if neobundle#is_sourced('vim-unite-giti')
@@ -3294,7 +3304,7 @@ function! hooks.on_source(bundle) "{{{
         \     ['git_branch', 'tagbar', 'modified'],
         \   ],
         \   'right': [
-        \     ['syntastic', 'lineinfo'],
+        \     ['syntastic', 'lineinfo', 'file_size'],
         \     ['percent'],
         \     ['fileformat', 'fileencoding', 'filetype']
         \   ],
@@ -3306,6 +3316,7 @@ function! hooks.on_source(bundle) "{{{
         \ 'component_expand': {
         \   'git_branch':  'g:lightline#functions#git_branch.statusline',
         \   'syntastic':   'g:lightline#functions#syntastic.statusline',
+        \   'file_size':   'g:lightline#functions#file_size.statusline',
         \ },
         \ 'component_type': {
         \   'syntastic': 'error',

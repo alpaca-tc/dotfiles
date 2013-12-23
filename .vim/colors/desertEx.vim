@@ -170,4 +170,4 @@ hi perlvarplain guifg=#d090d0 guibg=#340734 guisp=#340734 gui=NONE ctermfg=176 c
 hi perlstatementnew guifg=#afcdd0 guibg=#420342 guisp=#420342 gui=NONE ctermfg=152 ctermbg=53 cterm=NONE
 hi perlpackagedecl guifg=#a6add0 guibg=#400940 guisp=#400940 gui=NONE ctermfg=146 ctermbg=53 cterm=NONE
 hi perlvarplain2 guifg=#b190d0 guibg=#340734 guisp=#340734 gui=NONE ctermfg=140 ctermbg=53 cterm=NONE
-hi Conceal ctermfg=239 ctermbg=NONE guifg=#444444 guibg=NONE
+hi Conceal ctermfg=239 ctermbg=NONE
