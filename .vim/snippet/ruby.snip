@@ -577,3 +577,13 @@ options word
   `join(map(split(substitute(expand("%:p"), '.*/lib/\(.*\).rb$', '\1', 'g'), '/'), 'ToUpperCamel(v:val)'), '::')`
 
 
+snippet load_path
+options word
+  lib = File.expand_path(File.dirname(__FILE__) + '/../lib')
+  begin
+    require '${1}'
+  rescue LoadError
+    $LOAD_PATH << lib
+    require '$1'
+  end
+

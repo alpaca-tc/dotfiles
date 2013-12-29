@@ -290,10 +290,10 @@ NeoBundleLazy 'Shougo/vimfiler', {
       \   'mappings' : ['<Plug>(vimfiler_switch)'],
       \ }}
 " if $NEO
-" NeoBundleLazy 'Shougo/neocomplete', { 'autoload' : {
-"       \ 'functions' : ['neocomplete#init#disable', 'neocomplete#is_enabled'],
-"       \ 'insert' : 1,
-"       \ }}
+NeoBundleLazy 'Shougo/neocomplete', { 'autoload' : {
+      \ 'functions' : ['neocomplete#init#disable', 'neocomplete#is_enabled'],
+      \ 'insert' : 1,
+      \ }}
 " else
   " NeoBundleLazy 'alpaca-tc/YouCompleteMe', {
   "       \ 'depends' : 'Shougo/neosnippet',
@@ -343,6 +343,7 @@ NeoBundleLazy 'alpaca-tc/alpaca_tags', {
       \ 'depends': ['Shougo/vimproc', 'Shougo/unite.vim'],
       \ 'autoload' : {
       \   'commands' : ['Tags', 'TagsSet', 'TagsBundle', 'TagsCleanCache'],
+      \   'functions' : 'alpaca_tags#util#clean_current_git_cache',
       \   'unite_sources' : ['tags']
       \ }}
 
@@ -689,8 +690,7 @@ NeoBundleLazy 'Shougo/vinarise', {
 
 " Ruby
 " ----------------------------------------
-NeoBundleLazy 'alpaca-tc/vim-rails', { 'autoload' : {
-      \ 'filetypes' : g:my.ft.ruby_files }}
+NeoBundle 'tpope/vim-rails'
 NeoBundleLazy 'alpaca-tc/vim-endwise.git', {
       \ 'autoload' : {
       \   'insert' : 1,
@@ -1771,7 +1771,7 @@ function! hooks.on_source(bundle) "{{{
   let g:rails_syntax = 1
   let g:rails_url='http://localhost:3000'
 
-  function! s:test()
+  function! s:test() "{{{
     let buf = rails#buffer()
     let type = "-" . buf.type_name()
     let path = '/' . buf.name()
@@ -1789,29 +1789,42 @@ function! hooks.on_source(bundle) "{{{
     endif
 
     return path
-  endfunction
+  endfunction"}}}
   command! Test echo <SID>test()
+
+  function! s:rails_settings() "{{{
+    augroup RailsBufferSetting
+      autocmd!
+      autocmd BufReadPost <buffer> * LoadGemPath
+    augroup END
+  endfunction"}}}
 
   function! s:source_snippet() " {{{
     let buf = rails#buffer()
-    let type = "-" . buf.type_name()
-    let path = '/' . buf.name()
-    if path =~ '[ !#$%\,]'
-      let path = ''
-    endif
 
-    if type != '-'
-      let type = substitute(type, '-', '.', 'g')
-      execute 'silent doautocmd User Rails' . type
-    endif
+    try
+      let type = "-" . buf.type_name()
+      let path = '/' . buf.name()
+      if path =~ '[ !#$%\,]'
+        let path = ''
+      endif
 
-    if !empty(path)
-      execute 'silent doautocmd User Rails' . path
-    endif
+      if type != '-'
+        let type = substitute(type, '-', '.', 'g')
+        execute 'silent doautocmd User Rails' . type
+      endif
+
+      if !empty(path)
+        execute 'silent doautocmd User Rails' . path
+      endif
+    catch /.*/
+      echomsg 'Missing rails type'
+    endtry
   endfunction"}}}
 
   function! s:unite_rails_setting() "{{{
     call s:source_snippet()
+    call s:rails_settings()
     nnoremap <buffer><Space>r :R<CR>
     nnoremap <buffer><Space>a :A<CR>
 
@@ -1846,8 +1859,8 @@ function! s:define_rails_autocmd() "{{{
         \ '.view*':                 ['ruby.rails.view.snip'],
         \ '.view.haml':             ['haml.rails.view.snip'],
         \ '.view.erb':              ['eruby.rails.view.snip'],
-        \ '.model':                ['ruby.rails.model.snip'],
-        \ '.controller':           ['ruby.rails.controller.snip'],
+        \ '.model':                 ['ruby.rails.model.snip'],
+        \ '.controller':            ['ruby.rails.controller.snip'],
         \ '.db.migration':          ['ruby.rails.migrate.snip'],
         \ '/config/environment.rb': ['ruby.rails.environment.snip'],
         \ '/config/routes.rb':      ['ruby.rails.route.snip'],
@@ -1878,12 +1891,15 @@ function! s:load_vim_rails() "{{{
   let root_dir = s:current_git()
   if !empty(root_dir) && filereadable(root_dir . '/config/environments/development.rb')
     let s:loaded_vim_rails = 1
-
     autocmd! LoadVimRails
     augroup! LoadVimRails
+
+    let b:rails_root = root_dir
     NeoBundleSource vim-rails
-    call RailsDetect('%:p')
+
     call s:define_rails_autocmd()
+    silent doautocmd User BufEnterRails
+    silent doautocmd User Rails
   endif
 endfunction"}}}
 
@@ -1900,7 +1916,8 @@ endif
 " ------------------------------------
 let g:RspecKeymap = 0
 function! s:rspec_settings() "{{{
-  setl foldmethod=syntax foldlevel=2 foldlevelstart=1 foldminlines=10 foldnestmax=10
+  setl foldlevel=2 foldlevelstart=1 foldminlines=10 foldnestmax=10
+  " foldmethod=syntax
 
   augroup RspecSetting
     autocmd!
@@ -2571,7 +2588,7 @@ function! hooks.on_source(bundle) "{{{
 
   " 'include',
   let g:neocomplete#sources = {
-        \ '_' : ['file', 'vim', 'dictionary', 'omni', 'member', 'buffer', 'file/include']
+        \ '_' : ['file', 'vim', 'dictionary', 'omni', 'member', 'buffer', 'file/include', 'member']
         \ }
 
   if $USER == 'root'
@@ -2618,19 +2635,26 @@ function! hooks.on_source(bundle) "{{{
         \ 'scala' : '^import',
         \ 'scss'  : '^\s*\<\%(@import\)\>',
         \ 'php'   : '^\s*\<\%(inlcude\|\|include_once\|require\|require_once\)\>',
-        \ 'liquid' : '\({%\(\s\+\w\+\)\+\(\s*\|\s\+[a-zA-Z0-9_#\?\!]\+\)\@=\|{{\(\s\+\w\+\)\+\(\s*\|\s\+[a-zA-Z0-9_#\?\!]\+\)\@=\)'
+        \ 'liquid' : '\({%\(\s\+\w\+\)\+\(\s*\|\s\+[a-zA-Z0-9_#\?\!]\+\)\@=\|{{\(\s\+\w\+\)\+\(\s*\|\s\+[a-zA-Z0-9_#\?\!]\+\)\@=\)',
+        \ 'haml'  : '^\s*\(=\)\?\s*render\s*',
+        \ }
+  let g:neocomplete#sources#include#suffixes = {
+        \ 'haml'  : '.haml',
         \ }
   let g:neocomplete#sources#include#paths = {
         \ 'liquid' : '/Users/alpaca-tc/projects/alpaca-tc.github.io/source',
         \ }
   let g:neocomplete#sources#file_include#exprs = {
         \ 'liquid' : 'substitute(v:fname, "^/", "", "")',
+        \ 'ruby'   : "substitute(substitute(v:fname,'::','/','g'),'$','','')",
         \ }
   let g:neocomplete#sources#file_include#delimiters = {
         \ 'liquid' : '/',
+        \ 'ruby' : '/',
         \ }
   let g:neocomplete#sources#file_include#exts = {
-        \ 'liquid' : ['png', 'jpg', 'gif', 'jpeg', 'ico']
+        \ 'liquid' : ['png', 'jpg', 'gif', 'jpeg', 'ico'],
+        \ 'ruby' : ['rb'],
         \ }
 
   let g:neocomplete#sources#omni#input_patterns.php =
@@ -2690,9 +2714,9 @@ function! hooks.on_source(bundle) "{{{
   endfunction"}}}
   inoremap <silent><CR> <C-R>=<SID>my_crinsert()<CR>
   inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-  " inoremap <expr><C-X><C-F>  neocomplete#start_manual_complete('file')
-  " inoremap <expr><C-X><C-J>  neocomplete#start_manual_complete('file/include')
-  " inoremap <expr><C-X><C-E>  neocomplete#start_manual_complete('english')
+  inoremap <expr><C-X><C-F>  neocomplete#start_manual_complete('file')
+  inoremap <expr><C-X><C-J>  neocomplete#start_manual_complete('file/include')
+  inoremap <expr><C-X><C-E>  neocomplete#start_manual_complete('english')
   inoremap <expr><C-G> neocomplete#undo_completion()
   inoremap <expr><C-N> pumvisible() ? "\<C-N>" : "\<C-X>\<C-U>\<C-P>\<Down>"
   inoremap <expr><C-P> pumvisible() ? "\<C-P>" : "\<C-P>\<C-N>"
@@ -3570,7 +3594,7 @@ function! s:get_gem_paths() " {{{
   if !has_key(s:gem_path, project_dir)
     let result = system('bundle show --paths')
 
-    if result =~ 'Could not locate Gemfile'
+    if result =~ 'Could not'
       let s:gem_path[project_dir] = []
     else
       let s:gem_path[project_dir] = map(split(result, '\n'), 'v:val . "/lib"')
@@ -3619,10 +3643,12 @@ function! s:load_gem_paths() "{{{
   endif
 endfunction"}}}
 
-augroup GemPath
-  autocmd!
-  autocmd FileType Rakefile,ruby call s:load_gem_paths()
-augroup END
+" augroup GemPath
+"   autocmd!
+"   autocmd FileType Rakefile,ruby call s:load_gem_paths()
+" augroup END
+
+command! LoadGemPath call s:load_gem_paths()
 "}}}
 
 command! Make call alpaca#system#new('make')
