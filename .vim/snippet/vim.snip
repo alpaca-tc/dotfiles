@@ -174,6 +174,92 @@ options     word
   contained
 #}}}
 
+# for regexp {{{
+snippet \e
+abbr    [[:escape:]]
+options word
+alias   escape
+  [[:escape:]]
+
+snippet \t
+abbr    [[:tab:]]
+options word
+alias   tab
+  [[:tab:]]
+
+snippet \r
+abbr    [[:return:]]
+options word
+alias   return
+  [[:return:]]
+
+snippet \b
+abbr    [[:backspace:]]
+options word
+alias   backspace
+  [[:backspace:]]
+
+snippet alpha
+abbr    [[:alpha:]]
+options word
+  [[:alpha:]]
+
+snippet alnum
+abbr    [[:alnum:]]
+options word
+  [[:alnum:]]
+
+snippet blank
+abbr    [[:blank:]]
+options word
+  [[:blank:]]
+
+snippet space
+abbr    [[:space:]]
+options word
+  [[:space:]]
+
+snippet disit
+abbr    [[:disit:]]
+options word
+  [[:disit:]]
+
+snippet xdigit
+abbr    [[:xdigit:]]
+options word
+  [[:xdigit:]]
+
+snippet graph
+abbr    [[:graph:]]
+options word
+  [[:graph:]]
+
+snippet print
+abbr    [[:print:]]
+options word
+  [[:print:]]
+
+snippet upper
+abbr    [[:upper:]]
+options word
+  [[:upper:]]
+
+snippet lower
+abbr    [[:lower:]]
+options word
+  [[:lower:]]
+
+snippet punct
+abbr    [[:punct:]]
+options word
+  [[:punct:]]
+
+snippet cntrl
+abbr    [[:cntrl:]]
+options word
+  [[:cntrl:]]
+# }}}
+
 snippet     get
 abbr        let ${1:g}:${2:variable_name} = get($1:, '$2', ${3:default_value})
 options     word

@@ -1,0 +1,496 @@
+# Enumerable {{{
+snippet all?
+abbr    all? { |v| ... } #=> bool
+options word
+regexp  '\.'
+  all? { |${1:v}| ${2} }
+
+snippet any?
+abbr    any? { |v| ... } #=> bool
+options word
+regexp  '\.'
+  any? { |${1:v}| ${2} }
+
+snippet chunk
+abbr    chunk { |v| ... } #=> enum
+options word
+regexp  '\.'
+  chunk { |${1:v}| ${2} }
+
+snippet map
+alias   collect
+abbr    map { |v| ... } #=> array
+options word
+regexp  '\.'
+  map { |${1:v}| ${2} }
+
+snippet collect_concat
+abbr    collect_concat { |v| ... } #=> array
+options word
+regexp  '\.'
+  collect_concat { |${1:v}| ${2} }
+
+snippet flat_map
+abbr    flat_map { |v| ... } #=> array
+options word
+regexp  '\.'
+  flat_map { |${1:v}| ${2} }
+
+snippet countd
+abbr    count { |v| ... } #=> int
+options word
+regexp  '\.'
+  count { |${1:v}| ${2} }
+
+snippet count
+abbr    count(v) #=> int
+options word
+regexp  '\.'
+  count(${1})
+
+snippet cycle
+abbr    cycle { |v| ... } #=> nil
+options word
+regexp  '\.'
+  cycle { |${1:v}| ${2} }
+
+snippet cycled
+abbr    cycle(v) #=> enum
+options word
+regexp  '\.'
+  cycle(${1:count})
+
+snippet detect
+abbr    detect { |v| ... } #=> obj or nil
+options word
+alias   find
+regexp  '\.'
+  detect { |${1:v}| ${2} }
+
+snippet drop
+abbr    drop(index) #=> array
+options word
+regexp  '\.'
+  drop(${1:index})
+
+snippet drop_while
+abbr    drop_while { |v| ... } #=> array
+options word
+regexp  '\.'
+  drop_while { |${1:v}| ${2} }
+
+snippet each_consd
+abbr    each_cons { |v| ... } #=> nil
+options word
+regexp  '\.'
+  each_cons(${1:count}) { |${2:v}| ${3} }
+
+snippet each_cons
+abbr    each_cons(v) #=> enum
+options word
+regexp  '\.'
+  each_cons(${1:v})
+
+snippet each_entry
+abbr    each_entry { |v| ... } #=> enum
+options word
+regexp  '\.'
+  each_entry { |${1:v}| ${2} }
+
+snippet each_slice
+abbr    each_slice(n) { |v| ... } #=> nil
+options word
+regexp  '\.'
+  each_slice(${1:count}) { |${2:v}| ${3} }
+
+snippet each_with_index
+abbr    each_with_index { |v| ... } #=> enum
+options word
+regexp  '\.'
+  each_with_index { |${1}, index| ${2} }
+
+snippet each_with_object
+abbr    each_with_object { |v| ... } #=> obj
+options word
+regexp  '\.'
+  each_with_object(${1}) { |${2:v}, memo| ${3} }
+
+snippet select
+abbr    select { |v| ... } #=> array
+options word
+alias   find_all
+regexp  '\.'
+  select { |${1:v}| ${2} }
+
+snippet find_indexd
+abbr    find_index { |v| ... } #=> int or nil
+options word
+regexp  '\.'
+  find_index { |${1:v}| ${2} }
+
+snippet find_index
+abbr    find_index(n) #=> enum
+options word
+regexp  '\.'
+  find_index(${1:value})
+
+snippet first
+abbr    first(n) #=> array
+options word
+regexp  '\.'
+  first(${1:n})
+
+snippet grep
+abbr    grep(pat) { |v| ... }
+options word
+regexp  '\.'
+  grep(${1:pat}) ${2:{ |v| ${3\} \}}
+
+snippet group_by
+abbr    group_by { |v| ... } #=> hash
+options word
+regexp  '\.'
+  group_by { |${1:v}| ${2} }
+
+snippet include?
+abbr    include?(obj) #=> bool
+options word
+regexp  '\.'
+  include?(${1})
+
+snippet injectd
+abbr    inject(init) { |memo, v| ... } #=> obj
+options word
+regexp  '\.'
+  inject { |memo, ${1:v}| ${2} }
+
+snippet inject
+abbr    inject(:sym) #=> obj
+alias   reduce
+options word
+regexp  '\.'
+  inject(:${1:+})
+
+snippet map!
+abbr    map! { |v| ... } #=> array
+options word
+regexp  '\.'
+  map! { |${1:v}| ${2} }
+
+snippet max
+abbr    max { |a, b| ... }
+options word
+regexp  '\.'
+  max { |a, b| ${2} <=> $2${3} }
+
+snippet member?
+abbr    member?(obj)
+options word
+regexp  '\.'
+  member?(${1:obj})
+
+snippet min
+abbr    min { |a, b| ... }
+options word
+regexp  '\.'
+  min { |a, b| ${2} <=> $2${3} }
+
+snippet min_by
+abbr    min_by { |v| ... }
+options word
+regexp  '\.'
+  min_by { |${1:v}| ${2} }
+
+snippet minmax
+abbr    minmax { |a, b| ... } #=> [min, max]
+options word
+regexp  '\.'
+  minmax { |a, b| ${2} }
+
+snippet minmax_by
+abbr    minmax_by { |v| ... } #=> [min, max]
+options word
+regexp  '\.'
+  minmax_by { |${1:v}| ${2} }
+
+snippet none?
+abbr    none? #=> bool
+options word
+regexp  '\.'
+  none?
+
+snippet one?
+abbr    one? #=> bool
+options word
+regexp  '\.'
+  one?
+
+snippet one?d
+abbr    one? { |v| ... } #=> bool
+options word
+regexp  '\.'
+  one? { |${1:v}| ${2} }
+
+snippet partition
+abbr    partition { |v| ... } #=> [true_a, false_a]
+options word
+regexp  '\.'
+  partition { |${1:v}| ${2:condition} }
+
+snippet reverse_each
+abbr    reverse_each { |v| ... } #=> enum
+options word
+regexp  '\.'
+  reverse_each { |${1:v}| ${2} }
+
+#snippet slice_before
+#abbr    slice_before { |v| ... } #=> enum
+#options word
+#regexp  '\.'
+#  slice_before { |${1:v}| ${2} }
+
+snippet sort
+abbr    sort { |v| ... } #=> array
+options word
+regexp  '\.'
+  sort { |a, b| ${1} <=> $1${2} }
+
+snippet sort_by
+abbr    sort_by { |v| ... } #=> array
+options word
+regexp  '\.'
+  sort_by { |${1}| ${2} }
+
+snippet take
+abbr    take(n)
+options word
+regexp  '\.'
+  take(${1:n})
+
+snippet take_while
+abbr    take_while { |arr| ... } #=> array
+options word
+regexp  '\.'
+  take_while { |${1}| ${2} }
+
+snippet zip
+abbr    zip(*args) #=> array_of_array
+options word
+regexp  '\.'
+  zip(${1:*args})
+
+snippet each
+abbr    each { ... }
+regexp  '\.'
+  each do |${1}|
+    ${2}
+  end
+
+snippet reject
+abbr    reject { |v| ... } #=> array
+options word
+regexp  '\.'
+  reject { |${1:v}| ${2} }
+
+snippet reject!
+abbr    reject! { |v| ... }
+options word
+regexp  '\.'
+  reject! { |${1:v}| ${2} }
+
+
+# }}}
+
+# Integer {{{
+snippet chr
+abbr    chr(encoding = Encoding::UTF_8)
+  chr ${1:#:Encoding::UTF_8}
+
+snippet denominator
+abbr    denominator
+alias   numerator
+options word
+  denominator
+
+snippet downto
+abbr    downto(min)
+options word
+regexp  '\.\w*$'
+  downto(min) do |${1:i}|
+    ${2}
+  end
+
+snippet even?
+abbr    even?
+regexp  '\.\w*$'
+# regexp dot
+options word
+  even?
+
+snippet gcd
+abbr    gcd(n)
+regexp  '\.\w*$'
+# regexp dot
+options word
+  gcd(${1:n})
+
+snippet gcdlcm
+abbr    gcdlcm(n)
+regexp  '\.\w*$'
+# regexp dot
+options word
+  gcdlcm(${1:n})
+
+snippet integer?
+abbr    integer?
+regexp  '\.\w*$'
+# regexp dot
+options word
+  integer?
+
+snippet lcm
+abbr    lcm(n)
+regexp  '\.\w*$'
+# regexp dot
+options word
+  lcm(${1:n})
+
+#snippet next
+#abbr    next
+#regexp  '\.\w*$'
+## regexp dot
+#alias   succ
+#options word
+#  next
+
+snippet odd?
+abbr    odd?
+regexp  '\.\w*$'
+# regexp dot
+options word
+  odd?
+
+snippet pred
+abbr    pred #=> self - 1
+regexp  '\.\w*$'
+# regexp dot
+options word
+  pred
+
+snippet times
+abbr    times { |i| ... }
+regexp  '\.\w*$'
+# regexp dot
+options word
+  times do |i|
+    ${1}
+  end
+
+snippet upto
+abbr    upto(max) { |i| ... }
+regexp  '\.\w*$'
+# regexp dot
+options word
+  upto(${1:max}) do |i|
+    ${2}
+  end
+# }}}
+
+# Numeric {{{
+snippet step
+abbr    step(limit, step = 1) { |n| ... }
+options word
+  step(${1:limit}${2:, ${3:step = 1\}}) do |i|
+    ${4}
+  end
+# }}}
+
+# Fixnum {{{
+snippet modulo
+abbr    modulo(other)
+regexp  '\.\w*$'
+# regexp dot
+options word
+  modulo(other)
+
+snippet div
+abbr    div(other)
+regexp  '\.\w*$'
+# regexp dot
+options word
+  div(${1:other})
+
+snippet abs
+abbr    abs
+regexp  '\.\w*$'
+# regexp dot
+options word
+  abs
+
+snippet fdiv
+abbr    fdiv(other)
+options word
+  fdiv(${1:other})
+
+snippet zero?
+abbr    zero?
+regexp  '\.\w*$'
+# regexp dot
+options word
+  zero?
+# }}}
+
+# Hash {{{
+snippet     Hash.new
+abbr        Hash.new { |h,k| h[k] = ... }
+options     word
+  Hash.new { |h,k| h[k] = ${1} }
+
+snippet     Hash0
+abbr        Hash.new { |h,k| h[k] = 0 }
+options     word
+  Hash.new { |h,k| h[k] = [] }
+
+snippet     Hash[]
+abbr        Hash.new { |h,k| h[k] = [] }
+options     word
+  Hash.new { |h,k| h[k] = [] }
+
+snippet     Hash{}
+  Hash.new { |h,k| h[k] = Hash.new(&h.default_proc) }
+# }}}
+
+# Rational {{{
+snippet Rational
+abbr    Rational
+options word
+  Rational(${1}, ${2})
+# }}}
+
+# Object {{{
+snippet instance_of?
+abbr    instance_of?(Klass)
+regexp  '\.[instance_of?]*$'
+# regexp dot
+options word
+  instance_of?(${1:Klass})
+
+snippet instance_variable_get
+abbr    instance_variable_get(var)
+regexp  '\.\w*$'
+# regexp dot
+options word
+  instance_variable_get(:@${1:name})
+
+snippet instance_variable_set
+abbr    instance_variable_set(var, value)
+regexp  '\.\w*$'
+# regexp dot
+options word
+  instance_variable_set(:@${1:name}, ${2:value})
+
+snippet instance_variables
+abbr    instance_variables
+options word
+  instance_variables
+# }}}

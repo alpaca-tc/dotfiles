@@ -22,10 +22,16 @@ snippet sn
   abbr    $1${2}
   options word
     $1${3}
-
+  # regexp  '\.[$1]*$' # regexp dot
 
 snippet ow
   options word
+
+snippet dot
+abbr    regexp '\.\w*$' # snip dot
+options word indent
+  ${1}regexp  '\.\w*$'
+  # regexp dot
 
 snippet al
   alias   ${1}

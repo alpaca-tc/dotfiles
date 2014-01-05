@@ -27,13 +27,13 @@ abbr        stub_model(...)
 options     word
   stub_model(${1})
 
-snippet     itd
+snippet     it
 abbr        it ... do
-  it ${1} do
+  it '${1}' do
     ${2}
   end
 
-snippet     it
+snippet     itd
 abbr        it { ... }
   it { ${1} }
 

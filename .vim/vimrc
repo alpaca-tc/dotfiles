@@ -117,9 +117,9 @@ let g:my.ft = {
       \ 'php_files':       ['php', 'phtml'],
       \ 'c_files':         ['c', 'cpp'],
       \ 'style_files':     ['css', 'scss', 'sass'],
-      \ 'markup_files':    ['html', 'haml', 'eruby', 'php', 'xhtml', 'liquid'],
+      \ 'markup_files':    ['html', 'haml', 'eruby', 'php', 'xhtml', 'liquid', 'slim'],
       \ 'english_files':   ['markdown', 'help', 'text'],
-      \ 'program_files':   ['ruby', 'php', 'python', 'eruby', 'vim', 'javascript', 'coffee', 'scala', 'java', 'go', 'cpp', 'haml', 'rust', 'c'],
+      \ 'program_files':   ['ruby', 'php', 'python', 'eruby', 'vim', 'javascript', 'coffee', 'scala', 'java', 'go', 'cpp', 'haml', 'rust', 'c', 'slim'],
       \ 'ignore_patterns': ['vimfiler', 'unite'],
       \ }
 let g:my.ft.youcomplete_me = g:my.ft.ruby_files + g:my.ft.js_files + g:my.ft.python_files + g:my.ft.scala_files + g:my.ft.sh_files + g:my.ft.php_files + g:my.ft.c_files + g:my.ft.style_files
@@ -342,7 +342,7 @@ NeoBundleLazy 'alpaca-tc/alpaca_remove_dust.vim', {
 NeoBundleLazy 'alpaca-tc/alpaca_tags', {
       \ 'depends': ['Shougo/vimproc', 'Shougo/unite.vim'],
       \ 'autoload' : {
-      \   'commands' : ['Tags', 'TagsSet', 'TagsBundle', 'TagsCleanCache'],
+      \   'commands' : ['Tags', 'TagsSet', 'TagsBundle', 'TagsCleanCache', 'TagsUpdate'],
       \   'functions' : 'alpaca_tags#util#clean_current_git_cache',
       \   'unite_sources' : ['tags']
       \ }}
@@ -701,6 +701,10 @@ NeoBundleLazy 'alpaca-tc/rake.vim', {
       \     {
       \       'name' : 'Rake',
       \       'complete' : 'customlist,rake#complete',
+      \     },
+      \     {
+      \       'name' : 'BundleExec',
+      \       'complete' : 'customlist,rake#complete',
       \     }
       \   ]
       \ }}
@@ -753,7 +757,7 @@ NeoBundleLazy 'alpaca-tc/alpaca_octopress.vim', { 'autoload' : {
 
 " Slim
 " ----------------------------------------
-NeoBundleLazy 'slim-template/vim-slim', { 'autolaod' : {
+NeoBundleLazy 'slim-template/vim-slim', { 'autoload' : {
       \ 'filetypes' : 'slim' }}
 
 " Nginx
@@ -825,6 +829,14 @@ NeoBundleLazy 'kana/vim-altr', {
       \     ['n', '<Plug>(altr-back)'],
       \   ]
       \ }}
+NeoBundle 'alpaca-tc/alpaca_altr', {
+      \ 'autoload' : {
+      \   'mappings' : [
+      \     ['n', '<Plug>(alpaca-altr-forward)'],
+      \     ['n', '<Plug>(alpaca-altr-back)'],
+      \   ]
+      \ }}
+
 
 NeoBundleLazy 'tsukkee/lingr-vim', { 'autoload' : {
       \ 'commands' : ['LingrExit', 'LingrLaunch'],
@@ -1249,11 +1261,11 @@ nnoremap [tag_or_tab]s  :<C-u>tselect<CR>
 
 augroup AlpacaTags
   autocmd!
-  " if exists(':Tags')
-  "   autocmd BufWritePost Gemfile TagsBundle
-  "   autocmd BufRead,BufNew * TagsSet
-  "   " autocmd BufWritePost * TagsUpdate
-  " endif
+  if exists(':Tags')
+    autocmd BufWritePost Gemfile TagsBundle
+    autocmd BufRead,BufNew * TagsSet
+    autocmd BufWritePost * TagsUpdate
+  endif
 augroup END
 "}}}
 
@@ -2571,7 +2583,7 @@ function! hooks.on_source(bundle) "{{{
   let g:neocomplete#force_overwrite_completefunc    = 1
   let g:neocomplete#manual_completion_start_length  = 0
   let g:neocomplete#sources#include#max_proceslses  = 10
-  let g:neocomplete#max_list                        = 20
+  let g:neocomplete#max_list                        = 30
   " let g:neocomplete_caching_limit_file_size = 500000
   " let g:neocomplete_max_keyword_width       = 120
   " let g:neocomplete_enable_cursor_hold_i    = 0
@@ -2619,7 +2631,7 @@ function! hooks.on_source(bundle) "{{{
 
   let g:neocomplete#sources#omni#functions.java = 'eclim#java#complete#CodeComplete'
   if has('python')
-    let g:neocomplete#sources#omni#functions.javascript = 'tern#Complete'
+    " let g:neocomplete#sources#omni#functions.javascript = 'tern#Complete'
   endif
 
   let g:neocomplete#keyword_patterns = {
@@ -2814,6 +2826,7 @@ function! hooks.on_source(bundle) "{{{
   let g:vimfiler_tree_opened_icon = '▾'
   let g:vimfiler_marked_file_icon = '✓'
   let g:vimfiler_ignore_pattern = '\v^(\.git|\.)'
+  let g:unite_kind_cdable_lcd_command = 'lcd'
 
   function! s:vimfiler_settings() "{{{
     if !exists('b:vimfiler')
@@ -2851,9 +2864,10 @@ let hooks = neobundle#get_hooks('neosnippet')
 function! hooks.on_source(bundle) "{{{
   let g:neosnippet#snippets_directory = g:my.dir.snippets
   let g:neosnippet#enable_preview = 1
-  " let g:neosnippet#disable_runtime_snippets = {
-  "       \ '_' : 1
-  "       \ }
+  let g:neosnippet#disable_runtime_snippets = {
+        \ '_' : 1,
+        \ 'ruby' : 1,
+        \ }
 
   call unite#custom_action('neosnippet/user', 'open', 'neosnippet_source')
   call unite#custom_action('neosnippet/runtime', 'open', 'neosnippet_source')
@@ -2959,7 +2973,8 @@ nnoremap <silent>[unite]:        :Unite history/command -no-empty<CR>
 nnoremap <silent>[unite]h        :Unite help -no-quit<CR>
 nnoremap <silent>[unite]o        :Unite outline -no-start-insert -horizontal -no-quit -hide-source-names<CR>
 nnoremap <silent><expr>[unite]t  ':Unite tags -horizontal -input='.expand("<cword>").'<CR>'
-nnoremap <silent><expr>[tag_or_tab]t ':Unite tags -immediately -horizontal -auto-preview -input='.expand("<cword>").'<CR>'
+nnoremap <expr><C-]> ':Unite tags -immediately -horizontal -auto-preview -input='.expand("<cword>").'<CR>'
+nnoremap <C-]><C-]> <C-]>
 
 " vim-unite-giti
 nnoremap <silent>gl :Unite giti/log -no-start-insert -horizontal<CR>
@@ -2982,7 +2997,7 @@ let hooks = neobundle#get_hooks('unite.vim')
 function! hooks.on_source(bundle) "{{{
   highlight UniteCursorLine ctermbg=236 cterm=none
   let g:unite_cursor_line_highlight='UniteCursorLine'
-  let g:unite_data_directory=g:my.dir.unite
+  " let g:unite_data_directory=g:my.dir.unite
   let g:unite_enable_split_vertically=0
   let g:unite_update_time=50
   let g:unite_enable_start_insert=1
@@ -3452,19 +3467,18 @@ let g:clang_use_library = 1
 
 nmap <Space>A  <Plug>(altr-forward)
 nmap <Space>a  <Plug>(altr-back)
-let hooks = neobundle#get_hooks('vim-altr')
-function! hooks.on_post_source(bundle) "{{{
-  call altr#remove_all()
-
-  " For ruby tdd
-  call altr#define('lib/%.rb', 'spec/lib/%_spec.rb')
-  call altr#define('%.rb', 'spec/%_spec.rb')
-  call altr#define('_posts/%.markdown', 'images/blog/')
-
-  " For Berksfile
-  call altr#define('Berksfile', $HOME . '/.berkshelf/cookbooks')
-endfunction"}}}
-unlet hooks
+" let hooks = neobundle#get_hooks('vim-altr')
+" function! hooks.on_post_source(bundle) "{{{
+"   call altr#remove_all()
+"
+"   " For ruby tdd
+"   call altr#define('lib/%.rb', 'spec/lib/%_spec.rb')
+"   call altr#define('_posts/%.markdown', 'images/blog/')
+"
+"   " For Berksfile
+"   call altr#define('Berksfile', $HOME . '/.berkshelf/cookbooks')
+" endfunction"}}}
+" unlet hooks
 
 nmap p <Plug>(yankround-p)
 nmap P <Plug>(yankround-P)

@@ -1,4 +1,4 @@
-# Javascript Common Snippets {{{
+# Javascript Snippets {{{
 snippet     try
 abbr        try {} catch {}
 options     word
@@ -6,7 +6,7 @@ options     word
     ${1}
   } catch(e) {
     ${2}
-  } 
+  }
 
 snippet     tryf
 abbr        try {} catch {} finary
@@ -71,9 +71,9 @@ options word
     ${2:// code}
     break;
 
-snippet     for
-abbr        for ( var i = 0; i < ...; i += 1 )
-options     word
+snippet for
+abbr    for ( var i = 0; i < ...; i += 1 )
+options word
   for (var i = 0; i < ${1}; i += 1) {
     ${2}
   }
@@ -105,9 +105,9 @@ snippet :fun
 alias   :function
 abbr    method: function() { ... }
 options word
-    ${1:method_name}: function(${2:attribute}) {
-        ${4}
-    }${3:,}
+  ${1:method_name}: function(${2:attribute}) {
+    ${4}
+  }${3:,}
 
 snippet timeout
 abbr    setTimeout(function() { ... }, time);
@@ -132,13 +132,36 @@ options word
   clearTimeout(${1:timeout_var})
 #}}}
 
+# Function
+snippet isNaN
+abbr    isNaN()
+regexp  'is'
+options word
+  isNaN(${1})
+
+snippet isFinite
+abbr    isFinite()
+regexp  '$'
+options word
+  isFinite(${1})
+
+#snippet isInteger
+#abbr    isInteger()
+#options head
+#  isInteger(${1})
+#
+#snippet toInteger
+#abbr    toInteger()
+#options head
+#  toInteger(${1})
+
 # Web development#{{{
 snippet debug
-    console.debug(${1:#:`expand("<cword>")`});
+    console.debug(${1:`@*`});
 
 snippet log
-    console.log(${1:#:`expand("<cword>")`});
+    console.log(${1:`@*`});
 
 snippet warn
-    console.warn(${1:#:`expand("<cword>")`});
+    console.warn(${1:`@*`});
 #}}}
