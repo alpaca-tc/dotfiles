@@ -178,14 +178,6 @@ options word
     ${3}
   end
 
-snippet method_missing
-abbr    method_missing
-options word
-  def method_missing(action, *args)
-    if action.to_s =~ ${1:regexp}
-      ${2}
-    end
-  end
 #}}}
 
 # ruby_custom {{{

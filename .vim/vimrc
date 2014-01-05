@@ -1385,7 +1385,7 @@ function! hooks.on_source(bundle) "{{{
         \   '{' : "{ \r }",
         \   '#':  "#{\r}",
         \ },
-        \ 'snippet' : {
+        \ 'snippet,neosnippet' : {
         \   '$' : "${\r}",
         \ }
         \ }
