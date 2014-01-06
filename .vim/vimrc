@@ -820,15 +820,15 @@ NeoBundleLazy 'mattn/excitetranslate-vim', {
       \ 'depends': 'mattn/webapi-vim',
       \ 'autoload' : { 'commands': ['ExciteTranslate']}
       \ }
-NeoBundleLazy 'alpaca-tc/vim-altr', {
-      \ 'build' : 'bundle install',
-      \ 'autoload' : {
-      \   'filetypes' : 'ruby',
-      \   'mappings' : [
-      \     ['n', '<Plug>(altr-forward)'],
-      \     ['n', '<Plug>(altr-back)'],
-      \   ]
-      \ }}
+" NeoBundleLazy 'alpaca-tc/vim-altr', {
+"       \ 'build' : 'bundle install',
+"       \ 'autoload' : {
+"       \   'filetypes' : 'ruby',
+"       \   'mappings' : [
+"       \     ['n', '<Plug>(altr-forward)'],
+"       \     ['n', '<Plug>(altr-back)'],
+"       \   ]
+"       \ }}
 NeoBundle 'alpaca-tc/alpaca_altr', {
       \ 'autoload' : {
       \   'mappings' : [
