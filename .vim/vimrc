@@ -677,7 +677,7 @@ NeoBundleLazy 'alpaca-tc/alpaca_wordpress.vim', { 'autoload' : {
 
 " Binary
 " ----------------------------------------
-NeoBundleLazy 'Shougo/vinarise', {
+NeoBundleLazy 'Shougo/vinarise.vim', {
       \ 'depends': ['s-yukikaze/vinarise-plugin-peanalysis'],
       \ 'build' : {
       \   'mac' : 'brew install binutils',
@@ -820,7 +820,7 @@ NeoBundleLazy 'mattn/excitetranslate-vim', {
       \ 'depends': 'mattn/webapi-vim',
       \ 'autoload' : { 'commands': ['ExciteTranslate']}
       \ }
-NeoBundleLazy 'kana/vim-altr', {
+NeoBundleLazy 'alpaca-tc/vim-altr', {
       \ 'build' : 'bundle install',
       \ 'autoload' : {
       \   'filetypes' : 'ruby',
