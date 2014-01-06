@@ -19,22 +19,22 @@ snippet snr
  options word
    $1${3}
 
+snippet include
+  include ${1}
+
 snippet s
   snippet ${1}
     ${2}
 
-snippet ow
-  options word
+snippet options
+  options ${1}
 
 snippet dot
 abbr    regexp '\.\w*$' # snip dot
 regexp  '\.[[:alnum:]_?]*$'
 options word indent
 
-snippet al
-  alias   ${1}
-
 snippet alias
 abbr    alias
-options word
+alias   al
   alias   ${1}

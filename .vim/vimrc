@@ -290,13 +290,13 @@ NeoBundleLazy 'Shougo/vimfiler', {
       \   'mappings' : ['<Plug>(vimfiler_switch)'],
       \ }}
 " if $NEO
-NeoBundleLazy 'Shougo/neocomplete', { 'autoload' : {
+NeoBundleLazy 'Shougo/neocomplete.vim', { 'autoload' : {
       \ 'functions' : ['neocomplete#init#disable', 'neocomplete#is_enabled'],
       \ 'insert' : 1,
       \ }}
 " else
   " NeoBundleLazy 'alpaca-tc/YouCompleteMe', {
-  "       \ 'depends' : 'Shougo/neosnippet',
+  "       \ 'depends' : 'Shougo/neosnippet.vim',
   "       \ 'build' : {
   "       \   'mac' : './install.sh && git submodule update --init --recursive',
   "       \ },
@@ -310,7 +310,7 @@ NeoBundleLazy 'Shougo/neocomplete', { 'autoload' : {
   "       \   'filetypes' : g:my.ft.youcomplete_me
   "       \ }}
 " endif
-NeoBundleLazy 'Shougo/neosnippet', {
+NeoBundleLazy 'Shougo/neosnippet.vim', {
       \ 'autoload' : {
       \   'commands' : [
       \     { 'name' : 'NeoSnippetEdit', 'complete' : 'file' },
@@ -319,7 +319,7 @@ NeoBundleLazy 'Shougo/neosnippet', {
       \   'functions' : 'neosnippet#get_snippets',
       \   'filetypes' : 'snippet',
       \   'insert' : 1,
-      \   'unite_sources' : ['snippet', 'neosnippet/user', 'neosnippet/runtime'],
+      \   'unite_sources' : ['neosnippet', 'neosnippet/user', 'neosnippet/runtime'],
       \ }}
 NeoBundleLazy 'Shougo/vimshell', {
       \ 'autoload' : {
@@ -652,7 +652,7 @@ if has('python') && executable('npm')
         \ 'filetypes' : 'javascript'
         \ }}
 else
-  NeoBundleLazy 'teramako/jscomplete-vim', { 'autoload' : {
+  NeoBundleLazy 'mattn/jscomplete-vim', { 'autoload' : {
         \ 'filetypes' : g:my.ft.js_files
         \ }}
 endif
@@ -2532,8 +2532,13 @@ function! hooks.on_source(bundle) "{{{
   " DEVELOPMENT VERSION
   let g:alpaca_english_web_search_url   = 'http://eow.alc.co.jp/%s/UTF-8/'
   let g:alpaca_english_web_search_xpath = "div[@id='resultsList']/ul/li"
-  if exists('g:neocomplete#sources')
+  if exists('g:neocomplete#sources') && has_key(g:neocomplete#sources, '_')
     let g:neocomplete#sources._ += ['english']
+  endif
+endfunction"}}}
+function! hooks.on_post_source(bundle) "{{{
+  if exists(':NeoCompleteEnable')
+    inoremap <expr><C-X><C-E> neocomplete#start_manual_complete('english')
   endif
 endfunction"}}}
 unlet hooks
@@ -2566,8 +2571,9 @@ unlet hooks
 
 " ----------------------------------------
 let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#data_directory = g:my.dir.neocomplete
 
-let hooks = neobundle#get_hooks('neocomplete')
+let hooks = neobundle#get_hooks('neocomplete.vim')
 function! hooks.on_source(bundle) "{{{
   let g:neocomplete#auto_completion_start_length      = 1
   let g:neocomplete#sources#syntax#min_keyword_length = 1
@@ -2575,14 +2581,12 @@ function! hooks.on_source(bundle) "{{{
   " let g:neocomplete#lock_iminsert = 1
   let g:neocomplete#auto_completion_start_length      = g:neocomplete#sources#syntax#min_keyword_length
   " let g:neocomplete#ctags_arguments = g:alpaca_update_tags_config
-  let g:neocomplete#data_directory                    = g:my.dir.neocomplete
   let g:neocomplete#enable_auto_close_preview         = 1
   let g:neocomplete#enable_auto_select                = 0
-  let g:neocomplete#enable_complete_select          = 0
   let g:neocomplete#enable_fuzzy_completion         = 1
   let g:neocomplete#force_overwrite_completefunc    = 1
   let g:neocomplete#manual_completion_start_length  = 0
-  let g:neocomplete#sources#include#max_proceslses  = 10
+  let g:neocomplete#sources#include#max_processes   = 30
   let g:neocomplete#max_list                        = 30
   " let g:neocomplete_caching_limit_file_size = 500000
   " let g:neocomplete_max_keyword_width       = 120
@@ -2598,9 +2602,11 @@ function! hooks.on_source(bundle) "{{{
   let g:neocomplete#disable_auto_select_buffer_name_pattern =
         \ '\[Command Line\]'
 
-  " 'include',
+  " ['file', 'tag', 'file/include', 'neosnippet', 'dictionary', 'omni', 'include', 'vim', 'member', 'buffer', 'syntax']
   let g:neocomplete#sources = {
-        \ '_' : ['file', 'vim', 'dictionary', 'omni', 'member', 'buffer', 'file/include', 'member']
+        \ '_'   : ['file', 'dictionary', 'omni', 'buffer', 'file/include', 'member'],
+        \ 'vim' : ['file', 'dictionary', 'omni', 'buffer', 'file/include', 'member', 'vim'],
+        \ 'vimshell' : ['file', 'omni', 'buffer', 'vim'],
         \ }
 
   if $USER == 'root'
@@ -2612,7 +2618,6 @@ function! hooks.on_source(bundle) "{{{
         \ 'neocomplete#sources#omni#functions',
         \ 'neocomplete#sources#omni#input_patterns',
         \ 'neocomplete#force_omni_input_patterns',
-        \ 'neocomplete#keyword_patterns',
         \ 'neocomplete#sources#vim#complete_functions',
         \ 'neocomplete#sources#dictionary#dictionaries',
         \ 'neocomplete#sources',
@@ -2626,6 +2631,7 @@ function! hooks.on_source(bundle) "{{{
   let g:neocomplete#text_mode_filetypes = {
         \ 'markdown' : 1,
         \ 'gitcommit' : 1,
+        \ 'gitpullrequest' : 1,
         \ 'text' : 1,
         \ }
 
@@ -2700,15 +2706,13 @@ function! hooks.on_source(bundle) "{{{
         \}
 
   let neocomplete#sources#dictionary#dictionaries = {
-        \ 'default'             : '',
-        \ 'javascript.timobile' : $HOME.'/.vim/dict/timobile.dict',
-        \ 'coffee.timobile'     : $HOME.'/.vim/dict/timobile.dict',
+        \ 'default'  : '',
         \ 'vimshell' : g:my.dir.vimshell . '/command-history',
         \ }
-  for dict in split(glob($HOME.'/.vim/dict/*.dict'))
-    let ft = matchstr(dict, '[a-zA-Z0-9.]\+\ze\.dict$')
-    let neocomplete#sources#dictionary#dictionaries[ft] = dict
-  endfor
+  " for dict in split(glob($HOME.'/.vim/dict/*.dict'))
+  "   let ft = matchstr(dict, '[a-zA-Z0-9.]\+\ze\.dict$')
+  "   let neocomplete#sources#dictionary#dictionaries[ft] = dict
+  " endfor
 
   augroup MyAutoCmd
     autocmd BufReadPre * if &previewwindow | call alpaca_window#set_smart_close() | endif
@@ -2719,20 +2723,18 @@ function! hooks.on_source(bundle) "{{{
   imap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? neocomplete#complete_common_string() : "\<TAB>"
   " inoremap <expr><C-e> neocomplete#cancel_popup()
 
-  call neocomplete#custom#source('file', 'rank', 10)
-
   function! s:my_crinsert() "{{{
     return neocomplete#close_popup() . "\<CR>"
   endfunction"}}}
   inoremap <silent><CR> <C-R>=<SID>my_crinsert()<CR>
-  inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-  inoremap <expr><C-X><C-F>  neocomplete#start_manual_complete('file')
-  inoremap <expr><C-X><C-J>  neocomplete#start_manual_complete('file/include')
-  inoremap <expr><C-X><C-E>  neocomplete#start_manual_complete('english')
+  inoremap <expr><C-h> neocomplete#smart_close_popup() . "\<C-h>"
+  inoremap <expr><C-X><C-F> neocomplete#start_manual_complete('file')
+  inoremap <expr><C-X><C-K> neocomplete#start_manual_complete('dictionary')
+  inoremap <expr><C-X><C-I> neocomplete#start_manual_complete('file/include')
+  imap <C-W> <Plug>(neocomplete_start_unite_complete)
   inoremap <expr><C-G> neocomplete#undo_completion()
   inoremap <expr><C-N> pumvisible() ? "\<C-N>" : "\<C-X>\<C-U>\<C-P>\<Down>"
   inoremap <expr><C-P> pumvisible() ? "\<C-P>" : "\<C-P>\<C-N>"
-  inoremap <expr><C-@> neocomplete#start_manual_complete(['neosnippet'])
 
   inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
   inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
@@ -2860,10 +2862,10 @@ function! s:open_neosnippet_sources() "{{{
   silent! execute 'Unite neosnippet/user neosnippet/runtime -no-start-insert -default-action=neosnippet_source -input=' . s:filetype()
 endfunction"}}}
 
-let hooks = neobundle#get_hooks('neosnippet')
+let hooks = neobundle#get_hooks('neosnippet.vim')
 function! hooks.on_source(bundle) "{{{
-  let g:neosnippet#snippets_directory = g:my.dir.snippets
   let g:neosnippet#enable_preview = 1
+  let g:neosnippet#snippets_directory = g:my.dir.snippets
   let g:neosnippet#disable_runtime_snippets = {
         \ '_' : 1,
         \ 'ruby' : 1,
@@ -2871,14 +2873,15 @@ function! hooks.on_source(bundle) "{{{
 
   call unite#custom_action('neosnippet/user', 'open', 'neosnippet_source')
   call unite#custom_action('neosnippet/runtime', 'open', 'neosnippet_source')
-  imap <silent><C-K>     <ESC>:<C-U>call unite#start(['snippet'], { 'input': expand('<cword>')})<CR>
+  imap <silent><C-K>     <ESC>:<C-U>call unite#start(['neosnippet'], { 'input': expand('<cword>')})<CR>
   imap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
   smap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
 endfunction "}}}
 function! hooks.on_post_source(bundle) "{{{
-  if exists('g:neocomplete#sources')
+  if exists('g:neocomplete#sources') && has_key(g:neocomplete#sources, '_')
     let g:neocomplete#sources._ += ['neosnippet']
   endif
+  inoremap <expr><C-@> neocomplete#start_manual_complete(['neosnippet'])
 endfunction"}}}
 unlet hooks
 
@@ -3287,7 +3290,6 @@ function! hooks.on_source(bundle) "{{{
     return line('$')
   endfunction"}}}
 
-
   let g:lightline#functions#git_branch = s:lightline.new({ 'updatetime' : 5 })
   function! g:lightline#functions#git_branch.func() "{{{
     if neobundle#is_sourced('vim-unite-giti')
@@ -3351,11 +3353,11 @@ function! hooks.on_source(bundle) "{{{
         \ 'component_function' : {
         \   'tagbar':      'g:lightline#functions#tagbar.statusline',
         \   'information': 'g:lightline#functions#plugin_information.statusline',
+        \   'file_size':   'g:lightline#functions#file_size.statusline',
         \ },
         \ 'component_expand': {
         \   'git_branch':  'g:lightline#functions#git_branch.statusline',
         \   'syntastic':   'g:lightline#functions#syntastic.statusline',
-        \   'file_size':   'g:lightline#functions#file_size.statusline',
         \ },
         \ 'component_type': {
         \   'syntastic': 'error',
@@ -3684,5 +3686,6 @@ let s:loaded_vimrc = 1
 if !empty($TEST)
   source ~/.bundle/chatwork.vim/test.vim
 endif
+
 
 set secure
