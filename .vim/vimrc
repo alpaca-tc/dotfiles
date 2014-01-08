@@ -413,7 +413,6 @@ NeoBundleLazy 'alpaca-tc/git-vim', {
       \   { 'name': 'GitCheckout', 'complete' : 'customlist,git#list_commits' },
       \   { 'name': 'GitAdd',      'complete' : 'file' },
       \   'GitLog', 'GitCommit', 'GitBlame', 'GitPush'] }}
-" NeoBundle 'motemen/git-vim'
 NeoBundleLazy 'mattn/gist-vim', {
       \ 'depends': ['mattn/webapi-vim' ],
       \ 'autoload' : {
