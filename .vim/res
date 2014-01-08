@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Error><Code>SignatureDoesNotMatch</Code><Message>The request signature we calculated does not match the signature you provided. Check your key and signing method.</Message><StringToSignBytes>47 45 54 0a 0a 61 70 70 6c 69 63 61 74 69 6f 6e 2f 6a 73 6f 6e 3b 20 63 68 61 72 73 65 74 3d 75 74 66 2d 38 0a 31 33 38 39 31 39 32 36 36 33 0a 2f 70 68 6f 74 6f 73 2e 70 68 6f 74 6f 62 61 67 2e 69 6e 2f 39 33 34 30 65 64 38 30 2d 37 37 61 32 2d 31 31 65 33 2d 61 35 38 65 2d 30 33 37 37 63 64 38 64 65 38 32 32</StringToSignBytes><RequestId>1C840C36374E5663</RequestId><HostId>ZQT0VUOgT39HKEokzzpeQz8SvaXqk33AVDWBiFxpt4is5qnpO9RpWc/4wo0M1osS</HostId><SignatureProvided>xhJUGoSYlG2wm1gxr/MzVsnC4tg=</SignatureProvided><StringToSign>GET
+
+application/json; charset=utf-8
+1389192663
+/photos.photobag.in/9340ed80-77a2-11e3-a58e-0377cd8de822</StringToSign><AWSAccessKeyId>AKIAJNU5UHKXDX5RP3PQ</AWSAccessKeyId></Error>
