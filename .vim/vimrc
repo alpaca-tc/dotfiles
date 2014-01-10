@@ -291,7 +291,8 @@ NeoBundleLazy 'Shougo/vimfiler', {
       \ }}
 " if $NEO
 NeoBundleLazy 'Shougo/neocomplete.vim', { 'autoload' : {
-      \ 'functions' : ['neocomplete#init#disable', 'neocomplete#is_enabled'],
+      \ 'functions' : ['neocomplete#init#disable', 'neocomplete#is_enabled', 'neocomplete#start_manual_complete'],
+      \ 'commands' : ['NeoCompleteClean', 'NeoCompleteEnable', 'NeoCompleteDisable'],
       \ 'insert' : 1,
       \ }}
 " else
@@ -2536,9 +2537,7 @@ function! hooks.on_source(bundle) "{{{
   endif
 endfunction"}}}
 function! hooks.on_post_source(bundle) "{{{
-  if exists(':NeoCompleteEnable')
-    inoremap <expr><C-X><C-E> neocomplete#start_manual_complete('english')
-  endif
+  inoremap <expr><C-X><C-E> neocomplete#start_manual_complete('english')
 endfunction"}}}
 unlet hooks
 

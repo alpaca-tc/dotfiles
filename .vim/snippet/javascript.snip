@@ -1,3 +1,5 @@
+include javascript.html.snip
+
 # Javascript Snippets {{{
 snippet     try
 abbr        try {} catch {}
@@ -113,13 +115,13 @@ snippet timeout
 abbr    setTimeout(function() { ... }, time);
 alias   setTimeout
 options word
-  setTimeout(function() {${3}}${2}, ${1:10};
+  setTimeout(function() {${3}}${2}, ${1:10});
 
 snippet setInterval
 abbr    setInterval(function() { ... }, time);
 alias   setInterval
 options word
-  setInterval(function() {${3}}${2}, ${1:10};
+  setInterval(function() {${3}}${2}, ${1:10});
 
 snippet clearInterval
 abbr    Clears a timer set with setInterval()
