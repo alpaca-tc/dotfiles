@@ -391,8 +391,10 @@ NeoBundleLazy 'open-browser.vim', { 'autoload' : {
       \ 'commands' : ['OpenBrowserSearch', 'OpenBrowser', 'OpenBrowserSmartSearch'] }}
 
 " Comment Plugins
-NeoBundleLazy 'tomtom/tcomment_vim', { 'autoload' : {
-      \ 'commands' : ['TComment', 'TCommentAs', 'TCommentMaybeInline'] }}
+NeoBundle 'tomtom/tcomment_vim', { 'autoload' : {
+      \ 'commands' : ['TComment', 'TCommentAs', 'TCommentMaybeInline'],
+      \ 'functions' : ['tcomment#DefineType'],
+      \ }}
 " NeoBundleLazy 'tyru/caw.vim', {
 "       \ 'autoload' : {
 "       \   'insert' : 1,
@@ -2664,17 +2666,15 @@ function! hooks.on_source(bundle) "{{{
   let g:neocomplete#sources#include#paths = {
         \ 'liquid' : '/Users/alpaca-tc/projects/alpaca-tc.github.io/source',
         \ }
-  let g:neocomplete#sources#file_include#exprs = {
+  let g:neocomplete#sources#include#exprs = {
         \ 'liquid' : 'substitute(v:fname, "^/", "", "")',
         \ 'ruby'   : "substitute(substitute(v:fname,'::','/','g'),'$','','')",
         \ }
   let g:neocomplete#sources#file_include#delimiters = {
         \ 'liquid' : '/',
-        \ 'ruby' : '/',
         \ }
   let g:neocomplete#sources#file_include#exts = {
         \ 'liquid' : ['png', 'jpg', 'gif', 'jpeg', 'ico'],
-        \ 'ruby' : ['rb'],
         \ }
 
   let g:neocomplete#sources#omni#input_patterns.php =
@@ -3409,7 +3409,7 @@ nnoremap <Space>on :Octopress new_post<Space>
 let hooks = neobundle#get_hooks('alpaca_octopress.vim')
 function! hooks.on_source(bundle) "{{{
   let g:octopress#project_path = expand('~/projects/alpaca-tc.github.io')
-  let g:octopress#url = 'http://alpaca-tc.github.io'
+  let g:octopress#url = 'http://alpaca.tc'
   let g:octopress#rake_command = 'bundle exec rake'
   let g:octopress#system#async = 1
 
@@ -3660,10 +3660,10 @@ function! s:load_gem_paths() "{{{
   endif
 endfunction"}}}
 
-" augroup GemPath
-"   autocmd!
-"   autocmd FileType Rakefile,ruby call s:load_gem_paths()
-" augroup END
+augroup GemPath
+  autocmd!
+  autocmd FileType Rakefile,ruby call s:load_gem_paths()
+augroup END
 
 command! LoadGemPath call s:load_gem_paths()
 "}}}
@@ -3681,6 +3681,23 @@ elseif filereadable(expand('~/.vim_secret'))
   " let g:github#token
   source ~/.vim_secret
 endif
+
+function! s:setup_include_file_for_rails() "{{{
+  if !exists('b:rails_root') || !exists('g:neocomplete#sources#include#paths')
+    return
+  endif
+
+  let g:neocomplete#sources#include#patterns.haml =
+        \ '^\s*\(\w\+\)\?\(-\|=\)\s*\<\%(image_path\|image_tag\)\>'
+  let g:neocomplete#sources#include#paths.haml =
+        \ b:rails_root . '/app/assets/images'
+  let g:neocomplete#sources#file_include#delimiters.haml = '/'
+  let g:neocomplete#sources#include#exprs.haml =
+        \ 'substitute(v:fname, "^/", "", "")'
+  let g:neocomplete#sources#file_include#exts.haml =
+        \ ['png', 'jpg', 'gif', 'jpeg', 'ico']
+endfunction"}}}
+command! RailsView call s:setup_include_file_for_rails()
 
 let s:loaded_vimrc = 1
 
