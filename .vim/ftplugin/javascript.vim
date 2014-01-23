@@ -3,6 +3,7 @@ if exists('b:did_ftplugin')
 endif
 
 setl dict+=~/.vim/dict/jquery.dict
+setl foldmethod=marker
 " setl omnifunc=javascriptcomplete#CompleteJS
 
 " js{{{

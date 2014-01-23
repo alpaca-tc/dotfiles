@@ -181,10 +181,10 @@ endif
 " ----------------------------------------
 " NeoBundle  " {{{
 NeoBundleFetch 'Shougo/neobundle.vim'
-" NeoBundleLazy 'vim-jp/vital.vim', { 'autoload' : {
-"       \ 'functions' : 'vital#of',
-"       \ 'commands' : 'Vitalizer',
-"       \ }}
+NeoBundleLazy 'vim-jp/vital.vim', { 'autoload' : {
+      \ 'functions' : 'vital#of',
+      \ 'commands' : 'Vitalizer',
+      \ }}
 
 " For asynchronous communication
 NeoBundleLazy 'Shougo/vimproc', {
@@ -289,28 +289,11 @@ NeoBundleLazy 'Shougo/vimfiler', {
       \   ],
       \   'mappings' : ['<Plug>(vimfiler_switch)'],
       \ }}
-" if $NEO
 NeoBundleLazy 'Shougo/neocomplete.vim', { 'autoload' : {
       \ 'functions' : ['neocomplete#init#disable', 'neocomplete#is_enabled', 'neocomplete#start_manual_complete'],
       \ 'commands' : ['NeoCompleteClean', 'NeoCompleteEnable', 'NeoCompleteDisable'],
       \ 'insert' : 1,
       \ }}
-" else
-  " NeoBundleLazy 'alpaca-tc/YouCompleteMe', {
-  "       \ 'depends' : 'Shougo/neosnippet.vim',
-  "       \ 'build' : {
-  "       \   'mac' : './install.sh && git submodule update --init --recursive',
-  "       \ },
-  "       \ 'autoload' : {
-  "       \   'insert' : 1,
-  "       \   'functions' : 'youcompleteme#Enable',
-  "       \   'commands' : [
-  "       \     'YcmRestartServer', 'YcmDiags', 'YcmShowDetailedDiagnostic',
-  "       \     'YcmDebugInfo', 'YcmCompleter'
-  "       \   ],
-  "       \   'filetypes' : g:my.ft.youcomplete_me
-  "       \ }}
-" endif
 NeoBundleLazy 'Shougo/neosnippet.vim', {
       \ 'autoload' : {
       \   'commands' : [
@@ -322,6 +305,7 @@ NeoBundleLazy 'Shougo/neosnippet.vim', {
       \   'insert' : 1,
       \   'unite_sources' : ['neosnippet', 'neosnippet/user', 'neosnippet/runtime'],
       \ }}
+" NeoBundleLazy 'Shougo/neosnippet-snippets'
 NeoBundleLazy 'Shougo/vimshell', {
       \ 'autoload' : {
       \   'commands' : ['VimShell', 'VimShellBufferDir'],
@@ -527,7 +511,8 @@ NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
 
 if has('ruby')
   " The input support for English
-  NeoBundleLazy 'alpaca-tc/alpaca_english', {
+  NeoBundle 'alpaca-tc/alpaca_english', {
+        \ 'depends' : 'Shougo/neocomplete.vim',
         \ 'build' : {
         \   'mac' : 'bundle',
         \   'unix' : 'bundle',
@@ -535,7 +520,7 @@ if has('ruby')
         \ },
         \ 'autoload' : {
         \   'commands' : ['AlpacaEnglishDisable', 'AlpacaEnglishEnable', 'AlpacaEnglishSay'],
-        \   'unite_sources': ['english_dictionary', 'english_example', 'english_thesaurus'],
+        \   'unite_sources': ['english_dictionary', 'english_example', 'english_thesaurus', 'web_search'],
         \ }}
 
   " For payroll accounting
@@ -637,6 +622,10 @@ NeoBundleLazy 'mattn/emmet-vim', {
 NeoBundleLazy 'jiangmiao/simple-javascript-indenter', { 'autoload' : {
       \ 'filetypes' : ['javascript', 'json', 'nginx'],
       \ }}
+NeoBundleLazy 'geekjuice/vim-mocha', { 'autoload' : {
+      \ 'filetypes' : ['javascript', 'coffee'] }}
+" NeoBundleLazy 'alpaca-tc/alpaca_tester', { 'autoload' : {
+"       \ 'filetypes' : ['javascript', 'coffee'] }}
 NeoBundleLazy 'alpaca-tc/documentation', { 'autoload' : {
       \ 'commands' : ['Documentation', 'DocumentationAppend'] }}
 NeoBundleLazy 'leafgarland/typescript-vim', { 'autoload' : {
@@ -1241,7 +1230,8 @@ augroup MyWindow
   autocmd VimResized * wincmd =
 augroup END
 
-colorscheme desertEx
+" colorscheme desertEx
+colorscheme iceberg
 syntax on
 "}}}
 
@@ -2530,15 +2520,13 @@ function! hooks.on_source(bundle) "{{{
   let g:alpaca_english_enable                      = 1
   let g:alpaca_english_max_candidates              = 100
   let g:alpaca_english_enable_duplicate_candidates = 1
+endfunction"}}}
 
-  " DEVELOPMENT VERSION
-  let g:alpaca_english_web_search_url   = 'http://eow.alc.co.jp/%s/UTF-8/'
-  let g:alpaca_english_web_search_xpath = "div[@id='resultsList']/ul/li"
+function! hooks.on_post_source(bundle) "{{{
   if exists('g:neocomplete#sources') && has_key(g:neocomplete#sources, '_')
     let g:neocomplete#sources._ += ['english']
   endif
-endfunction"}}}
-function! hooks.on_post_source(bundle) "{{{
+
   inoremap <expr><C-X><C-E> neocomplete#start_manual_complete('english')
 endfunction"}}}
 unlet hooks
@@ -2867,7 +2855,7 @@ endfunction"}}}
 let hooks = neobundle#get_hooks('neosnippet.vim')
 function! hooks.on_source(bundle) "{{{
   let g:neosnippet#enable_preview = 1
-  let g:neosnippet#snippets_directory = g:my.dir.snippets
+  let g:neosnippet#snippets_directory = g:my.dir.snippets . ',~/.vim/bundle/vim-snippets/snippets'
   let g:neosnippet#disable_runtime_snippets = {
         \ 'ruby' : 1,
         \ }
