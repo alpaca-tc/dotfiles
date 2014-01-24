@@ -74,35 +74,55 @@ abbr 2つのパスを比べて、相対パスを書き出す
     // 出来上がったところで出力
     return $url;
   }/*}}}*/
+
 #}}}
 # custom#{{{
-snippet     public
+snippet function
+abbr    function name(...) { ... }
+options word
+  function ${1:name}(${2}) {
+    ${3}
+  }
+
+snippet public
+abbr    public function name(...) { ... }
+options word
   public function ${1:name}(${2}) {
     ${3}
   }
 
-snippet     protected
+snippet protected
+abbr    protected function name(...) { ... }
+options word
   protected function ${1:name}(${2}) {
     ${3}
   }
 
-snippet     private
+snippet private
+abbr    private function name(...) { ... }
+options word
   private function ${1:name}(${2}) {
     ${3}
   }
 
-snippet     static
+snippet static
+abbr    static function name(...) { ... }
+options word
   static function ${1:name}(${2}) {
     ${3}
   }
 
-snippet     this
-abbr        this
+snippet this
+abbr    $this->...
+options word
   $this->${1}
 
-snippet     self
+snippet self
+abbr    self::...
+options word
   self::${1}
 #}}}
+
 # classes #{{{
 snippet     Setting
   class Setting {/*{{{*/

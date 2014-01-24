@@ -81,7 +81,7 @@
   ff = false
 
 [pull]
-  rebase = true
+  # rebase = true
 ; [branch]
 ;   autosetuprebase = always
 

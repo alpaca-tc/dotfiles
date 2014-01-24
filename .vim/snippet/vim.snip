@@ -1,22 +1,98 @@
 # basic#{{{
-snippet     augroup
-abbr        augroup ... augroup END
-alias       aug
-options     word
+snippet if
+abbr    if endif
+options head
+  if ${1:#:condition}
+    ${0:TARGET}
+  endif
+
+snippet elseif
+options head
+  elseif ${1:#:condition}
+    ${0:TARGET}
+
+snippet ifelse
+abbr    if else endif
+options head
+  if ${1:#:condition}
+    ${2:TARGET}
+  else
+    ${3}
+  endif
+
+snippet     while
+abbr        while ... endwhile
+options     head
+  while ${1:#:condition}
+    ${0:TARGET}
+  endwhile
+
+snippet augroup
+abbr    augroup ... augroup END
+alias   aug
+options word
   augroup ${1:Name}
     ${2}
   augroup END
 
-snippet     for
-abbr        for value in array
-options     word
+snippet try
+abbr    try endtry
+options head
+  try
+    ${1:TARGET}
+  catch /${2:#:pattern}/
+    ${3}
+  endtry
+
+snippet tryfinally
+abbr    try ... finally ... endtry
+alias   tryf
+options head
+  try
+    ${1:TARGET}
+  finally
+    ${2}
+  endtry
+
+snippet catch
+abbr    catch /pattern/
+options head
+  catch ${1:/${2:#:pattern: empty, E484, Vim(cmdname):{errmsg\\}\}/}
+
+snippet echomsg
+alias   log
+options head
+  echomsg string(${1:TARGET})
+
+snippet command
+abbr    command call function
+options head
+  command! ${1:#:command_name} call ${2:#:func_name}
+
+snippet     redir
+abbr        redir => var
+options     head
+  redir => ${1:#:var}
+    ${2::TARGET}
+  redir END
+
+snippet for
+abbr    for value in array
+options word
   for ${1:value} in ${2:array}
     ${3}
   endfor
 
-snippet     ford
-abbr        for [key, value] in items(array)
-options     word
+snippet for_range
+abbr    for index in range(0, len(object) - 1)
+options word
+  for index in range(0, len(object) - 1)
+    ${1}
+  endfor
+
+snippet ford
+abbr    for [key, value] in items(array)
+options word
   for [${1:key}, ${2:value}] in items(${3:array})
     ${4}
   endfor
@@ -43,7 +119,7 @@ options     word
 snippet     loaded
 abbr        if exists('g:...') ${2:|| (v:version < 700)} ...
 options     word
-  if exists('g:${1:variable}') ${2:|| (v:version < 700)}
+  if exists('g:${1:variable}') ${2:#:|| (v:version < 700)}
     finish
   endif
   let g:$1 = 1
@@ -51,13 +127,15 @@ options     word
   let s:save_cpo = &cpo
   set cpo&vim
 
+  ${3}
+
   let &cpo = s:save_cpo
   unlet s:save_cpo
 
 snippet did_ftplugin
 abbr    did_ftplugin
 options word
-  if (exists("b:did_ftplugin"))
+  if (exists('b:did_ftplugin'))
     finish
   endif
   let b:did_ftplugin = 1
@@ -99,29 +177,11 @@ snippet     mit
 #}}}
 
 # for .vimrc#{{{
-snippet     neol
-  NeoBundle ${1}, {
-  \ 'depends' : [],
-  \ 'build' : {
-  \   'unix' : '',
-  \   'mac'  : '',
-  \ },
-  \ 'autoload': {
-  \   'mappings' : [],
-  \   'commands' : [],
-  \   ''
-  \ }
-  \ }
-
-snippet     neo
-    NeoBundle '${1}'
-
 snippet   neobundle#get
   let bundle = neobundle#get('${1}')
   function! bundle.hooks.on_source(bundle)
     ${2}
   endfunction
-
 #}}}
 
 # for syntax#{{{
@@ -261,42 +321,21 @@ options word
 # }}}
 
 snippet     get
-abbr        let ${1:g}:${2:variable_name} = get($1:, '$2', ${3:default_value})
+abbr        let g:variable_name = get(g:, 'variable_name', default_value)
 options     word
-  let ${1:g}:${2:variable_name} = get($1:, '$2', ${3:default_value})
+  let g:${1:variable_name} = get(g:, '$1', ${2:default_value})
 
 snippet auto_name
 abbr    auto_name
 options word
   `join(split(substitute(expand("%:p"), '.*/autoload/\(.*\).vim$', '\1', 'g'), '/'), '#') . '#'`${1}
 
-snippet neobundle_get
-abbr    neobundle_get
-options word
-  let bundle = NeoBundleGet('${1}')
-  function! bundle.hooks.on_source(bundle)
-    ${2}
-  endfunction
-  unlet bundle
-
-snippet ft_detect
+snippet augroup_ftdetect
 abbr    augroup MyFt... augroup END
 options word
   augroup MyFt`expand('%:r')`
     autocmd!${1}
   augroup END
-
-snippet let_default
-abbr    let g:... = get(g:, ..., '')
-options word
-  let ${1:g:}${2:name} = get($1, '$2', ${3:#:''})
-
-snippet eval_variable
-abbr    eval_variable
-options word
-  function! s:get_script_variables() "{{{
-    return s:
-  endfunction"}}}
 
 snippet function
 alias   func
@@ -312,3 +351,4 @@ options word
   function! auto_name${1}#complete(arg_lead, cmd_line, cursor_pos)
     ${2}
   endfunction
+

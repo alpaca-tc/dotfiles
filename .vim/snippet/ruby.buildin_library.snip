@@ -1629,3 +1629,78 @@ abbr    Rational
 options word
   Rational(${1}, ${2})
 # }}}
+
+# Net::HTTP# {{{
+snippet Net::HTTP.get
+abbr    Net::HTTP.get(url, path)
+regexp  '\.[Net::HTTP.get]*$'
+options word
+  Net::HTTP.get(${1:url}, ${2:path})
+
+snippet Net::HTTP.get_by_uri
+abbr    Net::HTTP.get(url)
+regexp  '\.[Net::HTTP.get_by_uri]*$'
+options word
+  uri = URI(${1:http//...})
+  Net::HTTP.get(uri)
+
+snippet Net::HTTP.get_by_params
+abbr    Net::HTTP.get(url) with params
+regexp  '\.[Net::HTTP.get_by_params]*$'
+options word
+  uri = URI(${1:http//...})
+  params = {${2}}
+  uri.query = URI.encode_www_form(params)
+  res = Net::HTTP.get(uri)
+
+  if res.is_a?(Net::HTTPSuccess)
+    ${3}
+  end
+
+snippet Net::HTTP::Post.new
+abbr    Net::HTTP::Post.new
+regexp  '\.[Net::HTTP::Post.new]*$'
+options word
+  uri = URI('${1}')
+  req = Net::HTTP::Post.new(uri)
+  req.set_form_data(${2:'name' => 'value'})
+
+  res = Net::HTTP.start(uri.hostname, uri.port) do |http|
+    http.request(req)
+  end
+
+snippet Net::HTTP.post_form
+abbr    Net::HTTP.post_form(uri, queries)
+regexp  '\.[Net::HTTP.post_form]*$'
+options word
+  uri = URI('${1}')
+  res = Net::HTTP.post_form(uri, ${2:'name' => 'value', 'multi_value' => [1, 2, 3]...})
+
+snippet Net::HTTP.start
+abbr    Net::HTTP.start(host, port) { ... }
+regexp  '\.[Net::HTTP.start]*$'
+options word
+  uri = URI('${1}')
+  Net::HTTP.start(uri.host, uri.port) do |http|
+    request = Net::HTTP::Get.new(uri)
+    res = http.request(request)
+  end
+
+snippet Net::HTTP.get_response
+abbr    Net::HTTP.get_response(uri)
+regexp  '\.[Net::HTTP.get_response]*$'
+options word
+  res = Net::HTTP.get_response(${1:uri})
+
+snippet req.basic_auth
+abbr    req.basic_auth
+regexp  'req\.[basic_auth]*$'
+options word
+  req.basic_auth '${1:user}', ${2:pass}
+
+snippet req.set_form_data
+abbr    req.set_form_data
+regexp  '\.[req.set_form_data]*$'
+options word
+  req.set_form_data(${2:'name' => 'value'})
+# }}}

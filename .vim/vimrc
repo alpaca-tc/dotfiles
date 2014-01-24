@@ -72,7 +72,7 @@ let s:is_unix    = has('unix')
 " user information
 let g:my.info = {
       \ 'author':  'Ishii Hiroyuki',
-      \ 'email':   'alprhcp666@gmail.com',
+      \ 'email':   'alpaca-tc@alpaca.tc',
       \ 'github':  'alpaca-tc',
       \ 'lingr':   'alpaca_taichou',
       \ 'twitter': 'alpaca_taichou'
@@ -379,11 +379,11 @@ NeoBundle 'tomtom/tcomment_vim', { 'autoload' : {
       \ 'commands' : ['TComment', 'TCommentAs', 'TCommentMaybeInline'],
       \ 'functions' : ['tcomment#DefineType'],
       \ }}
-" NeoBundleLazy 'tyru/caw.vim', {
-"       \ 'autoload' : {
-"       \   'insert' : 1,
-"       \   'mappings' : [ '<Plug>(caw:prefix)', '<Plug>(caw:i:toggle)'],
-"       \ }}
+NeoBundleLazy 'tyru/caw.vim', {
+      \ 'autoload' : {
+      \   'insert' : 1,
+      \   'mappings' : [ '<Plug>(caw:prefix)', '<Plug>(caw:i:toggle)'],
+      \ }}
 
 " For Git
 NeoBundleLazy 'tpope/vim-fugitive', { 'autoload': {
@@ -2177,12 +2177,13 @@ else
   " nmap <C-_> <Plug>(caw:i:toggle)
   " xmap <C-_> <Plug>(caw:i:toggle)
 endif
+
 let hooks = neobundle#get_hooks('caw.vim')
 function! hooks.on_source(bundle) "{{{
-  " nmap gc <Plug>(caw:prefix)
-  " xmap gc <Plug>(caw:prefix)
-  " nmap gcc <Plug>(caw:i:toggle)
-  " xmap gcc <Plug>(caw:i:toggle)
+  nmap gc <Plug>(caw:prefix)
+  xmap gc <Plug>(caw:prefix)
+  nmap gcc <Plug>(caw:i:toggle)
+  xmap gcc <Plug>(caw:i:toggle)
 endfunction"}}}
 unlet hooks
 
@@ -2856,7 +2857,7 @@ endfunction"}}}
 let hooks = neobundle#get_hooks('neosnippet.vim')
 function! hooks.on_source(bundle) "{{{
   let g:neosnippet#enable_preview = 1
-  let g:neosnippet#snippets_directory = g:my.dir.snippets . ',~/.vim/bundle/vim-snippets/snippets'
+  let g:neosnippet#snippets_directory = g:my.dir.snippets
   let g:neosnippet#disable_runtime_snippets = {
         \ 'ruby' : 1,
         \ }

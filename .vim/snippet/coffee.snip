@@ -1,4 +1,94 @@
 # 基礎
+# syntax
+snippet require
+abbr    require
+options word
+  ${1:object} = require('$1')
+
+snippet unless
+abbr    unless ...
+options word
+  unless ${1:condition}
+    ${2}
+
+snippet if
+abbr    if ...
+options word
+  if ${1:condition}
+    ${2}
+
+snippet tryc
+abbr    try catch
+options word
+  try
+    ${1}
+  catch error
+    ${2}
+
+snippet elsif
+abbr    else if
+options word
+  else if ${1:condition}
+    ${2}
+
+snippet ifthen
+abbr    if ... then ... else ...
+options word
+  if ${1:condition} then ${2} else ${3}
+
+snippet switch
+abbr    switch object when ...
+options word
+  switch ${1:object}
+  when ${2:value}
+    ${3}
+
+snippet when
+abbr    when ...
+options word
+  when ${1:value}
+    ${2}
+
+snippet forin
+abbr    for name in [start..end] by step}
+options word
+  for ${1:name} in [${2:start}..${3:finish}]${4: by ${5:#:step\}}
+    ${6}
+
+snippet for
+abbr    for name in array by step}
+options word
+  for ${1:name} in ${2:array}
+    ${3}
+
+snippet forof
+abbr    for name of object
+options word
+  for ${1:#:key}, ${2:#:value} of ${3:#:object}
+    ${0:TARGET}
+
+snippet function
+abbr    -> ...
+alias   fun ->
+options word
+  ${1:#:name} = (${2}) ->
+    ${3}
+
+snippet bfun
+abbr    => ...
+alias   fun ->
+options word
+  ${1:#:name} = (${2}) =>
+    ${3}
+
+snippet class
+abbr    class ... extends ...
+options word
+  class ${1:ClassName}${2: extends ${3:#:Ancestor\}}
+    constructor: (${4:#:args}) ->
+       ${5}
+
+
 # js#{{{
 snippet     js
     JSON.stringify(${1})
@@ -167,7 +257,7 @@ snippet     ftoggle
 
 ###
 # よく使うお決まり{{{##
-snippet     beforeunload 
+snippet     beforeunload
 abbr        ページ離脱者防止script
 options     word
   $(window).on 'beforeunload', ->
