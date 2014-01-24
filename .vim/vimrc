@@ -526,6 +526,7 @@ NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
 if has('ruby')
   " The input support for English
   NeoBundleLazy 'alpaca-tc/alpaca_english', {
+        \ 'rev' : 'refactoring',
         \ 'build' : {
         \   'mac' : 'bundle',
         \   'unix' : 'bundle',

@@ -825,6 +825,12 @@ options word
 regexp  '\.[[:alnum:]_?]*$'
   each_with_index { |${1}, index| ${2} }
 
+snippet with_index
+abbr    with_index { |v| ... } #=> enum
+options word
+regexp  '\.[[:alnum:]_?]*$'
+  with_index { |${1}, index| ${2} }
+
 snippet each_with_object
 abbr    each_with_object { |v| ... } #=> obj
 options word
@@ -992,6 +998,7 @@ regexp  '\.[[:alnum:]_?]*$'
 snippet each
 abbr    each { ... }
 regexp  '\.[[:alnum:]_?]*$'
+options word
   each do |${1}|
     ${2}
   end
@@ -1628,4 +1635,12 @@ snippet Rational
 abbr    Rational
 options word
   Rational(${1}, ${2})
+# }}}
+
+# String {{{
+snippet gsub
+abbr    gsub
+regexp  '\.[gsub]*$'
+options word
+  gsub(/${1:pat}/, '${2}')
 # }}}

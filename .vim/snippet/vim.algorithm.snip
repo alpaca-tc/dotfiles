@@ -1,0 +1,139 @@
+# sort# {{{
+
+snippet sort_insert_sort
+abbr    sort_insert_sort(挿入ソート)
+options word
+  function! s:sort(array)
+    let new_array = []
+
+    for val in a:array
+      let index = s:get_instartion_index(new_array, val)
+      call insert(new_array, val, index)
+    endfor
+
+    return new_array
+  endfunction
+
+  function! s:get_instartion_index(array, target)
+    for index in range(0, len(a:array) - 1)
+      if a:array[index] >= a:target
+        return index
+      endif
+    endfor
+
+    return len(a:array)
+  endfunction
+
+  let before = [8, 4, 3, 7, 6, 5, 2, 1]
+  let expected = [1, 2, 3, 4, 5, 6, 7, 8]
+
+  echo s:sort(before) == expected
+
+snippet sort_select_sort
+abbr    sort_select_sort(選択ソート)
+options word
+  function! s:sort(array)
+    let dup = copy(a:array)
+    let new_array = []
+
+    for val in range(0, len(dup) - 1)
+      let max_index = s:max(dup)
+      call insert(new_array, dup[max_index])
+      call remove(dup, max_index)
+    endfor
+
+    return new_array
+  endfunction
+
+  function! s:max(array)
+    let max = 0
+    let max_index = 0
+
+    for index in range(0, len(a:array) - 1)
+      if a:array[index] >= max
+        let max_index = index
+        let max = a:array[index]
+      endif
+    endfor
+
+    return max_index
+  endfunction
+
+  let before = [8, 4, 3, 7, 6, 5, 2, 1]
+  let expected = [1, 2, 3, 4, 5, 6, 7, 8]
+
+  echo s:sort(before)
+  echo s:sort(before) == expected
+
+snippet sort_bubble_sort
+abbr    sort_bubble_sort
+options word
+  function! s:sort(array)
+    let bubbled = copy(a:array)
+    let new_array = []
+
+    for val in range(0, len(a:array) - 1)
+      let bubbled = s:bubbling(bubbled)
+      call insert(new_array, bubbled[-1])
+      call remove(bubbled, -1)
+    endfor
+
+    return new_array
+  endfunction
+
+  function! s:bubbling(array)
+    let dup = copy(a:array)
+
+    for index in range(0, len(a:array) - 2)
+      if dup[index] > dup[index + 1]
+        let temp = dup[index]
+        let dup[index] = dup[index + 1]
+        let dup[index + 1] = temp
+      endif
+    endfor
+
+    return dup
+  endfunction
+
+  let before = [8, 4, 3, 7, 6, 5, 2, 1]
+  let expected = [1, 2, 3, 4, 5, 6, 7, 8]
+
+  echo s:sort(before) == expected
+
+snippet sort_quick_sort
+abbr    sort_quick_sort
+options word
+  function! s:sort(array)
+    if empty(a:array) || len(a:array) == 1
+      return a:array
+    endif
+
+    let dup = copy(a:array)
+    let base = dup[-1]
+    call remove(dup, -1)
+
+    let [smaller, bigger] = s:partition(dup, base)
+
+    return s:sort(smaller) + [base] + s:sort(bigger)
+  endfunction
+
+  function! s:partition(array, base)
+    let smaller = []
+    let bigger = []
+
+    for index in range(0, len(a:array) - 1)
+      if a:array[index] < a:base
+        call add(smaller, a:array[index])
+      else
+        call add(bigger, a:array[index])
+      endif
+    endfor
+
+    return [smaller, bigger]
+  endfunction
+
+  let before = [8, 4, 3, 7, 6, 5, 2, 1]
+  let expected = [1, 2, 3, 4, 5, 6, 7, 8]
+
+  echo s:sort(before) == expected
+# }}}

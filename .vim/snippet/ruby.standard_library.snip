@@ -1,7 +1,31 @@
+# Struct{{{
 snippet Struct.new
 abbr    class Name < Struct.new(...)
 alias   struct
 options word
   class ${1:ClassName} < Struct.new(%i!${2:attributes}!)
     ${2}
+  end
+# }}}
+
+# Delegate {{{
+snippet delegate_class
+abbr    require 'delegate'; class ... < DelegateClass(...)
+options word
+  require 'delegate'
+
+  class ${2} < DelegateClass(${1})
+    ${3}
+  end
+# }}}
+
+# Array
+snippet Array.split
+abbr    Array.split
+alias   'Array.'
+options word
+  class Array
+    def split(index)
+      [slice(0...index), slice(index..-1)]
+    end
   end
