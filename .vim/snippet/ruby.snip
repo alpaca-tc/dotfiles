@@ -2,6 +2,7 @@ include ruby.standard_library.snip
 include ruby.buildin_library.snip
 include ruby.rdoc.snip
 include ruby.yard.snip
+include ruby.algorithm.snip
 
 # Magic code#{{{
 snippet   utf
@@ -216,8 +217,10 @@ options word
       @count = -1 unless @count
       @count += 1
       [
-        ${1}
-      ][@count]
+        [
+          ${1}
+        ],
+      ][0][@count]
     end
   end
   extend Stub
@@ -238,6 +241,7 @@ options word
 
 #}}}
 
+# my snippets# {{{
 snippet auto_name
 abbr    Get autoload function name
 options word
@@ -253,3 +257,16 @@ options word
     require '$1'
   end
 
+snippet ++
+abbr    += 1
+options word
+alias   '.*\s\+'
+  ${1}+= 1
+
+snippet --
+abbr    -= 1
+options word
+alias   '.*\s\+'
+  ${1}-= 1
+
+# }}}

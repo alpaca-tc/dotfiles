@@ -1,0 +1,177 @@
+# Sort {{{
+snippet sort_select_sort
+abbr    sort_select_sort(選択ソート)
+options word
+  class Array
+    def select_sort
+      temp = self.dup
+      new_object = []
+      new_object.push(temp.delete_min) until temp.empty?
+      new_object
+    end
+
+    private
+
+    def delete_min
+      min_index = find_index { |v| v == self.min }
+      delete_at(min_index)
+    end
+  end
+
+  p [8, 4, 3, 7, 6, 5, 2, 1].select_sort == [1, 2, 3, 4, 5, 6, 7, 8]
+
+snippet sort_bubble_sort
+abbr    sort_bubble_sort(バブルソート)
+options word
+  class Array
+    def bubble_sort
+      temp = self.dup
+
+      new_array = []
+      new_array.push(temp.bubbling) until temp.empty?
+      new_array
+    end
+
+    def bubbling
+      (self.size - 1).times do |i|
+        self[i], self[i + 1] = self[i + 1], self[i] if self[i] < self[i + 1]
+      end
+
+      delete_at(-1)
+    end
+  end
+  p [8, 4, 3, 7, 6, 5, 2, 1].bubble_sort == [1, 2, 3, 4, 5, 6, 7, 8]
+
+snippet sort_quick_sort
+abbr    sort_quick_sort(クイックソート)
+options word
+  class Array
+    def quick_sort
+      return self if size <= 1
+
+      base = self.dup.pop
+      smaller, bigger = partition { |v| v < base }
+      smaller.quick_sort + [base] + bigger.quick_sort
+    end
+  end
+
+  p [8, 4, 3, 7, 6, 5, 2, 1].quick_sort == [1, 2, 3, 4, 5, 6, 7, 8]
+
+
+snippet sort_merge_sort
+abbr    sort_merge_sort(マージソート)
+options word
+  class Array
+    def merge_sort
+      temp = self.dup
+      return self if self.size <= 1
+
+      half = (self.size / 2).ceil
+      a, b = split(half).map { |v| v.merge_sort }
+      a.merge(b)
+    end
+
+    def split(index)
+      [slice(0...index), slice(index..-1)]
+    end
+
+    def merge(other)
+      new_array = []
+      until self.empty? && other.empty?
+        new_array << case
+        when other.empty?
+          self.shift
+        when self.empty?
+          other.shift
+        when self.first < other.first
+          self.shift
+        else
+          other.shift
+        end
+      end
+
+      new_array
+    end
+  end
+
+  p [8, 4, 3, 7, 6, 5, 2, 1].merge_sort == [1, 2, 3, 4, 5, 6, 7, 8]
+# }}}
+
+# Popular Questions {{{
+snippet Qestion_8qeen
+abbr    Qestion 8qeenの問題
+options word
+  class Ruby001
+    NOT_FOUND = 0
+    Q = true
+
+    def initialize(size)
+      @size = size
+      @row = Array.new(@size)
+      @col = []
+      @dpos = []
+      @dneg = []
+      @count = 0
+    end
+
+    def solve
+      current_position = 0
+      put_queen_on(current_position)
+      @count
+    end
+
+    private
+
+    def put_queen_on(lnum = 0)
+      lnum += 1 while @row[lnum]
+      return @count += 1 if @row.all?
+
+      @size.times do |index|
+        pos_index = lnum + index
+        neg_index = lnum - index + @size - 1
+
+        next if [@col[index], @dpos[pos_index], @dneg[neg_index]].include?(Q)
+
+        @row[lnum] = index
+        @col[index] = @dpos[pos_index] = @dneg[neg_index] = Q
+
+        put_queen_on(lnum + 1)
+
+        @row[lnum] = @col[index] = @dpos[pos_index] = @dneg[neg_index] = nil
+      end
+    end
+  end
+
+snippet Question_print_primes
+abbr    Question_print_primes
+options word
+  class Numeric
+    def prime_number?
+      return false if self == 1
+
+      sqrt = Math.sqrt(self)
+      !(2..sqrt).any? { |i| self % i == 0 }
+    end
+  end
+
+snippet Question_prime_primes
+abbr    Question_prime_primes
+options word
+  require 'prime'
+
+  Prime.each(${1:num}).each |prime|
+    ${2}
+  end
+
+snippet Fibonacci
+abbr    Fibonacci
+options word
+  module Fibonacci
+    @@memo = [0, 1]
+
+    def self.[](n)
+      @@memo.length.upto(n) { |i| @@memo[i] = @@memo[i - 1] + @@memo[i - 2] }
+      @@memo[n]
+    end
+  end
+# }}}
