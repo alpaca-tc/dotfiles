@@ -9,10 +9,18 @@ snippet ,-
 options word
   ----------------------------------------
 
-snippet     dd
-alias       date_day
-options     word
-    `strftime("%m-%d")`
+snippet date_day
+options word
+  `strftime("%m-%d")`
+
+snippet date_year
+options word
+  `strftime("%Y-%m-%d")`
+
+snippet date
+abbr    date
+options word
+  `strftime("%b %d %Y")`
 
 snippet assignment
 abbr    assignment

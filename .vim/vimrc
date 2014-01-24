@@ -181,10 +181,10 @@ endif
 " ----------------------------------------
 " NeoBundle  " {{{
 NeoBundleFetch 'Shougo/neobundle.vim'
-" NeoBundleLazy 'vim-jp/vital.vim', { 'autoload' : {
-"       \ 'functions' : 'vital#of',
-"       \ 'commands' : 'Vitalizer',
-"       \ }}
+NeoBundleLazy 'vim-jp/vital.vim', { 'autoload' : {
+      \ 'functions' : 'vital#of',
+      \ 'commands' : 'Vitalizer',
+      \ }}
 
 " For asynchronous communication
 NeoBundleLazy 'Shougo/vimproc', {
@@ -289,28 +289,11 @@ NeoBundleLazy 'Shougo/vimfiler', {
       \   ],
       \   'mappings' : ['<Plug>(vimfiler_switch)'],
       \ }}
-" if $NEO
 NeoBundleLazy 'Shougo/neocomplete.vim', { 'autoload' : {
       \ 'functions' : ['neocomplete#init#disable', 'neocomplete#is_enabled', 'neocomplete#start_manual_complete'],
       \ 'commands' : ['NeoCompleteClean', 'NeoCompleteEnable', 'NeoCompleteDisable'],
       \ 'insert' : 1,
       \ }}
-" else
-  " NeoBundleLazy 'alpaca-tc/YouCompleteMe', {
-  "       \ 'depends' : 'Shougo/neosnippet.vim',
-  "       \ 'build' : {
-  "       \   'mac' : './install.sh && git submodule update --init --recursive',
-  "       \ },
-  "       \ 'autoload' : {
-  "       \   'insert' : 1,
-  "       \   'functions' : 'youcompleteme#Enable',
-  "       \   'commands' : [
-  "       \     'YcmRestartServer', 'YcmDiags', 'YcmShowDetailedDiagnostic',
-  "       \     'YcmDebugInfo', 'YcmCompleter'
-  "       \   ],
-  "       \   'filetypes' : g:my.ft.youcomplete_me
-  "       \ }}
-" endif
 NeoBundleLazy 'Shougo/neosnippet.vim', {
       \ 'autoload' : {
       \   'commands' : [
@@ -322,6 +305,7 @@ NeoBundleLazy 'Shougo/neosnippet.vim', {
       \   'insert' : 1,
       \   'unite_sources' : ['neosnippet', 'neosnippet/user', 'neosnippet/runtime'],
       \ }}
+" NeoBundleLazy 'Shougo/neosnippet-snippets'
 NeoBundleLazy 'Shougo/vimshell', {
       \ 'autoload' : {
       \   'commands' : ['VimShell', 'VimShellBufferDir'],
@@ -391,8 +375,10 @@ NeoBundleLazy 'open-browser.vim', { 'autoload' : {
       \ 'commands' : ['OpenBrowserSearch', 'OpenBrowser', 'OpenBrowserSmartSearch'] }}
 
 " Comment Plugins
-NeoBundleLazy 'tomtom/tcomment_vim', { 'autoload' : {
-      \ 'commands' : ['TComment', 'TCommentAs', 'TCommentMaybeInline'] }}
+NeoBundle 'tomtom/tcomment_vim', { 'autoload' : {
+      \ 'commands' : ['TComment', 'TCommentAs', 'TCommentMaybeInline'],
+      \ 'functions' : ['tcomment#DefineType'],
+      \ }}
 " NeoBundleLazy 'tyru/caw.vim', {
 "       \ 'autoload' : {
 "       \   'insert' : 1,
@@ -527,6 +513,7 @@ if has('ruby')
   " The input support for English
   NeoBundleLazy 'alpaca-tc/alpaca_english', {
         \ 'rev' : 'refactoring',
+        \ 'depends' : 'Shougo/neocomplete.vim',
         \ 'build' : {
         \   'mac' : 'bundle',
         \   'unix' : 'bundle',
@@ -534,7 +521,7 @@ if has('ruby')
         \ },
         \ 'autoload' : {
         \   'commands' : ['AlpacaEnglishDisable', 'AlpacaEnglishEnable', 'AlpacaEnglishSay'],
-        \   'unite_sources': ['english_dictionary', 'english_example', 'english_thesaurus'],
+        \   'unite_sources': ['english_dictionary', 'english_example', 'english_thesaurus', 'web_search'],
         \ }}
 
   " For payroll accounting
@@ -636,6 +623,10 @@ NeoBundleLazy 'mattn/emmet-vim', {
 NeoBundleLazy 'jiangmiao/simple-javascript-indenter', { 'autoload' : {
       \ 'filetypes' : ['javascript', 'json', 'nginx'],
       \ }}
+NeoBundleLazy 'geekjuice/vim-mocha', { 'autoload' : {
+      \ 'filetypes' : ['javascript', 'coffee'] }}
+" NeoBundleLazy 'alpaca-tc/alpaca_tester', { 'autoload' : {
+"       \ 'filetypes' : ['javascript', 'coffee'] }}
 NeoBundleLazy 'alpaca-tc/documentation', { 'autoload' : {
       \ 'commands' : ['Documentation', 'DocumentationAppend'] }}
 NeoBundleLazy 'leafgarland/typescript-vim', { 'autoload' : {
@@ -1240,7 +1231,8 @@ augroup MyWindow
   autocmd VimResized * wincmd =
 augroup END
 
-colorscheme desertEx
+" colorscheme desertEx
+colorscheme iceberg
 syntax on
 "}}}
 
@@ -2529,15 +2521,13 @@ function! hooks.on_source(bundle) "{{{
   let g:alpaca_english_enable                      = 1
   let g:alpaca_english_max_candidates              = 100
   let g:alpaca_english_enable_duplicate_candidates = 1
+endfunction"}}}
 
-  " DEVELOPMENT VERSION
-  let g:alpaca_english_web_search_url   = 'http://eow.alc.co.jp/%s/UTF-8/'
-  let g:alpaca_english_web_search_xpath = "div[@id='resultsList']/ul/li"
+function! hooks.on_post_source(bundle) "{{{
   if exists('g:neocomplete#sources') && has_key(g:neocomplete#sources, '_')
     let g:neocomplete#sources._ += ['english']
   endif
-endfunction"}}}
-function! hooks.on_post_source(bundle) "{{{
+
   inoremap <expr><C-X><C-E> neocomplete#start_manual_complete('english')
 endfunction"}}}
 unlet hooks
@@ -2665,17 +2655,15 @@ function! hooks.on_source(bundle) "{{{
   let g:neocomplete#sources#include#paths = {
         \ 'liquid' : '/Users/alpaca-tc/projects/alpaca-tc.github.io/source',
         \ }
-  let g:neocomplete#sources#file_include#exprs = {
+  let g:neocomplete#sources#include#exprs = {
         \ 'liquid' : 'substitute(v:fname, "^/", "", "")',
         \ 'ruby'   : "substitute(substitute(v:fname,'::','/','g'),'$','','')",
         \ }
   let g:neocomplete#sources#file_include#delimiters = {
         \ 'liquid' : '/',
-        \ 'ruby' : '/',
         \ }
   let g:neocomplete#sources#file_include#exts = {
         \ 'liquid' : ['png', 'jpg', 'gif', 'jpeg', 'ico'],
-        \ 'ruby' : ['rb'],
         \ }
 
   let g:neocomplete#sources#omni#input_patterns.php =
@@ -2868,7 +2856,7 @@ endfunction"}}}
 let hooks = neobundle#get_hooks('neosnippet.vim')
 function! hooks.on_source(bundle) "{{{
   let g:neosnippet#enable_preview = 1
-  let g:neosnippet#snippets_directory = g:my.dir.snippets
+  let g:neosnippet#snippets_directory = g:my.dir.snippets . ',~/.vim/bundle/vim-snippets/snippets'
   let g:neosnippet#disable_runtime_snippets = {
         \ 'ruby' : 1,
         \ }
@@ -3410,7 +3398,7 @@ nnoremap <Space>on :Octopress new_post<Space>
 let hooks = neobundle#get_hooks('alpaca_octopress.vim')
 function! hooks.on_source(bundle) "{{{
   let g:octopress#project_path = expand('~/projects/alpaca-tc.github.io')
-  let g:octopress#url = 'http://alpaca-tc.github.io'
+  let g:octopress#url = 'http://alpaca.tc'
   let g:octopress#rake_command = 'bundle exec rake'
   let g:octopress#system#async = 1
 
@@ -3661,10 +3649,10 @@ function! s:load_gem_paths() "{{{
   endif
 endfunction"}}}
 
-" augroup GemPath
-"   autocmd!
-"   autocmd FileType Rakefile,ruby call s:load_gem_paths()
-" augroup END
+augroup GemPath
+  autocmd!
+  autocmd FileType Rakefile,ruby call s:load_gem_paths()
+augroup END
 
 command! LoadGemPath call s:load_gem_paths()
 "}}}
@@ -3682,6 +3670,23 @@ elseif filereadable(expand('~/.vim_secret'))
   " let g:github#token
   source ~/.vim_secret
 endif
+
+function! s:setup_include_file_for_rails() "{{{
+  if !exists('b:rails_root') || !exists('g:neocomplete#sources#include#paths')
+    return
+  endif
+
+  let g:neocomplete#sources#include#patterns.haml =
+        \ '^\s*\(\w\+\)\?\(-\|=\)\s*\<\%(image_path\|image_tag\)\>'
+  let g:neocomplete#sources#include#paths.haml =
+        \ b:rails_root . '/app/assets/images'
+  let g:neocomplete#sources#file_include#delimiters.haml = '/'
+  let g:neocomplete#sources#include#exprs.haml =
+        \ 'substitute(v:fname, "^/", "", "")'
+  let g:neocomplete#sources#file_include#exts.haml =
+        \ ['png', 'jpg', 'gif', 'jpeg', 'ico']
+endfunction"}}}
+command! RailsView call s:setup_include_file_for_rails()
 
 let s:loaded_vimrc = 1
 

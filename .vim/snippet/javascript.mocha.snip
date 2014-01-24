@@ -1,0 +1,110 @@
+# Default syntax {{{
+snippet describe
+abbr    describe('', function() { ... })
+alias   des
+options word
+  describe('${1:Description}', function() {
+    ${2}
+  });
+
+snippet describe.only
+abbr    describe.only('', function() { ... })
+alias   deso
+options word
+  describe.only('${1:Description}', function() {
+    ${2}
+  });
+
+snippet describe.skip
+abbr    describe.skip('', function() { ... })
+alias   dess
+options word
+  describe.skip('${1:Description}', function() {
+    ${2}
+  });
+
+snippet before
+abbr    before(function() { ... })
+options word
+  before(function() {
+  });
+
+snippet after
+abbr    after(function() { ... })
+options word
+  after(function() {
+  });
+
+snippet afterEach
+abbr    afterEach(function() { ... })
+options word
+  afterEach(function() {
+  });
+
+snippet beforeEach
+abbr    beforeEach(function() { ... })
+options word
+  beforeEach(function() {
+  });
+
+snippet it
+abbr    it('', function() { ... })
+options word
+  it('${1}', function(${2:#:done}) {
+    ${3}
+  });
+
+snippet ito
+abbr    it.only('', function() { ... })
+options word
+  it.only('${1}', function(${2:#:done}) {
+    ${3}
+  });
+
+snippet its
+abbr    it.skip('', function() { ... })
+options word
+  it.skip('${1}', function(${2:#:done}) {
+    ${3}
+  });
+
+snippet pending
+abbr    it('...')
+alias   itl
+options word
+  it('${1}');
+
+snippet expect
+abbr    expect(...).to
+options word
+  expect(${1}).to.${2}
+# }}}
+
+# {{{
+snippet assert
+abbr    assert.matcher(...);
+options word
+  assert.${2:equal}
+
+snippet should
+abbr    should
+options word
+  should.${2:equal}
+# }}}
+
+# matcher# {{{
+snippet eql
+abbr    eql(...)
+options word
+  eql(${1:expected});
+
+snippet equal
+abbr    equal(...)
+options word
+  equal(${1}, ${2});
+
+snippet have
+abbr    have
+options word
+  have.length(${1});
+# }}}
