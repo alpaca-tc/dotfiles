@@ -179,6 +179,20 @@ options word
     ${3}
   end
 
+snippet attr_accessor
+abbr    attr_accessor *args
+options word
+  attr_accessor :${1:*names}
+
+snippet attr_reader
+abbr    attr_reader *args
+options word
+  attr_reader :${1:*names}
+
+snippet attr_writer
+abbr    attr_writer *args
+options word
+  attr_writer :${1:*names}
 #}}}
 
 # ruby_custom {{{
@@ -269,4 +283,67 @@ options word
 alias   '.*\s\+'
   ${1}-= 1
 
+snippet atcoder
+abbr    class Question ...
+options word
+  require 'singleton'
+
+  class Question
+    include Singleton
+    include Enumerable
+
+    attr_accessor :answer, :question
+
+    def initialize
+      @statement = [
+        {
+          q: [
+            ${1}
+          ],
+          a: '${2}',
+        }
+      ]
+    end
+
+    def each(&block)
+      until @statement.empty?
+        build_question
+        self.instance_exec(@answer, &block)
+      end
+    end
+
+    def gets
+      build_question unless @question && @answer
+      @question.shift
+    end
+
+    def build_question
+      @question, @answer = @statement.shift.values_at(:q, :a)
+    end
+
+    module STDIN
+      def self.gets
+        Question.instance.gets
+      end
+    end
+    $stdin = STDIN
+  end
+
+  class Solver
+    def initialize
+      ${3}
+    end
+
+    def solve
+      gets
+    end
+  end
+
+  if Object.const_defined?(:Question)
+    Question.instance.each do |expected|
+      puts Solver.new.solve == expected
+    end
+  else
+    puts Solver.new.solve
+  end
 # }}}

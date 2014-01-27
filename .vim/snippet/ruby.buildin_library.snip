@@ -59,10 +59,22 @@ options word
   instance_variable_get(:@${1:name})
 
 snippet instance_variable_set
-abbr    instance_variable_set(var, value)
+abbr    instance_variable_set(name, value)
 regexp  '\.[instance_variable_set]*$'
 options word
   instance_variable_set(:@${1:name}, ${2:value})
+
+snippet class_variable_set
+abbr    class_variable_set(name, value)
+regexp  '\.[class_variable_set]*$'
+options word
+  class_variable_set(:@@${1:name}, ${2:value})
+
+snippet class_variable_get
+abbr    class_variable_get(name)
+regexp  '\.[class_variable_get]*$'
+options word
+  class_variable_get(:@@${1:name})
 
 snippet instance_variables
 abbr    instance_variables
@@ -726,15 +738,24 @@ options word
 regexp  '\.[[:alnum:]_?]*$'
   map { |${1:v}| ${2} }
 
+snippet mapd
+alias   collect
+abbr    map do |v| ... end #=> array
+options word
+regexp  '\.[[:alnum:]_?]*$'
+  map do |${1:v}|
+    ${2}
+  end
+
 snippet combination
 abbr    combination(n)
 regexp  '\.[combination]*$'
 options word
   combination(${1:size})
 
-snippet combinationdo
+snippet combinationd
 abbr    combination(n) { |c| ... }
-regexp  '\.[combination]*$'
+regexp  '\.[combinationd]*$'
 options word
   combination(${1:size}) do |${2:values}|
     ${3}
@@ -795,17 +816,19 @@ options word
 regexp  '\.[[:alnum:]_?]*$'
   drop_while { |${1:v}| ${2} }
 
-snippet each_consd
+snippet each_cons
 abbr    each_cons { |v| ... } #=> nil
 options word
 regexp  '\.[[:alnum:]_?]*$'
   each_cons(${1:count}) { |${2:v}| ${3} }
 
-snippet each_cons
-abbr    each_cons(v) #=> enum
+snippet each_consd
+abbr    each_cons do |v| ... end #=> nil
 options word
 regexp  '\.[[:alnum:]_?]*$'
-  each_cons(${1:v})
+  each_cons(${1:count}) do |${2:v}|
+    ${3}
+  end
 
 snippet each_entry
 abbr    each_entry { |v| ... } #=> enum
@@ -813,11 +836,27 @@ options word
 regexp  '\.[[:alnum:]_?]*$'
   each_entry { |${1:v}| ${2} }
 
+snippet each_entryd
+abbr    each_entry do |v| ... end #=> enum
+options word
+regexp  '\.[[:alnum:]_?]*$'
+  each_entry do |${1:v}|
+    ${2}
+  end
+
 snippet each_slice
 abbr    each_slice(n) { |v| ... } #=> nil
 options word
 regexp  '\.[[:alnum:]_?]*$'
   each_slice(${1:count}) { |${2:v}| ${3} }
+
+snippet each_sliced
+abbr    each_slice(n) do |v| ... end #=> nil
+options word
+regexp  '\.[[:alnum:]_?]*$'
+  each_slice(${1:count}) do |${2:v}|
+    ${3}
+  end
 
 snippet each_with_index
 abbr    each_with_index { |v| ... } #=> enum
@@ -825,17 +864,55 @@ options word
 regexp  '\.[[:alnum:]_?]*$'
   each_with_index { |${1}, index| ${2} }
 
+snippet each_with_indexd
+abbr    each_with_index do |v| ... end #=> enum
+options word
+regexp  '\.[[:alnum:]_?]*$'
+  each_with_index do |${1}, index|
+    ${2}
+  end
+
+snippet each_index
+abbr    each_index { |i| ... } #=> enum
+options word
+regexp  '\.[[:alnum:]_?]*$'
+  each_index { |i| ${1} }
+
+snippet each_indexd
+abbr    each_index do |i| ... end #=> enum
+options word
+regexp  '\.[[:alnum:]_?]*$'
+  each_index do |i|
+    ${1}
+  end
+
 snippet with_index
 abbr    with_index { |v| ... } #=> enum
 options word
 regexp  '\.[[:alnum:]_?]*$'
   with_index { |${1}, index| ${2} }
 
+snippet with_indexd
+abbr    with_index do |v| ... end #=> enum
+options word
+regexp  '\.[[:alnum:]_?]*$'
+  with_index do |${1}, index|
+    ${2}
+  end
+
 snippet each_with_object
 abbr    each_with_object { |v| ... } #=> obj
 options word
 regexp  '\.[[:alnum:]_?]*$'
   each_with_object(${1}) { |${2:v}, memo| ${3} }
+
+snippet each_with_objectd
+abbr    each_with_object(obj) do |v| ... end #=> obj
+options word
+regexp  '\.[[:alnum:]_?]*$'
+  each_with_object(${1}) do |${2:v}, memo|
+    ${3}
+  end
 
 snippet select
 abbr    select { |v| ... } #=> array
@@ -845,16 +922,10 @@ regexp  '\.[[:alnum:]_?]*$'
   select { |${1:v}| ${2} }
 
 snippet find_indexd
-abbr    find_index { |v| ... } #=> int or nil
+abbr    find_index(n) { |v| ... } #=> int or nil
 options word
 regexp  '\.[[:alnum:]_?]*$'
-  find_index { |${1:v}| ${2} }
-
-snippet find_index
-abbr    find_index(n) #=> enum
-options word
-regexp  '\.[[:alnum:]_?]*$'
-  find_index(${1:value})
+  find_index(${1:value}) { |${2:v}| ${3} }
 
 snippet first
 abbr    first(n) #=> array
@@ -884,14 +955,14 @@ snippet injectd
 abbr    inject(init) { |memo, v| ... } #=> obj
 options word
 regexp  '\.[[:alnum:]_?]*$'
-  inject { |memo, ${1:v}| ${2} }
+  inject(${1:init}) { |memo, ${1:v}| ${2} }
 
 snippet inject
 abbr    inject(:sym) #=> obj
 alias   reduce
 options word
 regexp  '\.[[:alnum:]_?]*$'
-  inject(:${1:+})
+  inject(&:${1:+})
 
 snippet map!
 abbr    map! { |v| ... } #=> array
@@ -999,9 +1070,17 @@ snippet each
 abbr    each { ... }
 regexp  '\.[[:alnum:]_?]*$'
 options word
+  each { |${2:v}| ${1} }
+
+snippet eachd
+abbr    each { ... }
+regexp  '\.[[:alnum:]_?]*$'
+options word
   each do |${1}|
     ${2}
   end
+
+
 
 snippet reject
 abbr    reject { |v| ... } #=> array
@@ -1717,5 +1796,38 @@ abbr    gsub
 regexp  '\.[gsub]*$'
 options word
   gsub(/${1:pat}/, '${2}')
->>>>>>> 11ce4df566acb599f98af581e2d82ef9058e0455
+# }}}
+
+# Comparable {{{
+snippet Comparable
+abbr    include Comparable
+options word
+  include Comparable
+
+  def <=>(other)
+    ${2}
+  end
+# }}}
+
+# Marshal# {{{
+snippet Marshal.load
+abbr    Marshal.load(Marshal.dump(${1:val}))
+alias   deep_duplicate
+options word
+  Marshal.load(Marshal.dump(${1:val}))
+# }}}
+
+# Range {{{
+snippet cover?
+abbr    cover?(n)
+options word
+  cover?(${1:n})
+# }}}
+
+# Kernel{{{
+snippet sprintf
+abbr    sprintf(pat, *values)
+regexp  '[sprintf]*$'
+options word
+  sprintf('${1:pat}', ${2:*values})
 # }}}

@@ -2,3 +2,161 @@ snippet     scanf
 abbr        scanf('%d', *valiables)
 options     word
   scanf('${1}'${2:, ${3:*valiables\}})
+
+snippet     if
+abbr        if () {}
+  if (${1:#:condition}) {
+      ${0:TARGET}
+  }
+
+snippet else
+abbr    else { ... }
+  else {
+      ${0:TARGET}
+  }
+
+snippet elseif
+abbr    else if (condition) { ... }
+  else if (${1:#:condition}) {
+      ${0:TARGET}
+  }
+
+snippet ifelse
+abbr    if (condition) { ... } else { ... }
+  if (${1:#:condition}) {
+      ${2:TARGET}
+  } else {
+      ${3}
+  }
+
+snippet for
+abbr    for () { ... }
+  for (${1} = 0; $1 < ${2}; $1++) {
+      ${0:TARGET}
+  }
+
+snippet while
+abbr    while () { ... }
+  while (${1:#:condition}) {
+      ${0:TARGET}
+  }
+
+snippet do_while
+alias   do
+  do {
+      ${0:TARGET:code}
+  } while (${1:#:condition});
+
+snippet switch
+abbr    switch () { ... }
+  switch (${1:#:var}) {
+      case ${2:#:val}:
+          ${0:TARGET}
+          break;
+  }
+
+snippet function
+alias   func
+abbr    func(args) { ... }
+  ${1:void} ${2:#:func_name}(${3:#:args}) {
+      ${0:TARGET}
+  }
+
+snippet struct
+abbr    struct { ... }
+  struct ${1:#:name} {
+      ${0:TARGET:data}
+  };
+
+# Typedef struct
+snippet struct_typedef
+abbr    typedef struct name { ... }
+  typedef struct ${1:#:name} {
+      ${0:TARGET:data}
+  };
+
+snippet     enum
+abbr        enum { ... }
+  enum ${1:#:name} {
+      ${0:TARGET}
+  };
+
+# hard-tab is necessary; C indent doesn't support this.
+snippet main
+abbr    int main(int argc, char const* argv[]) { ... }
+  int main(int argc, char const* argv[])
+  {
+    ${0:TARGET}
+    return 0;
+  }
+
+snippet include
+alias   #inc #include
+  #include <${1:stdio}.h>
+
+snippet include2
+alias   #inc2 #include2
+  #include "${1}.h"
+
+snippet ifndef
+alias   #ifndef
+abbr #ifndef ... #define ... #endif
+  #ifndef $1
+  #define ${1:#:SYMBOL}
+  #endif${0}
+
+snippet def
+alias   #def, #define
+  #define
+
+# Include-Guard
+snippet once
+abbr include-guard
+  #ifndef ${1:SYMBOL}
+      #define $1
+
+      ${0:TARGET}
+  #endif /* end of include guard */
+
+# Ternary conditional operator
+snippet conditional
+abbr    (condition) ? a : b
+  (${1:#:condition}) ? ${2:#:a} : ${3:#:b}
+
+snippet typedef
+abbr    typedef base_type custom_type
+  typedef ${1:#:base_type} ${2:#:custom_type};
+
+snippet printf
+abbr    printf("...\n", ...);
+  printf("${1}\n", ${2});
+
+snippet fprintf
+abbr    fprintf(..., "...\n", ...);
+  fprintf(${1:stderr}, "${2}\n"${3});
+
+snippet comment
+alias /*
+  /* ${1:#:comment} */
+
+snippet sizeof
+abbr    sizeof(...)
+  sizeof(${0:TARGET})
+
+snippet helloworld
+  #include <stdio.h>
+  int main(int argc, char const* argv[])
+  {
+      puts("hello, world!");
+      return 0;
+  }
+
+snippet fopen
+abbr fopen("...", "...");
+  fopen("${1:PATH}", "${2:MODE}");
+  ${0:TARGET}
+  fclose(${3:FD});
+
+snippet fgets
+abbr fgets(row, length, file);
+  fgets(${0:ROW}, ${1:LENGTH}, ${2:FILE});

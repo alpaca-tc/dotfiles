@@ -1050,7 +1050,7 @@ augroup MyEditing
   autocmd!
   autocmd BufEnter * execute ':silent! lcd! ' . expand('%:p:h')
   autocmd Filetype xml,html,eruby inoremap <buffer> </ </<C-X><C-O>
-  autocmd FileType slim,ruby,eruby,haml,racc,ruby.racc inoremap <buffer>\| \|\|<Left>
+  " autocmd FileType slim,ruby,eruby,haml,racc,ruby.racc inoremap <buffer>\| \|\|<Left>
 augroup END
 "}}}
 
@@ -2519,7 +2519,7 @@ unlet hooks
 " ------------------------------------
 let hooks = neobundle#get_hooks('alpaca_english')
 function! hooks.on_source(bundle) "{{{
-  let g:alpaca_english_enable                      = 1
+  let g:alpaca_english_enable                      = 0
   let g:alpaca_english_max_candidates              = 100
   let g:alpaca_english_enable_duplicate_candidates = 1
 endfunction"}}}
@@ -2715,10 +2715,11 @@ function! hooks.on_source(bundle) "{{{
   imap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? neocomplete#complete_common_string() : "\<TAB>"
   " inoremap <expr><C-e> neocomplete#cancel_popup()
 
-  function! s:my_crinsert() "{{{
+  inoremap <silent> <CR> <C-R>=<SID>my_cr_function()<CR><C-R>=g:crend(0)<CR>
+  function! s:my_cr_function()
     return neocomplete#close_popup() . "\<CR>"
-  endfunction"}}}
-  inoremap <silent><CR> <C-R>=<SID>my_crinsert()<CR>
+  endfunction
+
   inoremap <expr><C-h> neocomplete#smart_close_popup() . "\<C-h>"
   inoremap <expr><C-X><C-F> neocomplete#start_manual_complete('file')
   inoremap <expr><C-X><C-K> neocomplete#start_manual_complete('dictionary')
@@ -3232,8 +3233,24 @@ unlet hooks
 " ----------------------------------------
 let hooks = neobundle#get_hooks('auto-pairs')
 function! hooks.on_source(bundle) "{{{
-  let g:auto_pairs#map_space = 0
+  let g:auto_pairs#map_space = 1
   let g:auto_pairs#map_cr = 0
+
+  let g:auto_pairs = {
+        \ '(':')',
+        \ '[':']',
+        \ '{':'}',
+        \ "'":"'",
+        \ '"':'"',
+        \ '`':'`',
+        \ '|' : '|'
+        \ }
+
+  " let g:auto_pairs#shortcut_toggle = '<M-p>'
+  " let g:auto_pairs#shortcut_fast_wrap = '<M-e>'
+  " let g:auto_pairs#shortcut_jump = '<M-n>'
+  " let g:auto_pairs#shortcut_back_insert = '<M-b>'
+  " let g:auto_pairs#fly_mode = 0
 endfunction"}}}
 function! hooks.on_post_source(bundle) "{{{
   call auto_pairs#try_init()
@@ -3488,6 +3505,13 @@ let hooks = neobundle#get_hooks('vim-over')
 function! hooks.on_post_source(bundle) "{{{
   OverCommandLineNoremap <C-J> <Plug>(over-cmdline-substitute-jump-pattern)
   OverCommandLineNoremap <C-K> <Plug>(over-cmdline-substitute-jump-string)
+
+  command! -range -nargs=*
+        \  OverCommandLine
+        \  call over#command_line(
+        \    g:over_command_line_prompt,
+        \    <line1> != <line2> ? printf("'<,'>%s", <q-args>) : <q-args>
+        \)
 endfunction"}}}
 unlet hooks
 
