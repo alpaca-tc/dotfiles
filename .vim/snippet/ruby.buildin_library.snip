@@ -732,18 +732,30 @@ regexp  '\.[[:alnum:]_?]*$'
   chunk { |${1:v}| ${2} }
 
 snippet map
-alias   collect
 abbr    map { |v| ... } #=> array
 options word
 regexp  '\.[[:alnum:]_?]*$'
   map { |${1:v}| ${2} }
 
 snippet mapd
-alias   collect
 abbr    map do |v| ... end #=> array
 options word
 regexp  '\.[[:alnum:]_?]*$'
   map do |${1:v}|
+    ${2}
+  end
+
+snippet collect
+abbr    collect { |v| ... } #=> array
+options word
+regexp  '\.[[:alnum:]_?]*$'
+  collect { |${1:v}| ${2} }
+
+snippet collectd
+abbr    collect do |v| ... end #=> array
+options word
+regexp  '\.[[:alnum:]_?]*$'
+  collect do |${1:v}|
     ${2}
   end
 
