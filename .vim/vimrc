@@ -1255,9 +1255,9 @@ nnoremap [tag_or_tab]s  :<C-u>tselect<CR>
 augroup AlpacaTags
   autocmd!
   if exists(':Tags')
-    autocmd BufWritePost Gemfile TagsBundle
-    autocmd BufRead,BufNew * TagsSet
-    autocmd BufWritePost * TagsUpdate
+    " autocmd BufWritePost Gemfile TagsBundle
+    " autocmd BufRead,BufNew * TagsSet
+    " autocmd BufWritePost * TagsUpdate
   endif
 augroup END
 "}}}
@@ -3245,6 +3245,7 @@ function! hooks.on_source(bundle) "{{{
         \ '`':'`',
         \ '|' : '|'
         \ }
+  let g:auto_pairs#parens = { '{':'}' }
 
   " let g:auto_pairs#shortcut_toggle = '<M-p>'
   " let g:auto_pairs#shortcut_fast_wrap = '<M-e>'
