@@ -133,6 +133,13 @@ snippet clearTimeout()
 abbr    Clears a timer set with setTimeout()
 options word
   clearTimeout(${1:timeout_var})
+
+snippet let
+abbr    let(...) { ... }
+options word
+  let(${1:x = x + 1}) {
+    ${2}
+  }
 #}}}
 
 # Function
