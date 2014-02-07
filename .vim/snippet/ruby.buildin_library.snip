@@ -15,11 +15,6 @@ abbr    instance_eval(expr, filename = "(eval)", lineno = 1)
 options word
   instance_eval ${1:block_or_expr}
 
-snippet instance_exec
-abbr    instance_exec(*args) { |*vars| ... }
-options word
-  instance_exec(*${1:args}) { |${2:*vars}| ${3} }
-
 snippet singleton_method_added
 abbr    singleton_method_added
 regexp  'def [singleton_method_added]*$'
@@ -186,7 +181,7 @@ options word
 
 snippet tapd
 abbr    tap do |x| ... end
-regexp  '\.[tap]*$'
+regexp  '\.[[:alnum:]_?]*$'
 options word
   tap do |${1}|
     ${2}
@@ -1808,6 +1803,16 @@ abbr    gsub
 regexp  '\.[gsub]*$'
 options word
   gsub(/${1:pat}/, '${2}')
+
+snippet unpack
+abbr    unpack(format)
+options word
+  unpack(${1:format})
+
+snippet unpack_format_sample
+abbr    http://ruby-doc.org/core-2.0/String.html#method-i-unpack
+options word
+  http://ruby-doc.org/core-2.0/String.html#method-i-unpack
 # }}}
 
 # Comparable {{{
@@ -1843,3 +1848,28 @@ regexp  '[sprintf]*$'
 options word
   sprintf('${1:pat}', ${2:*values})
 # }}}
+
+# Module {{{
+snippet class_exec
+abbr    class_exec(*args) { |*vars| ... }
+alias   module_exec
+options word
+  class_exec(${1:*args}) do |${2:*vars}|
+    ${3}
+  end
+
+snippet class_eval
+abbr    class_eval { |klass| ... }
+alias   module_eval
+options word
+  class_eval do |klass|
+    ${1}
+  end
+
+snippet instance_exec
+abbr    instance_exec(*args) { |*vars| ... }
+options word
+  instance_exec(${1:*args}) do |${2:*vars}|
+    ${3}
+  end
+## }}}

@@ -27,13 +27,13 @@ abbr        stub_model(...)
 options     word
   stub_model(${1})
 
-snippet     it
+snippet     itd
 abbr        it ... do
   it '${1}' do
     ${2}
   end
 
-snippet     itd
+snippet     it
 abbr        it { ... }
   it { ${1} }
 
@@ -54,8 +54,9 @@ abbr        shared_examples_for
     ${2}
   end
 
-snippet     pend
+snippet     pending
 abbr        pending '...'
+alias       pend
 options     word
   pending '${1}'
 
@@ -262,8 +263,9 @@ options word
 
 snippet     respond_to
 abbr        be_respond_to(...)
+alias       be_respond_to
 options     word
-  should be_respond_to(:${1:method})
+  be_respond_to(:${1:method})
 
 snippet     when
 abbr        context 'when'

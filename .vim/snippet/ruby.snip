@@ -20,7 +20,7 @@ prev_word '^'
 snippet module
 abbr    module Name ... end
 options word
-  module ${1:module_name}
+  module ${1:auto_name}
     ${2}
   end
 
@@ -65,6 +65,18 @@ options word
   def ${1:method_name}
     ${2}
   end
+
+snippet refine
+abbr    refine Module { ... }
+options word
+  refine ${1:Module} do
+    ${2}
+  end
+
+snippet using
+abbr    using Module
+options word
+  using ${1:Module}
 #}}}
 
 # Branch on condition#{{{
@@ -119,7 +131,7 @@ options word
 snippet class
 abbr    class ... end
 options word
-  class ${1:className}
+  class ${1:auto_name}
     ${2}
   end
 

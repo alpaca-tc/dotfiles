@@ -812,22 +812,26 @@ NeoBundleLazy 'mattn/excitetranslate-vim', {
       \ 'depends': 'mattn/webapi-vim',
       \ 'autoload' : { 'commands': ['ExciteTranslate']}
       \ }
-" NeoBundleLazy 'alpaca-tc/vim-altr', {
-"       \ 'build' : 'bundle install',
-"       \ 'autoload' : {
-"       \   'filetypes' : 'ruby',
-"       \   'mappings' : [
-"       \     ['n', '<Plug>(altr-forward)'],
-"       \     ['n', '<Plug>(altr-back)'],
-"       \   ]
-"       \ }}
-NeoBundle 'alpaca-tc/alpaca_altr', {
+NeoBundleLazy 'mattn/googletranslate-vim', {
+      \ 'depends': 'mattn/webapi-vim',
+      \ 'autoload' : { 'commands': ['GoogleTranslate']}
+      \ }
+NeoBundleLazy 'alpaca-tc/vim-altr', {
+      \ 'build' : 'bundle install',
       \ 'autoload' : {
+      \   'filetypes' : 'ruby',
       \   'mappings' : [
-      \     ['n', '<Plug>(alpaca-altr-forward)'],
-      \     ['n', '<Plug>(alpaca-altr-back)'],
+      \     ['n', '<Plug>(altr-forward)'],
+      \     ['n', '<Plug>(altr-back)'],
       \   ]
       \ }}
+" NeoBundle 'alpaca-tc/alpaca_altr', {
+"       \ 'autoload' : {
+"       \   'mappings' : [
+"       \     ['n', '<Plug>(alpaca-altr-forward)'],
+"       \     ['n', '<Plug>(alpaca-altr-back)'],
+"       \   ]
+"       \ }}
 
 
 NeoBundleLazy 'tsukkee/lingr-vim', { 'autoload' : {
@@ -2314,6 +2318,7 @@ function! hooks.on_source(bundle) "{{{
         \   ['\.to_not', '\.to'],
         \   { '\([^. ]\+\)\.should\(_not\|\)': 'expect(\1)\.to\2' },
         \   { 'expect(\([^. ]\+\))\.to\(_not\|\)': '\1.should\2' },
+        \   ['before', 'after'],
         \ ],
         \ 'rails' : [
         \   [100, ':continue', ':information'],
@@ -2809,12 +2814,15 @@ let hooks = neobundle#get_hooks('vimfiler')
 function! hooks.on_source(bundle) "{{{
   let g:vimfiler_data_directory = g:my.dir.vimfiler
   let g:vimfiler_force_overwrite_statusline = 0
+  let g:vimfiler_draw_files_limit = 0
   let g:vimfiler_safe_mode_by_default = 0
   let g:vimfiler_as_default_explorer = 1
   let g:vimfiler_sort_type = 'filename'
   let g:vimfiler_preview_action = ''
   let g:vimfiler_enable_auto_cd= 1
   let g:vimfiler_file_icon = '-'
+  let g:vimfiler_max_directories_history = 1000
+  let g:vimfiler_tree_indentation = 2
   let g:vimfiler_readonly_file_icon = 'x'
   let g:vimfiler_tree_closed_icon = '‣'
   let g:vimfiler_tree_leaf_icon = ' '
@@ -3233,7 +3241,7 @@ unlet hooks
 " ----------------------------------------
 let hooks = neobundle#get_hooks('auto-pairs')
 function! hooks.on_source(bundle) "{{{
-  let g:auto_pairs#map_space = 1
+  let g:auto_pairs#map_space = 0
   let g:auto_pairs#map_cr = 0
 
   let g:auto_pairs = {
@@ -3478,18 +3486,17 @@ let g:clang_use_library = 1
 
 nmap <Space>A  <Plug>(altr-forward)
 nmap <Space>a  <Plug>(altr-back)
-" let hooks = neobundle#get_hooks('vim-altr')
-" function! hooks.on_post_source(bundle) "{{{
-"   call altr#remove_all()
-"
-"   " For ruby tdd
-"   call altr#define('lib/%.rb', 'spec/lib/%_spec.rb')
-"   call altr#define('_posts/%.markdown', 'images/blog/')
-"
-"   " For Berksfile
-"   call altr#define('Berksfile', $HOME . '/.berkshelf/cookbooks')
-" endfunction"}}}
-" unlet hooks
+let hooks = neobundle#get_hooks('vim-altr')
+function! hooks.on_post_source(bundle) "{{{
+  call altr#remove_all()
+
+  call altr#define('lib/%.rb', 'spec/lib/%_spec.rb')
+  call altr#define('lib/%.rb', 'spec/%_spec.rb')
+  call altr#define('_posts/%.markdown', 'images/blog/')
+
+  call altr#define('Berksfile', $HOME . '/.berkshelf/cookbooks')
+endfunction"}}}
+unlet hooks
 
 nmap p <Plug>(yankround-p)
 nmap P <Plug>(yankround-P)
@@ -3713,6 +3720,44 @@ function! s:setup_include_file_for_rails() "{{{
         \ ['png', 'jpg', 'gif', 'jpeg', 'ico']
 endfunction"}}}
 command! RailsView call s:setup_include_file_for_rails()
+
+function! s:echo_comment() "{{{
+  ruby <<EOS
+  $: << '/Users/alpaca-tc/projects/strip_comment/lib'
+  require 'strip_comment'
+  file_path = File.expand_path('test.js', '/Users/alpaca-tc/src')
+  file_object = StripComment::FileObject.new(file_path)
+  scanner = StripComment::Scanner::JavaScript.new(file_object)
+  comments = scanner.scan
+  comments.sort_by { |v| v.value }
+  lines = []
+
+  line = 1
+  until comments.empty?
+    comment = comments.shift
+
+    line += 1
+    until comment.line <= line
+      line += 1
+      lines << ' '
+    end
+
+    lines << comment.value
+  end
+
+  VIM.command("let g:length = #{lines.length}")
+  VIM.command("let lines = #{lines}")
+EOS
+
+  let tempfile = tempname()
+  call writefile(lines, tempfile)
+  let current_line = line('.')
+  set scrollbind
+  vnew `=tempfile`
+  call setpos('.', [0, current_line, 0, 0])
+  set scrollbind
+endfunction"}}}
+command! Comment call s:echo_comment()
 
 let s:loaded_vimrc = 1
 
