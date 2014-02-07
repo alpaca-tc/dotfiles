@@ -17,4 +17,14 @@ abbr database.ymlのsocketをすべての環境に対応する
   ].detect { |socket| File.exist?(socket) }
   %>
 
-
+snippet travis_config
+abbr    travis_config
+options word
+  language: ruby
+  rvm:
+    - 2.1.0
+  gemfile:
+    - Gemfile
+  notifications:
+    email: false
+  script: bundle exec rspec spec

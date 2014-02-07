@@ -810,7 +810,10 @@ NeoBundleLazy 'sh.vim', { 'autoload': {
 " ----------------------------------------
 NeoBundleLazy 'mattn/excitetranslate-vim', {
       \ 'depends': 'mattn/webapi-vim',
-      \ 'autoload' : { 'commands': ['ExciteTranslate']}
+      \ 'autoload' : {
+      \   'commands': ['ExciteTranslate'],
+      \   'functions' : ['ExciteTranslate'],
+      \ }
       \ }
 NeoBundleLazy 'mattn/googletranslate-vim', {
       \ 'depends': 'mattn/webapi-vim',
@@ -1081,7 +1084,9 @@ command! -nargs=1 Dict call alpaca#function#macdict#search(<q-args>)
 " Moving {{{
 if s:on_init()
   set virtualedit+=block
-  set whichwrap=b,s,h,l,~,<,>,[,]
+  augroup MyAutoCmd
+    autocmd BufEnter * set whichwrap=b,s,h,l,~,<,>,[,]
+  augroup END
 endif
 
 inoremap <silent><C-A> <End>
@@ -3722,13 +3727,14 @@ endfunction"}}}
 command! RailsView call s:setup_include_file_for_rails()
 
 function! s:echo_comment() "{{{
+  let current_file = expand('%:p')
   ruby <<EOS
   $: << '/Users/alpaca-tc/projects/strip_comment/lib'
   require 'strip_comment'
-  file_path = File.expand_path('test.js', '/Users/alpaca-tc/src')
+  current_file = VIM.evaluate('current_file')
+  file_path = File.expand_path(current_file, '/Users/alpaca-tc/src')
   file_object = StripComment::FileObject.new(file_path)
-  scanner = StripComment::Scanner::JavaScript.new(file_object)
-  comments = scanner.scan
+  comments = StripComment::Parser.for(file_object).scan
   comments.sort_by { |v| v.value }
   lines = []
 
@@ -3750,7 +3756,8 @@ function! s:echo_comment() "{{{
 EOS
 
   let tempfile = tempname()
-  call writefile(lines, tempfile)
+  let result = ExciteTranslate(join(lines, "\n"))
+  call writefile(split(result, "\n"), tempfile)
   let current_line = line('.')
   set scrollbind
   vnew `=tempfile`

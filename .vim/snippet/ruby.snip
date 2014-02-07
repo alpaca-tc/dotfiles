@@ -359,3 +359,30 @@ options word
     puts Solver.new.solve
   end
 # }}}
+
+snippet gemspec
+abbr    gemspec_config
+options word
+  $:.unshift File.expand_path('../lib', __FILE__)
+  require '${1}/version'
+
+  Gem::Specification.new do |s|
+    s.authors               = '`g:my.info.name`'
+    s.date                  = Time.now.strftime('%Y-%m-%d')
+    s.email                 = '`g:my.info.email`'
+    s.files                 = `git ls-files`.split("\n")
+    s.homepage              = '${2}'
+    s.license               = 'MIT'
+    s.name                  = '$1'
+    s.require_paths         = %w!lib!
+    s.required_ruby_version = '>= 2.0.0'
+    s.test_files            = `git ls-files -- {spec}/*`.split("\n")
+    s.version               = ${3}::VERSION
+
+    s.summary               = '${4}'
+    s.description           = '$4'
+
+    s.add_development_dependency 'rake'
+    s.add_development_dependency 'rspec'
+    # s.executables = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
+  end
