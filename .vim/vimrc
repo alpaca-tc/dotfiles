@@ -2314,6 +2314,7 @@ function! hooks.on_source(bundle) "{{{
         \   ['controller', 'model', 'view', 'migration', 'scaffold'],
         \ ],
         \ 'ruby.rspec': [
+        \   ['it_has_behavior', 'it_should_behave_like'],
         \   ['describe', 'context', 'specific', 'example'],
         \   ['before', 'after'],
         \   ['be_true', 'be_false'],
@@ -2323,7 +2324,6 @@ function! hooks.on_source(bundle) "{{{
         \   ['\.to_not', '\.to'],
         \   { '\([^. ]\+\)\.should\(_not\|\)': 'expect(\1)\.to\2' },
         \   { 'expect(\([^. ]\+\))\.to\(_not\|\)': '\1.should\2' },
-        \   ['before', 'after'],
         \ ],
         \ 'rails' : [
         \   [100, ':continue', ':information'],
