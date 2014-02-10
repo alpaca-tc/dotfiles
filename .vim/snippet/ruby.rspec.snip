@@ -417,7 +417,7 @@ options word
 snippet match_array
 abbr    match_array(...)
 regexp  '\v((to|should|to_not|should_not)\s|\.$)'
-alias   array_match
+alias   array_match contain_exactly
 options word
   match_array ${1:array}
 
@@ -550,4 +550,16 @@ options word
 
     ${4:#:diffable}
   end
+
+
 # }}}
+
+# rspec-expectations {{{
+snippet .or
+abbr    eql(...).or (...)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
+  .or ${1}
+
+# }}}
+

@@ -813,6 +813,10 @@ NeoBundleLazy 'mattn/excitetranslate-vim', {
       \ 'autoload' : {
       \   'commands': ['ExciteTranslate'],
       \   'functions' : ['ExciteTranslate'],
+      \ }}
+NeoBundle 'alpaca-tc/gingerice.vim', {
+      \ 'autoload' : {
+      \   'commands' : ['Gingerice'],
       \ }
       \ }
 NeoBundleLazy 'mattn/googletranslate-vim', {
@@ -3726,45 +3730,71 @@ function! s:setup_include_file_for_rails() "{{{
 endfunction"}}}
 command! RailsView call s:setup_include_file_for_rails()
 
-function! s:echo_comment() "{{{
-  let current_file = expand('%:p')
+function! s:gingerice_comment(count, line1, line2) "{{{
+  echomsg 'Post comment to Ginger...'
+
+  if a:count == -1
+    let current_file = expand('%:p')
+  else
+    let current_file = tempname() . expand('%')
+    call writefile(getline(a:line1, a:line2), current_file)
+  endif
+
   ruby <<EOS
   $: << '/Users/alpaca-tc/projects/strip_comment/lib'
   require 'strip_comment'
-  current_file = VIM.evaluate('current_file')
-  file_path = File.expand_path(current_file, '/Users/alpaca-tc/src')
-  file_object = StripComment::FileObject.new(file_path)
-  comments = StripComment::Parser.for(file_object).scan
-  comments.sort_by { |v| v.value }
-  lines = []
 
-  line = 1
-  until comments.empty?
-    comment = comments.shift
+  def parse_comment
+    current_file = VIM.evaluate('current_file')
+    file_path = File.expand_path(current_file)
+    file_object = StripComment::FileObject.new(file_path)
+    parser = StripComment::Parser.for(file_object)
+    return unless parser
+    comments = parser.scan
+    comments.sort_by { |v| v.value }
+    lines = []
 
-    line += 1
-    until comment.line <= line
+    line = 1
+    until comments.empty?
+      comment = comments.shift
+
       line += 1
-      lines << ' '
+      until comment.line <= line
+        line += 1
+        lines << ' '
+      end
+
+      lines << comment.value
     end
 
-    lines << comment.value
+    lines
   end
 
-  VIM.command("let g:length = #{lines.length}")
-  VIM.command("let lines = #{lines}")
-EOS
+  lines = parse_comment
 
-  let tempfile = tempname()
-  let result = ExciteTranslate(join(lines, "\n"))
-  call writefile(split(result, "\n"), tempfile)
-  let current_line = line('.')
-  set scrollbind
-  vnew `=tempfile`
-  call setpos('.', [0, current_line, 0, 0])
-  set scrollbind
+  if lines
+    VIM.command("let lines = #{lines}")
+  end
+EOS
+  if !exists('lines')
+    echoerr 'Parser is not found'
+    return
+  endif
+
+  if exists(':Gingerice')
+    let text_parsed = gingerice#parser#parse(join(lines, ' '))
+    call gingerice#buffer#build(text_parsed)
+    set modifiable
+    " let text_translated = ExciteTranslate(join(lines, "\n"))
+    " call append(line('$'), '--')
+    " call append(line('$'), text_translated)
+    set nomodifiable
+  else
+    vnew `=tempfile`
+  endif
 endfunction"}}}
-command! Comment call s:echo_comment()
+command! -nargs=0 -range=% Comment :call s:gingerice_comment(<count>, <line1>, <line2>)
+xnoremap <silent> t :Comment<CR>
 
 let s:loaded_vimrc = 1
 
