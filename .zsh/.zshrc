@@ -22,6 +22,8 @@ export ECLIPSE_HOME='/Applications/eclipse'
 # export CPPFLAGS="-I/usr/local/Cellar/readline/6.2.4/include"
 # export LDFLAGS="-L/usr/local/Cellar/readline/6.2.4/lib"
 
+export SSH_ASKPASS=$HOME/dotfiles/command/ssh-askpass
+
 # PATH
 # {{{
 export PATH=''

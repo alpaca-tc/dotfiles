@@ -56,7 +56,13 @@ function! s:on_init() "{{{
   return has('vim_starting') || !exists('s:loaded_vimrc')
 endfunction"}}}
 function! ToUpperCamel(string) "{{{
-  return substitute(a:string, '^[a-z]\|_\zs[a-z]\C', '\=toupper(submatch(0))', 'g')
+  let new_name = []
+  for str in split(a:string, '_')
+    let str = substitute(str, '^[a-z]\|_\zs[a-z]\C', '\=toupper(submatch(0))', 'g')
+    call add(new_name, str)
+  endfor
+
+  return join(new_name, '')
 endfunction"}}}
 "}}}
 
@@ -444,7 +450,7 @@ else
 endif
 
 NeoBundleLazy 'alpaca-tc/vim-qfreplace', { 'autoload' : {
-      \ 'filetypes' : ['unite', 'quickfix'],
+      \ 'filetypes' : ['unite', 'quickfix', 'vimfiler'],
       \ 'functions' : 'qfreplace#start',
       \ 'commands' : 'Qfreplace',
       \ }}
@@ -622,6 +628,9 @@ NeoBundleLazy 'mattn/emmet-vim', {
 " ----------------------------------------
 NeoBundleLazy 'jiangmiao/simple-javascript-indenter', { 'autoload' : {
       \ 'filetypes' : ['javascript', 'json', 'nginx'],
+      \ }}
+NeoBundleLazy 'moll/vim-node', { 'autoload' : {
+      \ 'filetypes' : ['javascript'],
       \ }}
 NeoBundleLazy 'geekjuice/vim-mocha', { 'autoload' : {
       \ 'filetypes' : ['javascript', 'coffee'] }}
@@ -1067,13 +1076,11 @@ augroup END
 
 " ----------------------------------------
 " Searching {{{
-if s:on_init()
-  set hlsearch
-  set ignorecase
-  set incsearch
-  set smartcase
-  set wrapscan
-endif
+set hlsearch
+set ignorecase
+set incsearch
+set smartcase
+set wrapscan
 
 nnoremap <silent> n nvv
 nnoremap <silent> N Nvv
@@ -1086,12 +1093,8 @@ command! -nargs=1 Dict call alpaca#function#macdict#search(<q-args>)
 
 " ----------------------------------------
 " Moving {{{
-if s:on_init()
-  set virtualedit+=block
-  augroup MyAutoCmd
-    autocmd BufEnter * set whichwrap=b,s,h,l,~,<,>,[,]
-  augroup END
-endif
+set whichwrap=b,s,h,l,~,<,>,[,]
+set virtualedit+=block
 
 inoremap <silent><C-A> <End>
 inoremap <silent><C-L> <Right>
@@ -1504,6 +1507,7 @@ nnoremap ,g :<C-u>OpenBrowserSearch<Space><C-R><C-W><CR>
 
 " ------------------------------------
 nnoremap <silent>,r :QuickRun<CR>
+nnoremap <silent>,R :autocmd BufWritePost <buffer> call quickrun#command('', len(range(0, line('$'))), 0, line('$'))<CR>
 let hooks = neobundle#get_hooks('vim-quickrun')
 function! hooks.on_source(bundle) "{{{
   let g:quickrun_config = {}
@@ -2846,12 +2850,16 @@ function! hooks.on_source(bundle) "{{{
     endif
 
     setl nonumber
-    " unmap <buffer>t
+
+    nunmap <buffer>N
+    nmap <buffer>C <Plug>(vimfiler_new_file)
+
     nmap <buffer><C-J> [unite]
     nmap <buffer><CR>  <Plug>(vimfiler_edit_file)
     nmap <buffer>f     <Plug>(vimfiler_toggle_mark_current_line)
     nnoremap <buffer>b :<C-U>UniteBookmarkAdd<CR>
     nnoremap <buffer><expr>p vimfiler#do_action('preview')
+    nnoremap <expr><buffer>re vimfiler#do_action('replace')
     nnoremap <buffer>v v
     nnoremap <silent><buffer>gs :Unite giti/status -buffer-name=giti_status -no-start-insert -horizontal<CR>
     nnoremap <buffer>u :<C-U>Unite file -no-start-insert -buffer-name=file<CR>
@@ -3730,6 +3738,90 @@ function! s:setup_include_file_for_rails() "{{{
 endfunction"}}}
 command! RailsView call s:setup_include_file_for_rails()
 
+function! s:get_comment(file_path) "{{{
+  ruby <<EOS
+  require 'comment_parser'
+  require 'json'
+
+  def parse_comment
+    file_path = File.expand_path(VIM.evaluate('a:file_path'))
+    file_object = CommentParser::File.new(file_path)
+
+    if parser = CommentParser::Parser.for(file_object)
+      parser.parse
+    end
+  end
+
+  def comments2dictionary_list(comments = [])
+    comments.map do |comment|
+      { line: comment.line, value: comment.value }
+    end
+  end
+
+  list = comments2dictionary_list(parse_comment)
+
+  VIM.command("let comments = #{list.to_json}")
+EOS
+
+  return comments
+endfunction"}}}
+
+function! s:get_comment_with_filetype(file_path, filetype) "{{{
+  ruby <<EOS
+  require 'comment_parser'
+  require 'json'
+
+  def parse_comment
+    file_path = File.expand_path(VIM.evaluate('a:file_path'))
+    file_object = CommentParser::File.new(file_path)
+
+    filetype = VIM.evaluate('a:filetype')
+    if scanner = CommentParser::Parser.find_scanner_by_filetype(filetype)
+      CommentParser::Parser.new(scanner.new(file_object)).parse
+    end
+  end
+
+  def comments2dictionary_list(comments = [])
+    comments.map do |comment|
+      { line: comment.line, value: comment.value }
+    end
+  end
+
+  list = comments2dictionary_list(parse_comment)
+
+  VIM.command("let comments = #{list.to_json}")
+EOS
+
+  return comments
+endfunction"}}}
+
+function! s:parse_comment_to_buffer(comments) "{{{
+  let comments = a:comments
+
+  let buffer = []
+  while !empty(comments)
+    let comment = remove(comments, 0)
+    while comment.line != len(buffer) + 1
+      call add(buffer, '')
+    endwhile
+
+    call add(buffer, comment.value)
+  endwhile
+
+  while len(buffer) < line('$')
+    call add(buffer, '')
+  endwhile
+
+  let temp = tempname()
+  set scrollbind
+  normal gg
+
+  call writefile(buffer, temp)
+  silent vnew `=temp`
+  silent! file [CommentParser Buffer]
+  set scrollbind
+endfunction"}}}
+
 function! s:gingerice_comment(count, line1, line2) "{{{
   echomsg 'Post comment to Ginger...'
 
@@ -3740,42 +3832,6 @@ function! s:gingerice_comment(count, line1, line2) "{{{
     call writefile(getline(a:line1, a:line2), current_file)
   endif
 
-  ruby <<EOS
-  $: << '/Users/alpaca-tc/projects/strip_comment/lib'
-  require 'strip_comment'
-
-  def parse_comment
-    current_file = VIM.evaluate('current_file')
-    file_path = File.expand_path(current_file)
-    file_object = StripComment::FileObject.new(file_path)
-    parser = StripComment::Parser.for(file_object)
-    return unless parser
-    comments = parser.scan
-    comments.sort_by { |v| v.value }
-    lines = []
-
-    line = 1
-    until comments.empty?
-      comment = comments.shift
-
-      line += 1
-      until comment.line <= line
-        line += 1
-        lines << ' '
-      end
-
-      lines << comment.value
-    end
-
-    lines
-  end
-
-  lines = parse_comment
-
-  if lines
-    VIM.command("let lines = #{lines}")
-  end
-EOS
   if !exists('lines')
     echoerr 'Parser is not found'
     return
@@ -3793,8 +3849,9 @@ EOS
     vnew `=tempfile`
   endif
 endfunction"}}}
-command! -nargs=0 -range=% Comment :call s:gingerice_comment(<count>, <line1>, <line2>)
-xnoremap <silent> t :Comment<CR>
+command! CommentByFileType :call s:get_comment_with_filetype(expand("%:p"), &filetype)
+command! CommentBuffer :call s:parse_comment_to_buffer(s:get_comment(expand("%:p")))
+command! Comment :call s:parse_comment_to_buffer(s:get_comment_with_filetype(expand("%:p"), &filetype))
 
 let s:loaded_vimrc = 1
 

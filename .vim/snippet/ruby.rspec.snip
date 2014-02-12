@@ -13,6 +13,11 @@ options head
   require 'spec_helper'
 
 # basic#{{{
+snippet described_class
+abbr    described_class
+options word
+  described_class
+
 snippet context
 abbr    context 'message' do ... end
 alias   con
@@ -75,6 +80,14 @@ options head
     ${3}
   end
 
+snippet shared_context
+abbr    shared_context 'noun' do ... end
+alias   shared
+options head
+  shared_context '${1:noun}' do ${2:#:|args|}
+    ${3}
+  end
+
 snippet pending
 abbr    pending '...'
 alias   pend
@@ -95,13 +108,23 @@ snippet it_behaves_like
 abbr    it_behaves_like 'noun' do ... end
 alias   behaves
 options head
-  it_behaves_like '${1:noun}' ${2:#:do}
+  it_behaves_like '${1:noun}'
 
-snippet it_has_behavior
-abbr    it_has_behavior 'adjective' do ... end
-alias   behavior
+snippet include_context
+abbr    include_context 'noun' do ... end
 options head
-  it_has_behavior '${1:adjective}' ${2:#:do}
+  include_context '${1:noun}'
+
+snippet include_examples
+abbr    include_examples 'noun' do ... end
+options head
+  include_examples '${1:noun}'
+
+# snippet it_has_behavior
+# abbr    it_has_behavior 'adjective' do ... end
+# alias   behavior
+# options head
+#   it_has_behavior '${1:adjective}' ${2:#:do}
 
 snippet it_should_behave_like
 abbr    it_should_behave_like 'noun'
@@ -291,11 +314,6 @@ abbr    .ordered
 regexp  '\.[ordered]*$'
 options word
   .ordered
-
-snippet receive
-abbr    receive(:method).with(...)
-options word
-  receive(:${1})${2:.with(${3:args\})}${4}
 #}}}
 
 # filter {{{
@@ -512,6 +530,26 @@ abbr    start_with('...')
 regexp  '\v((to|should|to_not|should_not)\s|\.$)'
 options word
   start_with(${1:'str' or *values for array})
+
+
+# Rspec 3
+snippet allow_any_instance_of
+abbr    allow_any_instance_of(...).to
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
+  allow_any_instance_of(${1}).to ${2}
+
+snippet be_truthy
+abbr    be_truthy
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
+  be_truthy
+
+snippet be_falsy
+abbr    be_falsy
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
+  be_falsy
 #}}}
 
 # rspec.rails? {{{
@@ -529,6 +567,7 @@ snippet stub_model
 abbr    stub_model(...)
 options word
   stub_model(${1})
+
 # }}}
 
 # Rspec::Matchers... {{{
@@ -550,8 +589,6 @@ options word
 
     ${4:#:diffable}
   end
-
-
 # }}}
 
 # rspec-expectations {{{
