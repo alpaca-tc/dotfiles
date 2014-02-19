@@ -35,9 +35,3 @@ setlocal commentstring=#\ %s
 setlocal formatoptions-=t formatoptions+=croql
 setlocal include=^\\s*\\<\\(load\\\|\w*require\\)\\>
 setlocal includeexpr=substitute(substitute(v:fname,'::','/','g'),'$','.rb','')
-
-augroup Gemfile
-  autocmd!
-  autocmd BufWritePost <buffer> call vimproc#system_bg('bundle && gem ctags')
-  autocmd FileType <buffer> call autocmd! Gemfile
-augroup END

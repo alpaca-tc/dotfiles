@@ -1,0 +1,639 @@
+snippet process.argv
+abbr    process.argv
+alias   argv
+options word
+  process.argv
+
+# Standard Module {{{
+# fs# {{{
+snippet fs.rename
+abbr    fs.rename(oldPath, newPath, callback)
+options word
+  fs.rename(${1:oldPath}, ${2:newPath}, ${3:callback})
+
+snippet fs.renameSync
+abbr    fs.renameSync(oldPath, newPath)
+options word
+  fs.renameSync(${1:oldPath}, ${2:newPath})
+
+snippet fs.ftruncate
+abbr    fs.ftruncate(fd, len, callback)
+options word
+  fs.ftruncate(${1:fd}, ${2:len}, ${3:callback})
+
+snippet fs.ftruncateSync
+abbr    fs.ftruncateSync(fd, len)
+options word
+  fs.ftruncateSync(${1:fd}, ${2:len})
+
+snippet fs.truncate
+abbr    fs.truncate(path, len, callback)
+options word
+  fs.truncate(${1:path}, ${2:len}, ${3:callback})
+
+snippet fs.truncateSync
+abbr    fs.truncateSync(path, len)
+options word
+  fs.truncateSync(${1:path}, ${2:len})
+
+snippet fs.chown
+abbr    fs.chown(path, uid, gid, callback)
+options word
+  fs.chown(${1:path}, ${2:uid}, ${3:gid}, ${4:callback})
+
+snippet fs.chownSync
+abbr    fs.chownSync(path, uid, gid)
+options word
+  fs.chownSync(${1:path}, ${2:uid}, ${3:gid})
+
+snippet fs.fchown
+abbr    fs.fchown(fd, uid, gid, callback)
+options word
+  fs.fchown(${1:fd}, ${2:uid}, ${3:gid}, ${4:callback})
+
+snippet fs.fchownSync
+abbr    fs.fchownSync(fd, uid, gid)
+options word
+  fs.fchownSync(${1:fd}, ${2:uid}, ${3:gid})
+
+snippet fs.lchown
+abbr    fs.lchown(path, uid, gid, callback)
+options word
+  fs.lchown(${1:path}, ${2:uid}, ${3:gid}, ${4:callback})
+
+snippet fs.lchownSync
+abbr    fs.lchownSync(path, uid, gid)
+options word
+  fs.lchownSync(${1:path}, ${2:uid}, ${3:gid})
+
+snippet fs.chmod
+abbr    fs.chmod(path, mode, callback)
+options word
+  fs.chmod(${1:path}, ${2:mode}, ${3:callback})
+
+snippet fs.chmodSync
+abbr    fs.chmodSync(path, mode)
+options word
+  fs.chmodSync(${1:path}, ${2:mode})
+
+snippet fs.fchmod
+abbr    fs.fchmod(fd, mode, callback)
+options word
+  fs.fchmod(${1:fd}, ${2:mode}, ${3:callback})
+
+snippet fs.fchmodSync
+abbr    fs.fchmodSync(fd, mode)
+options word
+  fs.fchmodSync(${1:fd}, ${2:mode})
+
+snippet fs.lchmod
+abbr    fs.lchmod(path, mode, callback)
+options word
+  fs.lchmod(${1:path}, ${2:mode}, ${3:callback})
+
+snippet fs.lchmodSync
+abbr    fs.lchmodSync(path, mode)
+options word
+  fs.lchmodSync(${1:path}, ${2:mode})
+
+snippet fs.stat
+abbr    fs.stat(path, callback)
+options word
+  fs.stat(${1:path}, ${2:callback})
+
+snippet fs.lstat
+abbr    fs.lstat(path, callback)
+options word
+  fs.lstat(${1:path}, ${2:callback})
+
+snippet fs.fstat
+abbr    fs.fstat(fd, callback)
+options word
+  fs.fstat(${1:fd}, ${2:callback})
+
+snippet fs.statSync
+abbr    fs.statSync(path)
+options word
+  fs.statSync(${1:path})
+
+snippet fs.lstatSync
+abbr    fs.lstatSync(path)
+options word
+  fs.lstatSync(${1:path})
+
+snippet fs.fstatSync
+abbr    fs.fstatSync(fd)
+options word
+  fs.fstatSync(${1:fd})
+
+snippet fs.link
+abbr    fs.link(srcpath, dstpath, callback)
+options word
+  fs.link(${1:srcpath}, ${2:dstpath}, ${3:callback})
+
+snippet fs.linkSync
+abbr    fs.linkSync(srcpath, dstpath)
+options word
+  fs.linkSync(${1:srcpath}, ${2:dstpath})
+
+snippet fs.symlink
+abbr    fs.symlink(srcpath, dstpath, [type], callback)
+options word
+  fs.symlink(${1:srcpath}, ${2:dstpath}, ${3:[type]}, ${4:callback})
+
+snippet fs.symlinkSync
+abbr    fs.symlinkSync(srcpath, dstpath, [type])
+options word
+  fs.symlinkSync(${1:srcpath}, ${2:dstpath}, ${3:[type]})
+
+snippet fs.readlink
+abbr    fs.readlink(path, callback)
+options word
+  fs.readlink(${1:path}, ${2:callback})
+
+snippet fs.readlinkSync
+abbr    fs.readlinkSync(path)
+options word
+  fs.readlinkSync(${1:path})
+
+snippet fs.realpath
+abbr    fs.realpath(path, [cache], callback)
+options word
+  fs.realpath(${1:path}, ${2:[cache]}, ${3:callback})
+
+snippet fs.realpathSync
+abbr    fs.realpathSync(path, [cache])
+options word
+  fs.realpathSync(${1:path}, ${2:[cache]})
+
+snippet fs.unlink
+abbr    fs.unlink(path, callback)
+options word
+  fs.unlink(${1:path}, ${2:callback})
+
+snippet fs.unlinkSync
+abbr    fs.unlinkSync(path)
+options word
+  fs.unlinkSync(${1:path})
+
+snippet fs.rmdir
+abbr    fs.rmdir(path, callback)
+options word
+  fs.rmdir(${1:path}, ${2:callback})
+
+snippet fs.rmdirSync
+abbr    fs.rmdirSync(path)
+options word
+  fs.rmdirSync(${1:path})
+
+snippet fs.mkdir
+abbr    fs.mkdir(path, [mode], callback)
+options word
+  fs.mkdir(${1:path}, ${2:[mode]}, ${3:callback})
+
+snippet fs.mkdirSync
+abbr    fs.mkdirSync(path, [mode])
+options word
+  fs.mkdirSync(${1:path}, ${2:[mode]})
+
+snippet fs.readdir
+abbr    fs.readdir(path, callback)
+options word
+  fs.readdir(${1:path}, ${2:callback})
+
+snippet fs.readdirSync
+abbr    fs.readdirSync(path)
+options word
+  fs.readdirSync(${1:path})
+
+snippet fs.close
+abbr    fs.close(fd, callback)
+options word
+  fs.close(${1:fd}, ${2:callback})
+
+snippet fs.closeSync
+abbr    fs.closeSync(fd)
+options word
+  fs.closeSync(${1:fd})
+
+snippet fs.open
+abbr    fs.open(path, flags, [mode], callback)
+options word
+  fs.open(${1:path}, ${2:flags}, ${3:[mode]}, ${4:callback})
+
+snippet fs.openSync
+abbr    fs.openSync(path, flags, [mode])
+options word
+  fs.openSync(${1:path}, ${2:flags}, ${3:[mode]})
+
+snippet fs.utimes
+abbr    fs.utimes(path, atime, mtime, callback)
+options word
+  fs.utimes(${1:path}, ${2:atime}, ${3:mtime}, ${4:callback})
+
+snippet fs.utimesSync
+abbr    fs.utimesSync(path, atime, mtime)
+options word
+  fs.utimesSync(${1:path}, ${2:atime}, ${3:mtime})
+
+snippet fs.futimes
+abbr    fs.futimes(fd, atime, mtime, callback)
+options word
+  fs.futimes(${1:fd}, ${2:atime}, ${3:mtime}, ${4:callback})
+
+snippet fs.futimesSync
+abbr    fs.futimesSync(fd, atime, mtime)
+options word
+  fs.futimesSync(${1:fd}, ${2:atime}, ${3:mtime})
+
+snippet fs.fsync
+abbr    fs.fsync(fd, callback)
+options word
+  fs.fsync(${1:fd}, ${2:callback})
+
+snippet fs.fsyncSync
+abbr    fs.fsyncSync(fd)
+options word
+  fs.fsyncSync(${1:fd})
+
+snippet fs.write
+abbr    fs.write(fd, buffer, offset, length, position, callback)
+options word
+  fs.write(${1:fd}, ${2:buffer}, ${3:offset}, ${4:length}, ${5:position}, ${6:callback})
+
+snippet fs.writeSync
+abbr    fs.writeSync(fd, buffer, offset, length, position)
+options word
+  fs.writeSync(${1:fd}, ${2:buffer}, ${3:offset}, ${4:length}, ${5:position})
+
+snippet fs.read
+abbr    fs.read(fd, buffer, offset, length, position, callback)
+options word
+  fs.read(${1:fd}, ${2:buffer}, ${3:offset}, ${4:length}, ${5:position}, ${6:callback})
+
+snippet fs.readSync
+abbr    fs.readSync(fd, buffer, offset, length, position)
+options word
+  fs.readSync(${1:fd}, ${2:buffer}, ${3:offset}, ${4:length}, ${5:position})
+
+snippet fs.readFile
+abbr    fs.readFile(filename, [options], callback)
+options word
+  fs.readFile(${1:filename}, ${2:[options]}, ${3:callback})
+
+snippet fs.readFileSync
+abbr    fs.readFileSync(filename, [options])
+options word
+  fs.readFileSync(${1:filename}, ${2:[options]})
+
+snippet fs.writeFile
+abbr    fs.writeFile(filename, data, [options], callback)
+options word
+  fs.writeFile(${1:filename}, ${2:data}, ${3:[options]}, ${4:callback})
+
+snippet fs.writeFileSync
+abbr    fs.writeFileSync(filename, data, [options])
+options word
+  fs.writeFileSync(${1:filename}, ${2:data}, ${3:[options]})
+
+snippet fs.appendFile
+abbr    fs.appendFile(filename, data, [options], callback)
+options word
+  fs.appendFile(${1:filename}, ${2:data}, ${3:[options]}, ${4:callback})
+
+snippet fs.appendFileSync
+abbr    fs.appendFileSync(filename, data, [options])
+options word
+  fs.appendFileSync(${1:filename}, ${2:data}, ${3:[options]})
+
+snippet fs.watchFile
+abbr    fs.watchFile(filename, [options], listener)
+options word
+  fs.watchFile(${1:filename}, ${2:[options]}, ${3:listener})
+
+snippet fs.unwatchFile
+abbr    fs.unwatchFile(filename, [listener])
+options word
+  fs.unwatchFile(${1:filename}, ${2:[listener]})
+
+snippet fs.watch
+abbr    fs.watch(filename, [options], [listener])
+options word
+  fs.watch(${1:filename}, ${2:[options]}, ${3:[listener]})
+
+snippet fs.exists
+abbr    fs.exists(path, callback)
+options word
+  fs.exists(${1:path}, ${2:callback})
+
+snippet fs.existsSync
+abbr    fs.existsSync(path)
+options word
+  fs.existsSync(${1:path})
+
+snippet fs.createReadStream
+abbr    fs.createReadStream(path, [options])
+options word
+  fs.createReadStream(${1:path}, ${2:[options]})
+
+snippet fs.createWriteStream
+abbr    fs.createWriteStream(path, [options])
+options word
+  fs.createWriteStream(${1:path}, ${2:[options]})
+# }}}
+
+# Assert {{{
+snippet assert.fail
+abbr    assert.fail(actual, expected, message, operator)
+options word
+  assert.fail(${1:actual}, ${2:expected}, ${3:message}, ${4:operator})
+
+snippet assert
+abbr    assert(value, message)
+options word
+  assert(${1:value}, ${2:message)}
+
+snippet assert.ok
+abbr    assert.ok(value, [message])
+options word
+  assert.ok(${1:value}, ${2:message})
+
+snippet assert.equal
+abbr    assert.equal(actual, expected, [message])
+options word
+  assert.equal(${1:actual}, ${2:expected}, ${3:[message]})
+
+snippet assert.notEqual
+abbr    assert.notEqual(actual, expected, [message])
+options word
+  assert.notEqual(${1:actual}, ${2:expected}, ${3:[message]})
+
+snippet assert.deepEqual
+abbr    assert.deepEqual(actual, expected, [message])
+options word
+  assert.deepEqual(${1:actual}, ${2:expected}, ${3:[message]})
+
+snippet assert.notDeepEqual
+abbr    assert.notDeepEqual(actual, expected, [message])
+options word
+  assert.notDeepEqual(${1:actual}, ${2:expected}, ${3:[message]})
+
+snippet assert.strictEqual
+abbr    assert.strictEqual(actual, expected, [message])
+options word
+  assert.strictEqual(${1:actual}, ${2:expected}, ${3:[message]})
+
+snippet assert.notStrictEqual
+abbr    assert.notStrictEqual(actual, expected, [message])
+options word
+  assert.notStrictEqual(${1:actual}, ${2:expected}, ${3:[message]})
+
+snippet assert.throws
+abbr    assert.throws(block, [error], [message])
+options word
+  assert.throws(${1:block}, ${2:[error]}, ${3:[message]})
+
+snippet assert.doesNotThrow
+abbr    assert.doesNotThrow(block, [message])
+options word
+  assert.doesNotThrow(${1:block}, ${2:[message]})
+
+snippet assert.ifError
+abbr    assert.ifError(value)
+options word
+  assert.ifError(${1:value})
+
+# }}}
+
+# http# {{{
+snippet http.STATUS_CODES
+abbr    http.STATUS_CODES
+options word
+  http.STATUS_CODES
+
+snippet http.createServer
+abbr    http.createServer([requestListener])
+options word
+  http.createServer(${1:[requestListener]})
+
+snippet http.createClient
+abbr    http.createClient([port], [host])
+options word
+  http.createClient(${1:[port]}, ${2:[host]})
+
+snippet server.listen
+abbr    server.listen(path, [callback])
+options word
+  server.listen(${1:path}, ${2:[callback]})
+
+snippet server.close
+abbr    server.close([callback])
+options word
+  server.close(${1:[callback]})
+
+snippet server.maxHeadersCount
+abbr    server.maxHeadersCount
+options word
+  server.maxHeadersCount
+
+snippet server.setTimeout
+abbr    server.setTimeout(msecs, callback)
+options word
+  server.setTimeout(${1:msecs}, ${2:callback})
+
+snippet server.timeout
+abbr    server.timeout
+options word
+  server.timeout
+
+snippet response.writeContinue
+abbr    response.writeContinue()
+regexp  resp.writeContinue
+options word
+  response.writeContinue
+
+snippet response.writeHead
+abbr    response.writeHead(statusCode, [reasonPhrase], [headers])
+regexp  resp.writeHead
+options word
+  response.writeHead(${1:statusCode}, ${2:[reasonPhrase]}, ${3:[headers]})
+
+snippet response.setTimeout
+abbr    response.setTimeout(msecs, callback)
+regexp  resp.setTimeout
+options word
+  response.setTimeout(${1:msecs}, ${2:callback})
+
+snippet response.statusCode
+abbr    response.statusCode
+options word
+  response.statusCode
+
+snippet response.setHeader
+abbr    response.setHeader(name, value)
+regexp  resp.setHeader
+options word
+  response.setHeader(${1:name}, ${2:value})
+
+snippet response.headersSent
+abbr    response.headersSent
+options word
+  response.headersSent
+
+snippet response.sendDate
+abbr    response.sendDate
+options word
+  response.sendDate
+
+snippet response.getHeader
+abbr    response.getHeader(name)
+regexp  resp.getHeader
+options word
+  response.getHeader(${1:name})
+
+snippet response.removeHeader
+abbr    response.removeHeader(name)
+regexp  resp.removeHeader
+options word
+  response.removeHeader(${1:name})
+
+snippet response.write
+abbr    response.write(chunk, [encoding])
+regexp  resp.write
+options word
+  response.write(${1:chunk}, ${2:[encoding]})
+
+snippet response.addTrailers
+abbr    response.addTrailers(headers)
+regexp  resp.addTrailers
+options word
+  response.addTrailers(${1:headers})
+
+snippet response.end
+abbr    response.end([data], [encoding])
+regexp  resp.end
+options word
+  response.end(${1:[data]}, ${2:[encoding]})
+
+snippet http.request
+abbr    http.request(options, [callback])
+options word
+  http.request(${1:options}, ${2:[callback]})
+
+snippet http.get
+abbr    http.get(options, [callback])
+options word
+  http.get(${1:options}, ${2:[callback]})
+
+snippet agent.maxSockets
+abbr    agent.maxSockets
+options word
+  agent.maxSockets
+
+snippet agent.sockets
+abbr    agent.sockets
+options word
+  agent.sockets
+
+snippet agent.requests
+abbr    agent.requests
+options word
+  agent.requests
+
+snippet http.globalAgent
+abbr    http.globalAgent
+options word
+  http.globalAgent
+
+snippet request.write
+abbr    request.write(chunk, [encoding])
+options word
+  request.write(${1:chunk}, ${2:[encoding]})
+
+snippet request.end
+abbr    request.end([data], [encoding])
+options word
+  request.end(${1:[data]}, ${2:[encoding]})
+
+snippet request.abort
+abbr    request.abort()
+options word
+  request.abort
+
+snippet request.setTimeout
+abbr    request.setTimeout(timeout, [callback])
+options word
+  request.setTimeout(${1:timeout}, ${2:[callback]})
+
+snippet request.setNoDelay
+abbr    request.setNoDelay([noDelay])
+options word
+  request.setNoDelay(${1:[noDelay]})
+
+snippet request.setSocketKeepAlive
+abbr    request.setSocketKeepAlive([enable], [initialDelay])
+options word
+  request.setSocketKeepAlive(${1:[enable]}, ${2:[initialDelay]})
+
+snippet http.IncomingMessage
+abbr    http.IncomingMessage
+options word
+  http.IncomingMessage
+
+snippet message.httpVersion
+abbr    message.httpVersion
+options word
+  message.httpVersion
+
+snippet message.headers
+abbr    message.headers
+options word
+  message.headers
+
+snippet message.trailers
+abbr    message.trailers
+options word
+  message.trailers
+
+snippet message.setTimeout
+abbr    message.setTimeout(msecs, callback)
+options word
+  message.setTimeout(${1:msecs}, ${2:callback})
+
+snippet message.method
+abbr    message.method
+options word
+  message.method
+
+snippet message.url
+abbr    message.url
+options word
+  message.url
+
+snippet message.statusCode
+abbr    message.statusCode
+options word
+  message.statusCode
+
+snippet message.socket
+abbr    message.socket
+options word
+  message.socket
+# }}}
+# }}}
+
+# Module# {{{
+snippet module.exports
+abbr    module.exports = ...
+alias   exports
+options word
+  module.exports = ${1}
+# }}}
+
+# RequireJS# {{{
+snippet require
+abbr    require('...')
+alias   req
+options word
+  $1${2} = require('${1}')
+# }}}

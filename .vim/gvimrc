@@ -6,6 +6,8 @@ augroup END
 syntax on
 set imdisable
 
+set columns=88 lines=53 guioptions-=r
+
 nnoremap ¥ \
 inoremap ¥ \
 cnoremap ¥ \

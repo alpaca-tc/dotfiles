@@ -29,3 +29,9 @@ options word
       [slice(0...index), slice(index..-1)]
     end
   end
+
+# JSON
+snippet JSON.parse
+abbr    JSON.parse
+options word
+  JSON.parse('${1:path}')

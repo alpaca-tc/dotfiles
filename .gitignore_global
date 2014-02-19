@@ -14,3 +14,5 @@ yui
 *.pyc
 .watsonrc
 .watsonresults
+coverage/
+tmp/

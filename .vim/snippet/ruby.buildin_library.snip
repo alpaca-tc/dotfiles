@@ -71,6 +71,11 @@ regexp  '\.[class_variable_get]*$'
 options word
   class_variable_get(:@@${1:name})
 
+snippet class_variable_defined?
+abbr    class_variable_defined?(:@@name)
+options word
+  class_variable_defined?(:@@${1:name})
+
 snippet instance_variables
 abbr    instance_variables
 regexp  '\.[instance_variables]*$'
@@ -1523,10 +1528,10 @@ options word
   Hash.new(0)
 
 snippet Hash[]
-abbr    Hash.new([])
+abbr    Hash.new { |h,k| h[k] = [] }
 options word
 regexp  'Hash\[\?\]\?$'
-  Hash.new([])
+  Hash.new { |h,k| h[k] = [] }
 
 snippet     Hash{}
 abbr        Hash.new { |h,k| h[k] = Hash.new(&h.default_proc) }
@@ -1873,3 +1878,21 @@ options word
     ${3}
   end
 ## }}}
+
+# Forwardable {{{
+snippet Forwardable
+abbr    Forwardable
+options word
+  require 'forwardable'
+  extend Forwardable
+
+snippet def_delegator
+abbr    def_delegator(accessor, method, alias = method)
+options word
+  def_delegator :${1:@accessor}, :${2:method}${3:, ${4:alias\}}
+
+snippet def_delegators
+abbr    def_delegators(accessor, *methods)
+options word
+  def_delegators :${1:@accessor}, ${2:*methods}
+# }}}

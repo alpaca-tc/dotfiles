@@ -686,3 +686,4 @@ window
 with
 write
 writeln
+toISOString

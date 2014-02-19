@@ -187,12 +187,12 @@ options word
     ${4}
   end
 
-snippet .stub_chain
-abbr    .stub_chain(...) { value }
+snippet stub_chain
+abbr    stub_chain(...) { value }
 alias   .chain
 regexp  '\.[stub_chain]*$'
 options word
-  .stub_chain(${1::one, :two}) { ${2:value} }
+  stub_chain(${1::one, :two}) { ${2:value} }
 
 snippet .stub_any_instance
 abbr    .any_instance.stub(:method).and_return(value)
@@ -556,7 +556,7 @@ options word
 snippet allow
 abbr    allow
 options word
-  allow(${1}).to receive(:${2}).and_return(${3})
+  allow(${1}).to receive${2}
 
 snippet assings
 abbr    assings
