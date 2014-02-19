@@ -45,10 +45,15 @@ options word
   abbr ${1}
 
 snippet sne
- snippet ActiveModel::Naming.${1}
- abbr    ActiveModel::Naming.$1${2}
- regexp  'ActiveModel::Naming\.[$1]*$'
+ snippet self.${1}
+ abbr    AR.$1${2}
  options word
-   ActiveModel::Naming.$1${3}
+   self.$1${3}
+
+snippet snd
+ snippet .${1}
+ abbr    AR#$1${2}
+ options word
+   .$1${3}
 
 

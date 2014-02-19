@@ -3911,10 +3911,8 @@ function! s:get_comment(file_path) "{{{
 
   def parse_comment
     file_path = File.expand_path(VIM.evaluate('a:file_path'))
-    file_object = CommentParser::File.new(file_path)
-
-    if parser = CommentParser::Parser.for(file_object)
-      parser.parse
+    if parser = CommentExtractor::Parser.for(file_path)
+      parser.extract_comments
     end
   end
 
@@ -3939,11 +3937,10 @@ function! s:get_comment_with_filetype(file_path, filetype) "{{{
 
   def parse_comment
     file_path = File.expand_path(VIM.evaluate('a:file_path'))
-    file_object = CommentParser::File.new(file_path)
 
     filetype = VIM.evaluate('a:filetype')
-    if scanner = CommentParser::Parser.find_scanner_by_filetype(filetype)
-      CommentParser::Parser.new(scanner.new(file_object)).parse
+    if extractor = CommentExtractor::Extractors.find_by_filetype(filetype)
+      CommentParser::Parser.initialize_with_extractor(file_path, extractor).extract_comments
     end
   end
 
