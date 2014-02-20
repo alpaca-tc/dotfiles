@@ -1896,3 +1896,32 @@ abbr    def_delegators(accessor, *methods)
 options word
   def_delegators :${1:@accessor}, ${2:*methods}
 # }}}
+
+snippet Time.at
+abbr    Time.at(time)
+options word
+  Time.at(${1:large_n})
+
+snippet Time.gm
+abbr    Time.gm(year, mon = 1, day = 1, hour = 0, min = 0, sec = 0, usec = 0)
+alias   Time.utc
+options word
+  Time.gm(${1:year}, ${2:mon=1}, ${3:day=1}, ${4:hour}, ${5:min}, ${6:sec}, ${7:usec})
+
+snippet Time.local
+abbr    Time.local(year, mon = 1, day = 1, hour = 0, min = 0, sec = 0, usec = 0)
+alias   Time.mktime
+options word
+  Time.local(${1:year}, ${2:mon=1}, ${3:day=1}, ${4:hour}, ${5:min}, ${6:sec}, ${7:usec})
+
+snippet Time.new
+abbr    Time.new
+alias   Time.now
+options word
+  Time.new
+
+snippet strftime
+abbr    strftime(format)
+regexp  '\.[strftime]*$'
+options word
+  strftime('%Y-%m-%m %I:%M:%S')

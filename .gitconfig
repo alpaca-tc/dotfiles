@@ -98,3 +98,5 @@
   protocol = https
 [credential]
   helper = cache --timeout=86400
+[remote "origin"]
+	fetch = +refs/pull/*/head:refs/remotes/origin/pr/*

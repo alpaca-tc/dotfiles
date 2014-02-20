@@ -45,15 +45,21 @@ options word
   abbr ${1}
 
 snippet sne
- snippet self.${1}
+ snippet .${1}
  abbr    AR.$1${2}
  options word
-   self.$1${3}
+   .$1${3}
 
 snippet snd
  snippet .${1}
  abbr    AR#$1${2}
  options word
    .$1${3}
+
+snippet snt
+  snippet Time.${1}
+  abbr    Time.$1${2}
+  options word
+    Time.$1${3}
 
 

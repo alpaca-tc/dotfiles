@@ -1,6 +1,7 @@
 # ActiveModel::Validations::# {{{
 # Standard validations #{{{
 snippet v_length
+alias   length_validation
 abbr    length: { in: ... }
   length: {
     in: ${2:range_array_lambda_symbol},
@@ -11,56 +12,69 @@ abbr    length: { in: ... }
   }
 
 snippet v_numericality
+alias   numericality_validation
 abbr    numericality: { only_integer: true, ... }
   numericality: { ${1:only_integer: true,}, ${2:greater_than:, greater_than_or_equal_to:, equal_to:, less_than:, odd:, even:} }
 
 snippet v_uniqueness
+alias   uniqueness_validation
 abbr    uniqueness: true
   uniqueness: true
 
 snippet v_presence
+alias   presence_validation
 abbr    presence: true
   presence: true
 
 snippet v_confirmation
+alias   confirmation_validation
 abbr    confirmation: true
   confirmation: true
 
 snippet v_format
+alias   format_validation
 abbr    format: { with: ... }
   format: { with: /${1}/ }
 
 snippet v_inclusion
+alias   inclusion_validation
 abbr    inclusion: { in: %w!...! }
   inclusion: { in: %w!${1}! }
 
 snippet v_exclusion
+alias   exclusion_validation
 abbr    exclusion: { in: %w!...! }
   exclusion: { in: %w!${1}! }
 
 snippet v_allow_blank
+alias   allow_blank_option
 abbr    allow_blank: true
   allow_blank: true
 
 snippet v_allow_nil
+alias   allow_nil_option
 abbr    allow_nil: true
   allow_nil: true
 
 snippet v_acceptance
+alias   acceptance_option
 abbr    acceptance: { on: ... }
   acceptance: { on: ${1::create} }
 
 snippet v_message
+alias   message_option
 abbr    message: '%{value}...'
   message: '${1}'
 
 snippet v_if
+alias   if_option
 abbr if: '...'
-  if: '${1}'
+  if: ${1}
 
 snippet v_unless
+alias   unless_option
 abbr unless: '...'
-  unless: '${1}'
+  unless: ${1}
 
 snippet v_if_and_unless_sample
 abbr if: Proc.new { |u| u.blank }
@@ -70,14 +84,17 @@ abbr if: Proc.new { |u| u.blank }
   if: Proc.new { |u| u.dm.blank? }
 
 snippet v_maximum
+alias   maximum_validation
 abbr maximum: ...
   maximum: ${1}
 
 snippet v_in
+alias   in_option
 abbr in: ...
   in: ${1}
 
 snippet v_minimum
+alias   minimum_valiable
 abbr minimum: ...
   minimum: ${1}
 #}}}

@@ -1254,8 +1254,10 @@ set foldnestmax=2
 
 if v:version >= 703
   highlight ColorColumn guibg=#012345
-  set conceallevel=2 concealcursor=icv
-  set colorcolumn=81
+
+  augroup MyAutoCmd
+    autocmd BufEnter * set conceallevel=2 concealcursor=incv colorcolumn=81
+  augroup END
 endif
 
 augroup MyWindow
