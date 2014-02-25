@@ -1,13 +1,45 @@
 # Factorygirl for rspec#{{{
-snippet     build
-abbr        build(:model_name)
-options     word
+snippet build
+abbr    FactoryGirl.build(:model_name)
+options word
   build(:${1:model_name})
 
-snippet     create
-abbr        create(:model_name)
-options     word
+snippet create
+abbr    FactoryGirl.create(:model_name)
+options word
   create(:${1:model_name})
+
+snippet build_stubbed
+abbr    FactoryGirl.build_stubbed(name, *traits_and_overrides, &block)
+options word
+  build_stubbed(:${1:name}, ${2:*traits_and_overrides})
+
+snippet attributes_for
+abbr    FactoryGirl.attributes_for(name, *traits_and_overrides, &block)
+options word
+  attributes_for :${1:name}${2:, *traits_and_overrides} do
+    ${2}
+  end
+
+snippet build_list
+abbr    FactoryGirl.build_list(name, amount, *traits_and_overrides)
+options word
+  build_list(:${1:name}, ${2:amount}, ${3:*traits_and_overrides})
+
+snippet create_list
+abbr    FactoryGirl.create_list(name, amount, *traits_and_overrides)
+options word
+  create_list(:${1:name}, ${2:amount}, ${3:*traits_and_overrides})
+
+snippet build_stubbed_list
+abbr    build_stubbed_list(name, amount, *traits_and_overrides)
+options word
+  build_stubbed_list(${1:name}, ${2:amount})
+
+snippet attributes_for_list
+abbr    attributes_for_list(name, amount, *traits_and_overrides)
+options word
+  attributes_for_list(${1:name}, ${2:amount})
 ##}}}
 
 snippet     association
@@ -129,6 +161,7 @@ options     word
     ${1}
   end
 #}}}
+
 #FactoryGirl::Syntax::Default::DSL#{{{
 snippet factory
 abbr    factory(name, opts={}, &block)
@@ -150,25 +183,13 @@ options head
     end
   end
 
-#abbr        factory_name
-#options     word
-#  factory_name
-
-#snippet     names
-#abbr        names
-#options     word
-#  names
-
-#snippet     compile
-#abbr        compile
-#options     word
-#  compile
 
 snippet     with_traits
 abbr        with_traits(traits)
 options     word
   with_traits ${1:traits}
 #}}}
+
 #FactoryGirl::DefinitionProxy#{{{
 snippet     sequence
 abbr        sequence(name, start_value, &block)

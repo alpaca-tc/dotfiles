@@ -194,17 +194,11 @@ regexp  '\.[stub_chain]*$'
 options word
   stub_chain(${1::one, :two}) { ${2:value} }
 
-snippet .stub_any_instance
-abbr    .any_instance.stub(:method).and_return(value)
-regexp  '\.[stub_any_instance]*$'
+snippet allow_any_instance_of
+abbr    allow_any_instance_of().to receive(:method).and_return(value)
+alias   any_instance
 options word
-  .any_instance.stub(:${1:method})${2:.with(${3:args\})} { ${4} }
-
-snippet .stub_any_instanceh
-abbr    .any_instance.stub(...)
-regexp  '\.[stub_any_instanceh]*$'
-options word
-  .any_instance.stub(:${1:{ method: value }})
+  allow_any_instance_of(${1}).to receive${2}
 
 snippet .unstub
 abbr    .unstub(:method)
@@ -573,6 +567,7 @@ options word
 # Rspec::Matchers... {{{
 snippet RSpec::Matchers.define
 abbr    RSpec::Matchers.define :name do ... end
+alias   my_matcher_define
 options word
   RSpec::Matchers.define :${1:method_name} do |expected|
     match do |actual|
@@ -588,6 +583,39 @@ options word
     end
 
     ${4:#:diffable}
+  end
+
+snippet my_matcher_create
+abbr    class MyMatcher < RSpec::Matchers::BuiltIn::BaseMatcher ...
+options head
+  class ${1:My}Matcher < RSpec::Matchers::BuiltIn::BaseMatcher
+    def initialize(*args)
+      ${3}
+    end
+
+    def matches?(list_or_block)
+      # return boolean
+    end
+
+    def failure_message
+      <<-MESSAGE.gsub(/^\s*/, '')
+      expected to detect ...
+      expected: '...'
+      got: '...'
+      MESSAGE
+    end
+
+    def failure_message_when_negated
+      <<-MESSAGE.gsub(/^\s*/, '')
+      expected not to detect ...
+      expected: '...'
+      got: '...'
+      MESSAGE
+    end
+  end
+
+  def ${2:be_instance_of}(*args)
+    $1Matcher.new(self, *args)
   end
 # }}}
 

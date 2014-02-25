@@ -25,7 +25,7 @@ options     word
 snippet     flash
 abbr        flash[:name].should eql name
 options     word
-  flash[:${1:name}].should ${2:eql} ${3:value}
+  expect(flash[:${1:name}]).to eql '${2:value}'
 
 # RSpec::Rails::Matchers#{{{
 snippet     render_template
@@ -118,3 +118,13 @@ snippet     controller.append_view_path
 abbr        controller.append_view_path "path"
 options     word
   controller.append_view_path "${1:path}"
+
+snippet describe_action
+abbr    describe "GET 'logout'" { ... }
+options word
+  describe "${1:GET} '${2:action}'" do
+    it 'returns http success' do
+      $1 '$2'${3}
+    end
+  end
+

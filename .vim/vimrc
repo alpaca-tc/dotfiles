@@ -522,7 +522,6 @@ NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
 if has('ruby')
   " The input support for English
   NeoBundleLazy 'alpaca-tc/alpaca_english', {
-        \ 'rev' : 'refactoring',
         \ 'depends' : 'Shougo/neocomplete.vim',
         \ 'build' : {
         \   'mac' : 'bundle',
@@ -1287,11 +1286,11 @@ nnoremap [tag_or_tab]s  :<C-u>tselect<CR>
 
 augroup AlpacaTags
   autocmd!
-  if exists(':Tags')
-    " autocmd BufWritePost Gemfile TagsBundle
-    " autocmd BufRead,BufNew * TagsSet
-    " autocmd BufWritePost * TagsUpdate
-  endif
+  " if exists(':Tags')
+  autocmd BufWritePost Gemfile TagsBundle
+  autocmd BufRead,BufNew * TagsSet
+  autocmd BufWritePost * TagsUpdate
+  " endif
 augroup END
 "}}}
 
@@ -1861,9 +1860,15 @@ function! hooks.on_source(bundle) "{{{
     endtry
   endfunction"}}}
 
+  function! s:set_rails_path()
+    let path = ['app/controllers', 'app/models', 'lib', 'app/admin']
+    execute 'setl path+=,' . join(map(path, 'expand(b:rails_root . "/" . v:val)'), ',')
+  endfunction
+
   function! s:unite_rails_setting() "{{{
     call s:source_snippet()
     call s:rails_settings()
+
     nnoremap <buffer><Space>r :R<CR>
     nnoremap <buffer><Space>a :A<CR>
 
@@ -1878,7 +1883,8 @@ function! hooks.on_source(bundle) "{{{
     nnoremap <buffer>[plug]s           :<C-U>UniteGit spec<CR>
     nnoremap <buffer>[plug]d           :<C-U>UniteGit db<CR>
     nnoremap <buffer>[plug]i           :<C-U>UniteGit db/migrate<CR>
-    nnoremap <buffer>[plug]f           :<C-U>UniteGit db/fixtures<CR>
+    " nnoremap <buffer>[plug]f           :<C-U>UniteGit db/fixtures<CR>
+    nnoremap <buffer>[plug]f           :<C-U>UniteGit spec/factories<CR>
     nnoremap <buffer>[plug]m           :<C-U>UniteGit app/mailers<CR>
     nnoremap <buffer>[plug]l           :<C-U>UniteGit lib<CR>
     nnoremap <buffer>[plug]p           :<C-U>UniteGit public<CR>
@@ -1890,46 +1896,55 @@ function! hooks.on_source(bundle) "{{{
   augroup RailsDictSetting
     autocmd!
     autocmd User Rails call <SID>unite_rails_setting()
+    autocmd User BufEnterRails call <SID>set_rails_path()
   augroup END
 endfunction"}}}
 
 function! s:define_rails_autocmd() "{{{
   let s:rails_snippets = {
-        \ '.view*':                 ['ruby.rails.view.snip'],
-        \ '.view.haml':             ['haml.rails.view.snip'],
-        \ '.view.erb':              ['eruby.rails.view.snip'],
-        \ '.model*':                 ['ruby.rails.model.snip'],
-        \ '.controller':            ['ruby.rails.controller.snip'],
-        \ '.db.migration':          ['ruby.rails.migrate.snip'],
-        \ '/config/environment.rb': ['ruby.rails.environment.snip'],
-        \ '/config/routes.rb':      ['ruby.rails.route.snip'],
-        \ '.fixtures.replacement':  ['ruby.factory_girl.snip'],
-        \ '.spec.controller':       ['ruby.rspec.controller.snip'],
-        \ '.spec.model':            ['ruby.rspec.model.snip'],
-        \ '.spec.helper':           ['ruby.rspec.helper.snip'],
-        \ '.spec.feature':          ['ruby.capybara.snip'],
-        \ '.spec.routing':          ['ruby.rspec.routing.snip']
+        \ '.view*':                 ['ruby.rails.view'],
+        \ '.view.haml':             ['haml.rails.view'],
+        \ '.view.erb':              ['eruby.rails.view'],
+        \ '.model*':                 ['ruby.rails.model'],
+        \ '.controller':            ['ruby.rails.controller'],
+        \ '.db.migration':          ['ruby.rails.migrate'],
+        \ '/config/environment.rb': ['ruby.rails.environment'],
+        \ '/config/routes.rb':      ['ruby.rails.route'],
+        \ '.fixtures.replacement':  ['ruby.factory_girl'],
+        \ '.spec.controller':       ['ruby.rspec.controller'],
+        \ '.spec.model':            ['ruby.rspec.model'],
+        \ '.spec.helper':           ['ruby.rspec.helper'],
+        \ '.spec.feature':          ['ruby.capybara'],
+        \ '.spec.routing':          ['ruby.rspec.routing']
         \ }
 
   augroup MyRailsSetting
     autocmd!
     for [type_or_path, snippets] in items(s:rails_snippets)
       for snippet in snippets
-        let definition = ['autocmd User Rails', type_or_path, ' NeoSnippetSource', ' ~/.vim/snippet/', snippet]
-        execute join(definition, '')
+        let snippet_file = expand('~/.vim/snippet/' . snippet . '.snip')
+        if filereadable(snippet_file)
+          execute 'autocmd User Rails' . type_or_path . ' NeoSnippetSource ' . snippet_file
+          execute 'autocmd User Rails nnoremap <buffer><Space>e :<C-U>tabnew ' . snippet_file . '<CR>'
+        endif
       endfor
     endfor
   augroup END
 endfunction"}}}
+
+function! s:detect_rails()
+  let root_dir = s:current_git()
+  return !empty(root_dir) && filereadable(root_dir . '/config/environments/development.rb')
+endfunction
 
 function! s:load_vim_rails() "{{{
   if exists('s:loaded_vim_rails')
     return
   endif
 
-  let root_dir = s:current_git()
-  if !empty(root_dir) && filereadable(root_dir . '/config/environments/development.rb')
+  if s:detect_rails()
     let s:loaded_vim_rails = 1
+    let root_dir = s:current_git()
     autocmd! LoadVimRails
     augroup! LoadVimRails
 
@@ -1939,13 +1954,18 @@ function! s:load_vim_rails() "{{{
     call s:define_rails_autocmd()
     silent doautocmd User BufEnterRails
     silent doautocmd User Rails
+
+    augroup DetectVimRails
+      autocmd!
+      autocmd BufNew,BufNewFile * silent doautocmd User Rails
+    augroup END
   endif
 endfunction"}}}
 
 if s:on_init() && !exists('s:loaded_vim_rails')
   augroup LoadVimRails
     autocmd!
-    autocmd BufEnter * call <SID>load_vim_rails()
+    autocmd BufNewFile,BufRead * call <SID>load_vim_rails()
   augroup END
 endif
 "}}}
@@ -3807,6 +3827,18 @@ endfunction"}}}
 
 " For Gem
 " Gem"{{{
+function! s:get_all_gem_paths() "{{{
+  if exists('s:all_gem_paths')
+    return s:all_gem_paths
+  endif
+
+  let gem_env = system('rbenv exec gem env')
+  let gem_path = matchstr(gem_env, '\(\s*- INSTALLATION DIRECTORY:\s\)\@<=[^\n]*')
+  let gem_path .= '/gems/'
+  let s:all_gem_paths = split(globpath(gem_path, '*/lib'), '\n')
+
+  return s:all_gem_paths
+endfunction"}}}
 
 function! s:get_gem_paths() " {{{
   if !exists('s:gem_path')
@@ -3816,13 +3848,13 @@ function! s:get_gem_paths() " {{{
   let project_dir = s:get_vital().import('Prelude').path2project_directory(getcwd())
 
   if !has_key(s:gem_path, project_dir)
-    let result = system('bundle show --paths')
-
-    if result =~ 'Could not'
-      let s:gem_path[project_dir] = []
-    else
-      let s:gem_path[project_dir] = map(split(result, '\n'), 'v:val . "/lib"')
-    endif
+    try
+      let paths = map(split(result, '\n'), 'v:val . "/lib"')
+      call filter(paths, 'isdirectory(v:val)')
+      let s:gem_path[project_dir] = paths
+    catch /.*/
+      let s:gem_path[project_dir] = s:get_all_gem_paths()
+    endtry
   endif
 
   return s:gem_path[project_dir]

@@ -1,0 +1,14 @@
+# in Controller
+# CanCan::ControllerAdditions
+
+snippet load_and_authorize_resource
+abbr    load_and_authorize_resource(*args)
+alias   cancan_load_and_authorize_resource
+options head
+  load_and_authorize_resource${1:(*args)}
+
+snippet load_resource
+abbr    load_resource(*args)
+alias   cancan_load_resource
+options head
+  load_resource ${1::only :except :through :through_association :shallow :singleton :parent :class :instance_name :find_by :id_param :collection :new :prepend}

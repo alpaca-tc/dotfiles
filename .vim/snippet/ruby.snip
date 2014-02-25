@@ -24,6 +24,18 @@ options word
     ${2}
   end
 
+snippet concern
+abbr    extend ActiveSupport::Concern; module ClassMethods...
+options word
+  extend ActiveSupport::Concern
+
+  module ClassMethods
+    ${1}
+  end
+
+  included do
+  end
+
 snippet alias
 abbr    alias :new_name :old_name
 options word
@@ -227,11 +239,6 @@ abbr        binding
 alias       pry
 options     word
   binding.pry;
-
-snippet     concern
-abbr        extend ActiveSupport::Concern
-options     word
-  extend ActiveSupport::Concern
 #}}}
 
 # Snippet#{{{
