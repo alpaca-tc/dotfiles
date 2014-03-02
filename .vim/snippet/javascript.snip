@@ -192,3 +192,10 @@ abbr    console.info(...)
 options word
   console.info(${1:`substitute(@*, "\n", ' ', 'g')`});
 #}}}
+
+snippet super_method
+abbr    super_method
+options word
+  ${1:Child}.prototype.${2:method} = function() {
+    ${1:Parent}.prototype.$1.apply(this);
+  }

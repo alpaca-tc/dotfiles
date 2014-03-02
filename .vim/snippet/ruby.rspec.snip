@@ -194,10 +194,18 @@ regexp  '\.[stub_chain]*$'
 options word
   stub_chain(${1::one, :two}) { ${2:value} }
 
+snippet receive_message_chain
+abbr    receive_message_chain(*symbols).and_return(...)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+alias   chain
+options word
+  receive_message_chain(${1:*sym}).
+    and_return { ${2} }
+
 snippet allow_any_instance_of
 abbr    allow_any_instance_of().to receive(:method).and_return(value)
 alias   any_instance
-options word
+options head
   allow_any_instance_of(${1}).to receive${2}
 
 snippet .unstub
@@ -348,6 +356,13 @@ snippet given
 abbr    context 'given ...' do ... end
 options word
   context 'given ${1}' do
+    ${2}
+  end
+
+snippet with
+abbr    context 'with ...' do ... end
+options head
+  context 'with ${1}' do
     ${2}
   end
 
@@ -527,12 +542,6 @@ options word
 
 
 # Rspec 3
-snippet allow_any_instance_of
-abbr    allow_any_instance_of(...).to
-regexp  '\v((to|should|to_not|should_not)\s|\.$)'
-options word
-  allow_any_instance_of(${1}).to ${2}
-
 snippet be_truthy
 abbr    be_truthy
 regexp  '\v((to|should|to_not|should_not)\s|\.$)'

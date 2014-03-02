@@ -1,583 +1,496 @@
-# Underscore {{{
 snippet _.each
 abbr    _.each(list, iterator, [context])
-alias   forEach
-regexp  '_.[eachforEach]*$'
+alias   _.forEach
+regexp  '_.[each_.forEach]*$'
   _.each(${1:list}, ${2:iterator}, ${3:[context]})
 
 snippet _.map
 abbr    _.map(list, iterator, [context])
-alias   collect
-regexp  '_.[mapcollect]*$'
+alias   _.collect
+regexp  '_.[map_.collect]*$'
   _.map(${1:list}, ${2:iterator}, ${3:[context]})
 
 snippet _.reduce
 abbr    _.reduce(list, iterator, memo, [context])
-alias
 regexp  '_.[reduce]*$'
   _.reduce(${1:list}, ${2:iterator}, ${3:memo}, ${4:[context]})
 
 snippet _.reduceRight
 abbr    _.reduceRight(list, iterator, memo, [context])
-alias   foldr
-regexp  '_.[reduceRightfoldr]*$'
+alias   _.foldr
+regexp  '_.[reduceRight_.foldr]*$'
   _.reduceRight(${1:list}, ${2:iterator}, ${3:memo}, ${4:[context]})
 
 snippet _.find
 abbr    _.find(list, predicate, [context])
-alias   detect
-regexp  '_.[finddetect]*$'
+alias   _.detect
+regexp  '_.[find_.detect]*$'
   _.find(${1:list}, ${2:predicate}, ${3:[context]})
 
 snippet _.filter
 abbr    _.filter(list, predicate, [context])
-alias   select
-regexp  '_.[filterselect]*$'
+alias   _.select
+regexp  '_.[filter_.select]*$'
   _.filter(${1:list}, ${2:predicate}, ${3:[context]})
 
 snippet _.where
 abbr    _.where(list, properties)
-alias
 regexp  '_.[where]*$'
   _.where(${1:list}, ${2:properties})
 
 snippet _.findWhere
 abbr    _.findWhere(list, properties)
-alias
 regexp  '_.[findWhere]*$'
   _.findWhere(${1:list}, ${2:properties})
 
 snippet _.reject
 abbr    _.reject(list, predicate, [context])
-alias
 regexp  '_.[reject]*$'
   _.reject(${1:list}, ${2:predicate}, ${3:[context]})
 
 snippet _.every
 abbr    _.every(list, [predicate], [context])
-alias   all
-regexp  '_.[everyall]*$'
+alias   _.all
+regexp  '_.[every_.all]*$'
   _.every(${1:list}, ${2:[predicate]}, ${3:[context]})
 
 snippet _.some
 abbr    _.some(list, [predicate], [context])
-alias   any
-regexp  '_.[someany]*$'
+alias   _.any
+regexp  '_.[some_.any]*$'
   _.some(${1:list}, ${2:[predicate]}, ${3:[context]})
 
 snippet _.contains
 abbr    _.contains(list, value)
-alias   include
-regexp  '_.[containsinclude]*$'
+alias   _.include
+regexp  '_.[contains_.include]*$'
   _.contains(${1:list}, ${2:value})
 
 snippet _.invoke
 abbr    _.invoke(list, methodName, *arguments)
-alias
 regexp  '_.[invoke]*$'
   _.invoke(${1:list}, ${2:methodName}, ${3:*arguments})
 
 snippet _.pluck
 abbr    _.pluck(list, propertyName)
-alias
 regexp  '_.[pluck]*$'
   _.pluck(${1:list}, ${2:propertyName})
 
 snippet _.max
 abbr    _.max(list, [iterator], [context])
-alias
 regexp  '_.[max]*$'
   _.max(${1:list}, ${2:[iterator]}, ${3:[context]})
 
 snippet _.min
 abbr    _.min(list, [iterator], [context])
-alias
 regexp  '_.[min]*$'
   _.min(${1:list}, ${2:[iterator]}, ${3:[context]})
 
 snippet _.sortBy
 abbr    _.sortBy(list, iterator, [context])
-alias
 regexp  '_.[sortBy]*$'
   _.sortBy(${1:list}, ${2:iterator}, ${3:[context]})
 
 snippet _.groupBy
 abbr    _.groupBy(list, iterator, [context])
-alias
 regexp  '_.[groupBy]*$'
   _.groupBy(${1:list}, ${2:iterator}, ${3:[context]})
 
 snippet _.indexBy
 abbr    _.indexBy(list, iterator, [context])
-alias
 regexp  '_.[indexBy]*$'
   _.indexBy(${1:list}, ${2:iterator}, ${3:[context]})
 
 snippet _.countBy
 abbr    _.countBy(list, iterator, [context])
-alias
 regexp  '_.[countBy]*$'
   _.countBy(${1:list}, ${2:iterator}, ${3:[context]})
 
 snippet _.shuffle
 abbr    _.shuffle(list)
-alias
 regexp  '_.[shuffle]*$'
   _.shuffle(${1:list})
 
 snippet _.sample
 abbr    _.sample(list, [n])
-alias
 regexp  '_.[sample]*$'
   _.sample(${1:list}, ${2:[n]})
 
 snippet _.toArray
 abbr    _.toArray(list)
-alias
 regexp  '_.[toArray]*$'
   _.toArray(${1:list})
 
 snippet _.size
 abbr    _.size(list)
-alias
 regexp  '_.[size]*$'
   _.size(${1:list})
 
 snippet _.first
 abbr    _.first(array, [n])
-alias   head take
-regexp  '_.[firstheadtake]*$'
+alias   _.head _.take
+regexp  '_.[first_.head_.take]*$'
   _.first(${1:array}, ${2:[n]})
 
 snippet _.initial
 abbr    _.initial(array, [n])
-alias
 regexp  '_.[initial]*$'
   _.initial(${1:array}, ${2:[n]})
 
 snippet _.last
 abbr    _.last(array, [n])
-alias
 regexp  '_.[last]*$'
   _.last(${1:array}, ${2:[n]})
 
 snippet _.rest
 abbr    _.rest(array, [index])
-alias   tail drop
-regexp  '_.[resttaildrop]*$'
+alias   _.tail _.drop
+regexp  '_.[rest_.tail_.drop]*$'
   _.rest(${1:array}, ${2:[index]})
 
 snippet _.compact
 abbr    _.compact(array)
-alias
 regexp  '_.[compact]*$'
   _.compact(${1:array})
 
 snippet _.flatten
 abbr    _.flatten(array, [shallow])
-alias
 regexp  '_.[flatten]*$'
   _.flatten(${1:array}, ${2:[shallow]})
 
 snippet _.without
 abbr    _.without(array, *values)
-alias
 regexp  '_.[without]*$'
   _.without(${1:array}, ${2:*values})
 
 snippet _.partition
 abbr    _.partition(array, predicate)
-alias
 regexp  '_.[partition]*$'
   _.partition(${1:array}, ${2:predicate})
 
 snippet _.union
 abbr    _.union(*arrays)
-alias
 regexp  '_.[union]*$'
   _.union(${1:*arrays})
 
 snippet _.intersection
 abbr    _.intersection(*arrays)
-alias
 regexp  '_.[intersection]*$'
   _.intersection(${1:*arrays})
 
 snippet _.difference
 abbr    _.difference(array, *others)
-alias
 regexp  '_.[difference]*$'
   _.difference(${1:array}, ${2:*others})
 
 snippet _.uniq
 abbr    _.uniq(array, [isSorted], [iterator])
-alias   unique
-regexp  '_.[uniqunique]*$'
+alias   _.unique
+regexp  '_.[uniq_.unique]*$'
   _.uniq(${1:array}, ${2:[isSorted]}, ${3:[iterator]})
 
 snippet _.zip
 abbr    _.zip(*arrays)
-alias
 regexp  '_.[zip]*$'
   _.zip(${1:*arrays})
 
 snippet _.object
 abbr    _.object(list, [values])
-alias
 regexp  '_.[object]*$'
   _.object(${1:list}, ${2:[values]})
 
 snippet _.indexOf
 abbr    _.indexOf(array, value, [isSorted])
-alias
 regexp  '_.[indexOf]*$'
   _.indexOf(${1:array}, ${2:value}, ${3:[isSorted]})
 
 snippet _.lastIndexOf
 abbr    _.lastIndexOf(array, value, [fromIndex])
-alias
 regexp  '_.[lastIndexOf]*$'
   _.lastIndexOf(${1:array}, ${2:value}, ${3:[fromIndex]})
 
 snippet _.sortedIndex
 abbr    _.sortedIndex(list, value, [iterator], [context])
-alias
 regexp  '_.[sortedIndex]*$'
   _.sortedIndex(${1:list}, ${2:value}, ${3:[iterator]}, ${4:[context]})
 
 snippet _.range
 abbr    _.range([start], stop, [step])
-alias
 regexp  '_.[range]*$'
   _.range(${1:[start]}, ${2:stop}, ${3:[step]})
 
 snippet _.bind
 abbr    _.bind(function, object, *arguments)
-alias
 regexp  '_.[bind]*$'
   _.bind(${1:function}, ${2:object}, ${3:*arguments})
 
 snippet _.bindAll
 abbr    _.bindAll(object, *methodNames)
-alias
 regexp  '_.[bindAll]*$'
   _.bindAll(${1:object}, ${2:*methodNames})
 
 snippet _.partial
 abbr    _.partial(function, *arguments)
-alias
 regexp  '_.[partial]*$'
   _.partial(${1:function}, ${2:*arguments})
 
 snippet _.memoize
 abbr    _.memoize(function, [hashFunction])
-alias
 regexp  '_.[memoize]*$'
   _.memoize(${1:function}, ${2:[hashFunction]})
 
 snippet _.delay
 abbr    _.delay(function, wait, *arguments)
-alias
 regexp  '_.[delay]*$'
   _.delay(${1:function}, ${2:wait}, ${3:*arguments})
 
 snippet _.defer
 abbr    _.defer(function, *arguments)
-alias
 regexp  '_.[defer]*$'
   _.defer(${1:function}, ${2:*arguments})
 
 snippet _.throttle
 abbr    _.throttle(function, wait, [options])
-alias
 regexp  '_.[throttle]*$'
   _.throttle(${1:function}, ${2:wait}, ${3:[options]})
 
 snippet _.debounce
 abbr    _.debounce(function, wait, [immediate])
-alias
 regexp  '_.[debounce]*$'
   _.debounce(${1:function}, ${2:wait}, ${3:[immediate]})
 
 snippet _.once
 abbr    _.once(function)
-alias
 regexp  '_.[once]*$'
   _.once(${1:function})
 
 snippet _.after
 abbr    _.after(count, function)
-alias
 regexp  '_.[after]*$'
   _.after(${1:count}, ${2:function})
 
 snippet _.now
 abbr    _.now()
-alias
 regexp  '_.[now]*$'
   _.now()
 
 snippet _.wrap
 abbr    _.wrap(function, wrapper)
-alias
 regexp  '_.[wrap]*$'
   _.wrap(${1:function}, ${2:wrapper})
 
 snippet _.compose
 abbr    _.compose(*functions)
-alias
 regexp  '_.[compose]*$'
   _.compose(${1:*functions})
 
 snippet _.keys
 abbr    _.keys(object)
-alias
 regexp  '_.[keys]*$'
   _.keys(${1:object})
 
 snippet _.values
 abbr    _.values(object)
-alias
 regexp  '_.[values]*$'
   _.values(${1:object})
 
 snippet _.pairs
 abbr    _.pairs(object)
-alias
 regexp  '_.[pairs]*$'
   _.pairs(${1:object})
 
 snippet _.invert
 abbr    _.invert(object)
-alias
 regexp  '_.[invert]*$'
   _.invert(${1:object})
 
 snippet _.functions
 abbr    _.functions(object)
-alias   methods
-regexp  '_.[functionsmethods]*$'
+alias   _.methods
+regexp  '_.[functions_.methods]*$'
   _.functions(${1:object})
 
 snippet _.extend
 abbr    _.extend(destination, *sources)
-alias
 regexp  '_.[extend]*$'
   _.extend(${1:destination}, ${2:*sources})
 
 snippet _.pick
 abbr    _.pick(object, *keys)
-alias
 regexp  '_.[pick]*$'
   _.pick(${1:object}, ${2:*keys})
 
 snippet _.omit
 abbr    _.omit(object, *keys)
-alias
 regexp  '_.[omit]*$'
   _.omit(${1:object}, ${2:*keys})
 
 snippet _.defaults
 abbr    _.defaults(object, *defaults)
-alias
 regexp  '_.[defaults]*$'
   _.defaults(${1:object}, ${2:*defaults})
 
 snippet _.clone
 abbr    _.clone(object)
-alias
 regexp  '_.[clone]*$'
   _.clone(${1:object})
 
 snippet _.tap
 abbr    _.tap(object, interceptor)
-alias
 regexp  '_.[tap]*$'
   _.tap(${1:object}, ${2:interceptor})
 
 snippet _.has
 abbr    _.has(object, key)
-alias
 regexp  '_.[has]*$'
   _.has(${1:object}, ${2:key})
 
 snippet _.property
 abbr    _.property(key)
-alias
 regexp  '_.[property]*$'
   _.property(${1:key})
 
 snippet _.matches
 abbr    _.matches(attrs)
-alias
 regexp  '_.[matches]*$'
   _.matches(${1:attrs})
 
 snippet _.isEqual
 abbr    _.isEqual(object, other)
-alias
 regexp  '_.[isEqual]*$'
   _.isEqual(${1:object}, ${2:other})
 
 snippet _.isEmpty
 abbr    _.isEmpty(object)
-alias
 regexp  '_.[isEmpty]*$'
   _.isEmpty(${1:object})
 
 snippet _.isElement
 abbr    _.isElement(object)
-alias
 regexp  '_.[isElement]*$'
   _.isElement(${1:object})
 
 snippet _.isArray
 abbr    _.isArray(object)
-alias
 regexp  '_.[isArray]*$'
   _.isArray(${1:object})
 
 snippet _.isObject
 abbr    _.isObject(value)
-alias
 regexp  '_.[isObject]*$'
   _.isObject(${1:value})
 
 snippet _.isArguments
 abbr    _.isArguments(object)
-alias
 regexp  '_.[isArguments]*$'
   _.isArguments(${1:object})
 
 snippet _.isFunction
 abbr    _.isFunction(object)
-alias
 regexp  '_.[isFunction]*$'
   _.isFunction(${1:object})
 
 snippet _.isString
 abbr    _.isString(object)
-alias
 regexp  '_.[isString]*$'
   _.isString(${1:object})
 
 snippet _.isNumber
 abbr    _.isNumber(object)
-alias
 regexp  '_.[isNumber]*$'
   _.isNumber(${1:object})
 
 snippet _.isFinite
 abbr    _.isFinite(object)
-alias
 regexp  '_.[isFinite]*$'
   _.isFinite(${1:object})
 
 snippet _.isBoolean
 abbr    _.isBoolean(object)
-alias
 regexp  '_.[isBoolean]*$'
   _.isBoolean(${1:object})
 
 snippet _.isDate
 abbr    _.isDate(object)
-alias
 regexp  '_.[isDate]*$'
   _.isDate(${1:object})
 
 snippet _.isRegExp
 abbr    _.isRegExp(object)
-alias
 regexp  '_.[isRegExp]*$'
   _.isRegExp(${1:object})
 
 snippet _.isNaN
 abbr    _.isNaN(object)
-alias
 regexp  '_.[isNaN]*$'
   _.isNaN(${1:object})
 
 snippet _.isNull
 abbr    _.isNull(object)
-alias
 regexp  '_.[isNull]*$'
   _.isNull(${1:object})
 
 snippet _.isUndefined
 abbr    _.isUndefined(value)
-alias
 regexp  '_.[isUndefined]*$'
   _.isUndefined(${1:value})
 
 snippet _.noConflict
 abbr    _.noConflict()
-alias
 regexp  '_.[noConflict]*$'
   _.noConflict()
 
 snippet _.identity
 abbr    _.identity(value)
-alias
 regexp  '_.[identity]*$'
   _.identity(${1:value})
 
 snippet _.constant
 abbr    _.constant(value)
-alias
 regexp  '_.[constant]*$'
   _.constant(${1:value})
 
 snippet _.times
 abbr    _.times(n, iterator, [context])
-alias
 regexp  '_.[times]*$'
   _.times(${1:n}, ${2:iterator}, ${3:[context]})
 
 snippet _.random
 abbr    _.random(min, max)
-alias
 regexp  '_.[random]*$'
   _.random(${1:min}, ${2:max})
 
 snippet _.mixin
 abbr    _.mixin(object)
-alias
 regexp  '_.[mixin]*$'
   _.mixin(${1:object})
 
 snippet _.uniqueId
 abbr    _.uniqueId([prefix])
-alias
 regexp  '_.[uniqueId]*$'
   _.uniqueId(${1:[prefix]})
 
 snippet _.escape
 abbr    _.escape(string)
-alias
 regexp  '_.[escape]*$'
   _.escape(${1:string})
 
 snippet _.unescape
 abbr    _.unescape(string)
-alias
 regexp  '_.[unescape]*$'
   _.unescape(${1:string})
 
 snippet _.result
 abbr    _.result(object, property)
-alias
 regexp  '_.[result]*$'
   _.result(${1:object}, ${2:property})
 
 snippet _.template
 abbr    _.template(templateString, [data], [settings])
-alias
 regexp  '_.[template]*$'
   _.template(${1:templateString}, ${2:[data]}, ${3:[settings]})
 
 snippet _.chain
 abbr    _.chain(obj)
-alias
 regexp  '_.[chain]*$'
   _.chain(${1:obj})
-# }}}
