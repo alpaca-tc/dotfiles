@@ -1,53 +1,46 @@
 snippet Backbone.Router
-abbr    var Router = Backbone.Router.extend({...})
+abbr    class Router extends Backbone.Router
 options head
-  var ${1:Router} = Backbone.Router.extend({
-    routes: {
-      ${2:}
-    },
+  class ${1:Router} extends Backbone.Router
+    routes:
+      '' : '${2:index}'
 
-    initialize: function() {
-      ${4:}
-    },
+    initialize: ->
 
-    ${5:method:foo}: function(${6:}) {
-      ${7:}
-    }
-  });
+    $2: ->
+      ${3}
 
 snippet Backbone.View
-abbr    var View = Backbone.View.extend({...})
+abbr    class View extends Backbone.View
 options head
-  var ${1:MyView} = Backbone.View.extend({
-    ${2:el: ''},
-    ${3:tagName: ''},
+  class ${1:View} extends Backbone.View
+    el: $('${2}')
 
-    events: {
-      ${4:}
-    },
+    events:
+      'click body': '${3:method}'
 
-    initialize: function () {
-      ${5:}
-    },
+    initialize: ->
+    render: ->
 
-    render: function () {
-
-    }
-  });
+    $3: ->
 
 snippet Backbone.Model
-abbr    var Model = Backbone.Model.extend({...})
+abbr    class Model exnteds Backbone.Model
 options head
-  var ${1:Model} = Backbone.Model.extend({
-    initialize: function () {
+  class ${1:Model} extends Backbone.Model
+    # idAttribute: 'iid'
+    # defaults:
+    #  worked: '0'
+    urlRoot: '/$1${2}'
 
-    }
-  });
+    initialize: ->
 
 snippet Backbone.Colleaction
-abbr    var Collections = Backbone.Colleaction.extend({...})
+abbr    class Collections extends Backbone.Colleaction
 options head
-  var ${1}s = Backbone.Collection.extend({
-    model: ${2:ModelName},
-    url: "${3}"
-  });
+  class ${1}s exntends Backbone.Collection
+    model: $1
+    url: '/$1${2}'
+
+    initialize: ->
+      # @fetch()
