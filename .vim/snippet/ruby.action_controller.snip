@@ -145,7 +145,7 @@ options     word
 snippet     protect_from_forgery
 abbr        protect_from_forgery(opt={})
 options     word
-  protect_from_forgery ${1:only except}
+  protect_from_forgery ${1:only: ..., except: ..., with: :exception}
 #}}}
 
 #ActionController::UrlFor#{{{

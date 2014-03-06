@@ -1,68 +1,66 @@
-# coding: utf-8
+Pry.config.editor='vim'
 
-require 'active_support/all'
-
-Pry.config.editor="vim"
-if Pry::VERSION.to_f > 0.9
-
-# ininialize alias
-command_alias = {
-  "show" => "show-method",
-  "c" => "continue",
-  "s" => "step",
-  "n" => "next",
-}
-command_alias.each do |k, v|
-  Pry.config.commands.alias_command k, v
-end
-
-# デフォルトがださいのでカスタマイズprompt
-module Prompt
-  mattr_accessor :max_length, :space, :nest_string
-
-  @@klass_length = 20
-  @@klass_max_length = 15
-  @@max_length = 10
-  @@nest_string = "‣"
-  @@space = " "
+module PryExtender
+  COMMAND_ALIAS = {
+    'show' => 'show-method',
+    'c' => 'continue',
+    's' => 'step',
+    'n' => 'next',
+  }
 
   class << self
-    def prompt (target_self, nest_level, pry)
-      klass_or_module = fill_blank(Pry.view_clip(target_self), @@klass_length)
-      nest_level += 1
-      nest = fill_blank(@@nest_string * nest_level.to_i, 5)
+    def command_alias
+      COMMAND_ALIAS.each do |short, long|
+        Pry.config.commands.alias_command(short, long) if Pry.config.commands[long]
+      end
+    end
 
-      sprintf( "\e[33;1m%s \e[36;5m%s\e[0m « ", klass_or_module, nest)
+    KLASS_LENGTH = 20
+    NEST_STRING = '‣'
+    SPACE = ' '
+
+    def extend_prompt
+      Pry.config.prompt = [method(:default_prompt), method(:nest_prompt)]
+    end
+
+    def default_prompt(*args)
+      build_prompt(*args, '«')
+    end
+
+    def nest_prompt(*args)
+      build_prompt(*args, '*')
+    end
+
+    def build_prompt(target_self, nest_level, pry, mark = '*')
+      klass_or_module = fill_blank(Pry.view_clip(target_self), KLASS_LENGTH)
+      nest_level += 1
+      nest = fill_blank(NEST_STRING * nest_level.to_i, 5)
+
+      sprintf("\e[33;1m%s \e[36;5m%s\e[0m#{mark} ", klass_or_module, nest)
+    end
+
+    def enable_hirb
+      require 'hirb'
+
+      if const_defined?(:Hirb)
+        Hirb.enable
+
+        Pry.config.print = proc do |output, value|
+          hirb = Hirb::View.view_or_page_output(value)
+          hirb || Pry::DEFAULT_PRINT.call(output, value)
+        end
+      end
     end
 
     private
+
     def fill_blank(str, length)
-      [str, @@space * length].join[0..length]
+      [str, SPACE * length].join[0..length]
     end
   end
 end
 
-Pry.config.prompt = [
-  proc { |target_self, nest_level, pry|
-    Prompt.prompt(target_self, nest_level, pry)
-  },
-
-  proc { |target_self, nest_level, pry|
-    Prompt.prompt(target_self, nest_level, pry)
-  }
-]
-
-# hirbをpryに対応させる
-# def hirb_hack
-#   Pry.config.print = proc do |output, value|
-#     Hirb::View.view_or_page_output(value) || Pry::DEFAULT_PRINT.call(output, value)
-#   end
+# if Pry::VERSION.to_f > 0.9
+  PryExtender.command_alias
+  PryExtender.extend_prompt
 # end
-#
-# # Hirbをdefaultで使う場合は以下をコメントイン
-# def hirb_enable
-#   require 'hirb'
-#   Hirb.enable
-# end
-# hirb_enable
-end

@@ -1,5 +1,6 @@
-# 基礎
-# syntax
+include coffee.underscore.snip
+include coffee.backbone.snip
+
 snippet require
 abbr    require
 options word
@@ -69,23 +70,24 @@ options word
 
 snippet function
 abbr    -> ...
-alias   fun ->
+alias   fun
 options word
-  ${1:#:name} = (${2}) ->
+  ${1:name} = ${(2) }->
     ${3}
 
-snippet bfun
-abbr    => ...
-alias   fun ->
+snippet bfunction
+abbr    -> ...
+alias   bfun
 options word
-  ${1:#:name} = (${2}) =>
+  ${1:name} = ${(2) }=>
     ${3}
+
 
 snippet class
 abbr    class ... extends ...
 options word
-  class ${1:ClassName}${2: extends ${3:#:Ancestor\}}
-    constructor: (${4:#:args}) ->
+  class ${1:ClassName}${2: extends ${3:Ancestor\}}
+    constructor: ${4:(${5:\})} ->
        ${5}
 
 
@@ -111,12 +113,12 @@ snippet     log
 snippet     warn
     console?.warn ${1}
 
-snippet     class
-abbr        class ...
-options     word
-  class ${1:Klass}
-    constructor: ${2} ->
-    ${3}
+# snippet     class
+# abbr        class ...
+# options     word
+#   class ${1:Klass}
+#     constructor: ${2} ->
+#     ${3}
 #}}}
 
 # jquery#{{{

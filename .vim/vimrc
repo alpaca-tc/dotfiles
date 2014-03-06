@@ -56,7 +56,13 @@ function! s:on_init() "{{{
   return has('vim_starting') || !exists('s:loaded_vimrc')
 endfunction"}}}
 function! ToUpperCamel(string) "{{{
-  return join(map(split(a:string, '_'), "substitute(v:val, '^[a-z]\\|_\zs[a-z]\C', '\\=toupper(submatch(0))', 'g')"), '')
+  let new_name = []
+  for str in split(a:string, '_')
+    let str = substitute(str, '^[a-z]\|_\zs[a-z]\C', '\=toupper(submatch(0))', 'g')
+    call add(new_name, str)
+  endfor
+
+  return join(new_name, '')
 endfunction"}}}
 "}}}
 
@@ -249,7 +255,7 @@ NeoBundleLazy 'scrooloose/syntastic', {
       \   ]
       \ },
       \ 'build' : {
-      \   'mac' : join(['brew install tidy', 'brew install csslint', 'gem install sass', 'npm install -g jslint', 'gem install rubocop'], ' && ')
+      \   'mac' : join(['brew install tidy', 'brew install csslint', 'gem install sass', 'npm install -g jslint', 'gem install rubocop', 'easy_install http://closure-linter.googlecode.com/files/closure_linter-latest.tar.gz', ], ' && ')
       \ }}
 NeoBundleLazy 'vim-scripts/sudo.vim', {
       \ 'autoload': { 'commands': ['SudoRead', 'SudoWrite'] }}
@@ -274,6 +280,9 @@ NeoBundleLazy 'Shougo/unite.vim', {
       \     'UniteBookmarkAdd', 'UniteClose', 'UniteResume',
       \     'UniteWithBufferDir', 'UniteWithCurrentDir', 'UniteWithCursorWord',
       \     'UniteWithInput', 'UniteWithInputDirectory']
+      \ }}
+NeoBundleLazy 'Shougo/neomru.vim', { 'autoload' : {
+      \ 'unite_sources' : ['neomru/file', 'file_mru', 'neomru/directory', 'directory_mru'],
       \ }}
 NeoBundleLazy 'Shougo/vimfiler', {
       \ 'depends' : 'Shougo/unite.vim',
@@ -308,7 +317,9 @@ NeoBundleLazy 'Shougo/neosnippet.vim', {
 " NeoBundleLazy 'Shougo/neosnippet-snippets'
 NeoBundleLazy 'Shougo/vimshell', {
       \ 'autoload' : {
-      \   'commands' : ['VimShell', 'VimShellBufferDir'],
+      \   'commands' : [
+      \     'VimShell', 'VimShellBufferDir', 'VimShellPop', 'VimShellInteractive',
+      \   ],
       \ }}
 NeoBundleLazy 'Shougo/echodoc', {
       \ 'autoload' : {
@@ -358,12 +369,8 @@ NeoBundleLazy 'grep.vim', {
 NeoBundleLazy 'sjl/gundo.vim', {
       \ 'autoload' : { 'commands': ["GundoToggle", 'GundoRenderGraph'] }}
 
-" Need to fix bug in jsctags/jsctags/ctags/writter.js:67 Trait.required -> []
+" jsctags => https://github.com/faceleg/doctorjs, git submodule-init, sudo make install
 NeoBundleLazy 'majutsushi/tagbar', {
-      \ 'build' : {
-      \   'mac' : 'npm install jsctags && gem ins CoffeeTags',
-      \   'unix' : 'npm install https://github.com/faceleg/doctorjs',
-      \ },
       \ 'autoload' : {
       \   'commands': ["TagbarToggle", "TagbarTogglePause", "TagbarOpen"],
       \   'fuctions': ['tagbar#currenttag'] }}
@@ -444,7 +451,7 @@ else
 endif
 
 NeoBundleLazy 'alpaca-tc/vim-qfreplace', { 'autoload' : {
-      \ 'filetypes' : ['unite', 'quickfix'],
+      \ 'filetypes' : ['unite', 'quickfix', 'vimfiler'],
       \ 'functions' : 'qfreplace#start',
       \ 'commands' : 'Qfreplace',
       \ }}
@@ -485,6 +492,9 @@ NeoBundleLazy 'Shougo/unite-help', { 'autoload' : {
 NeoBundleLazy 'thinca/vim-unite-history', { 'autoload' : {
       \ 'unite_sources' : ['history/command', 'history/search']
       \ }}
+NeoBundleLazy 'alpaca-tc/unite-codic.vim', {
+      \ 'depends' : 'koron/codic-vim',
+      \ 'autoload' : { 'unite_sources' : 'codic' }}
 NeoBundleLazy 'basyura/TweetVim', { 'depends' :
       \ ['basyura/twibill.vim', 'tyru/open-browser.vim', 'Shougo/unite.vim'],
       \ 'autoload' : {
@@ -512,7 +522,6 @@ NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
 if has('ruby')
   " The input support for English
   NeoBundleLazy 'alpaca-tc/alpaca_english', {
-        \ 'rev' : 'refactoring',
         \ 'depends' : 'Shougo/neocomplete.vim',
         \ 'build' : {
         \   'mac' : 'bundle',
@@ -623,6 +632,11 @@ NeoBundleLazy 'mattn/emmet-vim', {
 NeoBundleLazy 'jiangmiao/simple-javascript-indenter', { 'autoload' : {
       \ 'filetypes' : ['javascript', 'json', 'nginx'],
       \ }}
+NeoBundleLazy 'jelera/vim-javascript-syntax', {
+      \ 'autoload' : { 'filetypes' : ['javascript'] }}
+NeoBundleLazy 'moll/vim-node', { 'autoload' : {
+      \ 'filetypes' : ['javascript'],
+      \ }}
 NeoBundleLazy 'geekjuice/vim-mocha', { 'autoload' : {
       \ 'filetypes' : ['javascript', 'coffee'] }}
 " NeoBundleLazy 'alpaca-tc/alpaca_tester', { 'autoload' : {
@@ -648,6 +662,10 @@ else
         \ 'filetypes' : g:my.ft.js_files
         \ }}
 endif
+NeoBundleLazy 'myhere/vim-nodejs-complete', { 'autoload' : {
+      \ 'filetypes' : ['javascript'],
+      \ }}
+
 
 " NeoBundleLazy 'claco/jasmine.vim', { 'autoload' : {
 "       \ 'filetypes' : g:my.ft.js_files }}
@@ -810,24 +828,35 @@ NeoBundleLazy 'sh.vim', { 'autoload': {
 " ----------------------------------------
 NeoBundleLazy 'mattn/excitetranslate-vim', {
       \ 'depends': 'mattn/webapi-vim',
-      \ 'autoload' : { 'commands': ['ExciteTranslate']}
-      \ }
-" NeoBundleLazy 'alpaca-tc/vim-altr', {
-"       \ 'build' : 'bundle install',
-"       \ 'autoload' : {
-"       \   'filetypes' : 'ruby',
-"       \   'mappings' : [
-"       \     ['n', '<Plug>(altr-forward)'],
-"       \     ['n', '<Plug>(altr-back)'],
-"       \   ]
-"       \ }}
-NeoBundle 'alpaca-tc/alpaca_altr', {
       \ 'autoload' : {
+      \   'commands': ['ExciteTranslate'],
+      \   'functions' : ['ExciteTranslate'],
+      \ }}
+NeoBundle 'alpaca-tc/gingerice.vim', {
+      \ 'autoload' : {
+      \   'commands' : ['Gingerice'],
+      \ }
+      \ }
+NeoBundleLazy 'mattn/googletranslate-vim', {
+      \ 'depends': 'mattn/webapi-vim',
+      \ 'autoload' : { 'commands': ['GoogleTranslate']}
+      \ }
+NeoBundleLazy 'alpaca-tc/vim-altr', {
+      \ 'build' : 'bundle install',
+      \ 'autoload' : {
+      \   'filetypes' : 'ruby',
       \   'mappings' : [
-      \     ['n', '<Plug>(alpaca-altr-forward)'],
-      \     ['n', '<Plug>(alpaca-altr-back)'],
+      \     ['n', '<Plug>(altr-forward)'],
+      \     ['n', '<Plug>(altr-back)'],
       \   ]
       \ }}
+" NeoBundle 'alpaca-tc/alpaca_altr', {
+"       \ 'autoload' : {
+"       \   'mappings' : [
+"       \     ['n', '<Plug>(alpaca-altr-forward)'],
+"       \     ['n', '<Plug>(alpaca-altr-back)'],
+"       \   ]
+"       \ }}
 
 
 NeoBundleLazy 'tsukkee/lingr-vim', { 'autoload' : {
@@ -910,21 +939,30 @@ endif
 
 " ----------------------------------------
 " Editing"{{{
-if s:on_init()
-  set autoread
-  set nostartofline
-  set hidden
-  set nrformats-=octal
-  set nrformats+=alpha
-  set textwidth=0
-  " set gdefault
-  " set splitright
-  " set splitbelow
-  set previewheight=10
-  set helpheight=14
-  set matchtime=1
-  set winheight=5
-endif
+set autoread
+set nostartofline
+set hidden
+set nrformats-=octal
+set nrformats+=alpha
+set textwidth=0
+" set gdefault
+" set splitright
+" set splitbelow
+set previewheight=10
+set helpheight=14
+set matchtime=1
+set winheight=5
+" nnoremap <silent>,i :call s:toggle_inserting_dot_to_iskeyword()
+"
+" let s:toggle_inserting_dot_to_iskeyword_flag = 0
+" function! s:toggle_inserting_dot_to_iskeyword()
+"   if s:toggle_inserting_dot_to_iskeyword_flag
+"     set iskeyword-=.
+"   else
+"     set iskeyword+=.
+"   endif
+"   let s:toggle_inserting_dot_to_iskeyword_flag = !s:toggle_inserting_dot_to_iskeyword_flag
+" endfunction
 
 if has('multi_byte_ime')
   set iminsert=0 imsearch=0
@@ -1056,13 +1094,11 @@ augroup END
 
 " ----------------------------------------
 " Searching {{{
-if s:on_init()
-  set hlsearch
-  set ignorecase
-  set incsearch
-  set smartcase
-  set wrapscan
-endif
+set hlsearch
+set ignorecase
+set incsearch
+set smartcase
+set wrapscan
 
 nnoremap <silent> n nvv
 nnoremap <silent> N Nvv
@@ -1075,13 +1111,8 @@ command! -nargs=1 Dict call alpaca#function#macdict#search(<q-args>)
 
 " ----------------------------------------
 " Moving {{{
-if s:on_init()
-  set virtualedit+=block
-  set whichwrap=b,s,h,l,~,<,>,[,]
-  augroup MyAutoCmd
-    autocmd BufEnter * setl whichwrap=b,s,h,l,~,<,>,[,]
-  augroup END
-endif
+set whichwrap=b,s,h,l,~,<,>,[,]
+set virtualedit+=block
 
 inoremap <silent><C-A> <End>
 inoremap <silent><C-L> <Right>
@@ -1151,15 +1182,13 @@ unlet num
 
 " ----------------------------------------
 " Encoding {{{
-if s:on_init()
-  set ambiwidth=double
-  set encoding=utf-8
-  set fileencodings=utf-8,sjis,shift-jis,euc-jp,utf-16,ascii,ucs-bom,cp932,iso-2022-jp
-  set fileformat=unix
-  set fileformats=unix,dos,mac
-  set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc
-  set termencoding=utf8
-endif
+set ambiwidth=double
+set encoding=utf-8
+set fileencodings=utf-8,sjis,shift-jis,euc-jp,utf-16,ascii,ucs-bom,cp932,iso-2022-jp
+set fileformat=unix
+set fileformats=unix,dos,mac
+set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc
+set termencoding=utf8
 
 command! -bang -bar -complete=file -nargs=? Cp932 edit<bang> ++enc=cp932 <args>
 command! -bang -bar -complete=file -nargs=? Euc edit<bang> ++enc=euc-jp <args>
@@ -1188,46 +1217,46 @@ filetype indent on
 
 " ----------------------------------------
 " Display {{{
-if s:on_init()
-  " set noequalalways
-  " set cursorline
-  " set titlelen=95
-  set pumheight=20
-  set breakat=\\;:,!?
-  set cdpath+=~
-  set cmdheight=2
-  set equalalways
-  set laststatus=2
-  set lazyredraw
-  set browsedir=buffer
-  set list
-  set listchars=tab:␣.,trail:›,extends:>,precedes:<
-  set fillchars=stl:\ ,stlnc:\ ,fold:\ ,diff:-
-  set matchpairs+=<:>
-  set number
-  set scrolloff=8
-  set noshowcmd
-  set showfulltag
-  set showmatch
-  set showtabline=1
-  set spelllang=en
-  set nospell
-  set t_Co=256
-  set title
-  set ttyfast
-  set shortmess=aTI
+" set noequalalways
+" set cursorline
+" set titlelen=95
+set pumheight=20
+set breakat=\\;:,!?
+set cdpath+=~
+set cmdheight=2
+set equalalways
+set laststatus=2
+set lazyredraw
+set browsedir=buffer
+set list
+set listchars=tab:␣.,trail:›,extends:>,precedes:<
+set fillchars=stl:\ ,stlnc:\ ,fold:\ ,diff:-
+set matchpairs+=<:>
+set number
+set scrolloff=8
+set noshowcmd
+set showfulltag
+set showmatch
+set showtabline=1
+set spelllang=en
+set nospell
+set t_Co=256
+set title
+set ttyfast
+set shortmess=aTI
 
-  set foldenable
-  set foldmethod=marker
-  set foldlevelstart=0
-  set foldminlines=2
-  set foldnestmax=2
-endif
+set foldenable
+set foldmethod=marker
+set foldlevelstart=0
+set foldminlines=2
+set foldnestmax=2
 
 if v:version >= 703
   highlight ColorColumn guibg=#012345
-  set conceallevel=2 concealcursor=iv
-  set colorcolumn=81
+
+  augroup MyAutoCmd
+    autocmd BufEnter * set conceallevel=2 concealcursor=incv colorcolumn=81
+  augroup END
 endif
 
 augroup MyWindow
@@ -1257,11 +1286,11 @@ nnoremap [tag_or_tab]s  :<C-u>tselect<CR>
 
 augroup AlpacaTags
   autocmd!
-  if exists(':Tags')
-    " autocmd BufWritePost Gemfile TagsBundle
-    " autocmd BufRead,BufNew * TagsSet
-    " autocmd BufWritePost * TagsUpdate
-  endif
+  " if exists(':Tags')
+  autocmd BufWritePost Gemfile TagsBundle
+  autocmd BufRead,BufNew * TagsSet
+  autocmd BufWritePost * TagsUpdate
+  " endif
 augroup END
 "}}}
 
@@ -1495,6 +1524,7 @@ nnoremap ,g :<C-u>OpenBrowserSearch<Space><C-R><C-W><CR>
 
 " ------------------------------------
 nnoremap <silent>,r :QuickRun<CR>
+nnoremap <silent>,R :autocmd BufWritePost <buffer> call quickrun#command('', len(range(0, line('$'))), 0, line('$'))<CR>
 let hooks = neobundle#get_hooks('vim-quickrun')
 function! hooks.on_source(bundle) "{{{
   let g:quickrun_config = {}
@@ -1672,8 +1702,8 @@ unlet hooks
 " unlet hooks
 
 " ------------------------------------
-nnoremap <silent>,v  :<C-U>VimShell<CR>
-nnoremap <silent>,V  :<C-U>VimShellBufferDir<CR>
+nnoremap <silent>,v  :<C-U>VimShell -popup<CR>
+nnoremap <silent>,V  :<C-U>VimShellBufferDir -popup<CR>
 let hooks = neobundle#get_hooks('vimshell')
 function! hooks.on_source(bundle) "{{{
   let g:vimshell_user_prompt  = '"(" . getcwd() . ")" '
@@ -1831,9 +1861,15 @@ function! hooks.on_source(bundle) "{{{
     endtry
   endfunction"}}}
 
+  function! s:set_rails_path()
+    let path = ['app/controllers', 'app/models', 'lib', 'app/admin']
+    execute 'setl path+=,' . join(map(path, 'expand(b:rails_root . "/" . v:val)'), ',')
+  endfunction
+
   function! s:unite_rails_setting() "{{{
     call s:source_snippet()
     call s:rails_settings()
+
     nnoremap <buffer><Space>r :R<CR>
     nnoremap <buffer><Space>a :A<CR>
 
@@ -1848,7 +1884,8 @@ function! hooks.on_source(bundle) "{{{
     nnoremap <buffer>[plug]s           :<C-U>UniteGit spec<CR>
     nnoremap <buffer>[plug]d           :<C-U>UniteGit db<CR>
     nnoremap <buffer>[plug]i           :<C-U>UniteGit db/migrate<CR>
-    nnoremap <buffer>[plug]f           :<C-U>UniteGit db/fixtures<CR>
+    " nnoremap <buffer>[plug]f           :<C-U>UniteGit db/fixtures<CR>
+    nnoremap <buffer>[plug]f           :<C-U>UniteGit spec/factories<CR>
     nnoremap <buffer>[plug]m           :<C-U>UniteGit app/mailers<CR>
     nnoremap <buffer>[plug]l           :<C-U>UniteGit lib<CR>
     nnoremap <buffer>[plug]p           :<C-U>UniteGit public<CR>
@@ -1860,46 +1897,55 @@ function! hooks.on_source(bundle) "{{{
   augroup RailsDictSetting
     autocmd!
     autocmd User Rails call <SID>unite_rails_setting()
+    autocmd User BufEnterRails call <SID>set_rails_path()
   augroup END
 endfunction"}}}
 
 function! s:define_rails_autocmd() "{{{
   let s:rails_snippets = {
-        \ '.view*':                 ['ruby.rails.view.snip'],
-        \ '.view.haml':             ['haml.rails.view.snip'],
-        \ '.view.erb':              ['eruby.rails.view.snip'],
-        \ '.model':                 ['ruby.rails.model.snip'],
-        \ '.controller':            ['ruby.rails.controller.snip'],
-        \ '.db.migration':          ['ruby.rails.migrate.snip'],
-        \ '/config/environment.rb': ['ruby.rails.environment.snip'],
-        \ '/config/routes.rb':      ['ruby.rails.route.snip'],
-        \ '.fixtures.replacement':  ['ruby.factory_girl.snip'],
-        \ '.spec.controller':       ['ruby.rspec.controller.snip'],
-        \ '.spec.model':            ['ruby.rspec.model.snip'],
-        \ '.spec.helper':           ['ruby.rspec.helper.snip'],
-        \ '.spec.feature':          ['ruby.capybara.snip'],
-        \ '.spec.routing':          ['ruby.rspec.routing.snip']
+        \ '.view*':                 ['ruby.rails.view'],
+        \ '.view.haml':             ['haml.rails.view'],
+        \ '.view.erb':              ['eruby.rails.view'],
+        \ '.model*':                 ['ruby.rails.model'],
+        \ '.controller':            ['ruby.rails.controller'],
+        \ '.db.migration':          ['ruby.rails.migrate'],
+        \ '/config/environment.rb': ['ruby.rails.environment'],
+        \ '/config/routes.rb':      ['ruby.rails.route'],
+        \ '.fixtures.replacement':  ['ruby.factory_girl'],
+        \ '.spec.controller':       ['ruby.rspec.controller'],
+        \ '.spec.model':            ['ruby.rspec.model'],
+        \ '.spec.helper':           ['ruby.rspec.helper'],
+        \ '.spec.feature':          ['ruby.capybara'],
+        \ '.spec.routing':          ['ruby.rspec.routing']
         \ }
 
   augroup MyRailsSetting
     autocmd!
     for [type_or_path, snippets] in items(s:rails_snippets)
       for snippet in snippets
-        let definition = ['autocmd User Rails', type_or_path, ' NeoSnippetSource', ' ~/.vim/snippet/', snippet]
-        execute join(definition, '')
+        let snippet_file = expand('~/.vim/snippet/' . snippet . '.snip')
+        if filereadable(snippet_file)
+          execute 'autocmd User Rails' . type_or_path . ' NeoSnippetSource ' . snippet_file
+          execute 'autocmd User Rails nnoremap <buffer><Space>e :<C-U>tabnew ' . snippet_file . '<CR>'
+        endif
       endfor
     endfor
   augroup END
 endfunction"}}}
+
+function! s:detect_rails()
+  let root_dir = s:current_git()
+  return !empty(root_dir) && filereadable(root_dir . '/config/environments/development.rb')
+endfunction
 
 function! s:load_vim_rails() "{{{
   if exists('s:loaded_vim_rails')
     return
   endif
 
-  let root_dir = s:current_git()
-  if !empty(root_dir) && filereadable(root_dir . '/config/environments/development.rb')
+  if s:detect_rails()
     let s:loaded_vim_rails = 1
+    let root_dir = s:current_git()
     autocmd! LoadVimRails
     augroup! LoadVimRails
 
@@ -1909,34 +1955,21 @@ function! s:load_vim_rails() "{{{
     call s:define_rails_autocmd()
     silent doautocmd User BufEnterRails
     silent doautocmd User Rails
+
+    augroup DetectVimRails
+      autocmd!
+      autocmd BufNew,BufNewFile * silent doautocmd User Rails
+    augroup END
   endif
 endfunction"}}}
 
 if s:on_init() && !exists('s:loaded_vim_rails')
   augroup LoadVimRails
     autocmd!
-    autocmd BufEnter * call <SID>load_vim_rails()
+    autocmd BufNewFile,BufRead * call <SID>load_vim_rails()
   augroup END
 endif
 "}}}
-
-" ------------------------------------
-" vim-rspec
-" ------------------------------------
-let g:RspecKeymap = 0
-function! s:rspec_settings() "{{{
-  setl foldlevel=2 foldlevelstart=1 foldminlines=10 foldnestmax=10
-  " foldmethod=syntax
-
-  augroup RspecSetting
-    autocmd!
-    autocmd FileType RSpecOutput setl nofoldenable
-  augroup END
-endfunction "}}}
-
-augroup MyAutoCmd
-  autocmd FileType ruby.rspec call <SID>rspec_settings()
-augroup END
 
 " ------------------------------------
 let hooks = neobundle#get_hooks('gist-vim')
@@ -2025,6 +2058,9 @@ function! hooks.on_source(bundle) "{{{
   let s:passive_filetypes       = ['html', 'yaml', 'racc.ruby', 'eruby', 'sass']
   let g:syntastic_ruby_checkers = ['rubocop', 'mri']
   let g:syntastic_Gemfile_checkers = ['rubocop', 'mri']
+  if executable('gjslint')
+    let g:syntastic_javascript_checkers = ['gjslint']
+  endif
   let g:syntastic_Rakefile_checkers = ['rubocop', 'mri']
   let g:syntastic_mode_map      = {
         \ 'mode'              : 'active',
@@ -2164,8 +2200,12 @@ xnoremap E :<C-U>ExciteTranslate<CR>
 
 " ------------------------------------
 "  jscomplete-vim
-" ------------------------------------
 let g:jscomplete_use = ['dom', 'moz', 'ex6th']
+
+" ------------------------------------
+"  simple-javascript-indenter
+let g:SimpleJsIndenter_BriefMode = 1
+let g:SimpleJsIndenter_CaseIndentLevel = -1
 
 " ------------------------------------
 if has('gui_running')
@@ -2282,14 +2322,13 @@ function! hooks.on_source(bundle) "{{{
         \   ['if', 'unless'],
         \   ['endif', 'endunless'],
         \ ],
-        \ 'Rakefile,Gemfile,ruby,eruby,haml' : [
+        \ 'Rakefile,Gemfile,ruby,ruby.rspec,eruby,haml' : [
         \   ['if', 'unless'],
         \   ['while', 'until'],
         \   ['.blank?', '.present?'],
         \   ['include', 'extend', 'prepend'],
         \   ['class', 'module'],
         \   ['.inject', '.delete_if'],
-        \   ['.map', '.map!'],
         \   ['attr_accessor', 'attr_reader', 'attr_writer'],
         \   { '%r\({[^}]\+\)}' : '/\1/' },
         \   { ':\(\k\+\)\s*=>\s*': '\1: ' },
@@ -2309,9 +2348,11 @@ function! hooks.on_source(bundle) "{{{
         \   ['controller', 'model', 'view', 'migration', 'scaffold'],
         \ ],
         \ 'ruby.rspec': [
+        \   ['it_has_behavior', 'it_should_behave_like'],
         \   ['describe', 'context', 'specific', 'example'],
         \   ['before', 'after'],
         \   ['be_true', 'be_false'],
+        \   ['be_truthy', 'be_falsy'],
         \   ['get', 'post', 'put', 'delete'],
         \   ['==', 'eql', 'equal'],
         \   { '\.should_not': '\.should' },
@@ -2516,7 +2557,29 @@ endif
 " ------------------------------------
 let hooks = neobundle#get_hooks('tern_for_vim')
 function! hooks.on_post_source(bundle) "{{{
-  " call tern#Disable()
+endfunction"}}}
+unlet hooks
+
+" ------------------------------------
+let hooks = neobundle#get_hooks('vim-nodejs-complete')
+function! hooks.on_source(bundle) "{{{
+  function! s:toggle_omnifunc() "{{{
+    if &l:omnifunc == 'nodejscomplete#CompleteJS'
+      setlocal omnifunc=tern#Complete
+    else
+      setlocal omnifunc=nodejscomplete#CompleteJS
+    endif
+  endfunction"}}}
+
+  augroup MyAutoCmd
+    autocmd FileType javascript nnoremap <silent><buffer>,t :call <SID>toggle_omnifunc()<CR>
+  augroup END
+  nnoremap <silent><buffer>,t :call <SID>toggle_omnifunc()<CR>
+
+  let g:nodejs_complete_config = {
+        \  'js_compl_fn': 'tern#Complete',
+        \  'max_node_compl_len': 15
+        \ }
 endfunction"}}}
 unlet hooks
 
@@ -2556,10 +2619,14 @@ nnoremap <Space>i :<C-U>IndentLinesToggle<CR>
 
 let hooks = neobundle#get_hooks('indentLine')
 function! hooks.on_source(bundle) "{{{
+  let g:indentLine_enabled = 1
   let g:indentLine_color_term = 239
   let g:indentLine_color_gui = '#444444'
   let g:indentLine_fileType = g:my.ft.program_files
   " let g:indentLine_char = 'c'
+endfunction"}}}
+function! hooks.on_post_source(bundle) "{{{
+  set conceallevel=2
 endfunction"}}}
 unlet hooks
 
@@ -2596,11 +2663,11 @@ function! hooks.on_source(bundle) "{{{
   let g:neocomplete#disable_auto_select_buffer_name_pattern =
         \ '\[Command Line\]'
 
-  " ['file', 'tag', 'file/include', 'neosnippet', 'dictionary', 'omni', 'include', 'vim', 'member', 'buffer', 'syntax']
+  " ['vimshell', 'file', 'vim', 'syntax', 'neosnippet', 'dictionary', 'member', 'vimshell/history', 'omni', 'include', 'tag', 'buffer', 'file/include']
   let g:neocomplete#sources = {
         \ '_'   : ['file', 'dictionary', 'omni', 'buffer', 'file/include', 'member'],
         \ 'vim' : ['file', 'dictionary', 'omni', 'buffer', 'file/include', 'member', 'vim'],
-        \ 'vimshell' : ['file', 'omni', 'buffer', 'vim'],
+        \ 'vimshell' : ['file', 'omni', 'buffer', 'vim', 'vimshell/history', 'file/include', 'vimshell'],
         \ }
 
   if $USER == 'root'
@@ -2616,6 +2683,10 @@ function! hooks.on_source(bundle) "{{{
         \ 'neocomplete#sources#dictionary#dictionaries',
         \ 'neocomplete#sources',
         \ 'neocomplete#text_mode_filetypes',
+        \ 'neocomplete#sources#include#paths',
+        \ 'neocomplete#sources#include#exprs',
+        \ 'neocomplete#sources#file_include#delimiters',
+        \ 'neocomplete#sources#file_include#exts',
         \ ]
 
   for initialize_variable in neocomplete_initialize_lists
@@ -2657,19 +2728,15 @@ function! hooks.on_source(bundle) "{{{
   let g:neocomplete#sources#include#suffixes = {
         \ 'haml'  : '.haml',
         \ }
-  let g:neocomplete#sources#include#paths = {
-        \ 'liquid' : '/Users/alpaca-tc/projects/alpaca-tc.github.io/source',
-        \ }
-  let g:neocomplete#sources#include#exprs = {
-        \ 'liquid' : 'substitute(v:fname, "^/", "", "")',
-        \ 'ruby'   : "substitute(substitute(v:fname,'::','/','g'),'$','','')",
-        \ }
-  let g:neocomplete#sources#file_include#delimiters = {
-        \ 'liquid' : '/',
-        \ }
-  let g:neocomplete#sources#file_include#exts = {
-        \ 'liquid' : ['png', 'jpg', 'gif', 'jpeg', 'ico'],
-        \ }
+  let g:neocomplete#sources#include#paths.liquid =
+        \ '/Users/alpaca-tc/projects/alpaca-tc.github.io/source'
+  let g:neocomplete#sources#include#exprs.liquid =
+        \ 'substitute(v:fname, "^/", "", "")'
+  let g:neocomplete#sources#include#exprs.ruby =
+        \ "substitute(substitute(v:fname,'::','/','g'),'$','','')"
+  let g:neocomplete#sources#file_include#delimiters.liquid = '/'
+  let g:neocomplete#sources#file_include#exts.liquid =
+        \ ['png', 'jpg', 'gif', 'jpeg', 'ico']
 
   let g:neocomplete#sources#omni#input_patterns.php =
         \ '[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
@@ -2699,7 +2766,7 @@ function! hooks.on_source(bundle) "{{{
         \ 'VimShell' : 'vimshell#complete',
         \ 'VimFiler' : 'vimfiler#complete',
         \ 'Vinarise' : 'vinarise#complete',
-        \}
+        \ }
 
   let neocomplete#sources#dictionary#dictionaries = {
         \ 'default'  : '',
@@ -2813,12 +2880,15 @@ let hooks = neobundle#get_hooks('vimfiler')
 function! hooks.on_source(bundle) "{{{
   let g:vimfiler_data_directory = g:my.dir.vimfiler
   let g:vimfiler_force_overwrite_statusline = 0
+  let g:vimfiler_draw_files_limit = 0
   let g:vimfiler_safe_mode_by_default = 0
   let g:vimfiler_as_default_explorer = 1
   let g:vimfiler_sort_type = 'filename'
   let g:vimfiler_preview_action = ''
   let g:vimfiler_enable_auto_cd= 1
   let g:vimfiler_file_icon = '-'
+  let g:vimfiler_max_directories_history = 1000
+  let g:vimfiler_tree_indentation = 2
   let g:vimfiler_readonly_file_icon = 'x'
   let g:vimfiler_tree_closed_icon = '‣'
   let g:vimfiler_tree_leaf_icon = ' '
@@ -2826,6 +2896,7 @@ function! hooks.on_source(bundle) "{{{
   let g:vimfiler_marked_file_icon = '✓'
   let g:vimfiler_ignore_pattern = '\v^(\.git|\.)'
   let g:unite_kind_cdable_lcd_command = 'lcd'
+  let g:vimfiler_no_default_key_mappings = 1
 
   function! s:vimfiler_settings() "{{{
     if !exists('b:vimfiler')
@@ -2833,15 +2904,124 @@ function! hooks.on_source(bundle) "{{{
     endif
 
     setl nonumber
-    " unmap <buffer>t
+
+    nmap <buffer>C <Plug>(vimfiler_new_file)
+
     nmap <buffer><C-J> [unite]
     nmap <buffer><CR>  <Plug>(vimfiler_edit_file)
     nmap <buffer>f     <Plug>(vimfiler_toggle_mark_current_line)
     nnoremap <buffer>b :<C-U>UniteBookmarkAdd<CR>
     nnoremap <buffer><expr>p vimfiler#do_action('preview')
+    nnoremap <expr><buffer>re vimfiler#do_action('replace')
     nnoremap <buffer>v v
     nnoremap <silent><buffer>gs :Unite giti/status -buffer-name=giti_status -no-start-insert -horizontal<CR>
     nnoremap <buffer>u :<C-U>Unite file -no-start-insert -buffer-name=file<CR>
+    " nmap <buffer> <TAB> <Plug>(vimfiler_switch_to_other_window)
+    nmap <buffer> <TAB> <Plug>(vimfiler_switch_to_another_vimfiler)
+    nmap <buffer> j <Plug>(vimfiler_loop_cursor_down)
+    nmap <buffer> k <Plug>(vimfiler_loop_cursor_up)
+
+    " Toggle mark.
+    nmap <buffer> <C-l> <Plug>(vimfiler_redraw_screen)
+    nmap <buffer> <Space> <Plug>(vimfiler_toggle_mark_current_line)
+    nmap <buffer> <S-LeftMouse> <Plug>(vimfiler_toggle_mark_current_line)
+    nmap <buffer> <S-Space> <Plug>(vimfiler_toggle_mark_current_line_up)
+    vmap <buffer> <Space> <Plug>(vimfiler_toggle_mark_selected_lines)
+
+    " Toggle marks in all lines.
+    nmap <buffer> * <Plug>(vimfiler_toggle_mark_all_lines)
+    nmap <buffer> & <Plug>(vimfiler_mark_similar_lines)
+    " Clear marks in all lines.
+    nmap <buffer> U <Plug>(vimfiler_clear_mark_all_lines)
+
+    " Copy files.
+    nmap <buffer> c <Plug>(vimfiler_copy_file)
+    nmap <buffer> Cc <Plug>(vimfiler_clipboard_copy_file)
+
+    " Move files.
+    nmap <buffer> m <Plug>(vimfiler_move_file)
+    nmap <buffer> Cm <Plug>(vimfiler_clipboard_move_file)
+
+    " Delete files.
+    nmap <buffer> d <Plug>(vimfiler_delete_file)
+
+    " Rename.
+    nmap <buffer> r <Plug>(vimfiler_rename_file)
+
+    " Make directory.
+    nmap <buffer> K <Plug>(vimfiler_make_directory)
+
+    " Paste.
+    nmap <buffer> Cp <Plug>(vimfiler_clipboard_paste)
+
+    " Execute or change directory.
+    nmap <buffer> R <Plug>(vimfiler_execute)
+    nmap <buffer> l <Plug>(vimfiler_smart_l)
+
+    nmap <buffer> x
+          \ <Plug>(vimfiler_execute_system_associated)
+
+    " Move to directory.
+    nmap <buffer> h <Plug>(vimfiler_smart_h)
+    nmap <buffer> L <Plug>(vimfiler_switch_to_drive)
+    nmap <buffer> ~ <Plug>(vimfiler_switch_to_home_directory)
+    nmap <buffer> \ <Plug>(vimfiler_switch_to_root_directory)
+    nmap <buffer> & <Plug>(vimfiler_switch_to_project_directory)
+    nmap <buffer> <C-j> <Plug>(vimfiler_switch_to_history_directory)
+    nmap <buffer> <BS> <Plug>(vimfiler_switch_to_parent_directory)
+
+    nmap <buffer> gv <Plug>(vimfiler_execute_new_gvim)
+    nmap <buffer> . <Plug>(vimfiler_toggle_visible_ignore_files)
+    nmap <buffer> H <Plug>(vimfiler_popup_shell)
+
+    " Edit file.
+    nmap <buffer> e <Plug>(vimfiler_edit_file)
+    nmap <buffer> E <Plug>(vimfiler_split_edit_file)
+    nmap <buffer> B <Plug>(vimfiler_edit_binary_file)
+
+    " Choose action.
+    nmap <buffer> a <Plug>(vimfiler_choose_action)
+
+    " Hide vimfiler.
+    nmap <buffer> q <Plug>(vimfiler_hide)
+    " Exit vimfiler.
+    nmap <buffer> Q <Plug>(vimfiler_exit)
+    " Close vimfiler.
+    nmap <buffer> - <Plug>(vimfiler_close)
+
+    nmap <buffer> ge <Plug>(vimfiler_execute_external_filer)
+    nmap <buffer> <RightMouse> <Plug>(vimfiler_execute_external_filer)
+
+    nmap <buffer> ! <Plug>(vimfiler_execute_shell_command)
+    nmap <buffer> ? <Plug>(vimfiler_help)
+    nmap <buffer> v <Plug>(vimfiler_preview_file)
+    nmap <buffer> o <Plug>(vimfiler_sync_with_current_vimfiler)
+    nmap <buffer> O <Plug>(vimfiler_open_file_in_another_vimfiler)
+    nmap <buffer> <C-g> <Plug>(vimfiler_print_filename)
+    nmap <buffer> g<C-g> <Plug>(vimfiler_toggle_maximize_window)
+    nmap <buffer> yy <Plug>(vimfiler_yank_full_path)
+    nmap <buffer> M <Plug>(vimfiler_set_current_mask)
+    nmap <buffer> gr <Plug>(vimfiler_grep)
+    nmap <buffer> gf <Plug>(vimfiler_find)
+    nmap <buffer> S <Plug>(vimfiler_select_sort_type)
+    nmap <buffer> <C-v> <Plug>(vimfiler_switch_vim_buffer_mode)
+    nmap <buffer> gc <Plug>(vimfiler_cd_vim_current_dir)
+    nmap <buffer> gs <Plug>(vimfiler_toggle_safe_mode)
+    nmap <buffer> gS <Plug>(vimfiler_toggle_simple_mode)
+    nmap <buffer> gg <Plug>(vimfiler_cursor_top)
+    nmap <buffer> G <Plug>(vimfiler_cursor_bottom)
+    nmap <buffer> t <Plug>(vimfiler_expand_tree)
+    nmap <buffer> T <Plug>(vimfiler_expand_tree_recursive)
+    nmap <buffer> I <Plug>(vimfiler_cd_input_directory)
+    nmap <buffer> <2-LeftMouse>
+          \ <Plug>(vimfiler_double_click)
+
+    " pushd/popd
+    nmap <buffer> Y <Plug>(vimfiler_pushd)
+    nmap <buffer> P <Plug>(vimfiler_popd)
+
+    nmap <buffer> gj <Plug>(vimfiler_jump_last_child)
+    nmap <buffer> gk <Plug>(vimfiler_jump_first_child)
   endfunction"}}}
 
   augroup VimFilerKeyMapping
@@ -2876,7 +3056,10 @@ endfunction "}}}
 function! hooks.on_post_source(bundle) "{{{
   if exists('g:neocomplete#sources') && has_key(g:neocomplete#sources, '_')
     let g:neocomplete#sources._ += ['neosnippet']
+    call neocomplete#custom#source('neosnippet', 'converters',
+          \ ['converter_remove_overlap', 'converter_case', 'converter_abbr'])
   endif
+
   inoremap <expr><C-@> neocomplete#start_manual_complete(['neosnippet'])
 endfunction"}}}
 unlet hooks
@@ -2890,7 +3073,7 @@ nmap <C-J> [unite]
 nnoremap [unite]f               :Unite -no-start-insert file_rec:
 nnoremap <silent><Space>b       :UniteBookmarkAdd<CR>
 nnoremap <silent>[unite]b       :Unite buffer<CR>
-nnoremap <silent>[unite]j       :Unite file_mru<CR>
+nnoremap <silent>[unite]j       :Unite neomru/file<CR>
 nnoremap <silent>[unite]B       :Unite bookmark<CR>
 nnoremap <silent>[unite]<C-F>   :UniteGit<CR>
 
@@ -2996,11 +3179,14 @@ let hooks = neobundle#get_hooks('unite.vim')
 function! hooks.on_source(bundle) "{{{
   highlight UniteCursorLine ctermbg=236 cterm=none
   let g:unite_cursor_line_highlight='UniteCursorLine'
-  " let g:unite_data_directory=g:my.dir.unite
+  let g:unite_data_directory=g:my.dir.unite
+  let g:neomru#file_mru_path=g:my.dir.unite . '/neomru/file'
+
   let g:unite_enable_split_vertically=0
   let g:unite_update_time=50
   let g:unite_enable_start_insert=1
   let g:unite_winheight=15
+  let g:unite_source_codic_search_limit=10000
 
   let g:unite_source_directory_mru_limit = 200
   let g:unite_source_directory_mru_time_format="(%m-%d %H:%M) "
@@ -3168,6 +3354,7 @@ function! hooks.on_source(bundle) "{{{
   endfunction"}}}
 
   " grep {{{
+  let g:unite_source_grep_max_candidates = 1000
   if executable('ag')
     let g:unite_source_grep_command = 'ag'
     let g:unite_source_grep_default_opts = '--nocolor --nogroup'
@@ -3237,7 +3424,7 @@ unlet hooks
 " ----------------------------------------
 let hooks = neobundle#get_hooks('auto-pairs')
 function! hooks.on_source(bundle) "{{{
-  let g:auto_pairs#map_space = 1
+  let g:auto_pairs#map_space = 0
   let g:auto_pairs#map_cr = 0
 
   let g:auto_pairs = {
@@ -3482,18 +3669,17 @@ let g:clang_use_library = 1
 
 nmap <Space>A  <Plug>(altr-forward)
 nmap <Space>a  <Plug>(altr-back)
-" let hooks = neobundle#get_hooks('vim-altr')
-" function! hooks.on_post_source(bundle) "{{{
-"   call altr#remove_all()
-"
-"   " For ruby tdd
-"   call altr#define('lib/%.rb', 'spec/lib/%_spec.rb')
-"   call altr#define('_posts/%.markdown', 'images/blog/')
-"
-"   " For Berksfile
-"   call altr#define('Berksfile', $HOME . '/.berkshelf/cookbooks')
-" endfunction"}}}
-" unlet hooks
+let hooks = neobundle#get_hooks('vim-altr')
+function! hooks.on_post_source(bundle) "{{{
+  call altr#remove_all()
+
+  call altr#define('lib/%.rb', 'spec/lib/%_spec.rb')
+  call altr#define('lib/%.rb', 'spec/%_spec.rb')
+  call altr#define('_posts/%.markdown', 'images/blog/')
+
+  call altr#define('Berksfile', $HOME . '/.berkshelf/cookbooks')
+endfunction"}}}
+unlet hooks
 
 nmap p <Plug>(yankround-p)
 nmap P <Plug>(yankround-P)
@@ -3533,6 +3719,29 @@ let g:assignment#path = expand('~/projects/assignment')
 " let g:lang8_email_address = 'alprhcp666@gmail.com'
 "}}}
 "}}}
+
+" ----------------------------------------
+let hooks = neobundle#get_hooks('vim-node')
+function! hooks.on_post_source(hooks) "{{{
+  function! s:detect(path) "{{{
+    if exists('b:node_root') | return | endif
+    let path = a:path
+
+    while 1
+      let is_node = 0
+      let is_node = is_node || filereadable(path . "/package.json")
+      let is_node = is_node || isdirectory(path . "/node_modules")
+      if is_node | return node#initialize(path) | endif
+
+      let parent = fnamemodify(path, ":h")
+      if parent == path | return | endif
+      let path = parent
+    endwhile
+  endfunction"}}}
+
+  call s:detect(getcwd())
+endfunction"}}}
+unlet hooks
 
 " ----------------------------------------
 function! s:update_ruby_ctags() "{{{
@@ -3619,22 +3828,34 @@ endfunction"}}}
 
 " For Gem
 " Gem"{{{
+function! s:get_all_gem_paths() "{{{
+  if exists('s:all_gem_paths')
+    return s:all_gem_paths
+  endif
+
+  let gem_env = system('rbenv exec gem env')
+  let gem_path = matchstr(gem_env, '\(\s*- INSTALLATION DIRECTORY:\s\)\@<=[^\n]*')
+  let gem_path .= '/gems/'
+  let s:all_gem_paths = split(globpath(gem_path, '*/lib'), '\n')
+
+  return s:all_gem_paths
+endfunction"}}}
 
 function! s:get_gem_paths() " {{{
   if !exists('s:gem_path')
     let s:gem_path = {}
   endif
 
-  let project_dir = s:V.path2project_directory(getcwd())
+  let project_dir = s:get_vital().import('Prelude').path2project_directory(getcwd())
 
   if !has_key(s:gem_path, project_dir)
-    let result = system('bundle show --paths')
-
-    if result =~ 'Could not'
-      let s:gem_path[project_dir] = []
-    else
-      let s:gem_path[project_dir] = map(split(result, '\n'), 'v:val . "/lib"')
-    endif
+    try
+      let paths = map(split(result, '\n'), 'v:val . "/lib"')
+      call filter(paths, 'isdirectory(v:val)')
+      let s:gem_path[project_dir] = paths
+    catch /.*/
+      let s:gem_path[project_dir] = s:get_all_gem_paths()
+    endtry
   endif
 
   return s:gem_path[project_dir]
@@ -3717,6 +3938,128 @@ function! s:setup_include_file_for_rails() "{{{
         \ ['png', 'jpg', 'gif', 'jpeg', 'ico']
 endfunction"}}}
 command! RailsView call s:setup_include_file_for_rails()
+
+function! s:get_comment(file_path) "{{{
+  ruby <<EOS
+  require 'comment_parser'
+  require 'json'
+
+  def parse_comment
+    file_path = File.expand_path(VIM.evaluate('a:file_path'))
+    if parser = CommentExtractor::Parser.for(file_path)
+      parser.extract_comments
+    end
+  end
+
+  def comments2dictionary_list(comments = [])
+    comments.map do |comment|
+      { line: comment.line, value: comment.value }
+    end
+  end
+
+  list = comments2dictionary_list(parse_comment)
+
+  VIM.command("let comments = #{list.to_json}")
+EOS
+
+  return comments
+endfunction"}}}
+
+function! s:get_comment_with_filetype(file_path, filetype) "{{{
+  ruby <<EOS
+  require 'comment_parser'
+  require 'json'
+
+  def parse_comment
+    file_path = File.expand_path(VIM.evaluate('a:file_path'))
+
+    filetype = VIM.evaluate('a:filetype')
+    if extractor = CommentExtractor::Extractors.find_by_filetype(filetype)
+      CommentParser::Parser.initialize_with_extractor(file_path, extractor).extract_comments
+    end
+  end
+
+  def comments2dictionary_list(comments = [])
+    comments.map do |comment|
+      { line: comment.line, value: comment.value }
+    end
+  end
+
+  list = comments2dictionary_list(parse_comment)
+
+  VIM.command("let comments = #{list.to_json}")
+EOS
+
+  return comments
+endfunction"}}}
+
+function! s:parse_comment_to_buffer(comments) "{{{
+  let comments = a:comments
+
+  let buffer = []
+  while !empty(comments)
+    let comment = remove(comments, 0)
+    while comment.line != len(buffer) + 1
+      call add(buffer, '')
+    endwhile
+
+    call add(buffer, comment.value)
+  endwhile
+
+  while len(buffer) < line('$')
+    call add(buffer, '')
+  endwhile
+
+  let temp = tempname()
+  set scrollbind
+  normal gg
+
+  call writefile(buffer, temp)
+  silent vnew `=temp`
+  silent! file [CommentParser Buffer]
+  set scrollbind
+endfunction"}}}
+
+function! s:gingerice_comment(count, line1, line2) "{{{
+  echomsg 'Post comment to Ginger...'
+
+  if a:count == -1
+    let current_file = expand('%:p')
+  else
+    let current_file = tempname() . expand('%')
+    call writefile(getline(a:line1, a:line2), current_file)
+  endif
+
+  if !exists('lines')
+    echoerr 'Parser is not found'
+    return
+  endif
+
+  if exists(':Gingerice')
+    let text_parsed = gingerice#parser#parse(join(lines, ' '))
+    call gingerice#buffer#build(text_parsed)
+    set modifiable
+    " let text_translated = ExciteTranslate(join(lines, "\n"))
+    " call append(line('$'), '--')
+    " call append(line('$'), text_translated)
+    set nomodifiable
+  else
+    vnew `=tempfile`
+  endif
+endfunction"}}}
+command! CommentByFileType :call s:get_comment_with_filetype(expand("%:p"), &filetype)
+command! CommentBuffer :call s:parse_comment_to_buffer(s:get_comment(expand("%:p")))
+command! Comment :call s:parse_comment_to_buffer(s:get_comment_with_filetype(expand("%:p"), &filetype))
+
+function! s:DiffWithSaved() "{{{
+  let filetype = &filetype
+  diffthis
+  vnew | read # | normal! 1Gdd
+  diffthis
+  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile readonly
+  let &l:filetype = filetype
+endfunction"}}}
+command! DiffSaved call s:DiffWithSaved()
 
 let s:loaded_vimrc = 1
 

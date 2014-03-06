@@ -15,11 +15,6 @@ abbr    instance_eval(expr, filename = "(eval)", lineno = 1)
 options word
   instance_eval ${1:block_or_expr}
 
-snippet instance_exec
-abbr    instance_exec(*args) { |*vars| ... }
-options word
-  instance_exec(*${1:args}) { |${2:*vars}| ${3} }
-
 snippet singleton_method_added
 abbr    singleton_method_added
 regexp  'def [singleton_method_added]*$'
@@ -75,6 +70,11 @@ abbr    class_variable_get(name)
 regexp  '\.[class_variable_get]*$'
 options word
   class_variable_get(:@@${1:name})
+
+snippet class_variable_defined?
+abbr    class_variable_defined?(:@@name)
+options word
+  class_variable_defined?(:@@${1:name})
 
 snippet instance_variables
 abbr    instance_variables
@@ -186,7 +186,7 @@ options word
 
 snippet tapd
 abbr    tap do |x| ... end
-regexp  '\.[tap]*$'
+regexp  '\.[[:alnum:]_?]*$'
 options word
   tap do |${1}|
     ${2}
@@ -979,7 +979,7 @@ regexp  '\.[[:alnum:]_?]*$'
 snippet map!
 abbr    map! { |v| ... } #=> array
 options word
-regexp  '\.[[:alnum:]_?]*$'
+regexp  '\.[[:alnum:]_!?]*$'
   map! { |${1:v}| ${2} }
 
 snippet max
@@ -1528,10 +1528,10 @@ options word
   Hash.new(0)
 
 snippet Hash[]
-abbr    Hash.new([])
+abbr    Hash.new { |h,k| h[k] = [] }
 options word
 regexp  'Hash\[\?\]\?$'
-  Hash.new([])
+  Hash.new { |h,k| h[k] = [] }
 
 snippet     Hash{}
 abbr        Hash.new { |h,k| h[k] = Hash.new(&h.default_proc) }
@@ -1808,6 +1808,16 @@ abbr    gsub
 regexp  '\.[gsub]*$'
 options word
   gsub(/${1:pat}/, '${2}')
+
+snippet unpack
+abbr    unpack(format)
+options word
+  unpack(${1:format})
+
+snippet unpack_format_sample
+abbr    http://ruby-doc.org/core-2.0/String.html#method-i-unpack
+options word
+  http://ruby-doc.org/core-2.0/String.html#method-i-unpack
 # }}}
 
 # Comparable {{{
@@ -1844,9 +1854,83 @@ options word
   sprintf('${1:pat}', ${2:*values})
 # }}}
 
-# Regexp {{{
-snippet Regexp.sample
-abbr    /\$(?<dollars>\d+)\.(?<cents>\d+)/.match("$3.67")
+# Module {{{
+snippet class_exec
+abbr    class_exec(*args) { |*vars| ... }
+alias   module_exec
 options word
-  /\$(?<dollars>\d+)\.(?<cents>\d+)/.match("$3.67")
+  class_exec(${1:*args}) do |${2:*vars}|
+    ${3}
+  end
+
+snippet class_eval
+abbr    class_eval { |klass| ... }
+alias   module_eval
+options word
+  class_eval do |klass|
+    ${1}
+  end
+
+snippet class_eval_string
+abbr    class_eval <<-EOT, __FILE__, __LINE__ + 1 { ... }
+options word
+  class_eval <<-EOT, __FILE__, __LINE__ + 1
+    ${1}
+  EOT
+
+snippet instance_exec
+abbr    instance_exec(*args) { |*vars| ... }
+options word
+  instance_exec(${1:*args}) do |${2:*vars}|
+    ${3}
+  end
+## }}}
+
+# Forwardable {{{
+snippet Forwardable
+abbr    Forwardable
+options word
+  require 'forwardable'
+  extend Forwardable
+
+snippet def_delegator
+abbr    def_delegator(accessor, method, alias = method)
+options word
+  def_delegator :${1:@accessor}, :${2:method}${3:, ${4:alias\}}
+
+snippet def_delegators
+abbr    def_delegators(accessor, *methods)
+options word
+  def_delegators :${1:@accessor}, ${2:*methods}
+# }}}
+
+# Time# {{{
+snippet Time.at
+abbr    Time.at(time)
+options word
+  Time.at(${1:large_n})
+
+snippet Time.gm
+abbr    Time.gm(year, mon = 1, day = 1, hour = 0, min = 0, sec = 0, usec = 0)
+alias   Time.utc
+options word
+  Time.gm(${1:year}, ${2:mon=1}, ${3:day=1}, ${4:hour}, ${5:min}, ${6:sec}, ${7:usec})
+
+snippet Time.local
+abbr    Time.local(year, mon = 1, day = 1, hour = 0, min = 0, sec = 0, usec = 0)
+alias   Time.mktime
+options word
+  Time.local(${1:year}, ${2:mon=1}, ${3:day=1}, ${4:hour}, ${5:min}, ${6:sec}, ${7:usec})
+
+snippet Time.new
+abbr    Time.new
+alias   Time.now
+options word
+  Time.new
+
+snippet strftime
+abbr    strftime(format)
+regexp  '\.[strftime]*$'
+options word
+  strftime('%Y-%m-%m %I:%M:%S')
 # }}}

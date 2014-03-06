@@ -4,25 +4,11 @@ endif
 
 setl dict+=~/.vim/dict/jquery.dict
 setl foldmethod=marker
-" setl omnifunc=javascriptcomplete#CompleteJS
 
-" js{{{
-if !exists('g:tagbar_type_javascript')
-  let jsctags = neobundle#get('tagbar').path . '/node_modules/jsctags/bin/jsctags.js'
-  if executable(jsctags)
-    let g:tagbar_type_javascript = {
-          \ 'ctagsbin' : jsctags
-          \ }
-  else
-    let g:tagbar_type_javascript = {
-          \'ctagstype' : 'js',
-          \'kinds'     : [
-          \   'o:objects',
-          \   'f:functions',
-          \   'a:arrays',
-          \   's:strings'
-          \]
-          \}
-  endif
+if executable('fixjsstyle')
+  command! FixJsStyle !fixjsstyle %
 endif
-"}}}
+
+let g:tagbar_type_javascript = {
+      \ 'ctagsbin' : expand('/usr/local/bin/jsctags')
+      \ }

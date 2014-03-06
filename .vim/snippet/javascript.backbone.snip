@@ -1,0 +1,53 @@
+snippet Backbone.Router
+abbr    var Router = Backbone.Router.extend({...})
+options head
+  var ${1:Router} = Backbone.Router.extend({
+    routes: {
+      ${2:}
+    },
+
+    initialize: function() {
+      ${4:}
+    },
+
+    ${5:method:foo}: function(${6:}) {
+      ${7:}
+    }
+  });
+
+snippet Backbone.View
+abbr    var View = Backbone.View.extend({...})
+options head
+  var ${1:MyView} = Backbone.View.extend({
+    ${2:el: ''},
+    ${3:tagName: ''},
+
+    events: {
+      ${4:}
+    },
+
+    initialize: function () {
+      ${5:}
+    },
+
+    render: function () {
+
+    }
+  });
+
+snippet Backbone.Model
+abbr    var Model = Backbone.Model.extend({...})
+options head
+  var ${1:Model} = Backbone.Model.extend({
+    initialize: function () {
+
+    }
+  });
+
+snippet Backbone.Colleaction
+abbr    var Collections = Backbone.Colleaction.extend({...})
+options head
+  var ${1}s = Backbone.Collection.extend({
+    model: ${2:ModelName},
+    url: "${3}"
+  });

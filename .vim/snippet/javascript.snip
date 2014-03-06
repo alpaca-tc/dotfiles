@@ -1,5 +1,6 @@
 include javascript.html.snip
 include javascript.mocha.snip
+include javascript.node.snip
 
 # Javascript Snippets {{{
 snippet     try
@@ -167,11 +168,34 @@ options word
 
 # Web development#{{{
 snippet debug
-    console.debug(${1:`@*`});
+abbr    console.debug(...)
+options word
+  console.debug(${1:`@*`});
 
 snippet log
-    console.log(${1:`@*`});
+abbr    console.log(...)
+options word
+  console.log(${1:`substitute(@*, "\n", ' ', 'g')`});
 
 snippet warn
-    console.warn(${1:`@*`});
+abbr    console.warn(...)
+options word
+  console.warn(${1:`substitute(@*, "\n", ' ', 'g')`});
+
+snippet error
+abbr    console.error(...)
+options word
+  console.error(${1:`substitute(@*, "\n", ' ', 'g')`});
+
+snippet info
+abbr    console.info(...)
+options word
+  console.info(${1:`substitute(@*, "\n", ' ', 'g')`});
 #}}}
+
+snippet super_method
+abbr    super_method
+options word
+  ${1:Child}.prototype.${2:method} = function() {
+    ${1:Parent}.prototype.$1.apply(this);
+  }

@@ -1,0 +1,591 @@
+# ActiveModel::Validations::# {{{
+# Standard validations #{{{
+snippet v_length
+alias   length_validation
+abbr    length: { in: ... }
+  length: {
+    in: ${2:range_array_lambda_symbol},
+    allow_nil: true,
+    allow_blank: true,
+    minimum: 5,
+    maximum: 1
+  }
+
+snippet v_numericality
+alias   numericality_validation
+abbr    numericality: { only_integer: true, ... }
+  numericality: { ${1:only_integer: true,}, ${2:greater_than:, greater_than_or_equal_to:, equal_to:, less_than:, odd:, even:} }
+
+snippet v_uniqueness
+alias   uniqueness_validation
+abbr    uniqueness: true
+  uniqueness: true
+
+snippet v_presence
+alias   presence_validation
+abbr    presence: true
+  presence: true
+
+snippet v_confirmation
+alias   confirmation_validation
+abbr    confirmation: true
+  confirmation: true
+
+snippet v_format
+alias   format_validation
+abbr    format: { with: ... }
+  format: { with: /${1}/ }
+
+snippet v_inclusion
+alias   inclusion_validation
+abbr    inclusion: { in: %w!...! }
+  inclusion: { in: %w!${1}! }
+
+snippet v_exclusion
+alias   exclusion_validation
+abbr    exclusion: { in: %w!...! }
+  exclusion: { in: %w!${1}! }
+
+snippet v_allow_blank
+alias   allow_blank_option
+abbr    allow_blank: true
+  allow_blank: true
+
+snippet v_allow_nil
+alias   allow_nil_option
+abbr    allow_nil: true
+  allow_nil: true
+
+snippet v_acceptance
+alias   acceptance_option
+abbr    acceptance: { on: ... }
+  acceptance: { on: ${1::create} }
+
+snippet v_message
+alias   message_option
+abbr    message: '%{value}...'
+  message: '${1}'
+
+snippet v_if
+alias   if_option
+abbr if: '...'
+  if: ${1}
+
+snippet v_unless
+alias   unless_option
+abbr unless: '...'
+  unless: ${1}
+
+snippet v_if_and_unless_sample
+abbr if: Proc.new { |u| u.blank }
+  unless: 'dm.blank?'
+  if: '!dm.blank?'
+  unless: :sendmail?
+  if: Proc.new { |u| u.dm.blank? }
+
+snippet v_maximum
+alias   maximum_validation
+abbr maximum: ...
+  maximum: ${1}
+
+snippet v_in
+alias   in_option
+abbr in: ...
+  in: ${1}
+
+snippet v_minimum
+alias   minimum_valiable
+abbr minimum: ...
+  minimum: ${1}
+#}}}
+
+# Validations# {{{
+snippet validates_associated
+abbr    AM::Validations.validates_associated(*attr_names)
+options head
+  validates_associated :${1:*table_names}
+
+snippet validates_uniqueness_of
+abbr    AM::Validations.validates_uniqueness_of(*attr_names)
+options head
+  validates_uniqueness_of :${1:*table_names}${2:, scoe: ${3:table_name\}\}}${4:, conditions: -> { ${5: where(approved: true)\} \}}
+
+snippet validates_presence_of
+abbr    AM::Validations.validates_presence_of(*attr_names)
+options head
+  validates_presence_of :${1:*table_names}
+
+snippet validates_adsence_of
+abbr    AM::Validations.validates_adsence_of(*attr_names)
+options head
+  validates_adsence_of :${1:*table_names}
+
+snippet validates_acceptance_of
+abbr    AM::Validations.validates_acceptance_of(*attr_names, **[message, allow_nil, accept])
+options head
+  validates_acceptance_of :${1:*table_names}${2:, allow_nil: ${3:true\}}${4:, accept: ${5:'1'\}}
+
+snippet validates_confirmation_of
+abbr    AM::Validations.validates_confirmation_of(*attr_names)
+options head
+  validates_confirmation_of :${1:*table_names}, if: :${2:method?}
+
+snippet validates_exclusion_of
+abbr    AM::Validations.validates_exclusion_of(*attr_names)
+options head
+  validates_exclusion_of :${1:name},
+    in: ${2:range_array_lambda_symbol}
+
+snippet validates_inclusion_of
+abbr    AM::Validations.validates_inclusion_of(*attr_names)
+options head
+  validates_inclusion_of :${1:name},
+    in: ${2:range_array_lambda_symbol}
+
+snippet validates_length_of
+abbr    AM::Validations.validates_length_of(*attr_names)
+options head
+  validates_length_of :${1:name},
+    in: ${2:range_array_lambda_symbol},
+    allow_nil: true,
+    allow_blank: true,
+    mininum: 5,
+    maximum: 1
+
+snippet validates_numericality_of
+abbr    AM::Validations.validates_numericality_of(*attr_names)
+options head
+  validates_numericality_of :${1:name},
+    less_than: 5,
+    greater_than: 1
+
+snippet validates_format_of
+abbr    AM::Validations.validates_format_of(*attr_names)
+options head
+  validates_format_of :${1:name},
+    with: /${1}/,
+    without: /${2}/
+
+snippet validates
+abbr    AM::Validations.validates :name, *validates
+options word
+  validates :${1:name},
+    ${2:validates}
+
+snippet validates_with
+abbr    AM::Validations.validates_with Klass
+options word
+  validates_with<`3`> ${1:Klass}
+# }}}
+
+# CallBacks {{{
+# %w[before_validation after_validation before_save around_save before_create around_create after_create after_save before_validation after_validation before_save around_save before_update around_update after_update after_save before_destroy around_destroy after_destroy]
+snippet before_validation
+abbr    AM::CallBacks.before_validation(*args, &block)
+options head
+  before_validation :${1:method_name}${2:validation_options}${3}
+
+snippet after_validation
+abbr    AM::CallBacks.after_validation(*args, &block)
+options head
+  after_validation :${1:method_name}${2:validation_options}${3}
+
+snippet before_save
+abbr    AM::CallBacks.before_save(*args, &block)
+options head
+  before_save :${1:method_name}${2:validation_options}${3}
+
+snippet around_save
+abbr    AM::CallBacks.around_save(*args, &block)
+options head
+  around_save :${1:method_name}${2:validation_options}${3}
+
+snippet before_create
+abbr    AM::CallBacks.before_create(*args, &block)
+options head
+  before_create :${1:method_name}${2:validation_options}${3}
+
+snippet around_create
+abbr    AM::CallBacks.around_create(*args, &block)
+options head
+  around_create :${1:method_name}${2:validation_options}${3}
+
+snippet after_create
+abbr    AM::CallBacks.after_create(*args, &block)
+options head
+  after_create :${1:method_name}${2:validation_options}${3}
+
+snippet after_save
+abbr    AM::CallBacks.after_save(*args, &block)
+options head
+  after_save :${1:method_name}${2:validation_options}${3}
+
+snippet before_validation
+abbr    AM::CallBacks.before_validation(*args, &block)
+options head
+  before_validation :${1:method_name}${2:validation_options}${3}
+
+snippet after_validation
+abbr    AM::CallBacks.after_validation(*args, &block)
+options head
+  after_validation :${1:method_name}${2:validation_options}${3}
+
+snippet before_save
+abbr    AM::CallBacks.before_save(*args, &block)
+options head
+  before_save :${1:method_name}${2:validation_options}${3}
+
+snippet around_save
+abbr    AM::CallBacks.around_save(*args, &block)
+options head
+  around_save :${1:method_name}${2:validation_options}${3}
+
+snippet before_update
+abbr    AM::CallBacks.before_update(*args, &block)
+options head
+  before_update :${1:method_name}${2:validation_options}${3}
+
+snippet around_update
+abbr    AM::CallBacks.around_update(*args, &block)
+options head
+  around_update :${1:method_name}${2:validation_options}${3}
+
+snippet after_update
+abbr    AM::CallBacks.after_update(*args, &block)
+options head
+  after_update :${1:method_name}${2:validation_options}${3}
+
+snippet after_save
+abbr    AM::CallBacks.after_save(*args, &block)
+options head
+  after_save :${1:method_name}${2:validation_options}${3}
+
+snippet before_destroy
+abbr    AM::CallBacks.before_destroy(*args, &block)
+options head
+  before_destroy :${1:method_name}${2:validation_options}${3}
+
+snippet around_destroy
+abbr    AM::CallBacks.around_destroy(*args, &block)
+options head
+  around_destroy :${1:method_name}${2:validation_options}${3}
+
+snippet after_destroy
+abbr    AM::CallBacks.after_destroy(*args, &block)
+options head
+  after_destroy :${1:method_name}${2:validation_options}${3}
+
+
+
+snippet validation_options
+abbr    AM::CallBacks.validation_options
+options word
+  ${1:on: active_record_hooks${2\}}
+  ${3:if: Proc.new { ${4\} \}}
+# }}}
+
+snippet active_record_hooks
+abbr    %i[save create update]
+options word
+  %i[create create!  decrement!  destroy destroy!  destroy_all increment!  save save!  save(validate: false) toggle!  update_attribute update update!  valid?  ]
+# }}}
+
+# ActiveModel::AttributeMethods# {{{
+snippet attribute_method_affix
+abbr    AM::AttributeMethods.attribute_method_affix(prefix: ..., suffix: ...)
+options head
+  attribute_method_affix prefix: '${1}_', suffix: '_${2}'
+  define_attribute_methods${3}
+
+  def $1_attribute_$2(attr, *args)
+    ${4}
+  end
+
+snippet attribute_method_suffix
+abbr    AM::AttributeMethods.attribute_method_suffix '...'
+options head
+  attribute_method_suffix '_${1}'
+
+  def attribute_$1(attr, *args)
+    ${2}
+  end
+
+snippet attribute_method_prefix
+abbr    AM::AttributeMethods.attribute_method_prefix '...'
+options head
+  attribute_method_prefix '${1}_'
+
+  def $1_attribute(attr, *args)
+    ${2}
+  end
+
+snippet define_attribute_methods
+abbr    AM::AttributeMethods.define_attribute_methods(*names)
+options head
+  define_attribute_methods :${1:*names}
+
+snippet alias_attribute
+abbr    AM::AttributeMethods.alias_attribute :new_name, :old_name
+options head
+  alias_attribute :${1:ne_name}, :${2:old_name}
+
+snippet undefine_attribute_methods
+abbr    AM::AttributeMethods.undefine_attribute_methods
+options head
+  undefine_attribute_methods
+# }}}
+
+# ActiveModel::CallBacks# {{{
+snippet define_model_callbacks
+abbr    define_model_callbacks :callback, only: :after
+options head
+  define_model_callbacks :${1:create}, only: :${2:after}
+# }}}
+
+# ActiveModel::Conversion# {{{
+# InstanceMethods
+snippet .to_key
+abbr    AM::Conversion#to_key
+options word
+  .to_key
+
+snippet .to_param
+abbr    AM::Conversion#to_param
+options word
+  .to_param
+
+snippet .to_partial_path
+abbr    AM::Conversion#to_partial_path
+options word
+  .to_partial_path
+
+# ClassMethods
+snippet _to_partial_path
+abbr    AM::Conversion._to_partial_path
+options word
+  _to_partial_path
+# }}}
+
+# ActiveModel::Dirty# {{{
+# Provides a way to track changes in your object in the same way as Active Record
+# does.
+
+snippet .changed?
+abbr    AM::Dirty#changed?
+options word
+  .changed?<`3`>
+
+snippet .changed
+abbr    AM::Dirty#changed #=> [*'keys']
+options word
+  .changed
+
+snippet .changes
+abbr    AM::Dirty#changes #=> { key: :value }
+options word
+  .changes
+
+snippet .previous_changes
+abbr    AM::Dirty#previous_changes #=> { key: :value }
+options word
+  .previous_changes
+
+snippet .changed_attributes
+abbr    AM::Dirty#changed_attributes
+options word
+  .changed_attributes
+
+# }}}
+
+# ActiveModel::Errors# {{{
+snippet errors.full_messages
+abbr    errors.full_messages
+regexp  'errors\.[full_messages]*$'
+options word
+  errors.full_messages
+
+snippet errors.clear
+abbr    errors.clear
+regexp  'errors\.[clear]*$'
+options word
+  errors.clear
+
+snippet errors.include?
+abbr    errors.include?(:attribute)
+regexp  'errors\.[include?]*$'
+options word
+  errors.include?(:${1:attribute})
+
+snippet errors.get
+abbr    errors.get(:key)
+regexp  'errors\.[get]*$'
+options word
+  errors.get(:${1:key})
+
+snippet errors.set
+abbr    errors.set(key, value)
+regexp  'errors\.[set]*$'
+options word
+  errors.set(${1:key}, ${2:value})
+
+snippet errors.delete
+abbr    errors.delete(:key)
+regexp  'errors\.[delete]*$'
+options word
+  errors.delete(:${1:key})
+
+snippet errors.to_xml
+abbr    errors.to_xml(*opts)
+regexp  'errors\.[to_xml]*$'
+options word
+  errors.to_xml ${1:*opts}
+
+snippet errors.as_json
+abbr    errors.as_json(*opts)
+regexp  'errors\.[as_json]*$'
+options word
+  errors.as_json${1:(full_messages: true)}
+
+snippet errors.to_hash
+abbr    errors.to_hash(full_messages = false)
+regexp  'errors\.[to_hash]*$'
+options word
+  errors.to_hash(${1:false})
+
+snippet errors.add
+abbr    errors.add(attribute, message = nil, *opts)
+regexp  'errors\.[add]*$'
+options word
+  errors.add(:${1:attribute}, ${2:message}${3:, strict: ${4:true\}})
+
+snippet errors.add_on_empty
+abbr    errors.add_on_empty([attributes], *opts)
+regexp  'errors\.[add_on_empty]*$'
+options word
+  errors.add_on_empty([${1:attributes}])
+
+snippet errors.add_on_blank
+abbr    errors.add_on_blank([attributes], *opts)
+regexp  'errors\.[add_on_blank]*$'
+options word
+  errors.add_on_blank([${1:attributes}])
+
+snippet errors.added?
+abbr    errors.added?(attribute, message = nil, *opts)
+regexp  'errors\.[added?]*$'
+options word
+  errors.added?(${1:attribute}, ${2:message})
+
+snippet errors.full_messages
+abbr    errors.full_messages
+regexp  'errors\.[full_messages]*$'
+options word
+  errors.full_messages
+
+snippet errors.full_messages_for
+abbr    errors.full_messages_for(attribute)
+regexp  'errors\.[full_messages_for]*$'
+options word
+  errors.full_messages_for(:${1:attribute})
+
+snippet errors.full_message
+abbr    errors.full_message(attribute, message)
+regexp  'errors\.[full_message]*$'
+options word
+  errors.full_message(:${1:attribute}, ${2:message})
+
+
+snippet errors.generate_message
+abbr    errors.generate_message(attribute, type = :invalid, *opts)
+regexp  'errors\.[generate_message]*$'
+options word
+  errors.generate_message(:${1:attribute}, '${1:blank}')
+# }}}
+
+# ActiveModel::Naming# {{{
+snippet .model_name
+abbr    AM::Naming.model_name
+options word
+  .model_name
+
+snippet model_name.human
+abbr    AM::Naming.model_name.human(*opts)
+regexp  'model_name\.[human]*$'
+options word
+  model_name.human
+
+# snippet Naming.plural
+# abbr    Naming.plural(record_or_class)
+# regexp  'Naming\.[plural]*$'
+# options word
+#   Naming.plural(${1:record_or_class})
+# }}}
+
+# ActiveModel::SecurePassword# {{{
+# Overwride password methods
+snippet has_secure_password
+abbr    AM::SecurePassword.has_secure_password(*opts)
+options word
+  has_secure_password ${1:valudations: true}
+
+snippet .authenticate
+abbr    AM::SecurePassword#authenticate(unencrypted_password)
+options word
+  .authenticate(${1:unencrypted_password})
+# }}}
+
+# ActiveModel::Serialization# {{{
+snippet .serializable_hash
+abbr    AM::Serialization#serializable_hash(*opts)
+options word
+  .serializable_hash${1: only: :name, except: :name, methods: :capitalized_name}
+# }}}
+
+# ActiveModel::Translation# {{{
+snippet .human_attribute_name
+abbr    AM::Translation.human_attribute_name(attribute, *opts)
+options word
+  .human_attribute_name(${1:attribute})
+# }}}
+
+# ActiveModel::Validations# {{{
+# ClassMethods
+snippet .attribute_method?
+abbr    AM::Validations.attribute_method?(:attribute)
+options word
+  .attribute_method?(:${1:attribute})
+
+snippet .validators_on
+abbr    AM::Validations.validators_on(*attributes)
+options word
+  .validators_on(${1:*attributes})
+
+snippet .valid?
+abbr    AM::Validations#valid?(context = nil)
+regexp  '\.[.valid?]*$'
+options word
+  .valid? :${1:attribute}
+
+snippet .invalid?
+abbr    AM::Validations#invalid?
+regexp  '\.[.invalid?]*$'
+options word
+  .invalid?
+# }}}
+
+# ActiveModel::Validator# {{{
+snippet MyValidator
+abbr    MyValidator < ActiveModel::Validator
+options word
+  class ${1:My}Validator < ActiveModel::Validator
+    def initialize(options)
+      super
+    end
+
+    def validate_each(record, attribute, value)
+      unless %w(Mr. Mrs. Dr.).include?(value)
+        record.errors.add attribute, 'must be Mr., Mrs., or Dr.'
+      end
+    end
+  end
+# }}}

@@ -1,0 +1,46 @@
+snippet Backbone.Router
+abbr    class Router extends Backbone.Router
+options head
+  class ${1:Router} extends Backbone.Router
+    routes:
+      '' : '${2:index}'
+
+    initialize: ->
+
+    $2: ->
+      ${3}
+
+snippet Backbone.View
+abbr    class View extends Backbone.View
+options head
+  class ${1:View} extends Backbone.View
+    el: $('${2}')
+
+    events:
+      'click body': '${3:method}'
+
+    initialize: ->
+    render: ->
+
+    $3: ->
+
+snippet Backbone.Model
+abbr    class Model exnteds Backbone.Model
+options head
+  class ${1:Model} extends Backbone.Model
+    # idAttribute: 'iid'
+    # defaults:
+    #  worked: '0'
+    urlRoot: '/$1${2}'
+
+    initialize: ->
+
+snippet Backbone.Colleaction
+abbr    class Collections extends Backbone.Colleaction
+options head
+  class ${1}s exntends Backbone.Collection
+    model: $1
+    url: '/$1${2}'
+
+    initialize: ->
+      # @fetch()

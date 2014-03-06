@@ -22,6 +22,8 @@ export ECLIPSE_HOME='/Applications/eclipse'
 # export CPPFLAGS="-I/usr/local/Cellar/readline/6.2.4/include"
 # export LDFLAGS="-L/usr/local/Cellar/readline/6.2.4/lib"
 
+# export SSH_ASKPASS=$HOME/dotfiles/command/ssh-askpass
+
 # PATH
 # {{{
 export PATH=''
@@ -44,6 +46,7 @@ export RSENSE_HOME=$HOME/.bundle/rsense-0.3
 # node
 export NODE_PATH=/usr/local/lib/node
 export NODE_PATH=/usr/local/lib/node_modules:$NODE_PATH
+export NODE_PATH=/usr/local/lib/jsctags:${NODE_PATH}
 export PATH=/usr/local/mysql/bin:/usr/local/share/npm/bin:$PATH
 
 # homebrew

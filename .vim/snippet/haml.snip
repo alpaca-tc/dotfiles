@@ -10,8 +10,12 @@ snippet    charset
 snippet     author
     %meta{ 'name' => 'author', :content => '${1}' }
 
-snippet     script
+snippet script
     %script{ :type => "text/javascript", :src => "${1}" }
+
+snippet template
+    %script{ type: 'text/template', data: { path: '${1}' } }
+      ${2}
 
 snippet     img
     %img{ :src => "${1}", :alt => "${2}" }/
@@ -69,5 +73,5 @@ abbr        %script{ src: "http://ie7-js.googlecode.com/svn/version/2.1(beta4)/I
 options     word
   /[if lt IE 9]
     %script{ src: "http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js" }
-  
-  
+
+

@@ -1,13 +1,1176 @@
-snippet     scope
-abbr        scope name, -> {}
-options     word
-  scope :${1:name}, -> {
-    ${2}
-  }
+# ActiveRecord::Persistence# {{{
+snippet .create
+abbr    AR.create(attributes, &block)
+options word
+  .create(${1:attribute: value})
 
-snippet     default_scope
-abbr        default_scope name, -> {}
-options     word
-  default_scope :${1:name}, -> {
+snippet .instantiate
+abbr    AR.instantiate(record, column_types={})
+options word
+  .instantiate(${1:record})
+
+snippet .new_record?
+abbr    AR#new_record?
+options word
+  .new_record?
+
+snippet .destroyed?
+abbr    AR#destroyed?
+options word
+  .destroyed?
+
+snippet .persisted??
+abbr    AR#persisted??
+options word
+  .persisted??
+
+snippet .save
+abbr    AR#save(*)
+options word
+  .save
+
+snippet .save!
+abbr    AR#save!(*)
+options word
+  .save!
+
+snippet .delete
+abbr    AR#delete
+options word
+  .delete
+
+snippet .destroy
+abbr    AR#destroy
+options word
+  .destroy
+
+snippet .destroy!
+abbr    AR#destroy!
+options word
+  .destroy!
+
+snippet .becomes
+abbr    AR#becomes(Klass)
+options word
+  .becomes(${1:Klass})
+
+snippet .becomes!
+abbr    AR#becomes!(Klass)
+options word
+  .becomes!(${1:Klass})
+
+snippet .update
+abbr    AR#update(attributes)
+options word
+  .update(${1:attribute})
+
+snippet .update!
+abbr    AR#update!(attributes)
+options word
+  .update!(${1:attributes})
+
+snippet .update_colmun
+abbr    AR#update_colmun(name, value)
+options word
+  .update_colmun(:${1:name}, ${2:value})
+
+snippet .update_columns
+abbr    AR#update_columns(attributes)
+options word
+  .update_columns(${1:attributes})
+
+snippet .increment
+abbr    AR#increment(:attribute, by = 1)
+options word
+  .increment(:${1:attribute}${2:, ${3:1\}})
+
+snippet .increment!
+abbr    AR#increment!(:attribute, by = 1)
+options word
+  .increment!(:${1:attribute}${2:, ${3:1\}})
+
+snippet .decrement
+abbr    AR#decrement(:attribute, by = 1)
+options word
+  .decrement(:${1:attribute}${2:, ${3:1\}})
+
+snippet .decrement!
+abbr    AR#decrement!(:attribute, by = 1)
+options word
+  .decrement!(:${1:attribute}${2:, ${3:1\}})
+
+snippet .toggle
+abbr    AR#toggle(attribute)
+options word
+  .toggle(:${1:attribute})
+
+snippet .toggle!
+abbr    AR#toggle!(attribute)
+options word
+  .toggle!(:${1:attribute})
+
+snippet .reload
+abbr    AR#reload(option = nil)
+options word
+  .reload${1:(lock: true)}
+
+snippet .touch
+abbr    AR#touch(name = nil)
+options word
+  .touch(:${1:updated_at})
+# }}}
+
+# ActiveRecord::ReadonlyAttributes# {{{
+snippet attr_readonly
+abbr    AR#attr_readonly(*attributes)
+options word
+  attr_readonly(${1:*attributes})
+
+snippet readonly_attributes
+abbr    AR.readonly_attributes
+options word
+  readonly_attributes
+# }}}
+
+# ActiveRecord::ModelSchema# {{{
+snippet self.table_name
+abbr    AR.table_name
+options word
+  self.table_name
+
+snippet self.inheritance_column
+abbr    AR.inheritance_column
+options word
+  self.inheritance_column
+
+snippet self.columns
+abbr    AR.columns
+options word
+  self.columns
+
+snippet self.table_exists?
+abbr    AR.table_exists?
+options word
+  self.table_exists?
+
+snippet self.columns_hash
+abbr    AR.columns_hash
+options word
+  self.columns_hash
+
+snippet self.column_types
+abbr    AR.column_types
+options word
+  self.column_types
+
+snippet self.decorate_columns
+abbr    AR.decorate_columns(columns_hash)
+options word
+  self.decorate_columns(${1:columns_hash})
+
+snippet self.column_defaults
+abbr    AR.column_defaults
+options word
+  self.column_defaults
+
+snippet self.column_names
+abbr    AR.column_names
+options word
+  self.column_names
+
+snippet self.content_columns
+abbr    AR.content_columns
+options word
+  self.content_columns
+
+snippet self.column_methods_hash
+abbr    AR.column_methods_hash
+options word
+  self.column_methods_hash
+# }}}
+
+# ActiveRecord::Inheritance# {{{
+snippet self.descends_from_active_record?
+abbr    AR.descends_from_active_record?
+options word
+  self.descends_from_active_record?
+
+snippet self.symbolized_base_class
+abbr    AR.symbolized_base_class
+options word
+  self.symbolized_base_class
+
+snippet self.symbolized_sti_name
+abbr    AR.symbolized_sti_name
+options word
+  self.symbolized_sti_name
+
+snippet self.base_class
+abbr    AR.base_class
+options word
+  self.base_class
+
+snippet self.abstract_class?
+abbr    AR.abstract_class?
+options word
+  self.abstract_class?
+
+snippet self.sti_name
+abbr    AR.sti_name
+options word
+  self.sti_name
+
+snippet self.abstract_class
+abbr    AR.self.abstract_class = true
+options head
+  self.abstract_class = true
+# }}}
+
+# ActiveRecord::Scoping# {{{
+snippet self.current_scope
+abbr    AR.current_scope
+options word
+  self.current_scope
+
+snippet self.current_scope=
+abbr    AR.current_scope = scope
+options word
+  self.current_scope = ${1:scope}
+
+# ActiveRecord::Scoping::Default::ClassMethods#methods
+snippet self.before_remove_const
+abbr    AR.before_remove_const
+options word
+  self.before_remove_const
+
+snippet self.unscoped
+abbr    AR.unscoped
+options word
+  self.unscoped
+
+snippet default_scope
+abbr    default_scope(scope = nil)
+options word
+  default_scope { ${1:scope} }
+
+snippet ignore_default_scope=
+abbr    ignore_default_scope=(ignore)
+options word
+  ignore_default_scope = ${1}
+
+# ActiveRecord::Scoping::Named::ClassMethods#methods
+snippet self.scope_attributes
+abbr    AR.scope_attributes
+options word
+  self.scope_attributes
+
+snippet self.scope_attributes?
+abbr    AR.scope_attributes?
+options word
+  self.scope_attributes?
+
+snippet scope
+abbr    scope(name, body, &block)
+options word
+  scope :${1:name}, -> (${1:args}) { |$1| ${2} }
+
+snippet self.scope_attributes
+abbr    AR.scope_attributes
+options word
+  self.scope_attributes
+
+snippet self.scope_attributes?
+abbr    AR.scope_attributes?
+options word
+  self.scope_attributes?
+# }}}
+
+# ActiveRecord::Sanitization# {{{
+snippet self.quote_value
+abbr    AR.quote_value(value, column)
+options word
+  self.quote_value(${1:value}, ${2:column})
+
+snippet self.sanitize
+abbr    AR.sanitize(value)
+options word
+  self.sanitize(${1:value})
+
+snippet self.sanitize_sql
+abbr    AR.sanitize_sql_for_conditions(condition, table_name = self.table_name)
+alias   self.sanitize_sql_for_conditions
+options word
+  self.sanitize_sql(${1:["name='%s'", 'name']})
+
+snippet self.sanitize_sql_for_assignment
+abbr    AR.sanitize_sql_for_assignment(assignments)
+options word
+  self.sanitize_sql_for_assignment(${1:name: value})
+
+snippet self.expand_hash_conditions_for_aggregates
+abbr    AR.expand_hash_conditions_for_aggregates(attrs)
+options word
+  self.expand_hash_conditions_for_aggregates(${1:attrs})
+
+snippet self.sanitize_sql_hash
+abbr    AR.sanitize_sql_hash_for_conditions(attr)
+alias   self.sanitize_sql_hash_for_conditions
+options word
+  self.sanitize_sql_hash(${1:attr})
+# }}}
+
+# ActiveRecord::AttributeAssignment# {{{
+snippet .assign_attributes
+abbr    AR#assign_attributes
+options word
+  .assign_attributes(${1:{ name: new_value }})
+# }}}
+
+# ActiveRecord::CounterCache# {{{
+snippet self.reset_counters
+abbr    AR.reset_counters(id, *counters)
+options word
+  self.reset_counters(${1:id}, ${2:*:conters})
+
+snippet self.update_counters
+abbr    AR.update_counters(id, counters)
+options word
+  self.update_counters(${1:id}, ${2:counters})
+
+snippet self.update_counters
+abbr    AR.update_counters(id, counters)
+options word
+  self.update_counters(${1:id}, ${2:{ counter: -1, counter: 1 }})
+
+snippet self.increment_counter
+abbr    AR.increment_counter(counter_name, id)
+options word
+  self.increment_counter(:${1:counter_name}, ${2:id})
+
+snippet self.decrement_counter
+abbr    AR.decrement_counter(counter_name, id)
+options word
+  self.decrement_counter(:${1:counter_name}, ${2:id})
+
+snippet self.locking_enabled?
+abbr    AR.locking_enabled?
+options word
+  self.locking_enabled?
+
+snippet self.self.locking_column
+abbr    AR.self.locking_column = :lock_person
+options word
+  self.self.locking_column = :${1:lock_person}
+
+snippet self.lock_optimistically
+abbr    AR.lock_optimistically = false
+options word
+  self.lock_optimistically = ${1:false}
+
+snippet self.instance_method_already_implemented?
+abbr    AR.instance_method_already_implemented?(:method_name)
+options word
+  self.instance_method_already_implemented?(:${1:save})
+
+snippet self.attribute_method?
+abbr    AR.attribute_method?(method_name)
+options word
+  self.attribute_method?(:${1:method_name})
+
+snippet self.dangerous_attribute_method?
+abbr    AR.dangerous_attribute_method?(method_name)
+options word
+  self.dangerous_attribute_method?(:${1:method_name})
+
+snippet self.attribute_names
+abbr    AR.attribute_names
+options word
+  self.attribute_names
+
+snippet self.has_attribute?
+abbr    AR.has_attribute?(method_name)
+options word
+  self.has_attribute?(:${1:method_name})
+
+snippet self.attribute_names
+abbr    AR.attribute_names
+options word
+  self.attribute_names
+
+snippet .attributes
+abbr    AR#attributes
+options word
+  .attributes
+
+snippet .attribute_for_inspect
+abbr    AR#attribute_for_inspect(method_name)
+options word
+  .attribute_for_inspect(:${1:method_name})
+
+snippet .attribute_present?
+abbr    AR#attribute_present?(method_name)
+options word
+  .attribute_present?(:${1:method_name})
+
+snippet .column_for_attribute
+abbr    AR#column_for_attribute(name)
+options word
+  .column_for_attribute(${1:name})
+
+snippet .clone_attributes
+abbr    AR#clone_attributes(reader_method = :read_attribute, attributes = {})
+options word
+  .clone_attributes
+# }}}
+
+# ActiveRecord::CallBacks# {{{
+snippet after_initialize
+abbr    AM::CallBacks.after_initialize(*args, &block)
+options head
+  after_initialize :${1:method_name}${2:validation_options}${3}
+
+snippet after_find
+abbr    AM::CallBacks.after_find(*args, &block)
+options head
+  after_find :${1:method_name}${2:validation_options}${3}
+
+snippet after_touch
+abbr    AM::CallBacks.after_touch(*args, &block)
+options head
+  after_touch :${1:method_name}${2:validation_options}${3}
+
+snippet after_commit
+abbr    AM::CallBacks.after_commit(*args, &block)
+options head
+  after_commit :${1:method_name}${2:validation_options}${3}
+
+snippet after_rollback
+abbr    AM::CallBacks.after_rollback(*args, &block)
+options head
+  after_rollback :${1:method_name}${2:validation_options}${3}
+# }}}
+
+# ActiveRecord::Timestamp# {{{
+snippet self.record_timestamps = true
+abbr    AM::Timestamp.record_timestamps = true
+options word
+  self.record_timestamps = true
+# }}}
+
+# ActiveRecord::Associations# {{{
+snippet association_options
+abbr    class_name: '...', foreign_key: '...', ...
+alias   options_of_associate
+options word
+  class_name: 'RealKlassName',
+  foreign_key: 'foreign_key_id',
+  primary_key: 'primay_key',
+  dependent: [:destroy, :delete_all, :nullify, :restrict_with_exception, :restrict_with_error],
+  counter_cache: true_or_method_name,
+  validate: false,
+  autosave: boolean,
+  readonly: :true,
+  as: ...able,
+  through: ...s,
+  source: :addressable,
+  inverse_of: :table_name,
+  before_add: [:methods],
+  after_add: [:methods],
+  before_remove: [:methods],
+  after_remove: [:methods]
+
+snippet has_many
+abbr    has_many(name, scope = nil, options = {}, &extension)
+alias   one_to_many
+options head
+  # 'belongs_to :current_table' to $1
+  # has_many $3s
+  has_many :${1:name}s${2:, through: :${3:name\}s}
+
+snippet has_one
+abbr    has_one(name, scope = nil, options = {})
+alias   one_to_one
+options word
+  has_one :${1:name}${2:, through: :${3:name\}s}
+
+snippet belongs_to
+abbr    belongs_to(name, scope = nil, options = {})
+alias   many_to_one
+options word
+  belongs_to :${1:name}${2:, polymorphic: true}${3:, touch: true}
+
+snippet has_and_belongs_to_many
+abbr    has_and_belongs_to_many(name, scope = nil, options = {})
+alias   many_to_many
+options word
+  has_and_belongs_to_many :${1:name}s
+# }}}
+
+# ActiveRecord::AutosaveAssociation# {{{
+snippet .changed_for_autosave?
+abbr    AR#changed_for_autosave?
+options word
+  .changed_for_autosave?
+
+snippet .destroyed_by_association
+abbr    AR#destroyed_by_association
+options word
+  .destroyed_by_association
+
+snippet .destroyed_by_association=
+abbr    AR#destroyed_by_association =
+options word
+  .destroyed_by_association = ${1:reflection}
+
+snippet .marked_for_destruction?
+abbr    AR#marked_for_destruction?
+options word
+  .marked_for_destruction?
+
+snippet .mark_for_destruction
+abbr    AR#mark_for_destruction
+options word
+  .mark_for_destruction
+# }}}
+
+# ActiveRecord::NestedAttributes# {{{
+snippet accepts_nested_attributes_for
+abbr    accepts_nested_attributes_for(*attr_names)
+options word
+  accepts_nested_attributes_for :${1:*name}s,
+    allow_destroy: true,
+    reject_if: proc { |attrs| },
+    limit: n,
+    update_only: :id or true
+# }}}
+
+# ActiveRecord::Aggregations# {{{
+snippet .clear_aggregation_cache
+abbr    AR#clear_aggregation_cache
+options word
+  .clear_aggregation_cache
+
+# [todo] - 調査する
+snippet composed_of
+abbr    composed_of(part_id, *opts)
+options word
+  composed_of :${1:class_name},
+    ${2:#:class_name: 'NetAddr::CIDR',}
+    mapping: [%w(${3:my_method} ${4:another_method})],
+    allow_nil: true,
+    constructor: Proc.new { |$3| $1.new($3) },
+    # converter is used at self.$1= value
+    converter: Proc.new { |value| NetAddr::CIDR.create(value.is_a?(Array) ? value.join('/') : value) }
+# }}}
+
+# ActiveRecord::Transactions# {{{
+snippet transaction
+abbr    transaction { ... }
+options word
+  transaction do
+    ${1}
+  end
+# }}}
+
+# ActiveRecord::Serialization# {{{
+snippet .serializable_hash
+abbr    AR#serializable_hash
+options word
+  .serializable_hash${1:(except: ${2\})}
+# }}}
+
+# ActiveRecord::Store# {{{
+snippet store
+abbr    store(store_attribute, options = {})
+options head
+  store(store_attribute, options = {})
+  store :${1:store_attribute}, accessors: %i[${2:*accessor_names}]${3:, coder: JSON}
+
+snippet store_accessor
+abbr    store_accessor(store_attribute, *keys)
+options head
+  store_accessor ${1:store_attribute}, ${2:*keys}
+
+snippet read_store_attribute
+abbr    read_store_attribute(store_attribute, key)
+options head
+  read_store_attribute(store_attribute, key)
+
+snippet write_store_attribute
+abbr    write_store_attribute(store_attribute, key, value)
+options head
+  write_store_attribute(store_attribute, key, value)
+# }}}
+
+# ActiveRecord::AttributeMethods# {{{
+snippet self.cache_attributes
+abbr    AR.cache_attributes
+options word
+  self.cache_attributes(*attribute_names)
+
+snippet self.cached_attributes
+abbr    AR.cached_attributes
+options word
+  self.cached_attributes
+
+snippet self.cache_attribute?
+abbr    AR.cache_attribute?(attr_name)
+options word
+  self.cache_attribute?(${1:attr_name})
+
+snippet self.define_method_attribute
+abbr    AR.define_method_attribute(name)
+options word
+  self.define_method_attribute(${1:name})
+# }}}
+
+# ActiveRecord::Locking# {{{
+snippet .lock!
+abbr    AR#lock!(lock = true)
+options word
+  .lock!
+
+snippet .with_lock
+abbr    AR#with_lock(lock = true)
+options word
+  .with_lock do # transaction
+    ${1}
+  end
+# }}}
+
+# ActiveRecord::Batches# {{{
+snippet .find_each
+abbr    AR#find_each { |var| ... }
+options word
+  .find_each do |${1}|
     ${2}
-  }
+  end
+
+snippet .find_in_batches
+abbr    AR#find_in_batches { |var| ... }
+options word
+  .find_in_batches ${1:start: ..., batch_size: ...} do |${2}|
+    ${2}.each { |${3}| ${4} }
+  end
+# }}}
+
+# ActiveRecord::Calculations# {{{
+snippet .count
+abbr    AR.count(:column, *opts)
+options word
+  .count(:${1:name})
+
+snippet .average
+abbr    AR.average(:column, *opts)
+options word
+  .average(:${1:name})
+
+snippet .minimum
+abbr    AR.minimum(:column, *opts)
+options word
+  .minimum(:${1:name})
+
+snippet .sum
+abbr    AR.sum(:column, *opts)
+options word
+  .sum(:${1:name})
+
+snippet .calculate(operation, column_name, options = {})
+abbr    AR.calculate(operation, column_name, options = {})
+options word
+  .calculate(:${1:count}, :${2:column})
+
+snippet .pluck
+abbr    AR.pluck(*columns)
+options word
+  .pluck(:${1:*columns})
+
+snippet .ids
+abbr    AR.ids
+options word
+  .ids
+# }}}
+
+# ActiveRecord::FinderMethods# {{{
+snippet .find
+abbr    AR.find(*args)
+options word
+  .find(${1:[1]})
+
+snippet .find_by
+abbr    AR.find_by(*condition)
+options word
+  .find_by(${1:name: value or ['published_at < ?', 2.weeks.ago]})
+
+snippet .find_by!
+abbr    AR.find_by!(*condition)
+options word
+  .find_by!(${1:name: value or ['published_at < ?', 2.weeks.ago]})
+
+snippet .take
+abbr    AR.take(limit = nil)
+options word
+  .take(${1:limit})
+
+snippet .take!
+abbr    AR.take!
+options word
+  .take!
+
+snippet .first
+abbr    AR.first(limit = nil)
+options word
+  .first(${1:limit})
+
+snippet .first!
+abbr    AR.first!(limit = nil)
+options word
+  .first!
+
+snippet .last
+abbr    AR.last(limit = nil)
+options word
+  .last(${1:limit})
+
+snippet .last!
+abbr    AR.last!
+options word
+  .last!
+
+snippet .exists?
+abbr    AR.exists?(conditions)
+options word
+  .exists?(${1:conditions})
+
+snippet .find_with_associations
+abbr    AR.find_with_associations
+options word
+  .find_with_associations
+
+snippet .construct_join_dependency_for_association_find
+abbr    AR.construct_join_dependency_for_association_find
+options word
+  .construct_join_dependency_for_association_find
+
+snippet .construct_relation_for_association_calculations
+abbr    AR.construct_relation_for_association_calculations
+options word
+  .construct_relation_for_association_calculations
+
+snippet .find_with_ids
+abbr    AR.find_with_ids(*ids)
+options word
+  .find_with_ids(${1:*ids})
+
+snippet .find_one(id)
+abbr    AR.find_one(id)
+options word
+  .find_one(${1:id})
+
+snippet .find_some(ids)
+abbr    AR.find_some(ids)
+options word
+  .find_some(${1:ids})
+
+snippet .find_take
+abbr    AR.find_take
+options word
+  .find_take
+
+snippet .find_first
+abbr    AR.find_first
+options word
+  .find_first
+
+snippet .find_last
+abbr    AR.find_last
+options word
+  .find_last
+# }}}
+
+# ActiveRecord::QueryMethods# {{{
+snippet .not
+abbr    AR.not(*key_value)
+options word
+  .not(${1:key: value})
+
+snippet .includes
+abbr    AR.includes(*tables)
+options word
+  .includes(:${1:*tables})
+
+snippet .includes!
+abbr    AR.includes!(*tables)
+options word
+  .includes!(:${1:*tables})
+
+# [todo] 調査
+snippet .eager_load
+abbr    AR.eager_load(*tables)
+options word
+  .eager_load(:${1:*tables})
+
+snippet .eager_load
+abbr    AR.eager_load(*tables)
+options word
+  .eager_load(:${1:*tables})
+
+snippet .preload
+abbr    AR.preload(*tables)
+options word
+  .preload(:${1:*tables})
+
+snippet .preload
+abbr    AR.preload(*tables)
+options word
+  .preload(:${1:*tables})
+
+snippet .references
+abbr    AR.references(*tables)
+options word
+  .references(:${1:*tables})
+
+snippet .references
+abbr    AR.references(*tables)
+options word
+  .references(:${1:*tables})
+
+snippet .group
+abbr    AR.group(*tables)
+options word
+  .group(:${1:*tables or 'name AS grouped_name, age'})
+
+snippet .group
+abbr    AR.group(*tables)
+options word
+  .group(:${1:*tables or 'name AS grouped_name, age'})
+
+snippet .order
+abbr    AR.order(*args)
+options word
+  .order(${1:name: :desc})
+
+snippet .order_count
+abbr    AR.order('COUNT(*) desc')
+options word
+  .order('COUNT(*) desc')
+
+snippet .order!
+abbr    AR.order!(*args)
+options word
+  .order!(${1:name: :desc})
+
+snippet .reorder
+abbr    AR.reorder(*args)
+options wreord
+  .reorder(${1:name: :desc})
+
+snippet .reorder!
+abbr    AR.reorder!(*args)
+options wreord
+  .reorder!(${1:name: :desc})
+
+snippet .unscope
+abbr    AR.unscope(*args)
+options word
+  .unscope(${1::where, :select, :group, :order, :lock, :limit, :offset, :joins, :includes, :from, :readonly, :having})
+
+snippet .unscope!
+abbr    AR.unscope!(*args)
+options word
+  .unscope!(${1::where, :select, :group, :order, :lock, :limit, :offset, :joins, :includes, :from, :readonly, :having})
+
+snippet .joins
+abbr    AR.joins(:name)
+options word
+  .joins(${1::name or 'LEFT JOIN bookmarks ON bookmarks.bookmarkable_type = 'Post' AND bookmarks.user_id = users.id'})
+
+snippet .joins!
+abbr    AR.joins!(:name)
+options word
+  .joins!(${1::name or 'LEFT JOIN bookmarks ON bookmarks.bookmarkable_type = 'Post' AND bookmarks.user_id = users.id'})
+
+snippet .bind
+abbr    AR.bind(value)
+options word
+  .bind(${1:value})
+
+snippet .bind!
+abbr    AR.bind!(value)
+options word
+  .bind!(${1:value})
+
+snippet .where
+abbr    AR.where(*conditions)
+options word
+  .where(${1:'name = :name', name: 'Joe'})
+
+snippet .where!
+abbr    AR.where!(*conditions)
+options word
+  .where!(${1:'name = :name', name: 'Joe'})
+
+snippet .where_created_at
+abbr    AR.where({ created_at: (Time.now.midnight - 1.day)..Time.now.midnight })
+options word
+  .where({ created_at: (Time.now.midnight - 1.day)..Time.now.midnight })
+
+snippet .having
+abbr    AR.having(*rest)
+options word
+  .having(${1:'SUM(${2\}) > ?', ${3:n\}})
+
+snippet .having!
+abbr    AR.having!(*rest)
+options word
+  .having!(${1:'SUM(${2\}) > ?', ${3:n\}})
+
+snippet .limit
+abbr    AR.limit(value)
+options word
+  .limit(${1:value})
+
+snippet .limit!
+abbr    AR.limit!(value)
+options word
+  .limit!(${1:value})
+
+snippet .offset
+abbr    AR.offset(value)
+options word
+  .offset(${1:value})
+
+snippet .offset!
+abbr    AR.offset!(value)
+options word
+  .offset!(${1:value})
+
+snippet .none
+abbr    AR.none
+options word
+  .none
+
+snippet .none!
+abbr    AR.none!
+options word
+  .none!
+
+snippet .readonly
+abbr    AR.readonly
+options word
+  .readonly
+
+snippet .readonly!
+abbr    AR.readonly!
+options word
+  .readonly!
+
+snippet .create_with
+abbr    AR.create_with(nil)
+options word
+  .create_with(nil)
+
+snippet .create_with!
+abbr    AR.create_with!(nil)
+options word
+  .create_with!(nil)
+
+snippet .from
+abbr    AR.from('table')
+options word
+  .from('${1}')
+
+snippet .select
+abbr    AR.select(:name)
+options word
+  .select(:${1:name})
+
+snippet .destinct
+abbr    AR.destinct(value = true)
+alias   .uniq
+options word
+  .destinct(true)
+
+snippet .extending
+abbr    AR.extending(*modules &block)
+options word
+  .extending${1: *modules} do
+    def${2}
+  end
+
+snippet .reverse_order
+abbr    AR.reverse_order
+alias   .order_reverse
+options word
+  .reverse_order
+
+snippet .alel
+abbr    AR.alel
+options word
+  .alel
+
+snippet .build_arel
+abbr    AR.build_arel
+options word
+  .build_arel
+# }}}
+
+# ActiveRecord::SpawnMethods# {{{
+snippet .merge_query
+abbr    AR.merge(other)
+options word
+  .merge(${1:other or -> { ... \}})
+
+snippet .except
+abbr    AR.except(*skips)
+options word
+  .except(${1::where, :select, :group, :order, :lock, :limit, :offset, :joins, :includes, :from, :readonly, :having})
+
+snippet .only
+abbr    AR.only(*skips)
+options word
+  .only(${1::where, :select, :group, :order, :lock, :limit, :offset, :joins, :includes, :from, :readonly, :having})
+# }}}
+
+# ActiveRecord::Relation# {{{
+snippet .initialize_copy
+abbr    AR#initialize_copy(other)
+options word
+  .initialize_copy(${1:other})
+
+snippet .insert
+abbr    AR#insert(values)
+options word
+  .insert(${1:values})
+
+snippet .create
+abbr    AR#create(name: value)
+options word
+  .create(${1:name: value})
+
+snippet .create!
+abbr    AR#create!(name: value)
+options word
+  .create!(${1:name: value})
+
+snippet .created
+abbr    AR#create(name: value) { ... }
+options word
+  .create(${1:name: value}) do |column|
+    ch${2}
+  end
+
+snippet .first_or_create
+abbr    AR#first_or_create(attributes, &block)
+options word
+  .first_or_create(${1:attrs}) do |column|
+    ${2:#:Create...}
+  end
+
+snippet .first_or_create!
+abbr    AR#first_or_create!(attributes, &block)
+options word
+  .first_or_create!(${1:attrs}) do |column|
+    ${2:#:Create...}
+  end
+
+snippet .first_or_initialize
+abbr    AR#first_or_initialize(attributes, &block)
+options word
+  .first_or_initialize(${1:attrs}) do |column|
+    ${2:#:initialize...}
+  end
+
+snippet .find_or_create_by
+abbr    AR#find_or_create_by(attributes, &block)
+options word
+  .find_or_create_by(${1:attrs}) do |column|
+    ${2:#:create...}
+  end
+
+snippet .find_or_create_by!
+abbr    AR#find_or_create_by!(attributes, &block)
+options word
+  .find_or_create_by!(${1:attrs}) do |column|
+    ${2:#:create...}
+  end
+
+snippet .find_or_initialize_by
+abbr    AR#find_or_initialize_by(attributes, &block)
+options word
+  .find_or_initialize_by(${1:attrs}) do |column|
+    ${2:#:initialize...}
+  end
+
+snippet .explain
+abbr    AR#explain
+options word
+  .explain
+
+snippet .scoping
+abbr    AR#scoping { ... }
+options word
+  .scoping do
+    ${1:#:Use current scope}
+  end
+
+snippet .update_all
+abbr    AR#update_all(name: value)
+options word
+  .update_all(${1:name: value})
+
+snippet .update
+abbr    AR.update(id, values)
+options word
+  .update(${1:id}, ${2:attrs})
+
+snippet .destroy_all
+abbr    AR#destroy_all(condition)
+options word
+  .destroy_all${1:(${2:condition\})}
+
+snippet .destroy
+abbr    AR.destroy(id)
+options word
+  .destroy${1:(${2:id\})}
+
+snippet .delete_all
+abbr    AR#delete_all(condition)
+options word
+  .delete_all${1:(${2:condition\})}
+
+snippet .delete
+abbr    AR.delete(id)
+options word
+  .delete${1:(${2:id\})}
+
+snippet .to_sql
+abbr    AR#to_sql
+options word
+  .to_sql
+
+snippet .where_values_hash
+abbr    AR#where_values_hash
+options word
+  .where_values_hash
+
+snippet .scope_for_create
+abbr    AR#scope_for_create
+options word
+  .scope_for_create
+
+snippet .eager_loading?
+abbr    AR#eager_loading?
+options word
+  .eager_loading?
+
+snippet .joined_includes_values
+abbr    AR#joined_includes_values
+options word
+  .joined_includes_values
+
+snippet .uniq_value
+abbr    AR#uniq_value
+options word
+  .uniq_value
+# }}}

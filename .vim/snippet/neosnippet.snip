@@ -38,3 +38,28 @@ snippet alias
 abbr    alias
 alias   al
   alias   ${1}
+
+snippet abbr
+abbr    abbr ...
+options word
+  abbr ${1}
+
+snippet sne
+ snippet .${1}
+ abbr    Backbone.$1${2}
+ regexp  '\.[$1_?]*$'
+ options word
+   .$1${3}
+
+snippet snd
+ snippet .${1}
+ abbr    Backbone.Model#$1${2}
+ regexp  '\.[$1_?]*$'
+ options word
+   .$1${3}
+
+snippet snu
+  snippet _.${1}
+  abbr    _.$1(${2})
+  regexp  '_\.[$1]*$'
+    _.$1($2${3})

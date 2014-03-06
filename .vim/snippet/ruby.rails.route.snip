@@ -173,23 +173,13 @@ options word
 snippet shallow_do
 abbr    shallow do ... end
 options word
-  shallow do 
+  shallow do
     ${1}
   end
 #}}}
 
 # ----------------------------------------
 # Concern#{{{
-snippet concern:
-abbr    concern: :name
-options word
-  concern: :${1:name}
-
-snippet concerns:
-abbr    concerns: :name
-options word
-  concerns: :${1:name}
-
 snippet concern
 abbr    concern :name
 options word
@@ -200,12 +190,20 @@ abbr    concerns :name
 options word
   concerns :${1:name}
 
-snippet concern_do
+snippet concernd
 abbr    concern :name do ... end
 options word
   concern :${1:name} do
     ${2}
   end
+
+snippet concernsd
+abbr    concerns :name do ... end
+options word
+  concerns :${1:name} do
+    ${2}
+  end
+
 #}}}
 
 # ----------------------------------------
@@ -223,7 +221,7 @@ options word
 snippet namespace
 abbr    namespace :name do ... end
 options word
-  namespace :${1:name} do 
+  namespace :${1:name} do
     ${2:define_route}
   end
 
@@ -271,7 +269,7 @@ options word
 snippet collection
 abbr    collection do ... end
 options word
-  collection do 
+  collection do
     ${1}
   end
 #}}}

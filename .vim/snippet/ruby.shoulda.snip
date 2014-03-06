@@ -1,104 +1,120 @@
 # shoulda-matchers {{{
 # other#{{{
-snippet     named_scope
-abbr        named_scope(scope, conditions: ...)
-options     word
+snippet named_scope
+abbr    named_scope(scope, conditions: ...)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
   have_named_scope(${1:scope}, conditions: ${2})
 
-snippet     instance_method
-abbr        instance_method(method_name)
-options     word
+snippet instance_method
+abbr    instance_method(method_name)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
   instance_method(${1:method_name})
 
-snippet     have_class_methods
-abbr        have_class_methods(method)
-options     word
+snippet have_class_methods
+abbr    have_class_methods(method)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
   have_class_methods(${1:method})
 
-snippet     have_indices
-abbr        have_indices(field)
-options     word
+snippet have_indices
+abbr    have_indices(field)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
   have_indices(${1:field})
 #}}}
 
 # common#{{{
-snippet     kind_of
-abbr        be_a_kind_of(...)
-options     word
-  be_a_kind_of(${1:Klass})
-
-snippet     instance_of
-abbr        be_an_instance_of(...)
-options     word
-  be_an_instance_of(${1:Klass})
-
-snippet     have_key
-abbr        have_key(...)
-options     word
+snippet have_key
+abbr    have_key(...)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
   have_key(${1:key})
 #}}}
 
 # Module: Shoulda::ActiveRecord::Matchers#{{{
 # validation#{{{
-snippet     .with_message
-abbr        .with_message(regexp)
-options     word
+snippet .with_message
+abbr    .with_message(regexp)
+options word
   .with_message(${1})
 
-snippet     allow_m
-abbr        allow_mass_assignment_of(value)
-options     word
+snippet allow_mass_assignment_of
+abbr    allow_mass_assignment_of(value)
+alias   mass_assignment_of allow_m
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
   allow_mass_assignment_of(${1:value})
 
-snippet     allow_v
-abbr        allow_value(value).for(column)
-options     word
+snippet allow_value
+abbr    allow_value(value).for(column)
+alias   value_of allow_value
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
   allow_value(${1:value}).for(:${2:column})
 
-snippet     inclusion
-abbr        ensure_inclusion_of(attr).in_range(...)
-options     word
-  ensure_inclusion_of(${1:column}).in_range(${2:1..100})${3:.with_low_message(${4:message\})}${5:.with_high_message${6:message\}}
+snippet ensure_inclusion_of
+abbr    ensure_inclusion_of(attr).in_range(...)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+alias   inclusion
+options word
+  ensure_inclusion_of(${1:column}).in_${2:range_or_array}(${3:1..100})${4:.with_low_message(${5:message\})}${6:.with_high_message${7:message\}}
 
-snippet     exclusion
-abbr        ensure_exclusion_of(...)
-options     word
-  ensure_exclusion_of(${1:column})
-    ${2:.in_range(${3:10..20\})}
+snippet ensure_exclusion_of
+abbr    ensure_exclusion_of(...)
+alias   exclusion within
+options word
+  ensure_exclusion_of(${1:column}).
+    in_${2:range_or_array}(${3:1..100})${4:.with_low_message(${5:message\})}${6:.with_high_message${7:message\}}
 
-snippet     confirmation
-abbr        validate_confirmation_of(...)
-options     word
+snippet validate_confirmation_of
+abbr    validate_confirmation_of(...)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+alias   confirmation
+options word
   validate_confirmation_of(${1:column})
 
-snippet     length
-abbr ensure_length_of(...).is_at_least(...)
-options     word
+snippet ensure_length_of
+abbr    ensure_length_of(...).is_at_least(...)
+alias   length_of
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
   ensure_length_of(${1:column})${2:.is_at_least(${3\}})${4:.is_at_most(${5\}})${6:.with_short_message(/${7:regext\}/) }
 
-snippet     acceptance
-abbr validate_acceptance_of(...)
-options     word
+snippet validate_acceptance_of
+abbr    validate_acceptance_of(...)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+alias   acceptance
+options word
   validate_acceptance_of(${1:column})
 
-snippet     format_of
-abbr validate_format_of(...)
-options     word
+snippet validate_format_of
+abbr    validate_format_of(...)
+alias   format_of
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
   validate_format_of(${1:column}).with(${2:message})
 
-snippet     numericality
-abbr        validate_numericality_of(...)
-options     word
+snippet validate_numericality_of
+abbr    validate_numericality_of(...)
+alias   numericality
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
   validate_numericality_of(${1:column})
 
-snippet     presence
-abbr        validate_presence_of(...)
-options     word
+snippet validate_presence_of
+abbr    validate_presence_of(...)
+alias   presence
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
   validate_presence_of(${1:column})
 
-snippet     uniq
-abbr        validate_uniqueness_of(...)
-options     word
+snippet validate_uniqueness_of
+abbr    validate_uniqueness_of(...)
+alias   uniq
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
   validate_uniqueness_of(${1:column})${2:.scoped_to: ${3:scope_name\}}${4:.case_insensitive}
 #}}}
 # db common#{{{
