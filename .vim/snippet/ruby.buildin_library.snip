@@ -1843,3 +1843,10 @@ regexp  '[sprintf]*$'
 options word
   sprintf('${1:pat}', ${2:*values})
 # }}}
+
+# Regexp {{{
+snippet Regexp.sample
+abbr    /\$(?<dollars>\d+)\.(?<cents>\d+)/.match("$3.67")
+options word
+  /\$(?<dollars>\d+)\.(?<cents>\d+)/.match("$3.67")
+# }}}

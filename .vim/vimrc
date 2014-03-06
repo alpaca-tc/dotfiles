@@ -56,7 +56,7 @@ function! s:on_init() "{{{
   return has('vim_starting') || !exists('s:loaded_vimrc')
 endfunction"}}}
 function! ToUpperCamel(string) "{{{
-  return substitute(a:string, '^[a-z]\|_\zs[a-z]\C', '\=toupper(submatch(0))', 'g')
+  return join(map(split(a:string, '_'), "substitute(v:val, '^[a-z]\\|_\zs[a-z]\C', '\\=toupper(submatch(0))', 'g')"), '')
 endfunction"}}}
 "}}}
 
@@ -1078,6 +1078,9 @@ command! -nargs=1 Dict call alpaca#function#macdict#search(<q-args>)
 if s:on_init()
   set virtualedit+=block
   set whichwrap=b,s,h,l,~,<,>,[,]
+  augroup MyAutoCmd
+    autocmd BufEnter * setl whichwrap=b,s,h,l,~,<,>,[,]
+  augroup END
 endif
 
 inoremap <silent><C-A> <End>
@@ -1375,6 +1378,7 @@ function! hooks.on_source(bundle) "{{{
         \ '_' : {
         \   '(' : "(\r)",
         \   '[' : "[\r]",
+        \   '<' : "<\r>",
         \   '{' : "{ \r }",
         \   '#':  "#{\r}",
         \ },

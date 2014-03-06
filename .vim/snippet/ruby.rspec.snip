@@ -260,11 +260,6 @@ abbr    assings
 options word
   expect(assigns(:${1:name})).to ${2}
 
-snippet     respond_to
-abbr        be_respond_to(...)
-options     word
-  should be_respond_to(:${1:method})
-
 snippet     when
 abbr        context 'when'
 options     word
@@ -279,3 +274,15 @@ options     word
     ${2}
   end
 #}}}
+
+# Matcher {{{
+snippet be_respond_to
+abbr    be_respond_to(:method_name)
+options word
+  be_respond_to(:${1:method})
+
+snippet be_const_defined
+abbr    be_const_defined(:Name)
+options word
+  be_const_defined(:${1:Name})
+# }}}
