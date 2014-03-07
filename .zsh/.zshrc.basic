@@ -126,6 +126,10 @@ setopt multios
 
 # ファイル名の展開でディレクトリにマッチした場合末尾に / を付加する
 setopt mark_dirs
+
+if type compdef >/dev/null; then
+   compdef hub=git
+fi
 # }}}
 
 # history# {{{

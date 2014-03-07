@@ -109,6 +109,7 @@ source ~/.zsh/.zshrc.basic
 source ~/.zsh/.zshrc.prompt
 source ~/.zsh/.zshrc.extends
 source ~/.zsh/.zshrc.alias
+source ~/.zsh/.zshrc.smartalias
 source ~/.zsh/.zshrc.bindkey
 # source ~/.zsh/.zshrc.tmuxauto
 # source ~/.zsh/.zshrc.command

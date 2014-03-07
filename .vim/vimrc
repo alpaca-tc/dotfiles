@@ -1367,7 +1367,7 @@ unlet hooks
 
 " ------------------------------------
 xnoremap <silent>n :<C-U>EasyAlign<CR>
-xnoremap e :EasyAlign<Space>
+xnoremap a :EasyAlign<Space>
 
 " ------------------------------------
 nmap cs  <Plug>Csurround
@@ -1711,6 +1711,10 @@ function! hooks.on_source(bundle) "{{{
   let g:vimshell_ignore_case  = 1
   let g:vimshell_smart_case   = 1
   let g:vimshell_temporary_directory = g:my.dir.vimshell
+  let vimsh_path = expand('~/.zsh/.zshrc.alias')
+  if filereadable(vimsh_path)
+    let g:vimshell_vimshrc_path = vimsh_path
+  endif
 
   let s:vimshell_altercmd = [
         \ 'vi vim',
@@ -2196,7 +2200,7 @@ unlet hooks
 " ------------------------------------
 " excitetranslate
 " ------------------------------------
-xnoremap E :<C-U>ExciteTranslate<CR>
+xnoremap <C-E> :<C-U>ExciteTranslate<CR>
 
 " ------------------------------------
 "  jscomplete-vim
