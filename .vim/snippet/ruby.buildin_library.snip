@@ -1904,6 +1904,7 @@ options word
   def_delegators :${1:@accessor}, ${2:*methods}
 # }}}
 
+# Time# {{{
 snippet Time.at
 abbr    Time.at(time)
 options word
@@ -1932,3 +1933,4 @@ abbr    strftime(format)
 regexp  '\.[strftime]*$'
 options word
   strftime('%Y-%m-%m %I:%M:%S')
+# }}}

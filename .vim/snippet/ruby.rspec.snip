@@ -570,7 +570,6 @@ snippet stub_model
 abbr    stub_model(...)
 options word
   stub_model(${1})
-
 # }}}
 
 # Rspec::Matchers... {{{
@@ -596,6 +595,7 @@ options word
 
 snippet my_matcher_create
 abbr    class MyMatcher < RSpec::Matchers::BuiltIn::BaseMatcher ...
+alias   Matcher
 options head
   class ${1:My}Matcher < RSpec::Matchers::BuiltIn::BaseMatcher
     def initialize(*args)
@@ -622,6 +622,21 @@ options head
       MESSAGE
     end
   end
+<<<<<<< HEAD
+#}}}
+
+# Matcher {{{
+snippet be_respond_to
+abbr    be_respond_to(:method_name)
+options word
+  be_respond_to(:${1:method})
+
+snippet be_const_defined
+abbr    be_const_defined(:Name)
+options word
+  be_const_defined(:${1:Name})
+# }}}
+=======
 
   def ${2:be_instance_of}(*args)
     $1Matcher.new(self, *args)
@@ -657,3 +672,4 @@ abbr    create_instance
 options word
   <`3`>create_instance
 
+>>>>>>> 63f681a56dc6492bf556992b232081cb16254e1b
