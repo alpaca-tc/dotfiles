@@ -108,7 +108,7 @@ options head
 snippet validates_uniqueness_of
 abbr    AM::Validations.validates_uniqueness_of(*attr_names)
 options head
-  validates_uniqueness_of :${1:*table_names}${2:, scoe: ${3:table_name\}\}}${4:, conditions: -> { ${5: where(approved: true)\} \}}
+  validates_uniqueness_of :${1:*table_names}${2:, scope: ${3:table_name\}\}}${4:, conditions: -> { ${5: where(approved: true)\} \}}
 
 snippet validates_presence_of
 abbr    AM::Validations.validates_presence_of(*attr_names)

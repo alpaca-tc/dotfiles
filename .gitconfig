@@ -82,7 +82,7 @@
   ff = false
 
 [pull]
-  # rebase = true
+  rebase = true
 ; [branch]
 ;   autosetuprebase = always
 
@@ -99,4 +99,7 @@
 [credential]
   helper = cache --timeout=86400
 [remote "origin"]
-	fetch = +refs/pull/*/head:refs/remotes/origin/pr/*
+  fetch = +refs/pull/*/head:refs/remotes/origin/pr/*
+[filter "media"]
+	clean = git-media-clean %f
+	smudge = git-media-smudge %f

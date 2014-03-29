@@ -146,7 +146,7 @@ snippet remove_instance_variable
 abbr    remove_instance_variable(name)
 regexp  '\.[remove_instance_variable]*$'
 options word
-  remove_instance_variable(:${1:name})
+  remove_instance_variable(:@${1:name})
 
 snippet respond_to?
 abbr    respond_to?(name, include_all = false)

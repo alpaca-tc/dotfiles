@@ -336,11 +336,23 @@ NeoBundleLazy 'alpaca-tc/alpaca_remove_dust.vim', {
 
 " Asynchronous updating tags
 NeoBundleLazy 'alpaca-tc/alpaca_tags', {
-      \ 'depends': ['Shougo/vimproc', 'Shougo/unite.vim'],
+      \ 'rev' : 'v2.0',
+      \ 'depends': ['Shougo/vimproc'],
       \ 'autoload' : {
-      \   'commands' : ['Tags', 'TagsSet', 'TagsBundle', 'TagsCleanCache', 'TagsUpdate'],
-      \   'functions' : 'alpaca_tags#util#clean_current_git_cache',
-      \   'unite_sources' : ['tags']
+      \   'commands' : ['AlpacaTagsSet', 'AlpacaTagsBundle', 'AlpacaTagsCleanCache', 'AlpacaTagsUpdate'],
+      \ }}
+
+NeoBundleLazy 'alpaca-tc/alpaca_unite_tags', {
+      \ 'autoload': {
+      \   'unite_sources' : 'tags',
+      \ }}
+
+" NeoBundle 'alpaca-tc/alpaca_flash_message'
+
+
+NeoBundleLazy 'tsukkee/unite-tag', {
+      \ 'autoload': {
+      \   'unite_sources' : 'tag',
       \ }}
 
 " Interface for lang-8.com(dev)
@@ -910,11 +922,12 @@ NeoBundleLazy 'sgur/unite-git_grep', { 'autoload' : {
       \ 'unite_sources': ['vcs_grep/git', 'vcs_grep/hg', 'vcs_grep']
       \ }}
 NeoBundleLazy 'alpaca-tc/vim-unite-watson.vim', {
+      \ 'rev' : 'vim-unite-tamago',
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload' : {
-      \   'functions' : 'watson#complete',
-      \   'commands' : [{ 'name' : 'Watson', 'complete' : 'customlist,watson#complete' }],
-      \   'unite_sources' : ['watson', 'watson/dirty', 'watson/clean', 'watson/current_file'],
+      \   'functions' : 'tamago#complete',
+      \   'commands' : [{ 'name' : 'Tamago', 'complete' : 'customlist,tamago#complete' }],
+      \   'unite_sources' : ['tamago', 'tamago/dirty', 'tamago/clean', 'tamago/current_file'],
       \ }}
 NeoBundleLazy 'h1mesuke/vim-benchmark', { 'autoload' : {
       \ 'functions' : 'benchmark#new',
@@ -1016,6 +1029,8 @@ function! s:define_abbreviations() "{{{
         \ 'ruby.rspec' : [
         \   'sh should',
         \   "reqs require 'spec_helper'",
+        \   'has_many have_many',
+        \   'belongs_to belong_to',
         \ ],
         \ 'ruby' : [
         \   'req require',
@@ -1030,6 +1045,7 @@ function! s:define_abbreviations() "{{{
         \ ],
         \ 'gitcommit' : [
         \   'wip [WIP]',
+        \   'stash [STASH]',
         \   'imo IMO',
         \ ],
         \ }
@@ -1287,9 +1303,9 @@ nnoremap [tag_or_tab]s  :<C-u>tselect<CR>
 augroup AlpacaTags
   autocmd!
   " if exists(':Tags')
-  autocmd BufWritePost Gemfile TagsBundle
-  autocmd BufRead,BufNew * TagsSet
-  autocmd BufWritePost * TagsUpdate
+  autocmd BufWritePost Gemfile AlpacaTagsBundle
+  autocmd BufRead,BufNew * AlpacaTagsSet
+  autocmd BufWritePost * AlpacaTagsUpdate
   " endif
 augroup END
 "}}}
@@ -2357,7 +2373,6 @@ function! hooks.on_source(bundle) "{{{
         \   ['before', 'after'],
         \   ['be_true', 'be_false'],
         \   ['be_truthy', 'be_falsy'],
-        \   ['get', 'post', 'put', 'delete'],
         \   ['==', 'eql', 'equal'],
         \   { '\.should_not': '\.should' },
         \   ['\.to_not', '\.to'],
@@ -2514,9 +2529,7 @@ unlet hooks
 " ------------------------------------
 let hooks = neobundle#get_hooks('alpaca_tags')
 function! hooks.on_source(bundle) "{{{
-  " let g:alpaca_tags_ctags_bin = g:my.bin.ctags
-  " let g:alpaca_update_tags_config = {
-  let g:alpaca_tags_config = {
+  let g:alpaca_tags#config = {
         \ '_' : '-R --sort=yes --languages=+Ruby --languages=-js,JavaScript',
         \ 'default' : '--languages=-css,scss,html,js,JavaScript',
         \ 'js' : '--languages=+js',
@@ -2532,11 +2545,6 @@ function! hooks.on_source(bundle) "{{{
         \ 'coffee': '--languages=+coffee',
         \ '-coffee': '--languages=-coffee',
         \ 'bundle': '--languages=+Ruby',
-        \ }
-  let g:alpaca_tags_print_to_console = {
-        \ 'debug' : 0,
-        \ 'setted tags' : 0,
-        \ 'created/updated tags' : 1,
         \ }
 endfunction"}}}
 unlet hooks
@@ -3081,8 +3089,8 @@ nnoremap <silent>[unite]j       :Unite neomru/file<CR>
 nnoremap <silent>[unite]B       :Unite bookmark<CR>
 nnoremap <silent>[unite]<C-F>   :UniteGit<CR>
 
-nnoremap <silent>[unite]d       :Unite watson/dirty<CR>
-nnoremap <silent>[unite]c       :Unite watson/current_file<CR>
+nnoremap <silent>[unite]d       :Unite tamago/dirty<CR>
+nnoremap <silent>[unite]c       :Unite tamago/current_file<CR>
 
 nnoremap <silent>[unite]e       :Unite english_dictionary<CR>
 nnoremap <silent>[unite]x       :Unite english_example -horizontal<CR>
@@ -3158,8 +3166,8 @@ nnoremap <silent>[unite]/        :Unite history/search -no-empty<CR>
 nnoremap <silent>[unite]:        :Unite history/command -no-empty<CR>
 nnoremap <silent>[unite]h        :Unite help -no-quit<CR>
 nnoremap <silent>[unite]o        :Unite outline -no-start-insert -horizontal -no-quit -hide-source-names<CR>
-nnoremap <silent><expr>[unite]t  ':Unite tags -horizontal -input='.expand("<cword>").'<CR>'
-nnoremap <expr><C-]> ':Unite tags -immediately -horizontal -auto-preview -input='.expand("<cword>").'<CR>'
+nnoremap <silent><expr>[unite]t  ':Unite tag -horizontal -immediately -input='.expand("<cword>").'<CR>'
+nnoremap <expr><C-]> ':Unite tags -immediately -horizontal -input='.expand("<cword>").'<CR>'
 nnoremap <C-]><C-]> <C-]>
 
 " vim-unite-giti
@@ -4066,6 +4074,19 @@ endfunction"}}}
 command! DiffSaved call s:DiffWithSaved()
 
 let s:loaded_vimrc = 1
+
+function! s:open_file_rec() "{{{
+  if argc() == 0
+    VimFiler
+  endif
+endfunction"}}}
+
+if has('vim_starting')
+  augroup OpenFileRec
+    autocmd!
+    autocmd VimEnter * call s:open_file_rec()
+  augroup END
+endif
 
 if !empty($TEST)
   source ~/.bundle/chatwork.vim/test.vim

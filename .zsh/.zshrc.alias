@@ -113,6 +113,7 @@ alias hn='hub --noop'
 
 # rails# {{{
 alias rake='bundle exec rake'
+alias sp='spring'
 alias be='bundle exec'
 alias r='rails'
 alias rg='rails generate'

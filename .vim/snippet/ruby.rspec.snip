@@ -104,6 +104,11 @@ abbr    expect { ... }.to
 options word
   expect { ${1} }.to ${2}
 
+snippet expect_any_instance_of
+abbr    expect_any_instance_of(...).to
+options word
+  expect_any_instance_of(${1}).to ${2}
+
 snippet it_behaves_like
 abbr    it_behaves_like 'noun' do ... end
 alias   behaves
@@ -622,7 +627,6 @@ options head
       MESSAGE
     end
   end
-<<<<<<< HEAD
 #}}}
 
 # Matcher {{{
@@ -636,7 +640,6 @@ abbr    be_const_defined(:Name)
 options word
   be_const_defined(:${1:Name})
 # }}}
-=======
 
   def ${2:be_instance_of}(*args)
     $1Matcher.new(self, *args)
@@ -670,6 +673,4 @@ options word
 snippet create_instance
 abbr    create_instance
 options word
-  <`3`>create_instance
-
->>>>>>> 63f681a56dc6492bf556992b232081cb16254e1b
+  create_instance

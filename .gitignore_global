@@ -16,3 +16,6 @@ yui
 .watsonresults
 coverage/
 tmp/
+Guardfile
+spec/fixtures
+pkg/
