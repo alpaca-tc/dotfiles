@@ -1,3 +1,8 @@
+snippet inverse_of
+abbr    inverse_of true or symbol
+options word
+  inverse_of ${1::method_name or true}
+
 # ActiveRecord::Persistence# {{{
 snippet .create
 abbr    AR.create(attributes, &block)
@@ -272,7 +277,9 @@ options word
 snippet scope
 abbr    scope(name, body, &block)
 options word
-  scope :${1:name}, -> (${1:args}) { |$1| ${2} }
+  scope :${1:name}, -> (${1:args}) {
+    ${2}
+  }
 
 snippet self.scope_attributes
 abbr    AR.scope_attributes

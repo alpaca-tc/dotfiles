@@ -34,7 +34,7 @@ options word
 #}}}
 
 # Module: Shoulda::ActiveRecord::Matchers#{{{
-# validation#{{{
+# validation#
 snippet .with_message
 abbr    .with_message(regexp)
 options word
@@ -116,7 +116,7 @@ alias   uniq
 regexp  '\v((to|should|to_not|should_not)\s|\.$)'
 options word
   validate_uniqueness_of(${1:column})${2:.scoped_to: ${3:scope_name\}}${4:.case_insensitive}
-#}}}
+#
 # db common#{{{
 snippet     have_db_index
 abbr        have_db_index(columns)
@@ -212,24 +212,28 @@ abbr        render_with_layout(name)
 options     word
   should render_with_layout${1:(${name\})}
 
-snippet     respond_with
-abbr        respond_with(status)
-options     word
-  expect(response).to${1:_not} respond_with(${2::success|:redirect|:missing|:error|404})
+snippet respond_with
+abbr    respond_with(status)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
+  respond_with(${2::success|:redirect|:missing|:error|404})
 
-snippet     resopnd_with_content_type
-abbr        resopnd_with_content_type(content_type)
-options     word
-  should resopnd_with_content_type(${1::text|:csv|/json/|'application/rss'})
+snippet respond_with_content_type
+abbr    respond_with_content_type(content_type)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
+  resopnd_with_content_type(${1::text|:csv|/json/|'application/rss'})
 
 snippet     route
 abbr        route(method, path).to(...)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
 options     word
-  should route(${1:method}, ${2:path}).to(action: ${3:action_name}, ${4:id: 4}})
+  route(${1:method}, ${2:path}).to(action: ${3:action_name}, ${4:id: 4}})
 
-snippet     flash
-abbr        set_the_flash.to(message)
-options     word
-  should set_the_flash(:${1:notice}).to(${2:message})}
+snippet flash
+abbr    set_the_flash.to(message)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
+  set_the_flash(:${1:notice}).to(${2:message})}
 #}}}
 #}}}

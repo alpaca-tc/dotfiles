@@ -234,11 +234,15 @@ options     word
 #}}}
 
 # Gem#{{{
-snippet     binding
-abbr        binding
-alias       pry
-options     word
+snippet pry
+abbr    binding
+options word
   binding.pry;
+
+snippet rpry
+abbr    binding.remote_pry
+options word
+  binding.remote_pry
 #}}}
 
 # Snippet#{{{
