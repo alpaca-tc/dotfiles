@@ -921,14 +921,26 @@ NeoBundleLazy 'osyo-manga/vim-over', { 'autoload' : {
 NeoBundleLazy 'sgur/unite-git_grep', { 'autoload' : {
       \ 'unite_sources': ['vcs_grep/git', 'vcs_grep/hg', 'vcs_grep']
       \ }}
-NeoBundleLazy 'alpaca-tc/vim-unite-watson.vim', {
-      \ 'rev' : 'vim-unite-tamago',
-      \ 'depends' : 'Shougo/unite.vim',
-      \ 'autoload' : {
-      \   'functions' : 'tamago#complete',
-      \   'commands' : [{ 'name' : 'Tamago', 'complete' : 'customlist,tamago#complete' }],
-      \   'unite_sources' : ['tamago', 'tamago/dirty', 'tamago/clean', 'tamago/current_file'],
-      \ }}
+if executable('watson')
+  NeoBundleLazy 'alpaca-tc/vim-unite-watson.vim', {
+        \ 'depends' : 'Shougo/unite.vim',
+        \ 'autoload' : {
+        \   'functions' : 'watson#complete',
+        \   'commands' : [{ 'name' : 'Watson', 'complete' : 'customlist,watson#complete' }],
+        \   'unite_sources' : ['watson', 'watson/dirty', 'watson/clean', 'watson/current_file'],
+        \ }}
+endif
+
+if executable('tamago')
+  NeoBundleLazy 'alpaca-tc/vim-unite-tamago.vim', {
+        \ 'depends' : 'Shougo/unite.vim',
+        \ 'autoload' : {
+        \   'functions' : 'tamago#complete',
+        \   'commands' : [{ 'name' : 'Tamago', 'complete' : 'customlist,tamago#complete' }],
+        \   'unite_sources' : ['tamago', 'tamago/dirty', 'tamago/clean', 'tamago/current_file'],
+        \ }}
+endif
+
 NeoBundleLazy 'h1mesuke/vim-benchmark', { 'autoload' : {
       \ 'functions' : 'benchmark#new',
       \ }}
@@ -3089,8 +3101,13 @@ nnoremap <silent>[unite]j       :Unite neomru/file<CR>
 nnoremap <silent>[unite]B       :Unite bookmark<CR>
 nnoremap <silent>[unite]<C-F>   :UniteGit<CR>
 
-nnoremap <silent>[unite]d       :Unite tamago/dirty<CR>
-nnoremap <silent>[unite]c       :Unite tamago/current_file<CR>
+if executable('tamago')
+  nnoremap <silent>[unite]d       :Unite tamago/dirty<CR>
+  nnoremap <silent>[unite]c       :Unite tamago/current_file<CR>
+else
+  nnoremap <silent>[unite]d       :Unite watson/dirty<CR>
+  nnoremap <silent>[unite]c       :Unite watson/current_file<CR>
+endif
 
 nnoremap <silent>[unite]e       :Unite english_dictionary<CR>
 nnoremap <silent>[unite]x       :Unite english_example -horizontal<CR>

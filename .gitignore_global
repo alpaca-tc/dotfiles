@@ -19,3 +19,5 @@ tmp/
 Guardfile
 spec/fixtures
 pkg/
+.tamago_unite_result
+.tamagoresults
