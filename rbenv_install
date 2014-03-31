@@ -17,18 +17,18 @@ if [ -x `which rbenv` ];then
     echo 'eval "$(rbenv init -)"'
 
     # 1.8.7系
-    echo "install ruby 1.8.7"
-    CC=/usr/local/bin/gcc-4.2 CONFIGURE_OPTS="--without-tcl --without-tk --enable-shared --with-openssl-dir=/usr/local/opt/openssl" rbenv install 1.8.7-p371 &
+    # echo "install ruby 1.8.7"
+    # CC=/usr/local/bin/gcc-4.2 CONFIGURE_OPTS="--without-tcl --without-tk --enable-shared --with-openssl-dir=/usr/local/opt/openssl" rbenv install 1.8.7-p371 &
 
     # 1.9.3系
-    echo "install ruby 1.9.3"
+    # echo "install ruby 1.9.3"
     # CONFIGURE_OPTS="--with-arch=i386 --with-readline-dir=`brew --prefix readline` --with-openssl-dir=/usr/local --enable-shared" rbenv install 1.9.3-p392 &
-    CONFIGURE_OPTS="--with-openssl-dir=`brew --prefix openssl` --enable-shared" rbenv install 1.9.3-p392 &
+    # CONFIGURE_OPTS="--with-openssl-dir=`brew --prefix openssl` --enable-shared" rbenv install 1.9.3-p392 &
 
     # 2.0.0系
-    echo "install ruby 2.0.0p247"
+    # echo "install ruby 2.0.0p247"
     # CONFIGURE_OPTS="--with-openssl-dir=`brew --prefix openssl` --enable-shared" rbenv install 2.0.0-p195 &
-    RUBY_CONFIGURE_OPTS="--with-openssl-dir=`brew --prefix openssl` --enable-shared --with-readline-dir=`brew --prefix readline`" rbenv install 2.0.0-p247
+    # RUBY_CONFIGURE_OPTS="--with-openssl-dir=`brew --prefix openssl` --enable-shared --with-readline-dir=`brew --prefix readline`" rbenv install 2.0.0-p247
 
     # 2.1.0系
     echo "install ruby 2.1.0p247"
@@ -36,5 +36,3 @@ if [ -x `which rbenv` ];then
 
     rbenv rehash
 fi
-
-

@@ -3,7 +3,7 @@
   name= alpaca-tc
 
 [core]
-  excludesfile = ~/.gitignore_global
+  excludesfile = /opt/boxen/config/git/gitignore
   ; autocrlf     = true ; input false
   trailing-space = false
   space-before-tab = false
@@ -14,7 +14,15 @@
   editor = vim -c \"set fenc=utf-8\"
 
 [receive]
-  fsckObjects = true
+  denyDeleteCurrent = false
+
+[difftool "sourcetree"]
+  cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+  path =
+
+[mergetool "sourcetree"]
+  cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+  trustExitCode = true
 
 [color]
   ui = true
@@ -97,7 +105,7 @@
 [hub]
   protocol = https
 [credential]
-  helper = cache --timeout=86400
+  helper = /opt/boxen/bin/boxen-git-credential
 [remote "origin"]
   fetch = +refs/pull/*/head:refs/remotes/origin/pr/*
 [filter "media"]

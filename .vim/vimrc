@@ -342,10 +342,10 @@ NeoBundleLazy 'alpaca-tc/alpaca_tags', {
       \   'commands' : ['AlpacaTagsSet', 'AlpacaTagsBundle', 'AlpacaTagsCleanCache', 'AlpacaTagsUpdate'],
       \ }}
 
-NeoBundleLazy 'alpaca-tc/alpaca_unite_tags', {
-      \ 'autoload': {
-      \   'unite_sources' : 'tags',
-      \ }}
+" NeoBundleLazy 'alpaca-tc/alpaca_unite_tags', {
+"       \ 'autoload': {
+"       \   'unite_sources' : 'tags',
+"       \ }}
 
 " NeoBundle 'alpaca-tc/alpaca_flash_message'
 
@@ -751,6 +751,9 @@ NeoBundleLazy 'taka84u9/vim-ref-ri', {
       \   'filetypes': g:my.ft.ruby_files,
       \   'unite_sources' : 'ref/ri',
       \ }}
+NeoBundleLazy 'rodjek/vim-puppet', {
+      \ 'filetypes' : 'puppet',
+      \ }
 " NeoBundleLazy 'alpaca-tc/neorspec.vim', {
 "       \ 'depends' : ['alpaca-tc/vim-rails', 'tpope/vim-dispatch'],
 "       \ 'autoload' : {
