@@ -2009,11 +2009,11 @@ endif
 " ------------------------------------
 let hooks = neobundle#get_hooks('gist-vim')
 function! hooks.on_source(bundle) "{{{
-  let g:gist_browser_command         = 'w3m %URL%'
-  let g:gist_clip_command            = 'pbcopy'
-  let g:gist_detect_filetype         = 1
+  let g:gist_clip_command = 'pbcopy'
+  let g:gist_detect_filetype = 1
+  let g:gist_detect_filetype = 1
   let g:gist_open_browser_after_post = 1
-  let g:github_user                  = g:my.info.github
+  let g:github_user = g:my.info.github
 endfunction"}}}
 unlet hooks
 
@@ -3187,7 +3187,7 @@ nnoremap <silent>[unite]:        :Unite history/command -no-empty<CR>
 nnoremap <silent>[unite]h        :Unite help -no-quit<CR>
 nnoremap <silent>[unite]o        :Unite outline -no-start-insert -horizontal -no-quit -hide-source-names<CR>
 nnoremap <silent><expr>[unite]t  ':Unite tag -horizontal -immediately -input='.expand("<cword>").'<CR>'
-nnoremap <expr><C-]> ':Unite tags -immediately -horizontal -input='.expand("<cword>").'<CR>'
+" nnoremap <expr><C-]> ':Unite tags -immediately -horizontal -input='.expand("<cword>").'<CR>'
 nnoremap <C-]><C-]> <C-]>
 
 " vim-unite-giti
@@ -3705,8 +3705,9 @@ let hooks = neobundle#get_hooks('vim-altr')
 function! hooks.on_post_source(bundle) "{{{
   call altr#remove_all()
 
-  call altr#define('lib/%.rb', 'spec/lib/%_spec.rb')
+  " call altr#define('lib/%.rb', 'spec/lib/%_spec.rb')
   call altr#define('lib/%.rb', 'spec/%_spec.rb')
+  call altr#define('lib/%.rb', 'test/%_test.rb')
   call altr#define('_posts/%.markdown', 'images/blog/')
 
   call altr#define('Berksfile', $HOME . '/.berkshelf/cookbooks')
