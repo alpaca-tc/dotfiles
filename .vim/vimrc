@@ -1583,6 +1583,11 @@ function! hooks.on_source(bundle) "{{{
         \ 'outputter': 'browser',
         \ 'cmdopt': '-s' }
 
+  let g:quickrun_config['markdown.snowcrash'] = {
+        \ 'command': 'snowcrash',
+        \ 'cmdopt': '--format json'
+        \ }
+
   let g:quickrun_config.applescript = {
         \ 'command' : 'osascript' , 'output' : '_'}
 
@@ -1874,6 +1879,10 @@ function! hooks.on_source(bundle) "{{{
   endfunction"}}}
 
   function! s:source_snippet() " {{{
+    if !exists('b:rails_root') || !b:rails_root
+      return
+    endif
+
     let buf = rails#buffer()
 
     try
