@@ -265,7 +265,7 @@ NeoBundleLazy 'alpaca-tc/vim-ref', { 'autoload' : {
       \   'complete' : 'customlist,ref#complete',
       \ },
       \ 'unite_sources' : [
-      \   'ref/erlang', 'ref/man', 'ref/perldoc',
+      \   'ref/erlang', 'ref/man', 'ref/perldoc', 'ref/godoc',
       \   'ref/phpmanual', 'ref/pydoc', 'ref/redis', 'ref/refe', 'ref/webdict'
       \ ],
       \ 'mappings' : ['n', 'K', '<Plug>(ref-keyword)']
@@ -682,7 +682,7 @@ NeoBundleLazy 'myhere/vim-nodejs-complete', { 'autoload' : {
 " NeoBundleLazy 'claco/jasmine.vim', { 'autoload' : {
 "       \ 'filetypes' : g:my.ft.js_files }}
 
-"  go
+"  golang
 " ----------------------------------------
 NeoBundleLazy 'fsouza/go.vim', { 'autoload' : {
       \ 'filetypes' : ['go'] }}
@@ -1645,6 +1645,7 @@ unlet hooks
 nnoremap <C-K> :<C-U>Ref alc <C-R><C-W><CR>
 xnoremap <C-K> :<C-U>Ref alc <C-R><C-W><CR>
 nnoremap ra  :<C-U>Ref alc<Space>
+nnoremap rg  :<C-U>Ref godoc<Space>
 nnoremap rp  :<C-U>Ref phpmanual<Space>
 nnoremap rr  :<C-U>Unite ref/refe -default-action=tabopen -immediately -input=
 nnoremap ri  :<C-U>Unite ref/ri -default-action=tabopen -immediately -input=
@@ -2737,6 +2738,11 @@ function! hooks.on_source(bundle) "{{{
         \ }
 
   let g:neocomplete#sources#omni#functions.java = 'eclim#java#complete#CodeComplete'
+  if executable('gocode')
+    let g:neocomplete#sources#omni#functions.go = 'gocomplete#Complete'
+    execute 'set runtimepath+=' . globpath($GOPATH, 'src/github.com/nsf/gocode/vim')
+  endif
+
   if has('python')
     " let g:neocomplete#sources#omni#functions.javascript = 'tern#Complete'
   endif

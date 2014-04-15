@@ -61,6 +61,11 @@ export CLASSPATH=$JAVA_HOME'/lib/ext'
 # scala 2.9
 export SCALA_HOME=/usr/local/Cellar/scala/2.9.2
 
+# Golang 1.2.1
+export GOROOT=`go env GOROOT`
+export GOPATH=$HOME/.go
+export PATH=$PATh:$GOROOT/bin:$GOPATH/bin:$PATH
+
 # rbenv
 if [ -d '/usr/rbenv' ];then
   export RBENV_ROOT=/usr/rbenv
@@ -111,7 +116,7 @@ source ~/.zsh/.zshrc.extends
 source ~/.zsh/.zshrc.alias
 source ~/.zsh/.zshrc.smartalias
 source ~/.zsh/.zshrc.bindkey
-source ~/.zsh/.zshrc.tmuxauto
+# source ~/.zsh/.zshrc.tmuxauto
 # source ~/.zsh/.zshrc.command
 # }}}
 
