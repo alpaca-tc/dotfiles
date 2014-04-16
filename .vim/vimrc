@@ -2738,11 +2738,6 @@ function! hooks.on_source(bundle) "{{{
         \ }
 
   let g:neocomplete#sources#omni#functions.java = 'eclim#java#complete#CodeComplete'
-  if executable('gocode')
-    let g:neocomplete#sources#omni#functions.go = 'gocomplete#Complete'
-    execute 'set runtimepath+=' . globpath($GOPATH, 'src/github.com/nsf/gocode/vim')
-  endif
-
   if has('python')
     " let g:neocomplete#sources#omni#functions.javascript = 'tern#Complete'
   endif
