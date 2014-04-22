@@ -2,7 +2,7 @@
 
 ## 内容
 
-
+test
 以下のdotfiles
 
 - .autojump/
