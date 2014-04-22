@@ -7,6 +7,8 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
+
+
 " options. {{{1
 if !exists('g:ref_godoc_cmd')  " {{{2
   let g:ref_godoc_cmd = executable('godoc') ? 'godoc' : ''

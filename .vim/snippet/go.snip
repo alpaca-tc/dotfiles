@@ -14,8 +14,8 @@ options     head
 snippet     func
 abbr        func ...() { ... }
 options     head
-  func ${1:fname}(${2}) ${3:int }{
-    ${0:TARGET:return }
+  func ${1:fname}(${2}) {
+    ${0}
   }
 
 snippet     import
@@ -23,20 +23,18 @@ options     head
   import (
     "${1:fmt}"
   )
-  ${0:TARGET}
 
 snippet     package
 options     head
   package ${1:main}
-  ${0:TARGET}
 
-snippet     printf
-options     word
-  fmt.Printf("${1}\n"${2:})
-
-snippet     println
-options     word
-  fmt.Println(${0:TARGET})
+# snippet     printf
+# options     word
+#   fmt.Printf("${1}\n"${2:})
+#
+# snippet     println
+# options     word
+#   fmt.Println(${0:TARGET})
 
 snippet     struct
 options     head
@@ -48,4 +46,41 @@ snippet     interface
 options     head
   type ${1} interface {
     ${0:TARGET}
+  }
+
+snippet for
+abbr    for i := 0; i < 10; i++ { ... }
+options head
+  for ${1:i} := 0; $1 < ${2}; $1++ {
+    ${3}
+  }
+
+snippet loop
+abbr    for { ... }
+options word
+  for {
+    ${1}
+  }
+
+snippet if
+abbr    if ... { }
+options word
+  if ${1} {
+    ${2}
+  }
+
+snippet ife
+abbr    if ... { } else { }
+options word
+  if ${1} {
+    ${2}
+  } else {
+    ${3}
+  }
+
+snippet for_list
+abbr    for e := list.Front(); e != nil; e = e.Next() { }
+options head
+  for e := ${1}.Front(); e != nil; e = e.Next() {
+    ${2}
   }

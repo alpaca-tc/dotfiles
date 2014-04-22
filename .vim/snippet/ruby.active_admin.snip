@@ -1,0 +1,111 @@
+
+snippet controller_do
+abbr    controller { ... }
+options head
+  controller do
+    ${1}
+  end
+
+snippet action_item
+abbr    action_item(options = {}, &block)
+options head
+  action_item(${1:only: %i[${2\}]})
+
+snippet batch_action
+abbr    batch_action(title, options = {}, &block)
+options head
+  batch_action ${1:title}${2:, ${3:confirm, sort_order, if:...\}} do
+    ${1}
+  end
+
+snippet menu
+abbr    menu(options={})
+options head
+  menu ${1}
+
+snippet navigation_menu
+abbr    navigation_menu(menu_name=nil, &block)
+options head
+  navigation_menu ${1::name}
+
+snippet breadcrumb
+abbr    breadcrumb(&block)
+options word
+  breadcrumb do
+    [
+      ${1:link_to('my piece', '/my/link/to/piece')}
+    ]
+  end
+
+snippet sidebar
+abbr    sidebar(name, options = {}, &block)
+options word
+  sidebar ${1:name} do
+    ${2}
+  end
+
+snippet collection_action
+abbr    collection_action(name, options = {}, &block)
+options word
+  collection_action :${1}, method: :${2:post} do
+    ${3}
+  end
+
+snippet member_action
+abbr    member_action(name, options = {}, &block)
+options word
+  member_action :${1}, method: :${2:post} do
+    ${3}
+  end
+
+snippet actions
+abbr    actions(*actions)
+options word
+  actions ${1:*:index...}
+
+snippet scope
+abbr    scope(*args, &block)
+options word
+  scope -> { ${1} }
+
+snippet scope_to
+abbr    scope_to(*args, &block)
+options word
+  scope_to -> { ${1} }
+
+snippet belongs_to
+abbr    belongs_to(*args, &block)
+options word
+  belongs_to -> { ${1} }
+
+snippet authorized?
+abbr    authorized?(action, subject = nil)
+options word
+  authorized?(${1:action})
+
+snippet scope_collection
+abbr    scope_collection(collection, action = Auth::READ)
+options word
+  scope_collection ${1:collection}
+
+snippet icon
+abbr    Iconic.icon :loop, width: 100, height: 100, color: "#5E6469"
+options word
+  Iconic.icon :loop, width: 100, height: 100, color: "#5E6469"
+
+snippet ActiveAdmin.register
+abbr    ActiveAdmin.register(name, *opts)
+options word
+  ActiveAdmin.register ${1} do
+    ${2}
+  end
+
+snippet resource_class
+abbr    resource_class
+options word
+  resource_class
+
+snippet decorator_class
+abbr    decorator_class
+options word
+  decorator_class

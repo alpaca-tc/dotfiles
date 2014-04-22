@@ -125,7 +125,7 @@ let g:my.ft = {
       \ 'style_files':     ['css', 'scss', 'sass'],
       \ 'markup_files':    ['html', 'haml', 'eruby', 'php', 'xhtml', 'liquid', 'slim'],
       \ 'english_files':   ['markdown', 'help', 'text'],
-      \ 'program_files':   ['ruby', 'php', 'python', 'eruby', 'vim', 'javascript', 'coffee', 'scala', 'java', 'go', 'cpp', 'haml', 'rust', 'c', 'slim'],
+      \ 'program_files':   ['ruby', 'php', 'python', 'eruby', 'vim', 'javascript', 'coffee', 'scala', 'java', 'go', 'cpp', 'haml', 'rust', 'c', 'slim', 'go'],
       \ 'ignore_patterns': ['vimfiler', 'unite'],
       \ }
 let g:my.ft.youcomplete_me = g:my.ft.ruby_files + g:my.ft.js_files + g:my.ft.python_files + g:my.ft.scala_files + g:my.ft.sh_files + g:my.ft.php_files + g:my.ft.c_files + g:my.ft.style_files
@@ -339,7 +339,11 @@ NeoBundleLazy 'alpaca-tc/alpaca_tags', {
       \ 'rev' : 'v2.0',
       \ 'depends': ['Shougo/vimproc'],
       \ 'autoload' : {
-      \   'commands' : ['AlpacaTagsSet', 'AlpacaTagsBundle', 'AlpacaTagsCleanCache', 'AlpacaTagsUpdate'],
+      \   'commands' : [
+      \     { 'name' : 'AlpacaTagsBundle', 'complete': 'customlist,alpaca_tags#complete_source' },
+      \     { 'name' : 'AlpacaTagsUpdate', 'complete': 'customlist,alpaca_tags#complete_source' },
+      \     'AlpacaTagsSet', 'AlpacaTagsCleanCache', 'AlpacaTagsEnable', 'AlpacaTagsDisable',
+      \ ],
       \ }}
 
 " NeoBundleLazy 'alpaca-tc/alpaca_unite_tags', {
@@ -903,6 +907,13 @@ NeoBundleLazy 'tyru/operator-camelize.vim', {
       \   'mappings' : [
       \     ['nx', '<Plug>(operator-camelize)'],
       \     ['nx', '<Plug>(operator-decamelize)'],
+      \   ]
+      \ }}
+NeoBundleLazy 'kana/vim-operator-replace.git', {
+      \ 'depends' : 'kana/vim-operator-user.git',
+      \ 'autoload' : {
+      \   'mappings' : [
+      \     ['nxi', '<Plug>(operator-replace)']
       \   ]
       \ }}
 
@@ -2107,6 +2118,7 @@ function! hooks.on_source(bundle) "{{{
     let g:syntastic_javascript_checkers = ['gjslint']
   endif
   let g:syntastic_Rakefile_checkers = ['rubocop', 'mri']
+  let g:syntastic_go_checkers = ['go', 'golint']
   let g:syntastic_mode_map      = {
         \ 'mode'              : 'active',
         \ 'active_filetypes'  : g:my.ft.program_files,
@@ -2554,6 +2566,7 @@ unlet hooks
 " ------------------------------------
 let hooks = neobundle#get_hooks('alpaca_tags')
 function! hooks.on_source(bundle) "{{{
+  " let g:alpaca_tags#console = { 'report': 0 }
   let g:alpaca_tags#config = {
         \ '_' : '-R --sort=yes --languages=+Ruby --languages=-js,JavaScript',
         \ 'default' : '--languages=-css,scss,html,js,JavaScript',
@@ -3729,6 +3742,8 @@ nmap P <Plug>(yankround-P)
 nmap <C-P> <Plug>(yankround-prev)
 nmap <C-N> <Plug>(yankround-next)
 " let g:yankround_use_region_hl = 1
+
+map R <Plug>(operator-replace)
 
 " ----------------------------------------
 " vim-over
