@@ -717,6 +717,17 @@ NeoBundleLazy 'Shougo/vinarise.vim', {
 " Ruby
 " ----------------------------------------
 NeoBundle 'tpope/vim-rails'
+NeoBundleLazy 'alpaca-tc/alpaca_rails_support', {
+      \ 'depends' : ['Shougo/neocomplete.vim', 'tpope/vim-rails', 'Shougo/vimproc'],
+      \ 'autoload': {
+      \   'insert' : 1,
+      \   'unite_sources' : 'rails_support/locales',
+      \   'commands' : [
+      \     'RSCreateRoutesCache', 'RSCleanCache',
+      \     'RSShowLocale', 'RSCreateLocaleCache',
+      \   ]
+      \ }}
+
 NeoBundleLazy 'alpaca-tc/vim-endwise.git', {
       \ 'autoload' : {
       \   'insert' : 1,
@@ -960,12 +971,6 @@ NeoBundleLazy 'h1mesuke/vim-benchmark', { 'autoload' : {
       \ }}
 
 " NeoBundle 'mopp/AOJ.vim'
-
-" Installation check.
-if s:on_init() && g:my.conf.initialize && neobundle#exists_not_installed_bundles()
-  echomsg 'Not installed bundles : ' .  string(neobundle#get_not_installed_bundle_names())
-  execute 'NeoBundleInstall' join(neobundle#get_not_installed_bundle_names(), ' ')
-endif
 
 filetype plugin indent on
 "}}}
@@ -1895,9 +1900,8 @@ function! hooks.on_source(bundle) "{{{
       return
     endif
 
-    let buf = rails#buffer()
-
     try
+      let buf = rails#buffer()
       let type = "-" . buf.type_name()
       let path = '/' . buf.name()
       if path =~ '[ !#$%\,]'
@@ -2026,6 +2030,12 @@ if s:on_init() && !exists('s:loaded_vim_rails')
   augroup END
 endif
 "}}}
+
+let hooks = neobundle#get_hooks('rails_support.vim')
+function! hooks.on_source(bundle) "{{{
+  " let g:neocomplete#sources._ += ['rails/url_helper']
+endfunction"}}}
+unlet hooks
 
 " ------------------------------------
 let hooks = neobundle#get_hooks('gist-vim')
@@ -2715,7 +2725,7 @@ function! hooks.on_source(bundle) "{{{
 
   " ['vimshell', 'file', 'vim', 'syntax', 'neosnippet', 'dictionary', 'member', 'vimshell/history', 'omni', 'include', 'tag', 'buffer', 'file/include']
   let g:neocomplete#sources = {
-        \ '_'   : ['file', 'dictionary', 'omni', 'buffer', 'file/include', 'member'],
+        \ '_'   : ['file', 'dictionary', 'omni', 'buffer', 'file/include', 'member', 'rails/url_helper'],
         \ 'vim' : ['file', 'dictionary', 'omni', 'buffer', 'file/include', 'member', 'vim'],
         \ 'vimshell' : ['file', 'omni', 'buffer', 'vim', 'vimshell/history', 'file/include', 'vimshell'],
         \ }
@@ -4136,6 +4146,12 @@ endif
 
 if !empty($TEST)
   source ~/.bundle/chatwork.vim/test.vim
+endif
+
+" Installation check.
+if s:on_init() && g:my.conf.initialize && neobundle#exists_not_installed_bundles()
+  echomsg 'Not installed bundles : ' .  string(neobundle#get_not_installed_bundle_names())
+  execute 'NeoBundleInstall' join(neobundle#get_not_installed_bundle_names(), ' ')
 endif
 
 set secure
