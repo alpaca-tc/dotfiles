@@ -2751,7 +2751,7 @@ function! hooks.on_source(bundle) "{{{
         \ ]
 
   for initialize_variable in neocomplete_initialize_lists
-    call alpaca#let_g:(initialize_variable, {})
+    let g:[initialize_variable] = get(g:, initialize_variable, {})
   endfor
 
   let g:neocomplete#text_mode_filetypes = {
@@ -3272,7 +3272,7 @@ function! hooks.on_source(bundle) "{{{
   let g:unite_source_history_yank_enable = 0
   let g:unite_force_overwrite_statusline = 0
 
-  call alpaca#let_g:('unite_source_menu_menus', {})
+  let g:unite_source_menu_menus = get(g:, 'unite_source_menu_menus', {})
 
   " call unite#custom_source('file_rec', 'max_candidates', 5000)
   " call unite#custom_source('file_rec/async', 'max_candidates', 5000)
