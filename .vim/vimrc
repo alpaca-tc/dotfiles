@@ -667,12 +667,12 @@ NeoBundleLazy 'kchmck/vim-coffee-script', { 'autoload' : {
       \ 'commands' : ['CoffeeCompile', 'CoffeeWatch', 'CoffeeMake'],
       \ }}
 if has('python') && executable('npm')
-  NeoBundleLazy 'marijnh/tern_for_vim', {
-        \ 'build' : 'npm install',
-        \ 'autoload' : {
-        \ 'functions': ['tern#Complete', 'tern#Enable'],
-        \ 'filetypes' : 'javascript'
-        \ }}
+  " NeoBundleLazy 'marijnh/tern_for_vim', {
+  "       \ 'build' : 'npm install',
+  "       \ 'autoload' : {
+  "       \ 'functions': ['tern#Complete', 'tern#Enable'],
+  "       \ 'filetypes' : 'javascript'
+  "       \ }}
 else
   NeoBundleLazy 'mattn/jscomplete-vim', { 'autoload' : {
         \ 'filetypes' : g:my.ft.js_files
@@ -2031,9 +2031,9 @@ if s:on_init() && !exists('s:loaded_vim_rails')
 endif
 "}}}
 
-let hooks = neobundle#get_hooks('rails_support.vim')
+let hooks = neobundle#get_hooks('alpaca_rails_support')
 function! hooks.on_source(bundle) "{{{
-  " let g:neocomplete#sources._ += ['rails/url_helper']
+  inoremap <expr><C-X><C-R> neocomplete#start_manual_complete('rails/url_helper')
 endfunction"}}}
 unlet hooks
 
@@ -2390,6 +2390,7 @@ function! hooks.on_source(bundle) "{{{
         \   ['endif', 'endunless'],
         \ ],
         \ 'Rakefile,Gemfile,ruby,ruby.rspec,eruby,haml' : [
+        \   ['raise', 'fail'],
         \   ['if', 'unless'],
         \   ['while', 'until'],
         \   ['.blank?', '.present?'],
@@ -2724,11 +2725,11 @@ function! hooks.on_source(bundle) "{{{
         \ '\[Command Line\]'
 
   " ['vimshell', 'file', 'vim', 'syntax', 'neosnippet', 'dictionary', 'member', 'vimshell/history', 'omni', 'include', 'tag', 'buffer', 'file/include']
-  let g:neocomplete#sources = {
-        \ '_'   : ['file', 'dictionary', 'omni', 'buffer', 'file/include', 'member', 'rails/url_helper'],
-        \ 'vim' : ['file', 'dictionary', 'omni', 'buffer', 'file/include', 'member', 'vim'],
-        \ 'vimshell' : ['file', 'omni', 'buffer', 'vim', 'vimshell/history', 'file/include', 'vimshell'],
-        \ }
+  let g:neocomplete#sources = {}
+  let g:neocomplete#sources._ = ['file', 'dictionary', 'omni', 'buffer', 'member']
+  let g:neocomplete#sources.vim = g:neocomplete#sources._ + ['vim']
+  let g:neocomplete#sources.vimshell = g:neocomplete#sources._ + ['vimshell/history', 'vimshell']
+  let g:neocomplete#sources.liquid = g:neocomplete#sources._ + ['file/include']
 
   if $USER == 'root'
     let g:neocomplete#data_directory = '/tmp'
