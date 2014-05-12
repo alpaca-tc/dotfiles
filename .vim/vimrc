@@ -643,6 +643,13 @@ NeoBundleLazy 'mattn/emmet-vim', {
 "       \ 'filetypes' : 'haskell'
 "       \ }}
 
+" Java
+NeoBundleLazy 'alpaca-tc/eclim', {
+      \ 'autoload': {
+      \   'insert' : 1,
+      \   'filetypes' : 'java',
+      \ }}
+
 " JavaScript / Coffee-script / TypeScript
 " ----------------------------------------
 NeoBundleLazy 'jiangmiao/simple-javascript-indenter', { 'autoload' : {
@@ -720,15 +727,14 @@ NeoBundle 'tpope/vim-rails'
 NeoBundleLazy 'alpaca-tc/alpaca_rails_support', {
       \ 'depends' : ['Shougo/neocomplete.vim', 'tpope/vim-rails', 'Shougo/vimproc'],
       \ 'autoload': {
-      \   'insert' : 1,
+      \   'filetypes': 'ruby',
       \   'unite_sources' : 'rails_support/locales',
       \   'commands' : [
       \     'RSCreateRoutesCache', 'RSCleanCache',
       \     'RSShowLocale', 'RSCreateLocaleCache',
       \   ]
       \ }}
-
-NeoBundleLazy 'alpaca-tc/vim-endwise.git', {
+NeoBundleLazy 'tpope/vim-endwise', {
       \ 'autoload' : {
       \   'insert' : 1,
       \ }}
@@ -1331,14 +1337,14 @@ nnoremap [tag_or_tab]j  :<C-u>tprevious<CR>
 nnoremap [tag_or_tab]k  :<C-u>tags<CR>
 nnoremap [tag_or_tab]s  :<C-u>tselect<CR>
 
-augroup AlpacaTags
-  autocmd!
-  " if exists(':Tags')
-  autocmd BufWritePost Gemfile AlpacaTagsBundle
-  autocmd BufRead,BufNew * AlpacaTagsSet
-  autocmd BufWritePost * AlpacaTagsUpdate
-  " endif
-augroup END
+if neobundle#is_installed('alpaca_tags')
+  augroup AlpacaTags
+    autocmd!
+    autocmd BufWritePost Gemfile AlpacaTagsBundle
+    autocmd BufRead,BufNew * AlpacaTagsSet
+    autocmd BufWritePost * AlpacaTagsUpdate
+  augroup END
+endif
 "}}}
 
 " ----------------------------------------
@@ -1564,6 +1570,26 @@ endfunction "}}}
 unlet hooks
 
 " ------------------------------------
+let java_highlight_all = 1
+let hooks = neobundle#get_hooks('eclim')
+function! hooks.on_source(bundle) "{{{
+  if !exists('g:neocomplete#sources#omni#input_patterns')
+    let g:neocomplete#sources#omni#input_patterns = {}
+  endif
+
+  if !exists('g:neocomplete#sources#omni#functions')
+    let g:neocomplete#sources#omni#functions = {}
+  endif
+  let g:neocomplete#sources#omni#input_patterns.java = '\%(\h\w*\|)\)\.[a-zA-Z0-9.]*'
+  let g:neocomplete#sources#omni#functions.java = 'eclim#java#complete#CodeComplete'
+  let g:EclimCompletionMethod = 'omnifunc'
+  let g:EclimJavaSyntasticEnabled = 1
+
+  command! LunchEclimd call vimproc#system_bg($ECLIPSE_HOME . '/eclimd')
+endfunction"}}}
+unlet hooks
+
+" ------------------------------------
 " open-browser
 nmap ,o <Plug>(openbrowser-open)
 xmap ,o <Plug>(openbrowser-open)
@@ -1582,6 +1608,12 @@ function! hooks.on_source(bundle) "{{{
         \ }
   let g:quickrun_config.javascript = {
         \ 'command': 'node'}
+
+  let g:quickrun_config.java = {
+        \   'exec': ['javac %o %s', '%c %s:t:r %a'],
+        \   'hook/output_encode/encoding': '&termencoding',
+        \   'hook/sweep/files': '%S:p:r.class',
+        \ }
 
   let g:quickrun_config.lisp = {
         \ 'command': 'clisp' }
@@ -2033,7 +2065,7 @@ endif
 
 let hooks = neobundle#get_hooks('alpaca_rails_support')
 function! hooks.on_source(bundle) "{{{
-  inoremap <expr><C-X><C-R> neocomplete#start_manual_complete('rails/url_helper')
+  inoremap <expr><C-X><C-R> neocomplete#start_manual_complete(['rails/url_helper'])
 endfunction"}}}
 unlet hooks
 
@@ -2708,7 +2740,7 @@ function! hooks.on_source(bundle) "{{{
   let g:neocomplete#enable_fuzzy_completion         = 1
   let g:neocomplete#force_overwrite_completefunc    = 1
   let g:neocomplete#manual_completion_start_length  = 0
-  let g:neocomplete#sources#include#max_processes   = 30
+  let g:neocomplete#sources#include#max_processes   = 10
   let g:neocomplete#max_list                        = 30
   " let g:neocomplete_caching_limit_file_size = 500000
   " let g:neocomplete_max_keyword_width       = 120
@@ -2761,9 +2793,8 @@ function! hooks.on_source(bundle) "{{{
         \ 'text' : 1,
         \ }
 
-  let g:neocomplete#sources#omni#functions.java = 'eclim#java#complete#CodeComplete'
-  if has('python')
-    " let g:neocomplete#sources#omni#functions.javascript = 'tern#Complete'
+  if has('python') && neobundle#is_installed('tern_for_vim')
+    let g:neocomplete#sources#omni#functions.javascript = 'tern#Complete'
   endif
 
   let g:neocomplete#keyword_patterns = {
@@ -2833,10 +2864,10 @@ function! hooks.on_source(bundle) "{{{
         \ 'default'  : '',
         \ 'vimshell' : g:my.dir.vimshell . '/command-history',
         \ }
-  " for dict in split(glob($HOME.'/.vim/dict/*.dict'))
-  "   let ft = matchstr(dict, '[a-zA-Z0-9.]\+\ze\.dict$')
-  "   let neocomplete#sources#dictionary#dictionaries[ft] = dict
-  " endfor
+  for dict in split(glob($HOME.'/.vim/dict/*.dict'))
+    let ft = matchstr(dict, '[a-zA-Z0-9.]\+\ze\.dict$')
+    let neocomplete#sources#dictionary#dictionaries[ft] = dict
+  endfor
 
   augroup MyAutoCmd
     autocmd BufReadPre * if &previewwindow | call alpaca_window#set_smart_close() | endif
@@ -2844,19 +2875,18 @@ function! hooks.on_source(bundle) "{{{
   augroup END
 
   imap <expr><C-G> neocomplete#undo_completion()
-  imap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? neocomplete#complete_common_string() : "\<TAB>"
   " inoremap <expr><C-e> neocomplete#cancel_popup()
 
-  inoremap <silent> <CR> <C-R>=<SID>my_cr_function()<CR><C-R>=g:crend(0)<CR>
   function! s:my_cr_function()
-    return neocomplete#close_popup() . "\<CR>"
+    return pumvisible() ? neocomplete#close_popup() . "\<CR>"  : "\<CR>\<Plug>DiscretionaryEnd"
   endfunction
+  imap <expr><silent> <CR> <SID>my_cr_function()
 
   inoremap <expr><C-h> neocomplete#smart_close_popup() . "\<C-h>"
   inoremap <expr><C-X><C-F> neocomplete#start_manual_complete('file')
   inoremap <expr><C-X><C-K> neocomplete#start_manual_complete('dictionary')
   inoremap <expr><C-X><C-I> neocomplete#start_manual_complete('file/include')
-  imap <C-W> <Plug>(neocomplete_start_unite_complete)
+  imap <C-U> <Plug>(neocomplete_start_unite_complete)
   inoremap <expr><C-G> neocomplete#undo_completion()
   inoremap <expr><C-N> pumvisible() ? "\<C-N>" : "\<C-X>\<C-U>\<C-P>\<Down>"
   inoremap <expr><C-P> pumvisible() ? "\<C-P>" : "\<C-P>\<C-N>"
@@ -2866,9 +2896,13 @@ function! hooks.on_source(bundle) "{{{
   inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
   inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
 
-  inoremap <expr><TAB>  pumvisible() ? "\<C-n>" :
+  imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+        \ "\<Plug>(neosnippet_expand_or_jump)" :
+        \ pumvisible() ?
+        \ "\<C-n>" :
         \ <SID>check_back_space() ? "\<TAB>" :
         \ neocomplete#start_manual_complete()
+
   function! s:check_back_space() "{{{
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~ '\s'
@@ -2949,7 +2983,7 @@ function! hooks.on_source(bundle) "{{{
   let g:vimfiler_enable_auto_cd= 1
   let g:vimfiler_file_icon = '-'
   let g:vimfiler_max_directories_history = 1000
-  let g:vimfiler_tree_indentation = 2
+  let g:vimfiler_tree_indentation = 1
   let g:vimfiler_readonly_file_icon = 'x'
   let g:vimfiler_tree_closed_icon = '‣'
   let g:vimfiler_tree_leaf_icon = ' '
@@ -2958,6 +2992,7 @@ function! hooks.on_source(bundle) "{{{
   let g:vimfiler_ignore_pattern = '\v^(\.git|\.)'
   let g:unite_kind_cdable_lcd_command = 'lcd'
   let g:vimfiler_no_default_key_mappings = 1
+  let g:vimfiler_edit_action = 'open'
 
   function! s:vimfiler_settings() "{{{
     if !exists('b:vimfiler')
@@ -3025,9 +3060,10 @@ function! hooks.on_source(bundle) "{{{
     " Move to directory.
     nmap <buffer> h <Plug>(vimfiler_smart_h)
     nmap <buffer> L <Plug>(vimfiler_switch_to_drive)
-    nmap <buffer> ~ <Plug>(vimfiler_switch_to_home_directory)
-    nmap <buffer> \ <Plug>(vimfiler_switch_to_root_directory)
-    nmap <buffer> & <Plug>(vimfiler_switch_to_project_directory)
+    nmap <buffer> ~ <Plug>(vimfiler_switch_to_project_directory)
+    " nmap <buffer> ~ <Plug>(vimfiler_switch_to_home_directory)
+    " nmap <buffer> \ <Plug>(vimfiler_switch_to_root_directory)
+    " nmap <buffer> & <Plug>(vimfiler_switch_to_project_directory)
     nmap <buffer> <C-j> <Plug>(vimfiler_switch_to_history_directory)
     nmap <buffer> <BS> <Plug>(vimfiler_switch_to_parent_directory)
 
@@ -3067,7 +3103,7 @@ function! hooks.on_source(bundle) "{{{
     nmap <buffer> S <Plug>(vimfiler_select_sort_type)
     nmap <buffer> <C-v> <Plug>(vimfiler_switch_vim_buffer_mode)
     nmap <buffer> gc <Plug>(vimfiler_cd_vim_current_dir)
-    nmap <buffer> gs <Plug>(vimfiler_toggle_safe_mode)
+    " nmap <buffer> gs <Plug>(vimfiler_toggle_safe_mode)
     nmap <buffer> gS <Plug>(vimfiler_toggle_simple_mode)
     nmap <buffer> gg <Plug>(vimfiler_cursor_top)
     nmap <buffer> G <Plug>(vimfiler_cursor_bottom)
@@ -3754,7 +3790,7 @@ nmap <C-P> <Plug>(yankround-prev)
 nmap <C-N> <Plug>(yankround-next)
 " let g:yankround_use_region_hl = 1
 
-map R <Plug>(operator-replace)
+xmap R <Plug>(operator-replace)
 
 " ----------------------------------------
 " vim-over
@@ -4146,6 +4182,7 @@ if has('vim_starting')
 endif
 
 if !empty($TEST)
+
   source ~/.bundle/chatwork.vim/test.vim
 endif
 

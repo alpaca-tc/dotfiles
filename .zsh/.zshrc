@@ -10,7 +10,7 @@ export BROWSER=/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome
 # export APXS2=/usr/sbin/apxs
 export GITHUB_HOST='github.com'
 # export CONFIGURE_OPTS="--with-gcc=clang"
-export ECLIPSE_HOME='/Applications/eclipse'
+export ECLIPSE_HOME='/Users/alpaca-tc/Downloads/eclipse-standard-kepler-SR2-macosx-cocoa-x86_64/eclipse'
 # export SSL_CERT_FILE=/usr/local/share/ca-bundle.crt
 
 # 各種の設定 古いgccを使う場合
