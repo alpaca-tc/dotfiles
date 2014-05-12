@@ -303,7 +303,8 @@ NeoBundleLazy 'Shougo/neocomplete.vim', { 'autoload' : {
       \ 'commands' : ['NeoCompleteClean', 'NeoCompleteEnable', 'NeoCompleteDisable'],
       \ 'insert' : 1,
       \ }}
-NeoBundleLazy 'Shougo/neosnippet.vim', {
+NeoBundle 'Shougo/neosnippet.vim', {
+      \ 'depends' : ['Shougo/neocomplete.vim', 'Shougo/unite.vim'],
       \ 'autoload' : {
       \   'commands' : [
       \     { 'name' : 'NeoSnippetEdit', 'complete' : 'file' },
@@ -723,7 +724,9 @@ NeoBundleLazy 'Shougo/vinarise.vim', {
 
 " Ruby
 " ----------------------------------------
-NeoBundle 'tpope/vim-rails'
+NeoBundleLazy 'tpope/vim-rails', { 'autoload' : {
+      \ 'function_prefix': 'rails'
+      \ }}
 NeoBundleLazy 'alpaca-tc/alpaca_rails_support', {
       \ 'depends' : ['Shougo/neocomplete.vim', 'tpope/vim-rails', 'Shougo/vimproc'],
       \ 'autoload': {
@@ -1928,29 +1931,32 @@ function! hooks.on_source(bundle) "{{{
   endfunction"}}}
 
   function! s:source_snippet() " {{{
-    if !exists('b:rails_root') || !b:rails_root
+    if empty(get(b:, 'rails_root', 0))
       return
     endif
 
     try
       let buf = rails#buffer()
-      let type = "-" . buf.type_name()
-      let path = '/' . buf.name()
-      if path =~ '[ !#$%\,]'
-        let path = ''
-      endif
-
-      if type != '-'
-        let type = substitute(type, '-', '.', 'g')
-        execute 'silent doautocmd User Rails' . type
-      endif
-
-      if !empty(path)
-        execute 'silent doautocmd User Rails' . path
-      endif
     catch /.*/
       echomsg 'Missing rails type'
     endtry
+
+    let type = "-" . buf.type_name()
+    let path = '/' . buf.name()
+    if path =~ '[ !#$%\,]'
+      let path = ''
+    endif
+
+    if type != '-'
+      let type = substitute(type, '-', '.', 'g')
+      let g:type = type
+      let g:md = 'doautocmd User Rails' . type
+      execute 'doautocmd User Rails' . type
+    endif
+
+    if !empty(path)
+      execute 'doautocmd User Rails' . path
+    endif
   endfunction"}}}
 
   function! s:set_rails_path()
@@ -2017,8 +2023,9 @@ function! s:define_rails_autocmd() "{{{
       for snippet in snippets
         let snippet_file = expand('~/.vim/snippet/' . snippet . '.snip')
         if filereadable(snippet_file)
-          execute 'autocmd User Rails' . type_or_path . ' NeoSnippetSource ' . snippet_file
-          execute 'autocmd User Rails nnoremap <buffer><Space>e :<C-U>tabnew ' . snippet_file . '<CR>'
+          let prefix = 'autocmd User Rails' . type_or_path
+          execute prefix . ' NeoSnippetSource ' . snippet_file
+          execute prefix . ' nnoremap <buffer><Space>e :<C-U>tabnew ' . snippet_file . '<CR>'
         endif
       endfor
     endfor
@@ -2896,17 +2903,18 @@ function! hooks.on_source(bundle) "{{{
   inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
   inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
 
-  imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-        \ "\<Plug>(neosnippet_expand_or_jump)" :
-        \ pumvisible() ?
-        \ "\<C-n>" :
+  imap <expr><TAB> pumvisible() ? "\<C-n>" :
+        \ neosnippet#expandable_or_jumpable() ?
+        \ neosnippet#mappings#jump_or_expand_impl() :
         \ <SID>check_back_space() ? "\<TAB>" :
         \ neocomplete#start_manual_complete()
-
   function! s:check_back_space() "{{{
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~ '\s'
   endfunction"}}}
+  " imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+  "       \ "\<Plug>(neosnippet_expand_or_jump)"
+  "       \ : pumvisible() ? "\<C-n>" : "\<TAB>"
 endfunction"}}}
 unlet hooks
 
@@ -3136,10 +3144,11 @@ function! s:open_neosnippet_sources() "{{{
   silent! execute 'Unite neosnippet/user neosnippet/runtime -no-start-insert -default-action=neosnippet_source -input=' . s:filetype()
 endfunction"}}}
 
+let g:neosnippet#enable_preview = 1
+let g:neosnippet#snippets_directory = g:my.dir.snippets
+
 let hooks = neobundle#get_hooks('neosnippet.vim')
 function! hooks.on_source(bundle) "{{{
-  let g:neosnippet#enable_preview = 1
-  let g:neosnippet#snippets_directory = g:my.dir.snippets
   let g:neosnippet#disable_runtime_snippets = {
         \ 'ruby' : 1,
         \ }
@@ -3156,6 +3165,11 @@ function! hooks.on_post_source(bundle) "{{{
     call neocomplete#custom#source('neosnippet', 'converters',
           \ ['converter_remove_overlap', 'converter_case', 'converter_abbr'])
   endif
+
+  augroup NeoSnippetAug
+    autocmd!
+    autocmd BufWritePre * NeoSnippetClearMarkers
+  augroup END
 
   inoremap <expr><C-@> neocomplete#start_manual_complete(['neosnippet'])
 endfunction"}}}
@@ -3989,7 +4003,7 @@ function! s:get_vital() "{{{
       let s:V = neocomplete#util#get_vital()
     elseif exists('*unite#util#get_vital')
       let s:V = unite#util#get_vital()
-    elseif exists('*vital#of')
+    elseif neobundle#is_installed('vital.vim')
       let s:V = vital#of('vital')
     else
       echomsg 'vital.vim is not found!!'
