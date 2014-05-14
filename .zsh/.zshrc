@@ -54,9 +54,9 @@ export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 export MANPATH=/usr/local/share/man:$MANPATH
 
 # java 1.7.0
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_07.jdk/Contents/Home
-export PATH=$JAVA_HOME/bin:$PATH
-export CLASSPATH=$JAVA_HOME'/lib/ext'
+# export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_07.jdk/Contents/Home
+# export PATH=$JAVA_HOME/bin:$PATH
+# export CLASSPATH=$JAVA_HOME'/lib/ext'
 
 # scala 2.9
 export SCALA_HOME=/usr/local/Cellar/scala/2.9.2

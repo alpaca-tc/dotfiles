@@ -1,6 +1,7 @@
+# Basic# {{{
 snippet class
-    class ${1} ${2:extends} ${3:#:Parent} ${4:implements} ${5:#:Interface} {
-        ${0:TARGET}
+    class ${1} ${2:extends ${3:Parent\} }${4:implements ${5:Interface\} }{
+        ${6:TARGET}
     }
 
 snippet interface
@@ -218,4 +219,12 @@ options     head
       System.out.println("Hello, world!");
     }
   }
+# }}}
 
+# Customize# {{{
+snippet System.arraycopy
+abbr    System.arraycopy(in, start, out, start, len)
+options word
+    String[] $3 = new String[$1.length];
+    System.arraycopy(${1:in}, ${2:start}, ${3:out}, ${4:len});
+# }}}

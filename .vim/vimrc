@@ -255,7 +255,15 @@ NeoBundleLazy 'scrooloose/syntastic', {
       \   ]
       \ },
       \ 'build' : {
-      \   'mac' : join(['brew install tidy', 'brew install csslint', 'gem install sass', 'npm install -g jslint', 'gem install rubocop', 'easy_install http://closure-linter.googlecode.com/files/closure_linter-latest.tar.gz', ], ' && ')
+      \   'mac' : join([
+      \     'brew install tidy',
+      \     'brew install checkstyle',
+      \     'brew install csslint',
+      \     'gem install sass',
+      \     'npm install -g jslint',
+      \     'gem install rubocop',
+      \     'easy_install http://closure-linter.googlecode.com/files/closure_linter-latest.tar.gz',
+      \   ], ' && ')
       \ }}
 NeoBundleLazy 'vim-scripts/sudo.vim', {
       \ 'autoload': { 'commands': ['SudoRead', 'SudoWrite'] }}
@@ -1587,6 +1595,14 @@ function! hooks.on_source(bundle) "{{{
   let g:neocomplete#sources#omni#functions.java = 'eclim#java#complete#CodeComplete'
   let g:EclimCompletionMethod = 'omnifunc'
   let g:EclimJavaSyntasticEnabled = 1
+  let g:EclimJavaSearchSingleResult = 'tabnew'
+  let dir = system('$(dirname $(readlink $(which javac)))/java_home')
+  let g:alpaca_tags#tag_builder#java_home#path = substitute(dir, '\n', '', 'g')
+
+  augroup EclimAugroup
+    autocmd!
+    autocmd FileType java nnoremap <buffer>tt :<C-U>JavaSearch <C-R><C-W><CR>
+  augroup END
 
   command! LunchEclimd call vimproc#system_bg($ECLIPSE_HOME . '/eclimd')
 endfunction"}}}
@@ -2168,6 +2184,7 @@ function! hooks.on_source(bundle) "{{{
   endif
   let g:syntastic_Rakefile_checkers = ['rubocop', 'mri']
   let g:syntastic_go_checkers = ['go', 'golint']
+  let g:syntastic_java_checkers = ['checkstyle', 'javac']
   let g:syntastic_mode_map      = {
         \ 'mode'              : 'active',
         \ 'active_filetypes'  : g:my.ft.program_files,
