@@ -205,7 +205,7 @@ NeoBundleLazy 'Shougo/vimproc', {
 " An awesome improvement to the Vim status bar.
 NeoBundleLazy 'itchyny/lightline.vim', {
       \ 'autoload' : {
-      \   'functions' : 'lightline#update',
+      \   'functions' : ['lightline#update', 'lightline#highlight'],
       \   'insert' : 1,
       \ }}
 
@@ -316,7 +316,8 @@ NeoBundle 'Shougo/neosnippet.vim', {
       \ 'autoload' : {
       \   'commands' : [
       \     { 'name' : 'NeoSnippetEdit', 'complete' : 'file' },
-      \     { 'name' : 'NeoSnippetSource', 'complete' : 'file' }
+      \     { 'name' : 'NeoSnippetSource', 'complete' : 'file' },
+      \     'NeoSnippetClearMarkers',
       \   ],
       \   'functions' : 'neosnippet#get_snippets',
       \   'filetypes' : 'snippet',
@@ -655,7 +656,6 @@ NeoBundleLazy 'mattn/emmet-vim', {
 " Java
 NeoBundleLazy 'alpaca-tc/eclim', {
       \ 'autoload': {
-      \   'insert' : 1,
       \   'filetypes' : 'java',
       \ }}
 
@@ -683,12 +683,12 @@ NeoBundleLazy 'kchmck/vim-coffee-script', { 'autoload' : {
       \ 'commands' : ['CoffeeCompile', 'CoffeeWatch', 'CoffeeMake'],
       \ }}
 if has('python') && executable('npm')
-  " NeoBundleLazy 'marijnh/tern_for_vim', {
-  "       \ 'build' : 'npm install',
-  "       \ 'autoload' : {
-  "       \ 'functions': ['tern#Complete', 'tern#Enable'],
-  "       \ 'filetypes' : 'javascript'
-  "       \ }}
+  NeoBundleLazy 'marijnh/tern_for_vim', {
+        \ 'build' : 'npm install',
+        \ 'autoload' : {
+        \ 'functions': ['tern#Complete', 'tern#Enable'],
+        \ 'filetypes' : 'javascript'
+        \ }}
 else
   NeoBundleLazy 'mattn/jscomplete-vim', { 'autoload' : {
         \ 'filetypes' : g:my.ft.js_files
@@ -1302,7 +1302,7 @@ set noshowcmd
 set showfulltag
 set showmatch
 set showtabline=1
-set spelllang=en
+set spelllang=en,cjk
 set nospell
 set t_Co=256
 set title
@@ -1325,6 +1325,17 @@ endif
 
 augroup MyWindow
   autocmd VimResized * wincmd =
+  autocmd VimResized * if &lines < 30
+        \|   set cmdheight=1
+        \|   set laststatus=0
+        \| else
+        \|   set cmdheight=2
+        \|   set laststatus=2
+        \|   if neobundle#is_sourced('lightline.vim')
+        \|     call lightline#highlight()
+        \|   endif
+        \| endif
+        \| redraw
 augroup END
 
 " colorscheme desertEx
@@ -1641,9 +1652,7 @@ function! hooks.on_source(bundle) "{{{
         \ 'command' : 'coffee',
         \ 'exec' : ['%c -cbp %s'] }
 
-  let g:quickrun_config['coffee'] = {
-        \ 'command' : 'coffee'
-        \ }
+  let g:quickrun_config['coffee'] = { 'command' : 'coffee', }
   let g:quickrun_config['coffee.javascript'] = g:quickrun_config['coffee']
 
   let g:quickrun_config.markdown = {
@@ -3164,6 +3173,11 @@ endfunction"}}}
 let g:neosnippet#enable_preview = 1
 let g:neosnippet#snippets_directory = g:my.dir.snippets
 
+augroup NeoSnippetAug
+  autocmd!
+  autocmd BufWritePre * NeoSnippetClearMarkers
+augroup END
+
 let hooks = neobundle#get_hooks('neosnippet.vim')
 function! hooks.on_source(bundle) "{{{
   let g:neosnippet#disable_runtime_snippets = {
@@ -3182,11 +3196,6 @@ function! hooks.on_post_source(bundle) "{{{
     call neocomplete#custom#source('neosnippet', 'converters',
           \ ['converter_remove_overlap', 'converter_case', 'converter_abbr'])
   endif
-
-  augroup NeoSnippetAug
-    autocmd!
-    autocmd BufWritePre * NeoSnippetClearMarkers
-  augroup END
 
   inoremap <expr><C-@> neocomplete#start_manual_complete(['neosnippet'])
 endfunction"}}}

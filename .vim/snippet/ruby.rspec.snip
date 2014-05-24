@@ -34,6 +34,14 @@ options head
     ${1}
   end
 
+snippet around
+abbr    around do ... end
+options word
+  around do |example|
+    ${1}
+    example.run
+  end
+
 snippet after
 abbr    after do ... end
 options head
@@ -135,7 +143,7 @@ snippet it_should_behave_like
 abbr    it_should_behave_like 'noun'
 alias   behave
 options head
-  it_should_behave_like '${1:noun}' ${2:#:do}
+  it_should_behave_like '${1:noun}'
 
 snippet let
 abbr    let(:name) {}
