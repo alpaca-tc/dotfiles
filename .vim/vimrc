@@ -2919,7 +2919,7 @@ function! hooks.on_source(bundle) "{{{
   inoremap <expr><C-X><C-F> neocomplete#start_manual_complete('file')
   inoremap <expr><C-X><C-K> neocomplete#start_manual_complete('dictionary')
   inoremap <expr><C-X><C-I> neocomplete#start_manual_complete('file/include')
-  imap <C-U> <Plug>(neocomplete_start_unite_complete)
+  imap <C-O> <Plug>(neocomplete_start_unite_complete)
   inoremap <expr><C-G> neocomplete#undo_completion()
   inoremap <expr><C-N> pumvisible() ? "\<C-N>" : "\<C-X>\<C-U>\<C-P>\<Down>"
   inoremap <expr><C-P> pumvisible() ? "\<C-P>" : "\<C-P>\<C-N>"

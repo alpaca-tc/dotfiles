@@ -1,0 +1,50 @@
+snippet .stub
+abbr    .stub(:method).with(...) { value }
+regexp  '\.[stub]*$'
+options word
+  .stub(:${1:method})${2:.with(${3\})} { ${4:value} }
+
+snippet .unstab
+abbr    .unstab(:method_name)
+regexp  '\.[unstab]*$'
+options word
+  .unstab(${1:method_name})
+
+snippet .stub_hash
+abbr    .stub(message: :value).with(...)
+regexp  '\.[stub_hash]*$'
+options word
+  .stub(${1:method}: ${2:value})${3:.with(${4\})}
+
+snippet .stub_method
+abbr    .stub(:method) { ... }
+regexp  '\.[stub_method]*$'
+options word
+  .stub(${1:method})${2:.with(${3\})} { ${4} }
+
+snippet .stubd
+abbr    .stub(:method).with(...) do |arg| ... end
+regexp  '\.[stubd]*$'
+options word
+  .stub(${1:method})${2:.with(${3\})} do |${4:arg}|
+    ${4}
+  end
+
+snippet stub_chain
+abbr    stub_chain(...) { value }
+alias   .chain
+regexp  '\.[stub_chain]*$'
+options word
+  stub_chain(${1::one, :two}) { ${2:value} }
+
+snippet .unstub
+abbr    .unstub(:method)
+regexp  '\.[unstub]*$'
+options word
+  .unstub(:${1:method})
+
+snippet stub_model
+abbr    stub_model(...)
+options word
+  stub_model(${1})
+

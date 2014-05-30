@@ -31,3 +31,5 @@ let g:tagbar_type_markdown = {
   \ ]
 \ }
 "}}}
+
+RemoveDustDisable

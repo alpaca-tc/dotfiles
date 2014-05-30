@@ -34,6 +34,22 @@ options head
     ${1}
   end
 
+snippet beforea
+abbr    before(:all) do ... end
+alias   befa
+options head
+  before(:all) do
+    ${1}
+  end
+
+snippet befores
+abbr    before(:suite) do ... end
+alias   befs
+options head
+  before(:suite) do
+    ${1}
+  end
+
 snippet around
 abbr    around do ... end
 options word
@@ -46,6 +62,20 @@ snippet after
 abbr    after do ... end
 options head
   after do
+    ${1}
+  end
+
+snippet aftera
+abbr    after(:all) do ... end
+options head
+  after(:all) do
+    ${1}
+  end
+
+snippet afters
+abbr    after(:suite) do ... end
+options head
+  after(:suite) do
     ${1}
   end
 
@@ -79,6 +109,11 @@ abbr    subject { ... }
 alias   subject
 options head
   subject { ${1} }
+
+snippet metadata
+abbr    ex.metadata
+options word
+  ex.metadata
 
 snippet shared_examples_for
 abbr    shared_examples_for 'noun' do ... end
@@ -159,53 +194,32 @@ snippet its
 abbr    its(:method) { ... }
 options head
   its(:${1}) { ${2} }
+
+snippet alias_example_group_to
+abbr    alias_example_group_to(:name, *opts)
+options word
+  alias_example_group_to :${1:name}, type: :${2:model}
+
+snippet is_expected
+abbr    is_expected ...
+options word
+  is_expected.to${1:#:_not} ${2}
+
+snippet define_derived_metadata
+abbr    define_derived_metadata(filepath: /.../) do |meta| ... end
+regexp  '%\(config\|c\)\.'
+options word
+  define_derived_metadata filepath: %r{spec/${1}} do |metadata|
+    ${2:metadata[:js] = true}
+  end
 #}}}
 
 # stub#{{{
-snippet .stub
-abbr    .stub(:method).with(...) { value }
-regexp  '\.[stub]*$'
-options word
-  .stub(:${1:method})${2:.with(${3\})} { ${4:value} }
-
-snippet .unstab
-abbr    .unstab(:method_name)
-regexp  '\.[unstab]*$'
-options word
-  .unstab(${1:method_name})
-
 snippet .and_return
 abbr    .and_return(...)
 regexp  '\.[and_return]*$'
 options word
   .and_return(${1})
-
-snippet .stub_hash
-abbr    .stub(message: :value).with(...)
-regexp  '\.[stub_hash]*$'
-options word
-  .stub(${1:method}: ${2:value})${3:.with(${4\})}
-
-snippet .stub_method
-abbr    .stub(:method) { ... }
-regexp  '\.[stub_method]*$'
-options word
-  .stub(${1:method})${2:.with(${3\})} { ${4} }
-
-snippet .stubd
-abbr    .stub(:method).with(...) do |arg| ... end
-regexp  '\.[stubd]*$'
-options word
-  .stub(${1:method})${2:.with(${3\})} do |${4:arg}|
-    ${4}
-  end
-
-snippet stub_chain
-abbr    stub_chain(...) { value }
-alias   .chain
-regexp  '\.[stub_chain]*$'
-options word
-  stub_chain(${1::one, :two}) { ${2:value} }
 
 snippet receive_message_chain
 abbr    receive_message_chain(*symbols).and_return(...)
@@ -220,12 +234,6 @@ abbr    allow_any_instance_of().to receive(:method).and_return(value)
 alias   any_instance
 options head
   allow_any_instance_of(${1}).to receive${2}
-
-snippet .unstub
-abbr    .unstub(:method)
-regexp  '\.[unstub]*$'
-options word
-  .unstub(:${1:method})
 
 snippet stub_const
 abbr    stub_const('Klass', var)
@@ -566,6 +574,40 @@ abbr    be_falsy
 regexp  '\v((to|should|to_not|should_not)\s|\.$)'
 options word
   be_falsy
+
+# RSpec3
+snippet a_collection_containing_exactly
+abbr    a_collection_containing_exactly(...)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
+  a_collection_containing_exactly(
+    ${1:*matchers}
+  )
+
+snippet all
+abbr    all(...)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
+  all(${1:matcher})
+
+snippet output
+abbr    output(...).to_stdout
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
+  output(${1:regexp_or_string}).to_std${1:out}
+
+snippet be_between
+abbr    be_between(begin, end)...
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
+  be_between(${1:begin}, ${2:end})${3:.exclusive}
+
+snippet contain_exactly
+abbr    contain_exactly(...)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
+  contain_exactly(${1:*values})
+
 #}}}
 
 # rspec.rails? {{{
@@ -579,10 +621,10 @@ abbr    assings
 options word
   expect(assigns(:${1:name})).to ${2}
 
-snippet stub_model
-abbr    stub_model(...)
+snippet double
+abbr    double(...)
 options word
-  stub_model(${1})
+  double(${1:object})
 # }}}
 
 # Rspec::Matchers... {{{
@@ -649,11 +691,6 @@ options word
   be_const_defined(:${1:Name})
 # }}}
 
-  def ${2:be_instance_of}(*args)
-    $1Matcher.new(self, *args)
-  end
-# }}}
-
 # rspec-expectations {{{
 snippet .or
 abbr    eql(...).or (...)
@@ -661,24 +698,9 @@ regexp  '\v((to|should|to_not|should_not)\s|\.$)'
 options word
   .or ${1}
 
+snippet .and
+abbr    eql(...).and (...)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
+  .and ${1}
 # }}}
-
-# -----
-snippet singular_name
-  singular_name
-
-snippet plural_name
-abbr    plural_name
-options word
-  plural_name
-
-
-snippet build_instance
-abbr    build_instance
-options word
-  build_instance
-
-snippet create_instance
-abbr    create_instance
-options word
-  create_instance
