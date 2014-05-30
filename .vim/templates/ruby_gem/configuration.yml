@@ -1,0 +1,10 @@
+template:
+  filenames:
+    gemname.gemspec: ${1:gemname}.gemspec
+    lib:
+      gemname.rb: $1.rb
+  variables:
+    global:
+      gemname: $1
+      gem_camelname: $1${2}
+    local:
