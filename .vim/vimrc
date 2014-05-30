@@ -343,6 +343,12 @@ NeoBundleLazy 'alpaca-tc/alpaca_remove_dust.vim', {
       \     'RemoveDust', 'RemoveDustForce',
       \ ]
       \ }}
+NeoBundleLazy 'alpaca-tc/alpaca_template.vim', {
+      \ 'autoload' : {
+      \   'commands' : [
+      \     { 'name': 'AlpacaTemplate', 'complete': 'customlist,alpaca_template#complete_template_names' },
+      \   ]
+      \ }}
 
 " Asynchronous updating tags
 NeoBundleLazy 'alpaca-tc/alpaca_tags', {
@@ -3175,7 +3181,9 @@ let g:neosnippet#snippets_directory = g:my.dir.snippets
 
 augroup NeoSnippetAug
   autocmd!
-  autocmd BufWritePre * NeoSnippetClearMarkers
+  autocmd BufWritePre * if &modifiable && !&readonly
+        \|   call neosnippet#commands#_clear_markers()
+        \| endif
 augroup END
 
 let hooks = neobundle#get_hooks('neosnippet.vim')
@@ -3856,6 +3864,12 @@ function! hooks.on_source(bundle) "{{{
   let g:github#user = g:my.info.github
 endfunction"}}}
 unlet hooks
+
+let hooks = neobundle#get_hooks('alpaca_template.vim')
+function! hooks.on_source(bundle)
+  let g:alpaca_template#template_paths = [expand('~/.vim/templates')]
+  let g:alpaca_template#enable_runtime_template = 1
+endfunction
 
 " ----------------------------------------
 " Other plugin settings {{{
