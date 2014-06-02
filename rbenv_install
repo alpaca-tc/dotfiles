@@ -31,8 +31,12 @@ if [ -x `which rbenv` ];then
     # RUBY_CONFIGURE_OPTS="--with-openssl-dir=`brew --prefix openssl` --enable-shared --with-readline-dir=`brew --prefix readline`" rbenv install 2.0.0-p247
 
     # 2.1.0系
-    echo "install ruby 2.1.1"
-    RUBY_CONFIGURE_OPTS="--with-openssl-dir=`brew --prefix openssl` --enable-shared --with-readline-dir=`brew --prefix readline`" rbenv install 2.1.1
+    # echo "install ruby 2.1.1"
+    # RUBY_CONFIGURE_OPTS="--with-openssl-dir=`brew --prefix openssl` --enable-shared --with-readline-dir=`brew --prefix readline`" rbenv install 2.1.1
+
+    # 2.1.2系
+    echo "install ruby 2.1.2"
+    RUBY_CONFIGURE_OPTS="--with-openssl-dir=`brew --prefix openssl` --enable-shared --with-readline-dir=`brew --prefix readline`" rbenv install 2.1.2
 
     rbenv rehash
 fi
