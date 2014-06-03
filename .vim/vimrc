@@ -1742,6 +1742,7 @@ function! hooks.on_source(bundle) "{{{
   let g:ref_open                    = 'tabnew'
   let g:ref_cache_dir               = g:my.dir.vimref
   let g:ref_phpmanual_path          = expand('~/.vim/ref/php-chunked-xhtml')
+  let g:ref_alc_encoding = 'utf-8'
   " let g:ref_refe_encoding           = 'utf-8'
   let g:ref_no_default_key_mappings = 1
 
