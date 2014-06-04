@@ -1503,7 +1503,7 @@ function! hooks.on_source(bundle) "{{{
   function! s:define_variable_for_surround(mapping_dict) "{{{
     for [key, mapping] in items(a:mapping_dict)
       let var_name = 'surround_'.char2nr(key)
-      call alpaca#let_b:(var_name, mapping)
+      execute 'let b:' . var_name . ' = get(b:, "' . var_name . '", "' . mapping . '")'
     endfor
   endfunction"}}}
 
@@ -2634,7 +2634,7 @@ function! hooks.on_source(bundle) "{{{
       let s:switch_definition_cache[ft] = s:get_switch_mappings()
     endif
 
-    call alpaca#let_b:('switch_custom_definitions', s:switch_definition_cache[ft])
+    let b:switch_custom_definitions = get(b:, 'switch_custom_definitions', s:switch_definition_cache[ft])
   endfunction"}}}
 
   augroup MyAutoCmd
@@ -2649,6 +2649,8 @@ unlet hooks
 let hooks = neobundle#get_hooks('alpaca_tags')
 function! hooks.on_source(bundle) "{{{
   " let g:alpaca_tags#console = { 'report': 0 }
+  let g:alpaca_tags#disable = 1
+  let g:alpaca_tags#single_task = 1
   let g:alpaca_tags#config = {
         \ '_' : '-R --sort=yes --languages=+Ruby --languages=-js,JavaScript',
         \ 'default' : '--languages=-css,scss,html,js,JavaScript',
@@ -4236,9 +4238,10 @@ if has('vim_starting')
 endif
 
 if !empty($TEST)
-
   source ~/.bundle/chatwork.vim/test.vim
 endif
+
+let g:pixiv_name_id = 72
 
 " Installation check.
 if s:on_init() && g:my.conf.initialize && neobundle#exists_not_installed_bundles()

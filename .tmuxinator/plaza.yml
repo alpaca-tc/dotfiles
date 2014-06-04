@@ -1,0 +1,19 @@
+# ~/.tmuxinator/gift.yml
+# you can make as many tabs as you wish...
+
+project_name: plaza
+root: ~/projects/plaza
+pre:
+  - mysql.server start
+
+windows:
+  - editor: vim
+  - guard: bundle exec guard
+  - console: bundle exec spring rails console
+  - setup:
+      layout: main-vertical
+      panes:
+        - grunt
+        - redis
+        - RAILS_ENV=development bundle exec sidekiq -C ./config/sidekiq.yml
+        - bundle exec foreman start
