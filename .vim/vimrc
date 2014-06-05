@@ -256,7 +256,6 @@ NeoBundleLazy 'scrooloose/syntastic', {
       \ },
       \ 'build' : {
       \   'mac' : join([
-      \     'brew install tidy',
       \     'brew install checkstyle',
       \     'brew install csslint',
       \     'gem install sass',
@@ -3004,7 +3003,7 @@ let g:echodoc_enable_at_startup = 1
 " ------------------------------------
 " VimFiler "{{{
 nnoremap <silent><Space>f  :call <SID>vim_filer_explorer_git()<CR>
-nnoremap <silent>,,  :VimFilerBufferDir<CR>
+nnoremap <silent>,,  :VimFilerCurrentDir<CR>
 nnoremap <silent>,n  :VimFilerCreate<CR>
 
 function! s:vim_filer_explorer_git() "{{{
