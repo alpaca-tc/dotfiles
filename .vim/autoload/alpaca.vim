@@ -17,13 +17,6 @@ function! alpaca#system_bg(...) "{{{
   call {s:system_bg}(command)
 endfunction"}}}
 
-function! alpaca#let_g:(name, value) "{{{
-  call s:let('g', a:name, a:value)
-endfunction"}}}
-function! alpaca#let_b:(name, value) "{{{
-  call s:let('b', a:name, a:value)
-endfunction"}}}
-
 function! alpaca#print_error(string) "{{{
   echohl Error | echomsg a:string | echohl None
 endfunction"}}}

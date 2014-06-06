@@ -9,7 +9,7 @@ pre:
 windows:
   - editor: vim
   - guard: bundle exec guard
-  - console: bundle exec spring rails console
+  - console: spring rails console
   - setup:
       layout: main-vertical
       panes:
