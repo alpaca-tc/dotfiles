@@ -302,6 +302,8 @@ NeoBundleLazy 'Shougo/vimfiler', {
       \       'complete' : 'customlist,vimfiler#complete' },
       \     { 'name' : 'VimFilerExplorer',
       \       'complete' : 'customlist,vimfiler#complete' },
+      \     { 'name' : 'VimFilerCreate',
+      \       'complete' : 'customlist,vimfiler#complete' },
       \   ],
       \   'mappings' : ['<Plug>(vimfiler_switch)'],
       \ }}
@@ -687,18 +689,18 @@ NeoBundleLazy 'kchmck/vim-coffee-script', { 'autoload' : {
       \ 'filetypes' : 'coffee',
       \ 'commands' : ['CoffeeCompile', 'CoffeeWatch', 'CoffeeMake'],
       \ }}
-if has('python') && executable('npm')
-  NeoBundleLazy 'marijnh/tern_for_vim', {
-        \ 'build' : 'npm install',
-        \ 'autoload' : {
-        \ 'functions': ['tern#Complete', 'tern#Enable'],
-        \ 'filetypes' : 'javascript'
-        \ }}
-else
-  NeoBundleLazy 'mattn/jscomplete-vim', { 'autoload' : {
-        \ 'filetypes' : g:my.ft.js_files
-        \ }}
-endif
+" if has('python') && executable('npm')
+"   NeoBundleLazy 'marijnh/tern_for_vim', {
+"         \ 'build' : 'npm install',
+"         \ 'autoload' : {
+"         \ 'functions': ['tern#Complete', 'tern#Enable'],
+"         \ 'filetypes' : 'javascript'
+"         \ }}
+" else
+"   NeoBundleLazy 'mattn/jscomplete-vim', { 'autoload' : {
+"         \ 'filetypes' : g:my.ft.js_files
+"         \ }}
+" endif
 NeoBundleLazy 'myhere/vim-nodejs-complete', { 'autoload' : {
       \ 'filetypes' : ['javascript'],
       \ }}
@@ -2648,7 +2650,7 @@ unlet hooks
 let hooks = neobundle#get_hooks('alpaca_tags')
 function! hooks.on_source(bundle) "{{{
   " let g:alpaca_tags#console = { 'report': 0 }
-  let g:alpaca_tags#disable = 1
+  let g:alpaca_tags#disable = 0
   let g:alpaca_tags#single_task = 1
   let g:alpaca_tags#config = {
         \ '_' : '-R --sort=yes --languages=+Ruby --languages=-js,JavaScript',
@@ -3003,8 +3005,7 @@ let g:echodoc_enable_at_startup = 1
 " ------------------------------------
 " VimFiler "{{{
 nnoremap <silent><Space>f  :call <SID>vim_filer_explorer_git()<CR>
-nnoremap <silent>,,  :VimFilerCurrentDir<CR>
-nnoremap <silent>,n  :VimFilerCreate<CR>
+nnoremap <silent>,,  :VimFilerCreate<CR>
 
 function! s:vim_filer_explorer_git() "{{{
   let path = (system('git rev-parse --is-inside-work-tree') == "true\n") ? s:current_git() : '.'

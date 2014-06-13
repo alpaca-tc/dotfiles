@@ -217,6 +217,13 @@ snippet attr_writer
 abbr    attr_writer *args
 options word
   attr_writer :${1:*names}
+
+snippet suppress
+abbr    suppress Error { ... }
+options head
+  suppress ${1:Error} do
+    ${2}
+  end
 #}}}
 
 # ruby_custom {{{

@@ -2,8 +2,6 @@ p phinze/homebrew-cask               || true
 tap homebrew/versions                || true
 update                               || true
 
-install brew-cask                    || true
-
 
 # install pyenv            || true
 
@@ -124,6 +122,10 @@ install xz                           || true
 install zlib                         || true
 install zsh                          || true
 install zsh-completions              || true
+
+tap phinze/homebrew-cask || true
+install brew-cask                    || true
+
 cask install alfred                  || true
 cask install atom                    || true
 cask install bettertouchtool         || true
@@ -156,7 +158,5 @@ cask install transmission            || true
 cask install virtualbox              || true
 cask install vlc                     || true
 cask install yorufukurou             || true
-
-tap phinze/homebrew-cask || true
 
 cleanup

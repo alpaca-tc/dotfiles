@@ -72,6 +72,7 @@ if [ -d '/usr/rbenv' ];then
   export PATH=/usr/rbenv/bin:$PATH
 else
   export PATH=$HOME/.rbenv/bin:$PATH
+  export PATH=$PATH:./bin
 fi
 
 eval "$(rbenv init -)"

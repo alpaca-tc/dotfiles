@@ -5,6 +5,7 @@
 /sercret
 .node_modules
 .bundle
+/bin/*
 
 ~
 \~
