@@ -307,6 +307,10 @@ NeoBundleLazy 'Shougo/vimfiler', {
       \   ],
       \   'mappings' : ['<Plug>(vimfiler_switch)'],
       \ }}
+NeoBundleLazy 'kintai.vim', {
+      \ 'autoload': {
+      \   'commands' : 'CreateKintai'
+      \ }}
 NeoBundleLazy 'Shougo/neocomplete.vim', { 'autoload' : {
       \ 'functions' : ['neocomplete#init#disable', 'neocomplete#is_enabled', 'neocomplete#start_manual_complete'],
       \ 'commands' : ['NeoCompleteClean', 'NeoCompleteEnable', 'NeoCompleteDisable'],
@@ -345,6 +349,7 @@ NeoBundleLazy 'alpaca-tc/alpaca_remove_dust.vim', {
       \ ]
       \ }}
 NeoBundleLazy 'alpaca-tc/alpaca_template.vim', {
+      \ 'depends' : 'Shougo/neosnippet.vim',
       \ 'autoload' : {
       \   'commands' : [
       \     { 'name': 'AlpacaTemplate', 'complete': 'customlist,alpaca_template#complete_template_names' },
