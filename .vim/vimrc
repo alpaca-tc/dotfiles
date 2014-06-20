@@ -488,7 +488,8 @@ NeoBundleLazy 'alpaca-tc/vim-qfreplace', { 'autoload' : {
       \ 'functions' : 'qfreplace#start',
       \ 'commands' : 'Qfreplace',
       \ }}
-NeoBundleLazy 'alpaca-tc/unite-session', { 'autoload' : {
+NeoBundleLazy 'Shougo/unite-session', { 'autoload' : {
+      \ 'depends' : 'Shougo/unite.vim',
       \ 'unite_sources': 'session',
       \ 'commands' : [
       \   { 'name' : 'UniteSessionSave',
@@ -509,8 +510,7 @@ NeoBundleLazy 'Shougo/unite-outline', {
       \ 'autoload' : {
       \   'unite_sources' : 'outline' },
       \ }
-NeoBundleLazy 'alpaca-tc/vim-unite-giti', {
-      \ 'rev' : 'dev',
+NeoBundleLazy 'kmnk/vim-unite-giti', {
       \ 'autoload': {
       \   'unite_sources': [
       \     'giti', 'giti/branch', 'giti/branch/new', 'giti/branch_all',
@@ -578,7 +578,7 @@ NeoBundleLazy 'kana/vim-niceblock', { 'autoload' : {
       \ 'mappings' : ['<Plug>(niceblock-I)', '<Plug>(niceblock-A)']
       \ }}
 
-NeoBundleLazy 'airblade/vim-gitgutter', {
+NeoBundle 'airblade/vim-gitgutter', {
       \ 'autoload': {
       \   'commands': [
       \     'GitGutterDisable', 'GitGutterEnable', 'GitGutterToggle', 'GitGutter',
@@ -2652,6 +2652,7 @@ function! hooks.on_source(bundle) "{{{
   " let g:alpaca_tags#console = { 'report': 0 }
   let g:alpaca_tags#disable = 0
   let g:alpaca_tags#single_task = 1
+  let g:alpaca_tags#timeout_period = 60
   let g:alpaca_tags#config = {
         \ '_' : '-R --sort=yes --languages=+Ruby --languages=-js,JavaScript',
         \ 'default' : '--languages=-css,scss,html,js,JavaScript',
@@ -2676,18 +2677,19 @@ unlet hooks
 function! s:toggle_gitgutter() "{{{
   let is_active = get(g:, 'gitgutter_enabled', 0)
 
-  if is_active
-    echomsg 'Gitgutter disabled'
-    GitGutterDisable
-  else
-    echomsg 'Gitgutter enabled'
-    GitGutterEnable
-  endif
+  try
+    if is_active
+      echomsg 'Gitgutter disabled'
+      GitGutterDisable
+    else
+      echomsg 'Gitgutter enabled'
+      GitGutterEnable
+    endif
+  catch /.*/
+  endtry
 endfunction"}}}
 
-if exists(':GitGutterEnable')
-  nnoremap <silent><Space>g :call <SID>toggle_gitgutter()<CR>
-endif
+nnoremap <Space>g :call <SID>toggle_gitgutter()<CR>
 
 " ------------------------------------
 let hooks = neobundle#get_hooks('tern_for_vim')
@@ -3659,7 +3661,7 @@ function! hooks.on_source(bundle) "{{{
 
   let g:lightline#functions#syntastic = s:lightline.new({ 'updatetime' : 5 })
   function! g:lightline#functions#syntastic.func() " {{{
-    return neobundle#is_sourced('syntastic') ? SyntasticStatuslineFlag() : ''
+    return neobundle#is_sourced('syntastic') && exists('*SyntasticStatuslineFlag') ? SyntasticStatuslineFlag() : ''
   endfunction "}}}
 
   let g:lightline#functions#tagbar = s:lightline.new({ 'updatetime' : 3 })
@@ -3724,6 +3726,7 @@ function! hooks.on_source(bundle) "{{{
   " let g:unite_source_session_options='blank,buffers,curdir,folds,help,tabpages,winsize'
   let g:unite_source_session_options='buffers,curdir,tabpages'
   let g:unite_source_session_enable_auto_save=0
+  let g:unite_data_directory=g:my.dir.unite
 endfunction"}}}
 unlet hooks
 

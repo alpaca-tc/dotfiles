@@ -1,1 +1,1 @@
-autocmd BufNewFile,BufRead *.coffee setl filetype=coffee.javascript
+autocmd BufNewFile,BufRead *.coffee,*.coffee.erb setl filetype=coffee.javascript
