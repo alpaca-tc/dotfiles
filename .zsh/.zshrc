@@ -19,6 +19,9 @@ export ECLIPSE_HOME='/Users/alpaca-tc/Downloads/eclipse-standard-kepler-SR2-maco
 # }}}
 
 # rbenvの設定
+export CFLAGS=-Qunused-arguments
+export CPPFLAGS=-Qunused-arguments
+export ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future pip install ansible
 # export CPPFLAGS="-I/usr/local/Cellar/readline/6.2.4/include"
 # export LDFLAGS="-L/usr/local/Cellar/readline/6.2.4/lib"
 
@@ -62,9 +65,9 @@ export MANPATH=/usr/local/share/man:$MANPATH
 export SCALA_HOME=/usr/local/Cellar/scala/2.9.2
 
 # Golang 1.2.1
-export GOROOT=`go env GOROOT`
-export GOPATH=$HOME/.go
-export PATH=$PATh:$GOROOT/bin:$GOPATH/bin:$PATH
+# export GOROOT=`go env GOROOT`
+# export GOPATH=$HOME/.go
+# export PATH=$PATh:$GOROOT/bin:$GOPATH/bin:$PATH
 
 # rbenv
 if [ -d '/usr/rbenv' ];then
@@ -82,6 +85,9 @@ export PATH=/Applications/Vagrant/bin:$PATH
 
 # MacVim
 export PATH=/Applications/MacVim.app/Contents/MacOS:$PATH
+
+# setup_rails_application
+export PATH=$HOME/dotfiles/bin:$PATH
 
 # scala
 [[ -s "$HOME/.bundle/ensime" ]] && export PATH=$HOME/.bundle/ensime/lib_2.9.2:$PATH
@@ -125,3 +131,4 @@ source ~/.zsh/.zshrc.bindkey
 export ACCESS_TOKEN=97817677bb076026d1d56f018fa5fa75f7c7f72bf5dc3d3833400d9db37a102e
 alias pantryman='ruby /Users/alpaca/src/client.rb'
 
+# [ -f /opt/boxen/env.sh ] && source /opt/boxen/env.sh

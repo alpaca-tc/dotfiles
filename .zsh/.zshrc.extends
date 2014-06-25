@@ -14,9 +14,9 @@ zstyle ':filter-select' max-lines $(($LINES / 2))
 
 # コマンドを一時避難# {{{
 show_buffer_stack() {
-    POSTDISPLAY="
-    stack: $LBUFFER"
-    zle push-line-or-edit
+  POSTDISPLAY="
+  stack: $LBUFFER"
+  zle push-line-or-edit
 }
 zle -N show_buffer_stack
 setopt noflowcontrol
@@ -24,16 +24,16 @@ setopt noflowcontrol
 
 # w3mでgoogle検索# {{{
 function google() {
-    local str opt
-    if [ $ != 0 ]; then
-        for i in $*; do
-            str="$str+$i"
-        done
-        str=`echo $str | sed 's/^\+//'`
-        opt='search?num=50&hl=ja&lr=lang_ja'
-        opt="${opt}&q=${str}"
-    fi
-    w3m http://www.google.co.jp/$opt
+  local str opt
+  if [ $ != 0 ]; then
+    for i in $*; do
+      str="$str+$i"
+    done
+    str=`echo $str | sed 's/^\+//'`
+    opt='search?num=50&hl=ja&lr=lang_ja'
+    opt="${opt}&q=${str}"
+  fi
+  w3m http://www.google.co.jp/$opt
 }
 # }}}
 
@@ -86,8 +86,8 @@ _rake() {
   if [ -f Rakefile ]; then
     cache_name=`_get_caching_name ".rake_tasks"`
     if [ ! -f $cache_name ] || \
-       [ `_cachefile_updated_at` -lt `_rakefile_updated_at` ] || \
-       [ -f Gemfile -a `_cachefile_updated_at` -lt `_gemfile_updated_at` ]; then
+      [ `_cachefile_updated_at` -lt `_rakefile_updated_at` ] || \
+      [ -f Gemfile -a `_cachefile_updated_at` -lt `_gemfile_updated_at` ]; then
       _generate_cachefile
     fi
 
@@ -99,5 +99,3 @@ compdef _rake rake
 
 # tmuxinator
 [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
-
-

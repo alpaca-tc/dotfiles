@@ -2026,8 +2026,8 @@ function! hooks.on_source(bundle) "{{{
 
   augroup RailsDictSetting
     autocmd!
-    autocmd User Rails call <SID>unite_rails_setting()
-    autocmd User BufEnterRails call <SID>set_rails_path()
+    autocmd User Rails call s:unite_rails_setting()
+    autocmd User BufEnterRails call s:set_rails_path()
   augroup END
 endfunction"}}}
 
