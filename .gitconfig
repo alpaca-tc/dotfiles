@@ -62,6 +62,7 @@
   tr = log --graph --pretty='format:%C(yellow)%h%Creset %C(magenta)%cd%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset' --date=iso
   empty-tree-sha1 = hash-object -t tree /dev/null
   forkdiff = !bash -c 'git diff $(git merge-base "$1" "$2") "$2" "${@: 3}" ' -
+  diffm = !"f() { git log HEAD...${1} --oneline | grep Merge; }; f"
 
 [push]
   default = current

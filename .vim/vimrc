@@ -510,7 +510,7 @@ NeoBundleLazy 'Shougo/unite-outline', {
       \ 'autoload' : {
       \   'unite_sources' : 'outline' },
       \ }
-NeoBundleLazy 'kmnk/vim-unite-giti', {
+NeoBundleLazy 'alpaca-tc/vim-unite-giti', {
       \ 'autoload': {
       \   'unite_sources': [
       \     'giti', 'giti/branch', 'giti/branch/new', 'giti/branch_all',
@@ -2651,7 +2651,7 @@ let hooks = neobundle#get_hooks('alpaca_tags')
 function! hooks.on_source(bundle) "{{{
   " let g:alpaca_tags#console = { 'report': 0 }
   let g:alpaca_tags#disable = 0
-  let g:alpaca_tags#single_task = 1
+  let g:alpaca_tags#single_task = 0
   let g:alpaca_tags#timeout_period = 60
   let g:alpaca_tags#config = {
         \ '_' : '-R --sort=yes --languages=+Ruby --languages=-js,JavaScript',

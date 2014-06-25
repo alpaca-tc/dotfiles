@@ -1,0 +1,13 @@
+# ~/.tmuxinator/gift.yml
+# you can make as many tabs as you wish...
+
+project_name: sevenstars
+root: ~/projects/sevenstars
+windows:
+  - editor: vim
+  - setup:
+      layout: main-vertical
+      panes:
+        - make stop && make debug
+        - redis
+        - make logs
