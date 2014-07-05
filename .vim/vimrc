@@ -358,13 +358,12 @@ NeoBundleLazy 'alpaca-tc/alpaca_template.vim', {
 
 " Asynchronous updating tags
 NeoBundleLazy 'alpaca-tc/alpaca_tags', {
-      \ 'rev' : 'v2.0',
       \ 'depends': ['Shougo/vimproc'],
       \ 'autoload' : {
       \   'commands' : [
       \     { 'name' : 'AlpacaTagsBundle', 'complete': 'customlist,alpaca_tags#complete_source' },
       \     { 'name' : 'AlpacaTagsUpdate', 'complete': 'customlist,alpaca_tags#complete_source' },
-      \     'AlpacaTagsSet', 'AlpacaTagsCleanCache', 'AlpacaTagsEnable', 'AlpacaTagsDisable',
+      \     'AlpacaTagsSet', 'AlpacaTagsCleanCache', 'AlpacaTagsEnable', 'AlpacaTagsDisable', 'AlpacaTagsKillProcess', 'AlpacaTagsProcessStatus',
       \ ],
       \ }}
 
@@ -2624,8 +2623,8 @@ let hooks = neobundle#get_hooks('alpaca_tags')
 function! hooks.on_source(bundle) "{{{
   " let g:alpaca_tags#console = { 'report': 0 }
   let g:alpaca_tags#disable = 0
-  let g:alpaca_tags#single_task = 0
-  let g:alpaca_tags#timeout_period = 60
+  let g:alpaca_tags#single_task = 1
+  let g:alpaca_tags#timeout_period = 120
   let g:alpaca_tags#config = {
         \ '_' : '-R --sort=yes --languages=+Ruby --languages=-js,JavaScript',
         \ 'default' : '--languages=-css,scss,html,js,JavaScript',
@@ -3844,10 +3843,42 @@ endfunction"}}}
 unlet hooks
 
 let hooks = neobundle#get_hooks('alpaca_template.vim')
-function! hooks.on_source(bundle)
+function! hooks.on_source(bundle) "{{{
   let g:alpaca_template#template_paths = [expand('~/.vim/templates')]
   let g:alpaca_template#enable_runtime_template = 1
-endfunction
+endfunction"}}}
+unlet hooks
+
+let hooks = neobundle#get_hooks('kintai.vim')
+function! hooks.on_source(bundle) "{{{
+  function! s:at_morning() "{{{
+    let hours = str2nr(strftime("%H"))
+    if hours < 12
+      return 1
+    else
+      return 0
+    endif
+  endfunction"}}}
+
+  let g:kintai#configuration = {}
+
+  function! g:kintai#configuration.url()
+    if s:at_morning()
+      return 'http://report.office/report/submit.php'
+    else
+      return 'http://report.office/report/report.php'
+    end
+  endfunction
+
+  function! g:kintai#configuration.body()
+    if s:at_morning()
+      return  "■本日の予定\n○大項目\n・詳細の説明\n○大項目\n・詳細の説明\n○大項目\n・詳細の説明\n"
+    else
+      return  "■業務内容\n○大項目\n・詳細の説明\n■明日やること\n○大項目\n・詳細の説明\n■やり残していること\n○大項目\n・詳細の説明\n■一言"
+    end
+  endfunction
+endfunction"}}}
+unlet hooks
 
 " ----------------------------------------
 " Other plugin settings {{{
