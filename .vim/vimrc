@@ -312,7 +312,7 @@ NeoBundleLazy 'Shougo/neocomplete.vim', { 'autoload' : {
       \ 'commands' : ['NeoCompleteClean', 'NeoCompleteEnable', 'NeoCompleteDisable'],
       \ 'insert' : 1,
       \ }}
-NeoBundle 'Shougo/neosnippet.vim', {
+NeoBundleLazy 'Shougo/neosnippet.vim', {
       \ 'depends' : ['Shougo/neocomplete.vim', 'Shougo/unite.vim'],
       \ 'autoload' : {
       \   'commands' : [
@@ -367,9 +367,6 @@ NeoBundleLazy 'alpaca-tc/alpaca_tags', {
 "       \ 'autoload': {
 "       \   'unite_sources' : 'tags',
 "       \ }}
-
-" NeoBundle 'alpaca-tc/alpaca_flash_message'
-
 
 NeoBundleLazy 'tsukkee/unite-tag', {
       \ 'autoload': {
@@ -678,10 +675,6 @@ NeoBundleLazy 'moll/vim-node', { 'autoload' : {
       \ }}
 NeoBundleLazy 'geekjuice/vim-mocha', { 'autoload' : {
       \ 'filetypes' : ['javascript', 'coffee'] }}
-" NeoBundleLazy 'alpaca-tc/alpaca_tester', { 'autoload' : {
-"       \ 'filetypes' : ['javascript', 'coffee'] }}
-NeoBundleLazy 'alpaca-tc/documentation', { 'autoload' : {
-      \ 'commands' : ['Documentation', 'DocumentationAppend'] }}
 NeoBundleLazy 'leafgarland/typescript-vim', { 'autoload' : {
       \ 'filetypes' : ['typescript']
       \ }}
@@ -704,7 +697,6 @@ NeoBundleLazy 'kchmck/vim-coffee-script', { 'autoload' : {
 NeoBundleLazy 'myhere/vim-nodejs-complete', { 'autoload' : {
       \ 'filetypes' : ['javascript'],
       \ }}
-
 
 " NeoBundleLazy 'claco/jasmine.vim', { 'autoload' : {
 "       \ 'filetypes' : g:my.ft.js_files }}
@@ -732,10 +724,6 @@ NeoBundleLazy 'Shougo/vinarise.vim', {
       \   'mac' : 'brew install binutils',
       \ },
       \ 'autoload': { 'commands': 'Vinarise' }}
-
-" Objective-c
-" ----------------------------------------
-" NeoBundle 'msanders/cocoa.vim'
 
 " Ruby
 " ----------------------------------------
@@ -904,30 +892,11 @@ NeoBundleLazy 'alpaca-tc/vim-altr', {
       \     ['n', '<Plug>(altr-back)'],
       \   ]
       \ }}
-" NeoBundle 'alpaca-tc/alpaca_altr', {
-"       \ 'autoload' : {
-"       \   'mappings' : [
-"       \     ['n', '<Plug>(alpaca-altr-forward)'],
-"       \     ['n', '<Plug>(alpaca-altr-back)'],
-"       \   ]
-"       \ }}
-
 
 NeoBundleLazy 'tsukkee/lingr-vim', { 'autoload' : {
       \ 'commands' : ['LingrExit', 'LingrLaunch'],
       \ }}
-NeoBundle 'alpaca-tc/chatwork.vim'
-" NeoBundle 'Floobits/floobits-vim', { 'autoload' : {
-"       \ 'commands' : [
-"       \   'FlooJoinWorkspace', 'FlooLeaveWorkspace',
-"       \   'FlooPartworkspace', 'FlooToggleFollowMode',
-"       \   'FlooSummon', 'FlooPing', 'FlooDeleteBuf',
-"       \   'FlooPause', 'FlooUnPause', 'FlooOpenInBrowser',
-"       \   'FlooClearHighlights', 'FlooToggleHighlights',
-"       \   'FlooShareDir', 'FlooShareDirPrivate',
-"       \   'FlooAddBuf', 'FlooInfo',
-"       \ ]
-"       \ }}
+" NeoBundle 'alpaca-tc/chatwork.vim'
 NeoBundleLazy 'alpaca-tc/assignment', { 'autoload': {
       \ 'commands' : [
       \   {
@@ -993,8 +962,6 @@ endif
 NeoBundleLazy 'h1mesuke/vim-benchmark', { 'autoload' : {
       \ 'functions' : 'benchmark#new',
       \ }}
-
-" NeoBundle 'mopp/AOJ.vim'
 
 filetype plugin indent on
 "}}}

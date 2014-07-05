@@ -462,12 +462,12 @@ regexp  '\v((to|should|to_not|should_not)\s|\.$)'
 options word
   be ${1:<} ${2}
 
-snippet match_array
-abbr    match_array(...)
+snippet contain_exactly
+abbr    contain_exactly(...)
 regexp  '\v((to|should|to_not|should_not)\s|\.$)'
-alias   array_match contain_exactly
+alias   array_match match_array
 options word
-  match_array ${1:array}
+  contain_exactly ${1:array}
 
 snippet kind_of
 abbr    be_a_kind_of(...)

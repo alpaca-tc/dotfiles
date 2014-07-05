@@ -1,6 +1,3 @@
-# ~/.tmuxinator/gift.yml
-# you can make as many tabs as you wish...
-
 project_name: plaza
 root: ~/projects/plaza
 pre:

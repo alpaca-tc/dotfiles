@@ -290,7 +290,7 @@ options word
 snippet auto_name
 abbr    Get autoload function name
 options word
-  `join(map(split(substitute(expand("%:p"), '.*/lib/\(.*\).rb$', '\1', 'g'), '/'), 'ToUpperCamel(v:val)'), '::')`
+  `join(map(split(substitute(expand("%:~"), '.*/\%(lib\|app/controllers\|app/models\|spec\)/\(.\{-}\)\%(_spec\)\{-}\.rb$', '\1', 'g'), '/'), 'ToUpperCamel(v:val)'), '::')`
 
 snippet load_path
 options word

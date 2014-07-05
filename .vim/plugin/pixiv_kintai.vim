@@ -6,9 +6,6 @@ let g:pixiv_kintai = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-let &cpo = s:save_cpo
-unlet s:save_cpo
-
 let s:morning = {
       \ 'url' : 'http://report.office/report/submit.php',
       \ 'body': "■本日の予定\n○大項目\n・詳細の説明\n○大項目\n・詳細の説明\n○大項目\n・詳細の説明\n",
@@ -79,3 +76,6 @@ function! s:create_request() "{{{
 endfunction"}}}
 
 command! CreateKintai call s:create_body()
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
