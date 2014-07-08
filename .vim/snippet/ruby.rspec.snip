@@ -201,9 +201,9 @@ options word
   alias_example_group_to :${1:name}, type: :${2:model}
 
 snippet is_expected
-abbr    is_expected ...
+abbr    is_expected.to ...
 options word
-  is_expected.to${1:#:_not} ${2}
+  is_expected.to ${1}
 
 snippet define_derived_metadata
 abbr    define_derived_metadata(filepath: /.../) do |meta| ... end
@@ -465,7 +465,18 @@ options word
 snippet contain_exactly
 abbr    contain_exactly(...)
 regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+<<<<<<< HEAD
 alias   array_match match_array
+=======
+alias   array_match
+>>>>>>> huga
+options word
+  contain_exactly ${1:array}
+
+snippet contain_exactly
+abbr    contain_exactly(...)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+alias   array_match
 options word
   contain_exactly ${1:array}
 

@@ -307,7 +307,7 @@ NeoBundleLazy 'Shougo/vimfiler', {
       \   ],
       \   'mappings' : ['<Plug>(vimfiler_switch)'],
       \ }}
-NeoBundleLazy 'kintai.vim', {
+NeoBundleLazy 'alpaca-tc/kintai.vim', {
       \ 'autoload': {
       \   'commands' : 'CreateKintai'
       \ }}
@@ -1125,6 +1125,9 @@ cnoremap <C-L> <Right>
 
 xnoremap H <Nop>
 inoremap <C-@> <Nop>
+
+" Copy current path
+cabbrev cpath let @* = expand('%:p')
 
 augroup MyEditing
   autocmd!
@@ -3009,6 +3012,7 @@ function! hooks.on_source(bundle) "{{{
   let g:unite_kind_cdable_lcd_command = 'lcd'
   let g:vimfiler_no_default_key_mappings = 1
   let g:vimfiler_edit_action = 'open'
+  call vimfiler#set_execute_file('pdf', 'preview')
 
   function! s:vimfiler_settings() "{{{
     if !exists('b:vimfiler')

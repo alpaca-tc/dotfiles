@@ -63,6 +63,7 @@
   empty-tree-sha1 = hash-object -t tree /dev/null
   forkdiff = !bash -c 'git diff $(git merge-base "$1" "$2") "$2" "${@: 3}" ' -
   diffm = !"f() { git log HEAD...${1} --oneline | grep Merge; }; f"
+  ff = !git clean -fd | git reset --hard
 
 [push]
   default = current

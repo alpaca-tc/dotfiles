@@ -1,162 +1,165 @@
-p phinze/homebrew-cask               || true
-tap homebrew/versions                || true
-update                               || true
+tap phinze/homebrew-cask
+tap homebrew/versions
+update
 
+# install pyenv
 
-# install pyenv            || true
+install apple-gcc42
+install astyle
+install atk
+install autoconf
+install automake
+install bdw-gc
+install binutils
+install brew-cask
+install bsdmake
+install cairo
+install checkstyle
+install cloog
+install cloog-ppl015
+install cmake
+install colordiff
+install coreutils
+install cscope
+install ctags
+install curl
+install curl-ca-bundle
+install elasticsearch
+install fcrackzip
+install figlet
+install fontconfig
+install fontforge
+install freetype
+install gcc
+install gcc43
+install gcc47
+install gdbm
+install gdk-pixbuf
+install gettext
+install gfortran
+install ghc
+install ghostscript
+install git
+install glib
+install gmp
+install gmp4
+install gnome-common
+install go
+install gobject-introspection
+install gtk+
+install harfbuzz
+install haskell-platform
+install heroku-toolbelt
+install httpd
+install hub
+install icu4c
+install imagemagick
+install intltool
+install isl
+install jbig2dec
+install jpeg
+install jq
+install jsl
+install libart
+install libevent
+install libffi
+install libglade
+install libgnomecanvas
+install libmpc
+install libmpc08
+install libpng
+install libtiff
+install libtool
+install mongodb
+install libxml2
+install lighttpd
+install little-cms2
+install llvm
+install lua
+install luajit
+install lynx
+install macvim
+install mercurial
+install mpfr
+install mpfr2
+install mysql
+install nginx
+install nkf
+install nmap
+install node
+install openssl
+install ossp-uuid
+install pango
+install pcre
+install phantomjs
+install pixman
+install pkg-config
+install postgresql
+install ppl011
+install python
+install python3
+install qt
+install readline
+install reattach-to-user-namespace
+install redis
+install snowcrash
+install sqlite
+install tcpdump
+install the_silver_searcher
+install tidy
+install tig
+install tmux
+install tree
+install unixodbc
+install unrar
+install vim
+install w3m
+install wemux
+install wget
+install xz
+install zlib
+install zsh
+install zsh-completions
 
-install apple-gcc42                  || true
-install astyle                       || true
-install atk                          || true
-install autoconf                     || true
-install automake                     || true
-install bdw-gc                       || true
-install binutils                     || true
-install brew-cask                    || true
-install bsdmake                      || true
-install cairo                        || true
-install checkstyle                   || true
-install cloog                        || true
-install cloog-ppl015                 || true
-install cmake                        || true
-install colordiff                    || true
-install coreutils                    || true
-install cscope                       || true
-install ctags                        || true
-install curl                         || true
-install curl-ca-bundle               || true
-install elasticsearch                || true
-install fcrackzip                    || true
-install figlet                       || true
-install fontconfig                   || true
-install fontforge                    || true
-install freetype                     || true
-install gcc                          || true
-install gcc43                        || true
-install gcc47                        || true
-install gdbm                         || true
-install gdk-pixbuf                   || true
-install gettext                      || true
-install gfortran                     || true
-install ghc                          || true
-install ghostscript                  || true
-install git                          || true
-install glib                         || true
-install gmp                          || true
-install gmp4                         || true
-install gnome-common                 || true
-install go                           || true
-install gobject-introspection        || true
-install gtk+                         || true
-install harfbuzz                     || true
-install haskell-platform             || true
-install heroku-toolbelt              || true
-install httpd                        || true
-install hub                          || true
-install icu4c                        || true
-install imagemagick                  || true
-install intltool                     || true
-install isl                          || true
-install jbig2dec                     || true
-install jpeg                         || true
-install jq                           || true
-install jsl                          || true
-install libart                       || true
-install libevent                     || true
-install libffi                       || true
-install libglade                     || true
-install libgnomecanvas               || true
-install libmpc                       || true
-install libmpc08                     || true
-install libpng                       || true
-install libtiff                      || true
-install libtool                      || true
-install mongodb                      || true
-install libxml2                      || true
-install lighttpd                     || true
-install little-cms2                  || true
-install llvm                         || true
-install lua                          || true
-install luajit                       || true
-install lynx                         || true
-install macvim                       || true
-install mercurial                    || true
-install mpfr                         || true
-install mpfr2                        || true
-install mysql                        || true
-install nginx                        || true
-install nkf                          || true
-install nmap                         || true
-install node                         || true
-install openssl                      || true
-install ossp-uuid                    || true
-install pango                        || true
-install pcre                         || true
-install phantomjs                    || true
-install php53                        || true
-install pixman                       || true
-install pkg-config                   || true
-install postgresql                   || true
-install ppl011                       || true
-install python                       || true
-install python3                      || true
-install qt                           || true
-install readline                     || true
-install reattach-to-user-namespace   || true
-install redis                        || true
-install snowcrash                    || true
-install sqlite                       || true
-install tcpdump                      || true
-install the_silver_searcher          || true
-install tidy                         || true
-install tig                          || true
-install tmux                         || true
-install tree                         || true
-install unixodbc                     || true
-install unrar                        || true
-install vim                          || true
-install w3m                          || true
-install wemux                        || true
-install wget                         || true
-install xz                           || true
-install zlib                         || true
-install zsh                          || true
-install zsh-completions              || true
+# Install php
+tap homebrew/dupes
+tap josegonzalez/homebrew-php
+install php55 --with-mysql --without-pear
 
 tap phinze/homebrew-cask || true
-install brew-cask                    || true
+install brew-cask
 
-cask install alfred                  || true
-cask install atom                    || true
-cask install bettertouchtool         || true
-cask install butter                  || true
-cask install cyberduck               || true
-cask install dropbox                 || true
-cask install evernote                || true
-cask install fluid                   || true
-cask install gitx                    || true
-cask install google-chrome           || true
-cask install google-drive            || true
-cask install google-japanese-ime     || true
-cask install gyazo                   || true
-cask install iterm2                  || true
-cask install github                  || true
-cask install hipchat                 || true
-cask install slack                   || true
-cask install firefox                 || true
-cask install keyremap4macbook        || true
-cask install simple-comic            || true
-cask install kindle                  || true
-cask install limechat                || true
-cask install mou                     || true
-cask install sequel_pro              || true
-cask install skitch                  || true
-cask install skype                   || true
-cask install sublime-text            || true
-cask install sqlite-database-browser || true
-cask install transmission            || true
-cask install virtualbox              || true
-cask install vlc                     || true
-cask install yorufukurou             || true
+cask install alfred
+cask install atom
+cask install bettertouchtool
+cask install butter
+cask install cyberduck
+cask install dropbox
+cask install evernote
+cask install fluid
+cask install gitx
+cask install google-chrome
+cask install google-drive
+cask install google-japanese-ime
+cask install gyazo
+cask install iterm2
+cask install github
+cask install hipchat
+cask install slack
+cask install firefox
+cask install keyremap4macbook
+cask install simple-comic
+cask install kindle
+cask install limechat
+cask install mou
+cask install sequel_pro
+cask install skitch
+cask install skype
+cask install sublime-text
+cask install sqlite-database-browser
+cask install transmission
+cask install virtualbox
+cask install vlc
+cask install yorufukurou
 
 cleanup
