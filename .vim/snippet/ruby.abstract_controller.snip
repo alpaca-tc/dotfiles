@@ -22,25 +22,25 @@ options     word
 #}}}
 
 #AbstractController::Callbacks::ClassMethods#{{{
-snippet     skip_filter
-abbr        skip_filter(*names, &block)
+snippet     skip_action
+abbr        skip_action(*names, &block)
 options     word
-  skip_filter ${1:*names} ${2:&block}
+  skip_action ${1:*names} ${2:&block}
 
-snippet     before_filter
-abbr        before_filter *names, &block
+snippet     before_action
+abbr        before_action *names, &block
 options     word
-  before_filter ${1:*names} ${2:&block}
+  before_action ${1:*names} ${2:&block}
 
-snippet     after_filter
-abbr        after_filter *names, &block
+snippet     after_action
+abbr        after_action *names, &block
 options     word
-  after_filter ${1:*names} ${2:&block}
+  after_action ${1:*names} ${2:&block}
 
-snippet     around_filter
-abbr        around_filter *names, &block
+snippet     around_action
+abbr        around_action *names, &block
 options     word
-  around_filter ${1:*names} ${2:&block}
+  around_action ${1:*names} ${2:&block}
 #}}}
 
 #AbstractController::Helpers::ClassMethods#{{{

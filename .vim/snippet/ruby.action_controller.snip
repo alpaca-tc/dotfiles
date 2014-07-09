@@ -386,10 +386,10 @@ options     word
 #render_to_string
 
 #ActionController::RequestForgeryProtection#{{{
-snippet     protect_from_forgery_skip
-abbr        protect_from_forgery_skip
-options     word
-  skip_before_filter :verify_authenticity_token${1:, only except}
+# snippet     protect_from_forgery_skip
+# abbr        protect_from_forgery_skip
+# options     word
+#   skip_before_filter :verify_authenticity_token${1:, only except}
 
 snippet     verify_authenticity_token
 abbr        verify_authenticity_token
