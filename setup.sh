@@ -69,7 +69,7 @@ if [ $yn = "y" -o $yn = "Y" ]; then
     echo "...Remove .ssh directory"
     rm -rf ~/.ssh
     mkdir -p ~/.ssh
-    git clone https://github.com/alpaca-tc/secret
+    git clone https://bitbucket.org/alpaca-tc/secret.git
     chmod +x `pwd`/secret/setup.sh
     echo "...run secret setup.sh \n"
     `pwd`/secret/setup.sh
