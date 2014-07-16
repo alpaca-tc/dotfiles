@@ -32,22 +32,22 @@ snippet     render_template
 abbr        expect(response).to render_template(template_name)
 alias       have_rendered
 options     word
-  expect(response).to${1:_not} render_template(${2:template_name})
+  render_template(${2:template_name})
 
 snippet     redirect_to
 abbr        redirect_to(target)
 options     word
-  expect(response).to${1:_not} redirect_to(${1:target})
+  redirect_to(${1:target})
 
 snippet     route_to
 abbr        route_to(*expected)
 options     word
-  ${1:routing_hash}.should${2:_not} route_to(${3:"top#index" or { controller: :top, action: :index \}})
+  expect(${1:routing_hash}).to${2:_not} route_to(${3:"top#index" or { controller: :top, action: :index \}})
 
 snippet     be_routable
 abbr        be_routable
 options     word
-  ${1:routing_hash}.should${2:_not} be_routable
+  expect(${1:routing_hash}).to${2:_not} be_routable
 #}}}
 
 snippet     assigns

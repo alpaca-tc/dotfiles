@@ -490,8 +490,6 @@ snippet has_many
 abbr    has_many(name, scope = nil, options = {}, &extension)
 alias   one_to_many
 options head
-  # 'belongs_to :current_table' to $1
-  # has_many $3s
   has_many :${1:name}s${2:, through: :${3:name\}s}
 
 snippet has_one

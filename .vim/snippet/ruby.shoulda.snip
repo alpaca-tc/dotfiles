@@ -133,30 +133,35 @@ abbr        have_readonly_attributes(field)
   have_read_only_attributes(:${1:field})
 #}}}
 # association#{{{
-snippet     belong
-abbr        belong_to(...)
-options     word
-  should belong_to(${1:table})
+snippet belong_to
+abbr    belong_to(...)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
+  belong_to(${1:table})
 
-snippet     have_many
-abbr        have_many(...)
-options     word
-  should have_many(${1:table})${2:.dependent(${3::destroy\})}
+snippet have_many
+abbr    have_many(...)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
+  have_many(${1:table})${2:.dependent(${3::destroy\})}
 
-snippet     have_one
-abbr        have_one(...)
-options     word
-  should have_one(${1:table})${2:.dependent(${3::destroy\})}
+snippet have_one
+abbr    have_one(...)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
+  have_one(${1:table})${2:.dependent(${3::destroy\})}
 
-snippet     have_manyt
-abbr        have_many(...).through(...)
-options     word
-  should have_many(${1:table}).through(${2:table})${3:.dependent(${4::destroy\})}
+snippet have_manyt
+abbr    have_many(...).through(...)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
+  have_many(${1:table}).through(${2:table})${3:.dependent(${4::destroy\})}
 
-snippet     have_and_belong_to_many
-abbr        have_and_belong_to_many(association)
-options     word
-  should have_and_belong_to_many(${1:table})
+snippet have_and_belong_to_many
+abbr    have_and_belong_to_many(association)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
+  have_and_belong_to_many(${1:table})
 #}}}
 #}}}
 # Module: Shoulda::Matchers::ActiveRecord#{{{
@@ -197,20 +202,23 @@ abbr        assign_to(variable)
 options     word
   assign_to(${1:column})${2:with(${3\})}${3:.with_kind_of(${4:Class\})}
 
-snippet     filter_param
-abbr        filter_param(key)
-options     word
-  should filter_param(${1:key})
+snippet filter_param
+abbr    filter_param(key)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
+  filter_param(${1:key})
 
-snippet     render_template
-abbr        render_template(options={}, message=nil)
-options     word
-  should render_template(${1:templete})
+snippet render_template
+abbr    render_template(options={}, message=nil)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
+  render_template(${1:templete})
 
-snippet     render_with_layout
-abbr        render_with_layout(name)
-options     word
-  should render_with_layout${1:(${name\})}
+snippet render_with_layout
+abbr    render_with_layout(name)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+options word
+  render_with_layout${1:(${name\})}
 
 snippet respond_with
 abbr    respond_with(status)
@@ -224,13 +232,13 @@ regexp  '\v((to|should|to_not|should_not)\s|\.$)'
 options word
   resopnd_with_content_type(${1::text|:csv|/json/|'application/rss'})
 
-snippet     route
-abbr        route(method, path).to(...)
+snippet route
+abbr    route(method, path).to(...)
 regexp  '\v((to|should|to_not|should_not)\s|\.$)'
-options     word
+options word
   route(${1:method}, ${2:path}).to(action: ${3:action_name}, ${4:id: 4}})
 
-snippet flash
+snippet set_the_flash
 abbr    set_the_flash.to(message)
 regexp  '\v((to|should|to_not|should_not)\s|\.$)'
 options word
