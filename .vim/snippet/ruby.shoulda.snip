@@ -224,7 +224,7 @@ snippet respond_with
 abbr    respond_with(status)
 regexp  '\v((to|should|to_not|should_not)\s|\.$)'
 options word
-  respond_with(${2::success|:redirect|:missing|:error|404})
+  respond_with(:${2::success})
 
 snippet respond_with_content_type
 abbr    respond_with_content_type(content_type)
