@@ -89,7 +89,7 @@ options head
 snippet it
 abbr    it { ... }
 options head
-  it { ${1} }
+  it { ${1:is_expected.to } }
 
 snippet describe
 abbr    describe 'message' do ... end
