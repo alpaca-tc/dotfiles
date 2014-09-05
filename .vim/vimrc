@@ -189,7 +189,7 @@ endif
 NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundleLazy 'vim-jp/vital.vim', { 'autoload' : {
       \ 'functions' : 'vital#of',
-      \ 'commands' : 'Vitalizer',
+      \ 'commands' : 'Vitalize',
       \ }}
 
 " For asynchronous communication
@@ -253,17 +253,17 @@ NeoBundleLazy 'scrooloose/syntastic', {
       \     'SyntasticCheck', 'SyntasticInfo',
       \     'SyntasticReset', 'SyntasticToggleMode'
       \   ]
-      \ },
-      \ 'build' : {
-      \   'mac' : join([
-      \     'brew install checkstyle',
-      \     'brew install csslint',
-      \     'gem install sass',
-      \     'npm install -g jslint',
-      \     'gem install rubocop',
-      \     'easy_install http://closure-linter.googlecode.com/files/closure_linter-latest.tar.gz',
-      \   ], ' && ')
       \ }}
+" \ 'build' : {
+" \   'mac' : join([
+" \     'brew install checkstyle',
+" \     'brew install csslint',
+" \     'gem install sass',
+" \     'npm install -g jslint',
+" \     'gem install rubocop',
+" \     'easy_install http://closure-linter.googlecode.com/files/closure_linter-latest.tar.gz',
+" \   ], ' && ')
+
 NeoBundleLazy 'vim-scripts/sudo.vim', {
       \ 'autoload': { 'commands': ['SudoRead', 'SudoWrite'] }}
 NeoBundleLazy 'alpaca-tc/vim-ref', { 'autoload' : {
@@ -451,11 +451,11 @@ NeoBundleLazy 'glidenote/memolist.vim', { 'autoload' : {
       \ 'commands' : ['MemoNew', 'MemoGrep']
       \ }}
 " NeoBundleLazy 'kakkyz81/evervim', { 'autoload': {
-NeoBundleLazy 'alpaca-tc/evervim', { 'autoload': {
-      \ 'rev' : 'unite',
-      \ 'commands' : ['EvervimCreateNote', 'EvervimNotebookList'],
-      \ 'unite_sources' : ['evervim/notebook', 'evervim/note', 'evervim/tag', 'evervim/query']
-      \ }}
+" NeoBundleLazy 'alpaca-tc/evervim', { 'autoload': {
+"       \ 'rev' : 'unite',
+"       \ 'commands' : ['EvervimCreateNote', 'EvervimNotebookList'],
+"       \ 'unite_sources' : ['evervim/notebook', 'evervim/note', 'evervim/tag', 'evervim/query']
+"       \ }}
 
 " The awesome plugin looks for one of a few specific patterns under
 " the cursor and performs a substition depending on the pattern.
@@ -731,6 +731,9 @@ NeoBundleLazy 'Shougo/vinarise.vim', {
 
 " Ruby
 " ----------------------------------------
+NeoBundleLazy 'spllr/vim-padrino', { 'autoload': {
+      \ 'function_prefix' : 'padrino',
+      \ } }
 NeoBundleLazy 'tpope/vim-rails', { 'autoload' : {
       \ 'function_prefix': 'rails'
       \ }}
@@ -784,6 +787,11 @@ NeoBundleLazy 'taka84u9/vim-ref-ri', {
       \ }}
 NeoBundleLazy 'rodjek/vim-puppet', {
       \ 'filetypes' : 'puppet',
+      \ }
+
+NeoBundleLazy 'mattn/lgtm-vim', {
+      \ 'depends': ['mattn/webapi-vim'],
+      \ 'commands' : ['LGTM']
       \ }
 " NeoBundleLazy 'alpaca-tc/neorspec.vim', {
 "       \ 'depends' : ['alpaca-tc/vim-rails', 'tpope/vim-dispatch'],
@@ -2625,7 +2633,7 @@ unlet hooks
 let hooks = neobundle#get_hooks('alpaca_tags')
 function! hooks.on_source(bundle) "{{{
   " let g:alpaca_tags#console = { 'report': 0 }
-  let g:alpaca_tags#disable = 0
+  let g:alpaca_tags#disable = 1
   let g:alpaca_tags#single_task = 1
   let g:alpaca_tags#timeout_period = 120
   let g:alpaca_tags#config = {
@@ -3323,7 +3331,7 @@ function! hooks.on_source(bundle) "{{{
   let g:unite_source_file_mru_time_format="(%m-%d %H:%M) "
   let g:unite_source_file_mru_filename_format=":~:."
   let g:unite_source_file_mru_limit = 300
-  let g:unite_source_directory_mru_ignore_pattern = '\(/private/var/\|\.git\|.pygments-cache\|.pygments-cache\)'
+  " let g:unite_source_directory_mru_ignore_pattern = '\(/private/var/\|\.git\|.pygments-cache\|.pygments-cache\)'
 
   if executable('gmv')
     let rm_command = 'gmv -f --backup=numbered --target-directory ' . g:my.dir.trash . ' $srcs'
@@ -3808,6 +3816,7 @@ function! hooks.on_post_source(bundle) "{{{
   call altr#define('lib/%.rb', 'spec/%_spec.rb')
   call altr#define('lib/%.rb', 'test/%_test.rb')
   call altr#define('_posts/%.markdown', 'images/blog/')
+  call altr#define('models/%.rb', 'spec/models/%_spec.rb')
 
   call altr#define('Berksfile', $HOME . '/.berkshelf/cookbooks')
 endfunction"}}}

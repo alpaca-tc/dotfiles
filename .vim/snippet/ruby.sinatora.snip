@@ -1,28 +1,34 @@
-# get path do ... end
 snippet get
-    get '/${1:path}'${2:, options} do
-        ${3:# ...}
-    end
+abbr    get :path do ... end
+options word
+  get :${1:name}${2:, ${3:provides: [:json], with: :id\}} do
+    ${4}
+  end
+
 # post path do ... end
 snippet post
     post '/${1:path}'${2:, options} do
         ${3:# ...}
     end
+
 # put path do ... end
 snippet put
     put '/${1:path}'${2:, options} do
         ${3:# ...}
     end
+
 # delete path do ... end
 snippet del
     delete '/${1:path}'${2:, options} do
         ${3:# ...}
     end
+
 # head ... end
 snippet head
     head '/${1:path}'${2:, options} do
         ${3:# ...}
     end
+
 snippet rest
     get '/${1:path}' do
         ${2}
@@ -39,6 +45,7 @@ snippet rest
     delete '/${1}' do
         ${5}
     end
+
 snippet gp
     get '/${1:path}' do
         ${2}
@@ -47,6 +54,7 @@ snippet gp
     post '/${1}' do
         ${3}
     end
+
 snippet err
     error ${1:ErrorName} do
         stop ${2:number}, ${3:'<h1>Error!</h1>'}
@@ -55,34 +63,57 @@ snippet be
     before do
         ${1}
     end
+
 snippet conf
     configure :${1:stage} do
         ${2}
     end
+
 snippet lay
     __END__
 
     @@ ${1:layout}
     ${2:= yield}
     ${3}
+
 snippet @
     @@ ${1:page}
+
 snippet erb
     erb :${1:name_of_view}
+
 snippet haml
     haml :${1:name_of_view}
+
 snippet nf
     not_found do
         ${1:'<h1>Four Oh Four!</h1>'}
     end
+
 snippet sass
     haml :${1:name_of_stylesheet}
 
 # helpers inclass
 snippet helc
     helpers ${1:inclass}
+
 # helpers do def helper end ... end
 snippet held
     helpers do
         ${1:helper}
     end
+
+snippet App.controllers
+abbr    App.controllers
+options word
+  App.controllers :${1:resource}s do
+    get :index, provides: [:html, :rss, :atom] do
+      @posts = Post.all(:order => 'created_at desc')
+      render 'posts/index'
+    end
+
+    get :show, with: :id do
+      @post = Post.find_by_id(params[:id])
+      render 'posts/show'
+    end
+  end

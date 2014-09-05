@@ -68,6 +68,13 @@ options word
   ensure_exclusion_of(${1:column}).
     in_${2:range_or_array}(${3:1..100})${4:.with_low_message(${5:message\})}${6:.with_high_message${7:message\}}
 
+snippet validate_absence_of
+abbr    validate_absence_of(...)
+regexp  '\v((to|should|to_not|should_not)\s|\.$)'
+alias   absence
+options word
+  validate_absence_of(${1:column})
+
 snippet validate_confirmation_of
 abbr    validate_confirmation_of(...)
 regexp  '\v((to|should|to_not|should_not)\s|\.$)'

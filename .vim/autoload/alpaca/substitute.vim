@@ -10,6 +10,13 @@ function! s:tabstop() "{{{
   return '                           '[:&tabstop]
 endfunction"}}}
 
+function! alpaca#substitute#alpha() "{{{
+  let converter_table = {
+        \ 'ａ': 'a' ,
+        \ }
+  call s:substitute(converter_table)
+endfunction"}}}
+
 function! alpaca#substitute#number() "{{{
   let converter_table = {
         \ '０': '0' ,
