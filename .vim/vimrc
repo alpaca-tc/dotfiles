@@ -2789,6 +2789,9 @@ function! hooks.on_source(bundle) "{{{
   let g:neocomplete#sources.vim = g:neocomplete#sources._ + ['vim']
   let g:neocomplete#sources.vimshell = g:neocomplete#sources._ + ['vimshell/history', 'vimshell']
   let g:neocomplete#sources.liquid = g:neocomplete#sources._ + ['file/include']
+  let g:neocomplete#sources.gitcommit = g:neocomplete#sources._ + ['emoji']
+
+  call neocomplete#custom#source('_', 'matchers', ['matcher_fuzzy'])
 
   if $USER == 'root'
     let g:neocomplete#data_directory = '/tmp'

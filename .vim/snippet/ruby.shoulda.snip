@@ -54,18 +54,18 @@ regexp  '\v((to|should|to_not|should_not)\s|\.$)'
 options word
   allow_value(${1:value}).for(:${2:column})
 
-snippet ensure_inclusion_of
-abbr    ensure_inclusion_of(attr).in_range(...)
+snippet validate_inclusion_of
+abbr    validate_inclusion_of(attr).in_range(...)
 regexp  '\v((to|should|to_not|should_not)\s|\.$)'
 alias   inclusion
 options word
-  ensure_inclusion_of(${1:column}).in_${2:range_or_array}(${3:1..100})${4:.with_low_message(${5:message\})}${6:.with_high_message${7:message\}}
+  validate_inclusion_of(${1:column}).in_${2:range_or_array}(${3:1..100})${4:.with_low_message(${5:message\})}${6:.with_high_message${7:message\}}
 
-snippet ensure_exclusion_of
-abbr    ensure_exclusion_of(...)
+snippet validate_exclusion_of
+abbr    validate_exclusion_of(...)
 alias   exclusion within
 options word
-  ensure_exclusion_of(${1:column}).
+  validate_exclusion_of(${1:column}).
     in_${2:range_or_array}(${3:1..100})${4:.with_low_message(${5:message\})}${6:.with_high_message${7:message\}}
 
 snippet validate_absence_of
