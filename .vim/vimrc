@@ -32,14 +32,6 @@ augroup END
 
 " ----------------------------------------
 " Utils {{{
-function! s:SID() "{{{
-  if exists('s:sid')
-    return s:sid
-  else
-    let s:sid = matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$')
-    return s:sid
-  endif
-endfun"}}}
 function! s:current_git() "{{{
   return unite#util#path2project_directory(getcwd())
 endfunction"}}}
@@ -333,7 +325,16 @@ NeoBundleLazy 'Shougo/neosnippet.vim', {
 NeoBundleLazy 'Shougo/vimshell', {
       \ 'autoload' : {
       \   'commands' : [
-      \     'VimShell', 'VimShellBufferDir', 'VimShellPop', 'VimShellInteractive',
+      \     { 'name': 'VimShell', 'complete': 'customlist,vimshell#complete' },
+      \     { 'name': 'VimShellCreate', 'complete': 'customlist,vimshell#complete' },
+      \     { 'name': 'VimShellTab', 'complete': 'customlist,vimshell#complete' },
+      \     { 'name': 'VimShellPop', 'complete': 'customlist,vimshell#complete' },
+      \     { 'name': 'VimShellCurrentDir', 'complete': 'customlist,vimshell#complete' },
+      \     { 'name': 'VimShellExecute', 'complete': 'customlist,vimshell#complete' },
+      \     { 'name': 'VimShellBufferDir', 'complete': 'customlist,vimshell#complete' },
+      \     { 'name': 'VimShellInteractive', 'complete': 'customlist,vimshell#vimshell_execute_complete' },
+      \     { 'name': 'VimShellTerminal', 'complete': 'customlist,vimshell#vimshell_execute_complete' },
+      \     { 'name': 'VimShellSendBuffer', 'complete': 'customlist,vimshell#vimshell_execute_complete' },
       \   ],
       \ }}
 NeoBundleLazy 'Shougo/echodoc', {
@@ -366,22 +367,6 @@ NeoBundleLazy 'alpaca-tc/alpaca_tags', {
       \     'AlpacaTagsSet', 'AlpacaTagsCleanCache', 'AlpacaTagsEnable', 'AlpacaTagsDisable', 'AlpacaTagsKillProcess', 'AlpacaTagsProcessStatus',
       \ ],
       \ }}
-
-" NeoBundleLazy 'alpaca-tc/alpaca_unite_tags', {
-"       \ 'autoload': {
-"       \   'unite_sources' : 'tags',
-"       \ }}
-
-NeoBundleLazy 'tsukkee/unite-tag', {
-      \ 'autoload': {
-      \   'unite_sources' : 'tag',
-      \ }}
-
-" Interface for lang-8.com(dev)
-" NeoBundle 'alpaca-tc/lang-8.vim', {
-"       \ 'autoload': {
-"       \   'commands' : ['PostJournal']
-"       \ }}
 
 NeoBundleLazy 'alpaca-tc/alpaca_window.vim', {
       \ 'autoload': {
@@ -450,12 +435,6 @@ NeoBundleLazy 'mattn/gist-vim', {
 NeoBundleLazy 'glidenote/memolist.vim', { 'autoload' : {
       \ 'commands' : ['MemoNew', 'MemoGrep']
       \ }}
-" NeoBundleLazy 'kakkyz81/evervim', { 'autoload': {
-" NeoBundleLazy 'alpaca-tc/evervim', { 'autoload': {
-"       \ 'rev' : 'unite',
-"       \ 'commands' : ['EvervimCreateNote', 'EvervimNotebookList'],
-"       \ 'unite_sources' : ['evervim/notebook', 'evervim/note', 'evervim/tag', 'evervim/query']
-"       \ }}
 
 " The awesome plugin looks for one of a few specific patterns under
 " the cursor and performs a substition depending on the pattern.
@@ -550,18 +529,12 @@ NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
       \ 'filetypes' : g:my.ft.program_files,
       \ 'autoload': {
       \   'function_prefix' : 'smartchr',
-      \ }
-      \ }}
+      \ }}}
 
 if has('ruby')
   " The input support for English
   NeoBundleLazy 'alpaca-tc/alpaca_english', {
         \ 'depends' : 'Shougo/neocomplete.vim',
-        \ 'build' : {
-        \   'mac' : 'bundle',
-        \   'unix' : 'bundle',
-        \   'other' : 'bundle',
-        \ },
         \ 'autoload' : {
         \   'commands' : ['AlpacaEnglishDisable', 'AlpacaEnglishEnable', 'AlpacaEnglishSay'],
         \   'unite_sources': ['english_dictionary', 'english_example', 'english_thesaurus', 'web_search'],
@@ -693,11 +666,6 @@ NeoBundleLazy 'kchmck/vim-coffee-script', { 'autoload' : {
 "         \ 'functions': ['tern#Complete', 'tern#Enable'],
 "         \ 'filetypes' : 'javascript'
 "         \ }}
-" else
-"   NeoBundleLazy 'mattn/jscomplete-vim', { 'autoload' : {
-"         \ 'filetypes' : g:my.ft.js_files
-"         \ }}
-" endif
 NeoBundleLazy 'myhere/vim-nodejs-complete', { 'autoload' : {
       \ 'filetypes' : ['javascript'],
       \ }}
@@ -785,26 +753,12 @@ NeoBundleLazy 'taka84u9/vim-ref-ri', {
       \   'filetypes': g:my.ft.ruby_files,
       \   'unite_sources' : 'ref/ri',
       \ }}
-NeoBundleLazy 'rodjek/vim-puppet', {
-      \ 'filetypes' : 'puppet',
-      \ }
-
 NeoBundleLazy 'mattn/lgtm-vim', {
       \ 'depends': ['mattn/webapi-vim'],
       \ 'commands' : ['LGTM']
       \ }
-" NeoBundleLazy 'alpaca-tc/neorspec.vim', {
-"       \ 'depends' : ['alpaca-tc/vim-rails', 'tpope/vim-dispatch'],
-"       \ 'autoload' : {
-"       \   'commands' : ['RSpec', 'RSpecAll', 'RSpecCurrent', 'RSpecNearest', 'RSpecRetry']
-"       \ }}
-NeoBundleLazy 'alpaca-tc/vim-chef', { 'autoload' : {
-      \ 'functions' : ['chef#detect'],
-      \ 'filetypes': 'ruby.chef',
-      \ }}
 NeoBundleLazy 'depuracao/vim-rdoc', { 'autoload' : {
       \   'filetypes' : 'rdoc' }}
-
 NeoBundleLazy 'tpope/vim-liquid', { 'autoload' : {
       \ 'filetypes' : 'liquid'
       \ }}
@@ -833,7 +787,7 @@ NeoBundleLazy 'mutewinter/nginx.vim', {
 " ----------------------------------------
 NeoBundleLazy 'yuroyoro/vim-python', { 'autoload' : {
       \ 'filetypes' : g:my.ft.python_files }}
-if has("python")
+if has('python')
   NeoBundleLazy 'davidhalter/jedi-vim', {
         \ 'build' : {
         \     'mac' : 'git submodule update --init',
@@ -869,7 +823,7 @@ endif
 " NeoBundleLazy 'osyo-manga/neocomplcache-clang_complete', { 'autoload' : {
 "      \ 'filetypes' : g:my.ft.c_files,
 "      \ }}
-NeoBundleLazy "vim-jp/cpp-vim", { 'autoload' : {
+NeoBundleLazy 'vim-jp/cpp-vim', { 'autoload' : {
       \ 'filetypes' : g:my.ft.c_files,
       \ }}
 
@@ -889,8 +843,7 @@ NeoBundleLazy 'mattn/excitetranslate-vim', {
 NeoBundle 'alpaca-tc/gingerice.vim', {
       \ 'autoload' : {
       \   'commands' : ['Gingerice'],
-      \ }
-      \ }
+      \ }}
 NeoBundleLazy 'mattn/googletranslate-vim', {
       \ 'depends': 'mattn/webapi-vim',
       \ 'autoload' : { 'commands': ['GoogleTranslate']}
@@ -999,17 +952,6 @@ set previewheight=10
 set helpheight=14
 set matchtime=1
 set winheight=5
-" nnoremap <silent>,i :call s:toggle_inserting_dot_to_iskeyword()
-"
-" let s:toggle_inserting_dot_to_iskeyword_flag = 0
-" function! s:toggle_inserting_dot_to_iskeyword()
-"   if s:toggle_inserting_dot_to_iskeyword_flag
-"     set iskeyword-=.
-"   else
-"     set iskeyword+=.
-"   endif
-"   let s:toggle_inserting_dot_to_iskeyword_flag = !s:toggle_inserting_dot_to_iskeyword_flag
-" endfunction
 
 if has('multi_byte_ime')
   set iminsert=0 imsearch=0
@@ -1124,18 +1066,10 @@ nnoremap <silent>: :call <SID>load_cabbrev_definition_automatically()<CR>
 let g:end_tag_commant_format = '<!-- /%tag_name%id%class -->'
 nnoremap ,t :call alpaca#function#html#endtag_comment()<CR>:
 
-inoremap <C-R> <C-R><C-R>
-inoremap <C-R><C-R> <C-R>"
-
-cnoremap <C-R> <C-R><C-R>
-cnoremap <C-R><C-R> <C-R>"
 cnoremap <C-L> <Right>
 
 xnoremap H <Nop>
 inoremap <C-@> <Nop>
-
-" Copy current path
-cabbrev cpath let @* = expand('%:p')
 
 augroup MyEditing
   autocmd!
@@ -1179,14 +1113,10 @@ nnoremap <silent>k gk
 nnoremap <silent>gj j
 nnoremap <silent>gk k
 nnoremap <silent>Y y$
-nnoremap J mzJ`z
 
 let g:alpaca_window_default_filetype = 'ruby'
 let g:alpaca_window_max_height = g:my.conf.winheight
 let g:alpaca_window_max_width = g:my.conf.winwidth
-nmap <silent>L            <Plug>(alpaca_window_move_next_window_or_tab)
-nmap <silent>H            <Plug>(alpaca_window_move_previous_window_or_tab)
-
 nmap <silent><C-W>n       <Plug>(alpaca_window_smart_new)
 nmap <silent><C-W><C-N>   <Plug>(alpaca_window_smart_new)
 
@@ -1205,8 +1135,8 @@ function! s:search_same_indent_line(next) "{{{
 
   echomsg 'Not found'
 endfunction"}}}
-" nnoremap <silent>[n :<C-U>call <SID>search_same_indent_line(1)<CR>
-" nnoremap <silent>[p :<C-U>call <SID>search_same_indent_line(0)<CR>
+nnoremap <silent>[h :<C-U>call <SID>search_same_indent_line(1)<CR>
+nnoremap <silent>[l :<C-U>call <SID>search_same_indent_line(0)<CR>
 
 augroup MyAutoCmd
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line('$') | execute "normal g`\"" | endif
@@ -1226,11 +1156,11 @@ nnoremap <silent>[tag_or_tab]p  :tabprevious<CR>
 nnoremap <silent>[tag_or_tab]x  :tabclose<CR>
 nnoremap <silent>[tag_or_tab]o  <C-W>T
 
-for num in range(0, 9)
-  execute 'nnoremap <silent>[tag_or_tab]'.num.'  :tabnext '.num'<CR>'
-  execute 'nnoremap <silent>[tag_or_tab]m'.num.'  :tabmove '.num'<CR>'
+for i in range(0, 9)
+  execute 'nnoremap <silent>[tag_or_tab]'.i.'  :tabnext '.i'<CR>'
+  execute 'nnoremap <silent>[tag_or_tab]m'.i.'  :tabmove '.i'<CR>'
 endfor
-unlet num
+unlet i
 "}}}
 
 " ----------------------------------------
@@ -1256,15 +1186,13 @@ command! -bang -bar -complete=file -nargs=? Utf8 edit<bang> ++enc=utf-8 <args>
 
 " ----------------------------------------
 " Indent {{{
-if s:on_init()
-  set autoindent
-  set expandtab
-  set smartindent
-  set smarttab
-  set softtabstop=2
-  set shiftwidth=2
-  set tabstop=2
-endif
+set autoindent
+set expandtab
+set smartindent
+set smarttab
+set softtabstop=2
+set shiftwidth=2
+set tabstop=2
 filetype indent on
 "}}}
 
@@ -1336,11 +1264,6 @@ syntax on
 " Tags {{{
 set tags=./tags
 
-" Vim's bug.
-if !has('patch336')
-  set notagbsearch
-endif
-
 nnoremap [tag_or_tab]t  <C-]>
 nnoremap [tag_or_tab]h  :<C-u>pop<CR>
 nnoremap [tag_or_tab]l  :<C-u>tag<CR>
@@ -1406,7 +1329,6 @@ set wildmenu
 set showfulltag
 set wildoptions=tagfile
 set wildmode=longest:full,full
-" set thesaurus+=~/.vim/thesaurus/mthes10/mthesaur.txt
 
 " Complement command in command-line like zsh
 cnoremap <C-P> <UP>
@@ -1917,27 +1839,6 @@ function! hooks.on_source(bundle) "{{{
   let g:rails_syntax = 1
   let g:rails_url='http://localhost:3000'
 
-  function! s:test() "{{{
-    let buf = rails#buffer()
-    let type = "-" . buf.type_name()
-    let path = '/' . buf.name()
-    if path =~ '[ !#$%\,]'
-      let path = ''
-    endif
-
-    if type != '-'
-      let type = substitute(type, '-', '.', 'g')
-      execute 'doautocmd User Rails' . type
-      execute 'doautocmd User Rails' . path
-
-      echo 'doautocmd User Rails' . type
-      echo 'doautocmd User Rails' . path
-    endif
-
-    return path
-  endfunction"}}}
-  command! Test echo <SID>test()
-
   function! s:rails_settings() "{{{
     augroup RailsBufferSetting
       autocmd!
@@ -1974,10 +1875,21 @@ function! hooks.on_source(bundle) "{{{
     endif
   endfunction"}}}
 
-  function! s:set_rails_path()
+  function! s:set_rails_path() "{{{
     let path = ['app/controllers', 'app/models', 'lib', 'app/admin']
     execute 'setl path+=,' . join(map(path, 'expand(b:rails_root . "/" . v:val)'), ',')
-  endfunction
+  endfunction"}}}
+
+  function! s:run_rails_console() "{{{
+    let current_dir = getcwd()
+    lcd `=b:rails_root`
+
+    try
+      VimShellInteractive --split='split | resize 20' bundle exec spring rails console
+    finally
+      lcd `=current_dir`
+    endtry
+  endfunction"}}}
 
   function! s:unite_rails_setting() "{{{
     call s:source_snippet()
@@ -1985,6 +1897,8 @@ function! hooks.on_source(bundle) "{{{
 
     nnoremap <buffer><Space>r :R<CR>
     nnoremap <buffer><Space>a :A<CR>
+
+    nnoremap <buffer>,q <C-U>:call <SID>run_rails_console()<CR>
 
     nnoremap <buffer>[plug]            :<C-U>UniteGit app/models<CR>
     nnoremap <buffer>[plug]<C-H>       :<C-U>UniteGit app/controllers<CR>
@@ -2791,7 +2705,7 @@ function! hooks.on_source(bundle) "{{{
   let g:neocomplete#sources.liquid = g:neocomplete#sources._ + ['file/include']
   let g:neocomplete#sources.gitcommit = g:neocomplete#sources._ + ['emoji']
 
-  call neocomplete#custom#source('_', 'matchers', ['matcher_fuzzy'])
+  call neocomplete#custom#source('emoji', 'matchers', ['matcher_fuzzy'])
 
   if $USER == 'root'
     let g:neocomplete#data_directory = '/tmp'
@@ -3423,10 +3337,10 @@ function! hooks.on_source(bundle) "{{{
 
     call unite#define_filter(pre_filter)
     let file_rec_filters = ['matcher_default', 'sorter_default', 'matcher_hide_hidden_files' , 'converter_relative_word']
-    call unite#custom#source('file_rec', 'filters', add(file_rec_filters, filter_name))
+    " call unite#custom#source('file_rec', 'filters', add(file_rec_filters, filter_name))
 
     let file_filters = [ 'matcher_default', 'matcher_hide_hidden_files' ]
-    call unite#custom#source('file', 'filters', add(file_filters, filter_name))
+    " call unite#custom#source('file', 'filters', add(file_filters, filter_name))
   endfunction"}}}
   call s:extend_file_rec_source()
 
@@ -4104,12 +4018,6 @@ if has('vim_starting')
     autocmd VimEnter * call s:open_file_rec()
   augroup END
 endif
-
-if !empty($TEST)
-  source ~/.bundle/chatwork.vim/test.vim
-endif
-
-let g:pixiv_name_id = 72
 
 " Installation check.
 if s:on_init() && g:my.conf.initialize && neobundle#exists_not_installed_bundles()

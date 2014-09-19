@@ -1,0 +1,6 @@
+" Vim's bug.
+if !has('patch336')
+  set notagbsearch
+endif
+
+
