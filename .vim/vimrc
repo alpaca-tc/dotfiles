@@ -120,11 +120,6 @@ set visualbell t_vb=
 set langmenu=en_us.UTF-8
 language en_US.UTF-8
 
-if v:version >= 703
-  set undofile
-  let &undodir = g:my.dir.undodir
-endif
-
 nnoremap <Space><Space>s :<C-U>source ~/.vim/vimrc<CR>
 nnoremap <Space><Space>v :<C-U>tabnew ~/.vim/vimrc<CR>
 "}}}
@@ -3914,16 +3909,17 @@ function! s:DiffWithSaved() "{{{
   diffthis
   setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile readonly
   let &l:filetype = filetype
-endfunction"}}}
+endfunction " }}}
 command! DiffSaved call s:DiffWithSaved()
 
 let s:loaded_vimrc = 1
+function! s:open_file_rec() " {{{
+  autocmd! OpenFileRec
 
-function! s:open_file_rec() "{{{
   if argc() == 0
     VimFiler
   endif
-endfunction"}}}
+endfunction
 
 if has('vim_starting')
   augroup OpenFileRec
@@ -3931,6 +3927,7 @@ if has('vim_starting')
     autocmd VimEnter * call s:open_file_rec()
   augroup END
 endif
+" }}}
 
 " Installation check.
 if s:on_init() && g:my.conf.initialize && neobundle#exists_not_installed_bundles()
@@ -3938,4 +3935,5 @@ if s:on_init() && g:my.conf.initialize && neobundle#exists_not_installed_bundles
   execute 'NeoBundleInstall' join(neobundle#get_not_installed_bundle_names(), ' ')
 endif
 
+let s:loaded_vimrc = 1
 set secure
