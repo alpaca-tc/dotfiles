@@ -3,7 +3,6 @@ let s:source = {
       \ 'kind' : 'manual',
       \ 'mark' : '[emoji]',
       \ }
-
 function! neocomplete#sources#emoji#define() "{{{
   return s:source
 endfunction"}}}

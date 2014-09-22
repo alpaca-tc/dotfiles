@@ -874,11 +874,3 @@ let s:emoji = {
 function! emoji#definition#get_all() "{{{
   return copy(s:emoji)
 endfunction"}}}
-
-function! emoji#definition#select(keyword) "{{{
-  return filter(copy(s:emoji), 'v:key =~ "^" . a:keyword')
-endfunction"}}}
-
-function! emoji#definition#get_for(keyword) "{{{
-  return s:emoji[a:keyword]
-endfunction"}}}
