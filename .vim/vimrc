@@ -1644,8 +1644,8 @@ unlet hooks
 " unlet hooks
 
 " ------------------------------------
-nnoremap <silent>,v  :<C-U>VimShell -popup<CR>
-nnoremap <silent>,V  :<C-U>VimShellBufferDir -popup<CR>
+nnoremap <silent>,v  :<C-U>VimShellBufferDir -popup<CR>
+nnoremap <silent>,V  :<C-U>VimShellCreate -popup<CR>
 let hooks = neobundle#get_hooks('vimshell')
 function! hooks.on_source(bundle) "{{{
   let g:vimshell_user_prompt  = '"(" . getcwd() . ")" '
@@ -1674,6 +1674,10 @@ function! hooks.on_source(bundle) "{{{
 
   function! s:vimshell_settings()
     set omnifunc=vimshell#complete#omnifunc
+
+    imap <buffer><C-K> <Plug>(vimshell_history_unite)
+    imap <silent><buffer><C-L> <ESC><C-L>A
+
     for altercmd in s:vimshell_altercmd
       call vimshell#altercmd#define(altercmd[0], altercmd[1])
     endfor
