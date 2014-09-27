@@ -1,27 +1,11 @@
-"              ,dPYb,
-"              IP'`Yb
-"              I8  8I
-"              I8  8'
-"    ,gggg,gg  I8 dP  gg,gggg,      ,gggg,gg    ,gggg,    ,gggg,gg
-"   dP"  "Y8I  I8dP   I8P"  "Yb    dP"  "Y8I   dP"  "Yb  dP"  "Y8I
-"  i8'    ,8I  I8P    I8'    ,8i  i8'    ,8I  i8'       i8'    ,8I
-" ,d8,   ,d8b,,d8b,_ ,I8 _  ,d8' ,d8,   ,d8b,,d8,_    _,d8,   ,d8b,
-" P"Y8888P"`Y88P'"Y88PI8 YY88888PP"Y8888P"`Y8P""Y8888PPP"Y8888P"`Y8
-"                     I8
-"                 I8                              ,dPYb,
-"                 I8                              IP'`Yb
-"              88888888             gg             I8  8I
-"                 I8                ""             I8  8'
-"                 I8     ,gggg,gg   gg     ,gggg,  I8 dPgg,     ,ggggg,   gg      gg
-"                 I8    dP"  "Y8I   88    dP"  "Yb I8dP" "8I   dP"  "Y8gggI8      8I
-"    Δ~~~~Δ    ,I8,  i8'    ,8I   88   i8'       I8P    I8  i8'    ,8I  I8,    ,8I
-"    ξ・ェ・ξ ,d88b,,d8,   ,d8b,_,88,_,d8,_    _,d8     I8,,d8,   ,d8' ,d8b,  ,d8b,
-"    ξ     ξ  8P""Y8P"Y8888P"`Y88P""Y8P""Y8888PP88P     `Y8P"Y8888P"   8P'"Y88P"`Y8
-"    ξ     ξ
-"    ξ     “~～~～~〜〇
-"    ξ                ξ
-"    ξ ξξ~～~~〜~ξ ξ
-"    ξ_ξξ_ξξ_ξξ_ξ  =з =з =з  @alpaca_taichou
+" Δ~~~~Δ
+" ξ・ェ・ξ  < I am @alpaca-tc
+" ξ     ξ
+" ξ     ξ
+" ξ     “~～~～~〜〇
+" ξ                ξ
+" ξ ξξ~～~~〜~ξ ξ
+" ξ_ξξ_ξξ_ξξ_ξ  =з =з =з
 augroup MyAutoCmd
   autocmd!
 augroup END
@@ -62,24 +46,16 @@ endfunction"}}}
 " initialize "{{{
 let g:my = {}
 
-" OS
-let s:is_windows = has('win32') || has('win64')
-let s:is_mac     = has('mac')
-let s:is_unix    = has('unix')
-
 " user information
+let g:my.conf = {
+      \ 'initialize': 1
+      \ }
 let g:my.info = {
       \ 'author':  'Ishii Hiroyuki',
       \ 'email':   'alpaca-tc@alpaca.tc',
       \ 'github':  'alpaca-tc',
       \ 'lingr':   'alpaca_taichou',
       \ 'twitter': 'alpaca_taichou'
-      \ }
-
-let g:my.conf = {
-      \ 'initialize' : 1,
-      \ 'winheight' : winheight(0),
-      \ 'winwidth' : winwidth(0),
       \ }
 
 let g:my.bin = {
@@ -120,13 +96,7 @@ let g:my.ft = {
       \ 'program_files':   ['ruby', 'php', 'python', 'eruby', 'vim', 'javascript', 'coffee', 'scala', 'java', 'go', 'cpp', 'haml', 'rust', 'c', 'slim', 'go'],
       \ 'ignore_patterns': ['vimfiler', 'unite'],
       \ }
-let g:my.ft.youcomplete_me = g:my.ft.ruby_files + g:my.ft.js_files + g:my.ft.python_files + g:my.ft.scala_files + g:my.ft.sh_files + g:my.ft.php_files + g:my.ft.c_files + g:my.ft.style_files
-let g:my.ft.neocomplete = ['vim'] + g:my.ft.english_files
-
-if s:on_init() && g:my.conf.initialize
-  call alpaca#initialize#directory(values(g:my.dir))
-endif
-"}}}
+" }}}
 
 " ----------------------------------------
 " basic settings "{{{
@@ -137,16 +107,16 @@ set clipboard+=unnamed
 set formatoptions+=lcqmM
 set modelines=1
 set ttymouse=xterm2
-set nomore
-set nobackup
+" set nomore
+" set nobackup
 set nowritebackup
-set norestorescreen
-set noshowmode
+" set norestorescreen
+" set noshowmode
 set timeout timeoutlen=400 ttimeoutlen=90 updatetime=1000
 set viminfo='1000,<800,s300,\"1000,f1,:1000,/1000
 execute 'set viminfo+=n' . g:my.dir.viminfo . '/.viminfo'
 set visualbell t_vb=
-set helplang=en
+" set helplang=en
 set langmenu=en_us.UTF-8
 language en_US.UTF-8
 
@@ -157,18 +127,13 @@ endif
 
 nnoremap <Space><Space>s :<C-U>source ~/.vim/vimrc<CR>
 nnoremap <Space><Space>v :<C-U>tabnew ~/.vim/vimrc<CR>
-nnoremap <Space><Space>b :<C-U>tabnew ~/.bundle<CR>
 "}}}
 
 " ----------------------------------------
 " Initialize Neobundle {{{
 filetype plugin indent off
 let g:neobundle#types#git#default_protocol = 'https'
-let g:neobundle#install_max_processes = s:is_mac ? 50 : 10
-
-if s:on_init() && g:my.conf.initialize && !isdirectory(g:my.dir.neobundle.'/neobundle.vim')
-  call system('git clone https://github.com/Shougo/neobundle.vim.git '. g:my.dir.neobundle . '/neobundle.vim')
-endif
+let g:neobundle#install_max_processes = 30
 
 if s:on_init()
   execute 'set runtimepath+=' . g:my.dir.neobundle . '/neobundle.vim'
@@ -529,7 +494,7 @@ NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
       \ 'filetypes' : g:my.ft.program_files,
       \ 'autoload': {
       \   'function_prefix' : 'smartchr',
-      \ }}}
+      \ } }}
 
 if has('ruby')
   " The input support for English
@@ -552,7 +517,7 @@ NeoBundleLazy 'kana/vim-niceblock', { 'autoload' : {
       \ 'mappings' : ['<Plug>(niceblock-I)', '<Plug>(niceblock-A)']
       \ }}
 
-NeoBundle 'airblade/vim-gitgutter', {
+NeoBundleLazy 'airblade/vim-gitgutter', {
       \ 'autoload': {
       \   'commands': [
       \     'GitGutterDisable', 'GitGutterEnable', 'GitGutterToggle', 'GitGutter',
@@ -564,29 +529,8 @@ NeoBundleLazy 'DirDiff.vim', { 'autoload' : {
 NeoBundleLazy 'repeat.vim', { 'autoload' : {
       \ 'mappings' : '.',
       \ }}
-" NeoBundle 'terryma/vim-multiple-cursors', { 'autload': {
-"       \ 'function_prefix': 'multiple_cursors',
-"       \ }}
 NeoBundleLazy 'alpaca-tc/auto-pairs', { 'autoload' : {
       \ 'insert': 1 }}
-
-NeoBundleFetch 'github/gitignore'
-
-" Generating Ricty Font.
-let g:ricty_generate_command = join([
-      \   'sh ricty_generator.sh',
-      \   neobundle#get_neobundle_dir().'/alpaca/fonts/Inconsolata.otf',
-      \   neobundle#get_neobundle_dir().'/alpaca/fonts/migu-1m-regular.ttf',
-      \   neobundle#get_neobundle_dir().'/alpaca/fonts/migu-1m-bold.ttf',
-      \ ], ' ')
-NeoBundleFetch 'yascentur/Ricty', {
-      \ 'depends' : 'alpaca-tc/alpaca',
-      \ 'autoload' : {
-      \   'build' : {
-      \     'mac'  : g:ricty_generate_command,
-      \     'unix' : g:ricty_generate_command,
-      \   }
-      \ }}
 
 " The light converter and beautifier
 NeoBundleLazy 'alpaca-tc/beautify.vim', { 'autoload' : {
@@ -603,8 +547,6 @@ NeoBundleLazy 'alpaca-tc/beautify.vim', { 'autoload' : {
 NeoBundleLazy 'hail2u/vim-css3-syntax', { 'autoload' : {
       \   'filetypes' : g:my.ft.style_files,
       \ }}
-NeoBundleLazy 'AtsushiM/sass-compile.vim', {
-      \ 'autoload': { 'filetypes': ['sass', 'scss'] }}
 NeoBundleLazy 'vim-less', {
       \ 'autoload': { 'filetypes': ['less'] }
       \ }
@@ -666,10 +608,9 @@ NeoBundleLazy 'kchmck/vim-coffee-script', { 'autoload' : {
 "         \ 'functions': ['tern#Complete', 'tern#Enable'],
 "         \ 'filetypes' : 'javascript'
 "         \ }}
-NeoBundleLazy 'myhere/vim-nodejs-complete', { 'autoload' : {
-      \ 'filetypes' : ['javascript'],
-      \ }}
-
+" NeoBundleLazy 'myhere/vim-nodejs-complete', { 'autoload' : {
+"       \ 'filetypes' : ['javascript'],
+"       \ }}
 " NeoBundleLazy 'claco/jasmine.vim', { 'autoload' : {
 "       \ 'filetypes' : g:my.ft.js_files }}
 
@@ -682,11 +623,6 @@ NeoBundleLazy 'fsouza/go.vim', { 'autoload' : {
 " ----------------------------------------
 NeoBundleLazy 'alpaca-tc/vim-markdown', { 'autoload' : {
       \ 'filetypes' : ['markdown'] }}
-
-"  PHP
-" ----------------------------------------
-NeoBundleLazy 'alpaca-tc/alpaca_wordpress.vim', { 'autoload' : {
-      \ 'filetypes': 'php' }}
 
 " Binary
 " ----------------------------------------
@@ -701,7 +637,7 @@ NeoBundleLazy 'Shougo/vinarise.vim', {
 " ----------------------------------------
 NeoBundleLazy 'spllr/vim-padrino', { 'autoload': {
       \ 'function_prefix' : 'padrino',
-      \ } }
+      \ }}
 NeoBundleLazy 'tpope/vim-rails', { 'autoload' : {
       \ 'function_prefix': 'rails'
       \ }}
@@ -732,7 +668,6 @@ NeoBundleLazy 'alpaca-tc/rake.vim', {
       \     }
       \   ]
       \ }}
-
 
 " Rails
 NeoBundleLazy 'basyura/unite-rails', {
@@ -862,14 +797,6 @@ NeoBundleLazy 'tsukkee/lingr-vim', { 'autoload' : {
       \ 'commands' : ['LingrExit', 'LingrLaunch'],
       \ }}
 " NeoBundle 'alpaca-tc/chatwork.vim'
-NeoBundleLazy 'alpaca-tc/assignment', { 'autoload': {
-      \ 'commands' : [
-      \   {
-      \     'name' : 'Assignment',
-      \     'complete' : 'customlist,assignment#complete',
-      \   }
-      \ ]
-      \ }}
 NeoBundleLazy 'tyru/operator-camelize.vim', {
       \ 'depends' : 'kana/vim-operator-user',
       \ 'autoload' : {
@@ -924,18 +851,8 @@ if executable('tamago')
         \ }}
 endif
 
-NeoBundleLazy 'h1mesuke/vim-benchmark', { 'autoload' : {
-      \ 'functions' : 'benchmark#new',
-      \ }}
-
 filetype plugin indent on
-"}}}
-
-" ----------------------------------------
-" Other Plugins
-if !exists('loaded_matchit')
-  runtime macros/matchit.vim
-endif
+" }}}
 
 " ----------------------------------------
 " Editing"{{{
@@ -1073,7 +990,7 @@ inoremap <C-@> <Nop>
 
 augroup MyEditing
   autocmd!
-  autocmd BufEnter * execute ':silent! lcd! ' . expand('%:p:h')
+  autocmd BufEnter * execute ':silent! lcd! ' . fnameescape(expand('%:p:h'))
   autocmd Filetype xml,html,eruby inoremap <buffer> </ </<C-X><C-O>
   " autocmd FileType slim,ruby,eruby,haml,racc,ruby.racc inoremap <buffer>\| \|\|<Left>
 augroup END
@@ -1115,8 +1032,8 @@ nnoremap <silent>gk k
 nnoremap <silent>Y y$
 
 let g:alpaca_window_default_filetype = 'ruby'
-let g:alpaca_window_max_height = g:my.conf.winheight
-let g:alpaca_window_max_width = g:my.conf.winwidth
+let g:alpaca_window_max_height = winheight(0)
+let g:alpaca_window_max_width = winwidth(0)
 nmap <silent><C-W>n       <Plug>(alpaca_window_smart_new)
 nmap <silent><C-W><C-N>   <Plug>(alpaca_window_smart_new)
 
@@ -3984,14 +3901,6 @@ command! Make call alpaca#system#new('make')
 
 if !s:on_init()
   call neobundle#call_hook('on_source')
-elseif filereadable(expand('~/.vim_secret'))
-  " snail & lingr
-
-  " let g:snail_csv2google_sheet_hourly_rete
-  " let g:lingr_vim_password
-  " let g:github#password
-  " let g:github#token
-  source ~/.vim_secret
 endif
 
 function! s:DiffWithSaved() "{{{
