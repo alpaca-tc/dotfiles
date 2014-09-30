@@ -261,7 +261,7 @@ NeoBundleLazy 'Shougo/vimfiler', {
       \ }}
 NeoBundleLazy 'alpaca-tc/kintai.vim', {
       \ 'autoload': {
-      \   'commands' : 'CreateKintai'
+      \   'commands' : ['CreateKintai', { 'name' : 'CreateKintaiSnail', 'complete' : 'file' }]
       \ }}
 NeoBundleLazy 'Shougo/neocomplete.vim', { 'autoload' : {
       \ 'functions' : ['neocomplete#init#disable', 'neocomplete#is_enabled', 'neocomplete#start_manual_complete'],
@@ -498,13 +498,6 @@ if has('ruby')
         \ 'autoload' : {
         \   'commands' : ['AlpacaEnglishDisable', 'AlpacaEnglishEnable', 'AlpacaEnglishSay'],
         \   'unite_sources': ['english_dictionary', 'english_example', 'english_thesaurus', 'web_search'],
-        \ }}
-
-  " For payroll accounting
-  NeoBundleLazy 'alpaca-tc/snail.vim', { 'autoload': {
-        \ 'commands' : [
-        \   { 'name': 'Snail', 'complete' : 'file' },
-        \ ],
         \ }}
 endif
 
@@ -2577,7 +2570,7 @@ function! hooks.on_source(bundle) "{{{
   let g:neocomplete#force_overwrite_completefunc    = 1
   let g:neocomplete#manual_completion_start_length  = 0
   let g:neocomplete#sources#include#max_processes   = 10
-  let g:neocomplete#max_list                        = 10
+  let g:neocomplete#max_list                        = 30
   " let g:neocomplete_caching_limit_file_size = 500000
   " let g:neocomplete_max_keyword_width       = 120
   " let g:neocomplete_enable_cursor_hold_i    = 0
@@ -3796,7 +3789,7 @@ command! -nargs=0 Vim call s:open_vim()
 "}}}
 
 " For Gem
-" Gem {{{
+" Gem"{{{
 function! s:get_all_gem_paths() "{{{
   if exists('s:all_gem_paths')
     return s:all_gem_paths
@@ -3808,7 +3801,7 @@ function! s:get_all_gem_paths() "{{{
   let s:all_gem_paths = split(globpath(gem_path, '*/lib'), '\n')
 
   return s:all_gem_paths
-endfunction "}}}
+endfunction"}}}
 
 function! s:get_gem_paths() " {{{
   if !exists('s:gem_path')
@@ -3868,11 +3861,6 @@ function! s:load_gem_paths() "{{{
     call s:set_gem_paths()
   endif
 endfunction"}}}
-
-augroup GemPath
-  autocmd!
-  autocmd FileType Rakefile,ruby call s:load_gem_paths()
-augroup END
 
 command! LoadGemPath call s:load_gem_paths()
 "}}}
