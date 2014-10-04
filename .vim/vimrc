@@ -541,7 +541,7 @@ NeoBundleLazy 'vim-less', {
 
 " HTML
 " ----------------------------------------
-NeoBundleLazy 'alpaca-tc/html5.vim', { 'autoload' : {
+NeoBundleLazy 'othree/html5.vim', { 'autoload' : {
       \   'filetypes' : g:my.ft.markup_files,
       \   'commands' : ['HtmlIndentGet']
       \ }}
@@ -589,13 +589,14 @@ NeoBundleLazy 'kchmck/vim-coffee-script', { 'autoload' : {
       \ 'filetypes' : 'coffee',
       \ 'commands' : ['CoffeeCompile', 'CoffeeWatch', 'CoffeeMake'],
       \ }}
-" if has('python') && executable('npm')
-"   NeoBundleLazy 'marijnh/tern_for_vim', {
-"         \ 'build' : 'npm install',
-"         \ 'autoload' : {
-"         \ 'functions': ['tern#Complete', 'tern#Enable'],
-"         \ 'filetypes' : 'javascript'
-"         \ }}
+if has('python') && executable('npm')
+  NeoBundleLazy 'marijnh/tern_for_vim', {
+        \ 'build' : 'npm install',
+        \ 'autoload' : {
+        \ 'functions': ['tern#Complete', 'tern#Enable'],
+        \ 'filetypes' : 'javascript'
+        \ }}
+end
 " NeoBundleLazy 'myhere/vim-nodejs-complete', { 'autoload' : {
 "       \ 'filetypes' : ['javascript'],
 "       \ }}
@@ -838,6 +839,10 @@ if executable('tamago')
         \   'commands' : [{ 'name' : 'Tamago', 'complete' : 'customlist,tamago#complete' }],
         \   'unite_sources' : ['tamago', 'tamago/dirty', 'tamago/clean', 'tamago/current_file'],
         \ }}
+endif
+
+if !exists('loaded_matchit')
+  runtime macros/matchit.vim
 endif
 
 filetype plugin indent on
@@ -1282,12 +1287,12 @@ function! hooks.on_source(bundle) "{{{
         \   '%':  "<% \r %>",
         \   '-':  "<% \r -%>",
         \   '=':  "<%= \r %>",
-        \   'w':  "%w!\r!",
-        \   'W':  "%W!\r!",
-        \   'q':  "%q!\r!",
-        \   'Q':  "%Q!\r!",
-        \   'r':  "%r!\r!",
-        \   'R':  "%R!\r!",
+        \   'w':  "%w(\r)",
+        \   'W':  "%W(\r)",
+        \   'q':  "%q(\r)",
+        \   'Q':  "%Q(\r)",
+        \   'r':  "%r{\r}",
+        \   'R':  "%R{\r}",
         \   '\"':  '\"\r\"',
         \   "'":  "'\r'",
         \   '{':  "{ \r }",
@@ -3684,9 +3689,9 @@ function! hooks.on_source(bundle) "{{{
 
   function! g:kintai#configuration.url()
     if s:at_morning()
-      return 'http://report.office/report/submit.php'
+      return 'http://clockin.office/#clockin'
     else
-      return 'http://report.office/report/report.php'
+      return 'http://clockin.office/#clockout'
     end
   endfunction
 
