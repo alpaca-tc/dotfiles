@@ -97,5 +97,31 @@ _rake() {
 compdef _rake rake
 # }}}
 
+# Highlight cat
+alias cat='pygmentize -O style=monokai -f console256 -g -O encoding=utf-8'
+alias less=lessfilter
+
+lessfilter() {
+  case "$1" in
+    *.awk|*.groff|*.java|*.js|*.m4|*.php|*.pl|*.pm|*.pod|*.sh|\
+      *.ad[asb]|*.asm|*.inc|*.[ch]|*.[ch]pp|*.[ch]xx|*.cc|*.hh|\
+      *.lsp|*.l|*.pas|*.p|*.xml|*.xps|*.xsl|*.axp|*.ppd|*.pov|\
+      *.diff|*.patch|*.py|*.rb|*.sql|*.ebuild|*.eclass)
+    pygmentize -O encoding=utf-8 -O style=monokai -f console256 -g "$1" | \less;;
+
+  .bashrc|.bash_aliases|.bash_environment)
+    pygmentize -O encoding=utf-8 -f 256 -l sh "$1" | \less
+    ;;
+
+  *)
+    grep "#\!/bin/bash" "$1" > /dev/null
+    if [ "$?" -eq "0" ]; then
+      pygmentize -O encoding=utf-8 -f 256 -l sh "$1" | \less
+    else
+      \less "$1"
+    fi
+  esac
+}
+
 # tmuxinator
 [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator

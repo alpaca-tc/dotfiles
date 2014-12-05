@@ -12,12 +12,7 @@ options word
 snippet describe_model
 abbr    describe_model
 options head
-  describe ${1} do
-    let(:singular_name) { described_class.model_name.singular }
-    let(:plural_name) { described_class.model_name.plural }
-    let(:build_instance) { build(singular_name) }
-    let(:create_instance) { create(singular_name) }
-
+  RSpec.describe ${1}, type: :model do
     context 'Associations' do
     end
 
@@ -28,10 +23,6 @@ options head
     end
 
     context 'ClassMethods' do
-      describe '.create' do
-        subject { create_instance }
-        it { expect { subject }.to be_truthy }
-      end
     end
 
     context 'InstanceMethods' do

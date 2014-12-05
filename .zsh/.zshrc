@@ -19,9 +19,9 @@ export ECLIPSE_HOME='/Users/alpaca-tc/Downloads/eclipse-standard-kepler-SR2-maco
 # }}}
 
 # rbenvの設定
-export CFLAGS=-Qunused-arguments
-export CPPFLAGS=-Qunused-arguments
-export ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future pip install ansible
+# export CFLAGS=-Qunused-arguments
+# export CPPFLAGS=-Qunused-arguments
+# export ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future pip install ansible
 # export CPPFLAGS="-I/usr/local/Cellar/readline/6.2.4/include"
 # export LDFLAGS="-L/usr/local/Cellar/readline/6.2.4/lib"
 
@@ -98,6 +98,9 @@ export PATH=$HOME/dotfiles/bin:$PATH
 # export PYTHONPATH=/usr/local/Cellar/python32/3.2.3/Frameworks/Python.framework/Versions/3.2
 # alias python=python3.2
 export PATH=$PATH:$HOME/usr/binl
+
+# QT
+export PATH=/usr/local/Trolltech/Qt-4.8.6/bin:$PATH
 # }}}
 
 # for vim
@@ -111,6 +114,9 @@ fpath=( $HOME/dotfiles/.zsh/zsh-completions/src $HOME/.zsh/site-functions $fpath
 
 # For rust
 export PATH=$PATH:/usr/local/bin/bin
+
+# For neovim
+export PATH=$HOME/neovim/bin:$PATH
 
 # For watson
 export LESS="-R"

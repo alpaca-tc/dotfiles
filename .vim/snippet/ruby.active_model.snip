@@ -169,8 +169,7 @@ options head
 snippet validates
 abbr    AM::Validations.validates :name, *validates
 options word
-  validates :${1:name},
-    ${2:validates}
+  validates :${1:name}, ${2}
 
 snippet validates_with
 abbr    AM::Validations.validates_with Klass

@@ -36,6 +36,9 @@ if [ $yn = "y" -o $yn = "Y" ]; then
         echo "...create folder: ~/$file"
         mkdir -p $HOME/$file
     done
+
+    ln -s $HOME/.vim $HOME/.nvim
+    ln -s $HOME/.vimrc $HOME/.nvimrc
 fi
 
 # finderで隠しファイルを表示する

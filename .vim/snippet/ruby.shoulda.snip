@@ -82,12 +82,12 @@ alias   confirmation
 options word
   validate_confirmation_of(${1:column})
 
-snippet ensure_length_of
-abbr    ensure_length_of(...).is_at_least(...)
+snippet validates_length_of
+abbr    validates_length_of(...).is_at_least(...)
 alias   length_of
 regexp  '\v((to|should|to_not|should_not)\s|\.$)'
 options word
-  ensure_length_of(${1:column})${2:.is_at_least(${3\}})${4:.is_at_most(${5\}})${6:.with_short_message(/${7:regext\}/) }
+  validates_length_of(${1:column})${2:.is_at_least(${3\}})${4:.is_at_most(${5\}})${6:.with_short_message(/${7:regext\}/) }
 
 snippet validate_acceptance_of
 abbr    validate_acceptance_of(...)

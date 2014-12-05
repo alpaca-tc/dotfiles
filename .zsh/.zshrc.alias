@@ -7,6 +7,12 @@ alias ll="ls -l"
 alias ls="ls -G"
 # }}}
 
+# vim# {{{
+# alias st='/Applications/Sublime\ Text\ 2.app/Contents/MacOS/Sublime\ Text\ 2 "$@"'
+alias n='nvim'
+# alias vim='nvim'
+# }}}
+
 # すぐに編修出来る# {{{
 alias sz="source ~/.zshrc"
 alias vv="vim ~/.vim/vimrc"
@@ -38,11 +44,6 @@ alias m='mvim'
 alias mi='mvim'
 alias v='vim'
 alias vi='vim'
-# }}}
-
-# vim# {{{
-# alias st='/Applications/Sublime\ Text\ 2.app/Contents/MacOS/Sublime\ Text\ 2 "$@"'
-alias nim='NEO=1 vim'
 # }}}
 
 # 省略# {{{
