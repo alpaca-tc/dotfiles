@@ -161,11 +161,11 @@ NeoBundleLazy 'Shougo/vimproc', {
       \ }}
 
 " An awesome improvement to the Vim status bar.
-" NeoBundleLazy 'itchyny/lightline.vim', {
-"       \ 'autoload' : {
-"       \   'functions' : ['lightline#update', 'lightline#highlight'],
-"       \   'insert' : 1,
-"       \ }}
+NeoBundleLazy 'itchyny/lightline.vim', {
+      \ 'autoload' : {
+      \   'functions' : ['lightline#update', 'lightline#highlight'],
+      \   'insert' : 1,
+      \ }}
 
 NeoBundleLazy 'mattn/webapi-vim', {
       \ 'autoload' : {
@@ -308,13 +308,13 @@ NeoBundleLazy 'alpaca-tc/alpaca_remove_dust.vim', {
       \     'RemoveDust', 'RemoveDustForce',
       \ ]
       \ }}
-" NeoBundleLazy 'alpaca-tc/alpaca_template.vim', {
-"       \ 'depends' : 'Shougo/neosnippet.vim',
-"       \ 'autoload' : {
-"       \   'commands' : [
-"       \     { 'name': 'AlpacaTemplate', 'complete': 'customlist,alpaca_template#complete_template_names' },
-"       \   ]
-"       \ }}
+NeoBundleLazy 'alpaca-tc/alpaca_template.vim', {
+      \ 'depends' : 'Shougo/neosnippet.vim',
+      \ 'autoload' : {
+      \   'commands' : [
+      \     { 'name': 'AlpacaTemplate', 'complete': 'customlist,alpaca_template#complete_template_names' },
+      \   ]
+      \ }}
 
 " Asynchronous updating tags
 NeoBundleLazy 'alpaca-tc/alpaca_tags', {
@@ -562,12 +562,12 @@ NeoBundleLazy 'alpaca-tc/vim-markdown', { 'autoload' : {
 
 " Binary
 " ----------------------------------------
-" NeoBundleLazy 'Shougo/vinarise.vim', {
-"       \ 'depends': ['s-yukikaze/vinarise-plugin-peanalysis'],
-"       \ 'build' : {
-"       \   'mac' : 'brew install binutils',
-"       \ },
-"       \ 'autoload': { 'commands': 'Vinarise' }}
+NeoBundleLazy 'Shougo/vinarise.vim', {
+      \ 'depends': ['s-yukikaze/vinarise-plugin-peanalysis'],
+      \ 'build' : {
+      \   'mac' : 'brew install binutils',
+      \ },
+      \ 'autoload': { 'commands': 'Vinarise' }}
 
 " Ruby
 " ----------------------------------------
@@ -636,8 +636,8 @@ NeoBundleLazy 'slim-template/vim-slim', { 'autoload' : {
 
 " Nginx
 " ----------------------------------------
-" NeoBundleLazy 'mutewinter/nginx.vim', {
-"       \ 'autoload' : { 'filetypes': 'nginx' }}
+NeoBundleLazy 'mutewinter/nginx.vim', {
+      \ 'autoload' : { 'filetypes': 'nginx' }}
 
 " python
 " ----------------------------------------
@@ -700,10 +700,10 @@ NeoBundleLazy 'mattn/excitetranslate-vim', {
 "       \ 'autoload' : {
 "       \   'commands' : ['Gingerice'],
 "       \ }}
-" NeoBundleLazy 'mattn/googletranslate-vim', {
-"       \ 'depends': 'mattn/webapi-vim',
-"       \ 'autoload' : { 'commands': ['GoogleTranslate']}
-"       \ }
+NeoBundleLazy 'mattn/googletranslate-vim', {
+      \ 'depends': 'mattn/webapi-vim',
+      \ 'autoload' : { 'commands': ['GoogleTranslate']}
+      \ }
 " NeoBundleLazy 'alpaca-tc/vim-altr', {
 "       \ 'build' : 'bundle install',
 "       \ 'autoload' : {
@@ -1098,9 +1098,9 @@ function! s:set_dictionary_automatically() "{{{
   endfor
 endfunc"}}}
 
-" augroup MyAutoCmd
-"   autocmd FileType * call <SID>set_dictionary_automatically()
-" augroup END
+augroup MyAutoCmd
+  autocmd FileType * call <SID>set_dictionary_automatically()
+augroup END
 
 " nnoremap <Space>d :execute join([alpaca_window#util#get_smart_split_command('split'), split(&dictionary, ',')[-1]], ' ')<CR>
 " nnoremap <Space><Space>d :execute join([alpaca_window#util#get_smart_split_command('split'), split(&dictionary, ',')[-2]], ' ')<CR>
@@ -1562,10 +1562,7 @@ unlet hooks
 
 " ------------------------------------
 function! s:edit_memolist() "{{{
-  let pwd = getcwd()
-  lcd `=g:my.dir.memolist`
-  Unite file
-  lcd `=pwd`
+  execute 'Unite file:' .  g:my.dir.memolist
 endfunction"}}}
 nnoremap <silent><Space>mn :MemoNew<CR>
 nnoremap <silent><Space>ml :call <SID>edit_memolist()<CR>
@@ -1796,7 +1793,7 @@ function! hooks.on_source(bundle) "{{{
   let g:syntastic_check_on_open       = 0
   let g:syntastic_echo_current_error  = 0
   let g:syntastic_enable_balloons     = has('balloon_eval')
-  let g:syntastic_quiet_warnings      = 0
+  let g:syntastic_quiet_messages = {'level': 'warnings'}
   let g:syntastic_enable_highlighting = 0
   let g:syntastic_enable_signs        = 0
   let g:syntastic_loc_list_height     = 2
@@ -1916,14 +1913,6 @@ unlet hooks
 nnoremap <Space>u :GundoToggle<CR>
 
 " ------------------------------------
-" let hooks = neobundle#get_hooks('accelerated-jk')
-" function! hooks.on_source(bundle) "{{{
-" nmap <silent>j <Plug>(accelerated_jk_gj)
-" nmap <silent>k <Plug>(accelerated_jk_gk)
-" endfunction"}}}
-" unlet hooks
-
-" ------------------------------------
 " excitetranslate
 " ------------------------------------
 xnoremap <C-E> :<C-U>ExciteTranslate<CR>
@@ -2030,6 +2019,7 @@ function! hooks.on_source(bundle) "{{{
         \ ],
         \ 'coffee' : [
         \   ['if', 'unless'],
+        \   ['is', 'isnt'],
         \   { '^\(.*\)->': '\1=>' },
         \   { '^\(.*\)=>': '\1->' },
         \ ],

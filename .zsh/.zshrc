@@ -5,7 +5,6 @@ export GIT_EDITOR=/usr/local/bin/vim
 export LC_CTYPE=en_US.UTF-8
 export LANG=en_US.UTF-8
 # export SHELL=/usr/local/bin/zsh
-export BROWSER=/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome
 # export ARCHFLAGS="-arch x86_64"
 # export APXS2=/usr/sbin/apxs
 export GITHUB_HOST='github.com'

@@ -1180,6 +1180,13 @@ options word
   .uniq_value
 # }}}
 
+snippet with_options
+abbr    with_options(option, &block)
+options word
+  with_options ${1:option} do
+    ${2}
+  end
+
 snippet enum
 abbr    enum column: { ** }
 options word

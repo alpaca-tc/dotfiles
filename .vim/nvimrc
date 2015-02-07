@@ -1,0 +1,5 @@
+source $HOME/.vim/vimrc
+
+if has('nvim')
+  set unnamedclip
+endif
