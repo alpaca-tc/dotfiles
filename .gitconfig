@@ -65,6 +65,10 @@
   diffm = !"f() { git log HEAD...${1} --oneline | grep Merge; }; f"
   ff = !git clean -fd | git reset --hard
 
+[log]
+  date = local
+  decorate = true
+
 [push]
   default = current
 

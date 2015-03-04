@@ -6,6 +6,7 @@
 .node_modules
 .bundle/*
 /bin/*
+config/database.yml
 
 ~
 \~
