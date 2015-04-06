@@ -154,6 +154,14 @@ abbr    assume_migrated_upto_version(version, migrations_paths = ActiveRecord::M
 options word
   assume_migrated_upto_version(${1:version}${2:, ${3:migrations_path\}})
 
+snippet add_foreign_key
+abbr    add_foreign_key(table_name, target, option)
+  add_foreign_key ${1:from_table_name}, ${2:to_table_name}, on_delete: ${3::restrict}
+
+snippet remove_foreign_key
+abbr    remove_foreign_key(table_name, target, option)
+  remove_foreign_key ${1:from_table_name}, ${2:to_table_name}
+
 #snippet type_to_sql
 #abbr    type_to_sql(type, limit=nil, precision=nil, scale)
 #options word

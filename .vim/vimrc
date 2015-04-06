@@ -522,11 +522,15 @@ NeoBundleLazy 'mattn/emmet-vim', {
 
 " JavaScript / Coffee-script / TypeScript
 " ----------------------------------------
-NeoBundleLazy 'jiangmiao/simple-javascript-indenter', { 'autoload' : {
-      \ 'filetypes' : ['javascript', 'json', 'nginx'],
+NeoBundleLazy 'othree/yajs.vim', { 'autoload': {
+      \ 'filetypes' : ['javascript', 'es6']
       \ }}
-NeoBundleLazy 'jelera/vim-javascript-syntax', {
-      \ 'autoload' : { 'filetypes' : ['javascript'] }}
+NeoBundleLazy 'othree/javascript-libraries-syntax.vim', { 'autoload': {
+      \ 'filetypes' : ['javascript', 'es6']
+      \ }}
+" NeoBundleLazy 'jiangmiao/simple-javascript-indenter', { 'autoload' : {
+"       \ 'filetypes' : ['javascript', 'json', 'nginx'],
+"       \ }}
 " NeoBundleLazy 'moll/vim-node', { 'autoload' : {
 "       \ 'filetypes' : ['javascript'],
 "       \ }}
@@ -618,16 +622,16 @@ NeoBundleLazy 'mattn/lgtm-vim', {
 " NeoBundleLazy 'tpope/vim-liquid', { 'autoload' : {
 "       \ 'filetypes' : 'liquid'
 "       \ }}
-" NeoBundleLazy 'alpaca-tc/alpaca_octopress.vim', { 'autoload' : {
-"       \ 'filetypes' : 'liquid',
-"       \ 'functions' : 'octopress#complete',
-"       \ 'commands': [
-"       \   'OctopressKillAllProcess',
-"       \   {
-"       \   'name' : 'Octopress',
-"       \   'complete' : 'customlist,octopress#complete',
-"       \   },
-"       \ ]}}
+NeoBundleLazy 'alpaca-tc/alpaca_octopress.vim', { 'autoload' : {
+      \ 'filetypes' : 'liquid',
+      \ 'functions' : 'octopress#complete',
+      \ 'commands': [
+      \   'OctopressKillAllProcess',
+      \   {
+      \   'name' : 'Octopress',
+      \   'complete' : 'customlist,octopress#complete',
+      \   },
+      \ ]}}
 
 " Slim
 " ----------------------------------------
@@ -1662,7 +1666,7 @@ function! hooks.on_source(bundle) "{{{
     nnoremap <buffer>[plug]s           :<C-U>Unite rails/spec<CR>
     nnoremap <buffer>[plug]b           :<C-U>Unite rails/db<CR>
     nnoremap <buffer>[plug]f           :<C-U>Unite rails/spec -input=factories\ <CR>
-    nnoremap <buffer>[plug]m           :<C-U>Unite rails/mailers<CR>
+    nnoremap <buffer>[plug]m           :<C-U>Unite rails/mailer<CR>
     nnoremap <buffer>[plug]l           :<C-U>Unite rails/lib<CR>
     nnoremap <buffer>[plug]g           :<C-U>UniteGit Gemfile<CR>
     nnoremap <buffer>[plug]r           :<C-U>UniteGit config/routes.rb<CR>
