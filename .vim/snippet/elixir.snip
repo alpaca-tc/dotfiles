@@ -1,0 +1,138 @@
+snippet defmodule
+abbr    defmodule do ... end
+options word
+  defmodule ${1} do
+    ${2}
+  end
+
+snippet def
+abbr    def do ... end
+options word
+  def ${1} do
+    ${2}
+  end
+
+snippet defp
+abbr    defp do ... end
+options word
+  defp ${1} do
+    ${2}
+  end
+
+snippet defprotocol
+abbr    defprotocol(name, function)
+options word
+  defprotocol ${1}, fn ->
+    ${2}
+  end
+
+snippet fn
+abbr    fn -> ... end
+options word
+  fn${1} ->
+    ${3}
+  end
+
+snippet @moduledoc
+abbr    @moduledoc
+options word
+  @moduledoc """
+  ${1}
+  """
+
+snippet @doc
+abbr    @doc
+options word
+  @doc """
+  ${1}
+  """
+
+snippet require
+abbr    require module_name, as: :alias
+options word
+  require ${1:module_name}, as: ${2:alias}
+
+snippet receive
+abbr    receive do match:... end
+options word
+  receive do
+  match: ${1}
+    ${2}
+  end
+
+snippet case
+abbr    case ... do match: ... end
+options word
+  case ${1} do
+  match: ${2}
+    ${3}
+  end
+
+snippet try
+abbr    try do ... catch ... end
+options word
+  try do
+  catch: ${1}
+    ${2}
+  end
+
+snippet if
+abbr    if ... do ... end
+options word
+  if ${1} do
+    ${2}
+  end
+
+snippet ife
+abbr    if ... do ... else ... end
+options word
+  if ${1:condition} do
+    ${2}
+  else:
+    ${3}
+  end
+
+snippet ifedo
+abbr    if ... do: ... else ... end
+options word
+  if ${1:condition}, do: ${2}, else: ${3}
+
+snippet ifdo
+abbr    if ..., do: ...
+options word
+  if ${1:condition}, do: ${2}
+
+# Test
+snippet start
+abbr    ExUnit.start
+regexp  '^ExUnit\.'
+options word
+  ExUnit.start
+
+snippet ExUnit.Case
+abbr    use ExUnit.start
+regexp  '^use\s'
+options word
+  use ExUnit.Case
+
+snippet test
+abbr    test "..." do ... end
+options word
+  test "${1}" do
+    ${2}
+  end
+
+snippet assert
+abbr    assert ...
+options word
+  assert ${1}
+
+
+###
+
+snippet benchmark
+abbr    {microsec, reversed} = :timer.tc fn -> ... end
+options word
+  {microsec, ${1}} = :timer.tc fn ->
+    ${2}
+  end

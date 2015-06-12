@@ -34,6 +34,14 @@ options head
     ${1}
   end
 
+snippet prepend_before
+alias   pbef
+abbr    prepend_before do ... end
+options head
+  prepend_before do
+    ${1}
+  end
+
 snippet beforea
 abbr    before(:all) do ... end
 alias   befa
