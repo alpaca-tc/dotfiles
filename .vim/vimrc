@@ -1575,21 +1575,13 @@ endfunction "}}}
 unlet hooks
 
 " ------------------------------------
-function! s:edit_memolist() "{{{
-  execute 'Unite file:' .  g:my.dir.memolist
-endfunction"}}}
-nnoremap <silent><Space>mn :MemoNew<CR>
-nnoremap <silent><Space>ml :call <SID>edit_memolist()<CR>
-
-let hooks = neobundle#get_hooks('memolist.vim')
-function! hooks.on_source(bundle) "{{{
-  let g:memolist_path              = g:my.dir.memolist
-  let g:memolist_template_dir_path = g:my.dir.trash
-  let g:memolist_memo_suffix       = 'md'
-  let g:memolist_memo_date         = '%D %T'
-  let g:memolist_vimfiler          = 1
-endfunction"}}}
-unlet hooks
+function! s:new_memolist()
+  let date = strftime('%Y-%m-%d')
+  let input = input('Filename: ', date . '-') . '.md'
+  tabnew `=input`
+endfunction
+nnoremap <silent><Space>mn :call <SID>new_memolist()<CR>
+nnoremap <silent><Space>ml :execute 'VimFilerExplorer ' . g:my.dir.memolist . ' -horizontal'<CR>
 
 " ------------------------------------
 " coffee-script

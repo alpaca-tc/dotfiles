@@ -60,7 +60,5 @@ module PryExtender
   end
 end
 
-# if Pry::VERSION.to_f > 0.9
-  PryExtender.command_alias
-  PryExtender.extend_prompt
-# end
+PryExtender.command_alias
+PryExtender.extend_prompt
