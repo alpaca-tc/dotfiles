@@ -141,6 +141,9 @@ SAVEHIST=10000
 # 登録済コマンド行は古い方を削除
 setopt hist_ignore_all_dups
 
+# historyを上書きしない
+setopt append_history
+
 # historyの共有
 setopt share_history
 
