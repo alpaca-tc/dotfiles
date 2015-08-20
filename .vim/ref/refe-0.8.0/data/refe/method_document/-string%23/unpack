@@ -1,7 +1,0 @@
---- unpack(template)
-
-    パックされた (おそらくは Array#pack [Array/pack] で生成された) 
-    文字列を template 文字列にしたがってアンパックし、それらの要
-    素を含む配列を返します。template 文字列のフォーマットについ
-    てはpackテンプレート文字列を参照してください。
-

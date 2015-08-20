@@ -1,8 +1,0 @@
-: new( name, addrs ) -> TMail::AddressGroup
-    name: String
-    addrs: [TMail::Address/TMail::AddressGroup]
-
-    新しい TMail::AddressGroup オブジェクトを作成します。
-    name はグループ名を示す文字列、addrs は TMail::Address または
-    TMail::AddressGroup の配列でなければいけません。
-

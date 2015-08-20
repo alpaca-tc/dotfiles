@@ -1,7 +1,0 @@
-string.c:1196
-static VALUE
-rb_str_upto_m(beg, end)
-    VALUE beg, end;
-{
-    return rb_str_upto(beg, end, Qfalse);
-}

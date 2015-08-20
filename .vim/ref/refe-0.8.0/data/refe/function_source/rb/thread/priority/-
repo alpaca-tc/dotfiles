@@ -1,7 +1,0 @@
-eval.c:9220
-static VALUE
-rb_thread_priority(thread)
-    VALUE thread;
-{
-    return INT2NUM(rb_thread_check(thread)->priority);
-}

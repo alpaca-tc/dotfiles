@@ -1,6 +1,0 @@
-kind=defined
-names=encode_name_end
-visibility=public
-
---- encode_name_end(ns, data)
-

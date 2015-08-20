@@ -1,2 +1,0 @@
-: struct RHash *RHASH(VALUE obj)
-

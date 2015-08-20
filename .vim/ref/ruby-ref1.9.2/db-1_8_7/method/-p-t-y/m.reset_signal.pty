@@ -1,8 +1,0 @@
-kind=defined
-names=reset_signal
-visibility=public
-
---- reset_signal -> self
-このメソッドは何もしません。
-このメソッドは obsolete です。
-

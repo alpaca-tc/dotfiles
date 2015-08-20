@@ -1,5 +1,0 @@
---- Matrix.columns(columns)
-    creates a new matrix using `columns` as set of colums vectors.
-
-    columnsを列ベクトルの集合とする行列を生成する。
-

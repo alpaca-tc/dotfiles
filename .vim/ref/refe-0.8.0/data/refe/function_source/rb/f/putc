@@ -1,7 +1,0 @@
-io.c:2644
-static VALUE
-rb_f_putc(recv, ch)
-    VALUE recv, ch;
-{
-    return rb_io_putc(rb_stdout, ch);
-}

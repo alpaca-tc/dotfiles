@@ -1,8 +1,0 @@
-math.c:286
-static VALUE
-math_erfc(obj, x)
-    VALUE obj, x;
-{
-    Need_Float(x);
-    return rb_float_new(erfc(RFLOAT(x)->value));
-}

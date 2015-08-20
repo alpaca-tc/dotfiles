@@ -1,7 +1,0 @@
---- truncate
-
-    小数点以下を切捨てます。
-
-    round, to_i, ceil,
-    floor も参照。
-

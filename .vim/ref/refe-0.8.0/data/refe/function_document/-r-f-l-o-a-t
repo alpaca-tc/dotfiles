@@ -1,2 +1,0 @@
-: struct RFloat *RFLOAT(VALUE obj)
-

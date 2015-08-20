@@ -1,9 +1,0 @@
-object.c:322
-VALUE
-rb_obj_tainted(obj)
-    VALUE obj;
-{
-    if (OBJ_TAINTED(obj))
-	return Qtrue;
-    return Qfalse;
-}

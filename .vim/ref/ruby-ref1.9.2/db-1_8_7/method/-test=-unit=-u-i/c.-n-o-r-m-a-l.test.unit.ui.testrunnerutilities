@@ -1,8 +1,0 @@
-kind=defined
-names=NORMAL
-visibility=public
-
---- NORMAL        -> Integer
-
-テスト結果の出力レベルを表す定数です。一般的な出力を行います。
-

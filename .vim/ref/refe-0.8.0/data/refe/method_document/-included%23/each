@@ -1,6 +1,0 @@
---- each { |o| ... }
-#    Calls the given block once for each element in the set, passing
-#    the element as parameter.
-    集合のすべての要素に対して1度ずつブロックを実行します。
-    ブロック変数 o にはその要素が渡されます。
-

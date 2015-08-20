@@ -1,8 +1,0 @@
---- re_exchangeable?
-
-    実/実効 ID の交換可否。
-
-    実ユーザ ID と実効ユーザ ID との入れ換えが可能な環境かどうか
-    (Process::UID.re_exchange が実装されているか) を真偽値で返す．
-    入れ換え可能なら true を返す．
-

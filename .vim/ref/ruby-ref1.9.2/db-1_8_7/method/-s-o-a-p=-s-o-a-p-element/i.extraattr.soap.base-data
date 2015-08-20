@@ -1,7 +1,0 @@
-kind=defined
-names=extraattr,extraattr=
-visibility=public
-
---- extraattr
---- extraattr=(value)
-

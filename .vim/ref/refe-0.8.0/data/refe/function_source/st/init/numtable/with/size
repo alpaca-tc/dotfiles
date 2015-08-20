@@ -1,7 +1,0 @@
-st.c:189
-st_table*
-st_init_numtable_with_size(size)
-    int size;
-{
-    return st_init_table_with_size(&type_numhash, size);
-}

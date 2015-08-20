@@ -1,8 +1,0 @@
-math.c:278
-static VALUE
-math_erf(obj, x)
-    VALUE obj, x;
-{
-    Need_Float(x);
-    return rb_float_new(erf(RFLOAT(x)->value));
-}

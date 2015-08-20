@@ -1,7 +1,0 @@
-superclass=Struct
-type=class
-library=net.imap
-extended=
-included=
-
-STATUS 応答を表わすクラスです。

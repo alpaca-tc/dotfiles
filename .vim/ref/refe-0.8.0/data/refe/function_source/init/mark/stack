@@ -1,7 +1,0 @@
-gc.c:448
-static void
-init_mark_stack()
-{
-    mark_stack_overflow = 0;
-    mark_stack_ptr = mark_stack;
-}

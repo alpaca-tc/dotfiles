@@ -1,7 +1,0 @@
-numeric.c:270
-static VALUE
-num_to_int(num)
-    VALUE num;
-{
-    return rb_funcall(num, id_to_i, 0, 0);
-}

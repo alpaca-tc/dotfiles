@@ -1,7 +1,0 @@
-kind=defined
-names=make_affine!
-visibility=public
-
---- make_affine! -> self
-@raise OpenSSL::PKey::EC::Point::Error エラーが生じた場合に発生します
-

@@ -1,4 +1,0 @@
---- File.readable?(path)
-
-    FileTest.readable? と同じです。
-

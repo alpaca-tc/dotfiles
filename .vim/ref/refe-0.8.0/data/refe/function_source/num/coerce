@@ -1,9 +1,0 @@
-numeric.c:77
-static VALUE
-num_coerce(x, y)
-    VALUE x, y;
-{
-    if (CLASS_OF(x) == CLASS_OF(y))
-	return rb_assoc_new(y, x);
-    return rb_assoc_new(rb_Float(y), rb_Float(x));
-}

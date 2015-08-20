@@ -1,4 +1,0 @@
---- Sync_m#sync_exclusive?
---- Sync_m#exclusive?
-      排他ロックされているかどうかを返す。
-

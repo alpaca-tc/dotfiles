@@ -1,3 +1,0 @@
-: VALUE rb_ary_includes(ary, item)
-    ary.include? item
-

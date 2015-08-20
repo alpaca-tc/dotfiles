@@ -1,2 +1,0 @@
-: static VALUE get_backtrace(VALUE info)
-

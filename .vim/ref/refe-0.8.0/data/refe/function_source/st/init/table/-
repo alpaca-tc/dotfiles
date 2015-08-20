@@ -1,7 +1,0 @@
-st.c:176
-st_table*
-st_init_table(type)
-    struct st_hash_type *type;
-{
-    return st_init_table_with_size(type, 0);
-}

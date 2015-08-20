@@ -1,6 +1,0 @@
-kind=defined
-names=finalize_all_dependency
-visibility=public
-
---- finalize_all_dependency(id, dependant)
-

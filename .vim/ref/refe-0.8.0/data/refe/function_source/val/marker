@@ -1,7 +1,0 @@
-variable.c:396
-static void
-val_marker(data)
-    VALUE data;
-{
-    if (data) rb_gc_mark_maybe(data);
-}

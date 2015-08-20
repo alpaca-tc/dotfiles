@@ -1,9 +1,0 @@
---- Net::FTP#list(*args, &block)
---- Net::FTP#ls(*args, &block)
---- Net::FTP#dir(*args, &block)
-
-    LISTコマンドを送信し、結果を返します。 
-
-    ブロックとともに呼び出された場合は各行に対してブロックを
-    実行します。
-

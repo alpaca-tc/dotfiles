@@ -1,7 +1,0 @@
-superclass=XSD=XSDNonPositiveInteger
-type=class
-library=xsd.datatypes
-extended=
-included=
-
-

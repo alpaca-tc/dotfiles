@@ -1,6 +1,0 @@
-eval.c:1332
-void
-ruby_finalize()
-{
-    ruby_finalize_0(EXIT_SUCCESS);
-}

@@ -1,3 +1,0 @@
---- OptionParser::Switch::NoArgument#parse
-    Raises an exception if any arguments given.
-

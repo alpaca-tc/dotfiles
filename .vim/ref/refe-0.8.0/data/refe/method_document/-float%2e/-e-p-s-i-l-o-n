@@ -1,4 +1,0 @@
---- EPSILON
-
-    1.0 + Float::EPSILON != 1.0 となる最小の値
-

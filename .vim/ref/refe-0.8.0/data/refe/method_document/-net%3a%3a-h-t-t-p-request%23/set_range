@@ -1,5 +1,0 @@
-: range = r
-: set_range( i, len )
-    範囲を指定してエンティティを取得するためのヘッダ Range: をセットします。
-    r は Range オブジェクト、i, len は始点と長さです。
-

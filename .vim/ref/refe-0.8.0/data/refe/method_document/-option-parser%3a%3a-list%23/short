@@ -1,3 +1,0 @@
---- OptionParser::List#short
-    Map from short style option switches to actual switch objects.
-

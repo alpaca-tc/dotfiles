@@ -1,9 +1,0 @@
-enum.c:149
-static VALUE
-collect_all(i, ary)
-    VALUE i, ary;
-{
-    rb_ary_push(ary, i);
-    
-    return Qnil;
-}

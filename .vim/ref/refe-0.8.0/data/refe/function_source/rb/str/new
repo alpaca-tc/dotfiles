@@ -1,8 +1,0 @@
-string.c:78
-VALUE
-rb_str_new(ptr, len)
-    const char *ptr;
-    long len;
-{
-    return str_new(rb_cString, ptr, len);
-}

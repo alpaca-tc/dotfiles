@@ -1,9 +1,0 @@
-dir.c:895
-static void
-push_globs(ary, s, flags)
-    VALUE ary;
-    char *s;
-    int flags;
-{
-    rb_glob2(s, flags, push_pattern, ary);
-}

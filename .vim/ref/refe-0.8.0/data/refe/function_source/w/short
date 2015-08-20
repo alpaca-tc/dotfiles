@@ -1,9 +1,0 @@
-marshal.c:133
-static void
-w_short(x, arg)
-    int x;
-    struct dump_arg *arg;
-{
-    w_byte((x >> 0) & 0xff, arg);
-    w_byte((x >> 8) & 0xff, arg);
-}

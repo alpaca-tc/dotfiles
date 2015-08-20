@@ -1,8 +1,0 @@
-kind=defined
-names=NOINTERN
-visibility=public
-
---- NOINTERN -> Integer
-Request/Response の署名データに含まれている証明書から
-署名者の証明書を「探さない」ことを意味します。
-

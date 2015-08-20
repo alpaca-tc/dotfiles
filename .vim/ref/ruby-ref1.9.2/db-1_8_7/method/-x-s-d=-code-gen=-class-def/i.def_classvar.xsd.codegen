@@ -1,6 +1,0 @@
-kind=defined
-names=def_classvar
-visibility=public
-
---- def_classvar(var, value)
-

@@ -1,7 +1,0 @@
---- symbol(sym[, typespec])
-
-    シンボル名がsymのシンボルを取り出す。
-    typespecには型情報を与え、DL::Symbolオブジェクトを返す。
-    typespecが省略された場合、シンボルへの参照をDL::DataPtrオブジェクト
-    として返す。
-

@@ -1,9 +1,0 @@
-string.c:316
-static VALUE
-rb_str_empty(str)
-    VALUE str;
-{
-    if (RSTRING(str)->len == 0)
-	return Qtrue;
-    return Qfalse;
-}

@@ -1,4 +1,0 @@
---- Net::FTP#chdir(dirname)
-
-    カレントディレクトリをdirnameに変更します。
-

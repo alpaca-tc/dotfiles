@@ -1,2 +1,0 @@
-: static VALUE nil_plus(VALUE x, VALUE y)
-

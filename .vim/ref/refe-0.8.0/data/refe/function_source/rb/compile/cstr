@@ -1,8 +1,0 @@
-parse.y:2605
-NODE*
-rb_compile_cstr(f, s, len, line)
-    const char *f, *s;
-    int len, line;
-{
-    return rb_compile_string(f, rb_str_new(s, len), line);
-}

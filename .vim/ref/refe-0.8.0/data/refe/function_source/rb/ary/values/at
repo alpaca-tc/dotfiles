@@ -1,9 +1,0 @@
-array.c:1255
-static VALUE
-rb_ary_values_at(argc, argv, ary)
-    int argc;
-    VALUE *argv;
-    VALUE ary;
-{
-    return rb_values_at(ary, RARRAY(ary)->len, argc, argv, rb_ary_entry);
-}

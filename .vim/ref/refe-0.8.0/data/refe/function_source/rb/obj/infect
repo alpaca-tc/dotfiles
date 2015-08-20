@@ -1,7 +1,0 @@
-object.c:359
-void
-rb_obj_infect(obj1, obj2)
-    VALUE obj1, obj2;
-{
-    OBJ_INFECT(obj1, obj2);
-}

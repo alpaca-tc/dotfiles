@@ -1,7 +1,0 @@
---- + enum
---- | enum
-#    Returns a new set built by merging the set and the elements of the
-#    given enumerable object.
-    和集合、すなわち、2つの集合の少なくともどちらか一方に属するすべて
-    の要素からなる新しい集合を作りそれを返します。
-

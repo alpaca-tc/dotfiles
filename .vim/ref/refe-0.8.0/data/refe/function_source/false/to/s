@@ -1,7 +1,0 @@
-object.c:479
-static VALUE
-false_to_s(obj)
-    VALUE obj;
-{
-    return rb_str_new2("false");
-}

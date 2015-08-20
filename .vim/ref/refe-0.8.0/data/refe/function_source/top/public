@@ -1,8 +1,0 @@
-eval.c:6222
-static VALUE
-top_public(argc, argv)
-    int argc;
-    VALUE *argv;
-{
-    return rb_mod_public(argc, argv, rb_cObject);
-}

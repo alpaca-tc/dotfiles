@@ -1,6 +1,0 @@
-kind=defined
-names=set_attributes
-visibility=public
-
---- set_attributes(obj, values)
-

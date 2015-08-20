@@ -1,7 +1,0 @@
-numeric.c:850
-static VALUE
-num_floor(num)
-    VALUE num;
-{
-    return flo_floor(rb_Float(num));
-}

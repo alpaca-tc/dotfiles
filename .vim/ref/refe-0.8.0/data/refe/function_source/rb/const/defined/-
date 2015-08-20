@@ -1,8 +1,0 @@
-variable.c:1469
-int
-rb_const_defined(klass, id)
-    VALUE klass;
-    ID id;
-{
-    return rb_const_defined_0(klass, id, Qfalse, Qtrue);
-}

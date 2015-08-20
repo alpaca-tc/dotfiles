@@ -1,8 +1,0 @@
-superclass=Object
-type=class
-library=cgi=2dlib
-extended=
-included=
-
-このライブラリは obsolete です。
-[[lib:cgi]] ライブラリを使ってください。

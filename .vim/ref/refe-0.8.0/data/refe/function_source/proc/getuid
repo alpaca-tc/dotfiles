@@ -1,8 +1,0 @@
-process.c:1322
-static VALUE
-proc_getuid(obj)
-    VALUE obj;
-{
-    int uid = getuid();
-    return INT2FIX(uid);
-}

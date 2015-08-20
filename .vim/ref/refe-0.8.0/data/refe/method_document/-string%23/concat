@@ -1,9 +1,0 @@
---- self << other
---- concat(other)
-
-    文字列 other の内容を self に連結します。
-    other が 0 から 255 の範囲の Fixnum である場合は
-    その 1 バイトを末尾に追加します。
-
-    self を返します。
-

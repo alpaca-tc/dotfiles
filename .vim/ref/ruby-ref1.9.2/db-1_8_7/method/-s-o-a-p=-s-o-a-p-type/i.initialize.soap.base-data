@@ -1,6 +1,0 @@
-kind=defined
-names=initialize
-visibility=public
-
---- initialize(*args)
-

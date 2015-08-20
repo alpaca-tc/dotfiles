@@ -1,5 +1,0 @@
-: getacl(mailbox)
-      Send the GETACL command along with specified mailbox.
-      If this mailbox exists, an array containing objects of
-      imap.rb"/Net::IMAP::MailboxACLItem will be returned.
-

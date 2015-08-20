@@ -1,8 +1,0 @@
---- FileUtils.cmp( file_a, file_b, *options )
-  Options: verbose
-
-  ファイル a と b の内容が同じなら真。
-
-    FileUtils.cmp 'somefile', 'somefile'  #=> true
-    FileUtils.cmp '/bin/cp', '/bin/mv'    #=> maybe false.
-

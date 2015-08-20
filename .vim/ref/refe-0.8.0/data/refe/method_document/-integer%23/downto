@@ -1,7 +1,0 @@
---- downto(min) {|n| ... }
-
-    self から min まで 1 ずつ減らしながら繰り返します。
-    self < min であれば何もしません。
-
-    upto, step, times も参照。
-

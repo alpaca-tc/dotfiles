@@ -1,5 +1,0 @@
---- Process.fork
---- Process.fork { ... }
-
-    関数 fork と同じです。
-

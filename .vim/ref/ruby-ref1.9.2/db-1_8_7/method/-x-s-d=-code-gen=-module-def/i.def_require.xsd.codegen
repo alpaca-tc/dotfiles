@@ -1,6 +1,0 @@
-kind=defined
-names=def_require
-visibility=public
-
---- def_require(path)
-

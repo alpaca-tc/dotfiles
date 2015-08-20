@@ -1,7 +1,0 @@
-methods=
-sublibraries=
-requires=
-classes=Test=Unit=TestSuite
-is_sublibrary=true
-
-複数のテストをひとつにまとめるためのライブラリです。

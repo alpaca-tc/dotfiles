@@ -1,7 +1,0 @@
-kind=defined
-names=client_thread=
-visibility=public
-
---- client_thread=(th)
-このメソッドは obsolete です。使わないでください。
-

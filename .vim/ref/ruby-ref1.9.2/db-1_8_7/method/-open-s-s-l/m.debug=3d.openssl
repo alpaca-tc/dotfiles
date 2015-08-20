@@ -1,9 +1,0 @@
-kind=defined
-names=debug=
-visibility=public
-
---- debug=(b)
-デバッグモードを on/off します。
-
-@see [[m:OpenSSL.#debug]]
-

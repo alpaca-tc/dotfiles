@@ -1,6 +1,0 @@
-kind=defined
-names=element_qualified?
-visibility=public
-
---- element_qualified?(element)
-

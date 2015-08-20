@@ -1,5 +1,0 @@
---- Matrix.scalar(n, value)
-    creates a diagonal matrix such that the diagal compornents is given by `values'.
-
-    対角要素が全てvalue (数)で、非対角要素が全て0であるようなn次の正方行列を生成する。
-

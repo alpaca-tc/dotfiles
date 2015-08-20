@@ -1,9 +1,0 @@
-hash.c:640
-static enum st_retval
-each_key_i(key, value)
-    VALUE key, value;
-{
-    if (key == Qundef) return ST_CONTINUE;
-    rb_yield(key);
-    return ST_CONTINUE;
-}

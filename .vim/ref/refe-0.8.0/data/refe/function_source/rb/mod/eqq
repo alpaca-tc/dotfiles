@@ -1,7 +1,0 @@
-object.c:588
-static VALUE
-rb_mod_eqq(mod, arg)
-    VALUE mod, arg;
-{
-    return rb_obj_is_kind_of(arg, mod);
-}

@@ -1,7 +1,0 @@
---- Vector.elements(a, copy = true)
-    Creates a vector object, populated by elements of `a'.
-    A new object is created if `copy' is false.
-    
-    配列aを要素とするベクトルを生成する。
-    ただし、オプション引数copyが偽(false)ならば、複製を行わない。
-

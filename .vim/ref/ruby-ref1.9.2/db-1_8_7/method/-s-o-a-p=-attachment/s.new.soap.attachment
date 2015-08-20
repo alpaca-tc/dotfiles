@@ -1,6 +1,0 @@
-kind=defined
-names=new
-visibility=public
-
---- new(string_or_readable = nil)
-

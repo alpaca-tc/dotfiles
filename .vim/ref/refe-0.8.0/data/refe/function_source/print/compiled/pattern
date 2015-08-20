@@ -1,9 +1,0 @@
-regex.c:998
-static void
-print_compiled_pattern(bufp)
-     struct re_pattern_buffer *bufp;
-{
-  unsigned char *buffer = (unsigned char*)bufp->buffer;
-
-  print_partial_compiled_pattern(buffer, buffer + bufp->used);
-}

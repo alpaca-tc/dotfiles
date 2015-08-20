@@ -1,6 +1,0 @@
-array.c:132
-VALUE
-rb_ary_new()
-{
-    return rb_ary_new2(ARY_DEFAULT_SIZE);
-}

@@ -1,6 +1,0 @@
-: parse( str ) -> TMail::Mail
-    str: String
-
-    文字列 str をパースして TMail::Mail オブジェクトを作成します。
-    str はメール一通分でなければいけません。
-

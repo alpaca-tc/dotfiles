@@ -1,9 +1,0 @@
-kind=added
-names=ssl,ssl?
-visibility=public
-
---- ssl -> bool
---- ssl? -> bool
-SSL への移行に成功した場合に真を返します。
-
-

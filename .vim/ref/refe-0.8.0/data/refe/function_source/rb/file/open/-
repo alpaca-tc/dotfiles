@@ -1,7 +1,0 @@
-io.c:1893
-VALUE
-rb_file_open(fname, mode)
-    const char *fname, *mode;
-{
-    return rb_file_open_internal(io_alloc(rb_cFile), fname, mode);
-}

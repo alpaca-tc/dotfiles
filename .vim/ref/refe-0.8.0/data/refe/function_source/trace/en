@@ -1,9 +1,0 @@
-variable.c:649
-static VALUE
-trace_en(var)
-    struct global_variable *var;
-{
-    var->block_trace = 0;
-    remove_trace(var);
-    return Qnil;		/* not reached */
-}

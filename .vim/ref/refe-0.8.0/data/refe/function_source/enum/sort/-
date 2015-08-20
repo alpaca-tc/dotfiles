@@ -1,7 +1,0 @@
-enum.c:241
-static VALUE
-enum_sort(obj)
-    VALUE obj;
-{
-    return rb_ary_sort(enum_to_a(obj));
-}

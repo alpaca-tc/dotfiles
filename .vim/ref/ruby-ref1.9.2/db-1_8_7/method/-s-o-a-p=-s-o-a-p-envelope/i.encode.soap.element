@@ -1,6 +1,0 @@
-kind=defined
-names=encode
-visibility=public
-
---- encode(generator, ns, attrs = {})
-

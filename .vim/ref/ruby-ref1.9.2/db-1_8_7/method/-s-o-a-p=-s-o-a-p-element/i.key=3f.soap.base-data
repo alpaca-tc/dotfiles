@@ -1,6 +1,0 @@
-kind=defined
-names=key?
-visibility=public
-
---- key?(name)
-

@@ -1,4 +1,0 @@
---- OpenStruct#delete_field(name)
-      nameで指定された要素を削除。
-      その後その要素を参照したらnilが返る。
-

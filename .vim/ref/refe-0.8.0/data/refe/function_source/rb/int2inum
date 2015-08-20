@@ -1,8 +1,0 @@
-bignum.c:178
-VALUE
-rb_int2inum(n)
-    long n;
-{
-    if (FIXABLE(n)) return LONG2FIX(n);
-    return rb_int2big(n);
-}

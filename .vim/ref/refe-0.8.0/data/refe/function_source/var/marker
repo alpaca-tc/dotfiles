@@ -1,7 +1,0 @@
-variable.c:421
-static void
-var_marker(var)
-    VALUE *var;
-{
-    if (var) rb_gc_mark_maybe(*var);
-}

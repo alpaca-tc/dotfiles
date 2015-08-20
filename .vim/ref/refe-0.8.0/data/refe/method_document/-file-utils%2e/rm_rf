@@ -1,5 +1,0 @@
---- FileUtils.rm_rf( list, *options )
-  Options: noop verbose
-
-  same to rm_r(list,:force)
-

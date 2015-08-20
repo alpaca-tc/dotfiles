@@ -1,3 +1,0 @@
-: VALUE rb_define_module(const char *name)
-    モジュール name を作成し返します。
-

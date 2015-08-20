@@ -1,4 +1,0 @@
-: VALUE rb_Integer(VALUE obj)
-    obj が Ruby の整数でない場合は to_i を使って
-    Integer に変換します。
-

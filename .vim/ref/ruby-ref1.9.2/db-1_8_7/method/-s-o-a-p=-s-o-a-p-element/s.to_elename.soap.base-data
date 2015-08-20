@@ -1,6 +1,0 @@
-kind=defined
-names=to_elename
-visibility=public
-
---- to_elename(obj, namespace = nil)
-

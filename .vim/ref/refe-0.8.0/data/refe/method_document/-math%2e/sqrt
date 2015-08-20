@@ -1,8 +1,0 @@
---- Math.sqrt(x)
-
-    x の平方根を返します。x の値が負である時には例外 
-    ArgumentError が発生します。
-
-    ruby 1.7 feature: 普通、x が負の場合、例外 
-    Errno::EDOM [Errno::EXXX] が発生します。
-

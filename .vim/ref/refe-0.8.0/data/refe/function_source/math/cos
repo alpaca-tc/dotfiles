@@ -1,8 +1,0 @@
-math.c:33
-static VALUE
-math_cos(obj, x)
-    VALUE obj, x;
-{
-    Need_Float(x);
-    return rb_float_new(cos(RFLOAT(x)->value));
-}

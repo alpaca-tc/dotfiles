@@ -1,7 +1,0 @@
-hash.c:38
-VALUE
-rb_hash_freeze(hash)
-    VALUE hash;
-{
-    return rb_obj_freeze(hash);
-}

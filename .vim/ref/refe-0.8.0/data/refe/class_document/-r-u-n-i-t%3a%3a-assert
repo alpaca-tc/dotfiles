@@ -1,2 +1,0 @@
-標準配布の runit/assert.rb (など)は、RAA:RubyUnit の互換ライブラリ
-で、Test::Unit により実装されています。

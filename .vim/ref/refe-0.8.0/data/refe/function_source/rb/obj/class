@@ -1,7 +1,0 @@
-object.c:99
-VALUE
-rb_obj_class(obj)
-    VALUE obj;
-{
-    return rb_class_real(CLASS_OF(obj));
-}

@@ -1,4 +1,0 @@
---- File.directory?(path)
-
-    FileTest.directory? と同じです。
-

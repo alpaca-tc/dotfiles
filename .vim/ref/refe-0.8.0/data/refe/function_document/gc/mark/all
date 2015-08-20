@@ -1,2 +1,0 @@
-: static void gc_mark_all(void)
-

@@ -1,9 +1,0 @@
-re.c:164
-static void
-kcode_euc(re)
-    struct RRegexp *re;
-{
-    FL_UNSET(re, KCODE_MASK);
-    FL_SET(re, KCODE_EUC);
-    FL_SET(re, KCODE_FIXED);
-}

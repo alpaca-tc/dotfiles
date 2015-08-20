@@ -1,6 +1,0 @@
-: new( src = '' ) -> TMail::StringPort
-    src: String
-
-    StringPort オブジェクトを生成します。
-    string はメール一通分の文字列でなければいけません。
-

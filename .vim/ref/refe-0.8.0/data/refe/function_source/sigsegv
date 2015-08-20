@@ -1,8 +1,0 @@
-signal.c:414
-static RETSIGTYPE sigsegv _((int));
-static RETSIGTYPE
-sigsegv(sig)
-    int sig;
-{
-    rb_bug("Segmentation fault");
-}

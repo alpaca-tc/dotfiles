@@ -1,7 +1,0 @@
-hash.c:546
-static int
-clear_i(key, value, dummy)
-    VALUE key, value, dummy;
-{
-    return ST_DELETE;
-}

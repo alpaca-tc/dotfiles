@@ -1,7 +1,0 @@
-marshal.c:1309
-static VALUE
-r_object(arg)
-    struct load_arg *arg;
-{
-    return r_object0(arg, arg->proc, 0, Qnil);
-}

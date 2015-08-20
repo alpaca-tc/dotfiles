@@ -1,4 +1,0 @@
-: VALUE rb_String(VALUE val)
-    Kernel#String の実体。
-    val を文字列に変換します。
-

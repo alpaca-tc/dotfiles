@@ -1,9 +1,0 @@
-string.c:187
-VALUE
-rb_str_new5(obj, ptr, len)
-    VALUE obj;
-    const char *ptr;
-    long len;
-{
-    return str_new(rb_obj_class(obj), ptr, len);
-}

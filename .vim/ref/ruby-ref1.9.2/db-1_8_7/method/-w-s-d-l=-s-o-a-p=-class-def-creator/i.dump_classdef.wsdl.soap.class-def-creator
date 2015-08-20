@@ -1,6 +1,0 @@
-kind=defined
-names=dump_classdef
-visibility=private 
-
---- dump_classdef(qname, typedef, qualified = false)
-

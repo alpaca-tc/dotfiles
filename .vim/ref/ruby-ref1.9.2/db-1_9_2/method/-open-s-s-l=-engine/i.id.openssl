@@ -1,9 +1,0 @@
-kind=defined
-names=id
-visibility=public
-
---- id -> String
-engine の識別子を文字列で返します。
-
-@see [[m:OpenSSL::Engine#name]]
-

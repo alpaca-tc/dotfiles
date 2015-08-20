@@ -1,2 +1,0 @@
-: struct RRegexp *RREGEXP(VALUE obj)
-

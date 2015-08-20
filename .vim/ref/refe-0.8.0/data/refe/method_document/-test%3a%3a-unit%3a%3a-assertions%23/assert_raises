@@ -1,5 +1,0 @@
---- assert_raises(expected_exception_klass, message="") { ... }
-
-    block を実行した結果 expected_exception_klass クラスの例外が
-    発生したら pass
-

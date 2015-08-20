@@ -1,8 +1,0 @@
-error.c:729
-void
-rb_notimplement()
-{
-    rb_raise(rb_eNotImpError,
-	     "The %s() function is unimplemented on this machine",
-	     rb_id2name(ruby_frame->last_func));
-}

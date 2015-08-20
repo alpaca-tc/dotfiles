@@ -1,4 +1,0 @@
-: VALUE rb_sym_all_symbols(void) 
-    呼び出し時までに変換が行われたすべてのシンボルの
-    配列を返す。
-

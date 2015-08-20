@@ -1,7 +1,0 @@
-re.c:1032
-static VALUE
-match_string(match)
-    VALUE match;
-{
-    return RMATCH(match)->str;	/* str is frozen */
-}

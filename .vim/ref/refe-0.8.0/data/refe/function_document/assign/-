@@ -1,4 +1,0 @@
-: static void assign(VALUE self, NODE *lhs, VALUE val, int pcall)
-    左辺を表す構文木 lhs に対し、右辺の値 val を代入します。
-    Proc オブジェクトを起動する場合は pcall を非ゼロとします。
-

@@ -1,7 +1,0 @@
-string.c:541
-VALUE
-rb_str_freeze(str)
-    VALUE str;
-{
-    return rb_obj_freeze(str);
-}

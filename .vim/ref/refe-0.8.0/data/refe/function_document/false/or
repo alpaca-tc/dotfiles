@@ -1,2 +1,0 @@
-: static VALUE false_or(VALUE obj, VALUE obj2)
-

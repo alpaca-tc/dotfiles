@@ -1,3 +1,0 @@
---- bind(host, port)
-    ソケットをhostのportに結合します。
-

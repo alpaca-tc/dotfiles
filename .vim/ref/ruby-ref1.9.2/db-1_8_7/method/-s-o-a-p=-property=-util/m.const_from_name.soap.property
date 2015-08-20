@@ -1,6 +1,0 @@
-kind=defined
-names=const_from_name
-visibility=public
-
---- const_from_name(fqname)
-

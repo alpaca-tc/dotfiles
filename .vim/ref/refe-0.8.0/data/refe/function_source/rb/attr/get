@@ -1,8 +1,0 @@
-variable.c:974
-VALUE
-rb_attr_get(obj, id)
-    VALUE obj;
-    ID id;
-{
-    return ivar_get(obj, id, Qfalse);
-}

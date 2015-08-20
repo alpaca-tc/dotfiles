@@ -1,7 +1,0 @@
-eval.c:1380
-void
-ruby_stop(ex)
-    int ex;
-{
-    exit(ruby_cleanup(ex));
-}

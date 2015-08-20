@@ -1,7 +1,0 @@
-eval.c:5941
-void
-rb_provide(feature)
-    const char *feature;
-{
-    rb_provide_feature(rb_str_new2(feature));
-}

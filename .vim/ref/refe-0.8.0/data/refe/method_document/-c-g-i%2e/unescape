@@ -1,8 +1,0 @@
---- CGI.unescape(string)
-      URLエンコードされた文字列を元に戻す
-
-        例：
-        string = CGI::unescape("url encoded string")
-
-#=== ESCAPE HTML &\"<>
-

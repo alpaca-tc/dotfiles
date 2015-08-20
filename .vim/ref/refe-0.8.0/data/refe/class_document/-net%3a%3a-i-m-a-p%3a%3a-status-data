@@ -1,1 +1,0 @@
-Net::IMAP::StatusData represents contents of the STATUS response.

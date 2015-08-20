@@ -1,6 +1,0 @@
-kind=defined
-names=element_local?
-visibility=public
-
---- element_local?(element)
-

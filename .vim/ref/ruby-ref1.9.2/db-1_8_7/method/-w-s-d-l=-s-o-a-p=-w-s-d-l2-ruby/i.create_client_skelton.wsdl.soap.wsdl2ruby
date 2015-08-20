@@ -1,6 +1,0 @@
-kind=defined
-names=create_client_skelton
-visibility=private 
-
---- create_client_skelton(servicename)
-

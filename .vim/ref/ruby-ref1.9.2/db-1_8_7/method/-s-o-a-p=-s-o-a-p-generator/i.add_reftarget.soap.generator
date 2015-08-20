@@ -1,6 +1,0 @@
-kind=defined
-names=add_reftarget
-visibility=public
-
---- add_reftarget(name, node)
-

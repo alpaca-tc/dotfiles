@@ -1,7 +1,0 @@
-numeric.c:86
-static VALUE
-coerce_body(x)
-    VALUE *x;
-{
-    return rb_funcall(x[1], id_coerce, 1, x[0]);
-}

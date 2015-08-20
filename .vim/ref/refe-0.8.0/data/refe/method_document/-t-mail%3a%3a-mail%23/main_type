@@ -1,5 +1,0 @@
-: main_type( default = nil ) -> String
-    メール本体のメインタイプ (例："text")。
-    常に小文字に統一されます。
-    ヘッダが存在しない場合は default を返します。
-

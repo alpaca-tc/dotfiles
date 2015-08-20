@@ -1,9 +1,0 @@
-kind=defined
-names=serial
-visibility=public
-
---- serial -> OpenSSL::BN
-証明書の識別番号を返します。
-
-@see [[m:OpenSSL::X509::Certificate#serial]]
-

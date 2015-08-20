@@ -1,4 +1,0 @@
---- PStore#[]=(name, value)
-      ルートnameに対応する値valueをセットする。
-      Hash#[]=に相当。
-

@@ -1,6 +1,0 @@
-kind=defined
-names=setiv2obj
-visibility=public
-
---- setiv2obj(obj, node, map)
-

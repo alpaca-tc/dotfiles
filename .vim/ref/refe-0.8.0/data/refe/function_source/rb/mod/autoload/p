@@ -1,7 +1,0 @@
-eval.c:6676
-static VALUE
-rb_mod_autoload_p(mod, sym)
-    VALUE mod, sym;
-{
-    return rb_autoload_p(mod, rb_to_id(sym));
-}

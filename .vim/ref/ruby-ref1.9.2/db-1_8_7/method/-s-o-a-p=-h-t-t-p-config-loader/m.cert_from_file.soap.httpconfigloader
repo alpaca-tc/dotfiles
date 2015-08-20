@@ -1,6 +1,0 @@
-kind=defined
-names=cert_from_file
-visibility=public
-
---- cert_from_file(filename)
-

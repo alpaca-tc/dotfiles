@@ -1,5 +1,0 @@
-: key?( name )
-    name: String
-
-    name ヘッダがあれば真。
-

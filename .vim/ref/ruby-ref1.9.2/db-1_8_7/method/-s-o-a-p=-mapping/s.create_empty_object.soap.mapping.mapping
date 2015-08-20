@@ -1,6 +1,0 @@
-kind=defined
-names=create_empty_object
-visibility=public
-
---- create_empty_object(klass)
-

@@ -1,6 +1,0 @@
---- delete(o)
-#    Deletes the given object from the set and returns the object.  If
-#    the object is not found, returns nil.
-    集合からオブジェクト o を削除し、その集合自身を返します。
-    ただし、集合に o が属していない場合は nil を返します。
-

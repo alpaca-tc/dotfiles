@@ -1,2 +1,0 @@
-: static void rb_backref_error(NODE *node)
-

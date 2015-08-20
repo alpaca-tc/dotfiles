@@ -1,7 +1,0 @@
-numeric.c:196
-static VALUE
-num_div(x, y)
-    VALUE x, y;
-{
-    return rb_Integer(rb_funcall(x, '/', 1, y));
-}

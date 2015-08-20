@@ -1,7 +1,0 @@
-eval.c:1528
-static VALUE
-localjump_reason(exc)
-    VALUE exc;
-{
-    return rb_iv_get(exc, "@reason");
-}

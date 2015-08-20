@@ -1,8 +1,0 @@
-gc.c:607
-void
-rb_mark_hash(tbl)
-    st_table *tbl;
-{
-    if (!tbl) return;
-    st_foreach(tbl, mark_keyvalue, 0);
-}

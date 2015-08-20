@@ -1,6 +1,0 @@
-: sender_addr( default = nil ) -> TMail::Address
-: sender_addr=( addr )
-    addr: TMail::Address
-
-    Sender: アドレス
-

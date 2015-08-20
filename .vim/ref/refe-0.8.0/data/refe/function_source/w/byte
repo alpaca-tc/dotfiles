@@ -1,8 +1,0 @@
-marshal.c:115
-static void
-w_byte(c, arg)
-    char c;
-    struct dump_arg *arg;
-{
-    w_nbyte(&c, 1, arg);
-}

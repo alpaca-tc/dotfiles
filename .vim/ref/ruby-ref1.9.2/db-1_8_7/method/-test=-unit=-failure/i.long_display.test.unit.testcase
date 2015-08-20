@@ -1,9 +1,0 @@
-kind=defined
-names=long_display,to_s
-visibility=public
-
---- long_display -> String
---- to_s -> String
-
-アサーションに失敗した時の詳細な説明を文字列で返します。
-

@@ -1,6 +1,0 @@
-: ==( other ) -> bool
-    other: Object
-
-    spec の同値判定によって self と other が等しいか判定します。
-    name や routes は影響しません。
-

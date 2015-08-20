@@ -1,8 +1,0 @@
-range.c:277
-static VALUE
-each_i(v, arg)
-    VALUE v;
-    void *arg;
-{
-    return rb_yield(v);
-}

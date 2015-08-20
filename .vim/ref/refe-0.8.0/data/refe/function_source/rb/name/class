@@ -1,8 +1,0 @@
-variable.c:269
-void
-rb_name_class(klass, id)
-    VALUE klass;
-    ID id;
-{
-    rb_iv_set(klass, "__classid__", ID2SYM(id));
-}

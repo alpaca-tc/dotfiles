@@ -1,7 +1,0 @@
---- OptionParser.terminate([arg])
-    Terminates option parsing. Optional parameter arg would be
-    pushed back if given.
-    :Parameters:
-      : arg
-        string pushed back to be first non-option argument
-

@@ -1,7 +1,0 @@
-error.c:445
-static VALUE
-exit_status(exc)
-    VALUE exc;
-{
-    return rb_attr_get(exc, rb_intern("status"));
-}

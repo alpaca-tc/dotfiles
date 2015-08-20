@@ -1,2 +1,0 @@
-: static void rb_provide_feature(VALUE feature)
-

@@ -1,5 +1,0 @@
---- Set::new(enum = nil)
-#    Creates a new set containing the elements of the given enumerable
-#    object.
-    引数 enum で与えられた Enumerable の要素からなるあたらしい集合を作ります。
-

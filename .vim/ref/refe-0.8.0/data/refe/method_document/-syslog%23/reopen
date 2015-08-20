@@ -1,4 +1,0 @@
-: reopen(ident=$0, options=LOG_PID|LOG_CONS, facility=LOG_USER)
-: open!(ident=$0, options=LOG_PID|LOG_CONS, facility=LOG_USER)
-   最初にcloseしてからopenと同様に開く。
-

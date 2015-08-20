@@ -1,7 +1,0 @@
-numeric.c:327
-static VALUE
-flo_coerce(x, y)
-    VALUE x, y;
-{
-    return rb_assoc_new(rb_Float(y), x);
-}

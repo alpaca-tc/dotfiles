@@ -1,8 +1,0 @@
---- Exception.new([error_message])
---- Exception.exception([error_message])
-
-    例外オブジェクトを生成して返します。引数としてエラーメッセージを表
-    す文字列を与えることができます。このメッセージは属性 
-    message の値になり、デフォルトの例外ハンドラで表示
-    されます。
-

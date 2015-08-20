@@ -1,7 +1,0 @@
-eval.c:1023
-static void
-set_backtrace(info, bt)
-    VALUE info, bt;
-{
-    rb_funcall(info, rb_intern("set_backtrace"), 1, bt);
-}

@@ -1,4 +1,0 @@
---- File.file?(path)
-
-    FileTest.file? と同じです。
-

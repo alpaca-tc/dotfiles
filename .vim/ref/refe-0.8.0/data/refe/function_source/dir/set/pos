@@ -1,8 +1,0 @@
-dir.c:397
-static VALUE
-dir_set_pos(dir, pos)
-    VALUE dir, pos;
-{
-    dir_seek(dir, pos);
-    return pos;
-}

@@ -1,6 +1,0 @@
-st.c:183
-st_table*
-st_init_numtable(void)
-{
-    return st_init_table(&type_numhash);
-}

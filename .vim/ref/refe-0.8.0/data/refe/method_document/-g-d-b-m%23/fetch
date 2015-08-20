@@ -1,4 +1,0 @@
-: fetch(key[,ifnone])
-: fetch(key) {|key| ... }
-    ハッシュと同じ
-

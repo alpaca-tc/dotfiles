@@ -1,7 +1,0 @@
-object.c:500
-static VALUE
-false_xor(obj, obj2)
-    VALUE obj, obj2;
-{
-    return RTEST(obj2)?Qtrue:Qfalse;
-}

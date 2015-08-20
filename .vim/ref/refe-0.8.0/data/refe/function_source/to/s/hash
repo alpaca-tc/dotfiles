@@ -1,7 +1,0 @@
-hash.c:750
-static VALUE
-to_s_hash(hash)
-    VALUE hash;
-{
-    return rb_ary_to_s(rb_hash_to_a(hash));
-}

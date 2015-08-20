@@ -1,7 +1,0 @@
-bignum.c:1764
-static VALUE
-rb_big_size(big)
-    VALUE big;
-{
-    return LONG2FIX(RBIGNUM(big)->len*SIZEOF_BDIGITS);
-}

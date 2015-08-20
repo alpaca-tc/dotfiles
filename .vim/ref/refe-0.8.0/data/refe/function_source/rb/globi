@@ -1,9 +1,0 @@
-dir.c:871
-void
-rb_globi(path, func, arg)
-    char *path;
-    void (*func) _((const char*, VALUE));
-    VALUE arg;
-{
-    rb_glob2(path, FNM_CASEFOLD, func, arg);
-}

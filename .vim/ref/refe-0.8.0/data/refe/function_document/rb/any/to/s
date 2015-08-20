@@ -1,2 +1,0 @@
-: VALUE rb_any_to_s(VALUE obj)
-

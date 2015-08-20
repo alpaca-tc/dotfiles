@@ -1,2 +1,0 @@
-: static VALUE var_getter(ID id, VALUE *var)
-

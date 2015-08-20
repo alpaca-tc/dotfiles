@@ -1,4 +1,0 @@
---- File.setuid?(path)
-
-    FileTest.setuid? と同じです。
-

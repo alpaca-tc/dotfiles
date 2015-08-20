@@ -1,3 +1,0 @@
-LDAP URI SCHEMA (described in RFC:2255)
-
-  ldap://<host>/<dn>[?<attrs>[?<scope>[?<filter>[?<extensions>]]]]

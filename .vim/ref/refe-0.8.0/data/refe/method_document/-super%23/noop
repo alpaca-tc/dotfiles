@@ -1,3 +1,0 @@
-: noop
-      Sends a NOOP command to the server. It does nothing.
-

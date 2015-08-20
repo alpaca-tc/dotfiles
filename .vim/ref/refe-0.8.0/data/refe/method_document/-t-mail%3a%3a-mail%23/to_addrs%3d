@@ -1,7 +1,0 @@
-: to_addrs( default = nil ) -> [TMail::Address/TMail::AddressGroup]
-: to_addrs=( addrs )
-    addrs: TMail::Address / [TMail::Address]
-    default: Object
-
-    To: アドレスの配列。
-

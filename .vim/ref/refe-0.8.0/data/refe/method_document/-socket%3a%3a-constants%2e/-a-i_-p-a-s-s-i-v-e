@@ -1,6 +1,0 @@
---- AI_PASSIVE
---- AI_CANONNAME
---- AI_NUMERICHOST
-
-    Socket.getaddrinfo ¤Î flags
-

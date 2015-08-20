@@ -1,8 +1,0 @@
---- div(other)
-
-    ruby 1.7 feature
-
-    self を other で割った整数の商を返します。
-
-        p 3.div(2) # => 1
-

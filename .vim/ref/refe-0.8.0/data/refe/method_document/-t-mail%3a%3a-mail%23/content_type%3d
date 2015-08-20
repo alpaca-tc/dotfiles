@@ -1,7 +1,0 @@
-: content_type=( ctype )
-    ctype: String
-
-    Content-Type のメインタイプ・サブタイプを main_sub からセット
-    します。main_sub は例えば "text/plain" のような形式でなければ
-    いけません。
-

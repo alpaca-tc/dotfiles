@@ -1,9 +1,0 @@
---- exception([error_message])
-
-    引数を指定しない場合は self を返します。そうでなければ、自身のコピー
-    を生成し、message 属性を error_message にし
-    て返します。
-
-    raise は、実質的に、例外オブジェクトの exception 
-    メソッドの呼び出しです。
-

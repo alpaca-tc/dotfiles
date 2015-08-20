@@ -1,9 +1,0 @@
-numeric.c:749
-static VALUE
-flo_is_nan_p(num)
-     VALUE num;
-{     
-    double value = RFLOAT(num)->value;
-
-    return isnan(value) ? Qtrue : Qfalse;
-}

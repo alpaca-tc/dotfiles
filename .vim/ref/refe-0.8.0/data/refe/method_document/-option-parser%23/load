@@ -1,8 +1,0 @@
---- OptionParser#load([filename])
-    Loads options from file named as filename. Does nothing when
-    the file is not present. Returns whether successfuly loaded.
-    :Parameters:
-      : filename
-        option file name.  defaulted to basename of the program without
-        suffix in a directory ((%~/.options%)).
-

@@ -1,6 +1,0 @@
-kind=defined
-names=fetch
-visibility=private 
-
---- fetch(location)
-

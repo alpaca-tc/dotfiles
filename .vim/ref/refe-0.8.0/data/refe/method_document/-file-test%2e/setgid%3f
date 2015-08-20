@@ -1,5 +1,0 @@
---- FileTest.setgid?(filename)
-
-    filename が setgid(2) [manual page] されている時に真を返
-    します。
-

@@ -1,6 +1,0 @@
-kind=defined
-names=dump_method
-visibility=private 
-
---- dump_method(operation, binding)
-

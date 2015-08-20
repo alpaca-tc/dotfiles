@@ -1,6 +1,0 @@
---- PP.sharing_detection
-#    returns the sharing detection flag as a boolean value.
-#    It is false by default.
-    共有検出フラグを boolean すなわち true か false で返します。
-    デフォルトは false です。
-

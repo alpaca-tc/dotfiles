@@ -1,2 +1,0 @@
-: void rb_load_protect(VALUE fname, int wrap, int *state)
-

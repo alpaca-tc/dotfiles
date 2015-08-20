@@ -1,6 +1,0 @@
---- Socket.gethostname
-    システムの標準のホスト名を取得します。
-    その他のホスト名などの情報は
-    Socket.gethostbyname(Socket.gethostname)
-    で取得できます。
-

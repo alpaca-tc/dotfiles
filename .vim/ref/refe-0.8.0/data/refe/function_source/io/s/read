@@ -1,7 +1,0 @@
-io.c:3704
-static VALUE
-io_s_read(arg)
-    struct foreach_arg *arg;
-{
-    return io_read(arg->argc, &arg->sep, arg->io);
-}

@@ -1,6 +1,0 @@
-kind=defined
-names=RTLD_GLOBAL
-visibility=public
-
---- RTLD_GLOBAL
-

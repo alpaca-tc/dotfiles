@@ -1,3 +1,0 @@
-: reject {|key, value| ... }
-    self.to_hash.reject [Hash] と同じです．ハッシュを返します．
-

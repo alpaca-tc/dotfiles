@@ -1,6 +1,0 @@
---- select { ... }
-
-    ruby 1.8 feature
-
-    self.to_a.select [Enumerable/select] { ... } と同じです。
-

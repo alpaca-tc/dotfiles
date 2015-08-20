@@ -1,8 +1,0 @@
---- TCPServer.new([host, ]service)
---- TCPServer.open([host, ]service)
-    新しいサーバー接続をオープンします。serviceは
-    /etc/services(またはNIS)に登録されているサービ
-    ス名かポート番号で指定します。hostを指定した時は
-    指定したホストに対しての接続だけを受け付けます。省略時は全てのホ
-    スト(インタフェース)への接続要求を受け付けることになります。
-

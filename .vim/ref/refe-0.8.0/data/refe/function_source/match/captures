@@ -1,7 +1,0 @@
-re.c:948
-static VALUE
-match_captures(match)
-    VALUE match;
-{
-    return match_array(match, 1);
-}

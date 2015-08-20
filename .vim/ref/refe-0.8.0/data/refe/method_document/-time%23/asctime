@@ -1,6 +1,0 @@
---- asctime
---- ctime
-
-    時刻を asctime(3) [manual page] の形式の文字列に変換します。た
-    だし、末尾の \n は含まれません。
-

@@ -1,7 +1,0 @@
-io.c:3914
-static VALUE
-argf_file()
-{
-    next_argv();
-    return current_file;
-}

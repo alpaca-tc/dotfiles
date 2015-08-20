@@ -1,5 +1,0 @@
-: VALUE rb_catch(const char *tag, VALUE (*proc)(), VALUE data)
-    catch の実体。
-
- void rb_check_safe_str(VALUE x)
-

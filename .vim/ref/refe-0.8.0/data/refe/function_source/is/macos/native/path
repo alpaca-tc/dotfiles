@@ -1,8 +1,0 @@
-file.c:2697
-static int
-is_macos_native_path(path)
-    const char *path;
-{
-    if (strchr(path, ':')) return 1;
-    return 0;
-}

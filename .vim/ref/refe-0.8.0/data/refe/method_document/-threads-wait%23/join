@@ -1,3 +1,0 @@
---- ThreadsWait#join(thread1,...) 
-    wait for specified thread(s).
-

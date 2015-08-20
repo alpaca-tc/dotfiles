@@ -1,4 +1,0 @@
---- FileTest.directory?(filename)
-
-    filename がディレクトリの時、真を返します。
-

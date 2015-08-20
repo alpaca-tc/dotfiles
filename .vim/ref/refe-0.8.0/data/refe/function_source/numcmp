@@ -1,7 +1,0 @@
-st.c:554
-static int
-numcmp(x, y)
-    long x, y;
-{
-    return x != y;
-}

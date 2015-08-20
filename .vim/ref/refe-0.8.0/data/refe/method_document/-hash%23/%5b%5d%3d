@@ -1,6 +1,0 @@
---- self[key]=value
---- store(key,value)
-
-    key に対して value を関連づけます。value を返し
-    ます。
-

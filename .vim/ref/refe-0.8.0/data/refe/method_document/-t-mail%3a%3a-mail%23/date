@@ -1,8 +1,0 @@
-: date( default = nil ) -> Time
-: date=( datetime )
-    datetime: Time
-    default: Object
-
-    Date: ヘッダに対応する Time オブジェクト。
-    常にローカルタイムに変換されます。
-

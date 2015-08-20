@@ -1,6 +1,0 @@
---- Vector#collect {|x| ... }
---- Vector#map {|x| ... }
-    returns a new vector with the results of running block once for every elements.
-
-    ベクトルの各要素に対してブロックを評価した結果を、要素として持つベクトルを生成する。
-

@@ -1,6 +1,0 @@
---- respond_to?(name[, priv=false])
-
-    オブジェクトが public メソッド name を持つとき真。
-    nameは Symbol または文字列です。priv が
-    真のときは private メソッドに対しても真を返します。
-

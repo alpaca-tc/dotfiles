@@ -1,6 +1,0 @@
-eval.c:9146
-static VALUE
-rb_thread_exit()
-{
-    return rb_thread_kill(curr_thread->thread);
-}

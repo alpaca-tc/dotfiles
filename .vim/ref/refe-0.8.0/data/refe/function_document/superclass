@@ -1,4 +1,0 @@
-: static VALUE superclass(VALUE self, NODE *node)
-    クラス文のスーパークラスを表すノード node を
-    評価してクラスを得ます。
-

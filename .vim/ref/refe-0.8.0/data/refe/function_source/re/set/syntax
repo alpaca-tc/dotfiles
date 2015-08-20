@@ -1,8 +1,0 @@
-regex.c:422
-long
-re_set_syntax(syntax)
-  long syntax;
-{
-    /* obsolete */
-    return 0;
-}

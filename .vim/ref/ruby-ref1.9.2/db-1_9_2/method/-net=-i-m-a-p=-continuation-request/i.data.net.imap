@@ -1,7 +1,0 @@
-kind=defined
-names=data
-visibility=public
-
---- data -> Net::IMAP::ResponseText
-レスポンスのデータを返します。
-

@@ -1,4 +1,0 @@
---- OptionParser::Switch.guess(arg)
-    Guesses argument style from arg.
-    Returns corresponding OptionParser::Switch subclass.
-

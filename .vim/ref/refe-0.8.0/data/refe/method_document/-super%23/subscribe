@@ -1,4 +1,0 @@
-: subscribe(mailbox)
-      Sends a SUBSCRIBE command to add the specified mailbox name to
-      the server's set of "active" or "subscribed" mailboxes.
-

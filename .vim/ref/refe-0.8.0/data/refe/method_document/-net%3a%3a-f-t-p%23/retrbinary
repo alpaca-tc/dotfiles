@@ -1,7 +1,0 @@
---- Net::FTP#retrbinary(cmd, blocksize, rest_offset = nil, callback = Proc.new)
-
-    サーバーにcmdで指定されたコマンドを送り、バイナリデータを 取り寄せます。
-    blocksizeで指定されたバイト単位でデータを
-    読み込み、callbackで指定されたProcオブジェクトまたは
-    ブロックに読み込んだデータを渡します。
-

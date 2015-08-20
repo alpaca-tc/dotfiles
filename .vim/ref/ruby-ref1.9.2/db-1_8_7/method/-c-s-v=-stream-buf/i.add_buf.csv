@@ -1,9 +1,0 @@
-kind=defined
-names=add_buf
-visibility=private 
-
---- add_buf -> bool
-ストリームバッファからデータを読み込み、true/falseを返します。
-
-@return データの読み込みに成功した場合にはtrueを、読み込み失敗した場合にはfalseを返します。
-

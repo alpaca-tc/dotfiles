@@ -1,8 +1,0 @@
-superclass=Object
-type=class
-library=test.unit.testcase
-extended=
-included=
-
-テストの失敗を表現するクラスです。テスト中にアサーションが失敗した時に
-[[c:Test::Unit::TestCase]]から作られます。

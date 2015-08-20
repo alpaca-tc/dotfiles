@@ -1,2 +1,0 @@
-: struct RBignum *RBIGNUM(VALUE obj)
-

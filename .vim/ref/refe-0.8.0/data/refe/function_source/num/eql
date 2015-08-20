@@ -1,9 +1,0 @@
-numeric.c:498
-static VALUE
-num_eql(x, y)
-    VALUE x, y;
-{
-    if (TYPE(x) != TYPE(y)) return Qfalse;
-
-    return rb_equal(x, y);
-}

@@ -1,7 +1,0 @@
-kind=defined
-names=streamhandler,streamhandler=
-visibility=public
-
---- streamhandler
---- streamhandler=(value)
-

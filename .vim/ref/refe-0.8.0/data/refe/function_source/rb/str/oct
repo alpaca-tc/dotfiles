@@ -1,7 +1,0 @@
-string.c:3085
-static VALUE
-rb_str_oct(str)
-    VALUE str;
-{
-    return rb_str_to_inum(str, -8, Qfalse);
-}

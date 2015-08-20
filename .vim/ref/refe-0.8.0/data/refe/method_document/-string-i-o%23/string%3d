@@ -1,6 +1,0 @@
---- string= buf
-
-    IOバッファを buf に変更し、buf を返します。これ以前の
-    バッファは捨てられます。StringIO は読み書き両用になりますが、
-    buf が nil の場合は、StringIO への読み書きは禁止されます。
-

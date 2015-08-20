@@ -1,6 +1,0 @@
-kind=defined
-names=create_servant_skelton
-visibility=private 
-
---- create_servant_skelton(porttypename)
-

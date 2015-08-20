@@ -1,8 +1,0 @@
-kind=defined
-names=quota
-visibility=public
-
---- quota -> Integer
-メールボックスに指定されている上限値を返します。
-
-

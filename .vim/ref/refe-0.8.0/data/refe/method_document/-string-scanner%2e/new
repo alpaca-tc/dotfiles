@@ -1,5 +1,0 @@
-: new( str, dup = true )  ->  StringScanner
-    新しい StringScanner オブジェクトを生成します。str はスキャン対
-    象の文字列です。dup が true の時は複製したうえで使います。またど
-    ちらの場合でも StringScanner が保持する文字列はfreeze されます。
-

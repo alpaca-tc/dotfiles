@@ -1,6 +1,0 @@
-kind=defined
-names=collect_documentparameter
-visibility=public
-
---- collect_documentparameter(operation)
-

@@ -1,7 +1,0 @@
-re.c:842
-VALUE
-rb_reg_last_match(match)
-    VALUE match;
-{
-    return rb_reg_nth_match(0, match);
-}

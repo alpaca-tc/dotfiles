@@ -1,5 +1,0 @@
-: subwin(height, width, y, x)
-  画面の座標 (x,y) を左上端とし、幅 width
-  高さ height とするサブウィンドウを作成し、
-  それを表現する Curses::Window オブジェクトを返します。
-

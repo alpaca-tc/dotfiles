@@ -1,4 +1,0 @@
-: get( address, path, port = 80 )
-    ホスト address の port 番ポートに接続して path の表現する
-    エンティティを取得、文字列で返します。
-

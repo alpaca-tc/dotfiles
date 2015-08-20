@@ -1,6 +1,0 @@
-: each {|line| .... }
-    line: String
-
-    本文文字列の各行に対する繰り返し。
-    body_port.ropen {|f| f.each } と同じです。
-

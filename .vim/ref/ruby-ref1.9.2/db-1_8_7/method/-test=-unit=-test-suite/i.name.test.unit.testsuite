@@ -1,9 +1,0 @@
-kind=defined
-names=name,to_s
-visibility=public
-
---- to_s    -> String
---- name    -> String
-
-自身の名前を返します。
-

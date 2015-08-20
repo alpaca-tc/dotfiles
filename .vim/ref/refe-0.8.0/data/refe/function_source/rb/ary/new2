@@ -1,7 +1,0 @@
-array.c:124
-VALUE
-rb_ary_new2(len)
-    long len;
-{
-    return ary_new(rb_cArray, len);
-}

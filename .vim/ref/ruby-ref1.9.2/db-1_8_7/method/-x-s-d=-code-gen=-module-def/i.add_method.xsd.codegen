@@ -1,6 +1,0 @@
-kind=defined
-names=add_method
-visibility=public
-
---- add_method(m, visibility = :public)
-

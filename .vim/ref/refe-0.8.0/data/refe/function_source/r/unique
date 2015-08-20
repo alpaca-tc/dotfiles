@@ -1,7 +1,0 @@
-marshal.c:889
-static char*
-r_unique(arg)
-    struct load_arg *arg;
-{
-    return rb_id2name(r_symbol(arg));
-}

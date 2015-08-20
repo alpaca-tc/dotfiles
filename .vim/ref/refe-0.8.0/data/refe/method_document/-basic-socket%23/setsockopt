@@ -1,4 +1,0 @@
---- setsockopt(level, optname, optval)
-    ソケットのオプションを設定します。setsockopt(2) [manual page]
-    を参照のこと。
-

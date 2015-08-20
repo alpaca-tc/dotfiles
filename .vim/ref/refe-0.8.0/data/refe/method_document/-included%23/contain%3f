@@ -1,5 +1,0 @@
---- contain?(enum)
-#    Returns true if the set contains every element of the given
-#    enumerable object.
-    enum で与えられた Enumerable の要素をすべて含むときに true を返します。
-

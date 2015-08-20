@@ -1,7 +1,0 @@
---- Matrix#column(j)
-    returns the j-th column vector. 
-    When the block is supplied for the method, the block is iterated over all column vectors.
-
-    第j番目の列ベクトルを返す。
-    ブロックが与えられたときは、各列ベクトルについて、ブロックを繰り返す。
-

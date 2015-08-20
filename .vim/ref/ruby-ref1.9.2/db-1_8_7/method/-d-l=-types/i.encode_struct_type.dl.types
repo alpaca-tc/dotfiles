@@ -1,8 +1,0 @@
-kind=defined
-names=encode_struct_type
-visibility=public
-
---- encode_struct_type(alias_type)
-
-
-

@@ -1,5 +1,0 @@
-: start( account, password )
-: start( account, password ) {|pop| .... }
-    リモートホストとの接続を開始し、アカウントに account、
-    パスワードに password を使って POP ログインします。
-

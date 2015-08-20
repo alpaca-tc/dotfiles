@@ -1,8 +1,0 @@
-numeric.c:130
-VALUE
-rb_num_coerce_bin(x, y)
-    VALUE x, y;
-{
-    do_coerce(&x, &y, Qtrue);
-    return rb_funcall(x, ruby_frame->orig_func, 1, y);
-}

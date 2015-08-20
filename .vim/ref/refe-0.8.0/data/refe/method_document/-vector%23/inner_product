@@ -1,5 +1,0 @@
---- Vector#inner_product(v)
-    Returns an inner product with `v'
-
-    ベクトルvとの内積を返す。
-

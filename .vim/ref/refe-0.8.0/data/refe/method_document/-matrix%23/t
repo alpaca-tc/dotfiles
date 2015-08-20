@@ -1,7 +1,0 @@
---- Matrix#transpose
---- Matrix#t
-    returns the transposed
-
-    転置行列(transpose matrix)を返す。
-    冒頭に掲げた行列に対して、a(j,i)を(i,j)要素とする(n,m)型行列を転置行列という。
-

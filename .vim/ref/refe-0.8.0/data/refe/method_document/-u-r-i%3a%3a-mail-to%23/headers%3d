@@ -1,8 +1,0 @@
---- URI::MailTo#to
---- URI::MailTo#to=(v)
---- URI::MailTo#headers
---- URI::MailTo#headers=(v)
-
-    各構成要素の属性メソッドです。属性設定では、引数の正当性をチェック
-    し不正な引数に対して例外 URI::InvalidComponentError を発生させます。
-

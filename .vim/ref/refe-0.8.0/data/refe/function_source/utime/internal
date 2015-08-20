@@ -1,9 +1,0 @@
-file.c:1210
-static void
-utime_internal(path, utp)
-    const char *path;
-    struct utimbuf *utp;
-{
-    if (utime(path, utp) < 0)
-	rb_sys_fail(path);
-}

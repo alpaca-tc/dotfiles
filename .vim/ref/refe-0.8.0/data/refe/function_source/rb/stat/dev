@@ -1,7 +1,0 @@
-file.c:153
-static VALUE
-rb_stat_dev(self)
-    VALUE self;
-{
-    return INT2NUM(get_stat(self)->st_dev);
-}

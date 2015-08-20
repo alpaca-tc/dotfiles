@@ -1,7 +1,0 @@
---- ENV[key]=value
---- ENV.store(key, value)
-
-    key に対応する環境変数の値を value にします。
-    value が nil の時、key に対応する環境変数を取り
-    除きます。
-

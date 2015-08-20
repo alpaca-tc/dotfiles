@@ -1,7 +1,0 @@
-eval.c:5963
-VALUE
-rb_f_require(obj, fname)
-    VALUE obj, fname;
-{
-    return rb_require_safe(fname, ruby_safe_level);
-}

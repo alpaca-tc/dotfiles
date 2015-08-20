@@ -1,6 +1,0 @@
-kind=defined
-names=ele2str
-visibility=private 
-
---- ele2str(ele)
-

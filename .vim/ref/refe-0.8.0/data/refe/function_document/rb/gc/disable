@@ -1,3 +1,0 @@
-: VALUE rb_gc_disable(void)
-    GC を禁止します。
-

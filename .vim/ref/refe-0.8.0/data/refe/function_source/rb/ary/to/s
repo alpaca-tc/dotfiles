@@ -1,9 +1,0 @@
-array.c:951
-VALUE
-rb_ary_to_s(ary)
-    VALUE ary;
-{
-    if (RARRAY(ary)->len == 0) return rb_str_new(0, 0);
-    
-    return rb_ary_join(ary, rb_output_fs);
-}

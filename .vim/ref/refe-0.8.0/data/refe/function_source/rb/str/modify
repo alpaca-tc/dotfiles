@@ -1,8 +1,0 @@
-string.c:418
-void
-rb_str_modify(str)
-    VALUE str;
-{
-    if (!str_independent(str))
-	str_make_independent(str);
-}

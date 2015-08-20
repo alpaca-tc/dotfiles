@@ -1,7 +1,0 @@
-io.c:2020
-void
-rb_io_unbuffered(fptr)
-    OpenFile *fptr;
-{
-    rb_io_synchronized(fptr);
-}

@@ -1,2 +1,0 @@
-: static void safe_setter(VALUE val)
-

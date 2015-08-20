@@ -1,7 +1,0 @@
-eval.c:6386
-static VALUE
-errat_getter(id)
-    ID id;
-{
-    return get_backtrace(ruby_errinfo);
-}

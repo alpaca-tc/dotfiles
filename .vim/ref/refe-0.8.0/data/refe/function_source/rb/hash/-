@@ -1,7 +1,0 @@
-hash.c:50
-VALUE
-rb_hash(obj)
-    VALUE obj;
-{
-    return rb_funcall(obj, id_hash, 0);
-}

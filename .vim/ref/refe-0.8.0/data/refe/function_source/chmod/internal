@@ -1,9 +1,0 @@
-file.c:974
-static void
-chmod_internal(path, mode)
-    const char *path;
-    int mode;
-{
-    if (chmod(path, mode) < 0)
-	rb_sys_fail(path);
-}

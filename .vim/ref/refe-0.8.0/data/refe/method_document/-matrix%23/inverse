@@ -1,6 +1,0 @@
---- Matrix#inverse
---- Matrix#inv
-    inverse
-
-    逆行列を返す。
-

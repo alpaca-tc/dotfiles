@@ -1,4 +1,0 @@
---- OptionParser::Completion#convert(opt, *val)
-    Extracts the first element from result of
-    OptionParser::Completion#complete.
-

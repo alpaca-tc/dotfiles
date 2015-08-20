@@ -1,2 +1,0 @@
-: static int thread_keys_i(ID key, VALUE value, VALUE ary)
-

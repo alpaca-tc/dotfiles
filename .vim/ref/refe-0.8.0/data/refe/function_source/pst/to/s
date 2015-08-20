@@ -1,7 +1,0 @@
-process.c:140
-static VALUE
-pst_to_s(st)
-    VALUE st;
-{
-    return rb_fix2str(pst_to_i(st), 10);
-}

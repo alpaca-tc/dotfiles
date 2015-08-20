@@ -1,7 +1,0 @@
-object.c:1342
-static VALUE
-rb_f_array(obj, arg)
-    VALUE obj, arg;
-{
-    return rb_Array(arg);
-}

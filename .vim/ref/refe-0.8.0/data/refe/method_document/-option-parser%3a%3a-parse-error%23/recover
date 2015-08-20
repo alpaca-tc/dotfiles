@@ -1,3 +1,0 @@
---- OptionParser::ParseError#recover(argv)
-    Push backs erred argument(s) to argv.
-

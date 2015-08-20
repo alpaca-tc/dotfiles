@@ -1,7 +1,0 @@
-eval.c:7185
-static VALUE
-proc_to_self(self)
-    VALUE self;
-{
-    return self;
-}

@@ -1,8 +1,0 @@
-re.c:379
-static VALUE
-rb_reg_inspect(re)
-    VALUE re;
-{
-    rb_reg_check(re);
-    return rb_reg_desc(RREGEXP(re)->str, RREGEXP(re)->len, re);
-}

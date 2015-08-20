@@ -1,8 +1,0 @@
-kind=defined
-names=content
-visibility=public
-
---- content
-
-for debugging, we allow access to our line contents as text
-

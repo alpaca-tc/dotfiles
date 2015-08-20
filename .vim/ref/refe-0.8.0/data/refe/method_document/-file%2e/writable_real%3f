@@ -1,4 +1,0 @@
---- File.writable_real?(path)
-
-    FileTest.writable_real? と同じです。
-

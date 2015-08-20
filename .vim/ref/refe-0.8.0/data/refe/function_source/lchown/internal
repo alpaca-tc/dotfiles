@@ -1,9 +1,0 @@
-file.c:1124
-static void
-lchown_internal(path, args)
-    const char *path;
-    struct chown_args *args;
-{
-    if (lchown(path, args->owner, args->group) < 0)
-	rb_sys_fail(path);
-}

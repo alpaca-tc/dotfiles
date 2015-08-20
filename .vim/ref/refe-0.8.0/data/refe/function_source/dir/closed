@@ -1,6 +1,0 @@
-dir.c:307
-static void
-dir_closed()
-{
-    rb_raise(rb_eIOError, "closed directory");
-}

@@ -1,7 +1,0 @@
---- Net::FTP#puttextfile(localfile, remotefile, callback = nil)
-
-    サーバーにテキストファイルをputします。 
-
-    callbackやブロックが指定された場合は
-    データが送信されるごとにそれを呼び出します。
-

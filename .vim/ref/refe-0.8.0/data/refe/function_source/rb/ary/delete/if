@@ -1,8 +1,0 @@
-array.c:1410
-static VALUE
-rb_ary_delete_if(ary)
-    VALUE ary;
-{
-    rb_ary_reject_bang(ary);
-    return ary;
-}

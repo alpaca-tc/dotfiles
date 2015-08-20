@@ -1,9 +1,0 @@
-re.c:182
-static void
-kcode_utf8(re)
-    struct RRegexp *re;
-{
-    FL_UNSET(re, KCODE_MASK);
-    FL_SET(re, KCODE_UTF8);
-    FL_SET(re, KCODE_FIXED);
-}

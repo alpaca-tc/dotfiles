@@ -1,6 +1,0 @@
---- instance_of?(klass)
-
-    self がクラス klass の直接のインスタンスである時、
-    真を返します。obj.instance_of?(c) が成立する時には、常に
-    obj.kind_of?(c) も成立します。
-

@@ -1,3 +1,0 @@
---- OptionParser::Switch::OptionalArgument#parse
-    Parses argument if given, or uses default value.
-

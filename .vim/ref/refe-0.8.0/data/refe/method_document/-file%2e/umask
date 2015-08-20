@@ -1,5 +1,0 @@
---- File.umask([umask])
-
-    umask を変更します。変更前の umask の値を返します。umask を
-    省略すると変更を行わないで、現在の umask の値を返します。
-

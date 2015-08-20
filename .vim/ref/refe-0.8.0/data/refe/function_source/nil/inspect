@@ -1,7 +1,0 @@
-object.c:415
-static VALUE
-nil_inspect(obj)
-    VALUE obj;
-{
-    return rb_str_new2("nil");
-}

@@ -1,9 +1,0 @@
-eval.c:9890
-static int
-thread_keys_i(key, value, ary)
-    ID key;
-    VALUE value, ary;
-{
-    rb_ary_push(ary, ID2SYM(key));
-    return ST_CONTINUE;
-}

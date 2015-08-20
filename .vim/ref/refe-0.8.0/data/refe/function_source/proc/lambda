@@ -1,6 +1,0 @@
-eval.c:6999
-static VALUE
-proc_lambda()
-{
-    return proc_alloc(rb_cProc, Qtrue);
-}

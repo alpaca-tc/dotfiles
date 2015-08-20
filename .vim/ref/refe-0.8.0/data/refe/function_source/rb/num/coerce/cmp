@@ -1,9 +1,0 @@
-numeric.c:138
-VALUE
-rb_num_coerce_cmp(x, y)
-    VALUE x, y;
-{
-    if (do_coerce(&x, &y, Qfalse)) 
-	return rb_funcall(x, ruby_frame->orig_func, 1, y);
-    return Qnil;
-}

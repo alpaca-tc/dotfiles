@@ -1,7 +1,0 @@
-range.c:168
-static VALUE
-str_step(args)
-    VALUE *args;
-{
-    return rb_str_upto(args[0], args[1], EXCL(args[2]));
-}

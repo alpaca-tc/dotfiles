@@ -1,6 +1,0 @@
-kind=defined
-names=on_attribute
-visibility=public
-
---- on_attribute(name)
-

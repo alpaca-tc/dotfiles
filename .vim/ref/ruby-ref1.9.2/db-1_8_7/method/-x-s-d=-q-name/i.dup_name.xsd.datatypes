@@ -1,6 +1,0 @@
-kind=defined
-names=dup_name
-visibility=public
-
---- dup_name(name)
-

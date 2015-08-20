@@ -1,8 +1,0 @@
-eval.c:7976
-static int
-thread_set_raised()
-{
-    if (curr_thread->flags & THREAD_RAISED) return 1;
-    curr_thread->flags |= THREAD_RAISED;
-    return 0;
-}

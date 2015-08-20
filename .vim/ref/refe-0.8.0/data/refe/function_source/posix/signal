@@ -1,8 +1,0 @@
-signal.c:329
-void
-posix_signal(signum, handler)
-    int signum;
-    sighandler_t handler;
-{
-    ruby_signal(signum, handler);
-}

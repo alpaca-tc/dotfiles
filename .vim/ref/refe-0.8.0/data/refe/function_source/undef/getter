@@ -1,9 +1,0 @@
-variable.c:350
-static VALUE
-undef_getter(id)
-    ID id;
-{
-    rb_warning("global variable `%s' not initialized", rb_id2name(id));
-
-    return Qnil;
-}

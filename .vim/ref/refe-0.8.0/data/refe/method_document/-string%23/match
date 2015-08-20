@@ -1,6 +1,0 @@
---- match(regexp)         ruby 1.7 feature
-
-    regexp.match(self) と同じです
-    (Regexp#match [Regexp/match] 参照)。
-    regexp が文字列の場合は、正規表現にコンパイルします。
-

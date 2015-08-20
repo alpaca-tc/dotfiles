@@ -1,3 +1,0 @@
---- OptionParser::List#long
-    Map from long style option switches to actual switch objects.
-

@@ -1,2 +1,0 @@
-: void rb_exc_fatal(VALUE mesg)
-

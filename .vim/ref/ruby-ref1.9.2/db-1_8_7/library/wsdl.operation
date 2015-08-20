@@ -1,7 +1,0 @@
-methods=
-sublibraries=
-requires=wsdl.info
-classes=WSDL=Operation=NameInfo,WSDL=Operation
-is_sublibrary=true
-
-

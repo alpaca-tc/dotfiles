@@ -1,5 +1,0 @@
---- FileTest.executable?(filename)
-
-    filename が実効ユーザ/グループ ID で実行できる時、真を返しま
-    す。
-

@@ -1,4 +1,0 @@
-: static void print_undef(VALUE klass, ID id) 
-    クラス klass にメソッド id が見付からない (undefined) ことに
-    対するエラーメッセージを stderr に出力します。
-

@@ -1,4 +1,0 @@
-: name -> String
-: phrase -> String
-    俗に言うアドレスの「本名」部分。デコードされています。
-

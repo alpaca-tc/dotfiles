@@ -1,4 +1,0 @@
---- OptionParser#summary_indent
---- OptionParser#summary_indent=(indent)
-    Indentation for summary. Must be String (or have + String).
-

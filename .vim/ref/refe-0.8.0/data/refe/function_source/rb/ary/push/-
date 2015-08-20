@@ -1,9 +1,0 @@
-array.c:332
-VALUE
-rb_ary_push(ary, item)
-    VALUE ary;
-    VALUE item;
-{
-    rb_ary_store(ary, RARRAY(ary)->len, item);
-    return ary;
-}

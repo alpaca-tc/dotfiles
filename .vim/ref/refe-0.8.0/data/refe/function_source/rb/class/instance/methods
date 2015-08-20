@@ -1,9 +1,0 @@
-class.c:569
-VALUE
-rb_class_instance_methods(argc, argv, mod)
-    int argc;
-    VALUE *argv;
-    VALUE mod;
-{
-    return class_instance_method_list(argc, argv, mod, ins_methods_i);
-}

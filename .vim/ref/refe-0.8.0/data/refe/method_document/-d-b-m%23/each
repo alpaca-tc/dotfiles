@@ -1,4 +1,0 @@
-: each {|key, value|  ...  }
-: each_pair {|key, value|  ...  }
-    各要素に対するイテレータ。
-

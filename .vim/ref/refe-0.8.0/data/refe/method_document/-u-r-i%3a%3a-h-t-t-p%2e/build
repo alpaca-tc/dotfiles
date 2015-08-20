@@ -1,8 +1,0 @@
---- URI::HTTP.build(ary)
---- URI::HTTP.build(hash)
-
-    引数で与えられた URI 構成要素から URI::HTTP オブジェクトを生成します。
-    構成要素は、
-      [scheme, userinfo, host, port, path, query, fragment]
-    を配列かハッシュで与えます。
-

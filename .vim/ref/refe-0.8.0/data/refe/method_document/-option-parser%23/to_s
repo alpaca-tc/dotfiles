@@ -1,4 +1,0 @@
---- OptionParser#to_str
---- OptionParser#to_s
-    Returns option summary string.
-

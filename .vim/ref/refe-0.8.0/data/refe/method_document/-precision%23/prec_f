@@ -1,5 +1,0 @@
---- prec_f
-
-    self を Float に変換します。prec(Float) と等価で
-    す。
-

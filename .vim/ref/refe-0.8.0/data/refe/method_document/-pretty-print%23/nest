@@ -1,6 +1,0 @@
---- nest(indent) {...}
-#    increases left margin after newline with indent for line breaks added
-#    in the block.
-    ブロックの中で追加された改行の後の左マージンを indent ぶんだけ
-    増加させます。
-

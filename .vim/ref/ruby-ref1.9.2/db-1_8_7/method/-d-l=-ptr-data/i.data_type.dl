@@ -1,8 +1,0 @@
-kind=defined
-names=data_type
-visibility=public
-
---- data_type    -> [object]
-
-使ってはいけません。
-

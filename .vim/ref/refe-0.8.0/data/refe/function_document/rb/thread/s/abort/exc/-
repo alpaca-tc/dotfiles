@@ -1,2 +1,0 @@
-: static VALUE rb_thread_s_abort_exc(void)
-

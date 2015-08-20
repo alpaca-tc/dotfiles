@@ -1,7 +1,0 @@
-superclass=XSD=XMLParser=ParserError
-type=class
-library=xsd.xmlparser
-extended=
-included=
-
-

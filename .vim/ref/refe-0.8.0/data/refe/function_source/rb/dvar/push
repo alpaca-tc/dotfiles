@@ -1,8 +1,0 @@
-eval.c:744
-void
-rb_dvar_push(id, value)
-    ID id;
-    VALUE value;
-{
-    ruby_dyna_vars = new_dvar(id, value, ruby_dyna_vars);
-}

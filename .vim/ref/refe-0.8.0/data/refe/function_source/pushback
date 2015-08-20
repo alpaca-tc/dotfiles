@@ -1,8 +1,0 @@
-parse.y:2660
-static void
-pushback(c)
-    int c;
-{
-    if (c == -1) return;
-    lex_p--;
-}

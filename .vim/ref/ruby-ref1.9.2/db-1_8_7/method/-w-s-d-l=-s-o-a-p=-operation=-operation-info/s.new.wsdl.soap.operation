@@ -1,6 +1,0 @@
-kind=defined
-names=new
-visibility=public
-
---- new(style, op_name, optype_name, headerparts, bodyparts, faultpart, soapaction)
-

@@ -1,3 +1,0 @@
-: int FIXNUM_P(VALUE obj)
-    obj が Fixnum のインスタンスのとき真。
-

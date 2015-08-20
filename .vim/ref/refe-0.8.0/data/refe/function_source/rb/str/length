@@ -1,7 +1,0 @@
-string.c:309
-static VALUE
-rb_str_length(str)
-    VALUE str;
-{
-    return LONG2NUM(RSTRING(str)->len);
-}

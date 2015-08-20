@@ -1,9 +1,0 @@
-gc.c:171
-VALUE
-rb_gc_enable()
-{
-    int old = dont_gc;
-
-    dont_gc = Qfalse;
-    return old;
-}

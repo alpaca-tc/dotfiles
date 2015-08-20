@@ -1,2 +1,0 @@
-: VALUE rb_path2class(const char *path)
-

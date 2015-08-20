@@ -1,7 +1,0 @@
-: auth_only( account, password )
-    POP セッションを開き認証だけを行って接続を切ります。
-    POP before SMTP 専用です。
-        # example
-        pop = Net::POP3.new( 'your.pop3.server' )
-        pop.auth_only 'YourAccount', 'YourPassword'
-

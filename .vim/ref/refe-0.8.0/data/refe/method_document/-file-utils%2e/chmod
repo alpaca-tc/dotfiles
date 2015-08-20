@@ -1,9 +1,0 @@
---- FileUtils.chmod( mode, list, *options )
-  Options: noop verbose
-
-  ファイル LIST[0]、LIST[1] …のパーミッションを mode に変えます。
-
-    FileUtils.chmod 0644, 'my.rb', 'your.rb'
-    FileUtils.chmod 0755, 'somecommand'
-    FileUtils.chmod 0755, '/usr/bin/ruby', :verbose
-

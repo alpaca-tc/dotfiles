@@ -1,9 +1,0 @@
-kind=defined
-names=media_type
-visibility=public
-
---- media_type -> String
-MIME のメディアタイプを返します。
-
-@see [[m:Net::IMAP::BodyTypeBasic#subtype]]
-

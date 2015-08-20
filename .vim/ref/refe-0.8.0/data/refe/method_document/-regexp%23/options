@@ -1,9 +1,0 @@
---- options ruby 1.7 feature
-
-    正規表現の生成時に指定されたオプションを返します。戻り値は、
-    Regexp::EXTENDED, Regexp::IGNORECASE,
-    Regexp::MULTILINE の論理和です。
-
-        p Regexp::IGNORECASE # => 1
-        p //i.options        # => 1
-

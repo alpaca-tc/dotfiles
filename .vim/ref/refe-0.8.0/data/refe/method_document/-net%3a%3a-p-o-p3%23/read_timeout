@@ -1,5 +1,0 @@
-: read_timeout
-: read_timeout=(n)
-    読みこみ (read(1) 一回) でブロックしてよい最大秒数。
-    この秒数たっても読みこめなければ例外 TimeoutError を発生します。
-

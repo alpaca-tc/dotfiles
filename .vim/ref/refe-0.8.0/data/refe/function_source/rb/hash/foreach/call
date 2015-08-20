@@ -1,8 +1,0 @@
-hash.c:141
-static VALUE
-rb_hash_foreach_call(arg)
-    struct rb_hash_foreach_arg *arg;
-{
-    st_foreach(RHASH(arg->hash)->tbl, rb_hash_foreach_iter, (st_data_t)arg);
-    return Qnil;
-}

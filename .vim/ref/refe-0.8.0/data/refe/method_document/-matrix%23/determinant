@@ -1,6 +1,0 @@
---- Matrix#determinant
---- Matrix#det
-    returns the determinant
-
-    行列式(determinant) を返す。
-

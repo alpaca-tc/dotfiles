@@ -1,4 +1,0 @@
---- keyname
-    Registry.open [Win32::Registry/Registry.open] または Registry.create [Win32::Registry/Registry.create] に指定された
-    subkey の値を返します。
-

@@ -1,7 +1,0 @@
---- CGI::HtmlExtension#blockquote(cite = nil)
-       
-        Îã¡§
-        blockquote("url"){ "string" }
-          # = blockquote({ "CITE" => "url" }){ "string" }
-#=== CAPTION ELEMENT
-

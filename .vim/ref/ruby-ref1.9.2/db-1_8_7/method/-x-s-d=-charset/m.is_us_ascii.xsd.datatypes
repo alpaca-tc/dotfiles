@@ -1,6 +1,0 @@
-kind=defined
-names=is_us_ascii
-visibility=public
-
---- is_us_ascii(str)
-

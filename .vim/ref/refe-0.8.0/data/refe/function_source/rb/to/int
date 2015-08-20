@@ -1,7 +1,0 @@
-object.c:1091
-VALUE
-rb_to_int(val)
-    VALUE val;
-{
-    return rb_to_integer(val, "to_int");
-}

@@ -1,6 +1,0 @@
-eval.c:6986
-VALUE
-rb_block_proc()
-{
-    return proc_alloc(rb_cProc, Qfalse);
-}

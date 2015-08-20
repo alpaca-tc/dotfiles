@@ -1,7 +1,0 @@
-time.c:191
-struct timeval
-rb_time_interval(time)
-    VALUE time;
-{
-    return time_timeval(time, Qtrue);
-}

@@ -1,3 +1,0 @@
-: int rb_block_given_p(void)
-    メソッドがブロック付きで呼ばれていれば Qtrue を返します。
-

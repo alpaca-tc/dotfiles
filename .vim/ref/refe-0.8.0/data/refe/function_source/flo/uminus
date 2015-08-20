@@ -1,7 +1,0 @@
-numeric.c:334
-static VALUE
-flo_uminus(flt)
-    VALUE flt;
-{
-    return rb_float_new(-RFLOAT(flt)->value);
-}

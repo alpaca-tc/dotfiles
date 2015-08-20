@@ -1,7 +1,0 @@
---- OptionParser::Arguable#options=(opt)
-    Sets OptionParser object, when opt is false or
-    nil, methods OptionParser::Arguable#options and
-    OptionParser::Arguable#options= are undefined.  Thus, there
-    is no ways to access the OptionParser object via the
-    receiver object.
-

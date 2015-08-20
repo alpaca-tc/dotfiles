@@ -1,9 +1,0 @@
-string.c:1161
-static VALUE
-rb_str_succ_bang(str)
-    VALUE str;
-{
-    rb_str_shared_replace(str, rb_str_succ(str));
-
-    return str;
-}

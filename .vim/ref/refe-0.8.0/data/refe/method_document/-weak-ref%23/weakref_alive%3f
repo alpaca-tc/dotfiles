@@ -1,3 +1,0 @@
---- WeakRef#weakref_alive?
-            参照先のオブジェクトがまだ生きていればtrueを返す
-

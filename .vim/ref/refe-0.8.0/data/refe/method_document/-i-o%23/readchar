@@ -1,6 +1,0 @@
---- readchar
-
-    IO#getc [IO/getc] と同様に 1 文字読み込んで、その文字に対応す
-    る Fixnum を返しますが、EOF に到達した時に例外 
-    EOFError を発生させます。
-

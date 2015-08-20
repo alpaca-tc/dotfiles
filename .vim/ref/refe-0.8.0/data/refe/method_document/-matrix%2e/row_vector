@@ -1,7 +1,0 @@
---- Matrix.row_vector(row)
-    creates a 1-by-n matrix such the row vector is `row'.
-    The parameter `row' is given as a Vector or an Array.
-
-    要素がrowの(1,n)型の行列（行ベクトル)を生成する。
-    ここで、引数rowは、VectorまたはArrayで与えられる。
-

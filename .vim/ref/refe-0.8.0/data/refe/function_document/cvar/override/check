@@ -1,2 +1,0 @@
-: static void cvar_override_check(VALUE id, VALUE a)
-

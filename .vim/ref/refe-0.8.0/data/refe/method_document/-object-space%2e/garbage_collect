@@ -1,7 +1,0 @@
---- ObjectSpace.garbage_collect
-
-    どこからもアクセスされなくなったオブジェクトを回収します。
-    GC#start [GC/start] と同じです。
-
-    nil を返します。
-

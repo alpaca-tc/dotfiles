@@ -1,7 +1,0 @@
-eval.c:9871
-static VALUE
-rb_thread_aset(thread, id, val)
-    VALUE thread, id, val;
-{
-    return rb_thread_local_aset(thread, rb_to_id(id), val);
-}

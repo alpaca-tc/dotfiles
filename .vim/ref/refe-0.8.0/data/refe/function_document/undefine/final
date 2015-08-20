@@ -1,2 +1,0 @@
-: static VALUE undefine_final(VALUE os, VALUE obj)
-

@@ -1,6 +1,0 @@
-: sender( default = nil ) -> String
-: sender=( spec )
-    spec: String
-
-    Sender: アドレスの spec
-

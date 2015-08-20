@@ -1,5 +1,0 @@
---- Readline.completer_word_break_characters=(str)
---- Readline.completer_word_break_characters
-    rl_complete_internal() で使われる、補完時の単語同士の区切りを指定する
-    文字列です。デフォルトでは Readline.basic_word_break_characters です。
-

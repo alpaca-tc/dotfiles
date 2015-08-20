@@ -1,2 +1,0 @@
-: void rb_thread_stop_timer(void)
-

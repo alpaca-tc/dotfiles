@@ -1,8 +1,0 @@
---- File.truncate(path, length)
-
-    path で指定されたファイルのサイズを最大 length バイト
-    にします。
-
-    サイズの変更に成功すれば 0 を返します。失敗した場合は例外 
-    Errno::EXXX が発生します。
-

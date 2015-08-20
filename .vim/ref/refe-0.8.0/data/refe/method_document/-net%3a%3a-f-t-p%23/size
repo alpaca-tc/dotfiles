@@ -1,4 +1,0 @@
---- Net::FTP#size(filename)
-
-    ファイルのサイズを返します。
-

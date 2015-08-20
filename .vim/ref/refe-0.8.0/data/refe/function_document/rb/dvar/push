@@ -1,2 +1,0 @@
-: void rb_dvar_push(ID id, VALUE value)
-

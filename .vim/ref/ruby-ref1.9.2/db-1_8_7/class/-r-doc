@@ -1,7 +1,0 @@
-superclass=
-type=module
-library=rdoc
-extended=
-included=
-
-rdoc ドキュメントを扱うためのモジュールです。

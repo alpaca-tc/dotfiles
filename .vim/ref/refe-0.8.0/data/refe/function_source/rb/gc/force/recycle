@@ -1,9 +1,0 @@
-gc.c:1026
-void
-rb_gc_force_recycle(p)
-    VALUE p;
-{
-    RANY(p)->as.free.flags = 0;
-    RANY(p)->as.free.next = freelist;
-    freelist = RANY(p);
-}

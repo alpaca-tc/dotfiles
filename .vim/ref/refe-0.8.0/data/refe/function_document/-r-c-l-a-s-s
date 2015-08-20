@@ -1,2 +1,0 @@
-: struct RClass *RCLASS(VALUE obj)
-

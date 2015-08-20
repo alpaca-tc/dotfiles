@@ -1,2 +1,0 @@
-: static VALUE main_to_s(VALUE obj)
-

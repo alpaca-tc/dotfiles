@@ -1,6 +1,0 @@
-kind=defined
-names=dump_inputparam
-visibility=private 
-
---- dump_inputparam(input)
-

@@ -1,3 +1,0 @@
---- OptionParser::Switch::RequiredArgument#parse
-    Raises an exception if argument is not present.
-

@@ -1,9 +1,0 @@
-kind=defined
-names=rel_buf
-visibility=private 
-
---- rel_buf -> bool
-現在処理中のストリームバッファを解放する。
-
-@return 次のバッファが存在する場合にはtrueを、読み込み済みのバッファが存在しない場合にはfalseを返します。
-

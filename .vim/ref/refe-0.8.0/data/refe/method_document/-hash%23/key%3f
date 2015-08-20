@@ -1,7 +1,0 @@
---- has_key?(key)
---- include?(key)
---- key?(key)
---- member?(key)
-
-    ハッシュが key をキーとして持つ時真を返します。
-

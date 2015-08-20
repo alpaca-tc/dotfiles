@@ -1,6 +1,0 @@
-kind=defined
-names=on_entityref
-visibility=public
-
---- on_entityref(ref)
-

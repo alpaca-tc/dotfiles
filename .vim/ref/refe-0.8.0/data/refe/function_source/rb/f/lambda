@@ -1,7 +1,0 @@
-eval.c:6992
-VALUE
-rb_f_lambda()
-{
-    rb_warn("rb_f_lambda() is deprecated; use rb_block_proc() instead");
-    return proc_alloc(rb_cProc, Qtrue);
-}

@@ -1,8 +1,0 @@
-kind=defined
-names=run
-visibility=public
-
---- run(result) { .... }
-
-テストスイートを実行します。
-

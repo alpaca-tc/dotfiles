@@ -1,2 +1,0 @@
-Process::UID, Process::GID と異なり、ユーザ ID、グループ 
-ID を操作するシステムコールを集めたモジュール。

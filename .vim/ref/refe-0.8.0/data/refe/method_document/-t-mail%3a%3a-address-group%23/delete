@@ -1,7 +1,0 @@
-: delete( addr )
-    addr: TMail::Address/TMail::AddressGroup
-
-    TMail::Address または TMail::AddressGroup オブジェクトを
-    このグループから削除し、非 nil を返します。もともとこの
-    アドレスがグループ内に存在しない場合は無視して nil を返します。
-

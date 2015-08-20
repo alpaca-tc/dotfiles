@@ -1,6 +1,0 @@
-kind=defined
-names=add_attachment
-visibility=public
-
---- add_attachment(attach)
-

@@ -1,5 +1,0 @@
---- Vector.[](a)
-    Creates a new vector object, populated by elements of `a'.
-
-    配列aを要素とするベクトルを生成する。
-

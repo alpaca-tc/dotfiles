@@ -1,5 +1,0 @@
---- subtract(enum)
-#    Deletes every element that appears in the given enumerable object
-#    and returns self.
-    enum で与えられた Enumerable の要素を削除し、その集合自身を返します。
-

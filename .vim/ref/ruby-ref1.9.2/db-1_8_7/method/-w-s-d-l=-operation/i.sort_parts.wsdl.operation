@@ -1,5 +1,0 @@
-kind=defined
-names=sort_parts
-visibility=private 
-
---- sort_parts(parts)

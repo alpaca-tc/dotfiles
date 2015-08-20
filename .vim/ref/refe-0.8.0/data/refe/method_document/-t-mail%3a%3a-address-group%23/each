@@ -1,5 +1,0 @@
-: each {|a| .... }
-    a: TMail::Address / TMail::AddressGroup
-
-    #addresses に対する繰り返し。
-

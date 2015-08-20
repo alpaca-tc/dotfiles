@@ -1,8 +1,0 @@
-math.c:187
-static VALUE
-math_exp(obj, x)
-    VALUE obj, x;
-{
-    Need_Float(x);
-    return rb_float_new(exp(RFLOAT(x)->value));
-}

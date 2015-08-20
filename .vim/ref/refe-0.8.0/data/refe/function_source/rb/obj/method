@@ -1,8 +1,0 @@
-eval.c:7402
-static VALUE
-rb_obj_method(obj, vid)
-    VALUE obj;
-    VALUE vid;
-{
-    return mnew(CLASS_OF(obj), obj, rb_to_id(vid), rb_cMethod);
-}

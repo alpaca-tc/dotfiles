@@ -1,7 +1,0 @@
-file.c:274
-static VALUE
-rb_stat_mtime(self)
-    VALUE self;
-{
-    return rb_time_new(get_stat(self)->st_mtime, 0);
-}

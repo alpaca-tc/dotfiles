@@ -1,4 +1,0 @@
---- Net::Telnet#puts(string)
-
-    string を改行を付けてリモートホストに送ります。
-

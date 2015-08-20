@@ -1,8 +1,0 @@
---- OptionParser::Arguable#order!
---- OptionParser::Arguable#permute!
---- OptionParser::Arguable#parse!
-    Parses self destructively, and returns self just contains
-    rest arguments left without parsed.
-
-Initializes instance variable.
-

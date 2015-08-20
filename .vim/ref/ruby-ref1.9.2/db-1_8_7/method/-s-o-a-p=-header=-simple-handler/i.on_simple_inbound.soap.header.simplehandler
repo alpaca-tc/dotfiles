@@ -1,6 +1,0 @@
-kind=defined
-names=on_simple_inbound
-visibility=public
-
---- on_simple_inbound(header, mustunderstand)
-

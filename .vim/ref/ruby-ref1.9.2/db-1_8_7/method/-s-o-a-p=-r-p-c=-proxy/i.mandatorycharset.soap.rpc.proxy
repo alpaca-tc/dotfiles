@@ -1,7 +1,0 @@
-kind=defined
-names=mandatorycharset,mandatorycharset=
-visibility=public
-
---- mandatorycharset
---- mandatorycharset=(value)
-

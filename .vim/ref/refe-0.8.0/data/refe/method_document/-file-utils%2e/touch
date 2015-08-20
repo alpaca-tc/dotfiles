@@ -1,9 +1,0 @@
---- FileUtils.touch( list, *options )
-  Options: noop verbose
-
-  list[0], list[1] …の最終変更時刻 (mtime) とアクセス時刻 (atime) を
-  更新します。list[n] が存在しない場合は空のファイルを作成します。
-
-    FileUtils.touch 'timestamp'
-    FileUtils.touch Dir.glob('*.c');  system 'make'
-

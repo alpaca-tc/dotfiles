@@ -1,8 +1,0 @@
---- comma_breakable
-#    is a convenience method which is same as follows:
-
-    以下と等価な働きをするもので簡便のために用意されています。
-
-      text ','
-      breakable
-

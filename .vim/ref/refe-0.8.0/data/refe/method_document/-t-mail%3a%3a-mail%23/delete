@@ -1,4 +1,0 @@
-: delete( name )
-    name: String
-    name ヘッダを消します。
-

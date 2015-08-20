@@ -1,2 +1,0 @@
-: VALUE rb_uint_new(unsigned int v)
-

@@ -1,2 +1,0 @@
-: static const char *thread_status_name(enum thread_status status)
-

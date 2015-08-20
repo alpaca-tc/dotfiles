@@ -1,4 +1,0 @@
-: each_mail {|popmail| .... }
-: each {|popmail| .... }
-    pop3.mails.each と同じです。
-

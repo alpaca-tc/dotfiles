@@ -1,9 +1,0 @@
---- close_write
-
-    書き込み用の IO を close します。
-
-    self が書き込み用にオープンされていなければ、例外 
-    IOError が発生します。
-
-    nil を返します。
-

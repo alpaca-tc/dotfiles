@@ -1,5 +1,0 @@
---- Matrix#column_vectors
-    array of column vectors
-
-    行ベクトルの配列を返す。
-

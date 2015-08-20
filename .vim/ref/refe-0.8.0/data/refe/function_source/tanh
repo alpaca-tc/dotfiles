@@ -1,7 +1,0 @@
-math.c:133
-double
-tanh(x)
-    double x;
-{
-    return sinh(x) / cosh(x);
-}

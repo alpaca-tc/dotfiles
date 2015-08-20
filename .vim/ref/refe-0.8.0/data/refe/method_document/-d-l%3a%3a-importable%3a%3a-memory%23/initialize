@@ -1,5 +1,0 @@
---- initialize(ptr, names, ty, len, enc, dec)
-
-    DL::PtrDataオブジェクトptrの各メンバへアクセスするためのメソッドを
-    動的に定義する。Struct,Unionのインスタンスがこれらの情報を保持する。
-

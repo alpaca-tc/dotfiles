@@ -1,4 +1,0 @@
-: new_port -> TMail::FilePort
-    新しいメールに対応するファイルを作成し、
-    対応する TMail::Port オブジェクトを返す。
-

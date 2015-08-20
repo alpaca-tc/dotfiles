@@ -1,7 +1,0 @@
-superclass=SOAP=RPC=RPCError
-type=class
-library=soap.rpc.element
-extended=
-included=
-
-

@@ -1,5 +1,0 @@
---- Math.erf(x)  ruby 1.8 feature
---- Math.erfc(x) ruby 1.8 feature
-
-    x の誤差関数(erf)、相補誤差関数(erfc)の値を返します。
-

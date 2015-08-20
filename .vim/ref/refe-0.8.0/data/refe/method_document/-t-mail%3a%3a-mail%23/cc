@@ -1,7 +1,0 @@
-: cc( default = nil ) -> [String]
-: cc=( specs )
-    specs: String / [String]
-    default: Object
-
-    Cc: アドレスの spec の配列。
-

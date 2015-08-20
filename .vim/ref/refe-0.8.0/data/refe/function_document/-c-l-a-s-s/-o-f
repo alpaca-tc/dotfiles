@@ -1,6 +1,0 @@
-: VALUE CLASS_OF(VALUE obj)
-    obj のクラスを返します。
-    この場合の「クラス」とは C レベルのクラス、
-    つまり RBasic 構造体の klass メンバの値です。
-    また、構造体を持たない Fixnum などに対しても正常に働きます。
-

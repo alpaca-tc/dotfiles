@@ -1,6 +1,0 @@
-kind=defined
-names=init
-visibility=public
-
---- init(init_map = [])
-

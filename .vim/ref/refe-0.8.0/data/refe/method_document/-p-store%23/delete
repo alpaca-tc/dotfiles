@@ -1,4 +1,0 @@
---- PStore#delete(name)
-      ルートnameに対応する値を削除する。
-      Hash#deleteに相当。
-

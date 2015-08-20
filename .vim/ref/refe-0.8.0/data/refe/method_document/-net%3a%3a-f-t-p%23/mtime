@@ -1,6 +1,0 @@
---- Net::FTP#mtime(filename, local = false)
-
-    filenameの更新時刻をTimeオブジェクトで返します。
-    localは、更新時刻をローカル時刻とみなすかどうかの
-    フラグです。(省略したときのデフォルト値はfalseです)。
-

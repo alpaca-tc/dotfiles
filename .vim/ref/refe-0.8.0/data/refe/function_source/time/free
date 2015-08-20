@@ -1,7 +1,0 @@
-time.c:37
-static void
-time_free(tobj)
-    void *tobj;
-{
-    if (tobj) free(tobj);
-}

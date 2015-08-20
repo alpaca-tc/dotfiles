@@ -1,7 +1,0 @@
-object.c:401
-static VALUE
-nil_to_s(obj)
-    VALUE obj;
-{
-    return rb_str_new2("");
-}

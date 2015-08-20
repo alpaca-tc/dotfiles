@@ -1,6 +1,0 @@
---- delete_if { |o| ... }
-#    Deletes every element of the set for which block evaluates to
-#    true, and returns self.
-    ブロックで最後に評価された値が真であるようなすべての要素を削除し、
-    その集合自身を返します。
-

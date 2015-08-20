@@ -1,7 +1,0 @@
-object.c:408
-static VALUE
-nil_to_a(obj)
-    VALUE obj;
-{
-    return rb_ary_new2(0);
-}

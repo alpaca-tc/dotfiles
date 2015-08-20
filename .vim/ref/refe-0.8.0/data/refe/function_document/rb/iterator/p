@@ -1,3 +1,0 @@
-: int rb_iterator_p()
-    この関数はobsoleteです。rb_block_given_pを使用してください。
-

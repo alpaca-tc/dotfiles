@@ -1,8 +1,0 @@
-signal.c:479
-static RETSIGTYPE sigexit _((int));
-static RETSIGTYPE
-sigexit(sig)
-    int sig;
-{
-    rb_exit(0);
-}

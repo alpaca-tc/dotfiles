@@ -1,6 +1,0 @@
-kind=defined
-names=safeconstname?
-visibility=public
-
---- safeconstname?(name)
-

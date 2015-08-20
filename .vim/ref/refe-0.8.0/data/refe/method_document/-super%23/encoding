@@ -1,4 +1,0 @@
-: encoding
-      Returns a string giving the content transfer encoding as defined in
-      imap.rb"/[MIME-IMB].
-

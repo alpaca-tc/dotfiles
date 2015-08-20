@@ -1,9 +1,0 @@
-string.c:2995
-static VALUE
-rb_str_strip(str)
-    VALUE str;
-{
-    str = rb_str_dup(str);
-    rb_str_strip_bang(str);
-    return str;
-}

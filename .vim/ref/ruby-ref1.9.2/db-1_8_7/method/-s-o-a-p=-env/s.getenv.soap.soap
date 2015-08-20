@@ -1,6 +1,0 @@
-kind=defined
-names=getenv
-visibility=public
-
---- getenv(name)
-

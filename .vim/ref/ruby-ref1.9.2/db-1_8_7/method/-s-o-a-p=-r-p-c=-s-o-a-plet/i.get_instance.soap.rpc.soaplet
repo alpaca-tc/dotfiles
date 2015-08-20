@@ -1,6 +1,0 @@
-kind=defined
-names=get_instance
-visibility=public
-
---- get_instance(config, *options)
-

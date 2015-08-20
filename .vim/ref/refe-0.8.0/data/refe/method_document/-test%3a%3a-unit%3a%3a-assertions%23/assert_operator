@@ -1,4 +1,0 @@
---- assert_operator(object1, operator, object2, message="")
-
-    object1.send(operator, object2) が真なら pass
-

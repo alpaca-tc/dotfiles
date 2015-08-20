@@ -1,5 +1,0 @@
---- Net::Telnet#binmode
---- Net::Telnet#binmode(bool)
---- Net::Telnet#binmode = bool
-    ...
-

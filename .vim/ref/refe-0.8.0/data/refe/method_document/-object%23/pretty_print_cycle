@@ -1,7 +1,0 @@
---- pretty_print_cycle(pp)
-#    is a default pretty printing method for general objects that are
-#    detected as part of a cycle.
-
-    一般のオブジェクトがサイクルの一部であることが検出されたときのための
-    デフォルトの pretty print メソッドです。
-

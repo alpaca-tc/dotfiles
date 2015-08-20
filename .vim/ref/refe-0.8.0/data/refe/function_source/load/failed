@@ -1,7 +1,0 @@
-eval.c:6027
-static void
-load_failed(fname)
-    VALUE fname;
-{
-    rb_raise(rb_eLoadError, "No such file to load -- %s", RSTRING(fname)->ptr);
-}

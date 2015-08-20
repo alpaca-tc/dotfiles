@@ -1,6 +1,0 @@
---- Matrix.zero(n)
-    creates an n-by-n zero matrix.
-
-    n次の零行列を生成する。
-    零行列とは、要素が全て0の行列である。
-

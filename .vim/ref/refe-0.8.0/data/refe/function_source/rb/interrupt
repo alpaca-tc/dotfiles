@@ -1,6 +1,0 @@
-eval.c:3967
-void
-rb_interrupt()
-{
-    rb_raise(rb_eInterrupt, "");
-}

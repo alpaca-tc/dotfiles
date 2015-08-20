@@ -1,6 +1,0 @@
-kind=defined
-names=safe_iconv
-visibility=public
-
---- safe_iconv(to, from, str)
-

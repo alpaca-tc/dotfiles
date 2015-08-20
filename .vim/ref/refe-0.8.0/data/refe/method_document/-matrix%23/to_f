@@ -1,5 +1,0 @@
---- Matrix#to_f
-    converts each element to Float
-
-    各要素を浮動小数点数Floatに変換する。
-

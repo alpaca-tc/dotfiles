@@ -1,6 +1,0 @@
---- Registry.expand_environ(str)
-    str の %\w+% という並びを環境変数に置換します。
-    REG_EXPAND_SZ で用いられます。
-    
-    詳細は ExpandEnvironmentStrings [URL:http://msdn.microsoft.com/library/en-us/sysinfo/base/expandenvironmentstrings.asp] Win32 API を参照してください。
-

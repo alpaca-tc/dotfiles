@@ -1,6 +1,0 @@
-kind=defined
-names=loadproperty
-visibility=public
-
---- loadproperty(propertyname)
-

@@ -1,7 +1,0 @@
-re.c:941
-static VALUE
-match_to_a(match)
-    VALUE match;
-{
-    return match_array(match, 0);
-}

@@ -1,7 +1,0 @@
-superclass=SOAP=SOAPStruct
-type=class
-library=soap.element
-extended=
-included=SOAP=SOAPEnvelopeElement
-
-

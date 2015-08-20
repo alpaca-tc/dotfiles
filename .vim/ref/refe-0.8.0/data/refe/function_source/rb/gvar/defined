@@ -1,8 +1,0 @@
-variable.c:700
-VALUE
-rb_gvar_defined(entry)
-    struct global_entry *entry;
-{
-    if (entry->var->getter == undef_getter) return Qfalse;
-    return Qtrue;
-}

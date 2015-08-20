@@ -1,9 +1,0 @@
-kind=defined
-names=create_result
-visibility=public
-
---- create_result -> RUNIT::TestResult
-
-テストの実行結果を作成します。
-
-

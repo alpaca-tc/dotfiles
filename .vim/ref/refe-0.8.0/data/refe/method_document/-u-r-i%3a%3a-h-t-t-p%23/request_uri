@@ -1,4 +1,0 @@
---- URI::HTTP#request_uri
-
-    path + '?' + query を返します。
-

@@ -1,9 +1,0 @@
-variable.c:1402
-static int
-list_i(key, value, ary)
-    ID key, value;
-    VALUE ary;
-{
-    rb_ary_push(ary, rb_str_new2(rb_id2name(key)));
-    return ST_CONTINUE;
-}

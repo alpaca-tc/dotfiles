@@ -1,2 +1,0 @@
-: static void set_backtrace(VALUE info, VALUE bt)
-

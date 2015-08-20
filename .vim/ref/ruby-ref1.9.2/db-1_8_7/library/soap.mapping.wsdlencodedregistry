@@ -1,7 +1,0 @@
-methods=
-sublibraries=
-requires=
-classes=SOAP=Mapping=WSDLEncodedRegistry
-is_sublibrary=true
-
-

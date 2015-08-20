@@ -1,6 +1,0 @@
-kind=defined
-names=schema_element_definition
-visibility=public
-
---- schema_element_definition(klass)
-

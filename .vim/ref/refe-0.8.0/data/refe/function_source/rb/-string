@@ -1,7 +1,0 @@
-object.c:1303
-VALUE
-rb_String(val)
-    VALUE val;
-{
-    return rb_convert_type(val, T_STRING, "String", "to_s");
-}

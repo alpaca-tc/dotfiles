@@ -1,8 +1,0 @@
-file.c:2544
-static VALUE
-rb_stat_f(obj)
-    VALUE obj;
-{
-    if (S_ISREG(get_stat(obj)->st_mode)) return Qtrue;
-    return Qfalse;
-}

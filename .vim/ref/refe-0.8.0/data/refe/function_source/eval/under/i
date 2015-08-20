@@ -1,7 +1,0 @@
-eval.c:5629
-static VALUE
-eval_under_i(args)
-    VALUE *args;
-{
-    return eval(args[0], args[1], Qnil, (char*)args[2], (int)args[3]);
-}

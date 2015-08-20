@@ -1,9 +1,0 @@
-string.c:3242
-static VALUE
-rb_str_ljust(argc, argv, str)
-    int argc;
-    VALUE *argv;
-    VALUE str;
-{
-    return rb_str_justify(argc, argv, str, 'l');
-}

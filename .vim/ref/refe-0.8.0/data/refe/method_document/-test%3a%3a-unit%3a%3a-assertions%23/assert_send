@@ -1,5 +1,0 @@
---- assert_send(send_array, message="")
-
-    send_array[0].__send__(send_array[1], *send_array[2..-1])
-    が真なら pass
-

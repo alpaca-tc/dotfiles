@@ -1,9 +1,0 @@
-re.c:971
-static VALUE match_entry _((VALUE, long));
-static VALUE
-match_entry(match, n)
-    VALUE match;
-    long n;
-{
-    return rb_reg_nth_match(n, match);
-}

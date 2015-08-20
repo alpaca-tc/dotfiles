@@ -1,6 +1,0 @@
-正規表現のマッチに関する情報を扱うためのクラス。
-このクラスのインスタンスは、
-* Regexp.last_match
-* Regexp#match [Regexp/match], String#match [String/match]
-* $~
-などにより得られます。

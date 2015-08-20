@@ -1,7 +1,0 @@
---- pop([non_block])
---- shift([non_block])
---- deq([non_block])
-    queueからひとつ値を取り出します。queueが空の時、呼出元のスレッ
-    ドは停止します。省略可能な引数non_blockが真であれば、
-    queueが空の時に例外 ThreadError が発生します。
-

@@ -1,6 +1,0 @@
-re.c:1603
-static VALUE
-kcode_getter()
-{
-    return rb_str_new2(rb_get_kcode());
-}

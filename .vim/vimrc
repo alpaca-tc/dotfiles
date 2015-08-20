@@ -1,3 +1,5 @@
+" en0: flags=8863<UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+"         ether 3c:15:c2:be:67:10
 " Δ~~~~Δ
 " ξ・ェ・ξ  < I am @alpaca-tc
 " ξ     ξ
@@ -1448,7 +1450,6 @@ let hooks = neobundle#get_hooks('vim-ref')
 function! hooks.on_source(bundle) "{{{
   let g:ref_open                    = 'tabnew'
   let g:ref_cache_dir               = g:my.dir.vimref
-  let g:ref_phpmanual_path          = expand('~/.vim/ref/php-chunked-xhtml')
   let g:ref_alc_encoding = 'utf-8'
   " let g:ref_refe_encoding           = 'utf-8'
   let g:ref_no_default_key_mappings = 1

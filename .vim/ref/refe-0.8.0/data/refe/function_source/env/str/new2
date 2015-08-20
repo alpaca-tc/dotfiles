@@ -1,8 +1,0 @@
-hash.c:995
-static VALUE
-env_str_new2(ptr)
-    const char *ptr;
-{
-    if (!ptr) return Qnil;
-    return env_str_new(ptr, strlen(ptr));
-}

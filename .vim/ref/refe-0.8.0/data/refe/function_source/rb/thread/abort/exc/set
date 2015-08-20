@@ -1,9 +1,0 @@
-eval.c:9279
-static VALUE
-rb_thread_abort_exc_set(thread, val)
-    VALUE thread, val;
-{
-    rb_secure(4);
-    rb_thread_check(thread)->abort = RTEST(val);
-    return val;
-}

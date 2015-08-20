@@ -1,4 +1,0 @@
---- IPSocket.getaddress(host)
-    ホスト名からホストのアドレスを返します。ホストのアドレスは文
-    字列はoctet decimalの文字列(例:127.0.0.1)です。
-

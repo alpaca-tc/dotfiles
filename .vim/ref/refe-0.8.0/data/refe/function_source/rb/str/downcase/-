@@ -1,9 +1,0 @@
-string.c:2114
-static VALUE
-rb_str_downcase(str)
-    VALUE str;
-{
-    str = rb_str_dup(str);
-    rb_str_downcase_bang(str);
-    return str;
-}

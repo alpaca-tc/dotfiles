@@ -1,9 +1,0 @@
-.debug	OpenSSL.#debug
-.debug=	OpenSSL.#debug=
-.errors	OpenSSL.#errors
-#debug	OpenSSL.#debug
-#debug=	OpenSSL.#debug=
-#errors	OpenSSL.#errors
-:OPENSSL_VERSION	OpenSSL::OPENSSL_VERSION
-:OPENSSL_VERSION_NUMBER	OpenSSL::OPENSSL_VERSION_NUMBER
-:VERSION	OpenSSL::VERSION

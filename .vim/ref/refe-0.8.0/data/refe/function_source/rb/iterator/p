@@ -1,6 +1,0 @@
-eval.c:4042
-int
-rb_iterator_p()
-{
-    return rb_block_given_p();
-}

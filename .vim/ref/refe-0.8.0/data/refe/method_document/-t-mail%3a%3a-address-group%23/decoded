@@ -1,6 +1,0 @@
-: decoded( eol = "\n", encoding = 'e' ) -> String
-    eol: String
-    encoding: String
-
-    デコードされた RFC2822 形式の文字列表現を返します。
-

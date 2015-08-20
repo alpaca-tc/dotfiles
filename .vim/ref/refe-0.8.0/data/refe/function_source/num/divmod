@@ -1,7 +1,0 @@
-numeric.c:203
-static VALUE
-num_divmod(x, y)
-    VALUE x, y;
-{
-    return rb_assoc_new(num_div(x, y), rb_funcall(x, '%', 1, y));
-}

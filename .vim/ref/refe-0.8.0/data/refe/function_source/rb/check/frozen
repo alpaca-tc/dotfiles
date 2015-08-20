@@ -1,7 +1,0 @@
-error.c:814
-void
-rb_check_frozen(obj)
-    VALUE obj;
-{
-    if (OBJ_FROZEN(obj)) rb_error_frozen(rb_obj_classname(obj));
-}

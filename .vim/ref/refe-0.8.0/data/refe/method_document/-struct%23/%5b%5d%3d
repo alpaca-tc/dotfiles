@@ -1,9 +1,0 @@
---- self[nth]=value
-
-    構造体の nth 番目のメンバの値を value にして 
-    value を返します。nth が文字列または Symbol の場
-    合はその名前のメンバの値を value にします。
-
-    存在しないメンバを指定した場合、例外 IndexError あるいは 
-    NameError が発生します。
-

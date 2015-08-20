@@ -1,6 +1,0 @@
-kind=defined
-names=new
-visibility=public
-
---- new(op_name, optype_name, parts)
-

@@ -1,3 +1,0 @@
-: static VALUE rb_obj_inspect(VALUE obj)
-    Object#inspect の実体。
-

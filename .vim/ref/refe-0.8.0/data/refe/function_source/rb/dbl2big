@@ -1,7 +1,0 @@
-bignum.c:835
-VALUE
-rb_dbl2big(d)
-    double d;
-{
-    return bignorm(dbl2big(d));
-}

@@ -1,4 +1,0 @@
---- File.zero?(path)
-
-    FileTest.zero? と同じです。
-

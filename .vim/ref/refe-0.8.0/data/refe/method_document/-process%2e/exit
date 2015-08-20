@@ -1,6 +1,0 @@
---- Process.exit([status])
-
-    ruby 1.7 feature
-
-    関数 exit と同じです。
-

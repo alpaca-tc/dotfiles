@@ -1,2 +1,0 @@
-: static VALUE true_to_s(VALUE obj)
-

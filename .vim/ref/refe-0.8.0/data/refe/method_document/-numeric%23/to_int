@@ -1,4 +1,0 @@
---- to_int      ruby 1.7 feature
-
-    self.to_i と同じです。
-

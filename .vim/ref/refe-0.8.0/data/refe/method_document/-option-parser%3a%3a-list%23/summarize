@@ -1,9 +1,0 @@
---- OptionParser::List#summarize(*args) {...}
-    Making summary table, yields the block with each lines.
-    Each elements of @list should be able to summarize.
-    :Parameters:
-      : args
-        passed to elements#summarize through.
-      : block
-        to be passed each lines(without newline).
-

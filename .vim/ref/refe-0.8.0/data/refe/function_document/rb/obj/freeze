@@ -1,3 +1,0 @@
-: VALUE rb_obj_freeze(VALUE obj)
-    obj.freeze
-

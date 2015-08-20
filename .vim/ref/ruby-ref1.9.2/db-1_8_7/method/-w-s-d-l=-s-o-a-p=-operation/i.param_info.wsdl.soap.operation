@@ -1,6 +1,0 @@
-kind=defined
-names=param_info
-visibility=private 
-
---- param_info(name_info, param)
-

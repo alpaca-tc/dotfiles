@@ -1,4 +1,0 @@
---- OptionParser#ver
-    Returns version string from program_name, version and
-    release.
-

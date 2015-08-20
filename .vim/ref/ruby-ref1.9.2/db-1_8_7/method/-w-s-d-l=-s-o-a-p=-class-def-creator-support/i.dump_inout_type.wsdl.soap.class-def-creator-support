@@ -1,6 +1,0 @@
-kind=defined
-names=dump_inout_type
-visibility=private 
-
---- dump_inout_type(param)
-

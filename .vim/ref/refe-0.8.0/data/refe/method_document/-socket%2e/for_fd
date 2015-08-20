@@ -1,7 +1,0 @@
---- Socket.for_fd(fd)
-
-    ファイルディスクリプタ fd に対する新しいソケットを生成します。
-
-    ruby 1.7 feature:
-    このメソッドは BasicSocket に移動しました。
-

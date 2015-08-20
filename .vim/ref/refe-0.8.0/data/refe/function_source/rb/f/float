@@ -1,7 +1,0 @@
-object.c:1260
-static VALUE
-rb_f_float(obj, arg)
-    VALUE obj, arg;
-{
-    return rb_Float(arg);
-}

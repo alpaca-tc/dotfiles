@@ -1,2 +1,0 @@
-: static int generic_ivar_remove(VALUE obj, ID id, VALUE *valp)
-

@@ -1,6 +1,0 @@
-kind=defined
-names=encode_tag_end
-visibility=public
-
---- encode_tag_end(elename, cr = nil)
-

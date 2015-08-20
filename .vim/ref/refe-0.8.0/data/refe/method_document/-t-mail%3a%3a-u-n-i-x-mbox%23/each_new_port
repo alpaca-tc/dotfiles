@@ -1,9 +1,0 @@
-: each_new_port( time = @last_loaded_time ) {|port| .... }
-    time: Time
-    port: TMail::FilePort
-
-    新着メールのみに対してくりかえします。
-    引数 time が与えられたときはその時刻以降に更新されたメールを新着とみなします。
-    与えられなかった時は前回の each_mail, reverse_each_mail, each_new_port の後に
-    更新されたメールを新着とみなします。
-

@@ -1,7 +1,0 @@
-range.c:328
-static VALUE
-range_last(range)
-    VALUE range;
-{
-    return rb_ivar_get(range, id_end);
-}

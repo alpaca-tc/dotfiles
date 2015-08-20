@@ -1,7 +1,0 @@
-process.c:1976
-static VALUE
-p_uid_grant_privilege(obj, id)
-    VALUE obj, id;
-{
-    return rb_seteuid_core(NUM2INT(id));
-}

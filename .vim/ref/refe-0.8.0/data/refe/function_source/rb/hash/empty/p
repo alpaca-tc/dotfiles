@@ -1,9 +1,0 @@
-hash.c:614
-static VALUE
-rb_hash_empty_p(hash)
-    VALUE hash;
-{
-    if (RHASH(hash)->tbl->num_entries == 0)
-	return Qtrue;
-    return Qfalse;
-}

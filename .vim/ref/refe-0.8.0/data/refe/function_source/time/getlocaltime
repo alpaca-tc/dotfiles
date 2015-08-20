@@ -1,7 +1,0 @@
-time.c:863
-static VALUE
-time_getlocaltime(time)
-    VALUE time;
-{
-    return time_localtime(time_dup(time));
-}

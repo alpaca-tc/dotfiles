@@ -1,9 +1,0 @@
-kind=defined
-names=METHOD_DSA
-visibility=public
-
---- METHOD_DSA -> Integer
-デフォルトの DSA アルゴリズムのための engine に設定することを意味します。
-
-[[m:OpenSSL::Engine#set_default]] のフラグとして使います。
-

@@ -1,8 +1,0 @@
-math.c:262
-static VALUE
-math_ldexp(obj, x, n)
-    VALUE obj, x, n;
-{
-    Need_Float(x);
-    return rb_float_new(ldexp(RFLOAT(x)->value, NUM2INT(n)));
-}

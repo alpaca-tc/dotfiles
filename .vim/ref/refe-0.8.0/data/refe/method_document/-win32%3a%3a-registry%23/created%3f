@@ -1,4 +1,0 @@
---- created?
-    キーが((*新しく*))作成された場合，真を返します。
-    (⇒Registry.create [Win32::Registry/Registry.create])
-

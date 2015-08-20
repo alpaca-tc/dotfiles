@@ -1,8 +1,0 @@
-re.c:1643
-static void
-kcode_setter(val)
-    VALUE val;
-{
-    may_need_recompile = 1;
-    rb_set_kcode(StringValuePtr(val));
-}

@@ -1,6 +1,0 @@
-kind=defined
-names=new
-visibility=public
-
---- new(endpoint_url, soapaction, options)
-

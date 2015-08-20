@@ -1,4 +1,0 @@
---- File.writable?(path)
-
-    FileTest.writable? と同じです。
-

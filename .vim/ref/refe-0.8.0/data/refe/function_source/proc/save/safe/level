@@ -1,7 +1,0 @@
-eval.c:6902
-static void
-proc_save_safe_level(data)
-    VALUE data;
-{
-    FL_SET(data, (ruby_safe_level << PROC_TSHIFT) & PROC_TMASK);
-}

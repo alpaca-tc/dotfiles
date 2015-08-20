@@ -1,7 +1,0 @@
-: reply_to( default = nil ) -> [String]
-: reply_to=( specs )
-    specs: String / [String]
-    default: Object
-
-    Reply-To: アドレスの spec の配列。
-

@@ -1,7 +1,0 @@
-: new( strict ) -> TMail::Config
-    strict: bool
-
-    TMail::Config オブジェクトを生成します。strict が真の場合、
-    生成された Config オブジェクトのすべての strict_* フラグを
-    オンにします。
-

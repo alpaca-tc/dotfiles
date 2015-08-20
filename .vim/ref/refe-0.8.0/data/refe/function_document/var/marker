@@ -1,2 +1,0 @@
-: static void var_marker(VALUE *var)
-

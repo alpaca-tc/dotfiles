@@ -1,3 +1,0 @@
-.each	DL::MemorySpace.#each
-#each	DL::MemorySpace.#each
-:MemoryTable	DL::MemorySpace::MemoryTable

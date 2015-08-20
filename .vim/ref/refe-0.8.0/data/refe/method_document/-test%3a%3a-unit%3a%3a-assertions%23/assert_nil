@@ -1,7 +1,0 @@
---- assert_nil(object, message="")
---- assert_not_nil(object, message="")
-
-    object.nil? が真なら pass
-
-    !object.nil? が真なら pass
-

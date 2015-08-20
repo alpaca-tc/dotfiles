@@ -1,5 +1,0 @@
---- to_sym
-
-    ruby 1.7 feature:
-    self を返します。
-

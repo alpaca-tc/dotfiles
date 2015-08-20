@@ -1,4 +1,0 @@
---- Net::FTP#passive
-
-    passive モードの状態を真偽値で返します。
-

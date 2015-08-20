@@ -1,6 +1,0 @@
-kind=defined
-names=dump_simpletypedef
-visibility=private 
-
---- dump_simpletypedef(qname, simpletype)
-

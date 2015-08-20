@@ -1,7 +1,0 @@
-superclass=SOAP=RPC=HTTPServer
-type=class
-library=soap.rpc.standaloneServer
-extended=
-included=
-
-

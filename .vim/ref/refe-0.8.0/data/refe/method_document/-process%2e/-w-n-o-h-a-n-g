@@ -1,5 +1,0 @@
---- WNOHANG
-
-    Process#waitpid [Process/waitpid] の第二引数に指定するフラグで
-    す。終了した子プロセスがない時に waitpid がブロックしません。
-

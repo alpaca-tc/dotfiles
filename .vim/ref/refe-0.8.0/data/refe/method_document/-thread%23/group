@@ -1,9 +1,0 @@
---- group               ruby 1.8 feature
-
-    スレッドが属している ThreadGroup オブジェクトを返します。
-
-        p Thread.current.group == ThreadGroup::Default
-        # => true
-
-    死んでいるスレッドは nil を返します。
-

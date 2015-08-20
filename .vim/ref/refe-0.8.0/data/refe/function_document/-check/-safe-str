@@ -1,3 +1,0 @@
-: void Check_SafeStr(VALUE v)
-    古い API です。SafeStringValue を使ってください。
-

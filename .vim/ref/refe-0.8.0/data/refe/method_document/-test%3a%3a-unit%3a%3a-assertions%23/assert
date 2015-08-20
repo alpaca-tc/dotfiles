@@ -1,4 +1,0 @@
---- assert(boolean, message="")
-
-    boolean が真なら pass
-

@@ -1,8 +1,0 @@
-kind=defined
-names=add_html
-visibility=public
-
---- add_html(tag, name)
-
-Add to the sequences recognized as general markup
-

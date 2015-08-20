@@ -1,4 +1,0 @@
---- Complex.new(r,i=0)
---- Complex(r,i=0)
-    実部がr、虚部iが複素数を生成する。
-

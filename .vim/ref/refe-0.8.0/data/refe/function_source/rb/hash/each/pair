@@ -1,8 +1,0 @@
-hash.c:666
-static VALUE
-rb_hash_each_pair(hash)
-    VALUE hash;
-{
-    rb_hash_foreach(hash, each_pair_i, 0);
-    return hash;
-}

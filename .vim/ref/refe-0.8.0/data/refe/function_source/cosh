@@ -1,7 +1,0 @@
-math.c:98
-double
-cosh(x)
-    double x;
-{
-    return (exp(x) + exp(-x)) / 2;
-}

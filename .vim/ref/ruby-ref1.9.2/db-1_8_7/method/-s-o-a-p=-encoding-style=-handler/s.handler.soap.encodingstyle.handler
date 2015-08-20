@@ -1,6 +1,0 @@
-kind=defined
-names=handler
-visibility=public
-
---- handler(uri)
-

@@ -1,9 +1,0 @@
-math.c:106
-static VALUE
-math_cosh(obj, x)
-    VALUE obj, x;
-{
-    Need_Float(x);
-    
-    return rb_float_new(cosh(RFLOAT(x)->value));
-}

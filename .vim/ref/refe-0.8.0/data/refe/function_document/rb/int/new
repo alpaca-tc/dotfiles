@@ -1,2 +1,0 @@
-: VALUE rb_int_new(long v)
-

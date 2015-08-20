@@ -1,4 +1,0 @@
-: rename(mailbox, newname)
-      Sends a RENAME command to change the name of the mailbox to
-      the newname.
-

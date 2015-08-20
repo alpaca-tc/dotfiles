@@ -1,2 +1,0 @@
-: static int proc_get_safe_level(VALUE data)
-

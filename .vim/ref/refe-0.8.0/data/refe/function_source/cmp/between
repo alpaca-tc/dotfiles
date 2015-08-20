@@ -1,9 +1,0 @@
-compar.c:114
-static VALUE
-cmp_between(x, min, max)
-    VALUE x, min, max;
-{
-    if (RTEST(cmp_lt(x, min))) return Qfalse;
-    if (RTEST(cmp_gt(x, max))) return Qfalse;
-    return Qtrue;
-}

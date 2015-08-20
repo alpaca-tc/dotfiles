@@ -1,5 +1,0 @@
---- Readline.completion_case_fold=(bool)
---- Readline.completion_case_fold
-    入力補完時に大文字／小文字の区別をするかどうかを決定します。
-    bool が真ならば区別しません。
-

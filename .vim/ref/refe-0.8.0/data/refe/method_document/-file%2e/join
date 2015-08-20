@@ -1,8 +1,0 @@
---- File.join(item, item, ...)
-
-    File::SEPARATORを間に入れて文字列を連結します。
-
-      [item, item, ...].join(File::SEPARATOR)
-
-    と同じです。(DOSISH 対応で環境依存になる予定です。)
-

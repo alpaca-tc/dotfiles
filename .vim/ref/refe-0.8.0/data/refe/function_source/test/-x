@@ -1,9 +1,0 @@
-file.c:703
-static VALUE
-test_X(obj, fname)
-    VALUE obj, fname;
-{
-    SafeStringValue(fname);
-    if (access(StringValueCStr(fname), X_OK) < 0) return Qfalse;
-    return Qtrue;
-}

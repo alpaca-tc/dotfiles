@@ -1,9 +1,0 @@
---- Matrix.[](rows)
-    creates a matrix where `rows' indicates rows.
-    The parameter `rows' is an array of arrays,
-    e.g, Matrix[[11, 12], [21, 22]]
-
-    rowsを要素とする行列を生成する。
-    ただし、引数rowsはネストした配列(=配列の配列)である。
-    例 Matrix[[11, 12], [21, 22]]
-

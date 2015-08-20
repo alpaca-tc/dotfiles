@@ -1,7 +1,0 @@
-kind=defined
-names=httpproxy,httpproxy=
-visibility=public
-
---- httpproxy
---- httpproxy=(httpproxy)
-

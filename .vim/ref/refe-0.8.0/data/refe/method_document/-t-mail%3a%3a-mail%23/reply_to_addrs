@@ -1,7 +1,0 @@
-: reply_to_addrs( default = nil ) -> [TMail::Address]
-: reply_to_addrs=( addrs )
-    addrs: TMail::Address / [TMail::Address]
-    default: Object
-
-    Reply-To: アドレスの配列。
-

@@ -1,7 +1,0 @@
-kind=defined
-names=connect_timeout,connect_timeout=
-visibility=public
-
---- connect_timeout
---- connect_timeout=(value)
-

@@ -1,7 +1,0 @@
-array.c:849
-static VALUE
-rb_ary_length(ary)
-    VALUE ary;
-{
-    return LONG2NUM(RARRAY(ary)->len);
-}

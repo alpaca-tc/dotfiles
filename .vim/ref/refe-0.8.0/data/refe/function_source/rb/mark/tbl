@@ -1,8 +1,0 @@
-gc.c:589
-void
-rb_mark_tbl(tbl)
-    st_table *tbl;
-{
-    if (!tbl) return;
-    st_foreach(tbl, mark_entry, 0);
-}

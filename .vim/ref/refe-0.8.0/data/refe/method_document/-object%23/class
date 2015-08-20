@@ -1,8 +1,0 @@
---- class
---- type
-
-    レシーバのクラスを返します。
-
-    ruby 1.7 feature: type は、version 1.7 では、obsolete 
-    となりました。
-

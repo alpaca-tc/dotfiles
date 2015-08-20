@@ -1,8 +1,0 @@
-eval.c:782
-static inline void
-dvar_asgn(id, value)
-    ID id;
-    VALUE value;
-{
-    dvar_asgn_internal(id, value, 0);
-}

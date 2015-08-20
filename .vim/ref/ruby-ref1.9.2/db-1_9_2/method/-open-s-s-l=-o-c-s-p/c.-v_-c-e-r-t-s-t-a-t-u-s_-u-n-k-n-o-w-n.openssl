@@ -1,9 +1,0 @@
-kind=defined
-names=V_CERTSTATUS_UNKNOWN
-visibility=public
-
---- V_CERTSTATUS_UNKNOWN -> Integer
-[[m:OpenSSL::OCSP::BasicResponse#status]] 
-のステータスコードで証明書の有効性が不明であることを意味します。
-
-

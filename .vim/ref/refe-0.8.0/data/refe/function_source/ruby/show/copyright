@@ -1,7 +1,0 @@
-version.c:40
-void
-ruby_show_copyright()
-{
-    printf("ruby - Copyright (C) 1993-2003 Yukihiro Matsumoto\n");
-    exit(0);
-}

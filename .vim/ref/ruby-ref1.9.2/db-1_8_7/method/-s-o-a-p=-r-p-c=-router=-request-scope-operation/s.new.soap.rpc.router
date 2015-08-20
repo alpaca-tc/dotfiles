@@ -1,6 +1,0 @@
-kind=defined
-names=new
-visibility=public
-
---- new(soapaction, receiver_factory, name, param_def, opt)
-

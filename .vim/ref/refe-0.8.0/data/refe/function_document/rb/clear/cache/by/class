@@ -1,4 +1,0 @@
-: static void rb_clear_cache_by_class(VALUE klass) 
-    メソッドキャシュから klass クラスのメソッドの
-    キャッシュエントリを消去します。
-

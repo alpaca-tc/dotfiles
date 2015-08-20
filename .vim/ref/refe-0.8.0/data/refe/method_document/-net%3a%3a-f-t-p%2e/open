@@ -1,4 +1,0 @@
---- Net::FTP.open(host, user=nil, passwd=nil, acct=nil)
-
-    hostを省略できない以外は newと同じです。
-

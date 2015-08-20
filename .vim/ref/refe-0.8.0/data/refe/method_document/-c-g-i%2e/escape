@@ -1,8 +1,0 @@
---- CGI.escape(string)
-      文字列をURLエンコードする
-
-        例：
-        url_encoded_string = CGI::escape("string")
-
-#=== UNESCAPE URL ENCODED
-

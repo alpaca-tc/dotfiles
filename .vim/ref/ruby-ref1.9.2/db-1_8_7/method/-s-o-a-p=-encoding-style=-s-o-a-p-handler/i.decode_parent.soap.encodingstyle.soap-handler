@@ -1,6 +1,0 @@
-kind=defined
-names=decode_parent
-visibility=public
-
---- decode_parent(parent, node)
-

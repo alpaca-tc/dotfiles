@@ -1,8 +1,0 @@
-class.c:765
-void
-rb_define_alias(klass, name1, name2)
-    VALUE klass;
-    const char *name1, *name2;
-{
-    rb_alias(klass, rb_intern(name1), rb_intern(name2));
-}

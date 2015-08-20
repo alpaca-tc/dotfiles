@@ -1,5 +1,0 @@
---- reject! { |o| ... }
-#    Equivalent to Set#delete_if, but returns nil if no changes were
-#    made.
-    delete_if と同じですが、要素が1つも削除されなかった場合は nil を返します。
-

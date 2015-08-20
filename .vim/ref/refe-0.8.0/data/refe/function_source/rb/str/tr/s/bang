@@ -1,7 +1,0 @@
-string.c:2495
-static VALUE
-rb_str_tr_s_bang(str, src, repl)
-    VALUE str, src, repl;
-{
-    return tr_trans(str, src, repl, 1);
-}

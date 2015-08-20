@@ -1,7 +1,0 @@
-marshal.c:1316
-static VALUE
-load(arg)
-    struct load_arg *arg;
-{
-    return r_object(arg);
-}

@@ -1,8 +1,0 @@
-variable.c:623
-VALUE
-rb_gvar_get(entry)
-    struct global_entry *entry;
-{
-    struct global_variable *var = entry->var;
-    return (*var->getter)(entry->id, var->data, var);
-}

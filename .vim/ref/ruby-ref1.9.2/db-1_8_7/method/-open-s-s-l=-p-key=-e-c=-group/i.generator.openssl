@@ -1,7 +1,0 @@
-kind=defined
-names=generator
-visibility=public
-
---- generator -> OpenSSL::PKey::EC::Point
-群の生成元を返します。
-

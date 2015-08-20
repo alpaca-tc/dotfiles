@@ -1,7 +1,0 @@
-hash.c:607
-static VALUE
-rb_hash_size(hash)
-    VALUE hash;
-{
-    return INT2FIX(RHASH(hash)->tbl->num_entries);
-}

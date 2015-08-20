@@ -1,6 +1,0 @@
-kind=defined
-names=unmarshal
-visibility=public
-
---- unmarshal(stream, mapping_registry = SOAP::Marshal::MarshalMappingRegistry)
-

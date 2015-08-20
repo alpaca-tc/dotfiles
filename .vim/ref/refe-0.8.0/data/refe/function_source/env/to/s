@@ -1,6 +1,0 @@
-hash.c:1463
-static VALUE
-env_to_s()
-{
-    return rb_str_new2("ENV");
-}

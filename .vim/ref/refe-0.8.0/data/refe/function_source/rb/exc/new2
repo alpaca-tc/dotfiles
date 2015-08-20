@@ -1,8 +1,0 @@
-error.c:305
-VALUE
-rb_exc_new2(etype, s)
-    VALUE etype;
-    const char *s;
-{
-    return rb_exc_new(etype, s, strlen(s));
-}

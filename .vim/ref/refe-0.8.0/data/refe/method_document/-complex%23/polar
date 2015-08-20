@@ -1,3 +1,0 @@
---- Complex#polar
-    複素数の極座標表示、すなわち、配列[self.abs,self.arg]を返す。
-

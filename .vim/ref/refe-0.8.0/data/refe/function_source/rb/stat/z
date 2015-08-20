@@ -1,8 +1,0 @@
-file.c:2552
-static VALUE
-rb_stat_z(obj)
-    VALUE obj;
-{
-    if (get_stat(obj)->st_size == 0) return Qtrue;
-    return Qfalse;
-}

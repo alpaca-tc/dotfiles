@@ -1,7 +1,0 @@
-superclass=Exception
-type=class
-library=rdoc
-extended=
-included=
-
-ドキュメントの処理中にエラーがあった場合に発生します。

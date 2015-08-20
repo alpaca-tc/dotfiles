@@ -1,7 +1,0 @@
-dln.c:476
-static void
-dln_print_undef()
-{
-    fprintf(stderr, " Undefined symbols:\n");
-    st_foreach(undef_tbl, undef_print, NULL);
-}

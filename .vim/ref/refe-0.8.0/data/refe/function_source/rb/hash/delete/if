@@ -1,9 +1,0 @@
-hash.c:473
-VALUE
-rb_hash_delete_if(hash)
-    VALUE hash;
-{
-    rb_hash_modify(hash);
-    rb_hash_foreach(hash, delete_if_i, 0);
-    return hash;
-}

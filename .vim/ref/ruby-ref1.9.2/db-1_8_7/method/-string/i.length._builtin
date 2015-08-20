@@ -1,9 +1,0 @@
-kind=defined
-names=length,size
-visibility=public
-
---- length -> Integer
---- size -> Integer
-
-文字列のバイト数を返します。
-

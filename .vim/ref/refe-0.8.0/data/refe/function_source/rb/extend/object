@@ -1,7 +1,0 @@
-eval.c:6322
-void
-rb_extend_object(obj, module)
-    VALUE obj, module;
-{
-    rb_include_module(rb_singleton_class(obj), module);
-}

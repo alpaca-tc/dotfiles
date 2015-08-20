@@ -1,7 +1,0 @@
-object.c:493
-static VALUE
-false_or(obj, obj2)
-    VALUE obj, obj2;
-{
-    return RTEST(obj2)?Qtrue:Qfalse;
-}

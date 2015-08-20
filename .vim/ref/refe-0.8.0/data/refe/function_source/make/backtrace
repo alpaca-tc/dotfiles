@@ -1,6 +1,0 @@
-eval.c:5380
-static VALUE
-make_backtrace()
-{
-    return backtrace(-1);
-}

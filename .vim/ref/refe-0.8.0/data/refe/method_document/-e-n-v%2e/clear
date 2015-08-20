@@ -1,6 +1,0 @@
---- ENV.clear
-
-    ruby 1.8 feature
-
-    環境変数をすべてクリアします。self を返します。
-

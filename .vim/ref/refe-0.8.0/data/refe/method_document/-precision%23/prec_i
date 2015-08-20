@@ -1,5 +1,0 @@
---- prec_i
-
-    self を Integer に変換します。prec(Integer) と等
-    価です。
-

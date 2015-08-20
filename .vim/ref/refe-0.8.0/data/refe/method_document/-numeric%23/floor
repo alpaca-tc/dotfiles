@@ -1,7 +1,0 @@
---- floor
-
-    self を超えない最大の整数(床)を返します。
-
-    round, truncate, to_i,
-    ceil も参照。
-

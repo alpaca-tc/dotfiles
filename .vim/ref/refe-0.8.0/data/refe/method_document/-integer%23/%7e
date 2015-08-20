@@ -1,8 +1,0 @@
---- ~ self
---- self | other
---- self & other
---- self ^ other
-
-    ビット演算子。それぞれ否定、論理和、論理積、排他的論理和を計算しま
-    す。
-

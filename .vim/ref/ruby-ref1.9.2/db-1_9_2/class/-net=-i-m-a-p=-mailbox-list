@@ -1,8 +1,0 @@
-superclass=Struct
-type=class
-library=net.imap
-extended=
-included=
-
-[[m:Net::IMAP#list]]、[[m:Net::IMAP#xlist]]、[[m:Net::IMAP#lsub]]
-で返されるメールボックスのデータを表します。

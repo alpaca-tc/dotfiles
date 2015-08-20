@@ -1,7 +1,0 @@
-: new( dirname ) -> TMail::Maildir
-    dirname: String
-
-    新しい TMail::Maildir オブジェクトを生成します。
-    dirname は maildir メールボックスとして使うディレクトリ名です。
-    ディレクトリはすでに作成ずみでなければいけません。
-

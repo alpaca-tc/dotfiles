@@ -1,8 +1,0 @@
-variable.c:501
-void
-rb_define_readonly_variable(name, var)
-    const char  *name;
-    VALUE *var;
-{
-    rb_define_hooked_variable(name, var, 0, readonly_setter);
-}

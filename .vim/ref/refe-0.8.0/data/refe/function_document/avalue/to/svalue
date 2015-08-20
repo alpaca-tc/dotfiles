@@ -1,2 +1,0 @@
-: static VALUE avalue_to_svalue(VALUE v)
-

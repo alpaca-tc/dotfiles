@@ -1,8 +1,0 @@
-superclass=String
-type=class
-library=csv
-extended=
-included=
-
-CSV形式データのカラム（Cell）を操作するためのクラス。
-このクラスはバージョン1.8.7で廃止されました。

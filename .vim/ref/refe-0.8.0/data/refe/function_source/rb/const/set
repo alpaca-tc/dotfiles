@@ -1,9 +1,0 @@
-variable.c:1514
-void
-rb_const_set(klass, id, val)
-    VALUE klass;
-    ID id;
-    VALUE val;
-{
-    mod_av_set(klass, id, val, Qtrue);
-}

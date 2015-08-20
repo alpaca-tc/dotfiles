@@ -1,4 +1,0 @@
---- FileTest.pipe?(filename)
-
-    filename が名前つきパイプ(FIFO)である時、真を返します。
-

@@ -1,8 +1,0 @@
-: write_back( eol = "\n", encoding = 'e' )
-    eol: String
-    encoding: String
-
-    メール全体を文字列化し body_port に書き戻します。その際、ヘッダの
-    行末コードを eol に、ヘッダ内の日本語文字列の文字コードを encoding に
-    変換します。
-

@@ -1,7 +1,0 @@
-range.c:86
-static VALUE
-range_exclude_end_p(range)
-    VALUE range;
-{
-    return EXCL(range) ? Qtrue : Qfalse;
-}

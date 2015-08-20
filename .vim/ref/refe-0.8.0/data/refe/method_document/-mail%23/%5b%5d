@@ -1,5 +1,0 @@
---- Mail#[](field)
-      ヘッダの field の値を返す。
-      m.header[field.capitalize] と同じなので値取得の際は、フィー
-      ルド名のアルファベットの大小を気にする必要はない。
-

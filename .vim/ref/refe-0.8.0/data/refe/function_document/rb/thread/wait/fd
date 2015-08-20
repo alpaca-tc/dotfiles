@@ -1,2 +1,0 @@
-: void rb_thread_wait_fd(int fd)
-

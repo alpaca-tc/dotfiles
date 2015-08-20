@@ -1,9 +1,0 @@
---- FileUtils.mkdir( dir, *options )
-  Options: noop verbose
-
-  ディレクトリ dir を作成します。
-
-    FileUtils.mkdir 'test'
-    FileUtils.mkdir %w( tmp data )
-    FileUtils.mkdir 'notexist', :noop  # does not create really
-

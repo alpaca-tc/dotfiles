@@ -1,7 +1,0 @@
-eval.c:6909
-static int
-proc_get_safe_level(data)
-    VALUE data;
-{
-    return (RBASIC(data)->flags & PROC_TMASK) >> PROC_TSHIFT;
-}

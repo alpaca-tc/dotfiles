@@ -1,4 +1,0 @@
---- Net::FTP#connect(host, port = FTP_PORT)
-
-    hostで指定されたホストに接続します。
-

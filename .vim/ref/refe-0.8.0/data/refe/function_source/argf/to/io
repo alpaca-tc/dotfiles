@@ -1,8 +1,0 @@
-io.c:3786
-static VALUE
-argf_to_io()
-{
-    next_argv();
-    ARGF_FORWARD();
-    return current_file;
-}

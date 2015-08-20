@@ -1,8 +1,0 @@
-object.c:624
-static VALUE
-rb_mod_lt(mod, arg)
-    VALUE mod, arg;
-{
-    if (mod == arg) return Qfalse;
-    return rb_mod_le(mod, arg);
-}

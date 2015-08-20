@@ -1,5 +1,0 @@
---- Net::FTP#pwd
---- Net::FTP#getdir
-
-    カレントディレクトリを返します。
-

@@ -1,3 +1,0 @@
-: self[key]=value
-    keyをキーとして，valueを格納します．
-

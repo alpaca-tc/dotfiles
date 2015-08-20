@@ -1,3 +1,0 @@
---- send_io(io)  ruby 1.7 feature
-    IO や Fixnum に対応するファイルディスクリプタを送ります。
-

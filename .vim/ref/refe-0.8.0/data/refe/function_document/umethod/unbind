@@ -1,2 +1,0 @@
-: static VALUE umethod_unbind(VALUE obj)
-

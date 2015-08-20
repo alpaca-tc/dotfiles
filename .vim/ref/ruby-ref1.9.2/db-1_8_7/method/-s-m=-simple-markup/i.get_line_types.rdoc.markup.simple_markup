@@ -1,7 +1,0 @@
-kind=defined
-names=get_line_types
-visibility=public
-
---- get_line_types
-
-for debugging, return the list of line types

@@ -1,6 +1,0 @@
-kind=defined
-names=wellformed_error
-visibility=public
-
---- wellformed_error(msg)
-

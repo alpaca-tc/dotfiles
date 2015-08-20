@@ -1,6 +1,0 @@
-: friendly_from( default = nil ) -> String
-    default: Object
-
-    From: の最初のアドレスの phrase または spec。
-    From: が存在しないときは default を返します。
-

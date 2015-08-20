@@ -1,4 +1,0 @@
---- assert_match(str, re[, message])
---- assert_matches(str, re[, message])
---- assert_not_match(str, re[, message])
-

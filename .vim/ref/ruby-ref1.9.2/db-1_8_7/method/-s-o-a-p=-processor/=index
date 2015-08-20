@@ -1,4 +1,0 @@
-.default_parser_option	SOAP::Processor.default_parser_option
-.default_parser_option=	SOAP::Processor.default_parser_option
-.marshal	SOAP::Processor.marshal
-.unmarshal	SOAP::Processor.unmarshal

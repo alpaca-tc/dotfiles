@@ -1,4 +1,0 @@
---- Net::FTP#mdtm(filename)
-
-    MDTMコマンドを送信し、結果を返します。
-

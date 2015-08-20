@@ -1,6 +1,0 @@
-kind=defined
-names=on_xmldecl_version
-visibility=public
-
---- on_xmldecl_version(str)
-

@@ -1,4 +1,0 @@
-: static void stat_col(void) 
-    ハッシュの衝突に関する統計を /tmp/col に出力する。
-    #ifdef HASH_LOG のときだけ定義される、開発者用関数。
-

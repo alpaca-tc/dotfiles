@@ -1,9 +1,0 @@
-process.c:1983
-static VALUE
-proc_getegid(obj)
-    VALUE obj;
-{
-    int egid = getegid();
-
-    return INT2FIX(egid);
-}

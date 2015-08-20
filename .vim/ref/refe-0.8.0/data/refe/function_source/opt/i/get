@@ -1,7 +1,0 @@
-io.c:3967
-static VALUE
-opt_i_get()
-{
-    if (!ruby_inplace_mode) return Qnil;
-    return rb_str_new2(ruby_inplace_mode);
-}

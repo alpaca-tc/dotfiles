@@ -1,8 +1,0 @@
-: disposition
-      Returns a imap.rb"/Net::IMAP::ContentDisposition object giving
-      the content disposition.
-
-: disposition
-      Returns a imap.rb"/Net::IMAP::ContentDisposition object giving
-      the content disposition.
-

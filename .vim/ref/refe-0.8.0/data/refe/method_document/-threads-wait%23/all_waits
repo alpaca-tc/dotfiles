@@ -1,5 +1,0 @@
---- ThreadsWait#all_waits
-    waits until all of specified threads are terminated.
-    if a block is supplied for the method, evaluates it for
-    each thread termination.
-

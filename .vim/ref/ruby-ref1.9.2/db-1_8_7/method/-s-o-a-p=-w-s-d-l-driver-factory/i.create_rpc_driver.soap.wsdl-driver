@@ -1,6 +1,0 @@
-kind=defined
-names=create_rpc_driver
-visibility=public
-
---- create_rpc_driver(servicename = nil, portname = nil)
-

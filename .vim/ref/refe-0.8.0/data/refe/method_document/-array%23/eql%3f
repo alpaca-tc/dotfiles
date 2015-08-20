@@ -1,6 +1,0 @@
---- eql?(other)
-
-    self と other の各要素をそれぞれ順に
-    Object#eql? [Object/eql?] で比較して、全要素が等しければ真を返
-    します。
-

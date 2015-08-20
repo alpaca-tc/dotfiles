@@ -1,6 +1,0 @@
-kind=defined
-names=add_type
-visibility=public
-
---- add_type(complextype)
-

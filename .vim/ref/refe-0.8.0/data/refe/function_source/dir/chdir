@@ -1,8 +1,0 @@
-dir.c:429
-static void
-dir_chdir(path)
-    const char *path;
-{
-    if (chdir(path) < 0)
-	rb_sys_fail(path);
-}

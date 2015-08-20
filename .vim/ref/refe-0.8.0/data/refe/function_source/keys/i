@@ -1,9 +1,0 @@
-hash.c:772
-static int
-keys_i(key, value, ary)
-    VALUE key, value, ary;
-{
-    if (key == Qundef) return ST_CONTINUE;
-    rb_ary_push(ary, key);
-    return ST_CONTINUE;
-}

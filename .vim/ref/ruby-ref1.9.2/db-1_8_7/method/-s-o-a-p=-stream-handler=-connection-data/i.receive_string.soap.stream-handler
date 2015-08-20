@@ -1,7 +1,0 @@
-kind=defined
-names=receive_string,receive_string=
-visibility=public
-
---- receive_string
---- receive_string=(value)
-

@@ -1,6 +1,0 @@
-parse.y:5794
-static ID
-internal_id()
-{
-    return ID_INTERNAL | (++last_id << ID_SCOPE_SHIFT);
-}

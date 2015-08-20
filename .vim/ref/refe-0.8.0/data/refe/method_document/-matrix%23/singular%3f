@@ -1,5 +1,0 @@
---- Matrix#singular?
-    Is singular? i.e. Is non-regular?
-
-    特異(singular)である、すなわち、正則でないなら真を返す。
-

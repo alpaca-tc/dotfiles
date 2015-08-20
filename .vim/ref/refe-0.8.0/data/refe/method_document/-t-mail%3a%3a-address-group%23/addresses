@@ -1,3 +1,0 @@
-: addresses -> [TMail::Address/TMail::AddressGroup]
-    TMail::Address または TMail::AddressGroup オブジェクトの配列。
-

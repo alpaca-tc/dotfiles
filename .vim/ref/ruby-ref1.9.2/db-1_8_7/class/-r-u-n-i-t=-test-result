@@ -1,7 +1,0 @@
-superclass=Test=Unit=TestResult
-type=class
-library=runit.testresult
-extended=
-included=
-
-テストの実行結果を格納するクラスです。

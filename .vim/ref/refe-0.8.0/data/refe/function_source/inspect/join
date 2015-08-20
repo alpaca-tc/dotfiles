@@ -1,8 +1,0 @@
-array.c:879
-static VALUE
-inspect_join(ary, arg)
-    VALUE ary;
-    VALUE *arg;
-{
-    return rb_ary_join(arg[0], arg[1]);
-}

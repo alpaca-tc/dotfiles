@@ -1,6 +1,0 @@
---- ENV.reject{|key, value| ... }
-
-    ブロックを評価した値が真である時、要素を削除します。
-    Enumerable#reject [Enumerable/reject] と異なり Hash を返
-    します。
-

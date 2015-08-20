@@ -1,3 +1,0 @@
-: VALUE rb_obj_id(VALUE obj)
-    Object#id の実体。
-

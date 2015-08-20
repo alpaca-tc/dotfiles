@@ -1,4 +1,0 @@
-: int IMMEDIATE_P(VALUE obj)
-    obj がポインタでないとき真。すなわち現在の実装では
-    Symbol か Fixnum のインスタンスであるとき真。
-

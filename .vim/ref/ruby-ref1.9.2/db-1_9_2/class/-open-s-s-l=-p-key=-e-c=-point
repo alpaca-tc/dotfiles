@@ -1,7 +1,0 @@
-superclass=Object
-type=class
-library=openssl
-extended=
-included=
-
-楕円曲線暗号の公開鍵となる曲線上の点を表します。

@@ -1,7 +1,0 @@
---- Net::FTP.new(host=nil, user=nil, passwd=nil, acct=nil)
-
-    新しいインスタンスを生成します。 
-
-    hostが指定された場合、生成されたインスタンスに対して connectを呼び出し、
-    さらにuserが指定された場合は loginを呼び出します。
-

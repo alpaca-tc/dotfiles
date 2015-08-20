@@ -1,2 +1,0 @@
---- assert_kind_of(c, obj[, message])
-

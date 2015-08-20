@@ -1,6 +1,0 @@
-kind=defined
-names=delete_all_by_dependant
-visibility=public
-
---- delete_all_by_dependant(dependant)
-

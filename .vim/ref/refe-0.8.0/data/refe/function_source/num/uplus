@@ -1,7 +1,0 @@
-numeric.c:170
-static VALUE
-num_uplus(num)
-    VALUE num;
-{
-    return num;
-}

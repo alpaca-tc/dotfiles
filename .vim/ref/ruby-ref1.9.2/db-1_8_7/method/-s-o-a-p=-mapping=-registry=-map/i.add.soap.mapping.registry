@@ -1,6 +1,0 @@
-kind=defined
-names=add
-visibility=public
-
---- add(obj_class, soap_class, factory, info)
-

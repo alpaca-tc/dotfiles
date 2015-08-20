@@ -1,4 +1,0 @@
-: void ruby_options(int argc, char **argv)
-    argc と argv を ruby への
-    コマンドラインオプションとして処理します。
-

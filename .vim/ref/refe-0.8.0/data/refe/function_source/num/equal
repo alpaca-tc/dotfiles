@@ -1,8 +1,0 @@
-numeric.c:515
-static VALUE
-num_equal(x, y)
-    VALUE x, y;
-{
-    if (x == y) return Qtrue;
-    return rb_funcall(y, id_eq, 1, x);
-}

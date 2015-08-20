@@ -1,7 +1,0 @@
-: parse( str ) -> TMail::Address/TMail::AddressGroup
-    str: String
-
-    文字列 str から TMail::Address または TMail::AddressGroup
-    オブジェクトを生成します。str がメールアドレスとみなせない
-    ときは例外 TMail::SyntaxError を発生します。
-

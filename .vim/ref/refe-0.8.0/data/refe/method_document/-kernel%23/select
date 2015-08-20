@@ -1,4 +1,0 @@
---- select(reads[, writes[, excepts[, timeout]]])
-
-    IO.select と同じです。
-

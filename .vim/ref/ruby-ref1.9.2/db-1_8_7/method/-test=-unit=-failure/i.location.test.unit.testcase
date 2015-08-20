@@ -1,8 +1,0 @@
-kind=defined
-names=location
-visibility=public
-
---- location -> [String]
-
-自身に対応する呼び出し元の情報を [[m:$@]] の形式のバックトレースとして返します。
-

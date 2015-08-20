@@ -1,6 +1,0 @@
---- Vector#covector
-    Converts to the column vector, i.e., n-by-1 matrix.
-
-    列ベクトル(行列)、すなわち、(n,1)型の行列に変換する。
-    実際にはMatrix#row_vector [Matrix/row_vector](self)を適用する。
-

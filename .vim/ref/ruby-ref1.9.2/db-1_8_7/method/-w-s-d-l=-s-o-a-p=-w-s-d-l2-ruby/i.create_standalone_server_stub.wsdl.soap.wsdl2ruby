@@ -1,6 +1,0 @@
-kind=defined
-names=create_standalone_server_stub
-visibility=private 
-
---- create_standalone_server_stub(servicename)
-

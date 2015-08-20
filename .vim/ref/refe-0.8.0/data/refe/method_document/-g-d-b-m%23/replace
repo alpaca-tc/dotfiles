@@ -1,5 +1,0 @@
-: replace(other)
-    DBMの内容を other の内容で置き換えます．
-    other は each_pair メソッドを持つオブジェクトで
-    なければなりません．
-

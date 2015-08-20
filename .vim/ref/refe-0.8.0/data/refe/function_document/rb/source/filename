@@ -1,2 +1,0 @@
-: char *rb_source_filename(const char *f)
-

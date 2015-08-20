@@ -1,4 +1,0 @@
---- FileTest.writable?(filename)
-
-    filename が書き込み可である時、真を返します。
-

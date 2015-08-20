@@ -1,3 +1,0 @@
---- OptionParser::ParseError#reason
-    Returns error reason. Override this to I18N.
-

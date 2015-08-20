@@ -1,2 +1,0 @@
-: static VALUE run_single_final(VALUE *args)
-

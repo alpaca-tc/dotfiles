@@ -1,5 +1,0 @@
---- Vector#each2(v) {|x,y| ... }
-    Calls dyadic block once for each correspoding elements of `self' and `v'.
-
-    ベクトルの各要素と、それに対応するインデックスを持つ引数vの要素との組に対して(2引数の)ブロックを繰返し評価する。`v'はsizeメソッドと[]メソッドを持つオブジェクトである。
-

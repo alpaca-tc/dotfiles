@@ -1,6 +1,0 @@
-hash.c:1518
-static VALUE
-env_none()
-{
-    return Qnil;
-}

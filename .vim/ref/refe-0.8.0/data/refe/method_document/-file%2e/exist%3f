@@ -1,4 +1,0 @@
---- File.exist?(path)
-
-    FileTest.exist? と同じです。
-

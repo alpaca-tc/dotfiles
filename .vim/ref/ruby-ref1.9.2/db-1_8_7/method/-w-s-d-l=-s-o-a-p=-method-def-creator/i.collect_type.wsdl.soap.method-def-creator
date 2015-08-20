@@ -1,6 +1,0 @@
-kind=defined
-names=collect_type
-visibility=private 
-
---- collect_type(type)
-

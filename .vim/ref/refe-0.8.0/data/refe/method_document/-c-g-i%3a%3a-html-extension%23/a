@@ -1,7 +1,0 @@
---- CGI::HtmlExtension#a(href = "")
-       
-        Îã¡§
-        a("url")
-          # = a({ "HREF" => "url" })
-#=== BASE ELEMENT
-

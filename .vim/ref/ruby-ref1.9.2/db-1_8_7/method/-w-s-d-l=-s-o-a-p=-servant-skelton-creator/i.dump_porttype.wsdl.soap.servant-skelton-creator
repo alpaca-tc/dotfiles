@@ -1,5 +1,0 @@
-kind=defined
-names=dump_porttype
-visibility=private 
-
---- dump_porttype(name)

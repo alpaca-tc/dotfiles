@@ -1,5 +1,0 @@
-: static VALUE rb_yield_0(VALUE val, VALUE self, VALUE klass, int pcall) 
-    カレントブロックに val を渡して処理を移す。
-    そのさい self とクラスを self と klass に切り替える。
-    Proc の呼び出しのときは pcall=非ゼロ にしなければならない。
-

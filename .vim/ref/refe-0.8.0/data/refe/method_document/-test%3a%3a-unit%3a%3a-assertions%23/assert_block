@@ -1,4 +1,0 @@
---- assert_block(message="") { ... }
-
-    block の結果が真なら pass
-

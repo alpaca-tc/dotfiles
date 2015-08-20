@@ -1,7 +1,0 @@
-marshal.c:1420
-VALUE
-rb_marshal_load(port)
-    VALUE port;
-{
-    return marshal_load(1, &port);
-}

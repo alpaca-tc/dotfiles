@@ -1,6 +1,0 @@
-kind=defined
-names=attribute_basetype
-visibility=private 
-
---- attribute_basetype(attr)
-

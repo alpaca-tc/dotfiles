@@ -1,7 +1,0 @@
-eval.c:9139
-static VALUE
-rb_thread_s_kill(obj, th)
-    VALUE obj, th;
-{
-    return rb_thread_kill(th);
-}

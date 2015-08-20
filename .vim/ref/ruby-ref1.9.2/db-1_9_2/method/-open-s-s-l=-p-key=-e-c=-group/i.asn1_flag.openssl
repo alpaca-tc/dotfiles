@@ -1,9 +1,0 @@
-kind=defined
-names=asn1_flag
-visibility=public
-
---- asn1_flag -> Integer
-自身に設定された ASN1 フラグを返します。
-
-@see [[m:OpenSSL::PKey::EC::Group#asn1_flag=]]
-

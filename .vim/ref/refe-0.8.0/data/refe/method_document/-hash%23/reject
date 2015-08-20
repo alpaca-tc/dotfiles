@@ -1,8 +1,0 @@
---- reject {|key, value| ... }
-
-    self を複製して、ブロックを評価した値が真になる要
-    素を削除したハッシュを返します。
-
-    ハッシュを返すことを除けば 
-    Enumerable#reject [Enumerable/reject] と同じです。
-

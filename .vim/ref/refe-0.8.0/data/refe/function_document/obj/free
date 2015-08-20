@@ -1,2 +1,0 @@
-: static void obj_free(VALUE obj)
-

@@ -1,5 +1,0 @@
-: examine(mailbox)
-      Sends a EXAMINE command to select a mailbox so that messages
-      in the mailbox can be accessed. However, the selected mailbox
-      is identified as read-only.
-

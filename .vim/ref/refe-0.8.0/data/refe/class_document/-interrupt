@@ -1,3 +1,0 @@
-trap されていない SIGINT を受け取ると発生します。
-SIGINT 以外のシグナル受信による例外は SignalException を参
-照してください。

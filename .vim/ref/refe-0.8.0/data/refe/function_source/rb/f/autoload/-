@@ -1,9 +1,0 @@
-eval.c:6683
-static VALUE
-rb_f_autoload(obj, sym, file)
-    VALUE obj;
-    VALUE sym;
-    VALUE file;
-{
-    return rb_mod_autoload(ruby_cbase, sym, file);
-}

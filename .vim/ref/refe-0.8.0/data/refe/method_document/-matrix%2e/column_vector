@@ -1,7 +1,0 @@
---- Matrix.column_vector(column)
-    creates a n-by-1 matrix such that column vector is `column'.
-    The pameter `column' is given as a Vector or an Array.
-
-    要素がcolumnの(n,1)型の行列（列ベクトル)を生成する。
-    ここで、引数columnは、VectorまたはArrayで与えられる。
-

@@ -1,2 +1,0 @@
-: void rb_mark_generic_ivar(VALUE obj)
-

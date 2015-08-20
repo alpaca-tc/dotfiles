@@ -1,7 +1,0 @@
-numeric.c:1072
-int
-rb_num2int(val)
-    VALUE val;
-{
-    return rb_num2long(val);
-}

@@ -1,7 +1,0 @@
-eval.c:10205
-static VALUE
-catch_i(tag)
-    VALUE tag;
-{
-    return rb_funcall(Qnil, rb_intern("catch"), 1, tag);
-}

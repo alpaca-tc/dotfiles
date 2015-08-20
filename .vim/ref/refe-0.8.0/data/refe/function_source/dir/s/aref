@@ -1,7 +1,0 @@
-dir.c:1008
-static VALUE
-dir_s_aref(obj, str)
-    VALUE obj, str;
-{
-    return rb_push_glob(str, 0);
-}

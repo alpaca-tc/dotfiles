@@ -1,4 +1,0 @@
---- FileTest.owned?(filename)
-
-    filename が自分のものである時に真を返します。
-

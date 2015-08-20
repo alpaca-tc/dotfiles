@@ -1,6 +1,0 @@
-kind=defined
-names=create_refid
-visibility=public
-
---- create_refid(obj)
-

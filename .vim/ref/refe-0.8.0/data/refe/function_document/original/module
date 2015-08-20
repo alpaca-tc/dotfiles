@@ -1,2 +1,0 @@
-: static VALUE original_module(VALUE c)
-

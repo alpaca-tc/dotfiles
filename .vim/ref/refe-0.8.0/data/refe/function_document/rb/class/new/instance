@@ -1,3 +1,0 @@
-: VALUE rb_class_new_instance(int argc, VALUE *argv, VALUE klass)
-    Class#new の実体。
-

@@ -1,4 +1,0 @@
---- FileTest.socket?(filename)
-
-    filename がソケットである時、真を返します。
-

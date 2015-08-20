@@ -1,7 +1,0 @@
---- each_key { |subkey, wtime| ... }
-    キーのサブキーを列挙します。
-    
-    subkey はサブキーの名前を表す String です。
-    wtime は最終更新時刻を表す FILETIME (64-bit 整数) です。
-    (⇒Registry.wtime2time [Win32::Registry/Registry.wtime2time])
-

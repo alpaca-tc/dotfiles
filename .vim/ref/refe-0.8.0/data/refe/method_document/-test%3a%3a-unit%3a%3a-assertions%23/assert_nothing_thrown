@@ -1,7 +1,0 @@
---- assert_throws(expected_symbol, message="") { ... }
---- assert_nothing_thrown(message="") { ... }
-
-    block が throw :expected_symbol すれば pass
-
-    block が throw しなければ pass
-

@@ -1,8 +1,0 @@
-superclass=Struct
-type=class
-library=net.imap
-extended=
-included=
-
-[[RFC:1806]], [[RFC:2183]] で定義されている MIME の
-Content-Disposition フィールドを表すクラスです。

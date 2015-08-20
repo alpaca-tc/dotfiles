@@ -1,2 +1,0 @@
-: static VALUE errat_getter(ID id)
-

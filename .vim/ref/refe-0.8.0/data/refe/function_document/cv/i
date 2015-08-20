@@ -1,2 +1,0 @@
-: static int cv_i(ID key, VALUE value, VALUE ary)
-

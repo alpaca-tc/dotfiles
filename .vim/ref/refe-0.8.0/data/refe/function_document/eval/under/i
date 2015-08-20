@@ -1,2 +1,0 @@
-: static VALUE eval_under_i(VALUE *args)
-

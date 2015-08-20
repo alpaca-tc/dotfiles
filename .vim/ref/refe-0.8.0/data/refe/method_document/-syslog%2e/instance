@@ -1,4 +1,0 @@
-: instance
-   Syslog の唯一のインスタンスを返す。
-   (Singleton参照。)
-

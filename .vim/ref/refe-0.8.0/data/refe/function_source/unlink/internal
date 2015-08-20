@@ -1,8 +1,0 @@
-file.c:1317
-static void
-unlink_internal(path)
-    const char *path;
-{
-    if (unlink(path) < 0)
-	rb_sys_fail(path);
-}

@@ -1,6 +1,0 @@
-: new( filename ) -> TMail::FilePort
-    filename: String
-
-    FilePort オブジェクトを生成します。
-    filename はメール一通をおさめたファイル名でなければいけません。
-

@@ -1,6 +1,0 @@
-kind=defined
-names=new
-visibility=public
-
---- new(data = nil, is_fault = nil)
-

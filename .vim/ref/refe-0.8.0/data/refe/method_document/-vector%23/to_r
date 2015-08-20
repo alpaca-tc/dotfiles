@@ -1,5 +1,0 @@
---- Vector#to_r
-    Converts each element to Rational
-
-    各要素を有理数(Rational)に変換する
-

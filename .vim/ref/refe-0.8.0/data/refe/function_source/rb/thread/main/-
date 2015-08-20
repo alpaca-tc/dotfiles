@@ -1,6 +1,0 @@
-eval.c:9070
-VALUE
-rb_thread_main()
-{
-    return main_thread->thread;
-}

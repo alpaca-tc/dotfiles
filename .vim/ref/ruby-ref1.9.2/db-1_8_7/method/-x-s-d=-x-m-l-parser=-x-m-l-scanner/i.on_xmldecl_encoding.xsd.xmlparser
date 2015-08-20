@@ -1,6 +1,0 @@
-kind=defined
-names=on_xmldecl_encoding
-visibility=public
-
---- on_xmldecl_encoding(str)
-

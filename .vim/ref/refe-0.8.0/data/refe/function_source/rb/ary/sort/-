@@ -1,9 +1,0 @@
-array.c:1182
-VALUE
-rb_ary_sort(ary)
-    VALUE ary;
-{
-    ary = rb_ary_dup(ary);
-    rb_ary_sort_bang(ary);
-    return ary;
-}

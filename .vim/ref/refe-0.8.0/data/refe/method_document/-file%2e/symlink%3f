@@ -1,4 +1,0 @@
---- File.symlink?(path)
-
-    FileTest.symlink? と同じです。
-

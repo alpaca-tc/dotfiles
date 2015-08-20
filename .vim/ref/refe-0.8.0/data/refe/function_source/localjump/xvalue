@@ -1,7 +1,0 @@
-eval.c:1521
-static VALUE
-localjump_xvalue(exc)
-    VALUE exc;
-{
-    return rb_iv_get(exc, "@exit_value");
-}

@@ -1,3 +1,0 @@
-: static VALUE rb_obj_private_methods(VALUE obj)
-    Object#private_methods の実体。
-

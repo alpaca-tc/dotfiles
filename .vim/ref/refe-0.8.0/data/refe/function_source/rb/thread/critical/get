@@ -1,6 +1,0 @@
-eval.c:9690
-static VALUE
-rb_thread_critical_get()
-{
-    return rb_thread_critical?Qtrue:Qfalse;
-}

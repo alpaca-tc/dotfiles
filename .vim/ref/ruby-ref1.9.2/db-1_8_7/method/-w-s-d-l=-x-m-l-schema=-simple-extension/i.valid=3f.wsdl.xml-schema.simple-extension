@@ -1,6 +1,0 @@
-kind=defined
-names=valid?
-visibility=public
-
---- valid?(value)
-

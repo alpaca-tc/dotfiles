@@ -1,8 +1,0 @@
-kind=defined
-names=UTF32
-visibility=public
-
---- UTF32 -> Integer
-
-UTF32 を表します。
-

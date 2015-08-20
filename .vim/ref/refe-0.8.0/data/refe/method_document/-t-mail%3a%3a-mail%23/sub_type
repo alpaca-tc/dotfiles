@@ -1,5 +1,0 @@
-: sub_type( default = nil ) -> String
-    メール本体のサブタイプ (例："plain")。
-    常に小文字に統一されます。
-    ヘッダが存在しない場合は default を返します。
-

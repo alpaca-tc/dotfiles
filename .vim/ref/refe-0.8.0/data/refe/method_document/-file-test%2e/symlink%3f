@@ -1,4 +1,0 @@
---- FileTest.symlink?(filename)
-
-    filename がシンボリックリンクである時、真を返します。
-

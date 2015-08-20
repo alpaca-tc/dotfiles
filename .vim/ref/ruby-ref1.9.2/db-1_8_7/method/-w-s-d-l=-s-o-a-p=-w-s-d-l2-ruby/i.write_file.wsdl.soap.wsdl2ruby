@@ -1,6 +1,0 @@
-kind=defined
-names=write_file
-visibility=private 
-
---- write_file(filename)
-

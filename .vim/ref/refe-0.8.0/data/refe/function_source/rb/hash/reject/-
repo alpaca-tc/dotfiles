@@ -1,7 +1,0 @@
-hash.c:492
-static VALUE
-rb_hash_reject(hash)
-    VALUE hash;
-{
-    return rb_hash_delete_if(rb_obj_dup(hash));
-}

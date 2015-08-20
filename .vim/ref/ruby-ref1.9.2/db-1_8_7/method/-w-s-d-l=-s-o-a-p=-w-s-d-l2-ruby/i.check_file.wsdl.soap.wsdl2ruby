@@ -1,6 +1,0 @@
-kind=defined
-names=check_file
-visibility=private 
-
---- check_file(filename)
-

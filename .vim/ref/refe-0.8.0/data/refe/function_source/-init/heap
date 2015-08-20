@@ -1,9 +1,0 @@
-gc.c:1357
-void
-Init_heap()
-{
-    if (!rb_gc_stack_start) {
-	Init_stack(0);
-    }
-    add_heap();
-}

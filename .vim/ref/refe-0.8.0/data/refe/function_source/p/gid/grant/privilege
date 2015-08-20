@@ -1,7 +1,0 @@
-process.c:2058
-static VALUE
-p_gid_grant_privilege(obj, id)
-    VALUE obj, id;
-{
-    return rb_setegid_core(NUM2INT(id));
-}

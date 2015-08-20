@@ -1,5 +1,0 @@
---- Vector#to_f
-    Converts each element to Float
-
-    各要素を浮動小数点数(Float)に変換する
-

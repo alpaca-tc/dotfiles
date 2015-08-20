@@ -1,7 +1,0 @@
---- Net::FTP#gettextfile(remotefile, localfile, callback = nil)
-
-    サーバー上のテキストファイルをgetします。 
-
-    callbackやブロックが指定された場合は
-    データが送信されるごとにそれを呼び出します。
-

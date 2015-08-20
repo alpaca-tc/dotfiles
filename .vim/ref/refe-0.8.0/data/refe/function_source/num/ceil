@@ -1,7 +1,0 @@
-numeric.c:857
-static VALUE
-num_ceil(num)
-    VALUE num;
-{
-    return flo_ceil(rb_Float(num));
-}

@@ -1,7 +1,0 @@
-kind=defined
-names=decode_text
-visibility=private 
-
---- decode_text(ns, text)
-
-

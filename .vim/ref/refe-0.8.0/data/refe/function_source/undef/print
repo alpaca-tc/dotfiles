@@ -1,8 +1,0 @@
-dln.c:468
-static int
-undef_print(key, value)
-    char *key, *value;
-{
-    fprintf(stderr, "  %s\n", key);
-    return ST_CONTINUE;
-}

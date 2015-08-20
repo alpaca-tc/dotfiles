@@ -1,7 +1,0 @@
---- ceil
-
-    self と等しいかより大きい最小の整数(天井)を返します。
-
-    round, truncate, to_i,
-    floor も参照。
-

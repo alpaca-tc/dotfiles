@@ -1,7 +1,0 @@
---- Process.maxgroups
---- Process.maxgroups=num
-
-    設定できる補助グループ ID の数を指定します。実際に返される補助グルー
-    プ ID の数よりも少ない値を設定していると、
-    Process.groups で例外が発生します。
-

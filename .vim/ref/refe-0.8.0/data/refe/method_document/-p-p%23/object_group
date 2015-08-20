@@ -1,7 +1,0 @@
---- object_group(obj) { ... }
-#    is a convenience method which is same as follows:
-
-    以下と等価な働きをするもので簡便のために用意されています。
- 
-      group(1, '#<' + obj.class.name, '>') { ... }
-

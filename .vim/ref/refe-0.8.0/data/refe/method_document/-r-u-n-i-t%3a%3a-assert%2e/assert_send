@@ -1,2 +1,0 @@
---- assert_send(obj, method, *args)
-

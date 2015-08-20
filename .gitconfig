@@ -110,15 +110,3 @@
   insteadOf = git@github.com:
 [hub]
   protocol = https
-[credential]
-  helper = /opt/boxen/bin/boxen-git-credential
-; [remote "origin"]
-;   fetch = +refs/pull/*/head:refs/remotes/origin/pr/*
-[filter "media"]
-  clean = git-media-clean %f
-  smudge = git-media-smudge %f
-# [remote "origin"]
-#   fetch = +refs/pull/*/head:refs/remotes/origin/pr/*
-[filter "media"]
-  clean = git-media-clean %f
-  smudge = git-media-smudge %f

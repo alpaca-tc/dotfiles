@@ -1,2 +1,0 @@
---- assert_equal_float(expected, actual, e[, message])
-

@@ -1,6 +1,0 @@
-kind=defined
-names=create_name
-visibility=private 
-
---- create_name(name)
-

@@ -1,3 +1,0 @@
---- Registry.wtime2time(wtime)
-    64bit の FILETIME [URL:http://msdn.microsoft.com/library/en-us/sysinfo/base/filetime_str.asp] を Time オブジェクトに変換します。
-

@@ -1,9 +1,0 @@
-gc.c:1464
-static VALUE
-rm_final(os, block)
-    VALUE os, block;
-{
-    rb_warn("ObjectSpace::remove_finalizer is deprecated; use undefine_finalizer");
-    rb_ary_delete(finalizers, block);
-    return block;
-}

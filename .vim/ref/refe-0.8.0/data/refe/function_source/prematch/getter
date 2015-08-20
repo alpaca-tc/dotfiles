@@ -1,6 +1,0 @@
-re.c:899
-static VALUE
-prematch_getter()
-{
-    return rb_reg_match_pre(rb_backref_get());
-}

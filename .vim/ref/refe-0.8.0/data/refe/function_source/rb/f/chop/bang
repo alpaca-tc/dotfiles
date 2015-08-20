@@ -1,7 +1,0 @@
-string.c:2796
-static VALUE
-rb_f_chop_bang(str)
-    VALUE str;
-{
-    return rb_str_chop_bang(uscore_get());
-}

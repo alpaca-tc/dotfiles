@@ -1,8 +1,0 @@
---- FileTest.size(filename)
-
-    filename のサイズを返します。filename が存在しなければ
-    例外 Errno::EXXX(おそらく Errno::ENOENT)が発生します。
-
-    FileTest.size?, FileTest.zero? も参
-    照してください。
-

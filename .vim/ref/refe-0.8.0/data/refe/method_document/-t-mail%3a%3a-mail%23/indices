@@ -1,7 +1,0 @@
-: values_at( *names ) -> [TMail::HeaderField]
-: indexes( *names ) -> [TMail::HeaderField]
-: indices( *names ) -> [TMail::HeaderField]
-    names: [String]
-
-    全ての names について fetch した結果の配列を返します。
-

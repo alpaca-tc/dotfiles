@@ -1,9 +1,0 @@
---- Ping.pingecho(host, timeout=5, service='echo')
-
-    host の TCP サービスserviceに対して接続を試み
-    成功すれば true を返します。ping(1) [manual page]
-    と異なり ICMP を使用しないので root 権限を必要としない利点があります。
-
-    注: 最近は不要なサービスを受け付けないホストが多いので必ずしもこの
-    モジュールが有用とは限りません
-

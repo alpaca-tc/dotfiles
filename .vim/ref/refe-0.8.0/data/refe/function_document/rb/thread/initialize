@@ -1,2 +1,0 @@
-: static VALUE rb_thread_initialize(VALUE thread, VALUE args)
-

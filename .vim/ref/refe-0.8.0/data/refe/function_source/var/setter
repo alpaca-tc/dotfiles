@@ -1,9 +1,0 @@
-variable.c:412
-static void
-var_setter(val, id, var)
-    VALUE val;
-    ID id;
-    VALUE *var;
-{
-    *var = val;
-}

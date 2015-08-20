@@ -1,6 +1,0 @@
---- Process.abort([message])
-
-    ruby 1.7 feature
-
-    関数 abort と同じです。
-

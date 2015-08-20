@@ -1,3 +1,0 @@
-: static VALUE rb_obj_methods(VALUE obj)
-    Object#methods の実体。
-

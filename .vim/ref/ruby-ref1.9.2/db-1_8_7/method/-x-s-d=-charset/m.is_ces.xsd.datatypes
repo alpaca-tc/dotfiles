@@ -1,6 +1,0 @@
-kind=defined
-names=is_ces
-visibility=public
-
---- is_ces(str, code = $KCODE)
-

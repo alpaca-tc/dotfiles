@@ -1,5 +1,0 @@
-: self[key]=value
-    keyをキーとして、valueを格納します。
-    valueとしてnilを指定すると、keyに対
-    する項目を削除します。
-

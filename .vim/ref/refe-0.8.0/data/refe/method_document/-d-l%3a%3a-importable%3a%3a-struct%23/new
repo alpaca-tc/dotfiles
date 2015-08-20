@@ -1,4 +1,0 @@
---- new(ptr)
-
-    DL::PtrDataオブジェクトptrを保持するMemoryオブジェクトを返す。
-

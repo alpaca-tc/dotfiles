@@ -1,8 +1,0 @@
-kind=defined
-names=degree
-visibility=public
-
---- degree -> Integer
-群の定義の元となっている体の要素を
-表現するのに必要なビット数を返します。
-

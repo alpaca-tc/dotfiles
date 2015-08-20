@@ -1,7 +1,0 @@
-struct.c:86
-static VALUE
-rb_struct_ref(obj)
-    VALUE obj;
-{
-    return rb_struct_getmember(obj, rb_frame_last_func());
-}

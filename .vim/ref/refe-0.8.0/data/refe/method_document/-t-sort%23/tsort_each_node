@@ -1,6 +1,0 @@
---- tsort_each_node {|node| ...}
-#    should be implemented by a extended class.
-    TSort で拡張されるクラスで定義されていなければならないメソッドです。
-
-    tsort_each_node is used to iterate for all nodes over a graph.
-

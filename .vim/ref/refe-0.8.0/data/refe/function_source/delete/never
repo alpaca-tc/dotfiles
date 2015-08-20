@@ -1,8 +1,0 @@
-st.c:463
-static int
-delete_never(key, value, never)
-    st_data_t key, value, never;
-{
-    if (value == never) return ST_DELETE;
-    return ST_CONTINUE;
-}

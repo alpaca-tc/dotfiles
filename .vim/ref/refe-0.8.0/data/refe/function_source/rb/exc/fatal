@@ -1,7 +1,0 @@
-eval.c:3960
-void
-rb_exc_fatal(mesg)
-    VALUE mesg;
-{
-    rb_longjmp(TAG_FATAL, mesg);
-}

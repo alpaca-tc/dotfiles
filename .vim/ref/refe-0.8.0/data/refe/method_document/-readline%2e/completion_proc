@@ -1,3 +1,0 @@
---- Readline.completion_proc
-    補完時の動作を決定するProcオブジェクトを返します。
-

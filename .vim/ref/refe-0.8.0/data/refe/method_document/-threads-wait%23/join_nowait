@@ -1,3 +1,0 @@
---- ThreadsWait#join_nowait(threa1,...)
-    specifies thread(s) to wait.  non-blocking.
-

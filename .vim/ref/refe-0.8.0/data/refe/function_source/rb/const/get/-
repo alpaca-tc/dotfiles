@@ -1,8 +1,0 @@
-variable.c:1312
-VALUE
-rb_const_get(klass, id)
-    VALUE klass;
-    ID id;
-{
-    return rb_const_get_0(klass, id, Qfalse, Qtrue);
-}

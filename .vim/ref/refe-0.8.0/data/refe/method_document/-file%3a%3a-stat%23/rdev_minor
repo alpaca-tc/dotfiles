@@ -1,6 +1,0 @@
---- rdev_minor  ruby 1.7 feature
-    rdev の minor 番号
-
-以下の判定メソッドは、FileTest の同名のモジュール関数と同じですが、
-ファイル名を引数に取るかわりに Stat 自身について判定します。
-

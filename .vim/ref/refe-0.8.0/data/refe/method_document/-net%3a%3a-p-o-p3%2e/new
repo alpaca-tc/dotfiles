@@ -1,4 +1,0 @@
-: new( address, port = 110, apop = false )
-    Net::POP3 オブジェクトを生成します。まだ接続はしません。
-    apop が真のときは APOP 認証を行うオブジェクトを生成します。
-

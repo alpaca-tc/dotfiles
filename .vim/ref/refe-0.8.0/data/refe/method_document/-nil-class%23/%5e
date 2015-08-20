@@ -1,5 +1,0 @@
---- self | other
---- self ^ other
-
-    other が真なら true を偽なら false を返します。
-

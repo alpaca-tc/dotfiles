@@ -1,6 +1,0 @@
-: set_mime_version( major, minor )
-    major: Integer
-    minor: Integer
-
-    MIME バージョンをセットします。
-

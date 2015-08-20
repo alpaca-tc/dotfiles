@@ -1,5 +1,0 @@
---- define_union(contents), union(contents)
-
-    共用体を定義する。
-    contentsについては上記define_structと同様である。
-

@@ -1,4 +1,0 @@
-.const_from_name	SOAP::Property::Util.#const_from_name
-.require_from_name	SOAP::Property::Util.#require_from_name
-#const_from_name	SOAP::Property::Util.#const_from_name
-#require_from_name	SOAP::Property::Util.#require_from_name

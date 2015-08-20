@@ -1,6 +1,0 @@
-kind=defined
-names=name_attribute
-visibility=private 
-
---- name_attribute(attribute)
-

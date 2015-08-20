@@ -1,7 +1,0 @@
-file.c:119
-static VALUE
-stat_new(st)
-    struct stat *st;
-{
-    return stat_new_0(rb_cStat, st);
-}

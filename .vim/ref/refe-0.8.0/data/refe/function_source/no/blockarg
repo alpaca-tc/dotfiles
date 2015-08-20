@@ -1,9 +1,0 @@
-parse.y:5354
-static void
-no_blockarg(node)
-    NODE *node;
-{
-    if (node && nd_type(node) == NODE_BLOCK_PASS) {
-	rb_compile_error("block argument should not be given");
-    }
-}

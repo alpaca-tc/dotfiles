@@ -1,8 +1,0 @@
-process.c:203
-static VALUE
-pst_equal(st1, st2)
-    VALUE st1, st2;
-{
-    if (st1 == st2) return Qtrue;
-    return rb_equal(pst_to_i(st1), st2);
-}

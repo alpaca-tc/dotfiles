@@ -1,4 +1,0 @@
-: VALUE rb_call_super(int argc, const VALUE *argv)
-    Rubyレベルでの super です。
-    現在評価中のメソッドのスーパークラスのメソッドを呼び出します。
-

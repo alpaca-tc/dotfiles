@@ -1,9 +1,0 @@
-io.c:2625
-static VALUE
-rb_f_print(argc, argv)
-    int argc;
-    VALUE *argv;
-{
-    rb_io_print(argc, argv, rb_stdout);
-    return Qnil;
-}

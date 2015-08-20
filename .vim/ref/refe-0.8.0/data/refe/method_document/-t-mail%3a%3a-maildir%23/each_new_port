@@ -1,5 +1,0 @@
-: each_new_port {|port| .... }
-    port: TMail::FilePort
-
-    MAILDIR/new のメールに対して、cur に移動したのちに繰り返します。
-

@@ -1,5 +1,0 @@
-: fastmode = bool
-: syncmode = bool
-    オープンしているGDBMオブジェクトのモードを変更します．下記の定数
-    GDBM::FAST、GDBM::SYNC を参照してください．
-

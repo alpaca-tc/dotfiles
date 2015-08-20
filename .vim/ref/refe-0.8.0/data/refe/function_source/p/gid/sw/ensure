@@ -1,8 +1,0 @@
-process.c:2246
-static VALUE
-p_gid_sw_ensure(id)
-    int id;
-{
-    under_gid_switch = 0;
-    return rb_setegid_core(id);
-}

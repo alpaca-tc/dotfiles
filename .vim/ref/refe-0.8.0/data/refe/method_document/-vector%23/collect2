@@ -1,5 +1,0 @@
---- Vector#collect2(v) {|x,y| ... }
-    Applies dyadic block to corresponding elements of `self' and `v', and returns a new Array object of the results.
- 
-    ベクトルの各要素と、それに対応するインデックスを持つ引数vの要素との組に対して(2引数の)ブロックを評価し、その結果を要素として持つ配列を生成する。
-

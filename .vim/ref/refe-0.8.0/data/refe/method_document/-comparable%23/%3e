@@ -1,7 +1,0 @@
---- self > other
-
-    self が other より大きい時真を返します。
-
-    ruby 1.8 feature:
-    <=> が nil を返したとき例外ArgumentError が発生します。
-

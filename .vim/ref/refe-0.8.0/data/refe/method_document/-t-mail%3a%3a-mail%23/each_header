@@ -1,7 +1,0 @@
-: each_header {|name, field| .... }
-: each_pair {|name, field| .... }
-    name: String
-    field: TMail::HeaderField
-
-    全てのヘッダ名とヘッダオブジェクトに対するくりかえし。
-

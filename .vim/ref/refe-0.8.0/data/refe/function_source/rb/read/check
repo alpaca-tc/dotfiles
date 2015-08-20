@@ -1,9 +1,0 @@
-io.c:258
-void
-rb_read_check(fp)
-    FILE *fp;
-{
-    if (!READ_DATA_PENDING(fp)) {
-	rb_thread_wait_fd(fileno(fp));
-    }
-}

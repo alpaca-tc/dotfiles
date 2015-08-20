@@ -1,4 +1,0 @@
---- assert_nothing_raised(*args) { ... }
-
-    block が例外を発生させなければ pass
-

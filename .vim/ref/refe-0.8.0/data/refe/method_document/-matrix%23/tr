@@ -1,7 +1,0 @@
---- Matrix#trace
---- Matrix#tr
-    returns the trace
-
-    トレース(trace)を返す。
-    行列のトレース(trace)とは、対角要素の和である。
-

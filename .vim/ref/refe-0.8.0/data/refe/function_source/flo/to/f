@@ -1,7 +1,0 @@
-numeric.c:724
-static VALUE
-flo_to_f(num)
-    VALUE num;
-{
-    return num;
-}

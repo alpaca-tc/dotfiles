@@ -1,7 +1,0 @@
-: log(priority, format, ...)
-   syslogにメッセージを書き込む。
-   format以降はsprintfと同じです。
-
-      例:
-        sl.log(Syslog::LOG_CRIT, "the sky is falling in %d seconds!", 10)
-

@@ -1,6 +1,0 @@
-re.c:893
-static VALUE
-last_match_getter()
-{
-    return rb_reg_last_match(rb_backref_get());
-}

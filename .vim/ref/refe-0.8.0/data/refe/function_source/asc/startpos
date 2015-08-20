@@ -1,8 +1,0 @@
-regex.c:4562
-static unsigned int
-asc_startpos(string, pos)
-     const char *string;
-     unsigned int pos;
-{
-  return pos;
-}

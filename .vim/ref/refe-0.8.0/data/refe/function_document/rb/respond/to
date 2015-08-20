@@ -1,3 +1,0 @@
-: int rb_respond_to(VALUE obj, ID id)
-    obj にメソッド id が定義されているとき真。
-

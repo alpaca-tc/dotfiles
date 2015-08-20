@@ -1,8 +1,0 @@
-variable.c:378
-static VALUE
-val_getter(id, val)
-    ID id;
-    VALUE val;
-{
-    return val;
-}

@@ -1,7 +1,0 @@
-kind=defined
-names=LABEL_LIST_RE
-visibility=public
-
---- LABEL_LIST_RE -> Regexp
-
-

@@ -1,4 +1,0 @@
---- empty?
-#    Returns true if the set contains no elements.
-    要素を1つも持たないときに true を返します。
-

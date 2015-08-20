@@ -1,7 +1,0 @@
-superclass=XSD=XSDInt
-type=class
-library=soap.baseData
-extended=SOAP=SOAPModuleUtils
-included=SOAP=SOAPBasetype
-
-

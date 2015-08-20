@@ -1,3 +1,0 @@
-: static VALUE rb_obj_protected_methods(VALUE obj)
-    Object#protected_methods の実体。
-

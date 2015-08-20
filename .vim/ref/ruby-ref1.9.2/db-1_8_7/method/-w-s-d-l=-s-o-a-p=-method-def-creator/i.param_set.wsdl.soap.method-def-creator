@@ -1,6 +1,0 @@
-kind=defined
-names=param_set
-visibility=private 
-
---- param_set(io_type, name, type, ele = nil)
-

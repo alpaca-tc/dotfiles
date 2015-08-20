@@ -1,7 +1,0 @@
-hash.c:253
-static VALUE
-to_hash(hash)
-    VALUE hash;
-{
-    return rb_convert_type(hash, T_HASH, "Hash", "to_hash");
-}

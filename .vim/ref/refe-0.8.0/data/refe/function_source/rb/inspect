@@ -1,7 +1,0 @@
-object.c:202
-VALUE
-rb_inspect(obj)
-    VALUE obj;
-{
-    return rb_obj_as_string(rb_funcall(obj, id_inspect, 0, 0));
-}

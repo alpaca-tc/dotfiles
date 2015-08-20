@@ -1,6 +1,0 @@
---- - enum
-#    Returns a new set built by duplicating the set, removing every
-#    element that appear in the given enumerable object.
-    差集合、すなわち、前者に属し後者に属さないすべての要素からなる
-    新しい集合を作りそれを返します。
-

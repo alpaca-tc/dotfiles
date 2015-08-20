@@ -1,8 +1,0 @@
---- OptionParser::Completion#complete(key[, pat])
-    Searches key, or pat with completion if not found.
-    :Parameters:
-      : key
-        keyword to search.
-      : pat
-        completion pattern.
-

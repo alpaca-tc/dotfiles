@@ -1,4 +1,0 @@
---- File.sticky?(path)
-
-    FileTest.sticky? と同じです。
-

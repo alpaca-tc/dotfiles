@@ -1,9 +1,0 @@
-gc.c:615
-void
-rb_gc_mark_maybe(obj)
-    VALUE obj;
-{
-    if (is_pointer_to_heap((void *)obj)) {
-	rb_gc_mark(obj);
-    }
-}

@@ -1,3 +1,0 @@
-: VALUE rb_obj_dup(VALUE obj) 
-    Object#dup の実体です。
-

@@ -1,4 +1,0 @@
---- ENV.each_value {|value| ... }
-
-    value を引数としてブロックを評価します。
-

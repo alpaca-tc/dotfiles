@@ -1,5 +1,0 @@
-: value?( field )
-    field: TMail::HeaderField
-
-    field ヘッダオブジェクトがあれば真。
-

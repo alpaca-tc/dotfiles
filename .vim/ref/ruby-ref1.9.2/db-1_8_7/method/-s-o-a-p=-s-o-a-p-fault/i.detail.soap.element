@@ -1,7 +1,0 @@
-kind=defined
-names=detail,detail=
-visibility=public
-
---- detail
---- detail=(rhs)
-

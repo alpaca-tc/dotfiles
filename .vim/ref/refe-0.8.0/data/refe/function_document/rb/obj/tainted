@@ -1,3 +1,0 @@
-: VALUE rb_obj_tainted(VALUE obj)
-    obj.tainted?
-

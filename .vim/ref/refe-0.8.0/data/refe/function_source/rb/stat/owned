@@ -1,8 +1,0 @@
-file.c:2398
-static VALUE
-rb_stat_owned(obj)
-    VALUE obj;
-{
-    if (get_stat(obj)->st_uid == geteuid()) return Qtrue;
-    return Qfalse;
-}

@@ -1,7 +1,0 @@
-kind=defined
-names=faultstring,faultstring=
-visibility=public
-
---- faultstring
---- faultstring=(rhs)
-

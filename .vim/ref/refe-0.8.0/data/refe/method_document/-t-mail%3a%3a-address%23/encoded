@@ -1,8 +1,0 @@
-: encoded( eol = "\r\n", encoding = 'j' ) -> String
-    eol: String
-    encoding: String
-
-    B エンコードされた RFC2822 形式の文字列表現を返します。
-    行末コードに eol、文字エンコーディングに encoding を使います。
-    ただし encoding は j しか実装されていません。
-

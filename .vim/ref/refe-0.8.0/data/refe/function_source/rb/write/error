@@ -1,7 +1,0 @@
-io.c:2762
-void
-rb_write_error(mesg)
-    const char *mesg;
-{
-    rb_write_error2(mesg, strlen(mesg));
-}

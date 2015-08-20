@@ -1,9 +1,0 @@
-hash.c:1116
-int
-rb_env_path_tainted()
-{
-    if (path_tainted < 0) {
-	path_tainted_p(getenv(PATH_ENV));
-    }
-    return path_tainted;
-}

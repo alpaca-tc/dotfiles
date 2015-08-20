@@ -1,9 +1,0 @@
-string.c:2787
-static VALUE
-rb_str_chop(str)
-    VALUE str;
-{
-    str = rb_str_dup(str);
-    rb_str_chop_bang(str);
-    return str;
-}

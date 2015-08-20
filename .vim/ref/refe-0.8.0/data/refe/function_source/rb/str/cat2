@@ -1,8 +1,0 @@
-string.c:651
-VALUE
-rb_str_cat2(str, ptr)
-    VALUE str;
-    const char *ptr;
-{
-    return rb_str_cat(str, ptr, strlen(ptr));
-}

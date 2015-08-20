@@ -1,7 +1,0 @@
-io.c:3679
-static VALUE
-io_s_readlines(arg)
-    struct foreach_arg *arg;
-{
-    return rb_io_readlines(arg->argc, &arg->sep, arg->io);
-}

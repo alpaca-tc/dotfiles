@@ -1,9 +1,0 @@
-array.c:1889
-static VALUE
-rb_ary_uniq(ary)
-    VALUE ary;
-{
-    ary = rb_ary_dup(ary);
-    rb_ary_uniq_bang(ary);
-    return ary;
-}

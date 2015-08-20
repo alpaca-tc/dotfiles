@@ -1,9 +1,0 @@
-math.c:41
-static VALUE
-math_sin(obj, x)
-    VALUE obj, x;
-{
-    Need_Float(x);
-
-    return rb_float_new(sin(RFLOAT(x)->value));
-}

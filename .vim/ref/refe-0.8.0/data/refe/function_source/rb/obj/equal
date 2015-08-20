@@ -1,8 +1,0 @@
-object.c:55
-static VALUE
-rb_obj_equal(obj1, obj2)
-    VALUE obj1, obj2;
-{
-    if (obj1 == obj2) return Qtrue;
-    return Qfalse;
-}

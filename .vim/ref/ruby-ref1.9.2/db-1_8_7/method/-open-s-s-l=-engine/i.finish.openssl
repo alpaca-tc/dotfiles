@@ -1,8 +1,0 @@
-kind=defined
-names=finish
-visibility=public
-
---- finish -> nil
-engine を終了させ、内部に保持しているデータを破棄します。
-
-

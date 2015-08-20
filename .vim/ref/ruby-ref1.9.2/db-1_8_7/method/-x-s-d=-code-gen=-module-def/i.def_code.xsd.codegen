@@ -1,6 +1,0 @@
-kind=defined
-names=def_code
-visibility=public
-
---- def_code(code)
-

@@ -1,4 +1,0 @@
---- Net::FTP#resume = boolean
-
-    resume の値を設定します。
-

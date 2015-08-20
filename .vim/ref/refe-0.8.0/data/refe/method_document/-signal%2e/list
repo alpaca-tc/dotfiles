@@ -1,7 +1,0 @@
---- Signal.list
-
-    シグナル名とシグナル番号を対応づけた Hash オブジェクトを返し
-    ます。
-
-        p Signal.list   # => {"WINCH"=>28, "PROF"=>27, ...}
-

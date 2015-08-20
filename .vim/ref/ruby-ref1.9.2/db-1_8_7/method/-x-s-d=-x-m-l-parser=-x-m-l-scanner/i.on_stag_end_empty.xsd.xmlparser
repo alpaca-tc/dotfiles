@@ -1,6 +1,0 @@
-kind=defined
-names=on_stag_end_empty
-visibility=public
-
---- on_stag_end_empty(name)
-

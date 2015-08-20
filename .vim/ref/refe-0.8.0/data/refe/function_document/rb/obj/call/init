@@ -1,5 +1,0 @@
-: void rb_obj_call_init(VALUE obj, int argc, VALUE *argv)
-    オブジェクト obj に対して initialize を呼び出します。
-    引数は長さ argc の配列 argv で表され、
-    ブロックが積んである場合はそれも自動的に渡されます。
-

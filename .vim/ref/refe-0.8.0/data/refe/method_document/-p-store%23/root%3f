@@ -1,4 +1,0 @@
---- PStore#root?(name)
-      nameがルートであるかどうか。
-      Hash#key?に相当。
-

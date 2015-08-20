@@ -1,8 +1,0 @@
-eval.c:476
-void
-rb_disable_super(klass, name)
-    VALUE klass;
-    const char *name;
-{
-    /* obsolete - no use */
-}

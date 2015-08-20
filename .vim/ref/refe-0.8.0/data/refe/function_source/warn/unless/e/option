@@ -1,8 +1,0 @@
-parse.y:5177
-static void
-warn_unless_e_option(node, str)
-    NODE *node;
-    const char *str;
-{
-    if (!e_option_supplied()) parser_warn(node, str);
-}

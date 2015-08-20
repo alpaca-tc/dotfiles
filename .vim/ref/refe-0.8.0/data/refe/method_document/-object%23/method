@@ -1,8 +1,0 @@
---- method(name)
-
-    self のメソッド name をオブジェクト化した 
-    Method オブジェクトを返します。name は 
-    Symbol または文字列で指定します。
-
-    Module#instance_method [Module/instance_method] も参照してください。
-

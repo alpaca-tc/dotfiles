@@ -1,4 +1,0 @@
---- assert_instance_of(klass, object, message="")
-
-    klass == object.class が真なら pass
-

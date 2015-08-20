@@ -1,7 +1,0 @@
-prec.c:19
-static VALUE
-prec_prec(x, klass)
-    VALUE x, klass;
-{
-    return rb_funcall(klass, prc_if, 1, x);
-}

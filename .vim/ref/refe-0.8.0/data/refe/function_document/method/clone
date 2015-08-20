@@ -1,2 +1,0 @@
-: static VALUE method_clone(VALUE self)
-

@@ -1,7 +1,0 @@
---- CGI::HtmlExtension#base(href = "")
-       
-        Îã¡§
-        base("url")
-          # = base({ "HREF" => "url" })
-#=== BLOCKQUOTE ELEMENT
-

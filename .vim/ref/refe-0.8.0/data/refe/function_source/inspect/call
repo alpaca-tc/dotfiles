@@ -1,7 +1,0 @@
-array.c:967
-static VALUE
-inspect_call(arg)
-    struct inspect_arg *arg;
-{
-    return (*arg->func)(arg->arg1, arg->arg2);
-}

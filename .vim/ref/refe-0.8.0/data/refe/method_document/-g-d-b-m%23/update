@@ -1,7 +1,0 @@
-: update(other)
-    DBMとotherの内容をマージします．重複するキーに対応する値は
-    otherの内容で上書きされます．
-
-    otherは each_pair メソッドを持つオブジェクトでなければなりま
-    せん．
-

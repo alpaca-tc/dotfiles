@@ -1,4 +1,0 @@
-: VALUE rb_class_new(VALUE super) 
-    super をスーパークラスとして
-    新しいクラスオブジェクトを生成し、返します。
-

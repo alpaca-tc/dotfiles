@@ -1,7 +1,0 @@
-array.c:73
-VALUE
-rb_ary_freeze(ary)
-    VALUE ary;
-{
-    return rb_obj_freeze(ary);
-}

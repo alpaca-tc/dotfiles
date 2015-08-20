@@ -1,5 +1,0 @@
---- Vector#to_i
-    Converts each element to Integer
-
-    各要素を整数(Integer)に変換する
-

@@ -1,6 +1,0 @@
-kind=defined
-names=decode_tag_end
-visibility=private 
-
---- decode_tag_end(ns, node)
-

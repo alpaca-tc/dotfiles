@@ -1,3 +1,0 @@
-: VALUE rb_obj_frozen_p(VALUE obj)
-    obj.frozen?
-

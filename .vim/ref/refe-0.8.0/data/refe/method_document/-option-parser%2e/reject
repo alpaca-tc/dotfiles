@@ -1,7 +1,0 @@
---- OptionParser.reject(t)
---- OptionParser#reject(t)
-    Directs to reject specified class argument.
-    :Parameters:
-      : t
-        argument class specifier, any object including Class.
-

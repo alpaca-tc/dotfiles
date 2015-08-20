@@ -1,8 +1,0 @@
-bignum.c:572
-VALUE
-rb_ull2inum(n)
-    unsigned LONG_LONG n;
-{
-    if (POSFIXABLE(n)) return LONG2FIX(n);
-    return rb_ull2big(n);
-}
