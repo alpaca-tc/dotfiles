@@ -1,0 +1,200 @@
+*alpaca_english.txt*		alpaca_english.vim: alpaca_english client for Vim
+
+"=============================================================================
+" FILE: alpaca_english
+" AUTHOR: Ishii Hiroyuki <alprhcp666@gmail.com>
+" Last Modified: 2013-05-18
+" License: MIT license  {{{
+"     Permission is hereby granted, free of charge, to any person obtaining
+"     a copy of this software and associated documentation files (the
+"     "Software"), to deal in the Software without restriction, including
+"     without limitation the rights to use, copy, modify, merge, publish,
+"     distribute, sublicense, and/or sell copies of the Software, and to
+"     permit persons to whom the Software is furnished to do so, subject to
+"     the following conditions:
+"
+"     The above copyright notice and this permission notice shall be included
+"     in all copies or substantial portions of the Software.
+"
+"     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+"     OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+"     MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+"     IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+"     CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+"     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+"     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+" }}}
+"=============================================================================
+
+CONTENTS					*alpaca_english-contents*
+
+Introduction		|alpaca_english-introduction|
+Install			|alpaca_english-install|
+Interface		|alpaca_english-interface|
+    Commands		    |alpaca_english-commands|
+    Functions		    |alpaca_english-functions|
+    Key Mappings	    |alpaca_english-key-mappings|
+    Autocmd		    |alpaca_english-autocmd|
+Customizing		|alpaca_english-customizing|
+Changelog		|alpaca_english-changelog|
+
+==============================================================================
+INTRODUCTION					*alpaca_english-introduction*
+This plugin supports completion of user input on Vim.
+
+==============================================================================
+INSTALL						*alpaca_english-install*
+This plugin is tested with Vim 7.3 (Maybe it works with 7.0 or higher).
+This plugin needs |+ruby| feature with Ruby2.0(Maybe it also works with 1.9).
+
+Firstly, move to root path of this plugin, and run `bundle` in the shell, 
+because you have to install depends.
+Secondly, to install `Shougo/neocomplcache`, `Shougo/unite.vim` to vim.
+Finally, setting config to .vimrc. Please see at `alpaca_english-example`
+
+==============================================================================
+INTERFACE					*alpaca_english-interface*
+
+------------------------------------------------------------------------------
+VARIABLE					*alpaca_english-variable*
+
+g:alpaca_english_enable				*g:alpaca_english_enable*
+	If set to 1, completion for neocomplcache is enable(default:0)
+
+g:alpaca_english_max_candidates			*g:alpaca_english_max_candidates*
+	This variable is limit length of candidates(default:20)
+
+g:alpaca_english_say_ignore_char		*g:alpaca_english_say_ignore_char*
+	Replace word into value from key when to use `AlpacaEnglishSay`.
+	(default:{
+	\ '[!]' : '.',
+	\ "#" : " number ",
+	\ '["=>]' : '',
+	\ }
+	)
+
+g:alpaca_english_use_cursor_word		*g:alpaca_english_use_cursor_word*
+	If set to 1, when to use unite and input is empty, auto inputting
+	cursor word as alternate
+	(default:1)
+
+g:alpaca_english_web_search_url			*g:alpaca_english_web_search_url*
+	DEVELOPMENT VERSION:p
+
+g:alpaca_english_web_search_xpath		*g:alpaca_english_web_search_xpath*
+	DEVELOPMENT VERSION:p
+
+------------------------------------------------------------------------------
+COMMANDS					*alpaca_english-commands*
+
+:AlpacaEnglishEnable					*:AlpacaEnglishEnable*
+		Enable completion of alpaca_english.
+
+:AlpacaEnglishDisable					*:AlpacaEnglishDisable*
+		Disable completion of alpaca_english.
+
+:AlpacaEnglishSay					*:AlpacaEnglishSay*
+		Read a cursor word(Mac Only)
+
+------------------------------------------------------------------------------
+UNITE COMMANDS					*alpaca_english-unite_commands*
+
+:Unite english_dictionary				*:Unite_english_dictionary*
+		To consult dict of words as English-Japanese.
+
+:Unite english_thesaurus				*:Unite_english_thesaurus*
+		To consult thesaurus of words.
+
+:Unite english_example					*:Unite_english_example*
+		To consult example of words.
+
+:Unite web_search					*:Unite_web_search*
+		DEVELOPMENT VERSION
+
+------------------------------------------------------------------------------
+FUNCTIONS					*alpaca_english-functions*
+
+Nothing.
+
+==============================================================================
+FAQ						*alpaca_english-faq*
+
+Q: How can I search many word quickly?
+A: 
+   You can try to tap <Plug>(unite_redraw) in the unite.
+   Maybe, it's binded with <C-L> as default.
+
+Q: How I check Ruby's version on the vim?
+A:
+   run `:ruby p RUBY_DESCRIPTION`
+   You should use Ruby2.0.
+
+Q: I can't work this plugin.
+A:
+   1. `:ruby p require "sqlite3"`
+      `:ruby p require "json"`
+      `:ruby p require "mechanize" 
+      should be equal `true`.
+   2. when to run `:echo alpaca_english#sqlite#get_record("test")`
+   and occur error, please send report to me.
+
+Q: Sometime, SEVG error occurd using alpaca_english.
+A: Maybe it probrem is bug of Vim. In the case, you should use latest Vim.
+   This bug had solved by patch793 aad patch795.
+
+   Or, to append to head of .vimrc.
+	" Fix up ruby interface
+	" http://rubyforge.org/pipermail/vim-ruby-devel/2007q1/000698.html
+	" For vim > v932
+	if has('ruby')
+	  silent! ruby nil
+	endif
+
+------------------------------------------------------------------------------
+EXMPLE						*alpaca_english-example*
+
+if has("ruby")
+  NeoBundleLazy 'taichouchou2/alpaca_english', {
+        \ 'rev' : 'development',
+        \ 'build' : {
+        \   "mac" : "bundle",
+        \   "unix" : "bundle",
+        \   "other" : "bundle",
+        \ },
+        \ 'autoload' : {
+        \   'filetypes' : ['markdown', 'text'],
+        \   'commands' : ["AlpacaEnglishDisable", "AlpacaEnglishEnable", "AlpacaEnglishSay"],
+        \   'unite_sources': ['english/dictionary', 'english/example', 'english/thesaurus'],
+        \ }
+        \ }
+endif
+
+" ------------------------------------
+" alpaca_english enable
+" ------------------------------------
+let g:alpaca_english_enable=1
+let g:alpaca_english_max_candidates=30
+let g:alpaca_english_enable_duplicate_candidates=1
+
+let g:neocomplcache_text_mode_filetypes = {
+	\ 'markdown' : 1,
+	\ 'gitcommit' : 1,
+	\ 'text' : 1,
+	\ }
+
+nnoremap <C-J>e :<C-u>Unite english/dictionary<CR>
+nnoremap <C-J>x :<C-u>Unite english/example<CR>
+nnoremap <C-J>t :<C-u>Unite english/thesaurus<CR>
+
+Uniteのheadで文字を入力した後、`<C-L>`で再検索が可能です。
+
+==============================================================================
+CHANGELOG					*alpaca_english-changelog*
+
+0.0.2	2013-05-18
+	- Fixed document
+0.0.1	2013-05-13
+	- Create document
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:noet:fen:fdl=0:fdm=marker:

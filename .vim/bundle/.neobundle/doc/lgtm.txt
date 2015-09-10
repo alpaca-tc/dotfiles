@@ -1,0 +1,46 @@
+*lgtm.txt*                    Looks Good To Me!
+
+                  ,--.     ,----.    ,--------. ,--.   ,--. 
+                  |  |    '  .-./    '--.  .--' |   `.'   | 
+                  |  |    |  | .---.    |  |    |   "."|  | 
+                  |  '--. '  '--'  |    |  |    |  |   |  | 
+                  `-----'  `------'     `--'    `--'   `--' 
+
+Author: Yasuhiro Matsumoto <mattn.jp@gmail.com>
+WebSite: http://mattn.kaoriya.net/
+Repository: http://github.com/mattn/lgtm-vim
+License: MIT
+
+==============================================================================
+CONTENTS                                                         *lgtm-contents*
+
+Installation           |lgtm-install|
+Usage                  |lgtm-usage|
+Customize              |lgtm-customize|
+
+==============================================================================
+==============================================================================
+INSTALLRATION                                                     *lgtm-install*
+
+Install the distributed files into Vim runtime directory which is usually
+~/.vim/, or $HOME/vimfiles on Windows.
+
+If you install pathogen that provided from Tim Pope, you should extract the
+file into 'bundle' directory.
+
+You need to install webapi-vim also. https://github.com/mattn/webapi-vim
+
+==============================================================================
+USAGE                                                               *lgtm-usage*
+
+Just do ":LGTM"
+
+==============================================================================
+CUSTOMIZE                                                       *lgtm-customize*
+
+You can change key mapping for "<leader>lgtm": >
+
+ map <leader>L <plug>(lgtm)
+<
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:noet:fen:fdl=0:

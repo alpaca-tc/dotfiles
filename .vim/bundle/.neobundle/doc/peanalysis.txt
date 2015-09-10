@@ -1,0 +1,88 @@
+*peanalysis.txt*    Vinarise plugin for PE analysis engineering
+
+Author  : Sakura-yukikaze <sakura_yukikaze@live.jp>
+Version : 0.0.5
+License : MIT License (see below)
+{{{
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+}}}
+
+==============================================================================
+CONTENTS					*peanalysis-contents*
+
+Introduction		|peanalysis-introduction|
+Install			|peanalysis-install|
+Interface		|peanalysis-interface|
+  Keymappings		|peanalysis-keymappings|
+  Variables		|peanalysis-variables|
+  Commands		|peanalysis-commands|
+Changelog		|peanalysis-changelog|
+
+
+==============================================================================
+INSTALL						*peanalysis-install*
+
+1. Confirm vinarise is installed in your vim environment.
+2. Copy peanalysis's directories (doc, autoload) into
+   your dotvim path (e.g. ~/.vim/).
+3. That's all.
+Note: If you use a vim package system like Neobundle,
+      replace "the dotvim path" above with the vinarise installed path.
+
+
+==============================================================================
+INTERFACE					*peanalysis-interface*
+------------------------------------------------------------------------------
+KEYMAPPINGS					*peanalysis-keymappings*
+
+
+------------------------------------------------------------------------------
+VARIABLES					*peanalysis-variables*
+
+
+------------------------------------------------------------------------------
+COMMANDS					*peanalysis-commands*
+
+:VinarisePluginPEAnalysisShowSections
+    Show the section headers information of the current PE file.
+
+:VinarisePluginPEAnalysisShowVA
+    Show the virtual address corresponding to the current cursor position.
+
+:VinarisePluginPEAnalysisMoveToVA [{address}]
+    Move to input virtual address. Hexadecimal is supported.
+    {address} must be given without hexadecimal prefix '0x'.
+
+:VinarisePluginPEAnalysisMoveToEP
+    Move to the entry point address of the current PE file.
+
+
+==============================================================================
+CHANGELOG					*peanalysis-changelog*
+
+2012-03-15
+- Arranged identifiers.
+
+2012-03-13
+- Reduced the minimum of OptionalHeader to support specially crafted programs.
+- Modified get_hamming_weight to make it independent of bit-or operator.
+
+2012-03-06
+- Removed workaround against offset bug.
+
+2012-02-29
+- Fixed error handling.
+
+2012-02-26
+- Initial revision.
+- Fixed invalid data handling.
+- Changed function names.
+- Fixed directory hierarchy.
+
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:noet:fen:fdl=0:fdm=marker:

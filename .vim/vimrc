@@ -1579,7 +1579,7 @@ unlet hooks
 function! s:new_memolist()
   let date = strftime('%Y-%m-%d')
   let input = input('Filename: ', date . '-') . '.md'
-  tabnew `=input`
+  tabnew `=g:my.dir.memolist . '/' . input`
 endfunction
 nnoremap <silent><Space>mn :call <SID>new_memolist()<CR>
 nnoremap <silent><Space>ml :execute 'VimFilerExplorer ' . g:my.dir.memolist . ' -horizontal'<CR>
@@ -2851,7 +2851,7 @@ function! hooks.on_source(bundle) "{{{
   let g:unite_source_file_mru_time_format="(%m-%d %H:%M) "
   let g:unite_source_file_mru_filename_format=":~:."
   let g:neomru#do_validate=0
-  let g:neomru#update_interval=30
+  let g:neomru#update_interval=5
   " let g:unite_source_directory_mru_ignore_pattern = '\(/private/var/\|\.git\|.pygments-cache\|.pygments-cache\)'
 
   if executable('gmv')
