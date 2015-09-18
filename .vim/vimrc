@@ -231,7 +231,7 @@ NeoBundleLazy 'alpaca-tc/vim-ref', { 'autoload' : {
       \ 'mappings' : ['n', 'K', '<Plug>(ref-keyword)']
       \ }}
 " 暗黒美夢王
-NeoBundleLazy 'Shougo/unite.vim', {
+NeoBundle 'Shougo/unite.vim', {
       \ 'autoload' : {
       \   'functions' : 'unite#util#path2project_directory',
       \   'commands' : [ {
@@ -497,12 +497,12 @@ NeoBundleLazy 'vim-less', {
 "       \   'filetypes' : g:my.ft.markup_files,
 "       \   'commands' : ['HtmlIndentGet']
 "       \ }}
-NeoBundleLazy 'mattn/emmet-vim', {
-      \ 'autoload': {
-      \   'function_prefix': 'emmet',
-      \   'filetypes': g:my.ft.markup_files + g:my.ft.style_files,
-      \   'mappings' : ['i', '<Plug>(EmmetExpandAbbr)']
-      \ }}
+" NeoBundleLazy 'mattn/emmet-vim', {
+"       \ 'autoload': {
+"       \   'function_prefix': 'emmet',
+"       \   'filetypes': g:my.ft.markup_files + g:my.ft.style_files,
+"       \   'mappings' : ['i', '<Plug>(EmmetExpandAbbr)']
+"       \ }}
 
 " HAML
 " ----------------------------------------
