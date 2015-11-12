@@ -1,0 +1,128 @@
+include javascript.mocha.snip
+
+snippet except
+abbr    except(...).to
+options word
+  except(${1}).to.${2}
+
+snippet ok
+abbr    be.ok
+regexp  '\.to\(\.not\)\?\.'
+options word
+  be.ok();
+
+snippet be
+abbr    be
+regexp  '\.to\(\.not\)\?\.'
+options word
+  be(${1});
+
+snippet eql
+abbr    eql
+regexp  '\.to\(\.not\)\?\.'
+options word
+  eql(${1});
+
+snippet a
+abbr    be.a
+regexp  '\.to\(\.not\)\?\.'
+options word
+  be.a(${1});
+
+snippet an
+abbr    be.an
+regexp  '\.to\(\.not\)\?\.'
+options word
+  be.an(${1});
+
+snippet match
+abbr    match
+regexp  '\.to\(\.not\)\?\.'
+options word
+  match(/${1}/);
+
+snippet contain
+abbr    contain
+regexp  '\.to\(\.not\)\?\.'
+options word
+  contain(${1:'word'});
+
+snippet have.length
+abbr    have.length
+regexp  '\.to\(\.not\)\?\.'
+options word
+  have.length(${1:1});
+
+snippet be.empty
+abbr    be.empty
+regexp  '\.to\(\.not\)\?\.'
+options word
+  be.empty();
+
+snippet have.property
+abbr    have.property
+regexp  '\.to\(\.not\)\?\.'
+options word
+  have.property(${1:key});
+
+snippet have.keys
+abbr    have.keys
+regexp  '\.to\(\.not\)\?\.'
+options word
+  have.keys(${1:*keys});
+
+snippet throw
+abbr    throw
+regexp  '\.to\(\.not\)\?\.'
+options word
+  throw();
+
+snippet throwError
+abbr    throwError
+regexp  '\.to\(\.not\)\?\.'
+options word
+  throwError();
+
+snippet throwException
+abbr    throwException
+regexp  '\.to\(\.not\)\?\.'
+options word
+  throwException();
+
+snippet throwExceptionf
+abbr    throwExceptionf
+regexp  '\.to\(\.not\)\?\.'
+options word
+  throwException((err) => {
+    expect(err).to.be.a(${1:SyntaxError});
+  });
+
+snippet withArgs
+abbr    withArgs
+regexp  'expect(.*)\.'
+options word
+  withArgs(${1});
+
+snippet within
+abbr    be.within
+regexp  '\.to\(\.not\)\?\.'
+options word
+  be.within(${1:from}, ${2:to});
+
+snippet greaterThan
+abbr    be.greaterThan
+regexp  '\.to\(\.not\)\?\.'
+options word
+  be.greaterThan(${1});
+
+snippet lessThan
+abbr    be.lessThan
+regexp  '\.to\(\.not\)\?\.'
+options word
+  be.lessThan(${1});
+
+snippet fail
+abbr    be.fail
+regexp  '\.to\(\.not\)\?\.'
+options word
+  fail();

@@ -1,70 +1,70 @@
 # Default syntax {{{
 snippet describe
-abbr    describe('', function() { ... })
+abbr    describe('', () => { ... })
 alias   des
 options word
-  describe('${1:Description}', function() {
+  describe('${1:Description}', () => {
     ${2}
   });
 
 snippet describe.only
-abbr    describe.only('', function() { ... })
+abbr    describe.only('', () => { ... })
 alias   deso
 options word
-  describe.only('${1:Description}', function() {
+  describe.only('${1:Description}', () => {
     ${2}
   });
 
 snippet describe.skip
-abbr    describe.skip('', function() { ... })
+abbr    describe.skip('', () => { ... })
 alias   dess
 options word
-  describe.skip('${1:Description}', function() {
+  describe.skip('${1:Description}', () => {
     ${2}
   });
 
 snippet before
-abbr    before(function() { ... })
+abbr    before(() => { ... })
 options word
-  before(function() {
+  before(() => {
   });
 
 snippet after
-abbr    after(function() { ... })
+abbr    after(() => { ... })
 options word
-  after(function() {
+  after(() => {
   });
 
 snippet afterEach
-abbr    afterEach(function() { ... })
+abbr    afterEach(() => { ... })
 options word
-  afterEach(function() {
+  afterEach(() => {
   });
 
 snippet beforeEach
-abbr    beforeEach(function() { ... })
+abbr    beforeEach(() => { ... })
 options word
-  beforeEach(function() {
+  beforeEach(() => {
   });
 
 snippet it
-abbr    it('', function() { ... })
+abbr    it('', () => { ... })
 options word
-  it('${1}', function(${2:#:done}) {
+  it('${1}', (${2:#:done}) => {
     ${3}
   });
 
 snippet ito
-abbr    it.only('', function() { ... })
+abbr    it.only('', () => { ... })
 options word
-  it.only('${1}', function(${2:#:done}) {
+  it.only('${1}', (${2:#:done}) => {
     ${3}
   });
 
 snippet its
-abbr    it.skip('', function() { ... })
+abbr    it.skip('', () => { ... })
 options word
-  it.skip('${1}', function(${2:#:done}) {
+  it.skip('${1}', (${2:#:done}) => {
     ${3}
   });
 
@@ -73,11 +73,6 @@ abbr    it('...')
 alias   itl
 options word
   it('${1}');
-
-snippet expect
-abbr    expect(...).to
-options word
-  expect(${1}).to.${2}
 # }}}
 
 # {{{

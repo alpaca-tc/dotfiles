@@ -530,6 +530,12 @@ NeoBundleLazy 'othree/yajs.vim', { 'autoload': {
 NeoBundleLazy 'othree/javascript-libraries-syntax.vim', { 'autoload': {
       \ 'filetypes' : ['javascript', 'es6']
       \ }}
+NeoBundleLazy 'digitaltoad/vim-jade', { 'autoload': {
+      \ 'filetypes': ['jade']
+      \ }}
+NeoBundleLazy 'wavded/vim-stylus', { 'autoload': {
+      \ 'filetypes': ['stylus']
+      \ }}
 " NeoBundleLazy 'jiangmiao/simple-javascript-indenter', { 'autoload' : {
 "       \ 'filetypes' : ['javascript', 'json', 'nginx'],
 "       \ }}
@@ -1810,9 +1816,7 @@ function! hooks.on_source(bundle) "{{{
   let s:passive_filetypes       = ['html', 'yaml', 'racc.ruby', 'eruby', 'sass']
   let g:syntastic_ruby_checkers = ['rubocop', 'mri']
   let g:syntastic_Gemfile_checkers = ['rubocop', 'mri']
-  if executable('gjslint')
-    let g:syntastic_javascript_checkers = ['gjslint']
-  endif
+  let g:syntastic_javascript_checkers = ['eslint']
   let g:syntastic_Rakefile_checkers = ['rubocop', 'mri']
   let g:syntastic_go_checkers = ['go', 'golint']
   let g:syntastic_java_checkers = ['checkstyle', 'javac']
@@ -3167,6 +3171,18 @@ function! hooks.on_source(bundle) "{{{
     return neobundle#is_sourced('tagbar') && bufwinnr('__Tagbar__') != -1 ? tagbar#currenttag('[%s]', '') : ''
   endfunction "}}}
 
+  let g:lightline#functions#alpaca_tags = s:lightline.new({ 'updatetime' : 0.5 })
+  function! g:lightline#functions#alpaca_tags.func() "{{{
+    let processes = alpaca_tags#process_manager#all()
+    let status = ''
+
+    for [path, process] in items(processes)
+      let status .= process.status()
+    endfor
+
+    return status
+  endfunction"}}}
+
   let g:lightline#functions#plugin_information = s:lightline.new({ 'updatetime' : 0.5 })
   function! g:lightline#functions#plugin_information.func() "{{{
     if &filetype == 'unite'
@@ -3203,6 +3219,7 @@ function! hooks.on_source(bundle) "{{{
         \   ],
         \ },
         \ 'component_function' : {
+        \   'alpaca_tags': 'g:lightline#functions#alpaca_tags.statusline',
         \   'tagbar':      'g:lightline#functions#tagbar.statusline',
         \   'information': 'g:lightline#functions#plugin_information.statusline',
         \   'file_size':   'g:lightline#functions#file_size.statusline',
@@ -3331,6 +3348,8 @@ function! hooks.on_post_source(bundle) "{{{
   call altr#define('lib/%.rb', 'test/%_test.rb')
   call altr#define('_posts/%.markdown', 'images/blog/')
   call altr#define('models/%.rb', 'spec/models/%_spec.rb')
+  call altr#define('app/%.js', 'spec/%.spec.js')
+  call altr#define('app/%.jsx', 'spec/%.spec.js')
 
   call altr#define('Berksfile', $HOME . '/.berkshelf/cookbooks')
 endfunction"}}}

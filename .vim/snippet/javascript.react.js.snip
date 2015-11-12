@@ -1,0 +1,193 @@
+# React {{{
+snippet Component
+abbr    Component
+regexp  'React\.'
+options word
+  Component
+
+snippet createClass
+abbr    createClass
+regexp  'React\.'
+options word
+  createClass(${1})
+
+snippet createElement
+abbr    createElement
+regexp  'React\.'
+options word
+  createElement(${1:string_or_reactClass}, ${2:props})
+
+snippet createFactory
+abbr    createFactory
+regexp  'React\.'
+options word
+  createFactory(${1:string_or_reactClass})
+
+snippet isValidElement
+abbr    isValidElement
+regexp  'React\.'
+options word
+  isValidElement(${1:*object})
+
+snippet DOM
+abbr    DOM
+regexp  'React\.'
+options word
+  DOM.${1:div}(${2})
+# }}}
+
+# PropTypes {{{
+snippet PropTypes.array
+abbr    PropTypes.array
+options word
+  PropTypes.array
+
+snippet PropTypes.bool
+abbr    PropTypes.bool
+options word
+  PropTypes.bool
+
+snippet PropTypes.number
+abbr    PropTypes.number
+options word
+  PropTypes.number
+
+snippet PropTypes.func
+abbr    PropTypes.func
+options word
+  PropTypes.func
+
+snippet PropTypes.string
+abbr    PropTypes.string
+options word
+  PropTypes.string
+
+snippet PropTypes.node
+abbr    PropTypes.node
+options word
+  PropTypes.node
+
+snippet PropTypes.element
+abbr    PropTypes.element
+options word
+  PropTypes.element
+
+snippet PropTypes.oneOf
+abbr    PropTypes.oneOf
+options word
+  PropTypes.oneOf([${1}])
+
+snippet PropTypes.oneOfType
+abbr    PropTypes.oneOfType
+options word
+  PropTypes.oneOfType([${1:PropTypes...}])
+
+snippet PropTypes.arrayOf
+abbr    PropTypes.arrayOf
+options word
+  PropTypes.arrayOf(${1:PropTypes})
+
+snippet PropTypes.objectOf
+abbr    PropTypes.objectOf
+options word
+  PropTypes.objectOf(${1:PropTypes})
+
+snippet PropTypes.shape
+abbr    PropTypes.shape
+options word
+  PropTypes.shape({
+    ${1:key}: ${2:PropTypes}
+  });
+
+snippet PropTypes.isRequired
+abbr    PropTypes.isRequired
+options word
+  PropTypes.isRequired
+# }}}
+
+# ReactDOM {{{
+snippet render
+abbr    render
+regexp 'ReactDOM\.'
+options word
+  render(
+    ${1:Component or...},
+    ${2:DOM}
+  )
+
+snippet findDOMNode
+abbr    findDOMNode
+regexp 'ReactDOM\.'
+options word
+  findDOMNode(${1:ReactComponent})
+
+snippet unmountComponentAtNode
+abbr    unmountComponentAtNode
+regexp 'ReactDOM\.'
+options word
+  unmountComponentAtNode(${1:DOM})
+# }}}
+
+# ReactDOMServer {{{
+snippet renderToString
+abbr    renderToString
+regexp 'ReactDOMServer\.'
+options word
+  renderToString(${1:ReactElement})
+
+snippet renderToStaticMarkup
+abbr    renderToStaticMarkup
+regexp 'ReactDOMServer\.'
+options word
+  renderToStaticMarkup(${1:ReactElement})
+# }}}
+
+# React Component {{{
+snippet setState
+abbr    setState
+regexp 'this\.'
+options word
+  setState(${1})
+
+snippet setStatef
+abbr    setState(() => { ... })
+regexp 'this\.'
+options word
+  setState((previous, current) => {
+    return {
+      ${2}
+    }
+  });
+
+snippet replaceState
+abbr    replaceState
+regexp 'this\.'
+options word
+  replaceState(${1})
+
+snippet forceUpdate
+abbr    forceUpdate()
+regexp 'this\.'
+options word
+  forceUpdate(${1:callback});
+
+snippet getDOMNode
+abbr    getDOMNode()
+options word
+  getDOMNode();
+
+snippet isMounted
+abbr    isMounted()
+options word
+  isMounted();
+
+snippet setProps
+abbr    setProps(...)
+options word
+  setProps(${1})
+
+snippet replaceProps
+abbr    replaceProps(...)
+options word
+  replaceProps(${1})
+# }}}

@@ -46,6 +46,7 @@ export PATH=$HOME/.bundle/powerline/scripts:$PATH
 export RSENSE_HOME=$HOME/.bundle/rsense-0.3
 
 # node
+export PATH=./node_modules/.bin:$PATH
 export NODE_PATH=/usr/local/lib/node
 export NODE_PATH=/usr/local/lib/node_modules:$NODE_PATH
 export NODE_PATH=/usr/local/lib/jsctags:${NODE_PATH}

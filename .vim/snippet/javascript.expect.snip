@@ -1,0 +1,159 @@
+include javascript.mocha.snip
+include javascript.react.snip
+
+snippet except
+abbr    expect(...).
+options word
+  expect(${1}).${2}
+
+snippet exceptf
+abbr    expect(() => { ... }).
+options word
+  expect((${2}) => {
+    ${3}
+  }).withArgs(${1}).${4}
+
+snippet toExist
+abbr    toExist
+regexp  'expect([^)]\+)\.'
+options word
+  toExist();
+
+snippet toNotExist
+abbr    toNotExist
+regexp  'expect([^)]\+)\.'
+options word
+  toNotExist();
+
+snippet toBe
+abbr    toBe
+regexp  'expect([^)]\+)\.'
+options word
+  toBe(${1});
+
+snippet toNotBe
+abbr    toNotBe
+regexp  'expect([^)]\+)\.'
+options word
+  toNotBe(${1});
+
+snippet toEqual
+abbr    toEqual
+regexp  'expect([^)]\+)\.'
+options word
+  toEqual(${1});
+
+snippet toNotEqual
+abbr    toNotEqual
+regexp  'expect([^)]\+)\.'
+options word
+  toNotEqual(${1});
+
+snippet toThrow
+abbr    toThrow
+regexp  'expect([^)]\+)\.'
+options word
+  toThrow(${1});
+
+snippet toNotThrow
+abbr    toNotThrow
+regexp  'expect([^)]\+)\.'
+options word
+  toNotThrow(${1});
+
+snippet toBeA
+abbr    toBeA
+regexp  'expect([^)]\+)\.'
+options word
+  toBeA(${1});
+
+snippet toNotBeA
+abbr    toNotBeA
+regexp  'expect([^)]\+)\.'
+options word
+  toNotBeA(${1});
+
+snippet toMatch
+abbr    toMatch
+regexp  'expect([^)]\+)\.'
+options word
+  toMatch(/${1}/);
+
+snippet toBeLessThan
+abbr    toBeLessThan
+regexp  'expect([^)]\+)\.'
+options word
+  toBeLessThan(${1});
+
+snippet toBeGreaterThan
+abbr    toBeGreaterThan
+regexp  'expect([^)]\+)\.'
+options word
+  toBeGreaterThan(${1});
+
+snippet toInclude
+abbr    toInclude
+regexp  'expect([^)]\+)\.'
+options word
+  toInclude(${1});
+
+snippet toExclude
+abbr    toExclude
+regexp  'expect([^)]\+)\.'
+options word
+  toExclude(${1});
+
+snippet spyOn
+abbr    spyOn
+regexp  'expect\.'
+options word
+  spyOn(${1:obj}, ${2:key});
+
+snippet createSpy
+abbr    createSpy
+regexp  'expect\.'
+options word
+  createSpy(${1});
+
+snippet restoreSpies
+abbr    restoreSpies
+regexp  'expect\.'
+options word
+  restoreSpies();
+
+snippet andCall
+abbr    andCall
+options word
+  andCall((${1}) => {
+    ${2}
+  });
+
+snippet andCallThrough
+abbr    andCallThrough
+options word
+  andCallThrough();
+
+snippet andReturn
+abbr    andReturn
+options word
+  andReturn(${1});
+
+snippet andThrow
+abbr    andThrow
+options word
+  andThrow(${1});
+
+snippet restore
+abbr    restore
+options word
+  restore(${1});
+
+snippet withArgs
+abbr    withArgs
+options word
+  withArgs(${1}).${2};
+
+snippet withContext
+abbr    withContext
+options word
+  withContext(${1}).${2};

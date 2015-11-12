@@ -4,6 +4,7 @@ source ~/.zsh/git-prompt.sh
 # source ~/.zsh/tmux-completion.bash
 # source ~/.zsh/rbenv.zsh
 
+# eval "$(direnv hook zsh)"
 
 # source ~/.zsh/scala.sh
 

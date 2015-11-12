@@ -204,3 +204,10 @@ options word
   ${1:Child}.prototype.${2:method} = function() {
     ${1:Parent}.prototype.$1.apply(this);
   }
+
+snippet decorator
+abbr    decorator
+options word
+  function ${1}(target, name, descriptor) {
+    ${2}
+  }
