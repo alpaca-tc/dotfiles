@@ -35,8 +35,9 @@ case ${UID} in
     setopt prompt_subst
     # PROMPT='${RESET}${GREEN}${WINDOW:+"[$WINDOW]"}${RESET}%{$BLUE_BOLD%}${USER}@%m:${RESET}${WHITE}%~ ${RESET}${WHITE}$ '$'\n'
     # PROMPT='${RESET}%{$BLUE_BOLD%}${USER}@%m: %1(v|%F${CYAN}%1v%2v%f|)${vcs_info_git_pushed} ${RESET}${WHITE}${RESET}${WHITE}%~${RESET}${WHITE} '$' \n'
+    # PROMPT='${RESET}%{$BLUE_BOLD%}${USER}@%m: %1(v|%F${CYAN}%1v%2v%f|) ${RESET}${WHITE}${RESET}${WHITE}%~${RESET}${WHITE} '$' \n'
     PROMPT='${RESET}%{$BLUE_BOLD%}${USER}@%m: %1(v|%F${CYAN}%1v%2v%f|) ${RESET}${WHITE}${RESET}${WHITE}%~${RESET}${WHITE} '$' \n'
-    set_tmux_pwd
+    # set_tmux_pwd
 
         # Show git branch when you are in git repository# {{{
         # http://d.hatena.ne.jp/mollifier/20100906/p1
