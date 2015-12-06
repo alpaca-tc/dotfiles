@@ -28,6 +28,8 @@
   ui = true
 
 [alias]
+  master = "!git fetch origin master && git reset --hard FETCH_HEAD"
+
   first = !"fun() { git init; git add -A; git commit -m 'First commit'; }; fun"
   assume = !"fun() { git update-index --assume-unchanged `git ls-files $@ --no-empty-directory`; }; fun"
   no-assume = !"fun() { git update-index --no-assume-unchanged `git ls-files $@ --no-empty-directory`; }; fun"
@@ -72,6 +74,10 @@
 [push]
   default = current
 
+[pull]
+  rebase = true
+  default = current
+
 [rerere]
   enabled = 1
 
@@ -95,8 +101,6 @@
 [merge]
   ff = false
 
-[pull]
-  rebase = true
 ; [branch]
 ;   autosetuprebase = always
 

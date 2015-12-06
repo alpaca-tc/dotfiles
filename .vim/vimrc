@@ -1668,9 +1668,10 @@ function! hooks.on_source(bundle) "{{{
     nnoremap <buffer>[plug]u           :<C-U>UniteGit app/uploaders<CR>
     nnoremap <buffer>[plug]d           :<C-U>UniteGit app/decorators<CR>
     nnoremap <buffer>[plug]c           :<C-U>Unite rails/config<CR>
+    nnoremap <buffer>[plug]a           :<C-U>UniteGit app/assets<CR>
     nnoremap <buffer>[plug]j           :<C-U>Unite rails/javascript<CR>
-    nnoremap <buffer>[plug]a           :<C-U>Unite rails/stylesheet<CR>
-    nnoremap <buffer>[plug]s           :<C-U>Unite rails/spec<CR>
+    nnoremap <buffer>[plug]s           :<C-U>Unite rails/stylesheet<CR>
+    nnoremap <buffer>[plug]t           :<C-U>Unite rails/spec<CR>
     nnoremap <buffer>[plug]b           :<C-U>Unite rails/db<CR>
     nnoremap <buffer>[plug]f           :<C-U>Unite rails/spec -input=factories\ <CR>
     nnoremap <buffer>[plug]m           :<C-U>Unite rails/mailer<CR>
