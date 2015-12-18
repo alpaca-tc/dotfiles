@@ -7,4 +7,3 @@ syn keyword rubyRailsRenderMethod head redirect_to render_to_string respond_with
 syn match   rubyRailsRenderMethod '\<respond_to\>?\@!'
 syn keyword rubyRailsFilterMethod before_filter append_before_filter prepend_before_filter after_filter append_after_filter prepend_after_filter around_filter append_around_filter prepend_around_filter skip_before_filter skip_after_filter skip_filter
 syn keyword rubyRailsFilterMethod verify
-
