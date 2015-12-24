@@ -2585,7 +2585,7 @@ function! hooks.on_source(bundle) "{{{
   augroup MyUniteCmd
     autocmd!
     autocmd FileType unite call <SID>unite_my_settings()
-    autocmd BufEnter NeoMRUSave
+    autocmd BufEnter * NeoMRUSave
   augroup END
 
   function! s:unite_my_settings() "{{{
