@@ -9,6 +9,7 @@
 config/database.yml
 *.hot-update*
 .gist-vim
+.vim/.netrwhist
 
 ~
 \~

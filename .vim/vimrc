@@ -518,6 +518,9 @@ NeoBundleLazy 'Shougo/vinarise.vim', {
 " NeoBundleLazy 'spllr/vim-padrino', { 'autoload': {
 "       \ 'function_prefix' : 'padrino',
 "       \ }}
+NeoBundleLazy 'vim-ruby/vim-ruby', { 'autoload': {
+      \ 'filetypes' : ['ruby', 'erb', 'ruby.rspec']
+      \ }}
 NeoBundleLazy 'tpope/vim-rails', { 'autoload' : {
       \ 'function_prefix': 'rails'
       \ }}
@@ -973,6 +976,7 @@ endif
 " Dictionary {{{
 function! s:set_dictionary_automatically() "{{{
   let filetype = &filetype
+
   if empty(filetype) || count(g:my.ft.ignore_patterns, filetype) > 0
     return
   endif
@@ -989,7 +993,7 @@ function! s:set_dictionary_automatically() "{{{
     execute 'setl dictionary+=' . expand(dict_path)
 
     if exists(':NeoSnippetSource')
-      let snippet_path = '~/.vim/snippet/'. join(filetypes, '.') .'.snip'
+      let snippet_path = expand('~/.vim/snippet/'. join(filetypes, '.') .'.snip')
       if filereadable(snippet_path)
         execute 'NeoSnippetSource '. snippet_path
       endif
@@ -1452,9 +1456,9 @@ function! hooks.on_source(bundle) "{{{
       execute 'doautocmd User Rails' . type
     endif
 
-    if !empty(path)
-      execute 'doautocmd User Rails' . path
-    endif
+    " if !empty(path)
+    "   execute 'doautocmd User Rails' . path
+    " endif
   endfunction"}}}
 
   function! s:set_rails_path() "{{{
@@ -2425,9 +2429,7 @@ augroup END
 
 let hooks = neobundle#get_hooks('neosnippet.vim')
 function! hooks.on_source(bundle) "{{{
-  let g:neosnippet#disable_runtime_snippets = {
-        \ 'ruby' : 1,
-        \ }
+  let g:neosnippet#disable_runtime_snippets = { 'ruby' : 1 }
 
   call unite#custom_action('neosnippet/user', 'open', 'neosnippet_source')
   call unite#custom_action('neosnippet/runtime', 'open', 'neosnippet_source')
