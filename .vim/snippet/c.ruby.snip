@@ -1,0 +1,387 @@
+# Define class/module# {{{
+snippet rb_define_class
+abbr    rb_define_class('Class', rb_cClass)
+options word
+  rb_define_class("${1:Class}", ${2:rb_cClass})
+
+snippet rb_define_class_under
+abbr    rb_define_class_under(rb_cClass, "rb_cClass", rb_cClass)
+options word
+  rb_define_class_under(${1:rb_cClass}, "${2:Class}", ${3:rb_cClass})
+
+snippet rb_define_module
+abbr    rb_define_module("rb_mModule")
+options word
+  rb_define_module("${1:Module}")
+
+snippet rb_define_module_under
+abbr    rb_define_module_under(rb_mModule, "rb_mModule", rb_mModule)
+options word
+  rb_define_module_under(${1:rb_mModule}, "${2:Module}")
+
+snippet rb_define_method
+abbr    rb_define_method(rb_cClass, "method_name", pointer, arity)
+options word
+  rb_define_method(${1:rb_cClass}, "${2:method_name}", ${3:pointer}, ${4:arity})
+
+snippet rb_define_private_method
+abbr    rb_define_private_method(rb_cClass, "method_name", pointer, arity)
+options word
+  rb_define_method(${1:rb_cClass}, "${2:method_name}", ${3:pointer}, ${4:arity})
+
+snippet rb_define_singleton_method
+abbr    rb_define_singleton_method(rb_cClass, "method_name", pointer, arity)
+options word
+  rb_define_singleton_method(${1:rb_cClass}, "${2:method_name}", ${3:pointer}, ${4:arity})
+
+# }}}
+
+# {{{
+snippet rb_include_module
+abbr    rb_include_module(rb_cClass, rb_mModule)
+options word
+  rb_include_module(${1:rb_cClass}, ${2:rb_mModule})
+
+snippet rb_raise
+abbr    rb_raise(rb_eException, "message")
+options word
+  rb_raise(${1:rb_eException}, "${2:message}")
+
+snippet Check_Type
+abbr    Check_Type(super, T_CLASS)
+options word
+  Check_Type(${1:super}, ${2:T_STRUCT})
+
+snippet rb_class_boot
+abbr    rb_class_boot(super)
+options word
+  rb_class_boot(super);
+
+snippet rb_ivar_set
+abbr    rb_ivar_set(obj, id, val)
+options word
+  rb_ivar_set(${1:obj}, ${2:id}, ${3:val})
+
+snippet rb_ivar_get
+abbr    rb_ivar_get(obj, id)
+options word
+  rb_ivar_get(${1:obj}, ${2:id})
+
+snippet rb_define_const
+abbr    rb_define_const(rb_module_or_class, "const_name", value)
+options word
+  rb_define_const(${1:rb_module_or_class}, "${2:const_name}", ${3:value})
+
+snippet rb_str_new
+abbr    rb_str_new(c_string, length)
+options word
+  rb_str_new(${1:c_string}, ${2:length})
+
+snippet rb_str_new2
+abbr    rb_str_new2(c_string)
+options word
+  rb_str_new2(${1:c_string})
+
+snippet rb_str_dup
+abbr    rb_str_dup(ruby_string)
+options word
+  rb_str_dup(${1:ruby_string})
+
+snippet rb_str_plus
+abbr    rb_str_plus(ruby_string_object, ruby_string_object)
+options word
+  rb_str_plus(${1:ruby_string_object}, ${2:ruby_string_object})
+
+snippet rb_str_substr
+abbr    rb_str_substr(ruby_string_object, begin, length)
+options word
+  rb_str_substr(${1:ruby_string_object}, ${2:begin}, ${3:length})
+
+snippet rb_str_cat
+abbr    rb_str_cat(ruby_string_object, c_string, length)
+options word
+  rb_str_cat(${1:ruby_string_object}, ${2:c_string}, ${3:length})
+
+snippet rb_str_cat2
+abbr    rb_str_cat2(ruby_string_object, c_string)
+options word
+  rb_str_cat2(${1:ruby_string_object}, ${2:c_string})
+
+snippet rb_str_append
+abbr    rb_str_append(ruby_string_object_1, ruby_string_object_2)
+options word
+  rb_str_append(${1:ruby_string_object_1}, ${2:ruby_string_object_2})
+
+snippet rb_str_concat
+abbr    rb_str_concat(ruby_string_object, ruby_object)
+options word
+  rb_str_concat(${1:ruby_string_object}, ${2:ruby_object})
+
+snippet rb_intern
+abbr    rb_intern(str)
+options word
+  rb_intern("${1:str}")
+# }}}
+
+# Exception rb_e {{{
+snippet rb_eTypeError
+abbr    rb_eTypeError
+options word
+  rb_eTypeError
+# }}}
+
+# Variable Q {{{
+snippet Qnil
+abbr    Qnil
+options word
+  Qnil
+
+snippet Qfalse
+abbr    Qfalse
+options word
+  Qfalse
+
+snippet Qture
+abbr    Qture
+options word
+  Qture
+
+snippet Qundef
+abbr    Qundef
+options word
+  Qundef
+# }}}
+
+# rb_c {{{
+snippet rb_NilClass
+abbr    rb_NilClass
+options word
+  rb_NilClass
+
+snippet rb_FalseClass
+abbr    rb_FalseClass
+options word
+  rb_FalseClass
+
+snippet rb_cTrueClass
+abbr    rb_cTrueClass
+options word
+  rb_cTrueClass
+
+snippet rb_cObject
+abbr    rb_cObject
+options word
+  rb_cObject
+# }}}
+
+# Arrays {{{
+snippet rb_ary_new
+abbr    rb_ary_new()
+options word
+  rb_ary_new()
+
+snippet rb_ary_new2
+abbr    rb_ary_new2(size)
+options word
+  rb_ary_new2(${1:size})
+
+snippet rb_ary_store
+abbr    rb_ary_store(ruby_array, index, value)
+options word
+  rb_ary_store(${1:ruby_array}, ${2:index}, ${3:value})
+
+snippet rb_ary_push
+abbr    rb_ary_push(ruby_array, value)
+options word
+  rb_ary_push(${1:ruby_array}, ${2:value})
+
+snippet rb_ary_unshift
+abbr    rb_ary_unshift(ruby_array, value)
+options word
+  rb_ary_unshift(${1:ruby_array}, ${2:value})
+
+snippet rb_ary_pop
+abbr    rb_ary_pop(ruby_array)
+options word
+  rb_ary_pop(${1:ruby_array})
+
+snippet rb_ary_shift
+abbr    rb_ary_shift(ruby_array)
+options word
+  rb_ary_shift(${1:ruby_array})
+
+snippet rb_ary_entry
+abbr    rb_ary_entry(ruby_array, index)
+options word
+  rb_ary_entry(${1:ruby_array}, ${2:index})
+
+snippet rb_ary_dup
+abbr    rb_ary_dup(ruby_array)
+options word
+  rb_ary_dup(${1:ruby_array})
+
+snippet rb_ary_to_s
+abbr    rb_ary_to_s(ruby_array)
+options word
+  rb_ary_to_s(${1:ruby_array})
+
+snippet rb_ary_join
+abbr    rb_ary_join(ruby_array, ruby_string_object)
+options word
+  rb_ary_join(${1:ruby_array}, ${2:ruby_string_object})
+
+snippet rb_ary_reverse
+abbr    rb_ary_reverse(ruby_array)
+options word
+  rb_ary_reverse(${1:ruby_array})
+
+snippet rb_ary_to_ary
+abbr    rb_ary_to_ary(ruby_object)
+options word
+  rb_ary_to_ary(${1:ruby_object})
+# }}}
+
+# Hash {{{
+snippet rb_hash_new
+abbr    rb_hash_new()
+options word
+  rb_hash_new()
+
+snippet rb_hash_aset
+abbr    rb_hash_aset(ruby_hash, key, value)
+options word
+  rb_hash_aset(${1:ruby_hash}, ${2:key}, ${3:value})
+# }}}
+
+# Block {{{
+snippet rb_block_proc
+abbr    rb_block_proc()
+options word
+  rb_block_proc()
+
+snippet rb_block_given_p
+abbr    rb_block_given_p()
+options word
+  rb_block_given_p()
+
+snippet rb_yield
+abbr    rb_yield(ruby_object)
+options word
+  rb_yield(${1:ruby_object})
+
+snippet rb_yield_values
+abbr    rb_yield_values(ruby_object, ruby_object, ...)
+options word
+  rb_yield_values(${1:ruby_object...})
+# }}}
+
+# Struct R {{{
+snippet RObject
+abbr    RObject
+options word
+  RObject
+
+snippet RClass
+abbr    RClass
+options word
+  RClass
+
+snippet RFloat
+abbr    RFloat
+options word
+  RFloat
+
+snippet RString
+abbr    RString
+options word
+  RString
+
+snippet RArray
+abbr    RArray
+options word
+  RArray
+
+snippet RRegexp
+abbr    RRegexp
+options word
+  RRegexp
+
+snippet RHash
+abbr    RHash
+options word
+  RHash
+
+snippet RFile
+abbr    RFile
+options word
+  RFile
+
+snippet RData
+abbr    RData
+options word
+  RData
+
+snippet RStruct
+abbr    RStruct
+options word
+  RStruct
+
+snippet RBignum
+abbr    RBignum
+options word
+  RBignum
+# }}}
+
+# Cast {{{
+snippet RSTRING
+abbr    RSTRING(str)
+options word
+  RSTRING(${1:str})->${2}
+
+snippet RARRAY
+abbr    RARRAY(arr)
+options word
+  RARRAY(${1:arr})->${2}
+
+snippet RBASIC
+abbr    RBASIC(struct)
+options word
+  RBASIC(${1:struct})->${2}
+
+snippet StringValueCStr
+abbr    StringValueCStr(ruby_string_object)
+options word
+  StringValueCStr(${1:ruby_string_object})
+# }}}
+
+# Macro {{{
+snippet INT2FIX
+abbr    INT2FIX(int)
+options word
+  INT2FIX(${1:int})
+
+snippet LONG2NUM
+abbr    LONG2NUM(long)
+options word
+  LONG2NUM(${1:long})
+
+snippet ID2SYM
+abbr    ID2SYM(id)
+options word
+  ID2SYM(${1:id})
+
+snippet SYM2ID
+abbr    SYM2ID(sym)
+options word
+  SYM2ID(${1:sym})
+
+snippet NIL_P
+abbr    NIL_P(value)
+options word
+  NIL_P(${1:value})
+
+snippet RTEST
+abbr    RTEST(value)
+options word
+  RTEST(${1:value})
+# }}}
