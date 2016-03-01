@@ -470,20 +470,6 @@ regexp  '\v((to|should|to_not|should_not)\s|\.$)'
 options word
   be ${1:<} ${2}
 
-snippet contain_exactly
-abbr    contain_exactly(...)
-regexp  '\v((to|should|to_not|should_not)\s|\.$)'
-alias   array_match match_array
-options word
-  contain_exactly ${1:array}
-
-snippet contain_exactly
-abbr    contain_exactly(...)
-regexp  '\v((to|should|to_not|should_not)\s|\.$)'
-alias   array_match
-options word
-  contain_exactly ${1:array}
-
 snippet kind_of
 abbr    be_a_kind_of(...)
 alias   be_a_kind_of

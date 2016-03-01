@@ -156,7 +156,9 @@ alias gem_from_url='gem specific_install -l'
 
 # postgres {{{
 alias postdb_start='pg_ctl -D /usr/local/var/postgres -l logfile start'
+alias postdb_start='pg_ctl -D /usr/local/var/postgres9.5 -l logfile start'
 alias postdb_stop='pg_ctl -D /usr/local/var/postgres stop -s -m fast'
+alias postdb_stop='pg_ctl -D /usr/local/var/postgres9.5 stop -s -m fast'
 # }}}
 
 alias chrome='open -a Google\ chrome'

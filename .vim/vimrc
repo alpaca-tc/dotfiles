@@ -217,10 +217,7 @@ NeoBundleLazy 'alpaca-tc/vim-ref', { 'autoload' : {
       \   'name' : 'Ref',
       \   'complete' : 'customlist,ref#complete',
       \ },
-      \ 'unite_sources' : [
-      \   'ref/erlang', 'ref/man', 'ref/perldoc', 'ref/godoc',
-      \   'ref/phpmanual', 'ref/pydoc', 'ref/redis', 'ref/refe', 'ref/webdict'
-      \ ],
+      \ 'on_source' : 'unite.vim',
       \ 'mappings' : ['n', 'K', '<Plug>(ref-keyword)']
       \ }}
 " 暗黒美夢王
@@ -235,7 +232,7 @@ NeoBundle 'Shougo/unite.vim', {
       \     'UniteWithInput', 'UniteWithInputDirectory']
       \ }}
 NeoBundleLazy 'Shougo/neomru.vim', { 'autoload' : {
-      \ 'unite_sources' : ['neomru/file', 'file_mru', 'neomru/directory', 'directory_mru'],
+      \ 'on_source' : 'unite.vim',
       \ }}
 NeoBundleLazy 'Shougo/vimfiler', {
       \ 'depends' : 'Shougo/unite.vim',
@@ -269,7 +266,7 @@ NeoBundleLazy 'Shougo/neosnippet.vim', {
       \   'functions' : 'neosnippet#get_snippets',
       \   'filetypes' : 'snippet',
       \   'insert' : 1,
-      \   'unite_sources' : ['neosnippet', 'neosnippet/user', 'neosnippet/runtime'],
+      \   'on_source' : 'unite.vim',
       \ }}
 " NeoBundleLazy 'Shougo/neosnippet-snippets'
 NeoBundleLazy 'Shougo/vimshell', {
@@ -381,13 +378,7 @@ NeoBundleLazy 'alpaca-tc/vim-qfreplace', { 'autoload' : {
       \ }}
 
 NeoBundleLazy 'kmnk/vim-unite-giti', {
-      \ 'autoload': {
-      \   'unite_sources': [
-      \     'giti', 'giti/branch', 'giti/branch/new', 'giti/branch_all',
-      \     'giti/pull_request/base', 'giti/pull_request/head',
-      \     'giti/config', 'giti/log', 'giti/remote', 'giti/status'
-      \   ]
-      \ }}
+      \ 'autoload': { 'on_source' : 'unite.vim' }}
 NeoBundleLazy 'basyura/TweetVim', { 'depends' :
       \ ['basyura/twibill.vim', 'tyru/open-browser.vim', 'Shougo/unite.vim'],
       \ 'autoload' : {
@@ -397,11 +388,11 @@ NeoBundleLazy 'basyura/TweetVim', { 'depends' :
       \     'TweetVimHomeTimeline', 'TweetVimListStatuses', 'TweetVimMentions',
       \     'TweetVimSay', 'TweetVimSearch', 'TweetVimSwitchAccount',
       \     'TweetVimUserTimeline', 'TweetVimVersion' ],
-      \   'unite_sources' : ['tweetvim', 'tweetvim/account']
+      \   'on_source' : 'unite.vim',
       \ }}
 
 NeoBundleLazy 'alpaca-tc/unite-git-aliases', { 'autoload' : {
-      \ 'unite_sources' : 'git_aliases' }}
+      \ 'on_source' : 'unite.vim' }}
 
 NeoBundleLazy 'kana/vim-niceblock', { 'autoload' : {
       \ 'mappings' : ['<Plug>(niceblock-I)', '<Plug>(niceblock-A)']
@@ -532,16 +523,7 @@ NeoBundleLazy 'tpope/vim-endwise', {
 " Rails
 NeoBundleLazy 'basyura/unite-rails', {
       \ 'depends' : 'Shougo/unite.vim',
-      \ 'autoload' : {
-      \   'unite_sources' : [
-      \     'rails/bundle', 'rails/bundled_gem', 'rails/config',
-      \     'rails/controller', 'rails/db', 'rails/destroy', 'rails/features',
-      \     'rails/gem', 'rails/gemfile', 'rails/generate', 'rails/git', 'rails/helper',
-      \     'rails/heroku', 'rails/initializer', 'rails/javascript', 'rails/lib', 'rails/log',
-      \     'rails/mailer', 'rails/model', 'rails/rake', 'rails/route', 'rails/schema', 'rails/spec',
-      \     'rails/stylesheet', 'rails/view'
-      \   ]
-      \ }}
+      \ 'on_source' : 'unite.vim' }
 
 NeoBundleLazy 'mattn/lgtm-vim', {
       \ 'depends': ['mattn/webapi-vim'],
@@ -559,6 +541,8 @@ NeoBundleLazy 'alpaca-tc/alpaca_octopress.vim', { 'autoload' : {
       \   'complete' : 'customlist,octopress#complete',
       \   },
       \ ]}}
+NeoBundleLazy 'lambdalisue/unite-grep-vcs', {
+      \ 'on_source' : 'unite.vim' }
 
 " Slim
 " ----------------------------------------
@@ -1451,8 +1435,6 @@ function! hooks.on_source(bundle) "{{{
 
     if type != '-'
       let type = substitute(type, '-', '.', 'g')
-      let g:type = type
-      let g:md = 'doautocmd User Rails' . type
       execute 'doautocmd User Rails' . type
     endif
 
@@ -2532,6 +2514,7 @@ command! -nargs=? -complete=customlist,s:unite_git_complete UniteGit call <SID>u
 
 " nnoremap <silent>[unite]ra       :<C-U>Unite -buffer-name=rake rake<CR>
 nnoremap <silent>[unite]/ :Unite history/search -no-empty<CR>
+nnoremap <silent>[unite]s :Unite grep/git:.<CR>
 nnoremap <silent>[unite]h :Unite help -no-quit<CR>
 nnoremap <silent><expr>[unite]t ':Unite tag -horizontal -immediately -input='.expand("<cword>").'<CR>'
 " nnoremap <expr><C-]> ':Unite tags -immediately -horizontal -input='.expand("<cword>").'<CR>'
@@ -3119,6 +3102,8 @@ function! s:ruby_p(str) "{{{
   execute 'ruby p' a:str
 endfunction "}}}
 command! -nargs=+ RubyP call s:ruby_p(<q-args>)
+
+command! Ikaring !open https://splatoon.nintendo.net/
 
 if !s:on_init()
   call neobundle#call_hook('on_source')
