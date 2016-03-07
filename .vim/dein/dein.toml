@@ -1,0 +1,21 @@
+[[plugins]]
+repo = 'Shougo/unite.vim'
+on_cmd    = ["Unite", "UniteBookmarkAdd", "UniteClose", "UniteResume", "UniteWithBufferDir", "UniteWithCurrentDir", "UniteWithCursorWord", "UniteWithInput", "UniteWithInputDirectory"]
+on_func   = ["unite#util#path2project_directory"]
+
+[[plugins]]
+repo = 'tomtom/tcomment_vim'
+on_cmd    = ["TComment", "TCommentAs", "TCommentMaybeInline"]
+on_func   = ["tcomment#DefineType"]
+
+[[plugins]]
+repo = 'alpaca-tc/alpaca-switch-file.vim'
+
+[[plugins]]
+repo = 'repeat.vim'
+on_map    = '<Plug>'
+
+[[plugins]]
+repo = 'tomtom/tcomment_vim'
+on_cmd    = ["TComment", "TCommentAs", "TCommentMaybeInline"]
+on_func   = ["tcomment#DefineType"]
