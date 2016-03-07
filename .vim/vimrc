@@ -21,7 +21,13 @@ augroup END
 " ----------------------------------------
 " Utils {{{
 function! s:current_git() "{{{
-  return unite#util#path2project_directory(getcwd())
+  let vital = s:get_vital()
+
+  if empty( vital )
+    return ''
+  else
+    return vital.import('Prelude').path2project_directory(getcwd())
+  endif
 endfunction"}}}
 function! s:filetype() "{{{
   return get(split(&filetype, '\.'), 0, '')
@@ -150,8 +156,8 @@ let s:toml      = '~/.vim/dein/dein.toml'
 let s:lazy_toml = '~/.vim/dein/dein_lazy.toml'
 
 if dein#load_cache([expand('<sfile>'), s:toml, s:lazy_toml])
-  call dein#load_toml(s:toml, {'lazy': 0})
-  call dein#load_toml(s:lazy_toml, {'lazy': 1})
+  call dein#load_toml(s:toml)
+  call dein#load_toml(s:lazy_toml, { 'lazy': 1 })
   call dein#save_cache()
 endif
 
@@ -893,161 +899,166 @@ if dein#tap('vimshell') " {{{
   execute 'autocmd MyDeinCmd User' 'dein#source#' . g:dein#name 'call s:vimshell_on_source()'
 endif " }}}
 
-" " ------------------------------------
-" function! s:new_memolist()
-"   let date = strftime('%Y-%m-%d')
-"   let input = input('Filename: ', date . '-') . '.md'
-"   tabnew `=g:my.dir.memolist . '/' . input`
-" endfunction
-" nnoremap <silent><Space>mn :call <SID>new_memolist()<CR>
-" nnoremap <silent><Space>ml :execute 'VimFilerExplorer ' . g:my.dir.memolist . ' -horizontal'<CR>
-"
-" " ------------------------------------
-" let hooks = neobundle#get_hooks('vim-rails') " {{{
-" function! hooks.on_source(bundle) "{{{
-"   let g:rails_level = 4
-"   let g:rails_mappings=1
-"   let g:rails_modelines=0
-"   let g:rails_syntax = 1
-"
-"   function! s:source_snippet() " {{{
-"     if empty(get(b:, 'rails_root', 0))
-"       return
-"     endif
-"
-"     try
-"       let buf = rails#buffer()
-"     catch /.*/
-"       echomsg 'Missing rails type'
-"     endtry
-"
-"     let type = "-" . buf.type_name()
-"     let path = '/' . buf.name()
-"     if path =~ '[ !#$%\,]'
-"       let path = ''
-"     endif
-"
-"     if type != '-'
-"       let type = substitute(type, '-', '.', 'g')
-"       let g:type = type
-"       let g:md = 'doautocmd User Rails' . type
-"       execute 'doautocmd User Rails' . type
-"     endif
-"
-"     " if !empty(path)
-"     "   execute 'doautocmd User Rails' . path
-"     " endif
-"   endfunction"}}}
-"
-"   function! s:set_rails_path() "{{{
-"     let path = ['app/controllers', 'app/models', 'lib', 'app/controllers/concerns', 'app/models/concerns', 'app/workers', 'app/decorators', 'app/jobs']
-"     execute 'setl path+=,' . join(map(path, 'expand(b:rails_root . "/" . v:val)'), ',')
-"   endfunction"}}}
-"
-"   function! s:unite_rails_setting() " {{{
-"     call s:source_snippet()
-"
-"     nnoremap <buffer><Space>r :R<CR>
-"     nnoremap <buffer><Space>a :A<CR>
-"
-"     nnoremap <buffer>[plug]            :<C-U>Unite rails/model<CR>
-"     nnoremap <buffer>[plug]<C-H>       :<C-U>Unite rails/controller<CR>
-"     nnoremap <buffer>[plug]<C-H><C-H>  :<C-U>Unite rails/view<CR>
-"
-"     nnoremap <buffer>[plug]u           :<C-U>UniteGit app/uploaders<CR>
-"     nnoremap <buffer>[plug]d           :<C-U>UniteGit app/decorators<CR>
-"     nnoremap <buffer>[plug]c           :<C-U>Unite rails/config<CR>
-"     nnoremap <buffer>[plug]a           :<C-U>UniteGit app/assets<CR>
-"     nnoremap <buffer>[plug]j           :<C-U>Unite rails/javascript<CR>
-"     nnoremap <buffer>[plug]s           :<C-U>Unite rails/stylesheet<CR>
-"     nnoremap <buffer>[plug]t           :<C-U>Unite rails/spec<CR>
-"     nnoremap <buffer>[plug]b           :<C-U>Unite rails/db<CR>
-"     nnoremap <buffer>[plug]f           :<C-U>Unite rails/spec -input=factories\ <CR>
-"     nnoremap <buffer>[plug]m           :<C-U>Unite rails/mailer<CR>
-"     nnoremap <buffer>[plug]l           :<C-U>Unite rails/lib<CR>
-"     nnoremap <buffer>[plug]g           :<C-U>UniteGit Gemfile<CR>
-"     nnoremap <buffer>[plug]r           :<C-U>UniteGit config/routes.rb<CR>
-"     nnoremap <buffer>[plug]w           :<C-U>UniteGit app/workers<CR>
-"     nnoremap <buffer>[plug]h           :<C-U>Unite rails/helper<CR>
-"   endfunction " }}}
-"
-"   augroup RailsDictSetting
-"     autocmd!
-"     autocmd User Rails call s:unite_rails_setting()
-"     autocmd User BufEnterRails call s:set_rails_path()
-"   augroup END
-" endfunction " }}}
-"
-" function! s:define_rails_autocmd() "{{{
-"   let s:rails_snippets = {
-"         \ '.view*':                 ['ruby.rails.view'],
-"         \ '.view.haml':             ['haml.rails.view'],
-"         \ '.view.erb':              ['eruby.rails.view'],
-"         \ '.model*':                 ['ruby.rails.model'],
-"         \ '.controller':            ['ruby.rails.controller'],
-"         \ '.db.migration':          ['ruby.rails.migrate'],
-"         \ '/config/environment.rb': ['ruby.rails.environment'],
-"         \ '/config/routes.rb':      ['ruby.rails.route'],
-"         \ '.fixtures.replacement':  ['ruby.factory_girl'],
-"         \ '.spec.controller':       ['ruby.rspec.controller'],
-"         \ '.spec.model':            ['ruby.rspec.model'],
-"         \ '.spec.helper':           ['ruby.rspec.helper'],
-"         \ '.spec.feature':          ['ruby.capybara'],
-"         \ '.spec.routing':          ['ruby.rspec.routing']
-"         \ }
-"
-"   augroup MyRailsSetting
-"     autocmd!
-"     for [type_or_path, snippets] in items(s:rails_snippets)
-"       for snippet in snippets
-"         let snippet_file = expand('~/.vim/snippet/' . snippet . '.snip')
-"         if filereadable(snippet_file)
-"           let prefix = 'autocmd User Rails' . type_or_path
-"           execute prefix . ' NeoSnippetSource ' . snippet_file
-"           execute prefix . ' nnoremap <buffer><Space>e :<C-U>tabnew ' . snippet_file . '<CR>'
-"         endif
-"       endfor
-"     endfor
-"   augroup END
-" endfunction"}}}
-"
-" function! s:detect_rails()
-"   let root_dir = s:current_git()
-"   return !empty(root_dir) && filereadable(root_dir . '/config/application.rb')
-" endfunction
-"
-" function! s:load_vim_rails() "{{{
-"   if exists('s:loaded_vim_rails')
-"     return
-"   endif
-"
-"   if s:detect_rails()
-"     let s:loaded_vim_rails = 1
-"     let root_dir = s:current_git()
-"     autocmd! LoadVimRails
-"     augroup! LoadVimRails
-"
-"     let b:rails_root = root_dir
-"     NeoBundleSource vim-rails
-"
-"     call s:define_rails_autocmd()
-"     silent doautocmd User BufEnterRails
-"     silent doautocmd User Rails
-"
-"     augroup DetectVimRails
-"       autocmd!
-"       autocmd BufNew,BufNewFile * silent doautocmd User Rails
-"     augroup END
-"   endif
-" endfunction"}}}
-"
-" if s:on_init() && !exists('s:loaded_vim_rails')
-"   augroup LoadVimRails
-"     autocmd!
-"     autocmd VimEnter,BufNewFile,BufRead * call <SID>load_vim_rails()
-"   augroup END
-" endif
-" "}}}
+" ------------------------------------
+function! s:new_memolist()
+  let date = strftime('%Y-%m-%d')
+  let input = input('Filename: ', date . '-') . '.md'
+  tabnew `=g:my.dir.memolist . '/' . input`
+endfunction
+
+nnoremap <silent><Space>mn :call <SID>new_memolist()<CR>
+nnoremap <silent><Space>ml :execute 'VimFilerExplorer ' . g:my.dir.memolist . ' -horizontal'<CR>
+
+" ------------------------------------
+if dein#tap('vim-rails') " {{{
+  function! s:vim_rails_on_source() abort
+    let g:rails_level = 4
+    let g:rails_mappings=1
+    let g:rails_modelines=0
+    let g:rails_syntax = 1
+
+    function! s:source_snippet() " {{{
+      if empty(get(b:, 'rails_root', 0))
+        return
+      endif
+
+      try
+        let buf = rails#buffer()
+      catch /.*/
+        echomsg 'Missing rails type'
+      endtry
+
+      let type = "-" . buf.type_name()
+      let path = '/' . buf.name()
+      if path =~ '[ !#$%\,]'
+        let path = ''
+      endif
+
+      if type != '-'
+        let type = substitute(type, '-', '.', 'g')
+        let g:type = type
+        let g:md = 'doautocmd User Rails' . type
+        execute 'doautocmd User Rails' . type
+      endif
+
+      " if !empty(path)
+      "   execute 'doautocmd User Rails' . path
+      " endif
+    endfunction"}}}
+
+    function! s:set_rails_path() "{{{
+      let path = ['app/controllers', 'app/models', 'lib', 'app/controllers/concerns', 'app/models/concerns', 'app/workers', 'app/decorators', 'app/jobs']
+      execute 'setl path+=,' . join(map(path, 'expand(b:rails_root . "/" . v:val)'), ',')
+    endfunction"}}}
+
+    function! s:unite_rails_setting() " {{{
+      call s:source_snippet()
+
+      nnoremap <buffer><Space>r :R<CR>
+      nnoremap <buffer><Space>a :A<CR>
+
+      nnoremap <buffer>[plug]            :<C-U>Unite rails/model<CR>
+      nnoremap <buffer>[plug]<C-H>       :<C-U>Unite rails/controller<CR>
+      nnoremap <buffer>[plug]<C-H><C-H>  :<C-U>Unite rails/view<CR>
+
+      nnoremap <buffer>[plug]u           :<C-U>UniteGit app/uploaders<CR>
+      nnoremap <buffer>[plug]d           :<C-U>UniteGit app/decorators<CR>
+      nnoremap <buffer>[plug]c           :<C-U>Unite rails/config<CR>
+      nnoremap <buffer>[plug]a           :<C-U>UniteGit app/assets<CR>
+      nnoremap <buffer>[plug]j           :<C-U>Unite rails/javascript<CR>
+      nnoremap <buffer>[plug]s           :<C-U>Unite rails/stylesheet<CR>
+      nnoremap <buffer>[plug]t           :<C-U>Unite rails/spec<CR>
+      nnoremap <buffer>[plug]b           :<C-U>Unite rails/db<CR>
+      nnoremap <buffer>[plug]f           :<C-U>Unite rails/spec -input=factories\ <CR>
+      nnoremap <buffer>[plug]m           :<C-U>Unite rails/mailer<CR>
+      nnoremap <buffer>[plug]l           :<C-U>Unite rails/lib<CR>
+      nnoremap <buffer>[plug]g           :<C-U>UniteGit Gemfile<CR>
+      nnoremap <buffer>[plug]r           :<C-U>UniteGit config/routes.rb<CR>
+      nnoremap <buffer>[plug]w           :<C-U>UniteGit app/workers<CR>
+      nnoremap <buffer>[plug]h           :<C-U>Unite rails/helper<CR>
+    endfunction " }}}
+
+    augroup RailsDictSetting
+      autocmd!
+      autocmd User Rails call s:unite_rails_setting()
+      autocmd User BufEnterRails call s:set_rails_path()
+    augroup END
+  endfunction
+
+  execute 'autocmd MyDeinCmd User' 'dein#source#' . g:dein#name 'call s:vim_rails_on_source()'
+endif " }}}
+
+function! s:define_rails_autocmd() "{{{
+  let s:rails_snippets = {
+        \ '.view*':                 ['ruby.rails.view'],
+        \ '.view.haml':             ['haml.rails.view'],
+        \ '.view.erb':              ['eruby.rails.view'],
+        \ '.model*':                 ['ruby.rails.model'],
+        \ '.controller':            ['ruby.rails.controller'],
+        \ '.db.migration':          ['ruby.rails.migrate'],
+        \ '/config/environment.rb': ['ruby.rails.environment'],
+        \ '/config/routes.rb':      ['ruby.rails.route'],
+        \ '.fixtures.replacement':  ['ruby.factory_girl'],
+        \ '.spec.controller':       ['ruby.rspec.controller'],
+        \ '.spec.model':            ['ruby.rspec.model'],
+        \ '.spec.helper':           ['ruby.rspec.helper'],
+        \ '.spec.feature':          ['ruby.capybara'],
+        \ '.spec.routing':          ['ruby.rspec.routing']
+        \ }
+
+  augroup MyRailsSetting
+    autocmd!
+    for [type_or_path, snippets] in items(s:rails_snippets)
+      for snippet in snippets
+        let snippet_file = expand('~/.vim/snippet/' . snippet . '.snip')
+        if filereadable(snippet_file)
+          let prefix = 'autocmd User Rails' . type_or_path
+          execute prefix . ' NeoSnippetSource ' . snippet_file
+          execute prefix . ' nnoremap <buffer><Space>e :<C-U>tabnew ' . snippet_file . '<CR>'
+        endif
+      endfor
+    endfor
+  augroup END
+endfunction"}}}
+
+function! s:detect_rails()
+  let root_dir = s:current_git()
+  return !empty(root_dir) && filereadable(root_dir . '/config/application.rb')
+endfunction
+
+function! s:load_vim_rails() "{{{
+  if exists('s:loaded_vim_rails')
+    return
+  endif
+
+  if s:detect_rails()
+    let s:loaded_vim_rails = 1
+    let root_dir = s:current_git()
+
+    autocmd! LoadVimRails
+    augroup! LoadVimRails
+
+    let b:rails_root = root_dir
+    call dein#source('vim-rails')
+
+    call s:define_rails_autocmd()
+    silent doautocmd User BufEnterRails
+    silent doautocmd User Rails
+
+    augroup DetectVimRails
+      autocmd!
+      autocmd BufNew,BufNewFile * silent doautocmd User Rails
+    augroup END
+  endif
+endfunction"}}}
+
+if s:on_init() && !exists('s:loaded_vim_rails')
+  augroup LoadVimRails
+    autocmd!
+    autocmd VimEnter,BufNewFile,BufRead * call <SID>load_vim_rails()
+  augroup END
+endif
+"}}}
 
 " ------------------------------------
 if dein#tap('gist-vim') " {{{
@@ -2416,14 +2427,14 @@ endfunction"}}}
 
 function! s:get_vital() "{{{
   if !exists('s:V')
-    if exists('*neocomplete#util#get_vital')
+    if dein#is_sourced('neocomplete.vim')
       let s:V = neocomplete#util#get_vital()
-    elseif exists('*unite#util#get_vital')
+    elseif dein#is_sourced('unite.vim')
       let s:V = unite#util#get_vital()
     elseif dein#is_sourced('vital.vim')
-      let s:V = vital#of('vital')
+      let s:V = vital#__latest__#new()
     else
-      echomsg 'vital.vim is not found!!'
+      return 0
     endif
   endif
 

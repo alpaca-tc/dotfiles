@@ -42,7 +42,12 @@ on_cmd    = ["SudoRead", "SudoWrite"]
 [[plugins]]
 repo = 'Shougo/unite.vim'
 on_cmd    = ["Unite", "UniteBookmarkAdd", "UniteClose", "UniteResume", "UniteWithBufferDir", "UniteWithCurrentDir", "UniteWithCursorWord", "UniteWithInput", "UniteWithInputDirectory"]
-on_func   = ["unite#util#path2project_directory"]
+on_func   = ["unite#util#path2project_directory", 'unite#util#get_vital']
+
+[[plugins]]
+repo = 'tomtom/tcomment_vim'
+on_cmd    = ["TComment", "TCommentAs", "TCommentMaybeInline"]
+on_func   = ["tcomment#DefineType"]
 
 [[plugins]]
 repo = 'Shougo/neomru.vim'
@@ -58,7 +63,7 @@ depends   = ["unite.vim"]
 repo = 'Shougo/neocomplete.vim'
 on_cmd    = ["NeoCompleteClean", "NeoCompleteEnable", "NeoCompleteDisable"]
 on_i      = 1
-on_func   = ["neocomplete#init#disable", "neocomplete#is_enabled", "neocomplete#start_manual_complete"]
+on_func   = ["neocomplete#init#disable", "neocomplete#is_enabled", "neocomplete#start_manual_complete", 'neocomplete#util#get_vital']
 disabled = '!has("lua")'
 depends   = ['context_filetype.vim', "unite.vim"]
 
