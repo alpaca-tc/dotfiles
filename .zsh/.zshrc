@@ -5,27 +5,7 @@ export EDITOR=vim
 export GIT_EDITOR=/usr/local/bin/vim
 export LC_CTYPE=en_US.UTF-8
 export LANG=en_US.UTF-8
-# export SHELL=/usr/local/bin/zsh
-# export ARCHFLAGS="-arch x86_64"
-# export APXS2=/usr/sbin/apxs
-export GITHUB_HOST='github.com'
-# export CONFIGURE_OPTS="--with-gcc=clang"
-export ECLIPSE_HOME='/Users/alpaca-tc/Downloads/eclipse-standard-kepler-SR2-macosx-cocoa-x86_64/eclipse'
-# export SSL_CERT_FILE=/usr/local/share/ca-bundle.crt
-
-# 各種の設定 古いgccを使う場合
-# export CC='/usr/local/bin/gcc-4.2'
-# alias gcc='/usr/local/bin/gcc-4.5'
 # }}}
-
-# rbenvの設定
-# export CFLAGS=-Qunused-arguments
-# export CPPFLAGS=-Qunused-arguments
-# export ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future pip install ansible
-# export CPPFLAGS="-I/usr/local/Cellar/readline/6.2.4/include"
-# export LDFLAGS="-L/usr/local/Cellar/readline/6.2.4/lib"
-
-# export SSH_ASKPASS=$HOME/dotfiles/command/ssh-askpass
 
 # PATH
 # {{{
@@ -104,13 +84,6 @@ export PATH=$PATH:$HOME/usr/binl
 export PATH=/usr/local/Trolltech/Qt-4.8.6/bin:$PATH
 # }}}
 
-# for vim
-# export DYLD_FORCE_FLAT_NAMESPACE=1
-# export DYLD_INSERT_LIBRARIES=/Users/taichou/.pythonbrew/pythons/Python-2.7.2/lib/libpython2.7.dylib
-
-
-# http://stackoverflow.com/questions/13942443/error-installing-rmagick-on-mountain-lion
-
 fpath=( $HOME/dotfiles/.zsh/zsh-completions/src $HOME/.zsh/site-functions $fpath)
 
 # For rust
@@ -130,8 +103,4 @@ source ~/.zsh/.zshrc.extends
 source ~/.zsh/.zshrc.alias
 source ~/.zsh/.zshrc.smartalias
 source ~/.zsh/.zshrc.bindkey
-# source ~/.zsh/.zshrc.tmuxauto
-# source ~/.zsh/.zshrc.command
 # }}}
-
-# [ -f /opt/boxen/env.sh ] && source /opt/boxen/env.sh

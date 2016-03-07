@@ -1,0 +1,274 @@
+[[plugins]]
+repo = 'Shougo/vimproc'
+
+[plugins.build]
+mac  = 'make -f make_mac.mak'
+unix  = 'make -f make_unix.mak'
+
+
+[[plugins]]
+repo = 'itchyny/lightline.vim'
+on_i      = 1
+on_func   = ["lightline#update", "lightline#highlight"]
+
+[[plugins]]
+repo = 'mattn/webapi-vim'
+
+
+[[plugins]]
+repo = 'tpope/vim-surround'
+on_map    = ["nx", "<Plug>"]
+on_map    = [["nx", "<Plug>Dsurround"], ["nx", "<Plug>Csurround"], ["nx", "<Plug>Ysurround"], ["nx", "<Plug>YSurround"], ["nx", "<Plug>Yssurround"], ["nx", "<Plug>YSsurround"], ["nx", "<Plug>YSsurround"], ["nx", "<Plug>VgSurround"], ["nx", "<Plug>VSurround"]]
+
+[[plugins]]
+repo = 'camelcasemotion'
+on_map    = ["<Plug>CamelCaseMotion_w", "<Plug>CamelCaseMotion_b", "<Plug>CamelCaseMotion_e", "<Plug>CamelCaseMotion_iw", "<Plug>CamelCaseMotion_ib", "<Plug>CamelCaseMotion_ie"]
+
+[[plugins]]
+repo = 'kana/vim-arpeggio'
+on_i      = 1
+on_func   = ["arpeggio#map"]
+
+[[plugins]]
+repo = 'thinca/vim-quickrun'
+on_cmd    = ["QuickRun"]
+on_map    = ["nxo", "<Plug>"]
+depends   = ["vimproc"]
+
+[[plugins]]
+repo = 'vim-scripts/sudo.vim'
+on_cmd    = ["SudoRead", "SudoWrite"]
+
+[[plugins]]
+repo = 'Shougo/unite.vim'
+on_cmd    = ["Unite", "UniteBookmarkAdd", "UniteClose", "UniteResume", "UniteWithBufferDir", "UniteWithCurrentDir", "UniteWithCursorWord", "UniteWithInput", "UniteWithInputDirectory"]
+on_func   = ["unite#util#path2project_directory", 'unite#util#get_vital']
+
+[[plugins]]
+repo = 'tomtom/tcomment_vim'
+on_cmd    = ["TComment", "TCommentAs", "TCommentMaybeInline"]
+on_func   = ["tcomment#DefineType"]
+
+[[plugins]]
+repo = 'Shougo/neomru.vim'
+on_source = 'unite.vim'
+
+[[plugins]]
+repo = 'Shougo/vimfiler'
+on_cmd    = ["VimFiler", "VimFilerBufferDir", "VimFilerExplorer", "VimFilerCreate"]
+on_map    = '<Plug>'
+depends   = ["unite.vim"]
+
+[[plugins]]
+repo = 'Shougo/neocomplete.vim'
+on_cmd    = ["NeoCompleteClean", "NeoCompleteEnable", "NeoCompleteDisable"]
+on_i      = 1
+on_func   = ["neocomplete#init#disable", "neocomplete#is_enabled", "neocomplete#start_manual_complete", 'neocomplete#util#get_vital']
+disabled = '!has("lua")'
+depends   = ['context_filetype.vim', "unite.vim"]
+
+[[plugins]]
+repo = 'Shougo/context_filetype.vim'
+
+[[plugins]]
+repo = 'Shougo/neosnippet.vim'
+on_cmd    = ["NeoSnippetEdit", "NeoSnippetSource", "NeoSnippetClearMarkers"]
+on_i      = 1
+on_ft     = ["snippet"]
+on_func   = ["neosnippet#get_snippets"]
+depends   = ['context_filetype.vim']
+
+[[plugins]]
+repo = 'Shougo/vimshell'
+on_cmd    = ["VimShell", "VimShellCreate", "VimShellTab", "VimShellPop", "VimShellCurrentDir", "VimShellExecute", "VimShellBufferDir", "VimShellInteractive", "VimShellTerminal", "VimShellSendBuffer"]
+
+[[plugins]]
+repo = 'alpaca-tc/alpaca_remove_dust.vim'
+on_cmd    = ["RemoveDustDisable", "RemoveDustEnable", "RemoveDust", "RemoveDustForce"]
+
+[[plugins]]
+repo = 'alpaca-tc/alpaca_tags'
+on_cmd    = ["AlpacaTagsBundle", "AlpacaTagsUpdate", "AlpacaTagsSet", "AlpacaTagsCleanCache", "AlpacaTagsEnable", "AlpacaTagsDisable", "AlpacaTagsKillProcess", "AlpacaTagsProcessStatus"]
+depends   = ['vimproc']
+
+[[plugins]]
+repo = 'alpaca-tc/alpaca_window.vim'
+on_map    = '<Plug>'
+on_func   = ["alpaca_window#set_smart_close", "alpaca_window#smart_close", "alpaca_window#open_buffer"]
+
+[[plugins]]
+repo = 'grep.vim'
+on_cmd    = ["Grep", "Rgrep", "GrepBuffer"]
+
+[[plugins]]
+repo = 'sjl/gundo.vim'
+on_cmd    = ["GundoToggle", "GundoRenderGraph"]
+
+[[plugins]]
+repo = 'majutsushi/tagbar'
+on_cmd    = ["TagbarToggle", "TagbarTogglePause", "TagbarOpen"]
+
+[[plugins]]
+repo = 'open-browser.vim'
+on_cmd    = ["OpenBrowserSearch", "OpenBrowser", "OpenBrowserSmartSearch"]
+on_map    = '<Plug>(openbrowser-open)'
+on_func   = ["openbrowser#open"]
+
+[[plugins]]
+repo = 'tpope/vim-fugitive'
+on_cmd    = ["Gcommit", "Gblame", "Ggrep", "Gdiff", "Gcd"]
+on_func   = ["fugitive#head", "fugitive#detect"]
+
+[[plugins]]
+repo = 'alpaca-tc/git-vim'
+on_cmd    = ["GitDiff", "GitVimDiff", "Git", "GitCheckout", "GitAdd", "GitLog", "GitCommit", "GitBlame", "GitPush"]
+on_func   = ["git#get_current_branch"]
+
+[[plugins]]
+repo = 'mattn/gist-vim'
+on_cmd    = ["Gist"]
+depends   = ["mattn/webapi-vim"]
+
+[[plugins]]
+repo = 'alpaca-tc/switch.vim'
+on_cmd    = ["Switch"]
+
+[[plugins]]
+repo = 'alpaca-tc/vim-qfreplace'
+on_cmd    = ["Qfreplace"]
+on_ft     = ["unite", "quickfix", "vimfiler"]
+on_func   = ["qfreplace#start"]
+
+[[plugins]]
+repo = 'alpaca-tc/vim-unite-giti'
+on_source = 'unite.vim'
+
+[[plugins]]
+repo = 'basyura/TweetVim'
+on_cmd    = ["TweetVimAccessToken", "TweetVimAddAccount", "TweetVimBitly", "TweetVimCommandSay", "TweetVimCurrentLineSay", "TweetVimHomeTimeline", "TweetVimListStatuses", "TweetVimMentions", "TweetVimSay", "TweetVimSearch", "TweetVimSwitchAccount", "TweetVimUserTimeline", "TweetVimVersion"]
+on_func   = ["tweetvim#say#command"]
+depends   = ["twibill.vim", "open-browser.vim", "unite.vim"]
+
+[[plugins]]
+repo = "basyura/twibill.vim"
+
+[[plugins]]
+repo = 'alpaca-tc/unite-git-aliases'
+on_source = 'unite.vim'
+
+[[plugins]]
+repo = 'kana/vim-niceblock'
+on_map    = ["<Plug>(niceblock-I)", "<Plug>(niceblock-A)"]
+
+[[plugins]]
+repo = 'alpaca-tc/auto-pairs'
+on_i      = 1
+
+[[plugins]]
+repo = 'alpaca-tc/beautify.vim'
+on_cmd    = ["Beautify"]
+
+[[plugins]]
+repo = 'vim-less'
+on_ft     = ["less"]
+
+[[plugins]]
+repo = 'othree/yajs.vim'
+on_ft     = ["javascript"]
+
+[[plugins]]
+repo = 'othree/javascript-libraries-syntax.vim'
+on_ft     = ["javascript"]
+
+[[plugins]]
+repo = 'digitaltoad/vim-jade'
+on_ft     = ["jade"]
+
+[[plugins]]
+repo = 'wavded/vim-stylus'
+on_ft     = ["stylus"]
+
+[[plugins]]
+repo = 'moll/vim-node'
+on_ft     = ["javascript"]
+
+[[plugins]]
+repo = 'kchmck/vim-coffee-script'
+on_ft     = ["coffee"]
+
+[[plugins]]
+repo = 'alpaca-tc/vim-markdown'
+on_ft     = ["markdown"]
+
+[[plugins]]
+repo = 'Shougo/vinarise.vim'
+on_cmd    = ["Vinarise"]
+depends   = ["vinarise-plugin-peanalysis"]
+
+[[plugins]]
+repo = 's-yukikaze/vinarise-plugin-peanalysis'
+
+[plugins.build]
+mac  = 'brew install binutils'
+
+[[plugins]]
+repo = 'vim-ruby/vim-ruby'
+on_ft     = ["ruby", "erb", "ruby.rspec"]
+
+[[plugins]]
+repo = 'tpope/vim-rails'
+
+
+[[plugins]]
+repo = 'tpope/vim-endwise'
+on_i      = 1
+on_map = '<Plug>DiscretionaryEnd'
+
+[[plugins]]
+repo = 'basyura/unite-rails'
+on_source = ["unite.vim"]
+
+# [[plugins]]
+# repo = 'alpaca-tc/alpaca_octopress.vim'
+# on_cmd    = ["OctopressKillAllProcess", "Octopress"]
+# on_ft     = ["liquid"]
+# on_func   = ["octopress#complete"]
+
+[[plugins]]
+repo = 'slim-template/vim-slim'
+on_ft     = ["slim"]
+
+[[plugins]]
+repo = 'mutewinter/nginx.vim'
+on_ft     = ["nginx"]
+
+[[plugins]]
+repo = 'elixir-lang/vim-elixir'
+on_ft     = ["elixir"]
+
+[[plugins]]
+repo = 'mattreduce/vim-mix'
+on_ft     = ["elixir"]
+
+[[plugins]]
+repo = 'sh.vim'
+on_ft  = 'sh'
+
+[[plugins]]
+repo = 'mattn/excitetranslate-vim'
+on_cmd    = ["ExciteTranslate"]
+on_func   = ["ExciteTranslate"]
+depends   = ["mattn/webapi-vim"]
+
+[[plugins]]
+repo = 'LeafCage/yankround.vim'
+on_map    = [["nx", "<Plug>(yankround-p)"], ["nx", "<Plug>(yankround-P)"], ["nx", "<Plug>(yankround-prev)"], ["nx", "<Plug>(yankround-next)"]]
+on_func   = ["yankround#is_active"]
+
+[[plugins]]
+repo = 'osyo-manga/vim-over'
+on_cmd    = ["OverCommandLine"]
+
+[[plugins]]
+repo = 'alpaca-tc/alpaca-switch-file.vim'
+on_func = ['switch_file#next', 'switch_file#prev']
