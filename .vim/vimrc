@@ -150,22 +150,21 @@ if &runtimepath !~# '/dein.vim'
   execute 'set runtimepath^=' . fnamemodify(g:my.dir.dein, ':p')
 endif
 
-call dein#begin(g:my.dir.dein)
-
 let s:toml      = '~/.vim/dein/dein.toml'
 let s:lazy_toml = '~/.vim/dein/dein_lazy.toml'
 
-if dein#load_cache([expand('<sfile>'), s:toml, s:lazy_toml])
+if dein#load_state(s:toml) && dein#load_state(s:lazy_toml)
+  call dein#begin(g:my.dir.dein)
   call dein#load_toml(s:toml)
   call dein#load_toml(s:lazy_toml, { 'lazy': 1 })
-  call dein#save_cache()
+
+  call dein#end()
+  call dein#save_state()
 endif
 
 if !exists('loaded_matchit')
   runtime macros/matchit.vim
 endif
-
-call dein#end()
 
 " if dein#check_install()
 "   call dein#install()
