@@ -1,5 +1,5 @@
-let s:system = neobundle#is_installed('vimproc') ? 'vimproc#system' : 'system'
-let s:system_bg = neobundle#is_installed('vimproc') ? 'vimproc#system_bg' : 'system'
+let s:system = dein#is_sourced('vimproc') ? 'vimproc#system' : 'system'
+let s:system_bg = dein#is_sourced('vimproc') ? 'vimproc#system_bg' : 'system'
 
 function! s:let(scope, name, value) "{{{
   let global_variable_name = a:scope . ':' . a:name

@@ -161,6 +161,10 @@ if dein#load_cache([expand('<sfile>'), s:toml, s:lazy_toml])
   call dein#save_cache()
 endif
 
+if !exists('loaded_matchit')
+  runtime macros/matchit.vim
+endif
+
 call dein#end()
 
 " if dein#check_install()
@@ -760,6 +764,8 @@ if dein#tap('vim-quickrun') "{{{
 
     let g:quickrun_config['racc.ruby'] = {}
 
+    call quickrun#module#load('vimproc')
+
     augroup QuickRunAutoCmd
       autocmd!
       autocmd FileType quickrun call alpaca_window#set_smart_close()
@@ -960,10 +966,12 @@ if dein#tap('vim-rails') " {{{
       nnoremap <buffer>[plug]<C-H><C-H>  :<C-U>Unite rails/view<CR>
 
       nnoremap <buffer>[plug]u           :<C-U>UniteGit app/uploaders<CR>
+      nnoremap <buffer>[plug]p           :<C-U>UniteGit app/policies<CR>
       nnoremap <buffer>[plug]d           :<C-U>UniteGit app/decorators<CR>
+      nnoremap <buffer>[plug]j           :<C-U>UniteGit app/jobs<CR>
       nnoremap <buffer>[plug]c           :<C-U>Unite rails/config<CR>
       nnoremap <buffer>[plug]a           :<C-U>UniteGit app/assets<CR>
-      nnoremap <buffer>[plug]j           :<C-U>Unite rails/javascript<CR>
+      nnoremap <buffer>[plug]aj          :<C-U>Unite rails/javascript<CR>
       nnoremap <buffer>[plug]s           :<C-U>Unite rails/stylesheet<CR>
       nnoremap <buffer>[plug]t           :<C-U>Unite rails/spec<CR>
       nnoremap <buffer>[plug]b           :<C-U>Unite rails/db<CR>
@@ -2471,9 +2479,13 @@ function! s:copy_current_path() "{{{
 endfunction "}}}
 
 function! s:copy_current_path_from_root() "{{{
-  call s:copy_current_path()
-  let @* = substitute(@*, s:current_git() . '/', '', 'g')
-  echo 'Copy current path: ' . @*
+  if empty(s:current_git())
+    return
+  else
+    call s:copy_current_path()
+    let @* = substitute(@*, s:current_git() . '/', '', 'g')
+    echo 'Copy current path: ' . @*
+  endif
 endfunction "}}}
 
 nmap cp :call <SID>copy_current_path()<CR>
@@ -2485,10 +2497,6 @@ endfunction "}}}
 command! -nargs=+ RubyP call s:ruby_p(<q-args>)
 
 command! Ikaring !open https://splatoon.nintendo.net/
-
-if !s:on_init()
-  call neobundle#call_hook('on_source')
-endif
 
 " Installation check.
 let s:loaded_vimrc = 1

@@ -29,6 +29,7 @@
 
 [alias]
   master = "!git fetch origin master && git reset --hard FETCH_HEAD"
+  rmaster = "!git fetch origin master && git rebase FETCH_HEAD"
 
   first = !"fun() { git init; git add -A; git commit -m 'First commit'; }; fun"
   assume = !"fun() { git update-index --assume-unchanged `git ls-files $@ --no-empty-directory`; }; fun"
@@ -106,6 +107,8 @@
 
 [url "https://"]
   insteadOf = git://
+# [url "pixiv_gitlab:"]
+#   insteadOf = http://gitlab.pixiv.private/
 [url "github:"]
   insteadOf = https://github.com/
 [url "github:"]

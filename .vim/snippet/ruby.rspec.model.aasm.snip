@@ -1,0 +1,14 @@
+snippet transition_from
+abbr    transition_from(:state).to(:state).on_event(:event)
+options word
+  transition_from(:${1}).to(:${2}).on_event(:${3})
+
+snippet have_state
+abbr    have_state(:state)
+options word
+  have_state(:${1})
+
+snippet allow_event
+abbr    allow_event(:event)
+options word
+  allow_event(:${1})${2:.on($\{3})}

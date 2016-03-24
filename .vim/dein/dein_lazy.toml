@@ -132,6 +132,7 @@ depends   = ["mattn/webapi-vim"]
 [[plugins]]
 repo = 'alpaca-tc/switch.vim'
 on_cmd    = ["Switch"]
+on_i = 1
 
 [[plugins]]
 repo = 'alpaca-tc/vim-qfreplace'
