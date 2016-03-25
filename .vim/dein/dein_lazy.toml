@@ -1,12 +1,4 @@
 [[plugins]]
-repo = 'Shougo/vimproc'
-
-[plugins.build]
-mac  = 'make -f make_mac.mak'
-unix  = 'make -f make_unix.mak'
-
-
-[[plugins]]
 repo = 'itchyny/lightline.vim'
 on_i      = 1
 on_func   = ["lightline#update", "lightline#highlight"]
@@ -28,12 +20,6 @@ on_map    = ["<Plug>CamelCaseMotion_w", "<Plug>CamelCaseMotion_b", "<Plug>CamelC
 repo = 'kana/vim-arpeggio'
 on_i      = 1
 on_func   = ["arpeggio#map"]
-
-[[plugins]]
-repo = 'thinca/vim-quickrun'
-on_cmd    = ["QuickRun"]
-on_map    = ["nxo", "<Plug>"]
-depends   = ["vimproc"]
 
 [[plugins]]
 repo = 'vim-scripts/sudo.vim'
@@ -273,3 +259,7 @@ on_cmd    = ["OverCommandLine"]
 [[plugins]]
 repo = 'alpaca-tc/alpaca-switch-file.vim'
 on_func = ['switch_file#next', 'switch_file#prev']
+
+[[plugins]]
+repo = 'fatih/vim-go'
+on_ft = ["go"]

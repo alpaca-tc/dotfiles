@@ -1804,6 +1804,12 @@ if dein#tap('vimfiler') " {{{
       nmap <buffer> gk <Plug>(vimfiler_jump_first_child)
     endfunction"}}}
 
+    function! s:vim_filer_explorer_git() "{{{
+      let path = (system('git rev-parse --is-inside-work-tree') == "true\n") ? s:current_git() : '.'
+      execute 'VimFiler -explorer' path
+    endfunction"}}}
+    command! VimFilerExplorerGit call s:vim_filer_explorer_git()
+
     augroup VimFilerKeyMapping
       autocmd!
       autocmd FileType vimfiler call <SID>vimfiler_settings()

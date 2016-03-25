@@ -2,9 +2,19 @@
 repo = 'alpaca-tc/alpaca-switch-file.vim'
 
 [[plugins]]
+repo = 'Shougo/vimproc'
+
+[[plugins]]
 repo = 'repeat.vim'
 on_map    = '<Plug>'
 
 [[plugins]]
 repo = 'vim-jp/vital.vim'
 on_func = ['vital#of']
+
+[[plugins]]
+repo = 'thinca/vim-quickrun'
+on_cmd    = ["QuickRun"]
+on_map    = ["nxo", "<Plug>"]
+on_source = ['vimproc']
+depends   = ["vimproc"]
