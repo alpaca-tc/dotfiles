@@ -153,6 +153,12 @@ endif
 let s:toml      = '~/.vim/dein/dein.toml'
 let s:lazy_toml = '~/.vim/dein/dein_lazy.toml'
 
+let s:vimproc_dir = $HOME . "/.cache/dein/repos/github.com/Shougo/vimproc"
+if isdirectory(s:vimproc_dir)
+  set runtimepath+=s:vimproc_dir
+endif
+
+
 if dein#load_state(s:toml) && dein#load_state(s:lazy_toml)
   call dein#begin(g:my.dir.dein)
   call dein#load_toml(s:toml)
@@ -801,10 +807,15 @@ endif "}}}
 " unlet hooks
 
 " ----------------------------------------
-nnoremap <silent>gM :Gcommit --amend<CR>
-nnoremap <silent>gb :Gblame<CR>
-nnoremap <silent>gB :Gbrowse<CR>
-nnoremap <silent>gm :Gcommit<CR>
+nnoremap <silent>gM :call <SID>with_fugitive('Gcommit --amend')<CR>
+nnoremap <silent>gb :call <SID>with_fugitive('Gblame')<CR>
+nnoremap <silent>gB :call <SID>with_fugitive('Gbrowse')<CR>
+nnoremap <silent>gm :call <SID>with_fugitive('Gcommit')<CR>
+
+function! s:with_fugitive(command)
+  FugitiveReload
+  execute a:command
+endfunction
 
 if dein#tap('vim-fugitive') " {{{
   function! s:vim_fugitive_on_source() abort
@@ -815,10 +826,14 @@ if dein#tap('vim-fugitive') " {{{
     augroup END
 
     let g:fugitive_git_executable = g:my.bin.git
+  endfunction
+
+  function! s:vim_fugitive_on_post_source() abort
     call fugitive#detect(expand('<amatch>:p'))
   endfunction
 
   execute 'autocmd MyDeinCmd User' 'dein#source#' . g:dein#name 'call s:vim_fugitive_on_source()'
+  execute 'autocmd MyDeinCmd User' 'dein#post_source#' . g:dein#name 'call s:vim_fugitive_on_post_source()'
 endif " }}}
 
 command! FugitiveReload call fugitive#detect(expand('<amatch>:p'))
