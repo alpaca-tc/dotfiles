@@ -2335,6 +2335,16 @@ nmap <C-N> <Plug>(yankround-next)
 " let g:yankround_use_region_hl = 1
 
 " ----------------------------------------
+" vim-go
+if dein#tap('vim-go') "{{{
+  function! s:vim_go_on_post_source() abort
+    source `=dein#get('vim-go').path . '/ftplugin/go/commands.vim'`
+  endfunction
+
+  execute 'autocmd MyAutoCmd User' 'dein#post_source#' . g:dein#name 'call s:vim_go_on_post_source()'
+endif "}}}
+
+" ----------------------------------------
 " vim-over
 OverCommandLineNoremap <C-J> <Plug>(over-cmdline-substitute-jump-pattern)
 OverCommandLineNoremap <C-K> <Plug>(over-cmdline-substitute-jump-string)
