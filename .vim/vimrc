@@ -350,7 +350,6 @@ let g:alpaca_window_default_filetype = 'ruby'
 let g:alpaca_window_max_height = winheight(0)
 let g:alpaca_window_max_width = winwidth(0)
 nmap <silent><C-W>n       <Plug>(alpaca_window_smart_new)
-nmap <silent><C-W><C-N>   <Plug>(alpaca_window_smart_new)
 
 augroup MyAutoCmd
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line('$') | execute "normal g`\"" | endif

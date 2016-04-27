@@ -1,3 +1,7 @@
+is_executable() {
+  type "$1" &> /dev/null;
+}
+
 # 環境変数
 # # {{{
 export SHELL=/usr/local/bin/zsh-5.2
@@ -5,6 +9,7 @@ export EDITOR=vim
 export GIT_EDITOR=/usr/local/bin/vim
 export LC_CTYPE=en_US.UTF-8
 export LANG=en_US.UTF-8
+export TZ=Asia/Tokyo
 # }}}
 
 # PATH
@@ -59,7 +64,13 @@ else
   export PATH=$PATH:./bin
 fi
 
-eval "$(rbenv init -)"
+if is_executable rbenv; then
+  eval "$(rbenv init -)"
+fi
+
+if is_executable fuck; then
+  eval $(thefuck --alias)
+fi
 
 # Vagrant
 export PATH=/Applications/Vagrant/bin:$PATH
