@@ -593,6 +593,11 @@ if dein#tap('vim-surround') "{{{
           \ },
           \ 'snippet,neosnippet' : {
           \   '$' : "${\r}",
+          \ },
+          \ 'go' : {
+          \   '(' : "(\r)",
+          \   '[' : "[\r]",
+          \   '<' : "<\r>",
           \ }
           \ }
 
@@ -1175,6 +1180,7 @@ if exists(':RemoveDust')
   augroup RemoveDust
     autocmd!
     autocmd BufWritePre * RemoveDust
+    autocmd FileType go RemoveDustDisable
   augroup END
 endif
 
