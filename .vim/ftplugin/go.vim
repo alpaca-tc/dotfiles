@@ -8,19 +8,49 @@ let g:tagbar_type_go = {
       \ 'c:const'
       \ ]}
 
+if executable('gotags')
+  let g:tagbar_type_go = {
+        \ 'ctagstype' : 'go',
+        \ 'kinds'     : [
+        \ 'p:package',
+        \ 'i:imports:1',
+        \ 'c:constants',
+        \ 'v:variables',
+        \ 't:types',
+        \ 'n:interfaces',
+        \ 'w:fields',
+        \ 'e:embedded',
+        \ 'm:methods',
+        \ 'r:constructor',
+        \ 'f:functions'
+        \ ],
+        \ 'sro' : '.',
+        \ 'kind2scope' : {
+        \ 't' : 'ctype',
+        \ 'n' : 'ntype'
+        \ },
+        \ 'scope2kind' : {
+        \ 'ctype' : 't',
+        \ 'ntype' : 'n'
+        \ },
+        \ 'ctagsbin'  : 'gotags',
+        \ 'ctagsargs' : '-sort -silent'
+        \ }
+endif
 
 let b:remove_dust_enable = 0
 setl nolist
 
 augroup Go
   autocmd!
-  autocmd BufWritePre <buffer> :Fmt
+  autocmd BufWritePre <buffer> :GoFmt
 augroup END
 
 if !exists('s:initialized_go') && executable('go')
   let s:initialized_go = 1
 
   let s:go_root = substitute(system('go env GOROOT'), '\n', '', 'g')
+
   if isdirectory(s:go_root)
     let $GOROOT = s:go_root
     let $PATH = $PATH . ':' . $GOROOT

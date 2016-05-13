@@ -106,10 +106,6 @@ alias gdelete_non='git update-index --no-assume-unchanged'
 
 # hub# {{{
 alias git=hub
-alias hb='hub browse'
-alias hc='hub clone'
-alias hp='hub pull-request'
-alias hn='hub --noop'
 # }}}
 
 # rails# {{{

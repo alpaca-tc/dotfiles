@@ -25,11 +25,11 @@ export PATH=$HOME/.autojump/bin:$PATH
 # zsh関連
 export PATH=$HOME/bin:$PATH
 
+# user関連
+export PATH=$HOME/usr/bin:$PATH
+
 # powerline
 export PATH=$HOME/.bundle/powerline/scripts:$PATH
-
-# rsense
-export RSENSE_HOME=$HOME/.bundle/rsense-0.3
 
 # node
 export PATH=./node_modules/.bin:$PATH

@@ -455,6 +455,7 @@ endif
 
 " colorscheme desertEx
 colorscheme iceberg
+filetype plugin on
 syntax on
 "}}}
 
