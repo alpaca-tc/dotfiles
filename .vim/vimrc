@@ -599,7 +599,11 @@ if dein#tap('vim-surround') "{{{
           \   '(' : "(\r)",
           \   '[' : "[\r]",
           \   '<' : "<\r>",
-          \ }
+          \ },
+          \ 'javascript': {
+          \   '(' : "(\r)",
+          \   '[' : "[\r]",
+          \ },
           \ }
 
     let s:surround_definitions =
