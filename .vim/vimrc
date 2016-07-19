@@ -23,7 +23,7 @@ augroup END
 function! s:current_git() "{{{
   let vital = s:get_vital()
 
-  if empty( vital )
+  if empty(vital)
     return ''
   else
     return vital.import('Prelude').path2project_directory(getcwd())
@@ -603,6 +603,7 @@ if dein#tap('vim-surround') "{{{
           \ 'javascript': {
           \   '(' : "(\r)",
           \   '[' : "[\r]",
+          \   '$' : "${\r}",
           \ },
           \ }
 
@@ -2481,7 +2482,8 @@ function! s:get_vital() "{{{
     elseif dein#is_sourced('vital.vim')
       let s:V = vital#__latest__#new()
     else
-      return 0
+      call dein#source('vital.vim')
+      let s:V = vital#__latest__#new()
     endif
   endif
 

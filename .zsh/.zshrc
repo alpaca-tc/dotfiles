@@ -42,6 +42,9 @@ export PATH=/usr/local/mysql/bin:/usr/local/share/npm/bin:$PATH
 export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 export MANPATH=/usr/local/share/man:$MANPATH
 
+# iTerm2
+export PATH=$HOME/local/bin:$PATH
+
 # java 1.7.0
 # export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_07.jdk/Contents/Home
 # export PATH=$JAVA_HOME/bin:$PATH
