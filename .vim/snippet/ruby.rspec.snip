@@ -610,6 +610,10 @@ regexp  '\v((to|should|to_not|should_not)\s|\.$)'
 options word
   contain_exactly(${1:*values})
 
+snippet satisfy
+abbr    satisfy { ... }
+options word
+  satisfy { |${1}| ${2} }
 #}}}
 
 # rspec.rails? {{{
