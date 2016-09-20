@@ -104,7 +104,7 @@ fpath=( $HOME/dotfiles/.zsh/zsh-completions/src $HOME/.zsh/site-functions $fpath
 export PATH=$PATH:/usr/local/bin/bin
 
 # For neovim
-export PATH=$HOME/neovim/bin:$PATH
+export PATH=$HOME/src/neovim/build/bin:$PATH
 
 # For watson
 export LESS="-R"
