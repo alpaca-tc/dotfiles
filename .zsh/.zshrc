@@ -105,6 +105,7 @@ export PATH=$PATH:/usr/local/bin/bin
 
 # For neovim
 export PATH=$HOME/src/neovim/build/bin:$PATH
+export VIMRUNTIME=/usr/local/share/vim/vim80
 
 # For watson
 export LESS="-R"

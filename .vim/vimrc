@@ -115,17 +115,20 @@ set backspace=indent,eol,start
 set clipboard+=unnamed
 set formatoptions+=lcqmM
 set modelines=1
-set ttymouse=xterm2
+
+if !has('nvim')
+  set ttymouse=xterm2
+  execute 'set viminfo+=n' . g:my.dir.viminfo . '/.viminfo'
+endif
 " set nomore
 " set nobackup
 set nowritebackup
 " set norestorescreen
 " set noshowmode
-set timeout timeoutlen=400 ttimeoutlen=70 updatetime=600
 " set viminfo='1000,<800,s300,\"1000,f1,:1000,/1000
-execute 'set viminfo+=n' . g:my.dir.viminfo . '/.viminfo'
 set visualbell t_vb=
 " set helplang=en
+set timeout timeoutlen=400 ttimeoutlen=70 updatetime=600
 set langmenu=en_us.UTF-8
 language en_US.UTF-8
 
@@ -2422,7 +2425,7 @@ command! CleanAll call alpaca#system_bg('rm -rf ' . g:my.dir.trash_dir . '*')
 "}}}
 
 " For Gem
-" Gem"{{{
+" Gem {{{
 function! s:get_all_gem_paths() "{{{
   if exists('s:all_gem_paths')
     return s:all_gem_paths
