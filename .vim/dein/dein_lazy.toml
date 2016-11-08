@@ -54,6 +54,11 @@ disabled = '!has("lua")'
 depends   = ['context_filetype.vim', "unite.vim"]
 
 [[plugins]]
+repo = 'Shougo/deoplete.nvim'
+on_i      = 1
+disabled = '!has("nvim")'
+
+[[plugins]]
 repo = 'Shougo/context_filetype.vim'
 
 [[plugins]]

@@ -9,7 +9,7 @@ set expand-tilde on
 set input-meta on
 set convert-meta off
 set output-meta on
-set kanji-code utf-8
+# set kanji-code utf-8
 
 # タブ補完時、大文字小文字無視
 set completion-ignore-case on
