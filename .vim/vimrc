@@ -1485,7 +1485,7 @@ if dein#tap('alpaca_tags') " {{{
 endif " }}}
 
 " ----------------------------------------
-if has('lua')
+if has('lua') && !has('nvim')
   let g:neocomplete#enable_at_startup = 1
   let g:neocomplete#data_directory = g:my.dir.neocomplete
 
@@ -2542,8 +2542,6 @@ function! s:ruby_p(str) "{{{
   execute 'ruby p' a:str
 endfunction "}}}
 command! -nargs=+ RubyP call s:ruby_p(<q-args>)
-
-command! Ikaring !open https://splatoon.nintendo.net/
 
 " Installation check.
 let s:loaded_vimrc = 1
