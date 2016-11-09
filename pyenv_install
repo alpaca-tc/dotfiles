@@ -1,0 +1,7 @@
+#!/bin/sh
+
+cd $HOME
+brew install pyenv pyenv-virtualenv
+pyenv install 3.5.2
+pyenv global 3.5.2
+pyenv rehash

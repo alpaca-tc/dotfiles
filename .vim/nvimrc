@@ -2,3 +2,5 @@ set runtimepath^=$HOME/.vim
 source $HOME/.vim/vimrc
 set termguicolors
 set clipboard+=unnamedplus
+
+let g:deoplete#enable_at_startup = 1

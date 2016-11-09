@@ -71,10 +71,6 @@ if is_executable rbenv; then
   eval "$(rbenv init -)"
 fi
 
-if is_executable fuck; then
-  eval $(thefuck --alias)
-fi
-
 # Vagrant
 export PATH=/Applications/Vagrant/bin:$PATH
 
@@ -103,12 +99,19 @@ fpath=( $HOME/dotfiles/.zsh/zsh-completions/src $HOME/.zsh/site-functions $fpath
 # For rust
 export PATH=$PATH:/usr/local/bin/bin
 
+# For python
+export PATH=$HOME/.pyenv/bin:$PATH
+if which pyenv > /dev/null; then eval "$(pyenv init - zsh)"; fi
+
 # For neovim
-export PATH=$HOME/src/neovim/build/bin:$PATH
-export VIMRUNTIME=/usr/local/share/vim/vim80
+# export PATH=$HOME/src/neovim/build/bin:$PATH
+# export VIMRUNTIME=/usr/local/share/vim/vim80
 
 # For watson
 export LESS="-R"
+
+# For SSL
+export SSL_CERT_FILE=$HOME/dotfiles/cacert.pem
 
 # 各種読み込み
 # {{{
