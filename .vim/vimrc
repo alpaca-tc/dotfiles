@@ -531,7 +531,7 @@ cnoremap <C-N> <Down>
 " ----------------------------------------
 " Plugin settings {{{
 nnoremap [plug] <Nop>
-nmap <C-H> [plug]
+nmap <C-K> [plug]
 
 " ------------------------------------
 
