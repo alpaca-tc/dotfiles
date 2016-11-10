@@ -168,3 +168,5 @@ alias gem_uninstall_all_gems='gem uninstall -axI `gem list --no-versions`'
 alias geeknote='python ~/dotfiles/local/geeknote/geeknote.py'
 
 alias global_ip_address="curl -s checkip.dyndns.org|sed -e 's/.*Current IP Address: //' -e 's/<.*$//'"
+
+alias vim=nvim
