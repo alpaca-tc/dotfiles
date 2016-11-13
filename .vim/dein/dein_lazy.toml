@@ -268,3 +268,8 @@ on_func = ['switch_file#next', 'switch_file#prev']
 [[plugins]]
 repo = 'fatih/vim-go'
 on_ft = ["go"]
+
+[[plugins]]
+repo = 'Shougo/neco-vim'
+on_ft = ["vim"]
+

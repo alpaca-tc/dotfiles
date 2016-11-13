@@ -10,10 +10,6 @@ augroup MyAutoCmd
   autocmd!
 augroup END
 
-augroup MyWindow
-  autocmd!
-augroup END
-
 augroup MyDeinCmd
   autocmd!
 augroup END
@@ -58,13 +54,13 @@ let g:my = {}
 
 " user information
 let g:my.conf = {
-      \ 'initialize': 1
+      \ 'initialize': 0
       \ }
 let g:my.info = {
       \ 'author':  'Ishii Hiroyuki',
       \ 'email':   'alpaca-tc@alpaca.tc',
       \ 'github':  'alpaca-tc',
-      \ 'twitter': 'alpaca_taichou'
+      \ 'twitter': 'alpaca_tc'
       \ }
 
 let g:my.bin = {
@@ -77,17 +73,17 @@ let g:my.dir = {
       \ 'ctrlp':       expand('~/.vim.trash/ctrlp'),
       \ 'memolist':    expand('~/.memolist'),
       \ 'snippets':    expand('~/.vim/snippet'),
-      \ 'swap_dir':    expand('~/.vim.trash/vimswap'),
-      \ 'trash_dir':   expand('~/.vim.trash/'),
-      \ 'viminfo':     expand('~/.vim.trash/viminfo'),
-      \ 'undodir':     expand('~/.vim.trash/undodir'),
-      \ 'unite':       expand('~/.vim.trash/unite'),
-      \ 'vimref':      expand('~/.vim.trash/vim-ref'),
-      \ 'vimfiler':    expand('~/.vim.trash/vimfiler'),
-      \ 'vimshell':    expand('~/.vim.trash/vimshell'),
-      \ 'neocomplete': expand('~/.vim.trash/neocomplete'),
-      \ 'vim-session': expand('~/.vim.trash/vimsession'),
-      \ 'evernote':    expand('~/.vim.trash/evernote'),
+      \ 'swap_dir':    expand('~/.cache/vim/vimswap'),
+      \ 'trash_dir':   expand('~/.cache/vim/'),
+      \ 'viminfo':     expand('~/.cache/vim/viminfo'),
+      \ 'undodir':     expand('~/.cache/vim/undodir'),
+      \ 'unite':       expand('~/.cache/vim/unite'),
+      \ 'vimref':      expand('~/.cache/vim/vim-ref'),
+      \ 'vimfiler':    expand('~/.cache/vim/vimfiler'),
+      \ 'vimshell':    expand('~/.cache/vim/vimshell'),
+      \ 'neocomplete': expand('~/.cache/vim/neocomplete'),
+      \ 'vim-session': expand('~/.cache/vim/vimsession'),
+      \ 'evernote':    expand('~/.cache/vim/evernote'),
       \ 'trash':       expand('~/.Trash'),
       \ }
 
@@ -132,10 +128,8 @@ set timeout timeoutlen=400 ttimeoutlen=70 updatetime=600
 set langmenu=en_us.UTF-8
 language en_US.UTF-8
 
-if v:version >= 703
-  set undofile
-  let &undodir = g:my.dir.undodir
-endif
+set undofile
+let &undodir = g:my.dir.undodir
 
 nnoremap <Space><Space>s :<C-U>source ~/.vim/vimrc<CR>
 nnoremap <Space><Space>v :<C-U>tabnew ~/.vim/vimrc<CR>
@@ -352,7 +346,7 @@ nnoremap <silent>Y y$
 let g:alpaca_window_default_filetype = 'ruby'
 let g:alpaca_window_max_height = winheight(0)
 let g:alpaca_window_max_width = winwidth(0)
-nmap <silent><C-W>n       <Plug>(alpaca_window_smart_new)
+nmap <silent><C-W>n <Plug>(alpaca_window_smart_new)
 
 augroup MyAutoCmd
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line('$') | execute "normal g`\"" | endif
@@ -894,7 +888,7 @@ if dein#tap('vimshell') " {{{
     let g:vimshell_prompt       = '$ '
     let g:vimshell_ignore_case  = 1
     let g:vimshell_smart_case   = 1
-    let g:vimshell_temporary_directory = g:my.dir.vimshell
+    let g:vimshell_data_directory = g:my.dir.vimshell
     let vimsh_path = expand('~/.zsh/.zshrc.alias')
     if filereadable(vimsh_path)
       let g:vimshell_vimshrc_path = vimsh_path
