@@ -981,26 +981,26 @@ if dein#tap('vim-rails') " {{{
     nnoremap <buffer><Space>r :R<CR>
     nnoremap <buffer><Space>a :A<CR>
 
-    nnoremap <buffer>[plug]            :<C-U>Unite rails/model<CR>
-    nnoremap <buffer>[plug]<C-H>       :<C-U>Unite rails/controller<CR>
-    nnoremap <buffer>[plug]<C-H><C-H>  :<C-U>Unite rails/view<CR>
-    nnoremap <buffer>[plug]u           :<C-U>UniteGit app/uploaders<CR>
-    nnoremap <buffer>[plug]p           :<C-U>UniteGit app/policies<CR>
-    nnoremap <buffer>[plug]d           :<C-U>UniteGit app/decorators<CR>
-    nnoremap <buffer>[plug]j           :<C-U>UniteGit app/jobs<CR>
-    nnoremap <buffer>[plug]c           :<C-U>Unite rails/config<CR>
-    nnoremap <buffer>[plug]a           :<C-U>UniteGit app/assets<CR>
-    nnoremap <buffer>[plug]aj          :<C-U>Unite rails/javascript<CR>
-    nnoremap <buffer>[plug]s           :<C-U>Unite rails/stylesheet<CR>
-    nnoremap <buffer>[plug]t           :<C-U>Unite rails/spec<CR>
-    nnoremap <buffer>[plug]b           :<C-U>Unite rails/db<CR>
-    nnoremap <buffer>[plug]f           :<C-U>Unite rails/spec -input=factories\ <CR>
-    nnoremap <buffer>[plug]m           :<C-U>Unite rails/mailer<CR>
-    nnoremap <buffer>[plug]l           :<C-U>Unite rails/lib<CR>
-    nnoremap <buffer>[plug]g           :<C-U>UniteGit Gemfile<CR>
-    nnoremap <buffer>[plug]r           :<C-U>UniteGit config/routes.rb<CR>
-    nnoremap <buffer>[plug]w           :<C-U>UniteGit app/workers<CR>
-    nnoremap <buffer>[plug]h           :<C-U>Unite rails/helper<CR>
+    nnoremap <buffer><C-K>            :<C-U>Unite rails/model<CR>
+    nnoremap <buffer><C-K><C-K>       :<C-U>Unite rails/controller<CR>
+    nnoremap <buffer><C-K><C-K><C-K>  :<C-U>Unite rails/view<CR>
+    nnoremap <buffer><C-K>u           :<C-U>UniteGit app/uploaders<CR>
+    nnoremap <buffer><C-K>p           :<C-U>UniteGit app/policies<CR>
+    nnoremap <buffer><C-K>d           :<C-U>UniteGit app/decorators<CR>
+    nnoremap <buffer><C-K>j           :<C-U>UniteGit app/jobs<CR>
+    nnoremap <buffer><C-K>c           :<C-U>Unite rails/config<CR>
+    nnoremap <buffer><C-K>a           :<C-U>UniteGit app/assets<CR>
+    nnoremap <buffer><C-K>aj          :<C-U>Unite rails/javascript<CR>
+    nnoremap <buffer><C-K>s           :<C-U>Unite rails/stylesheet<CR>
+    nnoremap <buffer><C-K>t           :<C-U>Unite rails/spec<CR>
+    nnoremap <buffer><C-K>b           :<C-U>Unite rails/db<CR>
+    nnoremap <buffer><C-K>f           :<C-U>Unite rails/spec -input=factories\ <CR>
+    nnoremap <buffer><C-K>m           :<C-U>Unite rails/mailer<CR>
+    nnoremap <buffer><C-K>l           :<C-U>Unite rails/lib<CR>
+    nnoremap <buffer><C-K>g           :<C-U>UniteGit Gemfile<CR>
+    nnoremap <buffer><C-K>r           :<C-U>UniteGit config/routes.rb<CR>
+    nnoremap <buffer><C-K>w           :<C-U>UniteGit app/workers<CR>
+    nnoremap <buffer><C-K>h           :<C-U>Unite rails/helper<CR>
   endfunction " }}}
 
   function! s:vim_rails_on_source() abort
