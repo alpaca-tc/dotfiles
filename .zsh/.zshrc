@@ -54,7 +54,6 @@ export PATH=$HOME/local/bin:$PATH
 export SCALA_HOME=/usr/local/Cellar/scala/2.9.2
 
 # Golang 1.2.1
-export GOROOT=`go env GOROOT`
 export GOPATH=$HOME/.go
 export PATH=$PATh:$GOROOT/bin:$GOPATH/bin:$PATH
 
