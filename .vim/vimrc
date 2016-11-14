@@ -446,7 +446,6 @@ if v:version >= 703
   augroup END
 endif
 
-" colorscheme desertEx
 colorscheme iceberg
 filetype plugin on
 syntax on
