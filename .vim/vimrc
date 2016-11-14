@@ -2172,18 +2172,12 @@ if dein#tap('lightline.vim') "{{{
       return branch
     endfunction"}}}
 
-    let g:lightline#functions#syntastic = s:lightline.new({ 'updatetime' : 5 })
-    function! g:lightline#functions#syntastic.func() " {{{
-      return dein#is_sourced('syntastic') && exists('*SyntasticStatuslineFlag') ? SyntasticStatuslineFlag() : ''
-    endfunction "}}}
-
     let g:lightline#functions#tagbar = s:lightline.new({ 'updatetime' : 3 })
     function! g:lightline#functions#tagbar.func() " {{{
       return dein#is_sourced('tagbar') && bufwinnr('__Tagbar__') != -1 ? tagbar#currenttag('[%s]', '') : ''
     endfunction "}}}
 
     let g:lightline#functions#alpaca_tags = s:lightline.new({ 'updatetime' : 0.5 })
-
     function! g:lightline#functions#alpaca_tags.func() "{{{
       let processes = alpaca_tags#process_manager#all()
       let status = ''
@@ -2223,7 +2217,7 @@ if dein#tap('lightline.vim') "{{{
           \     ['git_branch', 'tagbar', 'modified'],
           \   ],
           \   'right': [
-          \     ['syntastic', 'lineinfo', 'file_size'],
+          \     ['lineinfo', 'file_size'],
           \     ['percent'],
           \     ['fileformat', 'fileencoding', 'filetype']
           \   ],
@@ -2236,10 +2230,6 @@ if dein#tap('lightline.vim') "{{{
           \ },
           \ 'component_expand': {
           \   'git_branch':  'g:lightline#functions#git_branch.statusline',
-          \   'syntastic':   'g:lightline#functions#syntastic.statusline',
-          \ },
-          \ 'component_type': {
-          \   'syntastic': 'error',
           \ },
           \ }
   endfunction
