@@ -207,15 +207,15 @@ function! s:redraw_and_doautocmd() "{{{
   redraw!
 endfunction"}}}
 
-" if exists(':OverCommandLine')
-"   nnoremap re :OverCommandLine<CR>%s!!!g<Left><Left><Left>
-"   xnoremap :s :OverCommandLine<CR>s!!!g<Left><Left><Left>
-"   xnoremap re "zy:OverCommandLine<CR>%s!<C-R>=substitute(@z, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
-" else
-"   nnoremap re :%s!
-"   xnoremap :s :s!
-"   xnoremap re y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
-" endif
+if exists(':OverCommandLine')
+  nnoremap re :OverCommandLine<CR>%s!!!g<Left><Left><Left>
+  xnoremap :s :OverCommandLine<CR>s!!!g<Left><Left><Left>
+  xnoremap re "zy:OverCommandLine<CR>%s!<C-R>=substitute(@z, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
+else
+  nnoremap re :%s!
+  xnoremap :s :s!
+  xnoremap re y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
+endif
 nnoremap ,f :setfiletype<Space>
 
 function! s:define_abbreviations() "{{{
@@ -2328,9 +2328,6 @@ endif "}}}
 
 " ----------------------------------------
 " vim-over
-OverCommandLineNoremap <C-J> <Plug>(over-cmdline-substitute-jump-pattern)
-OverCommandLineNoremap <C-K> <Plug>(over-cmdline-substitute-jump-string)
-
 if dein#tap('vim-over') " {{{
   function! s:vim_over_on_source() abort
     let g:over_command_line_key_mappings = {
@@ -2343,6 +2340,9 @@ if dein#tap('vim-over') " {{{
           \    g:over_command_line_prompt,
           \    <line1> != <line2> ? printf("'<,'>%s", <q-args>) : <q-args>
           \)
+
+    OverCommandLineNoremap <C-J> <Plug>(over-cmdline-substitute-jump-pattern)
+    OverCommandLineNoremap <C-K> <Plug>(over-cmdline-substitute-jump-string)
   endfunction
 
   execute 'autocmd MyDeinCmd User' 'dein#source#' . g:dein#name 'call s:vim_over_on_source()'
@@ -2480,7 +2480,7 @@ endfunction
 if has('vim_starting')
   augroup OpenFileRec
     autocmd!
-    " autocmd VimEnter * call s:open_file_rec()
+    autocmd VimEnter * call s:open_file_rec()
   augroup END
 endif
 " }}}
