@@ -30,6 +30,7 @@ repo = 'Shougo/unite.vim'
 on_cmd    = ["Unite", "UniteBookmarkAdd", "UniteClose", "UniteResume", "UniteWithBufferDir", "UniteWithCurrentDir", "UniteWithCursorWord", "UniteWithInput", "UniteWithInputDirectory"]
 on_func   = ["unite#util#path2project_directory", 'unite#util#get_vital']
 
+
 [[plugins]]
 repo = 'tomtom/tcomment_vim'
 on_cmd    = ["TComment", "TCommentAs", "TCommentMaybeInline"]

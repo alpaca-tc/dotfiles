@@ -10,7 +10,7 @@ alias ls="ls -G"
 # vim# {{{
 # alias st='/Applications/Sublime\ Text\ 2.app/Contents/MacOS/Sublime\ Text\ 2 "$@"'
 alias n='nvim'
-# alias vim='nvim'
+alias vim='nvim'
 # }}}
 
 # すぐに編修出来る# {{{
@@ -168,5 +168,3 @@ alias gem_uninstall_all_gems='gem uninstall -axI `gem list --no-versions`'
 alias geeknote='python ~/dotfiles/local/geeknote/geeknote.py'
 
 alias global_ip_address="curl -s checkip.dyndns.org|sed -e 's/.*Current IP Address: //' -e 's/<.*$//'"
-
-alias vim=nvim

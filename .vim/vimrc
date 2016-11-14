@@ -531,7 +531,7 @@ cnoremap <C-N> <Down>
 " ----------------------------------------
 " Plugin settings {{{
 nnoremap [plug] <Nop>
-nmap <C-K> [plug]
+nmap <C-H> [plug]
 
 " ------------------------------------
 
@@ -1882,13 +1882,8 @@ endif "}}}
 nmap [unite] <Nop>
 nmap <C-J> [unite]
 
-nnoremap [unite]f               :Unite -no-start-insert file_rec:
 nnoremap <silent>[unite]j       :Unite neomru/file<CR>
-nnoremap <silent>[unite]<C-F>   :UniteGit<CR>
-
 nnoremap <silent>g/             :Unite line -hide-source-names -horizontal -start-insert -no-quit<CR>
-nnoremap <silent>g*             :execute 'Unite line:forward -start-insert -no-quit -input=' . expand('<cword>')<CR>
-nnoremap <silent>g#             :execute 'Unite line:backword -start-insert -no-quit -input=' . expand('<cword>')<CR>
 
 function! s:parse_git_root_option(input) "{{{
   let reg_multi =  '\*\*/'
@@ -1945,13 +1940,6 @@ function! s:unite_git_complete(arg_lead, cmd_line, cursor_pos) "{{{
 endfunction "}}}
 
 command! -nargs=? -complete=customlist,s:unite_git_complete UniteGit call <SID>unite_git_root(<f-args>)
-
-" nnoremap <silent>[unite]ra       :<C-U>Unite -buffer-name=rake rake<CR>
-nnoremap <silent>[unite]/ :Unite history/search -no-empty<CR>
-nnoremap <silent>[unite]s :Unite grep/git:.<CR>
-nnoremap <silent><expr>[unite]t ':Unite tag -horizontal -immediately -input='.expand("<cword>").'<CR>'
-" nnoremap <expr><C-]> ':Unite tags -immediately -horizontal -input='.expand("<cword>").'<CR>'
-nnoremap <C-]><C-]> <C-]>
 
 " vim-unite-giti
 nnoremap <silent>gl :Unite giti/log -no-start-insert -horizontal<CR>
@@ -2017,9 +2005,7 @@ if dein#tap('unite.vim') " {{{
 
       nmap     <silent><buffer>f <Plug>(unite_toggle_mark_current_candidate)
       xmap     <silent><buffer>f <Plug>(unite_toggle_mark_selected_candidates)
-      " nmap     <silent><buffer>p <Plug>(unite_toggle_auto_preview)
       nnoremap <silent><buffer><expr>,, unite#do_action('vimfiler')
-      " nnoremap <silent><buffer>C ia<Esc>0Di
       nnoremap <expr><buffer>re unite#do_action('replace')
 
       for source in unite#get_current_unite().sources
