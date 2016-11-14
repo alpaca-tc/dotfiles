@@ -5,8 +5,8 @@ is_executable() {
 # 環境変数
 # # {{{
 export SHELL=/usr/local/bin/zsh-5.2
-export EDITOR=vim
-export GIT_EDITOR=/usr/local/bin/vim
+export EDITOR=nvim
+export GIT_EDITOR=/usr/local/bin/nvim
 export LC_CTYPE=en_US.UTF-8
 export LANG=en_US.UTF-8
 export TZ=Asia/Tokyo

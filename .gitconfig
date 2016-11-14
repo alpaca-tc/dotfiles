@@ -28,7 +28,7 @@
   ui = true
 
 [alias]
-  sync = "!git fetch origin $(git rev-parse --abbrev-ref HEAD) && git reset --hard FETCH_HEAD"
+  fsync = "!git fetch origin $(git rev-parse --abbrev-ref HEAD) && git reset --hard FETCH_HEAD"
   rmaster = "!git fetch origin master && git rebase FETCH_HEAD"
 
   first = !"fun() { git init; git add -A; git commit -m 'First commit'; }; fun"
