@@ -165,10 +165,6 @@ if dein#load_state(s:toml) && dein#load_state(s:lazy_toml)
   call dein#save_state()
 endif
 
-if !exists('loaded_matchit')
-  runtime macros/matchit.vim
-endif
-
 " if dein#check_install()
 "   call dein#install()
 " endif
@@ -211,15 +207,15 @@ function! s:redraw_and_doautocmd() "{{{
   redraw!
 endfunction"}}}
 
-if exists(':OverCommandLine')
-  nnoremap re :OverCommandLine<CR>%s!!!g<Left><Left><Left>
-  xnoremap :s :OverCommandLine<CR>s!!!g<Left><Left><Left>
-  xnoremap re "zy:OverCommandLine<CR>%s!<C-R>=substitute(@z, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
-else
-  nnoremap re :%s!
-  xnoremap :s :s!
-  xnoremap re y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
-endif
+" if exists(':OverCommandLine')
+"   nnoremap re :OverCommandLine<CR>%s!!!g<Left><Left><Left>
+"   xnoremap :s :OverCommandLine<CR>s!!!g<Left><Left><Left>
+"   xnoremap re "zy:OverCommandLine<CR>%s!<C-R>=substitute(@z, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
+" else
+"   nnoremap re :%s!
+"   xnoremap :s :s!
+"   xnoremap re y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
+" endif
 nnoremap ,f :setfiletype<Space>
 
 function! s:define_abbreviations() "{{{
@@ -2484,7 +2480,7 @@ endfunction
 if has('vim_starting')
   augroup OpenFileRec
     autocmd!
-    autocmd VimEnter * call s:open_file_rec()
+    " autocmd VimEnter * call s:open_file_rec()
   augroup END
 endif
 " }}}
