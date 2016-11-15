@@ -14,6 +14,9 @@ nnoremap <Space><Space>s :<C-U>source ~/.vim/nvimrc<CR>
 let g:deoplete#enable_at_startup = 1
 if dein#tap('deoplete.nvim') " {{{
   function! s:deoplete_on_source() abort
+    let g:deoplete#sources = {}
+    let g:deoplete#sources._ = ['buffer', 'member', 'tag', 'file', 'dictionary', 'neosnippet']
+
     imap <expr><C-G> deoplete#undo_completion()
 
     function! s:my_cr_function()
