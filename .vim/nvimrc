@@ -45,12 +45,14 @@ if dein#tap('deoplete.nvim') " {{{
     endfunction"}}}
   endfunction
 
-  let g:deoplete#sources = {}
-  let g:deoplete#sources._ = ['buffer', 'member', 'tag', 'file', 'dictionary', 'neosnippet']
-  let g:deoplete#ignore_sources = {
-    '_': ['omni']
-  }
+  function! s:deoplete_on_post_source()
+    let g:deoplete#sources = {}
+    let g:deoplete#sources._ = ['buffer', 'member', 'tag', 'file', 'dictionary', 'neosnippet']
+    let g:deoplete#ignore_sources = {
+          \ '_': ['omni']
+          \ }
+  endfunction
 
+  execute 'autocmd MyDeinCmd User' 'dein#post_source#' . g:dein#name 'call s:deoplete_on_post_source()'
   execute 'autocmd MyDeinCmd User' 'dein#source#' . g:dein#name 'call s:deoplete_on_source()'
-  execute 'autocmd MyDeinCmd User' 'dein#source#' . g:dein#name 'call s:deoplete_on_post_source()'
 endif " }}}
