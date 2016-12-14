@@ -5,6 +5,10 @@ on_func   = ["lightline#update", "lightline#highlight"]
 hook_source = '''
   let s:lightline = { 'updatetime' : 5 } "{{{
 
+  function! s:reltime() "{{{
+    return str2float(reltimestr(reltime()))
+  endfunction"}}}
+
   function! s:lightline.new(options) "{{{
     let options = a:options
     let instance = copy(self)
@@ -557,57 +561,95 @@ hook_source = '''
   augroup END
 '''
 
-[[plugins]]
-repo = 'Shougo/neocomplete.vim'
-on_cmd    = ["NeoCompleteClean", "NeoCompleteEnable", "NeoCompleteDisable"]
-on_i      = 1
-on_func   = ["neocomplete#init#disable", "neocomplete#is_enabled", "neocomplete#start_manual_complete", 'neocomplete#util#get_vital']
-disabled = '!(has("lua")&&has('nvim'))'
-depends   = ['context_filetype.vim', "unite.vim"]
-hook_source = '''
-  let g:neocomplete#enable_at_startup = 1
-  let g:neocomplete#data_directory = g:my.dir.neocomplete
-
-  imap <expr><C-G> neocomplete#undo_completion()
-  " inoremap <expr><C-e> neocomplete#cancel_popup()
-
-  function! s:my_cr_function()
-    return pumvisible() ? neocomplete#close_popup() . "\<CR>"  : "\<CR>\<Plug>DiscretionaryEnd"
-  endfunction
-  imap <expr><silent> <CR> <SID>my_cr_function()
-
-  inoremap <expr><C-h> neocomplete#smart_close_popup() . "\<C-h>"
-  inoremap <expr><C-X><C-F> neocomplete#start_manual_complete('file')
-  inoremap <expr><C-X><C-K> neocomplete#start_manual_complete('dictionary')
-  inoremap <expr><C-X><C-I> neocomplete#start_manual_complete('file/include')
-  imap <C-O> <Plug>(neocomplete_start_unite_complete)
-  inoremap <expr><C-G> neocomplete#undo_completion()
-  inoremap <expr><C-N> pumvisible() ? "\<C-N>" : "\<C-X>\<C-U>\<C-P>\<Down>"
-  inoremap <expr><C-P> pumvisible() ? "\<C-P>" : "\<C-P>\<C-N>"
-
-  inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
-  inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
-  inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
-  inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
-
-  imap <expr><TAB> pumvisible() ? "\<C-n>" :
-        \ neosnippet#expandable_or_jumpable() ?
-        \ neosnippet#mappings#jump_or_expand_impl() :
-        \ <SID>check_back_space() ? "\<TAB>" :
-        \ neocomplete#start_manual_complete()
-  function! s:check_back_space() "{{{
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~ '\s'
-  endfunction"}}}
-  " imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-  "       \ "\<Plug>(neosnippet_expand_or_jump)"
-  "       \ : pumvisible() ? "\<C-n>" : "\<TAB>"
-'''
+# [[plugins]]
+# repo = 'Shougo/neocomplete.vim'
+# on_cmd    = ["NeoCompleteClean", "NeoCompleteEnable", "NeoCompleteDisable"]
+# on_i      = 1
+# on_func   = ["neocomplete#init#disable", "neocomplete#is_enabled", "neocomplete#start_manual_complete", 'neocomplete#util#get_vital']
+# disabled = 'has("nvim")'
+# depends   = ['context_filetype.vim', "unite.vim"]
+# hook_source = '''
+#   let g:neocomplete#enable_at_startup = 1
+#   let g:neocomplete#data_directory = g:my.dir.neocomplete
+#
+#   imap <expr><C-G> neocomplete#undo_completion()
+#   " inoremap <expr><C-e> neocomplete#cancel_popup()
+#
+#   function! s:my_cr_function()
+#     return pumvisible() ? neocomplete#close_popup() . "\<CR>"  : "\<CR>\<Plug>DiscretionaryEnd"
+#   endfunction
+#   imap <expr><silent> <CR> <SID>my_cr_function()
+#
+#   inoremap <expr><C-h> neocomplete#smart_close_popup() . "\<C-h>"
+#   inoremap <expr><C-X><C-F> neocomplete#start_manual_complete('file')
+#   inoremap <expr><C-X><C-K> neocomplete#start_manual_complete('dictionary')
+#   inoremap <expr><C-X><C-I> neocomplete#start_manual_complete('file/include')
+#   imap <C-O> <Plug>(neocomplete_start_unite_complete)
+#   inoremap <expr><C-G> neocomplete#undo_completion()
+#   inoremap <expr><C-N> pumvisible() ? "\<C-N>" : "\<C-X>\<C-U>\<C-P>\<Down>"
+#   inoremap <expr><C-P> pumvisible() ? "\<C-P>" : "\<C-P>\<C-N>"
+#
+#   inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
+#   inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
+#   inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
+#   inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
+#
+#   imap <expr><TAB> pumvisible() ? "\<C-n>" :
+#         \ neosnippet#expandable_or_jumpable() ?
+#         \ neosnippet#mappings#jump_or_expand_impl() :
+#         \ <SID>check_back_space() ? "\<TAB>" :
+#         \ neocomplete#start_manual_complete()
+#   function! s:check_back_space() "{{{
+#     let col = col('.') - 1
+#     return !col || getline('.')[col - 1]  =~ '\s'
+#   endfunction"}}}
+#   " imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+#   "       \ "\<Plug>(neosnippet_expand_or_jump)"
+#   "       \ : pumvisible() ? "\<C-n>" : "\<TAB>"
+# '''
 
 [[plugins]]
 repo = 'Shougo/deoplete.nvim'
 on_i      = 1
 disabled = '!has("nvim")'
+hook_source = '''
+  imap <expr><C-G> deoplete#undo_completion()
+
+  function! s:my_cr_function()
+    return pumvisible() ? deoplete#close_popup() . "\<CR>"  : "\<CR>\<Plug>DiscretionaryEnd"
+  endfunction
+  imap <expr><silent> <CR> <SID>my_cr_function()
+
+  inoremap <expr><C-h> deoplete#smart_close_popup() . "\<C-h>"
+  inoremap <expr><C-X><C-F> deoplete#manual_complete(['file'])
+  inoremap <expr><C-X><C-K> deoplete#manual_complete('dictionary')
+  inoremap <expr><C-X><C-I> deoplete#manual_complete('file/include')
+  inoremap <expr><C-G> deoplete#undo_completion()
+  inoremap <expr><C-N> pumvisible() ? "\<C-N>" : "\<C-X>\<C-U>\<C-P>\<Down>"
+  inoremap <expr><C-P> pumvisible() ? "\<C-P>" : "\<C-P>\<C-N>"
+
+  inoremap <expr><Left>  deoplete#close_popup() . "\<Left>"
+  inoremap <expr><Right> deoplete#close_popup() . "\<Right>"
+  inoremap <expr><Up>    deoplete#close_popup() . "\<Up>"
+  inoremap <expr><Down>  deoplete#close_popup() . "\<Down>"
+
+  imap <expr><TAB> pumvisible() ? "\<C-n>" :
+        \ neosnippet#expandable_or_jumpable() ?
+        \ neosnippet#mappings#jump_or_expand_impl() :
+        \ <SID>check_back_space() ? "\<TAB>" :
+        \ deoplete#manual_complete()
+  function! s:check_back_space() "{{{
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
+  endfunction"}}}
+'''
+hook_post_source = '''
+  let g:deoplete#sources = {}
+  let g:deoplete#sources._ = ['buffer', 'member', 'tag', 'file', 'dictionary', 'neosnippet']
+  let g:deoplete#ignore_sources = {
+        \ '_': ['omni']
+        \ }
+'''
 
 [[plugins]]
 repo = 'Shougo/context_filetype.vim'

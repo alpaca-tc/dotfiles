@@ -31,9 +31,6 @@ endfunction"}}}
 function! s:complement_delimiter_of_directory(path) "{{{
   return isdirectory(a:path) ? a:path . '/' : a:path
 endfunction"}}}
-function! s:reltime() "{{{
-  return str2float(reltimestr(reltime()))
-endfunction"}}}
 function! s:on_init() "{{{
   return has('vim_starting') || !exists('s:loaded_vimrc')
 endfunction"}}}
