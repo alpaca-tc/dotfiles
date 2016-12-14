@@ -2,16 +2,6 @@ is_executable() {
   type "$1" &> /dev/null;
 }
 
-# 環境変数
-# # {{{
-export SHELL=/usr/local/bin/zsh-5.2
-export EDITOR=nvim
-export GIT_EDITOR=/usr/local/bin/nvim
-export LC_CTYPE=en_US.UTF-8
-export LANG=en_US.UTF-8
-export TZ=Asia/Tokyo
-# }}}
-
 # PATH
 # {{{
 export PATH=''
@@ -94,6 +84,17 @@ export PATH=/usr/local/Trolltech/Qt-4.8.6/bin:$PATH
 # }}}
 
 fpath=( $HOME/dotfiles/.zsh/zsh-completions/src $HOME/.zsh/site-functions $fpath)
+
+# # {{{
+if is_executable nvim; then
+  export EDITOR=nvim
+  export GIT_EDITOR=nvim
+fi
+
+export LC_CTYPE=en_US.UTF-8
+export LANG=en_US.UTF-8
+export TZ=Asia/Tokyo
+# }}}
 
 # For rust
 export PATH=$PATH:/usr/local/bin/bin
