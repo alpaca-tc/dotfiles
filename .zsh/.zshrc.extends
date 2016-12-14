@@ -99,7 +99,6 @@ compdef _rake rake
 # }}}
 
 # Highlight cat
-alias cat='pygmentize -O style=monokai -f console256 -g -O encoding=utf-8'
 alias less=lessfilter
 
 lessfilter() {
