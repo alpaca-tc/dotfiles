@@ -28,6 +28,9 @@ export NODE_PATH=/usr/local/lib/node_modules:$NODE_PATH
 export NODE_PATH=/usr/local/lib/jsctags:${NODE_PATH}
 export PATH=/usr/local/mysql/bin:/usr/local/share/npm/bin:$PATH
 
+# yarn
+export PATH="$HOME/.yarn/bin:$PATH"
+
 # homebrew
 export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 export MANPATH=/usr/local/share/man:$MANPATH
@@ -43,7 +46,7 @@ export PATH=$HOME/local/bin:$PATH
 # scala 2.9
 export SCALA_HOME=/usr/local/Cellar/scala/2.9.2
 
-# Golang 1.2.1
+# Golang
 export GOPATH=$HOME/.go
 export PATH=$PATh:$GOROOT/bin:$GOPATH/bin:$PATH
 
