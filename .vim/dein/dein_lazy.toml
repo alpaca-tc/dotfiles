@@ -1195,6 +1195,9 @@ mac  = 'brew install binutils'
 [[plugins]]
 repo = 'vim-ruby/vim-ruby'
 on_ft     = ["ruby", "erb", "ruby.rspec"]
+hook_source = '''
+  let g:ruby_indent_block_style = 'do'
+'''
 
 [[plugins]]
 repo = 'tpope/vim-rails'

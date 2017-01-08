@@ -3,6 +3,7 @@ repo = 'alpaca-tc/alpaca-switch-file.vim'
 
 [[plugins]]
 repo = 'Shougo/vimproc'
+build = 'make'
 
 [[plugins]]
 repo = 'repeat.vim'

@@ -1534,9 +1534,9 @@ regexp  'Hash\[\?\]\?$'
   Hash.new { |h,k| h[k] = [] }
 
 snippet     Hash{}
-abbr        Hash.new { |h,k| h[k] = Hash.new(&h.default_proc) }
+abbr        Hash.new { |h, k| h[k] = Hash.new(&h.default_proc) }
 regexp  'Hash\({}\)\?$'
-  Hash.new { |h,k| h[k] = Hash.new(&h.default_proc) }
+  Hash.new { |h, k| h[k] = Hash.new(&h.default_proc) }
 
 snippet store
 abbr    store(key, value)
