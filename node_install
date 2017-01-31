@@ -1,17 +1,13 @@
 #!/bin/sh
 
-# XCodeの設定画面から、macOS command toolをインストールしてください
-# sudo ln -s /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain /Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain
-# brew install node.js
-if [ -d $HOME/.node ]
+if [ -d $HOME/.nodenv ]
 then
-    echo "nodeフォルダは~/.nodeにインストール済みです"
+    echo "nodenvフォルダは~/.nodenvにインストール済みです"
 else
-    git clone git://github.com/creationix/nvm.git ~/.nvm
+    git clone https://github.com/nodenv/nodenv.git ~/.nodenv
+    mkdir -p ~/.nodenv/plugins
+    cd ~/.nodenv/plugins
+    git clone https://github.com/nodenv/node-build
 fi
-. ~/.nvm/nvm.sh
-nvm install v0.4.5
-nvm install v0.8.14
-nvm install v0.9.2
-nvm use v0.8.14
-npm install -g coffee-script
+
+

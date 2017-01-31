@@ -23,10 +23,6 @@ export PATH=$HOME/.bundle/powerline/scripts:$PATH
 
 # node
 export PATH=./node_modules/.bin:$PATH
-export NODE_PATH=/usr/local/lib/node
-export NODE_PATH=/usr/local/lib/node_modules:$NODE_PATH
-export NODE_PATH=/usr/local/lib/jsctags:${NODE_PATH}
-export PATH=/usr/local/mysql/bin:/usr/local/share/npm/bin:$PATH
 
 # yarn
 export PATH="$HOME/.yarn/bin:$PATH"
@@ -61,6 +57,13 @@ fi
 
 if is_executable rbenv; then
   eval "$(rbenv init -)"
+fi
+
+# nodenv
+export PATH=$HOME/.nodenv/bin:$PATH
+
+if is_executable nodenv; then
+  eval "$(nodenv init -)"
 fi
 
 # Vagrant

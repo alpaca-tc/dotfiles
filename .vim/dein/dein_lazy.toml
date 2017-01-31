@@ -643,6 +643,7 @@ hook_source = '''
     return !col || getline('.')[col - 1]  =~ '\s'
   endfunction"}}}
 '''
+
 hook_post_source = '''
   let g:deoplete#sources = {}
   let g:deoplete#sources._ = ['buffer', 'member', 'tag', 'file', 'dictionary', 'neosnippet']
@@ -669,7 +670,12 @@ hook_source = '''
   imap <silent><C-K>     <ESC>:<C-U>call unite#start(['neosnippet'], { 'input': expand('<cword>')})<CR>
   imap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
   smap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
-  inoremap <expr><C-@> neocomplete#start_manual_complete(['neosnippet'])
+
+  if dein#tap('neocomplete.vim')
+    inoremap <expr><C-@> neocomplete#start_manual_complete(['neosnippet'])
+  elseif dein#tap('deoplete.nvim')
+    inoremap <expr><C-@> deoplete#manual_complete(['neosnippet'])
+  endif
 '''
 
 [[plugins]]

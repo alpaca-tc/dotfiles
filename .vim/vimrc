@@ -271,28 +271,6 @@ if s:on_init()
 endif
 "}}}
 
-function! s:load_cabbrev_definition() "{{{
-  let cabbrev_definition = [
-        \ 'be !bundle exec rake',
-        \ 'berks !bundle exec berks install --path cookbooks',
-        \ 'f FugitiveReload',
-        \ 'U Unite',
-        \ 'G Git',
-        \ 'Un UnwatchBuffer',
-        \ 'gitgrep Unite vcs_grep',
-        \ 'sudowrite w !sudo tee %'
-        \ ]
-  for definition in cabbrev_definition
-    execute 'cabbrev' definition
-  endfor
-endfunction"}}}
-function! s:load_cabbrev_definition_automatically() "{{{
-  call s:load_cabbrev_definition()
-  nunmap :
-  call feedkeys(':', 'n')
-endfunction"}}}
-nnoremap <silent>: :call <SID>load_cabbrev_definition_automatically()<CR>
-
 cnoremap <C-L> <Right>
 
 xnoremap H <Nop>
@@ -737,7 +715,7 @@ if exists(':RemoveDust')
   augroup RemoveDust
     autocmd!
     autocmd BufWritePre * RemoveDust
-    autocmd FileType go RemoveDustDisable
+    autocmd FileType go,c,make RemoveDustDisable
   augroup END
 endif
 
