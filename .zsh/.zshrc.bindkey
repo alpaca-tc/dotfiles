@@ -11,6 +11,11 @@ bindkey -a '^Q' show_buffer_stack
 bindkey -a '^g' zaw-history
 bindkey -a 'q' push-line
 bindkey -a '^F' history-incremental-search-backward
+
+# ヒストリー補完機能を Ctrl+N, Ctrl+P に割り当てる
+bindkey "^L" clear-screen
+bindkey "^P" history-beginning-search-backward-end
+bindkey "^N" history-beginning-search-forward-end
 # bindkey -a "\r"  magic-abbrev-expand-and-accept # M-x RET はできなくなる
 # bindkey " "   magic-abbrev-expand-and-insert
 # bindkey "."   magic-abbrev-expand-and-insert

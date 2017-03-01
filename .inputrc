@@ -24,4 +24,3 @@ set horizontal-scroll-mode on
 "\C-p": history-search-backward
 "\C-n": history-search-forward
 "\C-l": clear-screen
-
