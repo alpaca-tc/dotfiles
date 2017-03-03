@@ -10,10 +10,6 @@ augroup MyAutoCmd
   autocmd!
 augroup END
 
-augroup MyDeinCmd
-  autocmd!
-augroup END
-
 " ----------------------------------------
 " Utils {{{
 function! s:current_git() "{{{
@@ -151,7 +147,6 @@ let s:vimproc_dir = $HOME . "/.cache/dein/repos/github.com/Shougo/vimproc"
 if isdirectory(s:vimproc_dir)
   set runtimepath+=s:vimproc_dir
 endif
-
 
 if dein#load_state(s:toml) && dein#load_state(s:lazy_toml)
   call dein#begin(g:my.dir.dein)
@@ -664,7 +659,6 @@ endif
 " ------------------------------------
 nnoremap <silent>[unite]w  :Unite tweetvim -buffer-name=tweetvim -no-start-insert<CR>
 nnoremap <silent>[tag_or_tab]v :TweetVimSay<CR>
-nnoremap [tag_or_tab]a :TweetVimSwitchAccount<Space>
 
 " ------------------------------------
 " vim-endwise

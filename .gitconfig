@@ -30,6 +30,7 @@
 [alias]
   fsync = "!git fetch origin $(git rev-parse --abbrev-ref HEAD) && git reset --hard FETCH_HEAD"
   rmaster = "!git fetch origin master && git rebase FETCH_HEAD"
+  ffetch = "!git fetch origin ${1} && git checkout FETCH_HEAD -b ${1}"
 
   first = !"fun() { git init; git add -A; git commit -m 'First commit'; }; fun"
   assume = !"fun() { git update-index --assume-unchanged `git ls-files $@ --no-empty-directory`; }; fun"

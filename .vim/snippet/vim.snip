@@ -356,13 +356,3 @@ snippet catch_sample
 abbr    catch /\v^Vim%(\(\a+\))=:(E121)|(E117)|(E110)|(E112)|(E113)|(E731)|(E475)|(E15)/
 options word
   catch /\v^Vim%(\(\a+\))=:(E121)|(E117)|(E110)|(E112)|(E113)|(E731)|(E475)|(E15)/
-
-snippet dein
-abbr    dein
-options word
-  if dein#tap('${1}') " {{{
-    function! s:${2}_on_source() abort
-    endfunction
-
-    execute 'autocmd MyDeinCmd User' 'dein#source#' . g:dein#name 'call s:$2_on_source()'
-  endif " }}}

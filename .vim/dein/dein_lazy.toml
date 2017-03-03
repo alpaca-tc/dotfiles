@@ -907,7 +907,7 @@ hook_source = '''
         \   ['if', 'unless'],
         \   ['endif', 'endunless'],
         \ ],
-        \ 'Rakefile,Gemfile,ruby,ruby.rspec,eruby,haml' : [
+        \ 'Rakefile,Gemfile,ruby,ruby.rspec,eruby,haml,slim' : [
         \   ['raise', 'fail'],
         \   ['if', 'unless'],
         \   ['while', 'until'],
@@ -945,7 +945,7 @@ hook_source = '''
         \   { '\([^. ]\+\)\.should\(_not\|\)': 'expect(\1)\.to\2' },
         \   { 'expect(\([^. ]\+\))\.to\(_not\|\)': '\1.should\2' },
         \ ],
-        \ 'rails' : [
+        \ 'rails,slim,ruby' : [
         \   [100, ':continue', ':information'],
         \   [101, ':switching_protocols'],
         \   [102, ':processing'],
