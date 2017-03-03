@@ -38,11 +38,6 @@ hook_source = '''
   endfunction"}}}
   "}}}
 
-  let g:lightline#functions#file_size = s:lightline.new({ 'updatetime' : 1 })
-  function! g:lightline#functions#file_size.func() "{{{
-    return line('$')
-  endfunction"}}}
-
   let g:lightline#functions#git_branch = s:lightline.new({ 'updatetime' : 5 })
   function! g:lightline#functions#git_branch.func() "{{{
     if dein#is_sourced('vim-unite-giti')
@@ -58,49 +53,21 @@ hook_source = '''
     return branch
   endfunction"}}}
 
-  let g:lightline#functions#tagbar = s:lightline.new({ 'updatetime' : 3 })
-  function! g:lightline#functions#tagbar.func() " {{{
-    return dein#is_sourced('tagbar') && bufwinnr('__Tagbar__') != -1 ? tagbar#currenttag('[%s]', '') : ''
-  endfunction "}}}
-
-  let g:lightline#functions#alpaca_tags = s:lightline.new({ 'updatetime' : 0.5 })
-  function! g:lightline#functions#alpaca_tags.func() "{{{
-    let processes = alpaca_tags#process_manager#all()
-    let status = ''
-
-    for [path, process] in items(processes)
-      let status .= process.status()
-    endfor
-
-    return status
-  endfunction"}}}
-
   let g:lightline#functions#plugin_information = s:lightline.new({ 'updatetime' : 0.5 })
   function! g:lightline#functions#plugin_information.func() "{{{
-    if &filetype == 'unite'
-      return unite#get_status_string()
-    elseif &filetype == 'vimfiler'
-      return vimfiler#get_status_string()
-    elseif &filetype == 'vimshell'
-      return vimshell#get_status_string()
-    elseif exists('b:tweetvim_say_count')
-      return tweetvim#account#current().screen_name
-    else
-      return empty(bufname('%')) ? '' : expand('%:p:~')
-    endif
+    return empty(bufname('%')) ? '' : expand('%:p:~')
   endfunction"}}}
 
   let g:lightline = {
         \ 'enable' : {
         \   'statusline': 1,
-        \   'tabline': 0
         \ },
         \ 'colorscheme': 'wombat',
         \ 'active': {
         \   'left': [
         \     ['mode'],
         \     ['information'],
-        \     ['git_branch', 'tagbar', 'modified'],
+        \     ['git_branch', 'modified'],
         \   ],
         \   'right': [
         \     ['lineinfo', 'file_size'],
@@ -109,10 +76,7 @@ hook_source = '''
         \   ],
         \ },
         \ 'component_function' : {
-        \   'alpaca_tags': 'g:lightline#functions#alpaca_tags.statusline',
-        \   'tagbar':      'g:lightline#functions#tagbar.statusline',
         \   'information': 'g:lightline#functions#plugin_information.statusline',
-        \   'file_size':   'g:lightline#functions#file_size.statusline',
         \ },
         \ 'component_expand': {
         \   'git_branch':  'g:lightline#functions#git_branch.statusline',
