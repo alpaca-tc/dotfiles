@@ -4,7 +4,7 @@
 
 [core]
   excludesfile = /opt/boxen/config/git/gitignore
-  ; autocrlf     = true ; input false
+  autocrlf = false; input false
   trailing-space = false
   space-before-tab = false
   ; indent-with-non-tab =
@@ -103,18 +103,18 @@
 [merge]
   ff = false
 
-; [branch]
-;   autosetuprebase = always
+[branch]
+  autosetuprebase = always
 
 [url "https://"]
   insteadOf = git://
-# [url "pixiv_gitlab:"]
-#   insteadOf = http://gitlab.pixiv.private/
+[url "pixiv_gitlab:"]
+  insteadOf = http://gitlab.pixiv.private/
 [url "github:"]
   insteadOf = https://github.com/
 [url "github:"]
   insteadOf = git://github.com/
-[url "github:"]
-  insteadOf = git@github.com:
+# [url "github:"]
+#   insteadOf = git@github.com:
 [hub]
   protocol = https
