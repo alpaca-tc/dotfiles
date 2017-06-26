@@ -6,7 +6,7 @@ repo = 'Shougo/vimproc'
 build = 'make'
 
 [[plugins]]
-repo = 'repeat.vim'
+repo = 'vim-scripts/repeat.vim'
 on_map    = '<Plug>'
 
 [[plugins]]
