@@ -16,14 +16,6 @@
 [receive]
   denyDeleteCurrent = false
 
-[difftool "sourcetree"]
-  cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-  path =
-
-[mergetool "sourcetree"]
-  cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-  trustExitCode = true
-
 [color]
   ui = true
 
@@ -37,14 +29,11 @@
   no-assume = !"fun() { git update-index --no-assume-unchanged `git ls-files $@ --no-empty-directory`; }; fun"
   assume-list = !"git ls-files -v | grep -e "^[a-z]""
 
-  send-request = !"branch_name=`git rev-parse --abbrev-ref HEAD`; git push origin ${branch_name}; hub pull-request -b master -h Lang-8:${branch_name}"
-
   add-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
   edit-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; vim `f`"
 
   append-gitkeep = "!find . -type d -empty -not -path './.git*' -exec touch {}\\/.gitkeep \\;"
   append-gitignore = !"f() { local s=$1; shift; while [ $# -gt 0 ]; do s="$s,$1"; shift; done; curl "http://gitignore.io/api/$s"; }; f"
-  branch-note = "!git config branch.$(git symbolic-ref HEAD|sed \"s/refs\\/heads\\///\").note $( if [ $# -gt 0 ]; then $1; fi)"
 
   remove-branch-all = "!git checkout master && git pull origin master && git fetch -p origin && git branch -d $(git branch --merged | grep -v master | grep -v '*') && git push origin $(git branch -r --merged | grep origin/ | grep -v master | sed s~origin/~:~)"
   remove-branch-local = "!git branch -d $(git branch --merged | grep -v master | grep -v '*')"
@@ -60,9 +49,6 @@
 
   shallow=clone --depth 1
   dm = !git branch --merged | grep -v '*' | xargs -I % git branch -d %
-  rs = reset
-  sn = shortlog -sn
-  st = !sh -c 'git ls-remote . | grep `git log -1 --grep="git-svn-id"`
   tr = log --graph --pretty='format:%C(yellow)%h%Creset %C(magenta)%cd%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset' --date=iso
   empty-tree-sha1 = hash-object -t tree /dev/null
   forkdiff = !bash -c 'git diff $(git merge-base "$1" "$2") "$2" "${@: 3}" ' -
@@ -88,14 +74,6 @@
 
 [receive]
   denyDeleteCurrent = false
-
-[difftool "sourcetree"]
-  cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-  path =
-
-[mergetool "sourcetree"]
-  cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-  trustExitCode = true
 
 [issue]
   type = github
