@@ -127,6 +127,22 @@ abbr    assert ...
 options word
   assert ${1}
 
+snippet refute
+abbr    refute ...
+options word
+  refute ${1}
+
+snippet assert_raise
+abbr    assert_raise ..., fn ->
+options word
+  assert_raise ${1}, fn ->
+    ${2}
+  end
+
+snippet assert_in_delta
+abbr    assert_in_delta ...
+options word
+  assert_in_delta ${1}
 
 ###
 

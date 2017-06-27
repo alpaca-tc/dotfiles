@@ -721,6 +721,26 @@ hook_source = '''
 '''
 
 [[plugins]]
+repo = 'vim-erlang/vim-erlang-tags'
+on_ft = ["erlang"]
+
+[[plugins]]
+repo = 'vim-erlang/vim-erlang-omnicomplete'
+on_ft = ["erlang"]
+
+[[plugins]]
+repo = 'mmorearty/elixir-ctags'
+on_ft = ["elixir"]
+
+[[plugins]]
+repo = 'jakedouglas/exuberant-ctags'
+on_i = 1
+
+[[plugins]]
+repo = 'jakedouglas/exuberant-ctags'
+on_i = 1
+
+[[plugins]]
 repo = 'alpaca-tc/alpaca_window.vim'
 on_map    = '<Plug>'
 on_func   = ["alpaca_window#set_smart_close", "alpaca_window#smart_close", "alpaca_window#open_buffer"]
@@ -1104,9 +1124,16 @@ hook_source = '''
         \ "'":"'",
         \ '"':'"',
         \ '`':'`',
-        \ '|' : '|'
         \ }
   let g:auto_pairs#parens = { '{':'}' }
+
+
+  augroup MySurroundMapping
+    autocmd!
+
+    autocmd FileType ruby,eruby,slim,haml
+      \ let b:auto_pairs = extend(g:auto_pairs, { '|' : '|' })
+  augroup END
 '''
 hook_post_source = '''
   call auto_pairs#try_init()
