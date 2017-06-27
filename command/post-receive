@@ -1,1 +1,0 @@
-(cd git_directory;git --git-dir=.git pull;)
