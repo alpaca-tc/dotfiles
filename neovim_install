@@ -1,21 +1,17 @@
 #!/bin/sh
 
 cd $HOME
-brew install neovim
+brew install --HEAD neovim
 
 if [ ! -f $HOME/.config/nvim/init.vim ]; then
     mkdir -p ~/.config/nvim
     ln -s $HOME/.vim/vimrc ~/.config/nvim/init.vim
 fi
 
-pyenv install 2.7.13
-pyenv global 2.7.13
-pip install neovim
-
 gem install neovim
-pyenv global 3.5.2
-pip3 install neovim
 
+pyenv install 3.5.2
 pyenv global 3.5.2
+pip3 install --upgrade --force-reinstall neovim --user
 
 pyenv rehash

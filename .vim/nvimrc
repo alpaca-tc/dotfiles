@@ -3,7 +3,7 @@ source $HOME/.vim/vimrc
 set termguicolors
 set clipboard=unnamedplus
 
-let g:python_host_prog = $HOME . '/.pyenv/versions/2.7.12/bin/python'
+let g:python_host_prog = $HOME . '/.pyenv/versions/3.5.2/bin/python'
 let g:python3_host_prog = $HOME . '/.pyenv/versions/3.5.2/bin/python'
 let g:ruby_host_prog = $HOME . '~/.rbenv/shims/ruby'
 set runtimepath+=/usr/local/share/nvim/runtime
