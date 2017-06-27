@@ -9,5 +9,3 @@ else
     cd ~/.nodenv/plugins
     git clone https://github.com/nodenv/node-build
 fi
-
-
