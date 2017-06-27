@@ -1,2 +1,2 @@
-NeoBundleSource simple-javascript-indenter
+" NeoBundleSource simple-javascript-indenter
 runtime! indent/javascript.vim
