@@ -66,6 +66,20 @@ if is_executable nodenv; then
   eval "$(nodenv init -)"
 fi
 
+# pyenv
+if is_executable pyenv; then
+  eval "$(pyenv init -)"
+fi
+
+export PATH=$HOME/.pyenv/bin:$PATH
+
+# exenv
+export PATH=$HOME/.exenv/bin:$PATH
+
+if is_executable exenv; then
+  eval "$(exenv init -)"
+fi
+
 # Vagrant
 export PATH=/Applications/Vagrant/bin:$PATH
 
@@ -104,10 +118,6 @@ export TZ=Asia/Tokyo
 
 # For rust
 export PATH=$PATH:/usr/local/bin/bin
-
-# For python
-export PATH=$HOME/.pyenv/bin:$PATH
-if which pyenv > /dev/null; then eval "$(pyenv init - zsh)"; fi
 
 # For neovim
 # export PATH=$HOME/src/neovim/build/bin:$PATH

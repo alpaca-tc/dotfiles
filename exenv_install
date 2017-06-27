@@ -1,0 +1,8 @@
+#!/bin/sh
+
+git clone git://github.com/mururu/exenv.git $HOME/.exenv
+mkdir -p ~/.exenv/plugins
+git clone git://github.com/mururu/elixir-build.git ~/.exenv/plugins/elixir-build
+source ~/.zshrc
+brew install elixir
+exenv install 1.4.5
