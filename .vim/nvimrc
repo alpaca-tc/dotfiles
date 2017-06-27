@@ -1,4 +1,4 @@
-set runtimepath^=$HOME/.vim
+set runtimepath^=$HOME/.vim runtimepath+=$HOME/.vim/after
 source $HOME/.vim/vimrc
 set termguicolors
 set clipboard=unnamedplus

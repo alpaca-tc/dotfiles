@@ -131,7 +131,6 @@ nnoremap <Space><Space>v :<C-U>tabnew ~/.vim/vimrc<CR>
 " ----------------------------------------
 " dein.vim {{{
 let s:dein_repo_dir = g:my.dir.dein . '/repos/github.com/Shougo/dein.vim'
-set runtimepath^=~/.vim runtimepath+=~/.vim/after
 
 " dein.vim がなければ github から落としてくる
 if &runtimepath !~# '/dein.vim'
