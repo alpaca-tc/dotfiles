@@ -654,7 +654,6 @@ if s:on_init() && !exists('s:loaded_vim_rails')
     autocmd VimEnter,BufNewFile,BufRead * call <SID>load_vim_rails()
   augroup END
 endif
-"}}}
 
 " ------------------------------------
 nnoremap <silent>[unite]w  :Unite tweetvim -buffer-name=tweetvim -no-start-insert<CR>
@@ -976,11 +975,6 @@ endfunction "}}}
 
 nmap cp :call <SID>copy_current_path()<CR>
 nmap cpr :call <SID>copy_current_path_from_root()<CR>
-
-function! s:ruby_p(str) "{{{
-  execute 'ruby p' a:str
-endfunction "}}}
-command! -nargs=+ RubyP call s:ruby_p(<q-args>)
 
 " Installation check.
 let s:loaded_vimrc = 1
