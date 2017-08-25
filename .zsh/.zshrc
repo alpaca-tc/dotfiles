@@ -5,10 +5,7 @@ is_executable() {
 # PATH
 # {{{
 export PATH=''
-export MANPATH=''
-export MANPATH=$MANPATH:/usr/share/man
-export PATH=/bin:/sbin:/usr/sbin:/usr/bin
-
+export MANPATH='' export MANPATH=$MANPATH:/usr/share/man export PATH=/bin:/sbin:/usr/sbin:/usr/bin
 # zsh関連
 export PATH=$HOME/.autojump/bin:$PATH
 
@@ -38,6 +35,7 @@ export PATH=$HOME/local/bin:$PATH
 # export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_07.jdk/Contents/Home
 # export PATH=$JAVA_HOME/bin:$PATH
 # export CLASSPATH=$JAVA_HOME'/lib/ext'
+export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
 
 # scala 2.9
 export SCALA_HOME=/usr/local/Cellar/scala/2.9.2
@@ -109,6 +107,10 @@ fpath=( $HOME/dotfiles/.zsh/zsh-completions/src $HOME/.zsh/site-functions $fpath
 if is_executable nvim; then
   export EDITOR=nvim
   export GIT_EDITOR=nvim
+fi
+
+if is_executable direnv; then
+  eval "$(direnv hook zsh)"
 fi
 
 export LC_CTYPE=en_US.UTF-8

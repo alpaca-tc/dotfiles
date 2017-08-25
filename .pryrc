@@ -17,6 +17,7 @@ module CustomPry
     private
 
     def default_prompt(*args)
+      Hirb.disable if defined?(Hirb)
       build_prompt(*args, '«')
     end
 
