@@ -1351,3 +1351,14 @@ hook_source = '''
 repo = 'Shougo/neco-vim'
 on_ft = ["vim"]
 
+[[plugins]]
+repo = 'mhartington/nvim-typescript'
+on_ft = ["typescript"]
+
+[[plugins]]
+repo = 'Quramy/tsuquyomi'
+on_ft = ["typescript"]
+
+[[plugins]]
+repo = 'leafgarland/typescript-vim'
+on_ft = ["typescript"]
