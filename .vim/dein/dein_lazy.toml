@@ -659,9 +659,9 @@ hook_source = '''
   smap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
 
   if dein#tap('neocomplete.vim')
-    inoremap <expr><C-@> neocomplete#start_manual_complete(['neosnippet'])
+    inoremap <expr><C-Space> neocomplete#start_manual_complete(['neosnippet'])
   elseif dein#tap('deoplete.nvim')
-    inoremap <expr><C-@> deoplete#manual_complete(['neosnippet'])
+    inoremap <expr><C-Space> deoplete#manual_complete(['neosnippet'])
   endif
 '''
 
