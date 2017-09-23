@@ -354,19 +354,21 @@ hook_source = '''
 repo = 'Shougo/denite.nvim'
 
 [[plugins]]
-repo = 'roxma/nvim-completion-manager'
+repo = 'autozimu/LanguageClient-neovim'
 depends   = ['deoplete.nvim']
-on_ft     = ["javascript"]
+on_i = 1
 hook_source = '''
+  " Required for operations modifying multiple buffers like rename.
   set hidden
 
+  " \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
   let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-    \ 'javascript': ['javascript-typescript-langserver'],
-    \ }
+      \ 'javascript': ['javascript-typescript-stdio'],
+      \ }
 
   " Automatically start language servers.
   let g:LanguageClient_autoStart = 1
+  let g:LanguageClient_trace = 'verbose'
 
   nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
   nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
@@ -633,7 +635,8 @@ hook_source = '''
 
 hook_post_source = '''
   let g:deoplete#sources = {}
-  let g:deoplete#sources._ = ['buffer', 'member', 'tag', 'file', 'dictionary', 'neosnippet']
+  let g:deoplete#sources._ = ['buffer', 'member', 'tag', 'file', 'dictionary', 'neosnippet', 'LanguageClient']
+  inoremap <expr><C-J> deoplete#manual_complete(['LanguageClient'])
   let g:deoplete#ignore_sources = {
         \ '_': ['omni']
         \ }
@@ -1211,6 +1214,10 @@ repo = 's-yukikaze/vinarise-plugin-peanalysis'
 
 [plugins.build]
 mac  = 'brew install binutils'
+
+[[plugins]]
+repo = 'mrkn/vim-cruby'
+on_ft = ["cruby"]
 
 [[plugins]]
 repo = 'vim-ruby/vim-ruby'
