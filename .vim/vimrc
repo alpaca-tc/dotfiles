@@ -704,11 +704,12 @@ endif
 " alpaca_remove_dust
 " ------------------------------------
 let g:remove_dust_enable = 1
+
 if exists(':RemoveDust')
   augroup RemoveDust
     autocmd!
     autocmd BufWritePre * RemoveDust
-    autocmd FileType go,c,make RemoveDustDisable
+    autocmd FileType ts,go,c,make RemoveDustDisable
   augroup END
 endif
 
@@ -832,6 +833,19 @@ let g:switch_file_rules = {
       \ }
 nnoremap <silent><Space>a :call switch_file#next()<CR>
 nnoremap <silent><Space>A :call switch_file#back()<CR>
+
+
+" ----------------------------------------
+" \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+" \ 'ruby': ['language_server-ruby'],
+" \ 'javascript': ['javascript-typescript-stdio'],
+let g:LanguageClient_serverCommands = {
+    \ 'json': ['/Users/alpaca-tc/src/language_server-json/bin/language_server_json'],
+    \ }
+
+" Automatically start language servers.
+let g:LanguageClient_autoStart = 1
+let g:LanguageClient_trace = 'verbose'
 "}}}
 
 " ----------------------------------------
@@ -975,6 +989,8 @@ endfunction "}}}
 
 nmap cp :call <SID>copy_current_path()<CR>
 nmap cpr :call <SID>copy_current_path_from_root()<CR>
+
+autocmd FileType json :LanguageClientStart<CR>
 
 " Installation check.
 let s:loaded_vimrc = 1
