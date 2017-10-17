@@ -1274,7 +1274,7 @@ hook_source = '''
     nnoremap <buffer><C-K>c           :<C-U>Unite rails/config<CR>
     nnoremap <buffer><C-K>a           :<C-U>UniteGit app/assets<CR>
     nnoremap <buffer><C-K>aj          :<C-U>Unite rails/javascript<CR>
-    nnoremap <buffer><C-K>s           :<C-U>Unite rails/stylesheet<CR>
+    nnoremap <buffer><C-K>s           :<C-U>UniteGit app/services<CR>
     nnoremap <buffer><C-K>t           :<C-U>Unite rails/spec<CR>
     nnoremap <buffer><C-K>b           :<C-U>Unite rails/db<CR>
     nnoremap <buffer><C-K>f           :<C-U>Unite rails/spec -input=factories\ <CR>
