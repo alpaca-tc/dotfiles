@@ -8,9 +8,9 @@ bindkey -v "^H" backward-delete-char
 
 # Normal Mode
 bindkey -a '^Q' show_buffer_stack
-bindkey -a '^g' zaw-history
 bindkey -a 'q' push-line
-bindkey -a '^F' history-incremental-search-backward
+# bindkey -a '^F' history-incremental-search-backward
+bindkey '^F' peco-select-history
 
 # ヒストリー補完機能を Ctrl+N, Ctrl+P に割り当てる
 bindkey "^L" clear-screen

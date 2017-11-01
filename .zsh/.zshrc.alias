@@ -165,3 +165,6 @@ alias gem_uninstall_all_gems='gem uninstall -axI `gem list --no-versions`'
 alias geeknote='python ~/dotfiles/local/geeknote/geeknote.py'
 
 alias global_ip_address="curl -s checkip.dyndns.org|sed -e 's/.*Current IP Address: //' -e 's/<.*$//'"
+
+alias switch_db_store="switch_db store --name $(git rev-parse --abbrev-ref HEAD) --database_names=ca_production,moneybook_api_production"
+alias switch_db_restore="switch_db restore --name $(git rev-parse --abbrev-ref HEAD)"

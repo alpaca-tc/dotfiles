@@ -1018,6 +1018,8 @@ augroup END
 nmap cp :call <SID>copy_current_path()<CR>
 nmap cpr :call <SID>copy_current_path_from_root()<CR>
 
+" autocmd FileType json :LanguageClientStart<CR>
+
 " Installation check.
 let s:loaded_vimrc = 1
 set secure

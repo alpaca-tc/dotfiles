@@ -23,6 +23,30 @@ options word
     ${2}
   });
 
+snippet context
+abbr    context('', () => { ... })
+alias   con
+options word
+  context('${1:Description}', () => {
+    ${2}
+  });
+
+snippet context.only
+abbr    context.only('', () => { ... })
+alias   cono
+options word
+  context.only('${1:Description}', () => {
+    ${2}
+  });
+
+snippet context.skip
+abbr    context.skip('', () => { ... })
+alias   cons
+options word
+  context.skip('${1:Description}', () => {
+    ${2}
+  });
+
 snippet before
 abbr    before(() => { ... })
 options word
