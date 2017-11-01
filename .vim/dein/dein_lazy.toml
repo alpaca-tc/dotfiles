@@ -356,15 +356,10 @@ repo = 'Shougo/denite.nvim'
 [[plugins]]
 repo = 'autozimu/LanguageClient-neovim'
 depends   = ['deoplete.nvim']
-on_cmd = ['LanguageClientStart', 'LanguageClientStop']
-on_i = 0
-hook_source = '''
-  " Required for operations modifying multiple buffers like rename.
-  set hidden
-
-  nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-  nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-  nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+on_func = ["LanguageClient_textDocument_hover", "LanguageClient_textDocument_definition", "LanguageClient_textDocument_rename"]
+hook_post_source = '''
+LanguageClientStart
+" on_cmd = ['LanguageClientStart', 'LanguageClientStop']
 '''
 
 [[plugins]]
@@ -1384,3 +1379,7 @@ on_ft = ["typescript"]
 [[plugins]]
 repo = 'leafgarland/typescript-vim'
 on_ft = ["typescript"]
+
+[[plugins]]
+repo = 'keith/swift.vim'
+on_ft = ['swift']

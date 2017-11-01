@@ -841,11 +841,19 @@ nnoremap <silent><Space>A :call switch_file#back()<CR>
 " \ 'javascript': ['javascript-typescript-stdio'],
 let g:LanguageClient_serverCommands = {
     \ 'json': ['/Users/alpaca-tc/src/language_server-json/bin/language_server_json'],
+    \ 'ruby': ['/Users/alpaca-tc/src/language_server-rails/bin/language_server_rails'],
     \ }
 
 " Automatically start language servers.
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_trace = 'verbose'
+
+" Required for operations modifying multiple buffers like rename.
+set hidden
+
+nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
 "}}}
 
 " ----------------------------------------
@@ -987,10 +995,28 @@ function! s:copy_current_path_from_root() "{{{
   endif
 endfunction "}}}
 
+function! s:reload_file()
+  " augroup ReloadAutoCmd
+  "   autocmd!
+  " augroup END
+
+  checktime
+endfunction
+
+set noconfirm
+function! s:autocommand_reload()
+  augroup ReloadAutoCmd
+    autocmd!
+    autocmd InsertEnter <buffer> checktime
+  augroup END
+endfunction
+
+augroup ReloadAutoCmd
+  autocmd BufWritePost * call s:autocommand_reload()
+augroup END
+
 nmap cp :call <SID>copy_current_path()<CR>
 nmap cpr :call <SID>copy_current_path_from_root()<CR>
-
-autocmd FileType json :LanguageClientStart<CR>
 
 " Installation check.
 let s:loaded_vimrc = 1
