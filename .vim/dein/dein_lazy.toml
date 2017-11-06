@@ -357,10 +357,6 @@ repo = 'Shougo/denite.nvim'
 repo = 'autozimu/LanguageClient-neovim'
 depends   = ['deoplete.nvim']
 on_func = ["LanguageClient_textDocument_hover", "LanguageClient_textDocument_definition", "LanguageClient_textDocument_rename"]
-hook_post_source = '''
-LanguageClientStart
-" on_cmd = ['LanguageClientStart', 'LanguageClientStop']
-'''
 
 [[plugins]]
 repo = 'tomtom/tcomment_vim'

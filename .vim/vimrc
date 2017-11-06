@@ -842,7 +842,7 @@ nnoremap <silent><Space>A :call switch_file#back()<CR>
 " \ 'javascript': ['javascript-typescript-stdio'],
 let g:LanguageClient_serverCommands = {
     \ 'json': ['/Users/alpaca-tc/src/language_server-json/bin/language_server_json'],
-    \ 'ruby': ['/Users/alpaca-tc/src/language_server-rails/bin/language_server_rails'],
+    \ 'ruby': ['/Users/ishii.hiroyuki/src/language_server-rails/bin/language_server_rails'],
     \ }
 
 " Automatically start language servers.
@@ -1005,7 +1005,7 @@ set runtimepath^=/Users/alpaca-tc/.cache/dein/repos/github.com/alpaca-tc/rspec_c
 nmap cp :call <SID>copy_current_path()<CR>
 nmap cpr :call <SID>copy_current_path_from_root()<CR>
 
-" autocmd FileType json :LanguageClientStart<CR>
+autocmd FileType ruby :LanguageClientStart<CR>
 
 " Installation check.
 let s:loaded_vimrc = 1
