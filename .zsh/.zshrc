@@ -6,6 +6,7 @@ is_executable() {
 # {{{
 export PATH=''
 export MANPATH='' export MANPATH=$MANPATH:/usr/share/man export PATH=/bin:/sbin:/usr/sbin:/usr/bin
+
 # zsh関連
 export PATH=$HOME/.autojump/bin:$PATH
 
@@ -35,7 +36,7 @@ export PATH=$HOME/local/bin:$PATH
 # export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_07.jdk/Contents/Home
 # export PATH=$JAVA_HOME/bin:$PATH
 # export CLASSPATH=$JAVA_HOME'/lib/ext'
-export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
+# export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
 
 # scala 2.9
 export SCALA_HOME=/usr/local/Cellar/scala/2.9.2

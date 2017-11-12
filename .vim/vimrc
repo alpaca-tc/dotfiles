@@ -196,6 +196,7 @@ nnoremap <silent><Space>s :SudoWrite %<CR>
 nnoremap <silent><C-L> :call <SID>redraw_and_doautocmd()<CR>
 function! s:redraw_and_doautocmd() "{{{
   silent doautocmd CursorHoldI <buffer>
+  checktime
   redraw!
 endfunction"}}}
 
@@ -995,25 +996,11 @@ function! s:copy_current_path_from_root() "{{{
   endif
 endfunction "}}}
 
-function! s:reload_file()
-  " augroup ReloadAutoCmd
-  "   autocmd!
-  " augroup END
-
-  checktime
-endfunction
-
-set noconfirm
-function! s:autocommand_reload()
-  augroup ReloadAutoCmd
-    autocmd!
-    autocmd InsertEnter <buffer> checktime
-  augroup END
-endfunction
-
-augroup ReloadAutoCmd
-  autocmd BufWritePost * call s:autocommand_reload()
+augroup MyAutoCmd
+  autocmd WinEnter <buffer> checktime
 augroup END
+
+set runtimepath^=/Users/alpaca-tc/.cache/dein/repos/github.com/alpaca-tc/rspec_context.vim
 
 nmap cp :call <SID>copy_current_path()<CR>
 nmap cpr :call <SID>copy_current_path_from_root()<CR>
