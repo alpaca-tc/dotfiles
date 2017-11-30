@@ -92,5 +92,7 @@
   insteadOf = git://github.com/
 [url "github:"]
   insteadOf = git@github.com:
+[url "github:"]
+  insteadOf = ssh://git@github.com
 [hub]
   protocol = https

@@ -134,6 +134,12 @@ hook_source = '''
         \   '[' : "[\r]",
         \   '$' : "${\r}",
         \ },
+        \ 'coffee': {
+        \   '(' : "(\r)",
+        \   '[' : "[\r]",
+        \   '{' : "{ \r }",
+        \   '#' : "#{\r}",
+        \ },
         \ }
 
   let s:surround_definitions =
@@ -1379,3 +1385,4 @@ on_ft = ["typescript"]
 [[plugins]]
 repo = 'keith/swift.vim'
 on_ft = ['swift']
+rtp = 'vim'

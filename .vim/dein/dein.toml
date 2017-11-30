@@ -88,4 +88,6 @@ hook_source = '''
   augroup END
 '''
 
-
+[[plugins]]
+repo = 'alpaca-tc/rspec_context'
+rtp = 'vim'

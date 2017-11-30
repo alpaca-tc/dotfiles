@@ -198,6 +198,7 @@ function! s:redraw_and_doautocmd() "{{{
   silent doautocmd CursorHoldI <buffer>
   checktime
   redraw!
+  checktime
 endfunction"}}}
 
 if exists(':OverCommandLine')
@@ -1005,7 +1006,21 @@ set runtimepath^=/Users/alpaca-tc/.cache/dein/repos/github.com/alpaca-tc/rspec_c
 nmap cp :call <SID>copy_current_path()<CR>
 nmap cpr :call <SID>copy_current_path_from_root()<CR>
 
-autocmd FileType ruby :LanguageClientStart<CR>
+" autocmd FileType ruby :LanguageClientStart<CR>
+
+function! s:replace_es6()
+  augroup MyEs6
+    autocmd!
+    autocmd BufWritePost <buffer> %s/() =>/function() /ge
+    autocmd FileType <buffer> autocmd! MyEs6
+  augroup END
+endfunction
+
+augroup MyAutoCmd
+  autocmd FileType javascript.expect call s:replace_es6()
+augroup END
+
+execute 'set runtimepath^=' . fnamemodify('~/src/rspec_context/vim', ':p')
 
 " Installation check.
 let s:loaded_vimrc = 1
