@@ -8,8 +8,6 @@ if [ -x `which rbenv` ];then
     mkdir -p ~/.rbenv/plugins
     cd ~/.rbenv/plugins
     git clone git://github.com/sstephenson/ruby-build.git
-    git clone git://github.com/tpope/rbenv-ctags.git
-    git clone git://github.com/jamis/rbenv-gemset.git
 
     echo ""
     echo "copy-paste this to ~/.zshrc"
