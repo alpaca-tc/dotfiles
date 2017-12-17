@@ -359,10 +359,14 @@ hook_source = '''
 [[plugins]]
 repo = 'Shougo/denite.nvim'
 
-[[plugins]]
-repo = 'autozimu/LanguageClient-neovim'
-depends   = ['deoplete.nvim']
-on_func = ["LanguageClient_textDocument_hover", "LanguageClient_textDocument_definition", "LanguageClient_textDocument_rename"]
+# [[plugins]]
+# repo = 'autozimu/LanguageClient-neovim'
+# depends   = ['deoplete.nvim']
+# on_func = ["LanguageClient_textDocument_hover", "LanguageClient_textDocument_definition", "LanguageClient_textDocument_rename"]
+# hook_post_source = '''
+# LanguageClientStart
+# " on_cmd = ['LanguageClientStart', 'LanguageClientStop']
+# '''
 
 [[plugins]]
 repo = 'tomtom/tcomment_vim'
@@ -624,8 +628,7 @@ hook_source = '''
 
 hook_post_source = '''
   let g:deoplete#sources = {}
-  let g:deoplete#sources._ = ['buffer', 'member', 'tag', 'file', 'dictionary', 'neosnippet', 'LanguageClient']
-  inoremap <expr><C-J> deoplete#manual_complete(['LanguageClient'])
+  let g:deoplete#sources._ = ['buffer', 'member', 'tag', 'file', 'dictionary', 'neosnippet']
   let g:deoplete#ignore_sources = {
         \ '_': ['omni']
         \ }

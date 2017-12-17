@@ -853,9 +853,9 @@ let g:LanguageClient_trace = 'verbose'
 " Required for operations modifying multiple buffers like rename.
 set hidden
 
-nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+" nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
+" nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+" nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
 "}}}
 
 " ----------------------------------------
@@ -997,9 +997,9 @@ function! s:copy_current_path_from_root() "{{{
   endif
 endfunction "}}}
 
-augroup MyAutoCmd
-  autocmd WinEnter <buffer> checktime
-augroup END
+" augroup MyAutoCmd
+"   autocmd WinEnter <buffer> checktime
+" augroup END
 
 set runtimepath^=/Users/alpaca-tc/.cache/dein/repos/github.com/alpaca-tc/rspec_context.vim
 
