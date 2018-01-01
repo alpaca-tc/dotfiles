@@ -70,6 +70,10 @@ if is_executable pyenv; then
   eval "$(pyenv init -)"
 fi
 
+if is_executable direnv; then
+  eval "$(direnv hook zsh)"
+fi
+
 export PATH=$HOME/.pyenv/bin:$PATH
 
 # exenv

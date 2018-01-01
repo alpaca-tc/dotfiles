@@ -3,126 +3,9 @@ source ~/.zsh/git-prompt.sh
 # source ~/.zsh/completion/tig-completion.bash
 # source ~/.zsh/tmux-completion.bash
 # source ~/.zsh/rbenv.zsh
-
-# eval "$(direnv hook zsh)"
-
 # source ~/.zsh/scala.sh
 
-# zaw.zsh# {{{
-# source ~/.zsh/zaw/zaw.zsh
-zstyle ':filter-select' max-lines $(($LINES / 2))
-# }}}
-
-# コマンドを一時避難# {{{
-show_buffer_stack() {
-  POSTDISPLAY="
-  stack: $LBUFFER"
-  zle push-line-or-edit
-}
-zle -N show_buffer_stack
-setopt noflowcontrol
-# }}}
-
-# w3mでgoogle検索# {{{
-function google() {
-  local str opt
-  if [ $ != 0 ]; then
-    for i in $*; do
-      str="$str+$i"
-    done
-    str=`echo $str | sed 's/^\+//'`
-    opt='search?num=50&hl=ja&lr=lang_ja'
-    opt="${opt}&q=${str}"
-  fi
-  w3m http://www.google.co.jp/$opt
-}
-# }}}
-
-# auto-fu.zsh# {{{
-# source ~/.zsh/auto-fu.zsh
-# function zle-line-init () {
-#     auto-fu-init
-# }
-# zle -N zle-line-init
-# }}}
-
-# caching rake command# {{{
-# caching_name# {{{
-caching_dir=$HOME/.Trash
-
-_get_caching_name() {
-  filename=$1
-  dir_name=`_escape_dir_name`
-  echo "${caching_dir}/${filename}${dir_name}"
-}
-_escape_dir_name() {
-  pwd=$(pwd)
-  echo `echo $pwd | sed -e 's!\([\/.]\)!__!g'`
-}
-_cachefile_updated_at() {
-  cache_name=`_get_caching_name ".rake_tasks"`
-  echo $(stat -f "%c" $cache_name)
-}
-# }}}
-
-# last modified# {{{
-_rakefile_updated_at() {
-  echo $(stat -f "%c" Rakefile)
-}
-
-_gemfile_updated_at() {
-  echo $(stat -f "%c" Gemfile)
-}
-# }}}
-
-_generate_cachefile() {
-  cache_name=`_get_caching_name ".rake_tasks"`
-  if [ -f $cache_name ]; then
-    \rm $cache_name
-  fi
-  rake --silent --tasks 2> /dev/null | cut  -f 2 -d " " > $cache_name
-}
-
-_rake() {
-  if [ -f Rakefile ]; then
-    cache_name=`_get_caching_name ".rake_tasks"`
-    if [ ! -f $cache_name ] || \
-      [ `_cachefile_updated_at` -lt `_rakefile_updated_at` ] || \
-      [ -f Gemfile -a `_cachefile_updated_at` -lt `_gemfile_updated_at` ]; then
-      _generate_cachefile
-    fi
-
-    compadd `cat $cache_name`
-  fi
-}
-compdef _rake rake
-# }}}
-
-# Highlight cat
-alias less=lessfilter
-
-lessfilter() {
-  case "$1" in
-    *.awk|*.groff|*.java|*.js|*.m4|*.php|*.pl|*.pm|*.pod|*.sh|\
-      *.ad[asb]|*.asm|*.inc|*.[ch]|*.[ch]pp|*.[ch]xx|*.cc|*.hh|\
-      *.lsp|*.l|*.pas|*.p|*.xml|*.xps|*.xsl|*.axp|*.ppd|*.pov|\
-      *.diff|*.patch|*.py|*.rb|*.sql|*.ebuild|*.eclass)
-    pygmentize -O encoding=utf-8 -O style=monokai -f console256 -g "$1" | \less;;
-
-  .bashrc|.bash_aliases|.bash_environment)
-    pygmentize -O encoding=utf-8 -f 256 -l sh "$1" | \less
-    ;;
-
-  *)
-    grep "#\!/bin/bash" "$1" > /dev/null
-    if [ "$?" -eq "0" ]; then
-      pygmentize -O encoding=utf-8 -f 256 -l sh "$1" | \less
-    else
-      \less "$1"
-    fi
-  esac
-}
-
+# peco-select-history {{{
 function peco-select-history() {
   local tac
   if which tac > /dev/null; then
@@ -137,6 +20,4 @@ function peco-select-history() {
   zle clear-screen
 }
 zle -N peco-select-history
-
-# tmuxinator
-[[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
+# }}}
