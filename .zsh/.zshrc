@@ -79,6 +79,9 @@ if is_executable exenv; then
   eval "$(exenv init -)"
 fi
 
+# tfenv
+export PATH=$HOME/.tfenv/bin:$PATH
+
 # Vagrant
 export PATH=/Applications/Vagrant/bin:$PATH
 

@@ -1,0 +1,13 @@
+#!/bin/sh
+
+cd $HOME
+git clone https://github.com/kamatama41/tfenv.git ~/.tfenv
+
+if [ -x `which tfenv` ];then
+    echo ""
+    echo "copy-paste this to ~/.zshrc"
+    echo 'export PATH="$HOME/.tfenv/bin:$PATH"'
+    echo 'eval "$(tfenv init -)"'
+
+    tfenv rehash
+fi

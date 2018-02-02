@@ -246,7 +246,7 @@ hook_source = '''
   " call unite#custom_source('file_rec', 'max_candidates', 5000)
   " call unite#custom_source('file_rec/async', 'max_candidates', 5000)
   " call unite#custom_source('giti/branch_all', 'max_candidates', 5000)
-  call unite#custom_source('giti/log', 'max_candidates', 5000)
+  call unite#custom_source('giti/log', 'max_candidates', 100)
   " call unite#custom_source('line', 'max_candidates', 5000)
   " call unite#custom_source('tag', 'max_candidates', 5000)
   " call unite#custom_source('tags', 'max_candidates', 5000)
@@ -1386,3 +1386,14 @@ on_ft = ["typescript"]
 repo = 'keith/swift.vim'
 on_ft = ['swift']
 rtp = 'vim'
+
+[[plugins]]
+repo = 'hashivim/vim-terraform'
+on_ft = ['terraform']
+hook_source = '''
+  let g:terraform_fmt_on_save = 1
+'''
+
+[[plugins]]
+repo = 'juliosueiras/vim-terraform-completion'
+on_ft = ['terraform']
