@@ -81,7 +81,7 @@ let g:my.dir = {
       \ }
 
 let g:my.ft = {
-      \ 'ruby_files':      ['ruby', 'Gemfile', 'haml', 'eruby', 'yaml', 'ruby.rspec'],
+      \ 'ruby_files':      ['ruby', 'Gemfile', 'haml', 'eruby', 'yaml', 'ruby.rspec', 'slim'],
       \ 'js_files':        ['javascript', 'coffeescript', 'node', 'typescript'],
       \ 'python_files':    ['python', 'python*'],
       \ 'scala_files':     ['scala'],
