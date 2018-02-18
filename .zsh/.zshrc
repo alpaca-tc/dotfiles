@@ -68,6 +68,8 @@ fi
 # pyenv
 if is_executable pyenv; then
   eval "$(pyenv init -)"
+
+  export PATH=$HOME/.local/bin:$PATH
 fi
 
 if is_executable direnv; then

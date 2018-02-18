@@ -3,7 +3,7 @@
   name= alpaca-tc
 
 [core]
-  excludesfile = /opt/boxen/config/git/gitignore
+  excludesfile = $HOME/.gitignore
   autocrlf = false; input false
   trailing-space = false
   space-before-tab = false
