@@ -139,7 +139,7 @@ export PATH=$PATH:/usr/local/bin/bin
 export LESS="-R"
 
 # For SSL
-export SSL_CERT_FILE=$HOME/dotfiles/cacert.pem
+# export SSL_CERT_FILE=$HOME/dotfiles/cacert.pem
 
 # 各種読み込み
 # {{{

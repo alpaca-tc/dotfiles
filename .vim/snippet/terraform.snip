@@ -4,3 +4,10 @@ options word
   variable "${1}" {
     default = ${2}
   }
+
+snippet module
+abbr    module "..." {}
+options word
+  module "${1}" {
+    ${2}
+  }
