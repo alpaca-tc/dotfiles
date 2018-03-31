@@ -1094,7 +1094,7 @@ hook_source = '''
 '''
 
 [[plugins]]
-repo = 'alpaca-tc/vim-qfreplace'
+repo = 'thinca/vim-qfreplace'
 on_cmd    = ["Qfreplace"]
 on_ft     = ["unite", "quickfix", "vimfiler"]
 on_func   = ["qfreplace#start"]

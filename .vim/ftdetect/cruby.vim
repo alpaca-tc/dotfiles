@@ -18,7 +18,7 @@ function! s:is_cruby()
   return !empty(found_file)
 endfunction
 
-function s:detect_cruby_and_set_filetype()
+function! s:detect_cruby_and_set_filetype()
   if s:is_cruby()
     setlocal filetype=cruby
   endif

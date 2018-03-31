@@ -25,4 +25,11 @@ abbr        match_array(array)
 options     word
   expect(${1:object}).to${2:_not} match_array(${3:array})
 
+snippet rails_spec
+abbr    require 'rails_helper' ...
+options word
+  require 'rails_helper'
 
+  RSpec.describe ${1} do
+    ${2}
+  end
