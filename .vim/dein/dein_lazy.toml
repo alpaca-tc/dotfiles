@@ -121,6 +121,9 @@ hook_source = '''
         \   '{' : "{ \r }",
         \   '#':  "#{\r}",
         \ },
+        \ 'terraform' : {
+        \   '$' : "${\r}",
+        \ },
         \ 'snippet,neosnippet' : {
         \   '$' : "${\r}",
         \ },

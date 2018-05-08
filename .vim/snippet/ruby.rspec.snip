@@ -710,3 +710,12 @@ regexp  '\v((to|should|to_not|should_not)\s|\.$)'
 options word
   .and ${1}
 # }}}
+
+snippet rspec_template
+abbr    require 'rails_helper'...
+options word
+  require 'rails_helper'
+
+  RSpec.describe ${1} do
+    ${2}
+  end
