@@ -55,6 +55,7 @@
   forkdiff = !bash -c 'git diff $(git merge-base "$1" "$2") "$2" "${@: 3}" ' -
   diffm = !"f() { git log HEAD...${1} --oneline | grep Merge; }; f"
   ff = !git clean -fd | git reset --hard
+  show-pr = !"f() { git log --merges --oneline --reverse --ancestry-path $1...master | grep 'Merge pull request #' | tail -n 1; }; f"
 
 [log]
   date = local

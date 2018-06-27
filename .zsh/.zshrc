@@ -43,7 +43,8 @@ export SCALA_HOME=/usr/local/Cellar/scala/2.9.2
 
 # Golang
 export GOPATH=$HOME/.go
-export PATH=$PATh:$GOROOT/bin:$GOPATH/bin:$PATH
+export PATH=$PATH:$HOME/.goenv/bin
+export PATH=$GOROOT/bin:$GOPATH/bin:$PATH
 
 # rbenv
 if [ -d '/usr/rbenv' ];then
@@ -70,6 +71,11 @@ if is_executable pyenv; then
   eval "$(pyenv init -)"
 
   export PATH=$HOME/.local/bin:$PATH
+fi
+
+# goenv
+if is_executable goenv; then
+  eval "$(goenv init -)"
 fi
 
 if is_executable direnv; then
@@ -140,6 +146,9 @@ export LESS="-R"
 
 # For SSL
 export SSL_CERT_FILE=$HOME/dotfiles/cacert.pem
+
+# For Sublime
+export PATH=$PATH:/Applications/Sublime\ Text.app/Contents/SharedSupport/bin
 
 # 各種読み込み
 # {{{

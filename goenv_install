@@ -1,0 +1,5 @@
+#!/bin/sh
+
+cd $HOME
+git clone https://github.com/syndbg/goenv.git ~/.goenv
+goenv install 1.10.3

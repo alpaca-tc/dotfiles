@@ -997,11 +997,9 @@ function! s:copy_current_path_from_root() "{{{
   endif
 endfunction "}}}
 
-" augroup MyAutoCmd
-"   autocmd WinEnter <buffer> checktime
-" augroup END
-
-set runtimepath^=/Users/alpaca-tc/.cache/dein/repos/github.com/alpaca-tc/rspec_context.vim
+augroup MyAutoCmd
+  autocmd WinEnter <buffer> checktime
+augroup END
 
 nmap cp :call <SID>copy_current_path()<CR>
 nmap cpr :call <SID>copy_current_path_from_root()<CR>
@@ -1019,8 +1017,6 @@ endfunction
 augroup MyAutoCmd
   autocmd FileType javascript.expect call s:replace_es6()
 augroup END
-
-execute 'set runtimepath^=' . fnamemodify('~/src/rspec_context/vim', ':p')
 
 " Installation check.
 let s:loaded_vimrc = 1
