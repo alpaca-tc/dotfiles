@@ -36,34 +36,34 @@ end
 Pry.config.prompt = PryConsole.build
 
 ## Customize eval line
-module FullAccessible
-  def method_missing(action, *args, &block)
-    return send(action, *args, &block) if respond_to?(action, true)
-    super
-  end
-
-  Object.prepend(self)
-end
+# module FullAccessible
+#   def method_missing(action, *args, &block)
+#     return send(action, *args, &block) if respond_to?(action, true)
+#     super
+#   end
+#
+#   Object.prepend(self)
+# end
 
 ## Short Syntax
-module ShortSyntax
-  def self.format!(str)
-    str.gsub!(/\.(@\w+)/, '.instance_variable_get(:\1)')
-    str
-  end
-end
+# module ShortSyntax
+#   def self.format!(str)
+#     str.gsub!(/\.(@\w+)/, '.instance_variable_get(:\1)')
+#     str
+#   end
+# end
 
 ## Evaluate instance variable access
-Pry.config.hooks.add_hook(:after_read, :evaluate_instance_variable) do |code, pry|
-  ShortSyntax.format!(code)
-end
+# Pry.config.hooks.add_hook(:after_read, :evaluate_instance_variable) do |code, pry|
+#   ShortSyntax.format!(code)
+# end
 
 ## Evaluate instance variable in the command
-Module.new do
-  def initialize(str, _pry_, options={})
-    ShortSyntax.format!(str)
-    super
-  end
-
-  Pry::CodeObject.prepend(self)
-end
+# Module.new do
+#   def initialize(str, _pry_, options={})
+#     ShortSyntax.format!(str)
+#     super
+#   end
+#
+#   Pry::CodeObject.prepend(self)
+# end
