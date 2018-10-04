@@ -27,3 +27,24 @@ let g:tagbar_type_ruby = {
 "       \ ]
 "       \ }
 "}}}
+
+" augroup MySchemafile
+"   autocmd!
+"   autocmd BufWritePost Schemafile call s:run_ridgepole()
+" augroup END
+"
+" function! s:run_ridgepole()
+"   let current_path = vital#of('vital').import('Prelude').path2project_directory(getcwd())
+"   let bin_candidates = [
+"         \ current_path . "/bin/ridgepole",
+"         \ "bundle exec ridgepole"
+"         \ ]
+"
+"   for bin_candidate in bin_candidates
+"     if filereadable(bin_candidate)
+"       echo system(join([bin_candidate, '-c', 'config/database.yml', '--apply', '--env', 'development'], ' '))
+"       echo system(join([bin_candidate, '-c', 'config/database.yml', '--apply', '--env', 'test'], ' '))
+"       return 1
+"     endif
+"   endfor
+" endfunction

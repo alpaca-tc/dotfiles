@@ -606,6 +606,7 @@ function! s:define_rails_autocmd() "{{{
 
   augroup MyRailsSetting
     autocmd!
+
     for [type_or_path, snippets] in items(s:rails_snippets)
       for snippet in snippets
         let snippet_file = expand('~/.vim/snippet/' . snippet . '.snip')
@@ -617,7 +618,7 @@ function! s:define_rails_autocmd() "{{{
       endfor
     endfor
   augroup END
-endfunction"}}}
+ endfunction"}}}
 
 function! s:detect_rails()
   let root_dir = s:current_git()
@@ -638,14 +639,14 @@ function! s:load_vim_rails() "{{{
 
     let b:rails_root = root_dir
     call dein#source('vim-rails')
-
     call s:define_rails_autocmd()
+
     silent doautocmd User BufEnterRails
     silent doautocmd User Rails
 
     augroup DetectVimRails
       autocmd!
-      autocmd BufNew,BufNewFile * silent doautocmd User Rails
+      autocmd BufNew,BufNewFile *.rb silent doautocmd User Rails
     augroup END
   endif
 endfunction"}}}
@@ -1004,19 +1005,44 @@ augroup END
 nmap cp :call <SID>copy_current_path()<CR>
 nmap cpr :call <SID>copy_current_path_from_root()<CR>
 
-" autocmd FileType ruby :LanguageClientStart<CR>
+function! s:rails_javascript_gf(text)
+  let text = a:text
+  let root = s:current_git()
+  let webpack_path = root . '/app/javascript'
+  let nodemodule_path = root . '/node_modules'
+  let paths = ['.', webpack_path, 'nodemodule_path']
 
-function! s:replace_es6()
-  augroup MyEs6
-    autocmd!
-    autocmd BufWritePost <buffer> %s/() =>/function() /ge
-    autocmd FileType <buffer> autocmd! MyEs6
-  augroup END
+  let extensions = ['.ts', '.tsx', '.js', '.jsx', '.sass']
+
+  if text[:0] == '~'
+    " node modules
+    let text = substitute(text, '^~', '', '')
+    let candidates = [nodemodule_path . '/']
+  else
+    let candidates = ['%{path}%{name}%{extension}', '%{path}/%{name}/index%{extension}', '%{path}%{name}']
+  endif
+
+  for candidate in candidates
+    for path in paths
+      for extension in extensions
+        let candidate_path = substitute(substitute(substitute(candidate, '%{name}', text, ''), '%{path}', path, ''), '%{extension}', extension, '')
+
+        if filereadable(candidate_path)
+          edit `=candidate_path`
+          return
+        endif
+      endfor
+    endfor
+  endfor
+
+  echoerr "Can't find " . text
 endfunction
 
 augroup MyAutoCmd
-  autocmd FileType javascript.expect call s:replace_es6()
+  autocmd FileType javascript,typescript,sass nmap <buffer> gf :call <SID>rails_javascript_gf(expand("<cfile>"))<CR>
 augroup END
+
+" autocmd FileType ruby :LanguageClientStart<CR>
 
 " Installation check.
 let s:loaded_vimrc = 1

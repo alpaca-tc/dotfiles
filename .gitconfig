@@ -57,6 +57,8 @@
   ff = !git clean -fd | git reset --hard
   show-pr = !"f() { git log --merges --oneline --reverse --ancestry-path $1...master | grep 'Merge pull request #' | tail -n 1; }; f"
 
+  difff = diff --color-words --word-diff-regex='\\w+|[^[:space:]]'
+
 [log]
   date = local
   decorate = true

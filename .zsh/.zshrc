@@ -69,7 +69,7 @@ fi
 # pyenv
 if is_executable pyenv; then
   eval "$(pyenv init -)"
-
+  export PYENV_ROOT=$HOME/.pyenv
   export PATH=$HOME/.local/bin:$PATH
 fi
 
