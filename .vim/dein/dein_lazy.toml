@@ -132,7 +132,7 @@ hook_source = '''
         \   '[' : "[\r]",
         \   '<' : "<\r>",
         \ },
-        \ 'javascript': {
+        \ 'javascript,typescript': {
         \   '(' : "(\r)",
         \   '[' : "[\r]",
         \   '$' : "${\r}",

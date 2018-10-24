@@ -1,26 +1,65 @@
-# Comment Syntax {{{
-snippet @p
+snippet @param
 abbr    @param [Class] ...
-alias   @param
+regexp  '^\s*#\s\+'
 options word
   @param [${1:Class}] ${2:name} ${3:#:description}
 
-snippet @r
+snippet @attr
+abbr    @attr [Class] ...
+regexp  '^\s*#\s\+'
+options word
+  @attr [${1:Class}] ${2:name} ${3:#:description}
+
+snippet @attr_reader
+abbr    @attr_reader [Class] ...
+regexp  '^\s*#\s\+'
+options word
+  @attr_reader [${1:Class}] ${2:name} ${3:#:description}
+
+snippet @attr_writer
+abbr    @attr_writer [Class] ...
+regexp  '^\s*#\s\+'
+options word
+  @attr_writer [${1:Class}] ${2:name} ${3:#:description}
+
+snippet @deprecated
+abbr    @deprecated ...
+regexp  '^\s*#\s\+'
+options word
+  @deprecated ${1}
+
+snippet @return
 abbr    @return [Class] ...
-alias   @return
+regexp  '^\s*#\s\+'
 options word
   @return [${1:Class}] ${2:description}
 
-snippet @o
+snippet @option
 abbr    @option name [Class] key description
-alias   @option
+regexp  '^\s*#\s\+'
 options word
   @option ${1:name} [${2:Class}] ${3:#:key description}
 
-snippet @e
+snippet @example
 abbr    @example Title ...
-alias   @example
+regexp  '^\s*#\s\+'
 options word
   @example ${1:Title}
   ${2}
-#}}}
+
+snippet @yield_document
+abbr    @example Title ...
+regexp  '^\s*#\s\+'
+options word
+  @yield [${1:arguments}] ${2:description}
+
+  @yieldparam [${1:arguments}] ${2:description}
+  @yieldreturn [${1:arguments}] ${2:description}
+
+snippet @yard_def
+options word
+  # ${1}
+  #
+  # @param${2}
+  #
+  # @return${3}

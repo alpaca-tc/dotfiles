@@ -1019,7 +1019,7 @@ function! s:rails_javascript_gf(text)
     let text = substitute(text, '^~', '', '')
     let candidates = [nodemodule_path . '/']
   else
-    let candidates = ['%{path}%{name}%{extension}', '%{path}/%{name}/index%{extension}', '%{path}%{name}']
+    let candidates = ['%{path}%{name}%{extension}', '%{path}/%{name}%{extension}', '%{path}/%{name}/index%{extension}', '%{path}%{name}']
   endif
 
   for candidate in candidates
@@ -1041,6 +1041,8 @@ endfunction
 augroup MyAutoCmd
   autocmd FileType javascript,typescript,sass nmap <buffer> gf :call <SID>rails_javascript_gf(expand("<cfile>"))<CR>
 augroup END
+
+command! OpenLocale call rails_locale#open_locale_file_from_path(expand('%:p'))
 
 " autocmd FileType ruby :LanguageClientStart<CR>
 
