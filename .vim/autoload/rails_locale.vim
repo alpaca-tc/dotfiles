@@ -6,12 +6,21 @@ function! rails_locale#open_locale_file_from_path(path)
   if file_type == 'view'
     let locale_path = join([s:locale_path(a:path), filename], '/')
     return s:open_locale_path(locale_path)
+  elseif file_type == 'controller'
+    let controller_name = substitute(fnamemodify(expand('%:p'), ':t:r'), '_controller', '', '')
+    let locale_path = join([substitute(s:locale_path(a:path), 'controllers/', 'views/', ''), controller_name, filename], '/')
+    return s:open_locale_path(locale_path)
+  elseif file_type == 'mailer'
+    let mailer_name = fnamemodify(expand('%:p'), ':t:r')
+    let locale_path = join([substitute(s:locale_path(a:path), 'mailers/', 'views/', ''), mailer_name, filename], '/')
+    return s:open_locale_path(locale_path)
   elseif file_type == 'model' || file_type == 'form' || file_type == 'validation'
     let model_name = fnamemodify(expand('%:p'), ':t:r')
     let locale_path = join([s:locale_path(a:path), model_name, filename], '/')
     return s:open_locale_path(locale_path)
   else
-    errmsg 'Can not detect locale path from ' . a:path
+    let message = 'Can not detect locale path from ' . a:path
+    echoerr message
   endif
 endfunction
 
@@ -70,6 +79,10 @@ endfunction
 function! s:file_type(path)
   if a:path =~ 'app/views'
     return 'view'
+  elseif a:path =~ 'app/mailers'
+    return 'mailer'
+  elseif a:path =~ 'app/controllers'
+    return 'controller'
   elseif a:path =~ 'app/models'
     return 'model'
   elseif a:path =~ 'app/forms'

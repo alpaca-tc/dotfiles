@@ -1273,16 +1273,17 @@ hook_source = '''
     nnoremap <buffer><C-K>u           :<C-U>UniteGit app/uploaders<CR>
     nnoremap <buffer><C-K>p           :<C-U>UniteGit app/policies<CR>
     nnoremap <buffer><C-K>d           :<C-U>UniteGit app/decorators<CR>
-    nnoremap <buffer><C-K>j           :<C-U>UniteGit app/jobs<CR>
+    nnoremap <buffer><C-K>jo          :<C-U>UniteGit app/jobs<CR>
+    nnoremap <buffer><C-K>ja          :<C-U>UniteGit app/javascript<CR>
     nnoremap <buffer><C-K>c           :<C-U>Unite rails/config<CR>
-    nnoremap <buffer><C-K>a           :<C-U>UniteGit app/assets<CR>
-    nnoremap <buffer><C-K>aj          :<C-U>Unite rails/javascript<CR>
-    nnoremap <buffer><C-K>s           :<C-U>UniteGit app/services<CR>
-    nnoremap <buffer><C-K>t           :<C-U>Unite rails/spec<CR>
+    nnoremap <buffer><C-K>as          :<C-U>UniteGit app/assets<CR>
+    nnoremap <buffer><C-K>se          :<C-U>UniteGit app/services<CR>
+    nnoremap <buffer><C-K>sp          :<C-U>Unite rails/spec<CR>
     nnoremap <buffer><C-K>b           :<C-U>Unite rails/db<CR>
-    nnoremap <buffer><C-K>f           :<C-U>Unite rails/spec -input=factories\ <CR>
+    nnoremap <buffer><C-K>fo          :<C-U>UniteGit app/forms<CR>
+    nnoremap <buffer><C-K>fa          :<C-U>Unite rails/spec -input=factories\ <CR>
     nnoremap <buffer><C-K>m           :<C-U>Unite rails/mailer<CR>
-    nnoremap <buffer><C-K>l           :<C-U>Unite rails/lib<CR>
+    nnoremap <buffer><C-K>l           :<C-U>UniteGit app/lib<CR>
     nnoremap <buffer><C-K>g           :<C-U>UniteGit Gemfile<CR>
     nnoremap <buffer><C-K>r           :<C-U>UniteGit config/routes.rb<CR>
     nnoremap <buffer><C-K>w           :<C-U>UniteGit app/workers<CR>
@@ -1381,7 +1382,7 @@ repo = 'mhartington/nvim-typescript'
 on_ft = ["typescript"]
 build = './install.sh'
 hook_source ='''
-  let g:deoplete#enable_at_startup = 1
+  let g:nvim_typescript#javascript_support = 1
 '''
 
 [[plugins]]
