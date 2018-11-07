@@ -1406,5 +1406,9 @@ hook_source = '''
 '''
 
 [[plugins]]
+repo = 'ujihisa/unite-colorscheme'
+on_source = 'unite.vim'
+
+[[plugins]]
 repo = 'juliosueiras/vim-terraform-completion'
 on_ft = ['terraform']

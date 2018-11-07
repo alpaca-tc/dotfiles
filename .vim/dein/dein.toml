@@ -91,3 +91,12 @@ hook_source = '''
 [[plugins]]
 repo = 'alpaca-tc/rspec_context'
 rtp = 'vim'
+
+[[plugins]]
+repo = 'nightsense/stellarized'
+
+[[plugins]]
+repo = 'chriskempson/vim-tomorrow-theme'
+
+[[plugins]]
+repo = 'cocopon/iceberg.vim'
