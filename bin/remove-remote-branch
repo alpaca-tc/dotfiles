@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+
+PROTECTED_BRANCHES = %w[
+  master
+  development
+  release
+].freeze
+
+remote = ARGV[1] || 'origin'
+
+system("git fetch #{remote} --prune")
+
+branches = `git branch --remote --merged`.split("\n").map { |branch| branch.strip }
+
+branches.select! do |branch|
+  !branch.include?('->') &&
+    PROTECTED_BRANCHES.none? { |protected_branch| %r{/#{protected_branch}$} =~ branch }
+end
+
+branches.select! { |branch| %r{#{remote}/} =~ branch }
+
+branch_names = branches.map { |branch| branch.sub(%r{^(#{remote})/}, '').sub(/^/, ':') }
+
+unless branch_names.empty?
+  puts("git push #{remote} #{branch_names.join(' ')}")
+  system("git push #{remote} #{branch_names.join(' ')}")
+end

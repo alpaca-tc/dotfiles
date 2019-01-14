@@ -35,10 +35,8 @@
   append-gitkeep = "!find . -type d -empty -not -path './.git*' -exec touch {}\\/.gitkeep \\;"
   append-gitignore = !"f() { local s=$1; shift; while [ $# -gt 0 ]; do s="$s,$1"; shift; done; curl "http://gitignore.io/api/$s"; }; f"
 
-  remove-branch-all = "!git checkout master && git pull origin master && git fetch -p origin && git branch -d $(git branch --merged | grep -v master | grep -v '*') && git push origin $(git branch -r --merged | grep origin/ | grep -v master | sed s~origin/~:~)"
-  remove-alpaca-branch-all = "!git checkout master && git pull origin master && git fetch -p alpaca-tc && git branch -d $(git branch --merged | grep -v master | grep -v '*') && git push alpaca-tc $(git branch -r --merged | grep alpaca-tc/ | grep -v master | sed s~origin/~:~)"
   remove-branch-local = "!git branch -d $(git branch --merged | grep -v master | grep -v '*')"
-  remove-branch-remote = "!git push origin $(git branch -r --merged | grep origin/ | grep -v master | grep -v origin/pr/ | sed s~origin/~:~)"
+  remove-branch-remote = "!~/dotfiles/bin/remove-remote-branch ${1}"
 
   zip="!date=`date "+%y_%m_%d_%H%M%S"`; directory_name=`basename $(pwd)`; branch_name=`git symbolic-ref --short HEAD`; file_name="${directory_name}_${branch_name}_${date}.zip"; echo "creating... ${file_name}"; git archive HEAD --format=zip -o "${file_name}""
   zip-from="!f() { date=`date \"+%y_%m_%d_%H%M%S\"`; directory_name=`basename $(pwd)`; from_hash=`git log --format=\"%h\" -1 ${1}`; to_hash=`git log --format=\"%h\" -1 HEAD`; file_name=\"${directory_name}_diff_${to_hash}_from_${from_hash}_${date}.zip\"; echo \"creating... ${file_name}\"; git archive --format=zip HEAD $(git diff --name-only HEAD ${1}) -o \"${file_name}\"; }; f"
