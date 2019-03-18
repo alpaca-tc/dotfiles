@@ -1,7 +1,8 @@
 #!/bin/sh
 
 cd $HOME
-brew install pyenv pyenv-virtualenv
+git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+source ~/.zshrc
 pyenv install 3.5.2
 pyenv global 3.5.2
 pyenv rehash

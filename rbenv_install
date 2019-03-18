@@ -15,7 +15,7 @@ if [ -x `which rbenv` ];then
     echo 'eval "$(rbenv init -)"'
 
     echo "install ruby 2.5.0"
-    RUBY_CONFIGURE_OPTS="--with-openssl-dir=`brew --prefix openssl` --enable-shared --with-readline-dir=`brew --prefix readline`" rbenv install 2.5.0
+    # RUBY_CONFIGURE_OPTS="--with-openssl-dir=`brew --prefix openssl` --enable-shared --with-readline-dir=`brew --prefix readline`" rbenv install 2.5.0
 
     rbenv rehash
 fi

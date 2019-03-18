@@ -67,6 +67,8 @@ if is_executable nodenv; then
 fi
 
 # pyenv
+export PATH=$HOME/.pyenv/bin:$PATH
+
 if is_executable pyenv; then
   eval "$(pyenv init -)"
   export PYENV_ROOT=$HOME/.pyenv
@@ -81,8 +83,6 @@ fi
 if is_executable direnv; then
   eval "$(direnv hook zsh)"
 fi
-
-export PATH=$HOME/.pyenv/bin:$PATH
 
 # exenv
 export PATH=$HOME/.exenv/bin:$PATH
