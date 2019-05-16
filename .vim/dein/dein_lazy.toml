@@ -361,6 +361,23 @@ hook_source = '''
 
 [[plugins]]
 repo = 'Shougo/denite.nvim'
+on_cmd    = ["Denite"]
+hook_source = '''
+call denite#custom#var('file/rec', 'command', ['rg', '--files', '--glob', '!.git'])
+" call denite#custom#map(
+"         \ 'insert',
+"         \ '<C-j>',
+"         \ '<denite:move_to_next_line>',
+"         \ 'noremap'
+"         \)
+
+call denite#custom#option('default', 'direction', 'dynamicbottom')
+" call denite#custom#option('default', 'auto_highlight', '1')
+call denite#custom#map('normal', '<C-N>', '<denite:move_to_next_line>')
+call denite#custom#map('normal', '<C-P>', '<denite:move_to_previous_line>')
+call denite#custom#map('insert', '<C-N>', '<denite:move_to_next_line>')
+call denite#custom#map('insert', '<C-P>', '<denite:move_to_previous_line>')
+'''
 
 # [[plugins]]
 # repo = 'autozimu/LanguageClient-neovim'
@@ -379,6 +396,12 @@ on_func   = ["tcomment#DefineType"]
 [[plugins]]
 repo = 'Shougo/neomru.vim'
 on_source = 'unite.vim'
+
+[[plugins]]
+repo = 'Shougo/defx.nvim'
+on_cmd    = ["Defx"]
+hook_source = '''
+'''
 
 [[plugins]]
 repo = 'Shougo/vimfiler'
@@ -875,6 +898,7 @@ hook_source = '''
         \   ['draw', 'erase'],
         \   ['old', 'new'],
         \   ['open', 'close'],
+        \   ['enable', 'disable'],
         \   ['first', 'last'],
         \   ['minminimun', 'maxmaxinum'],
         \   ['yes', 'no'],
@@ -1383,6 +1407,8 @@ on_ft = ["typescript"]
 build = './install.sh'
 hook_source ='''
   let g:nvim_typescript#javascript_support = 1
+  let g:nvim_typescript#vue_support = 1
+  let g:nvim_typescript#diagnostics_enable = 0
 '''
 
 [[plugins]]

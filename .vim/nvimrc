@@ -4,13 +4,15 @@ set termguicolors
 set clipboard=unnamedplus
 
 if executable('pyenv')
-  let g:python_host_prog = system('pyenv which python')
+  " let g:python_host_prog = system('pyenv which python')
+  let g:python_host_prog = $HOME . '/.pyenv/versions/3.6.8/bin/python'
 else
   let g:python_host_prog = 'python'
 endif
 
 if executable('rbenv')
-  let g:ruby_host_prog = system('rbenv which ruby')
+  " let g:ruby_host_prog = system('rbenv which ruby')
+  let g:ruby_host_prog = $HOME . '/.rbenv/versions/2.6.2/bin/ruby'
 else
   let g:python_host_prog = 'ruby'
 endif
