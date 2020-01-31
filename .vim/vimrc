@@ -404,7 +404,7 @@ set title
 set ttyfast
 set shortmess=aTI
 
-set foldenable
+set nofoldenable
 set foldmethod=marker
 set foldlevelstart=0
 set foldminlines=2
@@ -832,11 +832,12 @@ let g:git_aliases#author_name = g:my.info.github
 
 let g:switch_file_rules = {
       \ "vim": [['autoload/%\.vim', 'plugin/%\.vim']],
-      \ "ruby": [['spec/%_spec\.rb', 'app/%\.rb'], ['spec/%_spec\.rb', 'lib/%\.rb']]
+      \ "ruby": [['spec/requests/%_spec\.rb', 'app/controllers/%_controller\.rb'], ['spec/%_spec\.rb', 'app/%\.rb'], ['spec/%_spec\.rb', 'lib/%\.rb']],
+      \ "typescript": [['%\.ts', '__tests__/%.test.ts']]
       \ }
-nnoremap <silent><Space>a :call switch_file#next()<CR>
-nnoremap <silent><Space>A :call switch_file#back()<CR>
 
+nnoremap <silent><Space>a :call switch_file#next()<CR>
+nnoremap <silent><Space>A :call switch_file#prev()<CR>
 
 " ----------------------------------------
 " \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
@@ -844,12 +845,16 @@ nnoremap <silent><Space>A :call switch_file#back()<CR>
 " \ 'javascript': ['javascript-typescript-stdio'],
 let g:LanguageClient_serverCommands = {
     \ 'json': ['/Users/alpaca-tc/src/language_server-json/bin/language_server_json'],
-    \ 'ruby': ['/Users/ishii.hiroyuki/src/language_server-rails/bin/language_server_rails'],
+    \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
     \ }
 
 " Automatically start language servers.
-let g:LanguageClient_autoStart = 0
+let g:LanguageClient_autoStart = 1
 let g:LanguageClient_trace = 'verbose'
+
+nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 
 " Required for operations modifying multiple buffers like rename.
 set hidden

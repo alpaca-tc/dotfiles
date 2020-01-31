@@ -55,34 +55,45 @@ show_backtrace = Class.new(Pry::ClassCommand) do
       "Filter caller",
       optional_argument: true,
       as: String
+
+    opt.on :i, :index,
+      "Line number of backtrace",
+      optional_argument: true,
+      as: Integer
   end
 
   def process
-    if input_index && filtered_backtrace[input_index]
-      location = filtered_backtrace[input_index]
+    backtrace = filter_backtrace(caller_locations)
+
+    if index_number && backtrace[index_number]
+      location = backtrace[index_number]
       edit_file(location)
     else
-      show_backtrace
+      show_backtrace(backtrace)
     end
   end
 
   private
 
-  def show_backtrace
-    out = filtered_backtrace.map { |location|
+  def show_backtrace(backtrace)
+    out = backtrace.map { |location|
       path = Pathname.new(location.path)
       relative_path = relative_path_from_root(path)
 
       "#{relative_path}:#{location.lineno}:in `#{location.label}`"
     }.map { |line|
       "\e[31m#{line}\e[0m,"
-    }.join("\n")
+    }.to_a.join("\n")
 
     _pry_.pager.page(out)
   end
 
   def filter_re
-    Regexp.new(opts.present?(:filter)) if opts.present?(:filter)
+    Regexp.new(opts[:filter]) if opts.present?(:filter)
+  end
+
+  def index_number
+    opts[:index] if opts.present?(:index)
   end
 
   def relative_path_from_root(path)
@@ -99,15 +110,13 @@ show_backtrace = Class.new(Pry::ClassCommand) do
     _pry_.run_command("edit #{location.path}:#{location.lineno}")
   end
 
-  def filtered_backtrace
-    # 3で、このファイルのbacktraceを無視する
-    caller_locations(3).reject do |location|
-      location.path =~ ignore_path_re
-    end
-  end
+  def filter_backtrace(backtrace)
+    regrexp = ignore_path_re
 
-  def input_index
-    arg_string.to_i unless arg_string.empty?
+    # 3で、このファイルのbacktraceを無視する
+    backtrace.reject do |location|
+      location.path.match?(regrexp)
+    end
   end
 
   def ignore_path_re
@@ -118,6 +127,14 @@ show_backtrace = Class.new(Pry::ClassCommand) do
     else
       default_re
     end
+  end
+end
+
+require 'date'
+
+class Date
+  def inspect
+    to_s
   end
 end
 

@@ -379,14 +379,11 @@ call denite#custom#map('insert', '<C-N>', '<denite:move_to_next_line>')
 call denite#custom#map('insert', '<C-P>', '<denite:move_to_previous_line>')
 '''
 
-# [[plugins]]
-# repo = 'autozimu/LanguageClient-neovim'
-# depends   = ['deoplete.nvim']
-# on_func = ["LanguageClient_textDocument_hover", "LanguageClient_textDocument_definition", "LanguageClient_textDocument_rename"]
-# hook_post_source = '''
-# LanguageClientStart
-# " on_cmd = ['LanguageClientStart', 'LanguageClientStop']
-# '''
+[[plugins]]
+repo = 'autozimu/LanguageClient-neovim'
+depends = ['deoplete.nvim']
+on_func = ["LanguageClient#textDocument_hover", "LanguageClient#textDocument_definition", "LanguageClient#textDocument_rename"]
+on_cmd = ['LanguageClientStart', 'LanguageClientStop']
 
 [[plugins]]
 repo = 'tomtom/tcomment_vim'
@@ -1366,6 +1363,10 @@ depends   = ["mattn/webapi-vim"]
 repo = 'LeafCage/yankround.vim'
 on_map    = [["nx", "<Plug>(yankround-p)"], ["nx", "<Plug>(yankround-P)"], ["nx", "<Plug>(yankround-prev)"], ["nx", "<Plug>(yankround-next)"]]
 on_func   = ["yankround#is_active"]
+kjl
+hook_post_source = '''
+  let g:yankround_max_history = 300
+'''
 
 [[plugins]]
 repo = 'alpaca-tc/alpaca-switch-file.vim'
@@ -1409,6 +1410,7 @@ hook_source ='''
   let g:nvim_typescript#javascript_support = 1
   let g:nvim_typescript#vue_support = 1
   let g:nvim_typescript#diagnostics_enable = 0
+  let g:nvim_typescript#server_options = ['--locale', 'ja']
 '''
 
 [[plugins]]

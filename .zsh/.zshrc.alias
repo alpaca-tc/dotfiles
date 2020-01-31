@@ -168,3 +168,7 @@ alias global_ip_address="curl -s checkip.dyndns.org|sed -e 's/.*Current IP Addre
 
 alias switch_db_store="switch_db store --name $(git rev-parse --abbrev-ref HEAD) --database_names=ca_production,moneybook_api_production"
 alias switch_db_restore="switch_db restore --name $(git rev-parse --abbrev-ref HEAD)"
+
+# docker
+alias docker_clean_images='docker rmi $(docker images -a -q)'
+alias docker_clean_ps='docker rm $(docker ps --filter=status=exited --filter=status=created -q)'
