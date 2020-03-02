@@ -82,7 +82,7 @@ let g:my.dir = {
 
 let g:my.ft = {
       \ 'ruby_files':      ['ruby', 'Gemfile', 'haml', 'eruby', 'yaml', 'ruby.rspec', 'slim'],
-      \ 'js_files':        ['javascript', 'coffeescript', 'node', 'typescript'],
+      \ 'js_files':        ['javascript', 'coffeescript', 'node', 'typescript', 'vue'],
       \ 'python_files':    ['python', 'python*'],
       \ 'scala_files':     ['scala'],
       \ 'sh_files':        ['sh'],
@@ -531,13 +531,6 @@ nnoremap <silent>gb :call <SID>with_fugitive('Gblame')<CR>
 nnoremap <silent>gB :call <SID>with_fugitive('Gbrowse')<CR>
 nnoremap <silent>gm :call <SID>with_fugitive('Gcommit')<CR>
 
-function! s:with_fugitive(command)
-  FugitiveReload
-  execute a:command
-endfunction
-
-command! FugitiveReload call fugitive#detect(expand('<amatch>:p'))
-
 " ----------------------------------------
 nnoremap gA :<C-U>GitAdd<Space>
 nnoremap <silent>ga :<C-U>GitAdd<CR>
@@ -846,6 +839,7 @@ nnoremap <silent><Space>A :call switch_file#prev()<CR>
 let g:LanguageClient_serverCommands = {
     \ 'json': ['/Users/alpaca-tc/src/language_server-json/bin/language_server_json'],
     \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
+    \ 'go': ['gopls'],
     \ }
 
 " Automatically start language servers.
@@ -1015,9 +1009,9 @@ function! s:rails_javascript_gf(text)
   let root = s:current_git()
   let webpack_path = root . '/app/javascript'
   let nodemodule_path = root . '/node_modules'
-  let paths = ['.', webpack_path, 'nodemodule_path']
+  let paths = ['', expand('%:p') . '/', webpack_path, nodemodule_path]
 
-  let extensions = ['.ts', '.tsx', '.js', '.jsx', '.sass']
+  let extensions = ['.ts', '.tsx', '.js', '.jsx', '.sass', '.vue']
 
   if text[:0] == '~'
     " node modules

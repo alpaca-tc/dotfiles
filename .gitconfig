@@ -93,10 +93,14 @@
 [url "github:"]
   insteadOf = git://github.com/
 [url "github:"]
-  insteadOf = git@github.com:
+  insteadOf = git@github.com
+[url "github:"]
+  insteadOf = git@ssh.github.com
 [url "github:"]
   insteadOf = ssh://git@github.com
 [url "github:"]
   insteadOf = ssh://ssh.github.com
 [hub]
   protocol = https
+[rebase]
+  autostash = true

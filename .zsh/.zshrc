@@ -30,7 +30,7 @@ export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 export MANPATH=/usr/local/share/man:$MANPATH
 
 # iTerm2
-export PATH=$HOME/local/bin:$PATH
+export PATH=$HOME/usr/bin:$PATH
 
 # java 1.7.0
 # export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_07.jdk/Contents/Home
@@ -40,11 +40,6 @@ export PATH=$HOME/local/bin:$PATH
 
 # scala 2.9
 export SCALA_HOME=/usr/local/Cellar/scala/2.9.2
-
-# Golang
-export GOPATH=$HOME/.go
-export PATH=$PATH:$HOME/.goenv/bin
-export PATH=$GOROOT/bin:$GOPATH/bin:$PATH
 
 # rbenv
 if [ -d '/usr/rbenv' ];then
@@ -76,8 +71,12 @@ if is_executable pyenv; then
 fi
 
 # goenv
+export PATH=$PATH:$HOME/.goenv/bin
+
 if is_executable goenv; then
   eval "$(goenv init -)"
+  export GO111MODULE=on
+  export PATH=$GOROOT/bin:$GOPATH/bin:$PATH
 fi
 
 if is_executable direnv; then
