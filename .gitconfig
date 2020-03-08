@@ -93,7 +93,7 @@
 [url "github:"]
   insteadOf = git://github.com/
 [url "github:"]
-  insteadOf = git@github.com
+  insteadOf = git@github.com:
 [url "github:"]
   insteadOf = git@ssh.github.com
 [url "github:"]

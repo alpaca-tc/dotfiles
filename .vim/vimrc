@@ -379,6 +379,7 @@ filetype indent on
 " set noequalalways
 " set cursorline
 " set titlelen=95
+set termguicolors
 set pumheight=20
 set breakat=\\;:,!?
 set cdpath+=~
@@ -410,13 +411,11 @@ set foldlevelstart=0
 set foldminlines=2
 set foldnestmax=2
 
-if v:version >= 703
-  highlight ColorColumn guibg=#012345
+highlight ColorColumn guibg=#012345
 
-  augroup MyAutoCmd
-    autocmd BufEnter * set conceallevel=2 concealcursor=incv colorcolumn=81
-  augroup END
-endif
+augroup MyAutoCmd
+  autocmd BufEnter * set conceallevel=2 concealcursor=incv colorcolumn=81
+augroup END
 
 colorscheme iceberg
 filetype plugin on
@@ -526,10 +525,10 @@ nnoremap <silent>,r :QuickRun<CR>
 nnoremap <silent>,R :autocmd BufWritePost <buffer> call quickrun#command('', len(range(0, line('$'))), 0, line('$'))<CR>
 
 " ----------------------------------------
-nnoremap <silent>gM :call <SID>with_fugitive('Gcommit --amend')<CR>
-nnoremap <silent>gb :call <SID>with_fugitive('Gblame')<CR>
-nnoremap <silent>gB :call <SID>with_fugitive('Gbrowse')<CR>
-nnoremap <silent>gm :call <SID>with_fugitive('Gcommit')<CR>
+nnoremap <silent>gM :Gcommit --amend<CR>
+nnoremap <silent>gb :Gblame<CR>
+nnoremap <silent>gB :Gbrowse<CR>
+nnoremap <silent>gm :Gcommit<CR>
 
 " ----------------------------------------
 nnoremap gA :<C-U>GitAdd<Space>
@@ -834,28 +833,87 @@ nnoremap <silent><Space>A :call switch_file#prev()<CR>
 
 " ----------------------------------------
 " \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-" \ 'ruby': ['language_server-ruby'],
-" \ 'javascript': ['javascript-typescript-stdio'],
 let g:LanguageClient_serverCommands = {
+    \ 'typescript': ['typescript-language-server', '--stdio'],
+    \ 'javascript': ['typescript-language-server', '--stdio'],
     \ 'json': ['/Users/alpaca-tc/src/language_server-json/bin/language_server_json'],
-    \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
     \ 'go': ['gopls'],
     \ }
 
 " Automatically start language servers.
-let g:LanguageClient_autoStart = 1
 let g:LanguageClient_trace = 'verbose'
+let g:LanguageClient_changeThrottle = 0.1
+let g:LanguageClient_rootMarkers = ['.git', 'node_modules', 'tsconfig.json']
+let g:LanguageClient_echoProjectRoot = 0
+let g:LanguageClient_floatingHoverHighlight = 'Normal:Pmenu'
 
-nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+" カーソル配下のhighlightをチェックする
+" function! SynStack()
+"   if !exists("*synstack")
+"     return
+"   endif
+"   echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+" endfunc
 
-" Required for operations modifying multiple buffers like rename.
+function s:remove_unnecessary_head_space()
+  let minWidth = 100
+
+  for index in range(line('$'))
+    let line = getline(index + 1)
+    let leftSpace = len(matchstr(line, '^\(\s\+\)', 0))
+
+    if line != '' && leftSpace < minWidth
+      let minWidth = leftSpace
+    endif
+  endfor
+
+  let newLines = []
+  let initialLine = 1
+
+  for index in range(line('$'))
+    let line = getline(index + 1)
+    " Remove head space
+    let newLine = substitute(line, '^\s\{' . printf('%s', minWidth) . '\}', '', '')
+
+    " Remove tail space
+    let newLine = substitute(newLine, '\s*$', '', '')
+
+    if !initialLine || len(line) != 0
+      let initialLine = 0
+      call add(newLines, newLine)
+    endif
+  endfor
+
+  setl colorcolumn=
+  setl bufhidden=wipe
+  setl modifiable
+  setl colorcolumn=
+  call deletebufline('%', 1, line('$'))
+  call setline(1, newLines)
+  setl nomodifiable
+endfunction
+
+function! s:start_language_server()
+  nnoremap <buffer><silent> K :call LanguageClient#textDocument_hover()<CR>
+  nnoremap <buffer><silent> gd :call LanguageClient#textDocument_definition()<CR>
+  nnoremap <buffer><silent> td :call LanguageClient#textDocument_typeDefinition()<CR>
+  nnoremap <buffer><silent> tt :call LanguageClient#textDocument_implementation()<CR>
+  noremap <buffer><silent>rn :call LanguageClient#textDocument_rename()<CR>
+  setl formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
+  setlocal signcolumn=yes
+endfunction
+
+function! s:close_language_server()
+  setlocal signcolumn=auto
+endfunction
+
+augroup MyAutoCmd
+  autocmd FileType go,json,typescript,javascript call s:start_language_server()
+  autocmd BufLeave,BufEnter __LanguageClient__ call s:remove_unnecessary_head_space()
+  autocmd User LanguageClientStopped call s:close_language_server()
+augroup END
+
 set hidden
-
-" nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-" nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-" nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
 "}}}
 
 " ----------------------------------------

@@ -131,6 +131,7 @@ hook_source = '''
         \   '$' : "${\r}",
         \ },
         \ 'go' : {
+        \   '$' : "${\r}",
         \   '(' : "(\r)",
         \   '[' : "[\r]",
         \   '<' : "<\r>",
@@ -366,6 +367,25 @@ hook_source = '''
 repo = 'Shougo/denite.nvim'
 on_cmd    = ["Denite"]
 hook_source = '''
+function! s:denite_settings()
+  nnoremap <silent><buffer><expr> <CR>
+  \ denite#do_map('do_action')
+  nnoremap <silent><buffer><expr> d
+  \ denite#do_map('do_action', 'delete')
+  nnoremap <silent><buffer><expr> p
+  \ denite#do_map('do_action', 'preview')
+  nnoremap <silent><buffer><expr> q
+  \ denite#do_map('quit')
+  nnoremap <silent><buffer><expr> i
+  \ denite#do_map('open_filter_buffer')
+  nnoremap <silent><buffer><expr> <Space>
+  \ denite#do_map('toggle_select').'j'
+endfunction
+
+augroup MyAutoCmd
+  autocmd FileType denite call s:denite_settings()
+augroup END
+
 call denite#custom#var('file/rec', 'command', ['rg', '--files', '--glob', '!.git'])
 " call denite#custom#map(
 "         \ 'insert',
@@ -375,7 +395,7 @@ call denite#custom#var('file/rec', 'command', ['rg', '--files', '--glob', '!.git
 "         \)
 
 call denite#custom#option('default', 'direction', 'dynamicbottom')
-" call denite#custom#option('default', 'auto_highlight', '1')
+call denite#custom#option('default', 'auto_highlight', '1')
 call denite#custom#map('normal', '<C-N>', '<denite:move_to_next_line>')
 call denite#custom#map('normal', '<C-P>', '<denite:move_to_previous_line>')
 call denite#custom#map('insert', '<C-N>', '<denite:move_to_next_line>')
@@ -388,7 +408,12 @@ build = 'bash install.sh'
 depends = ['nvim-lsp']
 on_func = ["LanguageClient#textDocument_hover", "LanguageClient#textDocument_definition", "LanguageClient#textDocument_rename"]
 on_cmd = ['LanguageClientStart', 'LanguageClientStop']
-on_ft = ['go']
+on_ft = ['go', 'typescript']
+hook_source = '''
+augroup MyAutoCmd
+  autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
+augroup END
+'''
 
 [[plugins]]
 repo = 'cespare/vim-toml'
@@ -583,131 +608,6 @@ repo = 'Shougo/deoplete-lsp'
 depends = ['deoplete.nvim', 'nvim-lsp']
 on_ft = ['go']
 
-# [[plugins]]
-# repo = 'neoclide/coc.nvim'
-# build = 'yarn install --frozen-lockfile'
-# hook_source = '''
-# " Use tab for trigger completion with characters ahead and navigate.
-# " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-# " other plugin before putting this into your config.
-# inoremap <silent><expr> <TAB>
-#       \ pumvisible() ? "\<C-n>" :
-#       \ <SID>check_back_space() ? "\<TAB>" :
-#       \ coc#refresh()
-# inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-#
-# function! s:check_back_space() abort
-#   let col = col('.') - 1
-#   return !col || getline('.')[col - 1]  =~# '\s'
-# endfunction
-#
-# " Use <c-space> to trigger completion.
-# inoremap <silent><expr> <c-space> coc#refresh()
-#
-# " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
-# " position. Coc only does snippet and additional edit on confirm.
-# if has('patch8.1.1068')
-#   " Use `complete_info` if your (Neo)Vim version supports it.
-#   inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-# else
-#   imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-# endif
-#
-# " Use `[g` and `]g` to navigate diagnostics
-# nmap <silent> [g <Plug>(coc-diagnostic-prev)
-# nmap <silent> ]g <Plug>(coc-diagnostic-next)
-#
-# " GoTo code navigation.
-# nmap <silent> gd <Plug>(coc-definition)
-# nmap <silent> gy <Plug>(coc-type-definition)
-# nmap <silent> gi <Plug>(coc-implementation)
-# nmap <silent> gr <Plug>(coc-references)
-#
-# " Use K to show documentation in preview window.
-# nnoremap <silent> K :call <SID>show_documentation()<CR>
-#
-# function! s:show_documentation()
-#   if (index(['vim','help'], &filetype) >= 0)
-#     execute 'h '.expand('<cword>')
-#   else
-#     call CocAction('doHover')
-#   endif
-# endfunction
-#
-# " Highlight the symbol and its references when holding the cursor.
-# autocmd CursorHold * silent call CocActionAsync('highlight')
-#
-# " Symbol renaming.
-# nmap <leader>rn <Plug>(coc-rename)
-#
-# " Formatting selected code.
-# xmap <leader>f  <Plug>(coc-format-selected)
-# nmap <leader>f  <Plug>(coc-format-selected)
-#
-# augroup mygroup
-#   autocmd!
-#   " Setup formatexpr specified filetype(s).
-#   autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-#   " Update signature help on jump placeholder.
-#   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-# augroup end
-#
-# " Applying codeAction to the selected region.
-# " Example: `<leader>aap` for current paragraph
-# xmap <leader>a  <Plug>(coc-codeaction-selected)
-# nmap <leader>a  <Plug>(coc-codeaction-selected)
-#
-# " Remap keys for applying codeAction to the current line.
-# nmap <leader>ac  <Plug>(coc-codeaction)
-# " Apply AutoFix to problem on the current line.
-# nmap <leader>qf  <Plug>(coc-fix-current)
-#
-# " Introduce function text object
-# " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-# xmap if <Plug>(coc-funcobj-i)
-# xmap af <Plug>(coc-funcobj-a)
-# omap if <Plug>(coc-funcobj-i)
-# omap af <Plug>(coc-funcobj-a)
-#
-# " Use <TAB> for selections ranges.
-# " NOTE: Requires 'textDocument/selectionRange' support from the language server.
-# " coc-tsserver, coc-python are the examples of servers that support it.
-# nmap <silent> <TAB> <Plug>(coc-range-select)
-# xmap <silent> <TAB> <Plug>(coc-range-select)
-#
-# " Add `:Format` command to format current buffer.
-# command! -nargs=0 Format :call CocAction('format')
-#
-# " Add `:Fold` command to fold current buffer.
-# command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-#
-# " Add `:OR` command for organize imports of the current buffer.
-# command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
-#
-# " Add (Neo)Vim's native statusline support.
-# " NOTE: Please see `:h coc-status` for integrations with external plugins that
-# " provide custom statusline: lightline.vim, vim-airline.
-# set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-#
-# " Mappings using CoCList:
-# " Show all diagnostics.
-# nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
-# " Manage extensions.
-# nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
-# " Show commands.
-# nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
-# " Find symbol of current document.
-# nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
-# " Search workspace symbols.
-# nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
-# " Do default action for next item.
-# nnoremap <silent> <space>j  :<C-u>CocNext<CR>
-# " Do default action for previous item.
-# nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
-# " Resume latest coc list.
-# nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
-# '''
-
 [[plugins]]
 repo = 'Shougo/deoplete.nvim'
 depends = ['deoplete-lsp']
@@ -748,7 +648,6 @@ hook_source = '''
 hook_post_source = '''
   let g:deoplete#sources = {}
   let g:deoplete#sources._ = ['buffer', 'member', 'tag', 'file', 'dictionary', 'neosnippet']
-  let g:deoplete#sources.go = ['buffer', 'member', 'tag', 'file', 'dictionary', 'neosnippet', 'go']
   let g:deoplete#ignore_sources = {
         \ '_': ['omni']
         \ }
@@ -924,7 +823,7 @@ on_func   = ["openbrowser#open"]
 [[plugins]]
 repo = 'tpope/vim-fugitive'
 on_cmd    = ["Gcommit", "Gblame", "Ggrep", "Gdiff", "Gcd"]
-on_func   = ["fugitive#head", "fugitive#detect"]
+on_func   = ["fugitive#head"]
 hook_source = '''
   augroup MyGitCmd
     autocmd!
@@ -933,9 +832,6 @@ hook_source = '''
   augroup END
 
   let g:fugitive_git_executable = g:my.bin.git
-'''
-hook_post_source = '''
-  call fugitive#detect(expand('<amatch>:p'))
 '''
 
 [[plugins]]
@@ -1522,3 +1418,7 @@ on_source = 'unite.vim'
 [[plugins]]
 repo = 'juliosueiras/vim-terraform-completion'
 on_ft = ['terraform']
+
+[[plugins]]
+repo = 'alpaca-tc/mf_attendance.vim'
+on_cmd = ["ClockIn", "ClockOut", "StartBreak", "EndBreak"]
