@@ -832,86 +832,6 @@ nnoremap <silent><Space>a :call switch_file#next()<CR>
 nnoremap <silent><Space>A :call switch_file#prev()<CR>
 
 " ----------------------------------------
-" \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-let g:LanguageClient_serverCommands = {
-    \ 'typescript': ['typescript-language-server', '--stdio'],
-    \ 'javascript': ['typescript-language-server', '--stdio'],
-    \ 'json': ['/Users/alpaca-tc/src/language_server-json/bin/language_server_json'],
-    \ 'go': ['gopls'],
-    \ }
-
-" Automatically start language servers.
-let g:LanguageClient_trace = 'verbose'
-let g:LanguageClient_changeThrottle = 0.1
-let g:LanguageClient_rootMarkers = ['.git', 'node_modules', 'tsconfig.json']
-let g:LanguageClient_echoProjectRoot = 0
-let g:LanguageClient_floatingHoverHighlight = 'Normal:Pmenu'
-
-" カーソル配下のhighlightをチェックする
-" function! SynStack()
-"   if !exists("*synstack")
-"     return
-"   endif
-"   echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-" endfunc
-
-function s:remove_unnecessary_head_space()
-  let minWidth = 100
-
-  for index in range(line('$'))
-    let line = getline(index + 1)
-    let leftSpace = len(matchstr(line, '^\(\s\+\)', 0))
-
-    if line != '' && leftSpace < minWidth
-      let minWidth = leftSpace
-    endif
-  endfor
-
-  let newLines = []
-  let initialLine = 1
-
-  for index in range(line('$'))
-    let line = getline(index + 1)
-    " Remove head space
-    let newLine = substitute(line, '^\s\{' . printf('%s', minWidth) . '\}', '', '')
-
-    " Remove tail space
-    let newLine = substitute(newLine, '\s*$', '', '')
-
-    if !initialLine || len(line) != 0
-      let initialLine = 0
-      call add(newLines, newLine)
-    endif
-  endfor
-
-  setl colorcolumn=
-  setl bufhidden=wipe
-  setl modifiable
-  setl colorcolumn=
-  call deletebufline('%', 1, line('$'))
-  call setline(1, newLines)
-  setl nomodifiable
-endfunction
-
-function! s:start_language_server()
-  nnoremap <buffer><silent> K :call LanguageClient#textDocument_hover()<CR>
-  nnoremap <buffer><silent> gd :call LanguageClient#textDocument_definition()<CR>
-  nnoremap <buffer><silent> td :call LanguageClient#textDocument_typeDefinition()<CR>
-  nnoremap <buffer><silent> tt :call LanguageClient#textDocument_implementation()<CR>
-  noremap <buffer><silent>rn :call LanguageClient#textDocument_rename()<CR>
-  setl formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
-  setlocal signcolumn=yes
-endfunction
-
-function! s:close_language_server()
-  setlocal signcolumn=auto
-endfunction
-
-augroup MyAutoCmd
-  autocmd FileType go,json,typescript,javascript call s:start_language_server()
-  autocmd BufLeave,BufEnter __LanguageClient__ call s:remove_unnecessary_head_space()
-  autocmd User LanguageClientStopped call s:close_language_server()
-augroup END
 
 set hidden
 "}}}
@@ -1062,46 +982,7 @@ augroup END
 nmap cp :call <SID>copy_current_path()<CR>
 nmap cpr :call <SID>copy_current_path_from_root()<CR>
 
-function! s:rails_javascript_gf(text)
-  let text = a:text
-  let root = s:current_git()
-  let webpack_path = root . '/app/javascript'
-  let nodemodule_path = root . '/node_modules'
-  let paths = ['', expand('%:p') . '/', webpack_path, nodemodule_path]
-
-  let extensions = ['.ts', '.tsx', '.js', '.jsx', '.sass', '.vue']
-
-  if text[:0] == '~'
-    " node modules
-    let text = substitute(text, '^~', '', '')
-    let candidates = [nodemodule_path . '/']
-  else
-    let candidates = ['%{path}%{name}%{extension}', '%{path}/%{name}%{extension}', '%{path}/%{name}/index%{extension}', '%{path}%{name}']
-  endif
-
-  for candidate in candidates
-    for path in paths
-      for extension in extensions
-        let candidate_path = substitute(substitute(substitute(candidate, '%{name}', text, ''), '%{path}', path, ''), '%{extension}', extension, '')
-
-        if filereadable(candidate_path)
-          edit `=candidate_path`
-          return
-        endif
-      endfor
-    endfor
-  endfor
-
-  echoerr "Can't find " . text
-endfunction
-
-augroup MyAutoCmd
-  autocmd FileType javascript,typescript,sass nmap <buffer> gf :call <SID>rails_javascript_gf(expand("<cfile>"))<CR>
-augroup END
-
 command! OpenLocale call rails_locale#open_locale_file_from_path(expand('%:p'))
-
-" autocmd FileType ruby :LanguageClientStart<CR>
 
 " Installation check.
 let s:loaded_vimrc = 1

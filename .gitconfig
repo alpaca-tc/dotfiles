@@ -56,6 +56,7 @@
   show-pr = !"f() { git log --merges --oneline --ancestry-path $1...master | grep 'Merge pull request #' | tail -n 1; }; f"
   show-commit = !"f() { git log --reverse --ancestry-path $1^...master; }; f"
   difff = diff --color-words --word-diff-regex='\\w+|[^[:space:]]'
+  project = !"f() { hub clone $1 $1; }; f"
 
 [log]
   date = iso

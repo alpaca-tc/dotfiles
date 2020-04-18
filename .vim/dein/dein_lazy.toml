@@ -3,6 +3,7 @@ repo = 'itchyny/lightline.vim'
 on_i      = 1
 on_func   = ["lightline#update", "lightline#highlight"]
 hook_source = '''
+  let g:a = 1
   let s:lightline = { 'updatetime' : 5 } "{{{
 
   function! s:reltime() "{{{
@@ -84,7 +85,7 @@ hook_source = '''
         \ }
 '''
 
-hook_source = '''
+hook_post_source = '''
   call lightline#update()
 '''
 
@@ -136,7 +137,7 @@ hook_source = '''
         \   '[' : "[\r]",
         \   '<' : "<\r>",
         \ },
-        \ 'javascript,typescript': {
+        \ 'javascript,typescript,vue': {
         \   '(' : "(\r)",
         \   '[' : "[\r]",
         \   '$' : "${\r}",
@@ -405,14 +406,125 @@ call denite#custom#map('insert', '<C-P>', '<denite:move_to_previous_line>')
 [[plugins]]
 repo = 'autozimu/LanguageClient-neovim'
 build = 'bash install.sh'
-depends = ['nvim-lsp']
+branch = 'next'
+build = 'bash install.sh'
 on_func = ["LanguageClient#textDocument_hover", "LanguageClient#textDocument_definition", "LanguageClient#textDocument_rename"]
 on_cmd = ['LanguageClientStart', 'LanguageClientStop']
 on_ft = ['go', 'typescript']
 hook_source = '''
-augroup MyAutoCmd
-  autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
-augroup END
+  augroup MyAutoCmd
+    autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
+  augroup END
+
+  let g:LanguageClient_loggingFile = expand('/tmp/language-server.log')
+
+  " \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+  let g:LanguageClient_serverCommands = {
+      \ 'typescript': ['typescript-language-server', '--stdio'],
+      \ 'javascript': ['typescript-language-server', '--stdio'],
+      \ 'go': ['gopls'],
+      \ }
+
+  " Automatically start language servers.
+  let g:LanguageClient_trace = 'verbose'
+  let g:LanguageClient_changeThrottle = 0.1
+  let g:LanguageClient_rootMarkers = {
+        \ 'javascript': ['tsconfig.json', 'package.json'],
+        \ 'typescript': ['tsconfig.json', 'package.json'],
+        \ }
+  let g:LanguageClient_echoProjectRoot = 1
+  let g:LanguageClient_floatingHoverHighlight = 'Normal:Pmenu'
+  let g:LanguageClient_diagnosticsEnable = 0
+
+  function s:remove_unnecessary_head_space()
+    let minWidth = 100
+
+    for index in range(line('$'))
+      let line = getline(index + 1)
+      let leftSpace = len(matchstr(line, '^\(\s\+\)', 0))
+
+      if line != '' && leftSpace < minWidth
+        let minWidth = leftSpace
+      endif
+    endfor
+
+    let newLines = []
+    let initialLine = 1
+
+    for index in range(line('$'))
+      let line = getline(index + 1)
+      " Remove head space
+      let newLine = substitute(line, '^\s\{' . printf('%s', minWidth) . '\}', '', '')
+
+      " Remove tail space
+      let newLine = substitute(newLine, '\s*$', '', '')
+
+      if !initialLine || len(line) != 0
+        let initialLine = 0
+        call add(newLines, newLine)
+      endif
+    endfor
+
+    setl colorcolumn=
+    setl bufhidden=wipe
+    setl modifiable
+    setl colorcolumn=
+    call deletebufline('%', 1, line('$'))
+    call setline(1, newLines)
+    setl nomodifiable
+  endfunction
+
+  function! s:start_language_server()
+    nnoremap <buffer><silent> K :call LanguageClient#textDocument_hover()<CR>
+    nnoremap <buffer><silent> td :call LanguageClient#textDocument_typeDefinition()<CR>
+    nnoremap <buffer><silent> tt :call LanguageClient#textDocument_implementation()<CR>
+    setl formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
+    " setlocal signcolumn=yes
+    setlocal signcolumn=auto
+  endfunction
+
+  function! s:close_language_server()
+    setlocal signcolumn=auto
+  endfunction
+
+  augroup MyAutoCmd
+    autocmd FileType go,json,typescript,javascript call s:start_language_server()
+    autocmd BufLeave,BufEnter __LanguageClient__ call s:remove_unnecessary_head_space()
+    autocmd User LanguageClientStopped call s:close_language_server()
+  augroup END
+'''
+
+hook_post_source = '''
+  call LanguageClient_setLoggingLevel('DEBUG')
+'''
+
+[[plugins]]
+repo = 'dense-analysis/ale'
+build = 'go get -u github.com/sourcegraph/go-langserver && npm install -g typescript-language-server'
+on_ft = ['typescript', 'javascript', 'go']
+hook_source = '''
+  let g:ale_fixers = {
+    \ "javascript": ['eslint'],
+    \ "typescript": ['eslint'],
+    \ 'go': ['gofmt'],
+    \ }
+
+  let g:ale_linters = {
+    \ 'go': ['gopls'],
+    \}
+
+  let g:ale_sign_column_always = 1
+  let g:ale_fix_on_save = 1
+  " let g:ale_lint_on_text_changed = 'always'
+  let g:ale_lint_on_enter = 1
+  let g:ale_lint_on_save = 1
+  let g:ale_echo_cursor = 1
+  let g:ale_completion_enabled = 0
+  let g:ale_go_bingo_executable = 'gopls'
+  highlight ALEError guibg=none ctermbg=none cterm=none
+
+  " nnoremap <buffer><silent> K :ALEHover<CR>
+  " nnoremap <buffer><silent> tt :ALEGoToDefinition<CR>
 '''
 
 [[plugins]]
@@ -531,7 +643,7 @@ hook_source = '''
     " nmap <buffer> ~ <Plug>(vimfiler_switch_to_home_directory)
     " nmap <buffer> \ <Plug>(vimfiler_switch_to_root_directory)
     " nmap <buffer> & <Plug>(vimfiler_switch_to_project_directory)
-    nmap <buffer> <C-j> <Plug>(vimfiler_switch_to_history_directory)
+    " nmap <buffer> <C-j> <Plug>(vimfiler_switch_to_history_directory)
     nmap <buffer> <BS> <Plug>(vimfiler_switch_to_parent_directory)
 
     nmap <buffer> gv <Plug>(vimfiler_execute_new_gvim)
@@ -601,16 +713,7 @@ hook_source = '''
 '''
 
 [[plugins]]
-repo = 'neovim/nvim-lsp'
-
-[[plugins]]
-repo = 'Shougo/deoplete-lsp'
-depends = ['deoplete.nvim', 'nvim-lsp']
-on_ft = ['go']
-
-[[plugins]]
 repo = 'Shougo/deoplete.nvim'
-depends = ['deoplete-lsp']
 on_i      = 1
 disabled = '!has("nvim")'
 hook_source = '''
@@ -619,12 +722,14 @@ hook_source = '''
   function! s:my_cr_function()
     return pumvisible() ? deoplete#close_popup() . "\<CR>"  : "\<CR>\<Plug>DiscretionaryEnd"
   endfunction
-  imap <expr><silent> <CR> <SID>my_cr_function()
+
+  augroup MyAutoCmd
+    autocmd FileType ruby imap <expr><silent><buffer> <CR> <SID>my_cr_function()
+  augroup END
 
   inoremap <expr><C-h> deoplete#smart_close_popup() . "\<C-h>"
-  inoremap <expr><C-X><C-F> deoplete#manual_complete(['file'])
-  inoremap <expr><C-X><C-K> deoplete#manual_complete('dictionary')
-  inoremap <expr><C-X><C-I> deoplete#manual_complete('file/include')
+  inoremap <expr><C-X><C-F> deoplete#manual_complete('file')
+  inoremap <expr><C-X><C-O> deoplete#manual_complete('ale')
   inoremap <expr><C-G> deoplete#undo_completion()
   inoremap <expr><C-N> pumvisible() ? "\<C-N>" : "\<C-X>\<C-U>\<C-P>\<Down>"
   inoremap <expr><C-P> pumvisible() ? "\<C-P>" : "\<C-P>\<C-N>"
@@ -643,14 +748,24 @@ hook_source = '''
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~ '\s'
   endfunction"}}}
+
+  augroup MyAutoCmd
+    autocmd FileType * setl omnifunc=
+  augroup END
+
+  " call deoplete#enable_logging('DEBUG', '/tmp/deoplete.log')
 '''
 
 hook_post_source = '''
-  let g:deoplete#sources = {}
-  let g:deoplete#sources._ = ['buffer', 'member', 'tag', 'file', 'dictionary', 'neosnippet']
-  let g:deoplete#ignore_sources = {
-        \ '_': ['omni']
-        \ }
+  call deoplete#custom#option('sources', {
+    \ '_': ['buffer', 'member', 'tag', 'file', 'dictionary', 'neosnippet', 'ale', 'LanguageClient']
+    \ })
+  call deoplete#custom#option('ignore_sources', {
+    \ '_': ['omni'],
+    \ 'javascript': ['LanguageClient'],
+    \ 'typescript': ['LanguageClient'],
+    \ 'go': ['ale'],
+    \ })
 '''
 
 [[plugins]]
@@ -1380,20 +1495,26 @@ hook_post_source = '''
 repo = 'Shougo/neco-vim'
 on_ft = ["vim"]
 
-[[plugins]]
-repo = 'mhartington/nvim-typescript'
-on_ft = ["typescript"]
-build = './install.sh'
-hook_source ='''
-  let g:nvim_typescript#javascript_support = 1
-  let g:nvim_typescript#vue_support = 1
-  let g:nvim_typescript#diagnostics_enable = 0
-  let g:nvim_typescript#server_options = ['--locale', 'ja']
-'''
+# [[plugins]]
+# repo = 'mhartington/nvim-typescript'
+# on_ft = ["typescript"]
+# build = './install.sh'
+# hook_source ='''
+#   let g:nvim_typescript#javascript_support = 1
+#   let g:nvim_typescript#vue_support = 1
+#   let g:nvim_typescript#diagnostics_enable = 0
+#   let g:nvim_typescript#server_options = ['--locale', 'ja']
+# '''
 
 [[plugins]]
-repo = 'Quramy/tsuquyomi'
-on_ft = ["typescript"]
+repo = 'posva/vim-vue'
+hook_source = '''
+  " autocmd FileType vue syntax sync fromstart
+'''
+
+# [[plugins]]
+# repo = 'Quramy/tsuquyomi'
+# on_ft = ["typescript"]
 
 [[plugins]]
 repo = 'leafgarland/typescript-vim'
