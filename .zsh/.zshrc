@@ -30,7 +30,7 @@ export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 export MANPATH=/usr/local/share/man:$MANPATH
 
 # iTerm2
-export PATH=$HOME/usr/bin:$PATH
+export PATH=$HOME/usr/bin:$HOME/usr/local/bin:$PATH
 
 # java 1.7.0
 # export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_07.jdk/Contents/Home
@@ -95,6 +95,7 @@ export PATH=$HOME/.tfenv/bin:$PATH
 
 # Vagrant
 export PATH=/Applications/Vagrant/bin:$PATH
+export DOCKER_MF_DEV_VOLUME_OPTION=:cached
 
 # MacVim
 export PATH=/Applications/MacVim.app/Contents/MacOS:$PATH

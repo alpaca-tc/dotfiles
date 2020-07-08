@@ -212,3 +212,24 @@ options word
   function ${1}(target, name, descriptor) {
     ${2}
   }
+
+snippet benchmark
+abbr    benchmark
+options word
+  const benchmark = (callback, count = 100) => {
+    const start = new Date()
+
+    for (var i = 0; i < count; i += 1) {
+      callback()
+    }
+
+    const end = new Date()
+
+    console.log(`${end - start}ms`)
+
+    return end - start
+  };
+
+  benchmark(() => {
+    ${1}
+  })

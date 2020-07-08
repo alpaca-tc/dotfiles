@@ -56,7 +56,29 @@ hook_source = '''
 
   let g:lightline#functions#plugin_information = s:lightline.new({ 'updatetime' : 0.5 })
   function! g:lightline#functions#plugin_information.func() "{{{
-    return empty(bufname('%')) ? '' : expand('%:p:~')
+    if !dein#is_sourced("vital.vim")
+      call dein#source('vital.vim')
+    endif
+
+    let vital = vital#of('vital')
+    let root = vital.import('Prelude').path2project_directory(getcwd())
+
+    if empty(bufname('%'))
+      return ''
+    elseif !empty(root)
+      return "%" . expand('%:p')[len(root):]
+    else
+      return expand('%:p:~')
+    endif
+  endfunction"}}}
+
+  let g:lightline#functions#ale = s:lightline.new({ 'updatetime' : 0.3 })
+  function! g:lightline#functions#ale.func() "{{{
+    let counts = ale#statusline#Count(bufnr(''))
+    let errors = counts.error + counts.style_error
+    let non_errors = counts.total - errors
+
+    return (counts.total == 0) ? 'OK' : printf('⨉ %d ⚠ %d', non_errors, errors)
   endfunction"}}}
 
   let g:lightline = {
@@ -67,6 +89,7 @@ hook_source = '''
         \ 'active': {
         \   'left': [
         \     ['mode'],
+        \     ['ale'],
         \     ['information'],
         \     ['git_branch', 'modified'],
         \   ],
@@ -78,6 +101,7 @@ hook_source = '''
         \ },
         \ 'component_function' : {
         \   'information': 'g:lightline#functions#plugin_information.statusline',
+        \   'ale':  'g:lightline#functions#ale.statusline',
         \ },
         \ 'component_expand': {
         \   'git_branch':  'g:lightline#functions#git_branch.statusline',
@@ -228,6 +252,10 @@ hook_source = '''
 [[plugins]]
 repo = 'vim-scripts/sudo.vim'
 on_cmd    = ["SudoRead", "SudoWrite"]
+
+[[plugins]]
+repo='Shougo/neossh.vim'
+on_source = ["unite.vim"]
 
 [[plugins]]
 repo = 'Shougo/unite.vim'
@@ -494,14 +522,15 @@ hook_source = '''
   augroup END
 '''
 
-hook_post_source = '''
-  call LanguageClient_setLoggingLevel('DEBUG')
-'''
+# hook_post_source = '''
+#   call LanguageClient_setLoggingLevel('DEBUG')
+# '''
 
 [[plugins]]
 repo = 'dense-analysis/ale'
 build = 'go get -u github.com/sourcegraph/go-langserver && npm install -g typescript-language-server'
 on_ft = ['typescript', 'javascript', 'go']
+on_command = ['ALEGetStatusLine']
 hook_source = '''
   let g:ale_fixers = {
     \ "javascript": ['eslint'],

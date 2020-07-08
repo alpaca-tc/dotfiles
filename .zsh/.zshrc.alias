@@ -172,3 +172,4 @@ alias switch_db_restore="switch_db restore --name $(git rev-parse --abbrev-ref H
 # docker
 alias docker_clean_images='docker rmi $(docker images -a -q)'
 alias docker_clean_ps='docker rm $(docker ps --filter=status=exited --filter=status=created -q)'
+alias docker_clean_cache="docker images --no-trunc --format '{{.ID}}' | xargs docker rmi"
