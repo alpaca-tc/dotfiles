@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-YARN_VERSION='1.16.0'
+YARN_VERSION='1.22.4'
 
 if [[ ! -e ~/.yarn/bin/yarn || $(yarn --version) != "${YARN_VERSION}" ]]; then
   echo "Download and install Yarn."

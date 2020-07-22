@@ -8,7 +8,7 @@ function! rails_locale#open_locale_file_from_path(path)
     return s:open_locale_path(locale_path)
   elseif file_type == 'controller'
     let controller_name = substitute(fnamemodify(expand('%:p'), ':t:r'), '_controller', '', '')
-    let locale_path = join([substitute(s:locale_path(a:path), 'controllers/', 'views/', ''), controller_name, filename], '/')
+    let locale_path = join([substitute(s:locale_path(a:path), '/controllers', '/views', ''), controller_name, filename], '/')
     return s:open_locale_path(locale_path)
   elseif file_type == 'mailer'
     let mailer_name = fnamemodify(expand('%:p'), ':t:r')
