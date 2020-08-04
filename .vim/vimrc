@@ -833,6 +833,9 @@ nnoremap <silent><Space>A :call switch_file#prev()<CR>
 
 " ----------------------------------------
 
+" git-messenger.vim
+nnoremap <silent>P :GitMessenger<CR>
+
 set hidden
 "}}}
 

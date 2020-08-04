@@ -32,6 +32,8 @@ export MANPATH=/usr/local/share/man:$MANPATH
 # iTerm2
 export PATH=$HOME/usr/bin:$HOME/usr/local/bin:$PATH
 
+export PATH=$HOME/src/google-cloud-sdk/bin:$PATH
+
 # java 1.7.0
 # export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_07.jdk/Contents/Home
 # export PATH=$JAVA_HOME/bin:$PATH
@@ -52,6 +54,10 @@ fi
 
 if is_executable rbenv; then
   eval "$(rbenv init -)"
+fi
+
+if [ -d "$HOME/.cargo" ];then
+  source $HOME/.cargo/env
 fi
 
 # nodenv

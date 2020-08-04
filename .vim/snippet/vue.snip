@@ -1,0 +1,20 @@
+include javascript
+include typescript
+
+snippet script
+abbr    <script></script>
+options word
+  <script>
+  import Vue from "vue"
+
+  export default Vue.extend({
+    ${1}
+  })
+  </script>
+
+snippet template
+abbr    <template></template>
+options word
+  <template>
+  ${1}
+  </template>

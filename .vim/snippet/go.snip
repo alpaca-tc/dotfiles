@@ -112,3 +112,24 @@ options head
   for e := ${1}.Front(); e != nil; e = e.Next() {
     ${2}
   }
+
+snippet forrange
+abbr    for e := range ... {}
+options head
+  for ${1} range ${2} {
+    ${3}
+  }
+
+snippet fn
+abbr    func Method(...) {}
+options word
+  func ${1}(${2}) {
+    ${3}
+  }
+
+snippet funcc
+abbr    func (...) Method(...) error {}
+options word
+  func (${1}) ${2:Method}(${3}) ${4:error} {
+    ${5}
+  }

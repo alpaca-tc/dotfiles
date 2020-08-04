@@ -438,7 +438,7 @@ branch = 'next'
 build = 'bash install.sh'
 on_func = ["LanguageClient#textDocument_hover", "LanguageClient#textDocument_definition", "LanguageClient#textDocument_rename"]
 on_cmd = ['LanguageClientStart', 'LanguageClientStop']
-on_ft = ['go', 'typescript']
+on_ft = ['go', 'typescript', 'javascript', 'vue']
 hook_source = '''
   augroup MyAutoCmd
     autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
@@ -450,7 +450,8 @@ hook_source = '''
   let g:LanguageClient_serverCommands = {
       \ 'typescript': ['typescript-language-server', '--stdio'],
       \ 'javascript': ['typescript-language-server', '--stdio'],
-      \ 'go': ['gopls'],
+      \ 'vue': ['vls'],
+      \ 'go': ['gopls', 'serve'],
       \ }
 
   " Automatically start language servers.
@@ -459,6 +460,7 @@ hook_source = '''
   let g:LanguageClient_rootMarkers = {
         \ 'javascript': ['tsconfig.json', 'package.json'],
         \ 'typescript': ['tsconfig.json', 'package.json'],
+        \ 'go': ['go.mod'],
         \ }
   let g:LanguageClient_echoProjectRoot = 1
   let g:LanguageClient_floatingHoverHighlight = 'Normal:Pmenu'
@@ -505,7 +507,12 @@ hook_source = '''
   function! s:start_language_server()
     nnoremap <buffer><silent> K :call LanguageClient#textDocument_hover()<CR>
     nnoremap <buffer><silent> td :call LanguageClient#textDocument_typeDefinition()<CR>
-    nnoremap <buffer><silent> tt :call LanguageClient#textDocument_implementation()<CR>
+    nnoremap <buffer><silent> tt :call LanguageClient#textDocument_definition()<CR>
+    nnoremap <buffer><silent> ts :call LanguageClient#textDocument_documentSymbol()<CR>
+    nnoremap <buffer><silent> ti :call LanguageClient#textDocument_implementation()<CR>
+    nnoremap <buffer><silent> tf :call LanguageClient#textDocument_references()<CR>
+    nnoremap <buffer><silent> tr :call LanguageClient#textDocument_rename()<CR>
+
     setl formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
     " setlocal signcolumn=yes
     setlocal signcolumn=auto
@@ -516,7 +523,7 @@ hook_source = '''
   endfunction
 
   augroup MyAutoCmd
-    autocmd FileType go,json,typescript,javascript call s:start_language_server()
+    autocmd FileType go,json,typescript,javascript,vue call s:start_language_server()
     autocmd BufLeave,BufEnter __LanguageClient__ call s:remove_unnecessary_head_space()
     autocmd User LanguageClientStopped call s:close_language_server()
   augroup END
@@ -535,7 +542,7 @@ hook_source = '''
   let g:ale_fixers = {
     \ "javascript": ['eslint'],
     \ "typescript": ['eslint'],
-    \ 'go': ['gofmt'],
+    \ 'go': ['goimports'],
     \ }
 
   let g:ale_linters = {
@@ -785,17 +792,17 @@ hook_source = '''
   " call deoplete#enable_logging('DEBUG', '/tmp/deoplete.log')
 '''
 
-hook_post_source = '''
-  call deoplete#custom#option('sources', {
-    \ '_': ['buffer', 'member', 'tag', 'file', 'dictionary', 'neosnippet', 'ale', 'LanguageClient']
-    \ })
-  call deoplete#custom#option('ignore_sources', {
-    \ '_': ['omni'],
-    \ 'javascript': ['LanguageClient'],
-    \ 'typescript': ['LanguageClient'],
-    \ 'go': ['ale'],
-    \ })
-'''
+# hook_post_source = '''
+#   call deoplete#custom#option('sources', {
+#     \ '_': ['buffer', 'member', 'tag', 'file', 'dictionary', 'neosnippet', 'ale', 'LanguageClient']
+#     \ })
+#   call deoplete#custom#option('ignore_sources', {
+#     \ '_': ['omni'],
+#     \ 'javascript': ['LanguageClient'],
+#     \ 'typescript': ['LanguageClient'],
+#     \ 'go': ['ale'],
+#     \ })
+# '''
 
 [[plugins]]
 repo = 'Shougo/context_filetype.vim'
@@ -1572,3 +1579,7 @@ on_ft = ['terraform']
 [[plugins]]
 repo = 'alpaca-tc/mf_attendance.vim'
 on_cmd = ["ClockIn", "ClockOut", "StartBreak", "EndBreak"]
+
+[[plugins]]
+repo = 'rhysd/git-messenger.vim'
+on_cmd = ['GitMessenger']

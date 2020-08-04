@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cd $HOME
+curl https://sh.rustup.rs -sSf | sh
