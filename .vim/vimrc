@@ -145,8 +145,10 @@ let s:lazy_toml = '~/.vim/dein/dein_lazy.toml'
 
 let s:vimproc_dir = $HOME . "/.cache/dein/repos/github.com/Shougo/vimproc"
 if isdirectory(s:vimproc_dir)
-  set runtimepath+=s:vimproc_dir
+  execute 'set runtimepath+=' . s:vimproc_dir
 endif
+
+execute 'set runtimepath+=' . $HOME . '/.vim'
 
 if dein#load_state(s:toml) && dein#load_state(s:lazy_toml)
   call dein#begin(g:my.dir.dein)
@@ -928,10 +930,10 @@ function! s:get_vital() "{{{
     elseif dein#is_sourced('unite.vim')
       let s:V = unite#util#get_vital()
     elseif dein#is_sourced('vital.vim')
-      let s:V = vital#of('vital')
+      let s:V = vital#vital#new()
     else
       call dein#source('vital.vim')
-      let s:V = vital#of('vital')
+      let s:V = vital#vital#new()
     endif
   endif
 
