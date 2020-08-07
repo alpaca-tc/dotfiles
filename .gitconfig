@@ -89,6 +89,8 @@
 
 [url "https://"]
   insteadOf = git://
+[url "https://github.com/rust-lang"]
+  insteadOf = https://github.com/rust-lang
 [url "github:"]
   insteadOf = https://github.com/
 [url "github:"]

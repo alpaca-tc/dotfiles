@@ -438,7 +438,7 @@ branch = 'next'
 build = 'bash install.sh'
 on_func = ["LanguageClient#textDocument_hover", "LanguageClient#textDocument_definition", "LanguageClient#textDocument_rename"]
 on_cmd = ['LanguageClientStart', 'LanguageClientStop']
-on_ft = ['go', 'typescript', 'javascript', 'vue']
+on_ft = ['go', 'typescript', 'javascript', 'vue', 'rust']
 hook_source = '''
   augroup MyAutoCmd
     autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
@@ -461,6 +461,7 @@ hook_source = '''
         \ 'javascript': ['tsconfig.json', 'package.json'],
         \ 'typescript': ['tsconfig.json', 'package.json'],
         \ 'go': ['go.mod'],
+        \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
         \ }
   let g:LanguageClient_echoProjectRoot = 1
   let g:LanguageClient_floatingHoverHighlight = 'Normal:Pmenu'
@@ -523,7 +524,7 @@ hook_source = '''
   endfunction
 
   augroup MyAutoCmd
-    autocmd FileType go,json,typescript,javascript,vue call s:start_language_server()
+    autocmd FileType go,json,typescript,javascript,vue,rust call s:start_language_server()
     autocmd BufLeave,BufEnter __LanguageClient__ call s:remove_unnecessary_head_space()
     autocmd User LanguageClientStopped call s:close_language_server()
   augroup END
@@ -547,7 +548,8 @@ hook_source = '''
 
   let g:ale_linters = {
     \ 'go': ['gopls'],
-    \}
+    \ 'rust': ['rustc'],
+    \ }
 
   let g:ale_sign_column_always = 1
   let g:ale_fix_on_save = 1

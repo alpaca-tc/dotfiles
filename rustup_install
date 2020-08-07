@@ -2,3 +2,11 @@
 
 cd $HOME
 curl https://sh.rustup.rs -sSf | sh
+rustup update
+rustup install nightly
+rustup default nightly
+
+# language server
+rustup component add rls-preview --toolchain nightly
+rustup component add rust-analysis --toolchain nightly
+rustup component add rust-src --toolchain nightly
