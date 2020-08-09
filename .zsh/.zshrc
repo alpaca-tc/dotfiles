@@ -56,6 +56,7 @@ if is_executable rbenv; then
   eval "$(rbenv init -)"
 fi
 
+# rust
 if [ -d "$HOME/.cargo" ];then
   source $HOME/.cargo/env
 fi

@@ -446,22 +446,23 @@ hook_source = '''
 
   let g:LanguageClient_loggingFile = expand('/tmp/language-server.log')
 
-  " \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
   let g:LanguageClient_serverCommands = {
       \ 'typescript': ['typescript-language-server', '--stdio'],
       \ 'javascript': ['typescript-language-server', '--stdio'],
       \ 'vue': ['vls'],
       \ 'go': ['gopls', 'serve'],
+      \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
       \ }
 
   " Automatically start language servers.
   let g:LanguageClient_trace = 'verbose'
   let g:LanguageClient_changeThrottle = 0.1
   let g:LanguageClient_rootMarkers = {
+        \ 'ruby': ['Gemfile'],
         \ 'javascript': ['tsconfig.json', 'package.json'],
         \ 'typescript': ['tsconfig.json', 'package.json'],
         \ 'go': ['go.mod'],
-        \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+        \ 'rust': ['Cargo.toml', 'settings.json'],
         \ }
   let g:LanguageClient_echoProjectRoot = 1
   let g:LanguageClient_floatingHoverHighlight = 'Normal:Pmenu'
@@ -755,6 +756,8 @@ repo = 'Shougo/deoplete.nvim'
 on_i      = 1
 disabled = '!has("nvim")'
 hook_source = '''
+  let g:deoplete#enable_at_startup = 1
+
   imap <expr><C-G> deoplete#undo_completion()
 
   function! s:my_cr_function()
@@ -1585,3 +1588,10 @@ on_cmd = ["ClockIn", "ClockOut", "StartBreak", "EndBreak"]
 [[plugins]]
 repo = 'rhysd/git-messenger.vim'
 on_cmd = ['GitMessenger']
+
+[[plugins]]
+repo = 'rust-lang/rust.vim'
+on_ft = ['rust']
+hook_source = '''
+  let g:rustfmt_autosave = 1
+'''

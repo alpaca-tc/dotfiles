@@ -10,3 +10,4 @@ rustup default nightly
 rustup component add rls-preview --toolchain nightly
 rustup component add rust-analysis --toolchain nightly
 rustup component add rust-src --toolchain nightly
+rustup component add rustfmt --toolchain nightly
