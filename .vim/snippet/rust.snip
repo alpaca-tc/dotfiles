@@ -82,14 +82,14 @@ options word
 snippet impl
 abbr    impl T { ... }
 options word
-  impl`rust#recent_struct_and_generics_for_impl()` {
+  impl`rust_helper#recent_struct_and_generics_for_impl()` {
     fn${2}
   }
 
 snippet Deref
 abbr    impl Deref for ... {}
 options word
-  impl`rust#recent_struct_and_generics_for_impl("Deref for")` {
+  impl`rust_helper#recent_struct_and_generics_for_impl("Deref for")` {
     type Target = T;
 
     fn deref(&self) -> &T {
@@ -100,7 +100,7 @@ options word
 snippet Drop
 abbr    impl Drop for ... {}
 options word
-  impl`rust#recent_struct_and_generics_for_impl("Drop for")` {
+  impl`rust_helper#recent_struct_and_generics_for_impl("Drop for")` {
       fn drop(&mut self) {
           ${1}
       }
