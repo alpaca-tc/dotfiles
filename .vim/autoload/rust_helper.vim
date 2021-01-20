@@ -17,7 +17,7 @@ function! rust_helper#recent_struct()
 endfunction
 
 function! rust_helper#recent_struct_and_generics_for_impl(...)
-  let recent = rust#recent_struct()
+  let recent = rust_helper#recent_struct()
   let generics = get(recent, 1, "")
   let name = get(recent, 0, "")
 

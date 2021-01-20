@@ -25,9 +25,15 @@ export PATH=./node_modules/.bin:$PATH
 # yarn
 export PATH="$HOME/.yarn/bin:$PATH"
 
+export PATH="$PATH:$HOME/projects/google/depot_tools"
+
 # homebrew
 export PATH=/usr/local/bin:/usr/local/sbin:$PATH
+export PATH=$PATH:/usr/local/Cellar/llvm/10.0.1/Toolchains/LLVM10.0.1.xctoolchain/usr/bin
 export MANPATH=/usr/local/share/man:$MANPATH
+
+# export LDFLAGS="-L/usr/local/opt/llvm/lib -L/usr/local/opt/openssl/lib"
+# export CPPFLAGS="-I/usr/local/opt/llvm/include -I/usr/local/opt/openssl/include"
 
 # iTerm2
 export PATH=$HOME/usr/bin:$HOME/usr/local/bin:$PATH
@@ -130,6 +136,10 @@ fpath=( $HOME/dotfiles/.zsh/zsh-completions/src $HOME/.zsh/site-functions $fpath
 if is_executable nvim; then
   export EDITOR=nvim
   export GIT_EDITOR=nvim
+fi
+
+if is_executable git; then
+  export PATH=$PATH:/usr/local/share/git-core/contrib/diff-highlight
 fi
 
 if is_executable direnv; then

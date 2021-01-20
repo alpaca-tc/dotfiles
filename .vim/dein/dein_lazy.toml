@@ -353,6 +353,11 @@ hook_source = '''
     let g:unite_source_grep_command = 'ag'
     let g:unite_source_grep_default_opts = '--nocolor --nogroup'
     let g:unite_source_grep_recursive_opt = ''
+  elseif executable('rg')
+    let g:unite_source_grep_command =  'rg'
+    let g:unite_source_grep_default_opts = '-n --no-heading --color never'
+    let g:unite_source_grep_recursive_opt = ''
+    let g:unite_source_grep_max_candidates = 200
   else
     let g:unite_source_grep_command =  'grep'
     let g:unite_source_grep_recursive_opt = '-R'
@@ -438,7 +443,7 @@ branch = 'next'
 build = 'bash install.sh'
 on_func = ["LanguageClient#textDocument_hover", "LanguageClient#textDocument_definition", "LanguageClient#textDocument_rename"]
 on_cmd = ['LanguageClientStart', 'LanguageClientStop']
-on_ft = ['go', 'typescript', 'javascript', 'vue', 'rust']
+on_i = 1
 hook_source = '''
   augroup MyAutoCmd
     autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
@@ -452,6 +457,10 @@ hook_source = '''
       \ 'vue': ['vls'],
       \ 'go': ['gopls', 'serve'],
       \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+      \ 'css': ['css-languageserver', '--stdio'],
+      \ 'sass': ['css-languageserver', '--stdio'],
+      \ 'scss': ['css-languageserver', '--stdio'],
+      \ 'c': ['clangd'],
       \ }
 
   " Automatically start language servers.
@@ -525,15 +534,15 @@ hook_source = '''
   endfunction
 
   augroup MyAutoCmd
-    autocmd FileType go,json,typescript,javascript,vue,rust call s:start_language_server()
+    autocmd FileType c,go,json,typescript,javascript,vue,rust,css,scss,sass call s:start_language_server()
     autocmd BufLeave,BufEnter __LanguageClient__ call s:remove_unnecessary_head_space()
     autocmd User LanguageClientStopped call s:close_language_server()
   augroup END
 '''
 
-# hook_post_source = '''
-#   call LanguageClient_setLoggingLevel('DEBUG')
-# '''
+hook_post_source = '''
+  call LanguageClient_setLoggingLevel('DEBUG')
+'''
 
 [[plugins]]
 repo = 'dense-analysis/ale'
@@ -549,7 +558,7 @@ hook_source = '''
 
   let g:ale_linters = {
     \ 'go': ['gopls'],
-    \ 'rust': ['rustc'],
+    \ 'rust': ['cargo'],
     \ }
 
   let g:ale_sign_column_always = 1
@@ -770,7 +779,8 @@ hook_source = '''
 
   inoremap <expr><C-h> deoplete#smart_close_popup() . "\<C-h>"
   inoremap <expr><C-X><C-F> deoplete#manual_complete('file')
-  inoremap <expr><C-X><C-O> deoplete#manual_complete('ale')
+  inoremap <expr><C-X><C-O> deoplete#manual_complete('LanguageClient')
+  inoremap <expr><C-X><C-A> deoplete#manual_complete('ale')
   inoremap <expr><C-G> deoplete#undo_completion()
   inoremap <expr><C-N> pumvisible() ? "\<C-N>" : "\<C-X>\<C-U>\<C-P>\<Down>"
   inoremap <expr><C-P> pumvisible() ? "\<C-P>" : "\<C-P>\<C-N>"
@@ -1374,7 +1384,7 @@ mac  = 'brew install binutils'
 
 [[plugins]]
 repo = 'mrkn/vim-cruby'
-on_ft = ["cruby"]
+on_ft = ["c"]
 
 [[plugins]]
 repo = 'vim-ruby/vim-ruby'
@@ -1549,6 +1559,7 @@ on_ft = ["vim"]
 
 [[plugins]]
 repo = 'posva/vim-vue'
+on_ft = "vue"
 hook_source = '''
   " autocmd FileType vue syntax sync fromstart
 '''
@@ -1595,3 +1606,12 @@ on_ft = ['rust']
 hook_source = '''
   let g:rustfmt_autosave = 1
 '''
+
+[[plugins]]
+repo = 'alpaca-tc/syarousi'
+on_func   = ["syarousi#test"]
+rtp = 'vim'
+
+[[plugins]]
+repo = 'cat2koban/ghlink.vim'
+on_command = ['Ghlink']

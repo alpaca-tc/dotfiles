@@ -4,6 +4,7 @@ PROTECTED_BRANCHES = %w[
   master
   development
   release
+  master
 ].freeze
 
 remote = ARGV[1] || 'origin'
@@ -13,7 +14,8 @@ system("git fetch #{remote} --prune")
 branches = `git branch --remote --merged`.split("\n").map { |branch| branch.strip }
 
 branches.select! do |branch|
-  !branch.include?('->') &&
+  !branch.start_with?('origin/pr/') &&
+    !branch.include?('->') &&
     PROTECTED_BRANCHES.none? { |protected_branch| %r{/#{protected_branch}$} =~ branch }
 end
 

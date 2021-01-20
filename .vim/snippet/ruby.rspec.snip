@@ -719,3 +719,10 @@ options word
   RSpec.describe ${1} do
     ${2}
   end
+
+snippet and_wrap_original
+abbr    and_wrap_original { |m, *args| m.call(*args).first(5) }
+options word
+  and_wrap_original do |method, *args, **options|
+    ${2}
+  end

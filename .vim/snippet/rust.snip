@@ -61,6 +61,17 @@ options word
       ${2:pat}
   }
 
+snippet match_ok_err
+abbr    match ... { Ok => {}, ... }
+options word
+  match ${1} {
+    Ok(${2:value}) => {
+    }
+    Err(${3:error}) => {
+    }
+    ${4}
+  }
+
 snippet println
 abbr    println(...)
 options word
@@ -132,7 +143,7 @@ abbr    #[cfg(test)] mod tests { ... }
 options word
   #[cfg(test)]
   mod tests {
-    user super::*
+    use super::*;
 
     ${1}
   }

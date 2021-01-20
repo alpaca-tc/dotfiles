@@ -113,36 +113,6 @@ alias sp='spring'
 alias be='bundle exec'
 alias srails='./bin/spring rails'
 alias srake='./bin/spring rake'
-alias rg='rails generate'
-alias rc='rails console'
-alias rd='rails db'
-alias rgc='rails generate controller'
-alias rgm='rails generate model'
-alias rgd='rails destroy'
-alias rgs='rails generate scaffold'
-alias rgmg='rails generate migration'
-# _rakeDbMigrate() {
-#   rake db:drop
-#   rake db:create
-#   rake db:migrate
-# }
-# alias rmg=_rakeDbMigrate
-# _rakeDbSetUp() {
-#   rake db:drop:all
-#   rake db:create
-#
-#   echo "--development--"
-#   rake db:migrate RAILS_ENV=development
-#   rake db:seed RAILS_ENV=development
-#   # rake db:migrate db:test:prepare
-#
-#   echo "--test--"
-#   rake db:migrate RAILS_ENV=test
-#   rake db:seed RAILS_ENV=test
-# }
-# alias rreset=_rakeDbSetUp
-# alias y='yard'
-# alias yg='yard server --gems'
 alias gemset="rbenv gemset"
 alias set_gemset_to_current_directory="echo > .rbenv-gemsets"
 alias remove_all_gem='for gem in `gem list | cut -d " " -f 1`; do yes | gem uninstall $gem -a; done'
@@ -170,6 +140,6 @@ alias switch_db_store="switch_db store --name $(git rev-parse --abbrev-ref HEAD)
 alias switch_db_restore="switch_db restore --name $(git rev-parse --abbrev-ref HEAD)"
 
 # docker
-alias docker_clean_images='docker rmi $(docker images -a -q)'
+alias docker_clean_images='docker rmi -f $(docker images -a -q)'
 alias docker_clean_ps='docker rm $(docker ps --filter=status=exited --filter=status=created -q)'
 alias docker_clean_cache="docker images --no-trunc --format '{{.ID}}' | xargs docker rmi"
