@@ -449,19 +449,18 @@ hook_source = '''
     autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
   augroup END
 
-  let g:LanguageClient_loggingFile = expand('/tmp/language-server.log')
-
   let g:LanguageClient_serverCommands = {
       \ 'typescript': ['typescript-language-server', '--stdio'],
       \ 'javascript': ['typescript-language-server', '--stdio'],
-      \ 'vue': ['vls'],
       \ 'go': ['gopls', 'serve'],
       \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
       \ 'css': ['css-languageserver', '--stdio'],
       \ 'sass': ['css-languageserver', '--stdio'],
       \ 'scss': ['css-languageserver', '--stdio'],
       \ 'c': ['clangd'],
+      \ 'vue': ['vls', '--stdio'],
       \ }
+      " \ 'vue': ['node', $HOME . '/src/tailwindcss-intellisense/dist/server/index.js', '--stdio'],
 
   " Automatically start language servers.
   let g:LanguageClient_trace = 'verbose'
@@ -470,6 +469,7 @@ hook_source = '''
         \ 'ruby': ['Gemfile'],
         \ 'javascript': ['tsconfig.json', 'package.json'],
         \ 'typescript': ['tsconfig.json', 'package.json'],
+        \ 'vue': ['tsconfig.json', 'package.json', 'nuxt.config.js'],
         \ 'go': ['go.mod'],
         \ 'rust': ['Cargo.toml', 'settings.json'],
         \ }
@@ -509,7 +509,7 @@ hook_source = '''
     setl colorcolumn=
     setl bufhidden=wipe
     setl modifiable
-    setl colorcolumn=
+    setl signcolumn=no
     call deletebufline('%', 1, line('$'))
     call setline(1, newLines)
     setl nomodifiable
@@ -538,6 +538,17 @@ hook_source = '''
     autocmd BufLeave,BufEnter __LanguageClient__ call s:remove_unnecessary_head_space()
     autocmd User LanguageClientStopped call s:close_language_server()
   augroup END
+
+  function! TailwindcssConfigUpdated(...) abort
+    " echomsg json_encode(a:params)
+  endfunction
+
+  let g:LanguageClient_loggingFile = expand('/tmp/language-server.log')
+  let g:LanguageClient_serverStderr = expand('/tmp/language-server-error.log')
+
+  call LanguageClient#registerHandlers({
+      \ 'tailwindcss/configUpdated': 'TailwindcssConfigUpdated',
+      \ })
 '''
 
 hook_post_source = '''

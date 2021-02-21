@@ -109,13 +109,15 @@ end
 Pry::Commands.add_command(show_backtrace)
 Pry::Commands.alias_command '~', 'show-backtrace'
 
-Pry::Prompt.add(:awesome, 'Awesome prompt') do |context, nesting, pry_instance, sep|
-  nest_string = '‣'
-  mark = '«'
-  space = ' '
-  module_name = Pry.view_clip(context)
-  nest = nest_string * (nesting + 1)
-  format("\e[33;1m%-30.30s \e[36;5m%-4.4s\e[0m #{mark} ", module_name, nest)
-end
+if Pry::Prompt.respond_to?(:add)
+  Pry::Prompt.add(:awesome, 'Awesome prompt') do |context, nesting, pry_instance, sep|
+    nest_string = '‣'
+    mark = '«'
+    space = ' '
+    module_name = Pry.view_clip(context)
+    nest = nest_string * (nesting + 1)
+    format("\e[33;1m%-30.30s \e[36;5m%-4.4s\e[0m #{mark} ", module_name, nest)
+  end
 
-Pry.config.prompt = Pry::Prompt[:awesome]
+  Pry.config.prompt = Pry::Prompt[:awesome]
+end
