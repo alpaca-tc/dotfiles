@@ -100,3 +100,7 @@ repo = 'chriskempson/vim-tomorrow-theme'
 
 [[plugins]]
 repo = 'cocopon/iceberg.vim'
+
+[[plugins]]
+repo = 'tyru/open-browser-github.vim'
+depends = ['open-browser.vim']

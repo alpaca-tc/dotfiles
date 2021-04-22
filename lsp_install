@@ -1,8 +1,0 @@
-mkdir -p $HOME/src
-cd $HOME/src
-
-git clone https://github.com/tailwindlabs/tailwindcss-intellisense.git
-cd tailwindcss-intellisense
-git checkout v0.4.3
-npm ci
-npm run build

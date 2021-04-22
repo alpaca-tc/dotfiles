@@ -514,7 +514,7 @@ xmap gS  <Plug>VgSurround
 xmap s   <Plug>VSurround
 
 " ------------------------------------
-nnoremap <Space>t :TagbarToggle<CR>
+nnoremap <Space>t :Vista<CR>
 
 " ------------------------------------
 " open-browser

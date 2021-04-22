@@ -1,0 +1,3 @@
+LspInstall tailwindcss
+LspInstall typescript
+LspInstall ruby

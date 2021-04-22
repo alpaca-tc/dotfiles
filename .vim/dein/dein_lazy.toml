@@ -436,124 +436,139 @@ call denite#custom#map('insert', '<C-N>', '<denite:move_to_next_line>')
 call denite#custom#map('insert', '<C-P>', '<denite:move_to_previous_line>')
 '''
 
+#   let g:LanguageClient_serverCommands = {
+#       \ 'typescript': ['typescript-language-server', '--stdio', '--tsserver-log-file', '/tmp/typescript-language-server.log', '--log-level', '4'],
+#       \ 'typescript.tsx': ['typescript-language-server', '--stdio', '--tsserver-log-file', '/tmp/typescript-language-server.log', '--log-level', '4'],
+#       \ 'javascript': ['typescript-language-server', '--stdio', '--tsserver-log-file', '/tmp/typescript-language-server.log', '--log-level', '4'],
+#       \ 'javascript.jsx': ['typescript-language-server', '--stdio', '--tsserver-log-file', '/tmp/typescript-language-server.log', '--log-level', '4'],
+#       \ 'go': ['gopls', 'serve'],
+#       \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+#       \ 'css': ['css-languageserver', '--stdio'],
+#       \ 'sass': ['css-languageserver', '--stdio'],
+#       \ 'scss': ['css-languageserver', '--stdio'],
+#       \ 'c': ['ccls'],
+#       \ 'cpp': ['ccls'],
+#       \ 'vue': ['vls', '--stdio'],
+#       \ }
+#       " \ 'vue': ['node', $HOME . '/src/tailwindcss-intellisense/dist/server/index.js', '--stdio'],
+
 [[plugins]]
-repo = 'autozimu/LanguageClient-neovim'
-build = 'bash install.sh'
-branch = 'next'
-build = 'bash install.sh'
-on_func = ["LanguageClient#textDocument_hover", "LanguageClient#textDocument_definition", "LanguageClient#textDocument_rename"]
-on_cmd = ['LanguageClientStart', 'LanguageClientStop']
+repo = 'neovim/nvim-lspconfig'
 on_i = 1
 hook_source = '''
-  augroup MyAutoCmd
-    autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
-  augroup END
+function! s:setup_lsp()
+  setl signcolumn=no
 
-  let g:LanguageClient_serverCommands = {
-      \ 'typescript': ['typescript-language-server', '--stdio'],
-      \ 'javascript': ['typescript-language-server', '--stdio'],
-      \ 'go': ['gopls', 'serve'],
-      \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-      \ 'css': ['css-languageserver', '--stdio'],
-      \ 'sass': ['css-languageserver', '--stdio'],
-      \ 'scss': ['css-languageserver', '--stdio'],
-      \ 'c': ['clangd'],
-      \ 'vue': ['vls', '--stdio'],
-      \ }
-      " \ 'vue': ['node', $HOME . '/src/tailwindcss-intellisense/dist/server/index.js', '--stdio'],
+  nnoremap <silent> gd <cmd>lua vim.lsp.buf.declaration()<CR>
+  nnoremap <silent> tt <cmd>lua vim.lsp.buf.definition()<CR>
+  nnoremap <silent> K <cmd>lua vim.lsp.buf.hover()<CR>
+  nnoremap <silent> ti <cmd>lua vim.lsp.buf.implementation()<CR>
+  nnoremap <silent> ts <cmd>lua vim.lsp.buf.signature_help()<CR>
+  " nnoremap <silent> <space>wa <cmd>lua vim.lsp.buf.add_workspace_folder()<CR>
+  " nnoremap <silent> <space>wr <cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>
+  " nnoremap <silent> <space>wl <cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>
+  nnoremap <silent> td <cmd>lua vim.lsp.buf.type_definition()<CR>
+  nnoremap <silent> tr <cmd>lua vim.lsp.buf.rename()<CR>
+  nnoremap <silent> tf <cmd>lua vim.lsp.buf.references()<CR>
+  nnoremap <silent> te <cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
+  nnoremap <silent> tp <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
+  nnoremap <silent> tn <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
+  " nnoremap <silent> <space>q <cmd>lua vim.lsp.diagnostic.set_loclist()<CR>
+endfunction
 
-  " Automatically start language servers.
-  let g:LanguageClient_trace = 'verbose'
-  let g:LanguageClient_changeThrottle = 0.1
-  let g:LanguageClient_rootMarkers = {
-        \ 'ruby': ['Gemfile'],
-        \ 'javascript': ['tsconfig.json', 'package.json'],
-        \ 'typescript': ['tsconfig.json', 'package.json'],
-        \ 'vue': ['tsconfig.json', 'package.json', 'nuxt.config.js'],
-        \ 'go': ['go.mod'],
-        \ 'rust': ['Cargo.toml', 'settings.json'],
-        \ }
-  let g:LanguageClient_echoProjectRoot = 1
-  let g:LanguageClient_floatingHoverHighlight = 'Normal:Pmenu'
-  let g:LanguageClient_diagnosticsEnable = 0
+augroup MyAutoCmd
+  " autocmd Filetype typescript setlocal omnifunc=v:lua.vim.lsp.omnifunc
+  autocmd FileType typescript,javascript,vue,javascript.jsx,typescript.tsx,go,rust,css,scss,sass,ruby call s:setup_lsp()
+augroup END
 
-  function s:remove_unnecessary_head_space()
-    let minWidth = 100
+lua <<EOF
+local lsp = require 'lspconfig'
+local configs = require 'lspconfig/configs'
+local util = require 'lspconfig/util'
 
-    for index in range(line('$'))
-      let line = getline(index + 1)
-      let leftSpace = len(matchstr(line, '^\(\s\+\)', 0))
+if not lsp.tailwind_lsp then
+  configs.tailwind_lsp = {
+    default_config = {
+      cmd = {vim.api.nvim_eval("$HOME") .. "/.local/share/nvim/lspinstall/tailwindcss/tailwindcss-intellisense.sh", "--stdio"},
+      filetypes = {
+        -- html
+        'aspnetcorerazor',
+        'blade',
+        'django-html',
+        'edge',
+        'ejs',
+        'erb',
+        'gohtml',
+        'haml',
+        'handlebars',
+        'hbs',
+        'html',
+        'html-eex',
+        'jade',
+        'leaf',
+        'liquid',
+        'markdown',
+        'mdx',
+        'mustache',
+        'njk',
+        'nunjucks',
+        'php',
+        'razor',
+        'slim',
+        'twig',
+        -- css
+        'css',
+        'less',
+        'postcss',
+        'sass',
+        'scss',
+        'stylus',
+        'sugarss',
+        -- js
+        'javascript',
+        'javascriptreact',
+        'javascript.jsx',
+        'reason',
+        'rescript',
+        'typescript',
+        'typescriptreact',
+        'typescript.tsx',
+        -- mixed
+        'vue',
+        'svelte',
+      },
+      root_dir = function(fname)
+        return util.root_pattern('tailwind.config.js', 'tailwind.config.ts')(fname) or
+        util.root_pattern('postcss.config.js', 'postcss.config.ts')(fname) or
+        util.find_package_json_ancestor(fname) or
+        util.find_node_modules_ancestor(fname) or
+        util.find_git_ancestor(fname)
+        end,
+      handlers = {
+        ["tailwindcss/getConfiguration"] = function (_, _, params, _, bufnr, _)
+          -- tailwindcss lang server waits for this repsonse before providing hover
+          vim.lsp.buf_notify(bufnr, "tailwindcss/getConfigurationResponse", { _id = params._id })
+        end
+      }
+    };
+  }
+end
 
-      if line != '' && leftSpace < minWidth
-        let minWidth = leftSpace
-      endif
-    endfor
+lsp.tailwind_lsp.setup{}
+lsp.tsserver.setup{}
 
-    let newLines = []
-    let initialLine = 1
+lsp.solargraph.setup{
+  cmd = {"solargraph", "stdio"},
+}
 
-    for index in range(line('$'))
-      let line = getline(index + 1)
-      " Remove head space
-      let newLine = substitute(line, '^\s\{' . printf('%s', minWidth) . '\}', '', '')
-
-      " Remove tail space
-      let newLine = substitute(newLine, '\s*$', '', '')
-
-      if !initialLine || len(line) != 0
-        let initialLine = 0
-        call add(newLines, newLine)
-      endif
-    endfor
-
-    setl colorcolumn=
-    setl bufhidden=wipe
-    setl modifiable
-    setl signcolumn=no
-    call deletebufline('%', 1, line('$'))
-    call setline(1, newLines)
-    setl nomodifiable
-  endfunction
-
-  function! s:start_language_server()
-    nnoremap <buffer><silent> K :call LanguageClient#textDocument_hover()<CR>
-    nnoremap <buffer><silent> td :call LanguageClient#textDocument_typeDefinition()<CR>
-    nnoremap <buffer><silent> tt :call LanguageClient#textDocument_definition()<CR>
-    nnoremap <buffer><silent> ts :call LanguageClient#textDocument_documentSymbol()<CR>
-    nnoremap <buffer><silent> ti :call LanguageClient#textDocument_implementation()<CR>
-    nnoremap <buffer><silent> tf :call LanguageClient#textDocument_references()<CR>
-    nnoremap <buffer><silent> tr :call LanguageClient#textDocument_rename()<CR>
-
-    setl formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
-    " setlocal signcolumn=yes
-    setlocal signcolumn=auto
-  endfunction
-
-  function! s:close_language_server()
-    setlocal signcolumn=auto
-  endfunction
-
-  augroup MyAutoCmd
-    autocmd FileType c,go,json,typescript,javascript,vue,rust,css,scss,sass call s:start_language_server()
-    autocmd BufLeave,BufEnter __LanguageClient__ call s:remove_unnecessary_head_space()
-    autocmd User LanguageClientStopped call s:close_language_server()
-  augroup END
-
-  function! TailwindcssConfigUpdated(...) abort
-    " echomsg json_encode(a:params)
-  endfunction
-
-  let g:LanguageClient_loggingFile = expand('/tmp/language-server.log')
-  let g:LanguageClient_serverStderr = expand('/tmp/language-server-error.log')
-
-  call LanguageClient#registerHandlers({
-      \ 'tailwindcss/configUpdated': 'TailwindcssConfigUpdated',
-      \ })
+vim.lsp.set_log_level("debug")
+EOF
 '''
 
-hook_post_source = '''
-  call LanguageClient_setLoggingLevel('DEBUG')
-'''
+[[plugins]]
+repo = 'kabouzeid/nvim-lspinstall'
+depends = ['nvim-lspconfig']
+on_command = ['LspInstall', 'LspUninstall']
 
 [[plugins]]
 repo = 'dense-analysis/ale'
@@ -775,6 +790,7 @@ hook_source = '''
 repo = 'Shougo/deoplete.nvim'
 on_i      = 1
 disabled = '!has("nvim")'
+depends = ['deoplete-lsp']
 hook_source = '''
   let g:deoplete#enable_at_startup = 1
 
@@ -790,7 +806,7 @@ hook_source = '''
 
   inoremap <expr><C-h> deoplete#smart_close_popup() . "\<C-h>"
   inoremap <expr><C-X><C-F> deoplete#manual_complete('file')
-  inoremap <expr><C-X><C-O> deoplete#manual_complete('LanguageClient')
+  inoremap <expr><C-X><C-O> deoplete#manual_complete('lsp')
   inoremap <expr><C-X><C-A> deoplete#manual_complete('ale')
   inoremap <expr><C-G> deoplete#undo_completion()
   inoremap <expr><C-N> pumvisible() ? "\<C-N>" : "\<C-X>\<C-U>\<C-P>\<Down>"
@@ -816,19 +832,18 @@ hook_source = '''
   augroup END
 
   " call deoplete#enable_logging('DEBUG', '/tmp/deoplete.log')
+
+  call deoplete#custom#option('keyword_patterns', {
+      \ 'html': '[a-zA-Z_][a-z0-9A-Z_\-]*[!?]?',
+      \ 'typescript.tsx': '[a-zA-Z_\-][\k\-]*',
+      \})
 '''
 
-# hook_post_source = '''
-#   call deoplete#custom#option('sources', {
-#     \ '_': ['buffer', 'member', 'tag', 'file', 'dictionary', 'neosnippet', 'ale', 'LanguageClient']
-#     \ })
-#   call deoplete#custom#option('ignore_sources', {
-#     \ '_': ['omni'],
-#     \ 'javascript': ['LanguageClient'],
-#     \ 'typescript': ['LanguageClient'],
-#     \ 'go': ['ale'],
-#     \ })
-# '''
+[[plugins]]
+repo = 'Shougo/deoplete-lsp'
+hook_source = '''
+let g:deoplete#lsp#handler_enabled = v:true
+'''
 
 [[plugins]]
 repo = 'Shougo/context_filetype.vim'
@@ -964,32 +979,6 @@ hook_source = '''
 [[plugins]]
 repo = 'sjl/gundo.vim'
 on_cmd    = ["GundoToggle", "GundoRenderGraph"]
-
-[[plugins]]
-repo = 'majutsushi/tagbar'
-on_cmd    = ["TagbarToggle", "TagbarTogglePause", "TagbarOpen"]
-hook_source = '''
-  augroup MyTagbarCmd
-    autocmd!
-    autocmd FileType tagbar
-          \ nnoremap <buffer><Space> <Space>
-          \|nnoremap <buffer><space>t :<C-U>TagbarToggle<CR>
-  augroup END
-
-  if exists('g:my.bin.ctags') && executable(g:my.bin.ctags)
-    let g:tagbar_ctags_bin = g:my.bin.ctags
-  else
-    let g:tagbar_ctags_bin = 'ctags'
-  endif
-
-  let g:tagbar_autoclose = 0
-  " let g:tagbar_sort = 0
-  let g:tagbar_compact    = 1
-  let g:tagbar_autofocus  = 1
-  let g:tagbar_autoshowtag= 1
-  let g:tagbar_iconchars  =  ['▸', '▾']
-  let g:tagbar_width = 40
-'''
 
 [[plugins]]
 repo = 'vim-scripts/open-browser.vim'
@@ -1584,6 +1573,30 @@ repo = 'leafgarland/typescript-vim'
 on_ft = ["typescript"]
 
 [[plugins]]
+repo = 'yuezk/vim-js'
+on_ft = ["javascript", "typescript", "javascript.jsx", "typescript.tsx"]
+
+[[plugins]]
+repo = 'MaxMEllon/vim-jsx-pretty'
+on_ft = ["javascript", "typescript", "javascript.jsx", "typescript.tsx"]
+depends = ["vim-js", "yats.vim"]
+hook_source = '''
+  let g:vim_jsx_pretty_highlight_close_tag = 1
+'''
+
+[[plugins]]
+repo = 'HerringtonDarkholme/yats.vim'
+on_ft = ["javascript", "typescript", "javascript.jsx", "typescript.tsx"]
+
+[[plugins]]
+repo = 'peitalin/vim-jsx-typescript'
+on_ft = ["typescript"]
+
+# [[plugins]]
+# repo = 'sbdchd/neoformat'
+# on_ft = ["javascript", "typescript", "javascript.jsx", "typescript.tsx"]
+
+[[plugins]]
 repo = 'keith/swift.vim'
 on_ft = ['swift']
 rtp = 'vim'
@@ -1626,3 +1639,18 @@ rtp = 'vim'
 [[plugins]]
 repo = 'cat2koban/ghlink.vim'
 on_command = ['Ghlink']
+
+[[plugins]]
+repo = 'liuchengxu/vista.vim'
+on_command = ['Vista', 'Vista!', 'Vista!!']
+
+hook_source = '''
+  " Ensure you have installed some decent font to show these pretty symbols, then you can enable icon for the kind.
+  let g:vista#renderer#enable_icon = 1
+  let g:vista_sidebar_width = 40
+  "
+  " let g:vista_icon_indent = ['', '']
+  " let g:vista_fold_toggle_icons = get(g:, 'vista_fold_toggle_icons', ['▼', '▶'])
+  "
+  " The default icons can't be suitable for all the filetypes, you can extend it as you wish.
+'''

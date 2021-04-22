@@ -106,6 +106,15 @@ class Date
   end
 end
 
+class ::String
+  def sql
+    tempfile = Tempfile.new(['sql', '.sql'])
+    tempfile.write(self)
+    tempfile.rewind
+    puts `sqlformat -r -k upper #{tempfile.path}`
+  end
+end
+
 Pry::Commands.add_command(show_backtrace)
 Pry::Commands.alias_command '~', 'show-backtrace'
 
