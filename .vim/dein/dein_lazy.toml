@@ -568,13 +568,13 @@ EOF
 [[plugins]]
 repo = 'kabouzeid/nvim-lspinstall'
 depends = ['nvim-lspconfig']
-on_command = ['LspInstall', 'LspUninstall']
+on_cmd = ['LspInstall', 'LspUninstall']
 
 [[plugins]]
 repo = 'dense-analysis/ale'
 build = 'go get -u github.com/sourcegraph/go-langserver && npm install -g typescript-language-server'
 on_ft = ['typescript', 'javascript', 'go']
-on_command = ['ALEGetStatusLine']
+on_cmd = ['ALEGetStatusLine']
 hook_source = '''
   let g:ale_fixers = {
     \ "javascript": ['eslint'],
@@ -1637,12 +1637,8 @@ on_func   = ["syarousi#test"]
 rtp = 'vim'
 
 [[plugins]]
-repo = 'cat2koban/ghlink.vim'
-on_command = ['Ghlink']
-
-[[plugins]]
 repo = 'liuchengxu/vista.vim'
-on_command = ['Vista', 'Vista!', 'Vista!!']
+on_cmd = ['Vista', 'Vista!', 'Vista!!']
 
 hook_source = '''
   " Ensure you have installed some decent font to show these pretty symbols, then you can enable icon for the kind.
@@ -1654,3 +1650,8 @@ hook_source = '''
   "
   " The default icons can't be suitable for all the filetypes, you can extend it as you wish.
 '''
+
+[[plugins]]
+repo = 'alpaca-tc/alpaca_github.vim'
+on_cmd = ['GhFile', 'GhPullRequestCurrentLine', 'GhPullRequest']
+depends = ['open-browser.vim']

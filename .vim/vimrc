@@ -516,11 +516,17 @@ xmap s   <Plug>VSurround
 " ------------------------------------
 nnoremap <Space>t :Vista<CR>
 
+" ----------------------------------------
+" alpaca_github.vim
+let g:alpaca_github#host = 'github'
+nmap ,go :GhFile<CR>
+xmap ,go :GhFile<CR>
+nmap ,gp :GhPullRequestCurrentLine<CR>
+
 " ------------------------------------
 " open-browser
 nmap ,o <Plug>(openbrowser-open)
 xmap ,o <Plug>(openbrowser-open)
-nnoremap ,g :<C-u>OpenBrowserSearch<Space><C-R><C-W><CR>
 
 " ------------------------------------
 nnoremap <silent>,r :QuickRun<CR>
@@ -822,6 +828,8 @@ nmap <C-N> <Plug>(yankround-next)
 " ----------------------------------------
 " Other plugin settings {{{
 let g:git_aliases#author_name = g:my.info.github
+
+nnoremap <silent>gK :GitMessanger<CR>
 "}}}
 
 let g:switch_file_rules = {
