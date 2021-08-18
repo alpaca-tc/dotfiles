@@ -2,25 +2,25 @@ snippet @param
 abbr    @param [Class] ...
 regexp  '^\s*#\s\+'
 options word
-  @param [${1:Class}] ${2:name} ${3:#:description}
+  @param ${1:name} [${2:Class}] ${3:#:description}
 
 snippet @attr
 abbr    @attr [Class] ...
 regexp  '^\s*#\s\+'
 options word
-  @attr [${1:Class}] ${2:name} ${3:#:description}
+  @attr ${1:name} [${2:Class}] ${3:#:description}
 
 snippet @attr_reader
 abbr    @attr_reader [Class] ...
 regexp  '^\s*#\s\+'
 options word
-  @attr_reader [${1:Class}] ${2:name} ${3:#:description}
+  @attr_reader ${1:name} [${2:Class}] ${3:#:description}
 
 snippet @attr_writer
 abbr    @attr_writer [Class] ...
 regexp  '^\s*#\s\+'
 options word
-  @attr_writer [${1:Class}] ${2:name} ${3:#:description}
+  @attr_writer ${1:name} [${2:Class}] ${3:#:description}
 
 snippet @deprecated
 abbr    @deprecated ...

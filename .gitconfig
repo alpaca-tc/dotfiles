@@ -43,7 +43,7 @@
   submodule-init=submodule update --init --recursive
 
   resett = !git commit -a -m 'Temporary commit for cancel' && git reset --hard HEAD~
-  ignore = !"f() { local s=$1; shift; while [ $# -gt 0 ]; do s="$s,$1"; shift; done; curl "http://gitignore.io/api/$s"; }; f"
+  ignore = !"f() { local s=$1; shift; while [ $# -gt 0 ]; do s="$s,$1"; shift; done; curl "https://www.toptal.com/developers/gitignore/api/$s" > .gitignore; }; f"
   soft=reset --soft HEAD^
 
   shallow=clone --depth 1

@@ -712,7 +712,7 @@ if exists(':RemoveDust')
   augroup RemoveDust
     autocmd!
     autocmd BufWritePre * RemoveDust
-    autocmd FileType ts,go,c,make RemoveDustDisable
+    autocmd FileType ts,go,c,make,markdown RemoveDustDisable
   augroup END
 endif
 

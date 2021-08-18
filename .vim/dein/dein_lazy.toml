@@ -74,7 +74,16 @@ hook_source = '''
 
   let g:lightline#functions#ale = s:lightline.new({ 'updatetime' : 0.3 })
   function! g:lightline#functions#ale.func() "{{{
-    let counts = ale#statusline#Count(bufnr(''))
+    if exists('ale#statusline#Count')
+      let counts = ale#statusline#Count(bufnr(''))
+    else
+      let counts = {
+        \ 'style_error': 0,
+        \ 'error': 0,
+        \ 'total': 0
+        \ }
+    endif
+
     let errors = counts.error + counts.style_error
     let non_errors = counts.total - errors
 
@@ -267,7 +276,7 @@ hook_source = '''
   " let g:unite_source_directory_mru_time_format="(%m-%d %H:%M) "
   let g:neomru#time_format='(%m-%d %H:%M) '
   let g:neomru#filename_format = ':~:.'
-  let g:neomru#file_mru_ignore_pattern = '\(/private/var/\|\.git\|.pygments-cache\|.pygments-cache\)'
+  let g:neomru#file_mru_ignore_pattern = '^\(/private/var/\|\.git\|.pygments-cache\|.pygments-cache\)'
 
   if executable('gmv')
     let rm_command = 'gmv -f --backup=numbered --target-directory ' . g:my.dir.trash . ' $srcs'
@@ -473,7 +482,7 @@ function! s:setup_lsp()
   nnoremap <silent> te <cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
   nnoremap <silent> tp <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
   nnoremap <silent> tn <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
-  " nnoremap <silent> <space>q <cmd>lua vim.lsp.diagnostic.set_loclist()<CR>
+  nnoremap <silent> tl <cmd>lua vim.lsp.diagnostic.set_loclist()<CR>
 endfunction
 
 augroup MyAutoCmd
@@ -557,6 +566,20 @@ end
 lsp.tailwind_lsp.setup{}
 lsp.tsserver.setup{}
 
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+  vim.lsp.diagnostic.on_publish_diagnostics, {
+    virtual_text = {
+      prefix = "<"
+    }
+  }
+)
+
+local sumneko_main_path = vim.api.nvim_eval("$HOME")..'/.local/share/nvim/lspinstall/lua/sumneko-lua/extension/server/main.lua'
+local sumneko_binary = vim.api.nvim_eval("$HOME")..'/.local/share/nvim/lspinstall/lua/sumneko-lua/extension/server/bin/macOS/lua-language-server'
+lsp.sumneko_lua.setup{
+  cmd = {sumneko_binary, "-E", sumneko_main_path};
+}
+
 lsp.solargraph.setup{
   cmd = {"solargraph", "stdio"},
 }
@@ -570,36 +593,37 @@ repo = 'kabouzeid/nvim-lspinstall'
 depends = ['nvim-lspconfig']
 on_cmd = ['LspInstall', 'LspUninstall']
 
-[[plugins]]
-repo = 'dense-analysis/ale'
-build = 'go get -u github.com/sourcegraph/go-langserver && npm install -g typescript-language-server'
-on_ft = ['typescript', 'javascript', 'go']
-on_cmd = ['ALEGetStatusLine']
-hook_source = '''
-  let g:ale_fixers = {
-    \ "javascript": ['eslint'],
-    \ "typescript": ['eslint'],
-    \ 'go': ['goimports'],
-    \ }
-
-  let g:ale_linters = {
-    \ 'go': ['gopls'],
-    \ 'rust': ['cargo'],
-    \ }
-
-  let g:ale_sign_column_always = 1
-  let g:ale_fix_on_save = 1
-  " let g:ale_lint_on_text_changed = 'always'
-  let g:ale_lint_on_enter = 1
-  let g:ale_lint_on_save = 1
-  let g:ale_echo_cursor = 1
-  let g:ale_completion_enabled = 0
-  let g:ale_go_bingo_executable = 'gopls'
-  highlight ALEError guibg=none ctermbg=none cterm=none
-
-  " nnoremap <buffer><silent> K :ALEHover<CR>
-  " nnoremap <buffer><silent> tt :ALEGoToDefinition<CR>
-'''
+# [[plugins]]
+# repo = 'dense-analysis/ale'
+# build = 'go get -u github.com/sourcegraph/go-langserver && npm install -g typescript-language-server'
+# on_ft = ['typescript', 'javascript', 'go']
+# on_cmd = ['ALEGetStatusLine']
+# hook_source = '''
+#   let g:ale_fixers = {
+#     \ "javascript": ['eslint'],
+#     \ "typescript": ['eslint'],
+#     \ 'go': ['goimports'],
+#     \ }
+#
+#   let g:ale_linters = {
+#     \ 'go': ['gopls'],
+#     \ 'rust': ['cargo'],
+#     \ }
+#
+#   let g:ale_sign_column_always = 1
+#   let g:ale_fix_on_save = 1
+#   " let g:ale_lint_on_text_changed = 'always'
+#   let g:ale_lint_on_enter = 1
+#   let g:ale_lint_on_save = 1
+#   let g:ale_echo_cursor = 1
+#   let g:ale_completion_enabled = 0
+#   let g:ale_go_bingo_executable = 'gopls'
+#   let g:ale_virtualtext_cursor = 1
+#   highlight ALEError guibg=none ctermbg=none cterm=none
+#
+#   " nnoremap <buffer><silent> K :ALEHover<CR>
+#   " nnoremap <buffer><silent> tt :ALEGoToDefinition<CR>
+# '''
 
 [[plugins]]
 repo = 'cespare/vim-toml'
@@ -1546,27 +1570,12 @@ hook_post_source = '''
 repo = 'Shougo/neco-vim'
 on_ft = ["vim"]
 
-# [[plugins]]
-# repo = 'mhartington/nvim-typescript'
-# on_ft = ["typescript"]
-# build = './install.sh'
-# hook_source ='''
-#   let g:nvim_typescript#javascript_support = 1
-#   let g:nvim_typescript#vue_support = 1
-#   let g:nvim_typescript#diagnostics_enable = 0
-#   let g:nvim_typescript#server_options = ['--locale', 'ja']
-# '''
-
 [[plugins]]
 repo = 'posva/vim-vue'
 on_ft = "vue"
 hook_source = '''
   " autocmd FileType vue syntax sync fromstart
 '''
-
-# [[plugins]]
-# repo = 'Quramy/tsuquyomi'
-# on_ft = ["typescript"]
 
 [[plugins]]
 repo = 'leafgarland/typescript-vim'
@@ -1591,10 +1600,6 @@ on_ft = ["javascript", "typescript", "javascript.jsx", "typescript.tsx"]
 [[plugins]]
 repo = 'peitalin/vim-jsx-typescript'
 on_ft = ["typescript"]
-
-# [[plugins]]
-# repo = 'sbdchd/neoformat'
-# on_ft = ["javascript", "typescript", "javascript.jsx", "typescript.tsx"]
 
 [[plugins]]
 repo = 'keith/swift.vim'
