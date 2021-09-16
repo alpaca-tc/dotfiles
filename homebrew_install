@@ -1,0 +1,8 @@
+#!/bin/sh
+
+FILES=(coreutils git zsh hub)
+
+for file in ${FILES[@]}
+do
+  brew install ${file}
+done
