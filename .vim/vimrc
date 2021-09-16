@@ -533,18 +533,17 @@ nnoremap <silent>,r :QuickRun<CR>
 nnoremap <silent>,R :autocmd BufWritePost <buffer> call quickrun#command('', len(range(0, line('$'))), 0, line('$'))<CR>
 
 " ----------------------------------------
-nnoremap <silent>gM :Gcommit --amend<CR>
-nnoremap <silent>gb :Gblame<CR>
-nnoremap <silent>gB :Gbrowse<CR>
-nnoremap <silent>gm :Gcommit<CR>
+nnoremap <silent>gM :Git commit --amend<CR>
+nnoremap <silent>gb :Git blame<CR>
+nnoremap <silent>gB :Git browse<CR>
+nnoremap <silent>gm :Git commit<CR>
+nnoremap gp :<C-U>Git push<Space>
 
 " ----------------------------------------
 nnoremap gA :<C-U>GitAdd<Space>
 nnoremap <silent>ga :<C-U>GitAdd<CR>
-nnoremap gp :<C-U>Git push<Space>
 nnoremap gD :<C-U>GitDiff<Space>
 nnoremap gDD :<C-U>GitDiff HEAD<CR>
-nnoremap git :<C-U>Git<Space>
 
 let g:git_bin = g:my.bin.git
 let g:git_command_edit = 'vnew'

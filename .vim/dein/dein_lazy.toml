@@ -1012,7 +1012,7 @@ on_func   = ["openbrowser#open"]
 
 [[plugins]]
 repo = 'tpope/vim-fugitive'
-on_cmd    = ["Gcommit", "Gblame", "Ggrep", "Gdiff", "Gcd"]
+on_cmd    = ["Git"]
 on_func   = ["fugitive#head"]
 hook_source = '''
   augroup MyGitCmd
