@@ -83,11 +83,11 @@ if is_executable deno; then
 fi
 
 # pyenv
-export PATH=$HOME/.pyenv/bin:$PATH
+export PYENV_ROOT=$HOME/.pyenv
+export PATH=$PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH
 
 if is_executable pyenv; then
   eval "$(pyenv init -)"
-  export PYENV_ROOT=$HOME/.pyenv
   export PATH=$HOME/.local/bin:$PATH
 fi
 
