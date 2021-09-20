@@ -851,7 +851,6 @@ hook_source = '''
   " call deoplete#custom#source('lsp', 'input_pattern', '[a-zA-Z_]\w*$')
   " call deoplete#custom#source('lsp', 'input_pattern', '(\.|:|->)')
   " call deoplete#custom#source('lsp', 'input_pattern', '[a-zA-Z_]\w*$')
-r'(\.|:|->)$'
 '''
 
 [[plugins]]

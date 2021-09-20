@@ -13,7 +13,7 @@ endif
 
 if executable('rbenv')
   " let g:ruby_host_prog = system('rbenv which ruby')
-  let g:ruby_host_prog = $HOME . '/.rbenv/versions/2.7.1/bin/ruby'
+  let g:ruby_host_prog = $HOME . '/.rbenv/versions/2.7.4/bin/ruby'
 else
   let g:ruby_host_prog = 'ruby'
 endif
