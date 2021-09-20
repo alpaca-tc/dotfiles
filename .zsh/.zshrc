@@ -49,6 +49,9 @@ export PATH=$HOME/src/google-cloud-sdk/bin:$PATH
 # scala 2.9
 export SCALA_HOME=/usr/local/Cellar/scala/2.9.2
 
+# XCode
+export PATH=/Library/Apple/usr/bin:$PATH
+
 # rbenv
 if [ -d '/usr/rbenv' ];then
   export RBENV_ROOT=/usr/rbenv

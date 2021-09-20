@@ -5,7 +5,7 @@ brew install --HEAD neovim
 
 if [ ! -f $HOME/.config/nvim/init.vim ]; then
     mkdir -p ~/.config/nvim
-    ln -s $HOME/.vim/vimrc ~/.config/nvim/init.vim
+    ln -s $HOME/.vim/nvimrc ~/.config/nvim/init.vim
 fi
 
 gem install neovim
