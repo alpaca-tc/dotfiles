@@ -3,7 +3,7 @@
   name= alpaca-tc
 
 [core]
-  excludesfile = $HOME/.gitignore
+  excludesfile = ~/.gitignore
   autocrlf = false; input false
   trailing-space = false
   space-before-tab = false
@@ -11,7 +11,7 @@
   ; cr-at-eol =
   precomposeunicode = true
   quotepath = false
-  editor = vim -c \"set fenc=utf-8\"
+  editor = vim
 
 [receive]
   denyDeleteCurrent = false

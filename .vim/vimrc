@@ -535,7 +535,6 @@ nnoremap <silent>,R :autocmd BufWritePost <buffer> call quickrun#command('', len
 " ----------------------------------------
 nnoremap <silent>gM :Git commit --amend<CR>
 nnoremap <silent>gb :Git blame<CR>
-nnoremap <silent>gB :Git browse<CR>
 nnoremap <silent>gm :Git commit<CR>
 nnoremap gp :<C-U>Git push<Space>
 

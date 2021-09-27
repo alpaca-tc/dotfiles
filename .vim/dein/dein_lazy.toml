@@ -467,12 +467,48 @@ function! s:setup_lsp()
   nnoremap <silent> tp <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
   nnoremap <silent> tn <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
   nnoremap <silent> tl <cmd>lua vim.lsp.diagnostic.set_loclist()<CR>
+
+  nnoremap ff :lua vim.lsp.buf.formatting()<CR>
 endfunction
 
 augroup MyAutoCmd
   " autocmd Filetype typescript setlocal omnifunc=v:lua.vim.lsp.omnifunc
   autocmd FileType typescript,javascript,vue,javascript.jsx,typescript.tsx,go,rust,css,scss,sass,ruby call s:setup_lsp()
+  autocmd BufWritePre *.go lua vim.lsp.buf.formatting()
+  autocmd BufWritePre *.go lua goimports(1000)
 augroup END
+
+lua <<EOF
+  function goimports(timeout_ms)
+    local context = { only = { "source.organizeImports" } }
+    vim.validate { context = { context, "t", true } }
+
+    local params = vim.lsp.util.make_range_params()
+    params.context = context
+
+    -- See the implementation of the textDocument/codeAction callback
+    -- (lua/vim/lsp/handler.lua) for how to do this properly.
+    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout_ms)
+    if not result or next(result) == nil then return end
+    local actions = result[1].result
+    if not actions then return end
+    local action = actions[1]
+
+    -- textDocument/codeAction can return either Command[] or CodeAction[]. If it
+    -- is a CodeAction, it can have either an edit, a command or both. Edits
+    -- should be executed first.
+    if action.edit or type(action.command) == "table" then
+      if action.edit then
+        vim.lsp.util.apply_workspace_edit(action.edit)
+      end
+      if type(action.command) == "table" then
+        vim.lsp.buf.execute_command(action.command)
+      end
+    else
+      vim.lsp.buf.execute_command(action)
+    end
+  end
+EOF
 
 lua <<EOF
 local lsp = require 'lspconfig'
@@ -550,6 +586,7 @@ local util = require 'lspconfig/util'
 -- lsp.tailwind_lsp.setup{}
 lsp.tsserver.setup{}
 -- lsp.denols.setup{}
+lsp.gopls.setup{}
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -841,6 +878,7 @@ hook_source = '''
   augroup END
 
   call deoplete#enable_logging('DEBUG', '/tmp/deoplete.log')
+  call deoplete#custom#source('_', 'min_pattern_length', 1)
 
   " call deoplete#custom#option('keyword_patterns', {
   "     \ 'html': '[a-zA-Z_][a-z0-9A-Z_\-]*[!?]?',
