@@ -8,8 +8,6 @@ alias ls="ls -G"
 # }}}
 
 # vim# {{{
-# alias st='/Applications/Sublime\ Text\ 2.app/Contents/MacOS/Sublime\ Text\ 2 "$@"'
-alias n='nvim'
 alias vim='nvim'
 # }}}
 
@@ -17,60 +15,29 @@ alias vim='nvim'
 alias sz="source ~/.zshrc"
 alias vv="vim ~/.vim/vimrc"
 alias vz="vim ~/.zsh/.zshrc"
-alias vza="vim ~/.zsh/.zshrc.alias"
-alias vzb="vim ~/.zsh/.zshrc.basic"
-alias vze="vim ~/.zsh/.zshrc.extends"
-alias vzp="vim ~/.zsh/.zshrc.prompt"
-alias avim="ALPACA_MODE=1 vim"
-# }}}
-
-# XAMPP {{{
-alias apache='sudo /Applications/XAMPP/bin/apachectl'
-# }}}
-
-# emacs# {{{
-alias em="emacs"
-alias e="emacs"
-alias ee="emacs ~/.emacs.el"
 # }}}
 
 # vim# {{{
-# alias vim='env  LANG=en_US.UTF-8 /usr/local/bin/vim "$@"'
-# alias vim='env  LANG=en_US.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
-# alias mvim='env LANG=en_US.UTF-8 /Applications/MacVim.app/Contents/MacOS/mvim "$@"'
-# alias vim='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
-# alias mvim='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/mvim "$@"'
-alias m='mvim'
-alias mi='mvim'
 alias v='vim'
 alias vi='vim'
 # }}}
 
 # 省略# {{{
-alias pk='pkill -f'
-alias pb="pythonbrew"
 alias vimprofile='vim --cmd "profile start profile.txt" --cmd "profile file $HOME/.vim/config/.vimrc" +q && vim profile.txt'
 alias os='cat /etc/`ls /etc -F | grep "release$\|version$"`'
-alias msql="mysql -u root -p"
 # }}}
 
 # オプション付けたり、別のコマンドにしたり# {{{
 alias grep='egrep --color=auto -UIs'
 alias rgrep='egrep -R --color=auto -UIns'
 alias rm='gmv -f --backup=numbered --target-directory ~/.Trash/'
-# objdump homebrewだとgobjdumpという名前だから
-alias objdump='gobjdump'
 alias redis='redis-server /usr/local/etc/redis.conf'
 alias github='open github-mac://openRepo/file:/Volumes/disk1_pt1/git/'
 # }}}
 
 # tmux# {{{
 alias tm='tmux'
-alias tma='tmux attach'
-alias tml='tmux list-window'
 alias tmux='SHELL=/bin/zsh tmux -f ~/.tmux.conf'
-alias tmc="tmux capture-pane -S -10000\; show-buffer | vim +10000 -R -"
-# alias tmux='SHELL=/bin/zsh ~/Downloads/tmux/tmux -f ~/.tmux.conf'
 # }}}
 
 # git# {{{
@@ -111,12 +78,6 @@ alias git=hub
 # alias rake='bundle exec rake'
 alias sp='spring'
 alias be='bundle exec'
-alias srails='./bin/spring rails'
-alias srake='./bin/spring rake'
-alias gemset="rbenv gemset"
-alias set_gemset_to_current_directory="echo > .rbenv-gemsets"
-alias remove_all_gem='for gem in `gem list | cut -d " " -f 1`; do yes | gem uninstall $gem -a; done'
-alias gem_from_url='gem specific_install -l'
 # }}}
 
 # postgres {{{
@@ -126,18 +87,9 @@ alias postdb_stop='pg_ctl -D /usr/local/var/postgres stop -s -m fast'
 
 alias chrome='open -a Google\ chrome'
 
-# ftp server
-alias ftpd_load='sudo launchctl load -w /System/Library/LaunchDaemons/ftp.plist'
-alias ftpd_unload='sudo launchctl unload -w /System/Library/LaunchDaemons/ftp.plist'
-
-alias gem_uninstall_all_gems='gem uninstall -axI `gem list --no-versions`'
-
-alias geeknote='python ~/dotfiles/local/geeknote/geeknote.py'
-
 alias global_ip_address="curl -s checkip.dyndns.org|sed -e 's/.*Current IP Address: //' -e 's/<.*$//'"
 
-alias switch_db_store="switch_db store --name $(git rev-parse --abbrev-ref HEAD) --database_names=ca_production,moneybook_api_production"
-alias switch_db_restore="switch_db restore --name $(git rev-parse --abbrev-ref HEAD)"
+alias iwatch='fswatch -0 . | xargs -0 -I {} -n 1'
 
 # docker
 alias docker_clean_images='docker rmi -f $(docker images -a -q)'

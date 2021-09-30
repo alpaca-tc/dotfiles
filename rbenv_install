@@ -3,6 +3,9 @@
 cd $HOME
 git clone git://github.com/sstephenson/rbenv.git ~/.rbenv
 
+brew install readline
+brew link --force readline
+
 if [ -x `which rbenv` ];then
     echo 'rbenvをインストールします'
     mkdir -p ~/.rbenv/plugins

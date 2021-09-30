@@ -1054,7 +1054,7 @@ hook_source = '''
 
 [[plugins]]
 repo = 'alpaca-tc/git-vim'
-on_cmd    = ["GitDiff", "GitVimDiff", "Git", "GitCheckout", "GitAdd", "GitLog", "GitCommit", "GitBlame", "GitPush"]
+on_cmd    = ["GitDiff", "GitVimDiff", "GitCheckout", "GitAdd", "GitLog", "GitCommit", "GitBlame", "GitPush"]
 on_func   = ["git#get_current_branch"]
 
 [[plugins]]

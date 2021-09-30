@@ -52,6 +52,13 @@ export SCALA_HOME=/usr/local/Cellar/scala/2.9.2
 # XCode
 export PATH=/Library/Apple/usr/bin:$PATH
 
+
+if [ -d '/usr/local/opt/readline' ]; then
+  export LDFLAGS="-L/usr/local/opt/readline/lib"
+  export CPPFLAGS="-I/usr/local/opt/readline/include"
+  export PKG_CONFIG_PATH="/usr/local/opt/readline/lib/pkgconfig"
+fi
+
 # rbenv
 if [ -d '/usr/rbenv' ];then
   export RBENV_ROOT=/usr/rbenv

@@ -69,11 +69,11 @@ options word
     ${2}
   }
 
-snippet iferr
+snippet ife
 abbr    if err != nli { }
 options word
   if err != nil {
-    ${1}
+    ${1: return err}
   }
 
 snippet switch
@@ -96,15 +96,6 @@ snippet     case
 options     head
   case ${1:#:condition}:
     ${2:TARGET}
-
-snippet ife
-abbr    if ... { } else { }
-options word
-  if ${1} {
-    ${2}
-  } else {
-    ${3}
-  }
 
 snippet for_list
 abbr    for e := list.Front(); e != nil; e = e.Next() { }
@@ -130,6 +121,6 @@ options word
 snippet funcc
 abbr    func (...) Method(...) error {}
 options word
-  func (${1}) ${2:Method}(${3}) ${4:error} {
+  func (${1:`alpaca#go#prevStructVariableName()`} *`alpaca#go#prevStruct()`) ${2:Method}(${3}) ${4:error} {
     ${5}
   }
