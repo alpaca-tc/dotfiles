@@ -4,6 +4,7 @@
 
 - [chrome](https://www.google.com/intl/ja_jp/chrome/)
 - [iTerm2](https://iterm2.com)
+- [Slack](https://slack.com/intl/ja-jp/downloads/mac?geocode=ja-jp)
 
 ### Install applications from App Store
 
