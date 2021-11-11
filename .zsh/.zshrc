@@ -32,6 +32,10 @@ export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 export PATH=$PATH:/usr/local/Cellar/llvm/10.0.1/Toolchains/LLVM10.0.1.xctoolchain/usr/bin
 export MANPATH=/usr/local/share/man:$MANPATH
 
+if [ -d '/opt/homebrew/bin' ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
 # export LDFLAGS="-L/usr/local/opt/llvm/lib -L/usr/local/opt/openssl/lib"
 # export CPPFLAGS="-I/usr/local/opt/llvm/include -I/usr/local/opt/openssl/include"
 

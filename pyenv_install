@@ -2,7 +2,7 @@
 
 cd $HOME
 git clone https://github.com/pyenv/pyenv.git ~/.pyenv
-source ~/.zshrc
-pyenv install 3.5.2
-pyenv global 3.5.2
+
+pyenv install 3.10.0
+pyenv global 3.10.0
 pyenv rehash

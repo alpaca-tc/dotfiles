@@ -1,0 +1,87 @@
+## Setup
+
+### Install applications from browser
+
+- [chrome](https://www.google.com/intl/ja_jp/chrome/)
+- [iTerm2](https://iterm2.com)
+
+### Install applications from App Store
+
+- [1Password](https://apps.apple.com/jp/app/1password-7-password-manager/id1333542190?mt=12)
+- [Alfread](https://apps.apple.com/jp/app/alfred/id405843582?mt=12)
+
+### Install applications from Homebrew
+
+- [Homebrew](https://brew.sh/)
+
+```sh
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+for line in $(cat ./conf/brew.txt)
+do 
+  brew install $line
+done
+```
+
+### Install dependencies for programming
+
+#### Ruby
+
+```sh
+./rbenv_install
+
+# Load rbenv
+source ~/.zshrc
+
+rbenv install 3.0.2
+rbenv install 2.7.4
+rbenv global 3.0.2
+```
+
+#### Python
+
+```
+./pyenv_install
+
+pyenv install 3.10.0
+pyenv install 2.7.18
+```
+
+#### Go
+
+```
+./goenv_install
+```
+
+#### Node
+
+```
+./node_install
+nodenv install 16.13.0
+nodenv global 16.13.0
+./node_install
+```
+
+#### Rust
+
+```
+./rustup_install
+```
+
+#### Fonts
+
+```sh
+git clone https://github.com/alpaca-tc/alpaca
+cd alpaca
+git reset --hard HEAD^^^
+open fonts
+# and Install Ritchy
+```
+
+#### Neovim
+
+```
+./neovim_install
+vi lsp_setup.vim
+:source %
+```
