@@ -28,19 +28,19 @@ export PATH="$HOME/.yarn/bin:$PATH"
 export PATH="$PATH:$HOME/projects/google/depot_tools"
 
 # homebrew
-export PATH=/usr/local/bin:/usr/local/sbin:$PATH
-export PATH=$PATH:/usr/local/Cellar/llvm/10.0.1/Toolchains/LLVM10.0.1.xctoolchain/usr/bin
-export MANPATH=/usr/local/share/man:$MANPATH
+export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
+export PATH=$PATH:/opt/homebrew/Cellar/llvm/10.0.1/Toolchains/LLVM10.0.1.xctoolchain/usr/bin
+export MANPATH=/opt/homebrew/share/man:$MANPATH
 
 if [ -d '/opt/homebrew/bin' ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-# export LDFLAGS="-L/usr/local/opt/llvm/lib -L/usr/local/opt/openssl/lib"
-# export CPPFLAGS="-I/usr/local/opt/llvm/include -I/usr/local/opt/openssl/include"
+# export LDFLAGS="-L/opt/homebrew/opt/llvm/lib -L/opt/homebrew/opt/openssl/lib"
+# export CPPFLAGS="-I/opt/homebrew/opt/llvm/include -I/opt/homebrew/opt/openssl/include"
 
 # iTerm2
-export PATH=$HOME/usr/bin:$HOME/usr/local/bin:$PATH
+export PATH=$HOME/usr/bin:$HOME/opt/homebrew/bin:$PATH
 
 export PATH=$HOME/src/google-cloud-sdk/bin:$PATH
 
@@ -51,16 +51,16 @@ export PATH=$HOME/src/google-cloud-sdk/bin:$PATH
 # export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
 
 # scala 2.9
-export SCALA_HOME=/usr/local/Cellar/scala/2.9.2
+export SCALA_HOME=/opt/homebrew/Cellar/scala/2.9.2
 
 # XCode
 export PATH=/Library/Apple/usr/bin:$PATH
 
 
-if [ -d '/usr/local/opt/readline' ]; then
-  export LDFLAGS="-L/usr/local/opt/readline/lib"
-  export CPPFLAGS="-I/usr/local/opt/readline/include"
-  export PKG_CONFIG_PATH="/usr/local/opt/readline/lib/pkgconfig"
+if [ -d '/opt/homebrew/opt/readline' ]; then
+  export LDFLAGS="-L/opt/homebrew/opt/readline/lib"
+  export CPPFLAGS="-I/opt/homebrew/opt/readline/include"
+  export PKG_CONFIG_PATH="/opt/homebrew/opt/readline/lib/pkgconfig"
 fi
 
 # rbenv
@@ -144,12 +144,12 @@ export PATH=$HOME/dotfiles/bin:$PATH
 # python
 [[ -s "$HOME/.pythonbrew/etc/bashrc" ]] && source "$HOME/.pythonbrew/etc/bashrc"
 
-# export PYTHONPATH=/usr/local/Cellar/python32/3.2.3/Frameworks/Python.framework/Versions/3.2
+# export PYTHONPATH=/opt/homebrew/Cellar/python32/3.2.3/Frameworks/Python.framework/Versions/3.2
 # alias python=python3.2
 export PATH=$PATH:$HOME/usr/binl
 
 # QT
-export PATH=/usr/local/Trolltech/Qt-4.8.6/bin:$PATH
+export PATH=/opt/homebrew/Trolltech/Qt-4.8.6/bin:$PATH
 # }}}
 
 fpath=( $HOME/dotfiles/.zsh/zsh-completions/src $HOME/.zsh/site-functions $fpath)
@@ -161,7 +161,7 @@ if is_executable nvim; then
 fi
 
 if is_executable git; then
-  export PATH=$PATH:/usr/local/share/git-core/contrib/diff-highlight
+  export PATH=$PATH:/opt/homebrew/share/git-core/contrib/diff-highlight
 fi
 
 if is_executable direnv; then
@@ -173,12 +173,9 @@ export LANG=en_US.UTF-8
 export TZ=Asia/Tokyo
 # }}}
 
-# For rust
-export PATH=$PATH:/usr/local/bin/bin
-
 # For neovim
 # export PATH=$HOME/src/neovim/build/bin:$PATH
-# export VIMRUNTIME=/usr/local/share/vim/vim80
+# export VIMRUNTIME=/opt/homebrew/share/vim/vim80
 
 # For watson
 export LESS="-R"
