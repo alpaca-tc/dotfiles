@@ -86,3 +86,17 @@ open fonts
 vi lsp_setup.vim
 :source %
 ```
+
+### Setup hub
+
+Create access token for github
+
+https://github.com/settings/tokens/new
+
+```
+---
+github.com:
+- protocol: https
+  user: alpaca-tc
+  oauth_token: YOUR_GITHUB_ACCESS_TOKEN
+```
