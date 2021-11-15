@@ -124,6 +124,7 @@ hook_post_source = '''
 
 [[plugins]]
 repo = 'mattn/webapi-vim'
+on_func   = ["webapi#json#encode", "webapi#json#decode"]
 
 [[plugins]]
 repo = 'tpope/vim-surround'
@@ -587,6 +588,7 @@ local util = require 'lspconfig/util'
 lsp.tsserver.setup{}
 -- lsp.denols.setup{}
 lsp.gopls.setup{}
+lsp.pyright.setup{}
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -1674,6 +1676,32 @@ rtp = 'vim'
 repo = 'liuchengxu/vista.vim'
 on_cmd = ['Vista', 'Vista!', 'Vista!!']
 
+[[plugins]]
+repo = 'majutsushi/tagbar'
+on_cmd    = ["TagbarToggle", "TagbarTogglePause", "TagbarOpen"]
+hook_source = '''
+  augroup MyTagbarCmd
+    autocmd!
+    autocmd FileType tagbar
+          \ nnoremap <buffer><Space> <Space>
+          \|nnoremap <buffer><space>t :<C-U>TagbarToggle<CR>
+  augroup END
+
+  if exists('g:my.bin.ctags') && executable(g:my.bin.ctags)
+    let g:tagbar_ctags_bin = g:my.bin.ctags
+  else
+    let g:tagbar_ctags_bin = 'ctags'
+  endif
+
+  let g:tagbar_autoclose = 0
+  " let g:tagbar_sort = 0
+  let g:tagbar_compact    = 1
+  let g:tagbar_autofocus  = 1
+  let g:tagbar_autoshowtag= 1
+  let g:tagbar_iconchars  =  ['▸', '▾']
+  let g:tagbar_width = 40
+'''
+
 hook_source = '''
   " Ensure you have installed some decent font to show these pretty symbols, then you can enable icon for the kind.
   let g:vista#renderer#enable_icon = 1
@@ -1689,3 +1717,8 @@ hook_source = '''
 repo = 'alpaca-tc/alpaca_github.vim'
 on_cmd = ['GhFile', 'GhPullRequestCurrentLine', 'GhPullRequest']
 depends = ['open-browser.vim']
+
+[[plugins]]
+repo = 'alpaca-tc/alpaca_deepl.vim'
+on_cmd = ["Deepl"]
+depends = ['webapi-vim']

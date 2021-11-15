@@ -126,6 +126,10 @@ let &undodir = g:my.dir.undodir
 
 nnoremap <Space><Space>s :<C-U>source ~/.vim/vimrc<CR>
 nnoremap <Space><Space>v :<C-U>tabnew ~/.vim/vimrc<CR>
+
+if filereadable($HOME . '/.secret.vim')
+  source $HOME/.secret.vim
+endif
 "}}}
 
 " ----------------------------------------

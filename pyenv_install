@@ -6,3 +6,5 @@ git clone https://github.com/pyenv/pyenv.git ~/.pyenv
 pyenv install 3.10.0
 pyenv global 3.10.0
 pyenv rehash
+
+npm install -g pyright
