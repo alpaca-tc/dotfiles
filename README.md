@@ -5,6 +5,7 @@
 - [chrome](https://www.google.com/intl/ja_jp/chrome/)
 - [iTerm2](https://iterm2.com)
 - [Slack](https://slack.com/intl/ja-jp/downloads/mac?geocode=ja-jp)
+- [Docker](https://docs.docker.com/desktop/mac/install/)
 
 ### Install applications from App Store
 
@@ -17,6 +18,9 @@
 
 ```sh
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# If you use older OS, you need to link /usr/local to /opt/homebrew
+# sudo ln -s /usr/local /opt/homebrew
 
 for line in $(cat ./conf/brew.txt)
 do 

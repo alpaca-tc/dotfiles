@@ -89,12 +89,8 @@ if is_executable nodenv; then
 fi
 
 # deno
-export PATH=$HOME/.deno/bin:$PATH
-
-if is_executable deno; then
-  export DENO_INSTALL="/Users/alpaca-tc/.deno"
-  export PATH="$DENO_INSTALL/bin:$PATH"
-fi
+export DENO_INSTALL="$HOME/.deno"
+export PATH="$DENO_INSTALL/bin:$PATH"
 
 # pyenv
 export PYENV_ROOT=$HOME/.pyenv
