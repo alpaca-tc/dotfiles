@@ -26,6 +26,9 @@ for line in $(cat ./conf/brew.txt)
 do 
   brew install $line
 done
+
+brew tap universal-ctags/universal-ctags
+brew install --HEAD universal-ctags/universal-ctags/universal-ctags
 ```
 
 ### Install dependencies for programming
