@@ -101,3 +101,8 @@ repo = 'cocopon/iceberg.vim'
 [[plugins]]
 repo = 'tyru/open-browser-github.vim'
 depends = ['open-browser.vim']
+
+[[plugins]]
+repo = 'alpaca-tc/alpaca_deepl.vim'
+on_cmd = ["Deepl"]
+depends = ['webapi-vim']

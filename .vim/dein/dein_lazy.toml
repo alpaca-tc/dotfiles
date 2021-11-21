@@ -1717,8 +1717,3 @@ hook_source = '''
 repo = 'alpaca-tc/alpaca_github.vim'
 on_cmd = ['GhFile', 'GhPullRequestCurrentLine', 'GhPullRequest']
 depends = ['open-browser.vim']
-
-[[plugins]]
-repo = 'alpaca-tc/alpaca_deepl.vim'
-on_cmd = ["Deepl"]
-depends = ['webapi-vim']
