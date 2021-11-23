@@ -121,6 +121,6 @@ options word
 snippet funcc
 abbr    func (...) Method(...) error {}
 options word
-  func (${1:`alpaca#go#prevStructVariableName()`} *`alpaca#go#prevStruct()`) ${2:Method}(${3}) ${4:error} {
+  func (${1:`alpaca#go#prevStructVariableName()`} ${2:`alpaca#go#prevStruct()`}) ${3:Method}(${4}) ${5:error} {
     ${5}
   }

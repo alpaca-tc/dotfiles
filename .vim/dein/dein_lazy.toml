@@ -1678,7 +1678,7 @@ on_cmd = ['Vista', 'Vista!', 'Vista!!']
 
 [[plugins]]
 repo = 'majutsushi/tagbar'
-on_cmd    = ["TagbarToggle", "TagbarTogglePause", "TagbarOpen"]
+on_cmd    = ["Tagbar", "TagbarToggle", "TagbarTogglePause", "TagbarOpen"]
 hook_source = '''
   augroup MyTagbarCmd
     autocmd!
