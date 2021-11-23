@@ -29,6 +29,9 @@ done
 
 brew tap universal-ctags/universal-ctags
 brew install --HEAD universal-ctags/universal-ctags/universal-ctags
+
+# For ffi gem
+brew link --force libffi
 ```
 
 ### Install dependencies for programming
