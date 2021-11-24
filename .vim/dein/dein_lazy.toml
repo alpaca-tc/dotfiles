@@ -473,8 +473,8 @@ function! s:setup_lsp()
 endfunction
 
 augroup MyAutoCmd
-  " autocmd Filetype typescript setlocal omnifunc=v:lua.vim.lsp.omnifunc
-  autocmd FileType typescript,javascript,vue,javascript.jsx,typescript.tsx,go,rust,css,scss,sass,ruby call s:setup_lsp()
+  " autocmd Filetype typescript,typescriptreact setlocal omnifunc=v:lua.vim.lsp.omnifunc
+  autocmd FileType typescript,javascript,vue,javascript.jsx,typescript.tsx,go,rust,css,scss,sass,ruby,typescriptreact call s:setup_lsp()
   autocmd BufWritePre *.go lua vim.lsp.buf.formatting()
   autocmd BufWritePre *.go lua goimports(1000)
 augroup END
