@@ -3,7 +3,7 @@
   name= alpaca-tc
 
 [core]
-  excludesfile = ~/.gitignore
+  excludesfile = ~/.gitignore_global
   autocrlf = false; input false
   trailing-space = false
   space-before-tab = false
@@ -112,3 +112,5 @@
   protocol = https
 [rebase]
   autostash = true
+[init]
+  defaultBranch = main
