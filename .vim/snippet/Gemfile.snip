@@ -24,6 +24,11 @@ abbr        git: 'http://github...'
 options     word
   git: '${1:http://...}'
 
+snippet github
+abbr    git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+options word
+  git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+
 snippet     require
 abbr        require: 'gem_name'
 options     word

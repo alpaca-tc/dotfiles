@@ -516,6 +516,9 @@ local lsp = require 'lspconfig'
 local configs = require 'lspconfig/configs'
 local util = require 'lspconfig/util'
 
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+
 -- if not lsp.tailwind_lsp then
 --   configs.tailwind_lsp = {
 --     default_config = {
@@ -589,6 +592,9 @@ lsp.tsserver.setup{}
 -- lsp.denols.setup{}
 lsp.gopls.setup{}
 lsp.pyright.setup{}
+lsp.html.setup{
+  capabilities = capabilities,
+}
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -613,9 +619,9 @@ EOF
 '''
 
 [[plugins]]
-repo = 'kabouzeid/nvim-lspinstall'
+repo = 'williamboman/nvim-lsp-installer'
 depends = ['nvim-lspconfig']
-on_cmd = ['LspInstall', 'LspUninstall']
+on_cmd = ['LspInstallInfo', 'LspUninstall', 'LspUninstallAll', 'LspInstall', 'LspInstallLog', 'LspPrintInstalled']
 
 # [[plugins]]
 # repo = 'dense-analysis/ale'

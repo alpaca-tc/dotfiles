@@ -1,7 +1,7 @@
 " Vim syntax file
-" Language:	JSON
-" Maintainer:	Jeroen Ruigrok van der Werven <asmodai@in-nomine.org>
-" Last Change:	2009-06-16
+" Language:  JSON
+" Maintainer:  Jeroen Ruigrok van der Werven <asmodai@in-nomine.org>
+" Last Change:  2009-06-16
 " Version:      0.4
 " {{{1
 
@@ -43,7 +43,7 @@ syn keyword jsonBoolean   true false
 syn keyword jsonNull      null
 
 " Syntax: Braces {{{2
-syn match   jsonBraces	   "[{}\[\]]"
+syn match   jsonBraces     "[{}\[\]]"
 
 " Define the default highlighting. {{{1
 " For version 5.7 and earlier: only when not done already
@@ -57,10 +57,10 @@ if version >= 508 || !exists("did_json_syn_inits")
   endif
   HiLink jsonString             String
   HiLink jsonEscape             Special
-  HiLink jsonNumber		Number
-  HiLink jsonBraces		Operator
-  HiLink jsonNull		Function
-  HiLink jsonBoolean		Boolean
+  HiLink jsonNumber    Number
+  HiLink jsonBraces    Operator
+  HiLink jsonNull    Function
+  HiLink jsonBoolean    Boolean
 
   HiLink jsonNumError           Error
   HiLink jsonStringSQ           Error
