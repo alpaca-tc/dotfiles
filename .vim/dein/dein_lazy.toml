@@ -596,6 +596,8 @@ lsp.html.setup{
   capabilities = capabilities,
 }
 
+lsp.solargraph.setup{}
+
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
     virtual_text = {
@@ -608,10 +610,6 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 -- local sumneko_binary = vim.api.nvim_eval("$HOME")..'/.local/share/nvim/lspinstall/lua/sumneko-lua/extension/server/bin/macOS/lua-language-server'
 -- lsp.sumneko_lua.setup{
 --   cmd = {sumneko_binary, "-E", sumneko_main_path};
--- }
---
--- lsp.solargraph.setup{
---   cmd = {"solargraph", "stdio"},
 -- }
 
 vim.lsp.set_log_level("debug")
@@ -1681,6 +1679,15 @@ rtp = 'vim'
 [[plugins]]
 repo = 'liuchengxu/vista.vim'
 on_cmd = ['Vista', 'Vista!', 'Vista!!']
+hook_source = '''
+  function! s:vista_settings()
+    nmap <buffer><Space>t :Vista!<CR>
+  endfunction
+
+  augroup MyAutoCmd
+    autocmd FileType vista_kind call s:vista_settings()
+  augroup END
+'''
 
 [[plugins]]
 repo = 'majutsushi/tagbar'

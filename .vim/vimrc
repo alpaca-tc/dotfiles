@@ -522,7 +522,7 @@ function! OpenTag()
   let tagbars = ['vim']
 
   let finders = {
-        \ 'nvim_lsp': ['go', 'rust', 'typescript', 'javascript'],
+        \ 'nvim_lsp': ['go', 'rust', 'typescript', 'javascript', 'ruby'],
         \ }
 
   let command = 'Vista'
