@@ -20,7 +20,7 @@
   ui = true
 
 [alias]
-  fsync = "!git fetch origin $(git rev-parse --abbrev-ref HEAD) && git reset --hard FETCH_HEAD"
+  fsync = "!fun() { git fetch ${1:-origin} $(git rev-parse --abbrev-ref HEAD) && git reset --hard FETCH_HEAD; }; fun"
   rmaster = "!git fetch origin master && git rebase FETCH_HEAD"
   ffetch = "!git fetch origin ${1} && git checkout FETCH_HEAD -b ${1}"
 

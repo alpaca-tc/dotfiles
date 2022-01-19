@@ -1516,6 +1516,7 @@ hook_source = '''
     nnoremap <buffer><C-K>m           :<C-U>Unite rails/mailer<CR>
     nnoremap <buffer><C-K>l           :<C-U>UniteGit app/lib<CR>
     nnoremap <buffer><C-K>g           :<C-U>UniteGit Gemfile<CR>
+    nnoremap <buffer><C-K>S           :<C-U>UniteGit db/schema.rb<CR>
     nnoremap <buffer><C-K>r           :<C-U>UniteGit config/routes.rb<CR>
     nnoremap <buffer><C-K>w           :<C-U>UniteGit app/workers<CR>
     nnoremap <buffer><C-K>h           :<C-U>Unite rails/helper<CR>
