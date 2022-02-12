@@ -596,7 +596,9 @@ lsp.html.setup{
   capabilities = capabilities,
 }
 
-lsp.solargraph.setup{}
+lsp.solargraph.setup{
+  cmd = {"/Users/alpaca-tc/projects/solargraph/bin/solargraph", "stdio"},
+}
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -1101,7 +1103,6 @@ hook_source = '''
         \   ['up', 'down'],
         \   ['next', 'previous'],
         \   ['read', 'write'],
-        \   ['draw', 'erase'],
         \   ['old', 'new'],
         \   ['open', 'close'],
         \   ['enable', 'disable'],
@@ -1109,17 +1110,8 @@ hook_source = '''
         \   ['minminimun', 'maxmaxinum'],
         \   ['yes', 'no'],
         \   ['head', 'tail'],
-        \   ['lose', 'find'],
-        \   ['input', 'output'],
-        \   ['export', 'import'],
-        \   ['parent', 'child'],
         \   ['push', 'pull'],
-        \   ['fast', 'slow'],
         \   ['good', 'bad'],
-        \   ['same', 'different'],
-        \   ['add', 'remove'],
-        \   ['insert', 'delete'],
-        \   ['create', 'destroy'],
         \   ['prefix', 'suffix'],
         \ ],
         \ 'sass,scss,css' : [
@@ -1271,6 +1263,10 @@ hook_source = '''
         \   ['#', '##', '###', '####', '#####'],
         \   { '\(\*\*\|__\)\(.*\)\1': '_\2_' },
         \   { '\(\*\|_\)\(.*\)\1': '__\2__' },
+        \ ],
+        \ 'typescript,javascript' : [
+        \   { 'const \(.\+\)\s\+=\s\+require(\(.\+\))': 'import \1 from \2' },
+        \   { 'import \(.\+\) from \(.\+\)': 'const \1 = require(\2)' },
         \ ]
         \ }
   "}}}

@@ -53,7 +53,7 @@ show_backtrace = Class.new(Pry::ClassCommand) do
       "\e[31m#{line}\e[0m,"
     }.to_a.join("\n")
 
-    _pry_.pager.page(out)
+    pry_instance.pager.page(out)
   end
 
   def filter_re
@@ -75,7 +75,7 @@ show_backtrace = Class.new(Pry::ClassCommand) do
   end
 
   def edit_file(location)
-    _pry_.run_command("edit #{location.path}:#{location.lineno}")
+    pry_instance.run_command("edit #{location.path}:#{location.lineno}")
   end
 
   def filter_backtrace(backtrace)
