@@ -260,14 +260,6 @@ hook_source = '''
 '''
 
 [[plugins]]
-repo = 'vim-scripts/sudo.vim'
-on_cmd    = ["SudoRead", "SudoWrite"]
-
-[[plugins]]
-repo='Shougo/neossh.vim'
-on_source = ["unite.vim"]
-
-[[plugins]]
 repo = 'Shougo/unite.vim'
 on_cmd    = ["Unite", "UniteBookmarkAdd", "UniteClose", "UniteResume", "UniteWithBufferDir", "UniteWithCurrentDir", "UniteWithCursorWord", "UniteWithInput", "UniteWithInputDirectory"]
 on_func   = ["unite#util#path2project_directory", 'unite#util#get_vital']
@@ -458,6 +450,7 @@ function! s:setup_lsp()
   nnoremap <silent> K <cmd>lua vim.lsp.buf.hover()<CR>
   nnoremap <silent> ti <cmd>lua vim.lsp.buf.implementation()<CR>
   nnoremap <silent> ts <cmd>lua vim.lsp.buf.signature_help()<CR>
+  nnoremap <silent> ta <cmd>lua vim.lsp.buf.code_action()<CR>
   " nnoremap <silent> <space>wa <cmd>lua vim.lsp.buf.add_workspace_folder()<CR>
   " nnoremap <silent> <space>wr <cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>
   " nnoremap <silent> <space>wl <cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>
@@ -475,7 +468,7 @@ endfunction
 augroup MyAutoCmd
   " autocmd Filetype typescript,typescriptreact setlocal omnifunc=v:lua.vim.lsp.omnifunc
   autocmd FileType typescript,javascript,vue,javascript.jsx,typescript.tsx,go,rust,css,scss,sass,ruby,typescriptreact call s:setup_lsp()
-  autocmd BufWritePre *.go lua vim.lsp.buf.formatting()
+  autocmd BufWritePre *.go,*.ts lua vim.lsp.buf.formatting()
   autocmd BufWritePre *.go lua goimports(1000)
 augroup END
 
@@ -979,37 +972,6 @@ repo = 'alpaca-tc/alpaca_remove_dust.vim'
 on_cmd    = ["RemoveDustDisable", "RemoveDustEnable", "RemoveDust", "RemoveDustForce"]
 
 [[plugins]]
-repo = 'alpaca-tc/alpaca_tags'
-on_cmd    = ["AlpacaTagsBundle", "AlpacaTagsUpdate", "AlpacaTagsSet", "AlpacaTagsCleanCache", "AlpacaTagsEnable", "AlpacaTagsDisable", "AlpacaTagsKillProcess", "AlpacaTagsProcessStatus"]
-depends   = ['vimproc']
-hook_source = '''
-  " let g:alpaca_tags#console = { 'report': 0 }
-  let g:alpaca_tags#disable = 1
-  let g:alpaca_tags#single_task = 0
-  let g:alpaca_tags#timeout_period = 60
-  let g:alpaca_tags#console = {
-        \ 'report' : 0,
-        \ }
-  let g:alpaca_tags#config = {
-        \ '_' : '-R --sort=yes --languages=+Ruby --languages=-js,JavaScript',
-        \ 'default' : '--languages=-css,scss,html,js,JavaScript',
-        \ 'js' : '--languages=+js',
-        \ '-js' : '--languages=-js,JavaScript',
-        \ 'vim' : '--languages=+Vim,vim',
-        \ 'php' : '--languages=+php',
-        \ '-vim' : '--languages=-Vim,vim',
-        \ '-style': '--languages=-css,scss,js,JavaScript,html',
-        \ 'scss' : '--languages=+scss --languages=-css',
-        \ 'css' : '--languages=+css',
-        \ 'java' : '--languages=+java $JAVA_HOME/src',
-        \ 'ruby': '--languages=+Ruby',
-        \ 'coffee': '--languages=+coffee',
-        \ '-coffee': '--languages=-coffee',
-        \ 'bundle': '--languages=+Ruby',
-        \ }
-'''
-
-[[plugins]]
 repo = 'vim-erlang/vim-erlang-tags'
 on_ft = ["erlang"]
 
@@ -1333,23 +1295,6 @@ repo = 'alpaca-tc/vim-unite-giti'
 on_source = 'unite.vim'
 
 [[plugins]]
-repo = 'basyura/TweetVim'
-on_cmd    = ["TweetVimAccessToken", "TweetVimAddAccount", "TweetVimBitly", "TweetVimCommandSay", "TweetVimCurrentLineSay", "TweetVimHomeTimeline", "TweetVimListStatuses", "TweetVimMentions", "TweetVimSay", "TweetVimSearch", "TweetVimSwitchAccount", "TweetVimUserTimeline", "TweetVimVersion"]
-on_func   = ["tweetvim#say#command"]
-depends   = ["twibill.vim", "open-browser.vim", "unite.vim"]
-hook_source = '''
-  let g:tweetvim_async_post      = 1
-  let g:tweetvim_display_source  = 1
-  let g:tweetvim_config_dir = expand('~/src/tweetvim')
-  let g:tweetvim_display_time    = 1
-  let g:tweetvim_display_icon = 1
-  let g:tweetvim_open_buffer_cmd = 'tabnew'
-'''
-
-[[plugins]]
-repo = "basyura/twibill.vim"
-
-[[plugins]]
 repo = 'alpaca-tc/unite-git-aliases'
 on_source = 'unite.vim'
 
@@ -1395,10 +1340,6 @@ hook_source = '''
 '''
 
 [[plugins]]
-repo = 'vim-scripts/vim-less'
-on_ft     = ["less"]
-
-[[plugins]]
 repo = 'othree/yajs.vim'
 on_ft     = ["javascript"]
 
@@ -1417,10 +1358,6 @@ on_ft     = ["stylus"]
 [[plugins]]
 repo = 'moll/vim-node'
 on_ft     = ["javascript"]
-
-[[plugins]]
-repo = 'kchmck/vim-coffee-script'
-on_ft     = ["coffee"]
 
 [[plugins]]
 repo = 'alpaca-tc/vim-markdown'
@@ -1534,12 +1471,6 @@ on_map = '<Plug>DiscretionaryEnd'
 repo = 'basyura/unite-rails'
 on_source = ["unite.vim"]
 
-# [[plugins]]
-# repo = 'alpaca-tc/alpaca_octopress.vim'
-# on_cmd    = ["OctopressKillAllProcess", "Octopress"]
-# on_ft     = ["liquid"]
-# on_func   = ["octopress#complete"]
-
 [[plugins]]
 repo = 'slim-template/vim-slim'
 on_ft     = ["slim"]
@@ -1559,12 +1490,6 @@ on_ft     = ["elixir"]
 [[plugins]]
 repo = 'vim-scripts/sh.vim'
 on_ft  = 'sh'
-
-[[plugins]]
-repo = 'mattn/excitetranslate-vim'
-on_cmd    = ["ExciteTranslate"]
-on_func   = ["ExciteTranslate"]
-depends   = ["mattn/webapi-vim"]
 
 [[plugins]]
 repo = 'LeafCage/yankround.vim'
@@ -1654,10 +1579,6 @@ repo = 'juliosueiras/vim-terraform-completion'
 on_ft = ['terraform']
 
 [[plugins]]
-repo = 'alpaca-tc/mf_attendance.vim'
-on_cmd = ["ClockIn", "ClockOut", "StartBreak", "EndBreak"]
-
-[[plugins]]
 repo = 'rhysd/git-messenger.vim'
 on_cmd = ['GitMessenger']
 
@@ -1727,3 +1648,61 @@ hook_source = '''
 repo = 'alpaca-tc/alpaca_github.vim'
 on_cmd = ['GhFile', 'GhPullRequestCurrentLine', 'GhPullRequest']
 depends = ['open-browser.vim']
+
+[[plugins]]
+repo = 'alpaca-tc/vim-quickrun'
+rev = "fix_something"
+on_cmd    = ["QuickRun"]
+hook_source = '''
+  let g:quickrun_config = {}
+  let g:quickrun_no_default_key_mappings = 1
+
+  let g:quickrun_config._ = {
+        \ 'runner' : 'vimproc',
+        \ }
+
+  let g:quickrun_config.applescript = {
+        \ 'command' : 'osascript' , 'output' : '_'}
+
+  let g:quickrun_config['racc.ruby'] = {
+        \ 'command': 'racc',
+        \ 'cmdopt' : '-o',
+        \ 'args'   : 'main.rb',
+        \ 'outputter': 'message',
+        \ 'exec'   : '%c %o %a %s', }
+
+  let g:quickrun_config['racc.run'] = {
+        \ 'command': 'ruby',
+        \ 'args'   : 'main.rb',
+        \ 'exec'   : '%c %a src/', }
+
+  let g:quickrun_config['ruby.rspec'] = {
+        \ 'type' : 'ruby.rspec',
+        \ 'command': 'rspec',
+        \ 'exec': 'bundle exec %c %o %s', }
+
+  let g:quickrun_config['racc.ruby'] = {}
+
+  function! s:set_ruby_command()
+    let v = vital#quickrun#new().load('Prelude')
+    let root = v.import('Prelude').path2project_directory(getcwd())
+
+    if filereadable(root . '/Gemfile')
+      let g:quickrun_config['ruby'] = {
+            \ 'command': 'ruby',
+            \ 'exec': 'bundle exec %c %o %s',
+            \ }
+    else
+      let g:quickrun_config['ruby'] = {
+            \   'command': 'ruby',
+            \   'tempfile': '%{tempname()}.rb',
+            \ }
+    endif
+  endfunction
+
+  augroup QuickRunAutoCmd
+    autocmd!
+    autocmd FileType quickrun call alpaca_window#set_smart_close()
+    autocmd FileType ruby call s:set_ruby_command()
+  augroup END
+'''

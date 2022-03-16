@@ -16,22 +16,13 @@ export PATH=$HOME/bin:$PATH
 # user関連
 export PATH=$HOME/usr/bin:$PATH
 
-# powerline
-export PATH=$HOME/.bundle/powerline/scripts:$PATH
-
 # node
 export PATH=./node_modules/.bin:$PATH
 
 # yarn
 export PATH="$HOME/.yarn/bin:$PATH"
 
-export PATH="$PATH:$HOME/projects/google/depot_tools"
-
 # homebrew
-export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
-export PATH=$PATH:/opt/homebrew/Cellar/llvm/10.0.1/Toolchains/LLVM10.0.1.xctoolchain/usr/bin
-export MANPATH=/opt/homebrew/share/man:$MANPATH
-
 if [ -d '/opt/homebrew/bin' ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
@@ -42,6 +33,7 @@ fi
 # iTerm2
 export PATH=$HOME/usr/bin:$HOME/opt/homebrew/bin:$PATH
 
+# gcloud
 export PATH=$HOME/src/google-cloud-sdk/bin:$PATH
 
 # java 1.7.0
@@ -55,7 +47,6 @@ export SCALA_HOME=/opt/homebrew/Cellar/scala/2.9.2
 
 # XCode
 export PATH=/Library/Apple/usr/bin:$PATH
-
 
 if [ -d '/opt/homebrew/opt/readline' ]; then
   export LDFLAGS="-L/opt/homebrew/opt/readline/lib"
@@ -142,10 +133,7 @@ export PATH=$HOME/dotfiles/bin:$PATH
 
 # export PYTHONPATH=/opt/homebrew/Cellar/python32/3.2.3/Frameworks/Python.framework/Versions/3.2
 # alias python=python3.2
-export PATH=$PATH:$HOME/usr/binl
-
-# QT
-export PATH=/opt/homebrew/Trolltech/Qt-4.8.6/bin:$PATH
+export PATH=$PATH:$HOME/usr/bin
 # }}}
 
 fpath=( $HOME/dotfiles/.zsh/zsh-completions/src $HOME/.zsh/site-functions $fpath)
@@ -190,4 +178,6 @@ source ~/.zsh/.zshrc.extends
 source ~/.zsh/.zshrc.alias
 source ~/.zsh/.zshrc.smartalias
 source ~/.zsh/.zshrc.bindkey
+
+[[ -s "$HOME/.secret.zshrc" ]] && source ~/.secret.zshrc
 # }}}
