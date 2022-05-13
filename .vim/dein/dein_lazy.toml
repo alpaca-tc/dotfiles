@@ -467,7 +467,7 @@ endfunction
 
 augroup MyAutoCmd
   " autocmd Filetype typescript,typescriptreact setlocal omnifunc=v:lua.vim.lsp.omnifunc
-  autocmd FileType typescript,javascript,vue,javascript.jsx,typescript.tsx,go,rust,css,scss,sass,ruby,typescriptreact call s:setup_lsp()
+  autocmd FileType c,typescript,javascript,vue,javascript.jsx,typescript.tsx,go,rust,css,scss,sass,ruby,typescriptreact call s:setup_lsp()
   autocmd BufWritePre *.go,*.ts lua vim.lsp.buf.formatting()
   autocmd BufWritePre *.go lua goimports(1000)
 augroup END
@@ -588,10 +588,11 @@ lsp.pyright.setup{}
 lsp.html.setup{
   capabilities = capabilities,
 }
+lsp.clangd.setup{}
 
-lsp.solargraph.setup{
-  cmd = {"/Users/alpaca-tc/projects/solargraph/bin/solargraph", "stdio"},
-}
+-- lsp.solargraph.setup{
+--   cmd = {"/Users/alpaca-tc/projects/solargraph/bin/solargraph", "stdio"},
+-- }
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {

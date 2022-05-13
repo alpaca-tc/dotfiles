@@ -32,7 +32,6 @@ alias grep='egrep --color=auto -UIs'
 alias rgrep='egrep -R --color=auto -UIns'
 alias rm='gmv -f --backup=numbered --target-directory ~/.Trash/'
 alias redis='redis-server /usr/local/etc/redis.conf'
-alias github='open github-mac://openRepo/file:/Volumes/disk1_pt1/git/'
 # }}}
 
 # tmux# {{{

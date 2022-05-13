@@ -16,9 +16,6 @@ export PATH=$HOME/bin:$PATH
 # user関連
 export PATH=$HOME/usr/bin:$PATH
 
-# node
-export PATH=./node_modules/.bin:$PATH
-
 # yarn
 export PATH="$HOME/.yarn/bin:$PATH"
 
@@ -78,6 +75,9 @@ export PATH=$HOME/.nodenv/bin:$PATH
 if is_executable nodenv; then
   eval "$(nodenv init -)"
 fi
+
+# node
+export PATH=./node_modules/.bin:$PATH
 
 # deno
 export DENO_INSTALL="$HOME/.deno"

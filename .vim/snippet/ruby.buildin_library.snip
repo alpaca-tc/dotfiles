@@ -1934,3 +1934,27 @@ regexp  '\.[strftime]*$'
 options word
   strftime('%Y-%m-%m %I:%M:%S')
 # }}}
+
+snippet drb_server
+abbr    drb_server
+options word
+  require 'drb/drb'
+
+  class Server
+    def get_current_time
+      return Time.now
+    end
+  end
+
+  FRONT_OBJECT=TimeServer.new
+  DRb.start_service("druby://localhost:8787", Server.new, safe_level: 1)
+  DRb.thread.join
+
+snippet drb_client
+abbr    drb_client
+options word
+  require 'drb/drb'
+
+  DRb.start_service
+  server = DRbObject.new_with_uri("druby://localhost:8787")
+  puts server.get_current_time

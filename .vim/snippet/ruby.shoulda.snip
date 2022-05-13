@@ -139,37 +139,6 @@ snippet read_only_attributes
 abbr        have_readonly_attributes(field)
   have_read_only_attributes(:${1:field})
 #}}}
-# association#{{{
-snippet belong_to
-abbr    belong_to(...)
-regexp  '\v((to|should|to_not|should_not)\s|\.$)'
-options word
-  belong_to(${1:table})
-
-snippet have_many
-abbr    have_many(...)
-regexp  '\v((to|should|to_not|should_not)\s|\.$)'
-options word
-  have_many(${1:table})${2:.dependent(${3::destroy\})}
-
-snippet have_one
-abbr    have_one(...)
-regexp  '\v((to|should|to_not|should_not)\s|\.$)'
-options word
-  have_one(${1:table})${2:.dependent(${3::destroy\})}
-
-snippet have_manyt
-abbr    have_many(...).through(...)
-regexp  '\v((to|should|to_not|should_not)\s|\.$)'
-options word
-  have_many(${1:table}).through(${2:table})${3:.dependent(${4::destroy\})}
-
-snippet have_and_belong_to_many
-abbr    have_and_belong_to_many(association)
-regexp  '\v((to|should|to_not|should_not)\s|\.$)'
-options word
-  have_and_belong_to_many(${1:table})
-#}}}
 #}}}
 # Module: Shoulda::Matchers::ActiveRecord#{{{
 snippet     accept_nested_attributes_for
