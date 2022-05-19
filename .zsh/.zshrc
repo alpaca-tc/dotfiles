@@ -24,6 +24,10 @@ if [ -d '/opt/homebrew/bin' ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
+if [ -d '/usr/local/bin' ]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+fi
+
 # export LDFLAGS="-L/opt/homebrew/opt/llvm/lib -L/opt/homebrew/opt/openssl/lib"
 # export CPPFLAGS="-I/opt/homebrew/opt/llvm/include -I/opt/homebrew/opt/openssl/include"
 
@@ -145,7 +149,7 @@ if is_executable nvim; then
 fi
 
 if is_executable git; then
-  export PATH=$PATH:/opt/homebrew/share/git-core/contrib/diff-highlight
+  export PATH=$PATH:/opt/homebrew/share/git-core/contrib/diff-highlight:/usr/local/share/git-core/contrib/diff-highlight/
 fi
 
 if is_executable direnv; then
