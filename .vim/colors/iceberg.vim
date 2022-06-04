@@ -99,6 +99,12 @@ hi! link rubyInclude Statement
 hi! link rubyInterpolationDelimiter String
 hi! link rubySharpBang Comment
 hi! link rubyStringDelimiter String
+hi! link rbsDefine Statement
+hi! link rbsInclude Statement
+hi! link rbsInterpolationDelimiter String
+hi! link rbsSharpBang Comment
+hi! link rbsStringDelimiter String
+
 hi! link svssBraces Delimiter
 hi! link vimContinue Comment
 hi! link vimIsCommand Statement

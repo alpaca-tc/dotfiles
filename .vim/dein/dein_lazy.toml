@@ -1384,6 +1384,7 @@ repo = 'vim-ruby/vim-ruby'
 on_ft     = ["ruby", "erb", "ruby.rspec"]
 hook_source = '''
   let g:ruby_indent_block_style = 'do'
+  let g:ruby_foldable_groups = 'NONE'
 '''
 
 [[plugins]]
@@ -1707,3 +1708,7 @@ hook_source = '''
     autocmd FileType ruby call s:set_ruby_command()
   augroup END
 '''
+
+[[plugins]]
+repo = 'jlcrochet/vim-rbs'
+on_ft = ["rbs"]
