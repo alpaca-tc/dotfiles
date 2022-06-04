@@ -23,6 +23,7 @@
   fsync = "!fun() { git fetch ${1:-origin} $(git rev-parse --abbrev-ref HEAD) && git reset --hard FETCH_HEAD; }; fun"
   rmaster = "!git fetch origin master && git rebase FETCH_HEAD"
   ffetch = "!git fetch origin ${1} && git checkout FETCH_HEAD -b ${1}"
+  delta = "!git diff ${1:-HEAD} | delta"
 
   first = !"fun() { git init; git add -A; git commit -m 'First commit'; }; fun"
   assume = !"fun() { git update-index --assume-unchanged `git ls-files $@ --no-empty-directory`; }; fun"
@@ -114,3 +115,9 @@
   autostash = true
 [init]
   defaultBranch = main
+
+[delta]
+  navigate = true  # use n and N to move between diff sections
+  light = false    # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
+  side-by-side = true
+  line-numbers = true

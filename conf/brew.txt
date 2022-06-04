@@ -21,3 +21,4 @@ tmux
 unrar
 wget
 zsh
+git-delta
