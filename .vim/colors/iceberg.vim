@@ -99,6 +99,13 @@ hi! link rubyInclude Statement
 hi! link rubyInterpolationDelimiter String
 hi! link rubySharpBang Comment
 hi! link rubyStringDelimiter String
+
+" vim-rbs
+hi! link rbsMethod Statement
+hi! link rbsVisibility Statement
+hi! link rbsInclude Statement
+
+" pocke/rbs.vim
 hi! link rbsDefine Statement
 hi! link rbsInclude Statement
 hi! link rbsInterpolationDelimiter String

@@ -853,7 +853,15 @@ nnoremap <silent>gK :GitMessanger<CR>
 
 let g:switch_file_rules = {
       \ "vim": [['autoload/%\.vim', 'plugin/%\.vim']],
-      \ "ruby": [['spec/requests/%_spec\.rb', 'app/controllers/%_controller\.rb'], ['spec/%_spec\.rb', 'app/%\.rb'], ['spec/%_spec\.rb', 'lib/%\.rb']],
+      \ "ruby": [
+      \   ['spec/requests/%_spec\.rb', 'app/controllers/%_controller\.rb'],
+      \   ['spec/%_spec\.rb', 'app/%\.rb'],
+      \   ['spec/%_spec\.rb', 'lib/%\.rb'],
+      \   ['%.rb', '%.rbs'],
+      \ ],
+      \ "rbs": [
+      \   ['%.rbs', '%.rb'],
+      \ ],
       \ "typescript": [['%\.ts', '__tests__/%.test.ts'], ['%\.ts', '__tests__/%-test.ts']]
       \ }
 
