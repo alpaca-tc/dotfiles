@@ -428,3 +428,8 @@ options word
 
     git_source(:github) { |repo| "https://github.com/#{repo}.git" }
   end
+
+snippet explain_analyze
+abbr    ActiveRecord::Base.connection.exec_query(%Q{EXPLAIN ANALYZE})
+options word
+  ActiveRecord::Base.connection.exec_query(%Q{EXPLAIN ANALYZE ${1}}' AND "notifications"."unread" = TRUE}).pluck("QUERY PLAN").join("\n")

@@ -128,6 +128,7 @@ export PATH=/Applications/MacVim.app/Contents/MacOS:$PATH
 
 # setup_rails_application
 export PATH=$HOME/dotfiles/bin:$PATH
+export RAILS_SYSTEM_TESTING_SCREENSHOT=inline
 
 # scala
 [[ -s "$HOME/.bundle/ensime" ]] && export PATH=$HOME/.bundle/ensime/lib_2.9.2:$PATH
