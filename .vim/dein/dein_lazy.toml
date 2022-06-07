@@ -460,14 +460,14 @@ function! s:setup_lsp()
   nnoremap <silent> te <cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
   nnoremap <silent> tp <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
   nnoremap <silent> tn <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
-  nnoremap <silent> tl <cmd>lua vim.lsp.diagnostic.set_loclist()<CR>
+  nnoremap <silent> tl <cmd>lua vim.diagnostic.setloclist()<CR>
 
   nnoremap ff :lua vim.lsp.buf.formatting()<CR>
 endfunction
 
 augroup MyAutoCmd
   " autocmd Filetype typescript,typescriptreact setlocal omnifunc=v:lua.vim.lsp.omnifunc
-  autocmd FileType c,typescript,javascript,vue,javascript.jsx,typescript.tsx,go,rust,css,scss,sass,ruby,typescriptreact call s:setup_lsp()
+  autocmd FileType c,ruby,typescript,javascript,vue,javascript.jsx,typescript.tsx,go,rust,css,scss,sass,ruby,typescriptreact call s:setup_lsp()
   autocmd BufWritePre *.go,*.ts lua vim.lsp.buf.formatting()
   autocmd BufWritePre *.go lua goimports(1000)
 augroup END
@@ -589,6 +589,16 @@ lsp.html.setup{
   capabilities = capabilities,
 }
 lsp.clangd.setup{}
+
+lsp.sorbet.setup{
+  cmd = {'bundle', 'exec', 'srb', 'tc', '--lsp', '--dir', '.'},
+}
+
+lsp.steep.setup{
+  cmd = {'bundle', 'exec', 'srb', 'tc', '--lsp', '--dir', '.'},
+}
+
+lsp.steep.setup{}
 
 -- lsp.solargraph.setup{
 --   cmd = {"/Users/alpaca-tc/projects/solargraph/bin/solargraph", "stdio"},
@@ -879,7 +889,7 @@ hook_source = '''
     autocmd FileType * setl omnifunc=
   augroup END
 
-  call deoplete#enable_logging('DEBUG', '/tmp/deoplete.log')
+  " call deoplete#enable_logging('DEBUG', '/tmp/deoplete.log')
   call deoplete#custom#source('_', 'min_pattern_length', 1)
 
   " call deoplete#custom#option('keyword_patterns', {

@@ -858,6 +858,7 @@ let g:switch_file_rules = {
       \   ['spec/%_spec\.rb', 'app/%\.rb'],
       \   ['spec/%_spec\.rb', 'lib/%\.rb'],
       \   ['%.rb', '%.rbs'],
+      \   ['lib/%\.rb', 'sig/%\.rbs'],
       \ ],
       \ "rbs": [
       \   ['%.rbs', '%.rb'],
