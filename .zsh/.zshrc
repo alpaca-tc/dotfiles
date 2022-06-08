@@ -5,7 +5,9 @@ is_executable() {
 # PATH
 # {{{
 export PATH=''
-export MANPATH='' export MANPATH=$MANPATH:/usr/share/man export PATH=/bin:/sbin:/usr/sbin:/usr/bin
+export MANPATH=''
+export MANPATH=$MANPATH:/usr/share/man
+export PATH=/usr/local/bin:/bin:/sbin:/usr/sbin:/usr/bin
 
 # zsh関連
 export PATH=$HOME/.autojump/bin:$PATH

@@ -595,10 +595,8 @@ lsp.sorbet.setup{
 }
 
 lsp.steep.setup{
-  cmd = {'bundle', 'exec', 'srb', 'tc', '--lsp', '--dir', '.'},
+  cmd = { 'bundle', 'exec', 'steep', 'langserver' },
 }
-
-lsp.steep.setup{}
 
 -- lsp.solargraph.setup{
 --   cmd = {"/Users/alpaca-tc/projects/solargraph/bin/solargraph", "stdio"},
