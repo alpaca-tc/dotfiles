@@ -7,20 +7,6 @@ function! alpaca#initialize#directory(directories) "{{{
   endfor
 endfunction"}}}
 
-function! alpaca#initialize#define_abbreviations(definition, filetype) "{{{
-  let definition = a:definition
-  if empty(definition)
-    return
-  endif
-
-  call map(definition, '"inoreabbrev <buffer> " . v:val')
-  let command = join(definition, '|')
-
-  augroup Abbreviations
-    execute 'autocmd FileType' a:filetype command
-  augroup END
-endfunction"}}}
-
 function! alpaca#initialize#redefine_dict_to_each_filetype(difinitions, type) "{{{
   let result = {}
 

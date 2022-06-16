@@ -1,0 +1,4 @@
+snippet explain
+abbr    ApplicationRecord.connection.exec_query(%Q{EXPLAIN ANALYZE #{sql}}).pluck("QUERY PLAN").join("\n")
+options word
+  ApplicationRecord.connection.exec_query(%Q{EXPLAIN ANALYZE #{${1:sql}}}).pluck("QUERY PLAN").join("\n")

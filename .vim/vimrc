@@ -218,57 +218,6 @@ else
 endif
 nnoremap ,f :setfiletype<Space>
 
-function! s:define_abbreviations() "{{{
-  " Abbreviations {{{
-  let s:abbr_dictionary = {
-        \ 'javascript' : [
-        \   'elsif else if',
-        \   'elseif else if',
-        \ ],
-        \ 'vim' : [
-        \ ],
-        \ 'yaml': [
-        \   '<: << : *'
-        \ ],
-        \ 'ruby.rspec' : [
-        \   'sh should',
-        \   "reqs require 'spec_helper'",
-        \   'has_many have_many',
-        \   'belongs_to belong_to',
-        \ ],
-        \ 'ruby' : [
-        \   'req require',
-        \ ],
-        \ 'scss': [
-        \   'in include',
-        \   'im import',
-        \   'mi mixin',
-        \ ],
-        \ 'python' : [
-        \   'im import',
-        \ ],
-        \ 'gitcommit' : [
-        \   'wip [WIP]',
-        \   'stash [STASH]',
-        \   'imo IMO',
-        \ ],
-        \ }
-  "}}}
-
-  autocmd! Abbreviations
-  for [filetype, abbreviation_definitions] in items(s:abbr_dictionary)
-    call alpaca#initialize#define_abbreviations(abbreviation_definitions, filetype)
-  endfor
-endfunction
-
-if s:on_init()
-  augroup Abbreviations
-    autocmd!
-    autocmd FileType * call <SID>define_abbreviations()
-  augroup END
-endif
-"}}}
-
 cnoremap <C-L> <Right>
 
 xnoremap H <Nop>
