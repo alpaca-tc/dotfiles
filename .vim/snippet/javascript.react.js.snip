@@ -191,3 +191,8 @@ abbr    replaceProps(...)
 options word
   replaceProps(${1})
 # }}}
+
+snippet setState
+abbr    const [...] = setState
+options word
+    const [${1}, set${1}] = setState${2}

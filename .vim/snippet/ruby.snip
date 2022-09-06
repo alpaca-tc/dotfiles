@@ -410,15 +410,7 @@ options word
 snippet install_pry
 abbr    install_pry
 options word
-  %w[
-    ~/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/pry-0.14.1/lib
-    ~/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/coderay-1.1.3/lib
-    ~/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/method_source-1.0.0/lib
-  ].each { $LOAD_PATH.unshift(File.expand_path(_1)) }
-
-  require 'pry'
-  binding.pry
-
+  %w[~/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/pry-0.14.1/lib ~/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/coderay-1.1.3/lib ~/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/method_source-1.0.0/lib].each { $LOAD_PATH.unshift(File.expand_path(_1)) }; require 'pry'; binding.pry;
 
 snippet bundler_inline
 abbr    bundler/inline

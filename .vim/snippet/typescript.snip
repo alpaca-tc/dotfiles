@@ -26,21 +26,23 @@ snippet useEffectDebugger
 abbr    useEffectDebugger
 options word
   const usePrevious = (value: React.DependencyList, initialValue: React.DependencyList) => {
-    const ref = useRef(initialValue);
+    const ref = useRef(initialValue)
+
     useEffect(() => {
-      ref.current = value;
+      ref.current = value
     });
-    return ref.current;
+
+    return ref.current
   };
 
   const useEffectDebugger = (effectHook: React.EffectCallback, deps: React.DependencyList) => {
-    const previousDeps = usePrevious(deps, [] as React.DependencyList);
+    const previousDeps = usePrevious(deps, ([] as React.DependencyList))
 
-    const changedDeps = (deps || []).reduce((accum, dependency, index) => {
+    const changedDeps = deps.reduce((accum, dependency, index) => {
       if (dependency !== previousDeps[index]) {
-        const keyName = index;
+        const keyName = index
         return {
-          ...accum,
+          ...(accum as React.DependencyList),
           [keyName]: {
             before: previousDeps[index],
             after: dependency
@@ -49,7 +51,7 @@ options word
       }
 
       return accum;
-    }, {});
+    }, {}) as React.DependencyList
 
     if (Object.keys(changedDeps).length) {
       console.log('[use-effect-debugger] ', changedDeps);
@@ -57,3 +59,4 @@ options word
 
     useEffect(effectHook, deps);
   };
+
