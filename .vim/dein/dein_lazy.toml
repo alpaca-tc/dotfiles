@@ -583,7 +583,9 @@ capabilities.textDocument.completion.completionItem.snippetSupport = true
 -- lsp.tailwind_lsp.setup{}
 lsp.tsserver.setup{}
 -- lsp.denols.setup{}
-lsp.gopls.setup{}
+lsp.gopls.setup{
+  cmd = {vim.api.nvim_eval("$HOME") .. "/.local/share/nvim/lsp_servers/go/gopls"}
+}
 lsp.pyright.setup{}
 lsp.html.setup{
   capabilities = capabilities,
@@ -594,9 +596,9 @@ lsp.sorbet.setup{
   cmd = {'bundle', 'exec', 'srb', 'tc', '--lsp', '--dir', '.'},
 }
 
-lsp.steep.setup{
-  cmd = { 'bundle', 'exec', 'steep', 'langserver' },
-}
+-- lsp.steep.setup{
+--   cmd = { 'bundle', 'exec', 'steep', 'langserver' },
+-- }
 
 -- lsp.solargraph.setup{
 --   cmd = {"/Users/alpaca-tc/projects/solargraph/bin/solargraph", "stdio"},
