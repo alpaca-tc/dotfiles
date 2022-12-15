@@ -113,6 +113,14 @@ class ::String
     tempfile.rewind
     puts `sqlformat -r -k upper #{tempfile.path}`
   end
+
+  def exec_query
+    ApplicationRecord.connection.exec_query(self)
+  end
+
+  def explain
+    ApplicationRecord.connection.explain(self)
+  end
 end
 
 require 'bigdecimal'

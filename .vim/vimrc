@@ -188,9 +188,44 @@ if has('multi_byte_ime')
   set iminsert=0 imsearch=0
 endif
 
+function! s:join_sentence() abort range
+  let firstline = a:firstline
+  let lastline = a:lastline
+
+  let lines = getline(firstline, lastline)
+  let new_lines = []
+  let is_prev_sentence = v:false
+
+  for i in range(0, len(lines) - 1)
+    let line = lines[i]
+    let without_break = substitute(line, "[\r\n\t]", "", "g")
+    let is_sentence = matchstr(without_break, "\S") != ''
+
+    if is_prev_sentence
+      let last_line = new_lines[len(new_lines) - 1]
+      let last_line .= substitute(without_break, "^ *", "", "g")
+      let new_lines[len(new_lines) - 1] = last_line
+    else
+      if len(new_lines) != 0
+        call add(new_lines, "")
+      endif
+
+      call add(new_lines, line)
+    endif
+
+    let is_prev_sentence = is_sentence
+  endfor
+
+  let delete_command = firstline . ',' . lastline . 'delete'
+  silent execute delete_command
+
+  silent! call append(firstline - 1, new_lines)
+endfunction
+
 xnoremap < <gv
 xnoremap m :sort<CR>
 xnoremap > >gv
+xnoremap gj :call <SID>join_sentence()<CR>
 
 nnoremap <silent><Space><Space><Space>q :qall!<CR>
 nnoremap <silent><Space><Space>w :wall<CR>

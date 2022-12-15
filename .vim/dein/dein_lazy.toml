@@ -446,6 +446,7 @@ function! s:setup_lsp()
   setl signcolumn=no
 
   nnoremap <silent> gd <cmd>lua vim.lsp.buf.declaration()<CR>
+  nnoremap <silent> ty <cmd>lua vim.lsp.buf.document_symbol()<CR>
   nnoremap <silent> tt <cmd>lua vim.lsp.buf.definition()<CR>
   nnoremap <silent> K <cmd>lua vim.lsp.buf.hover()<CR>
   nnoremap <silent> ti <cmd>lua vim.lsp.buf.implementation()<CR>
@@ -467,7 +468,7 @@ endfunction
 
 augroup MyAutoCmd
   " autocmd Filetype typescript,typescriptreact setlocal omnifunc=v:lua.vim.lsp.omnifunc
-  autocmd FileType c,ruby,typescript,javascript,vue,javascript.jsx,typescript.tsx,go,rust,css,scss,sass,ruby,typescriptreact call s:setup_lsp()
+  autocmd FileType python,c,ruby,typescript,javascript,vue,javascript.jsx,typescript.tsx,go,rust,css,scss,sass,ruby,typescriptreact call s:setup_lsp()
   autocmd BufWritePre *.go,*.ts lua vim.lsp.buf.formatting()
   autocmd BufWritePre *.go lua goimports(1000)
 augroup END
@@ -582,20 +583,22 @@ capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 -- lsp.tailwind_lsp.setup{}
 lsp.tsserver.setup{}
+lsp.pyright.setup{
+  cmd = {vim.api.nvim_eval("$HOME") .. "/.local/share/nvim/lsp_servers/python/node_modules/.bin/pyright-langserver", '--stdio'}
+}
 -- lsp.denols.setup{}
 lsp.gopls.setup{
   cmd = {vim.api.nvim_eval("$HOME") .. "/.local/share/nvim/lsp_servers/go/gopls"}
 }
-lsp.pyright.setup{}
 lsp.html.setup{
   capabilities = capabilities,
 }
 lsp.clangd.setup{}
 
-lsp.sorbet.setup{
-  cmd = {'bundle', 'exec', 'srb', 'tc', '--lsp', '--dir', '.'},
-}
-
+-- lsp.sorbet.setup{
+--   cmd = {'bundle', 'exec', 'srb', 'tc', '--lsp', '--dir', '.'},
+-- }
+--
 -- lsp.steep.setup{
 --   cmd = { 'bundle', 'exec', 'steep', 'langserver' },
 -- }
@@ -865,7 +868,7 @@ hook_source = '''
   endfunction
 
   augroup MyAutoCmd
-    autocmd FileType ruby imap <expr><silent><buffer> <CR> <SID>my_cr_function()
+    autocmd FileType ruby,ruby.rspec imap <expr><silent><buffer> <CR> <SID>my_cr_function()
   augroup END
 
   inoremap <expr><C-h> deoplete#smart_close_popup() . "\<C-h>"
@@ -1616,6 +1619,16 @@ rtp = 'vim'
 repo = 'liuchengxu/vista.vim'
 on_cmd = ['Vista', 'Vista!', 'Vista!!']
 hook_source = '''
+  let g:vista_default_executive = 'nvim_lsp'
+
+  let g:vista_executive_for = {
+    \ 'c': 'nvim_lsp',
+    \ 'cpp': 'nvim_lsp',
+    \ 'typescript': 'vim_lsp',
+    \ 'javascript': 'vim_lsp',
+    \ 'ruby': 'ctags',
+    \ }
+
   function! s:vista_settings()
     nmap <buffer><Space>t :Vista!<CR>
   endfunction
@@ -1728,3 +1741,14 @@ hook_source = '''
 [[plugins]]
 repo = 'jlcrochet/vim-rbs'
 on_ft = ["rbs"]
+
+[[plugins]]
+repo = 'mfussenegger/nvim-dap'
+on_ft = ["javascript", "typescript", "javascript.jsx", "typescript.tsx", "ruby"]
+hook_source = '''
+  nnoremap DB :lua require'dap'.toggle_breakpoint()<CR>
+  nnoremap DD :lua require'dap'.continue()<CR>
+  nnoremap DS :lua require'dap'.step_into()<CR>
+  nnoremap DO :lua require'dap'.step_over()<CR>
+  nnoremap DR :lua require'dap'.repl.open()<CR>
+'''
