@@ -12,13 +12,9 @@ if [ -x `which rbenv` ];then
     cd ~/.rbenv/plugins
     git clone git://github.com/sstephenson/ruby-build.git
 
-    echo ""
     echo "copy-paste this to ~/.zshrc"
     echo 'export PATH="$HOME/.rbenv/bin/:$HOME/.rbenv:$PATH"'
     echo 'eval "$(rbenv init -)"'
-
-    echo "install ruby 2.5.0"
-    # RUBY_CONFIGURE_OPTS="--with-openssl-dir=`brew --prefix openssl` --enable-shared --with-readline-dir=`brew --prefix readline`" rbenv install 2.5.0
 
     rbenv rehash
 fi

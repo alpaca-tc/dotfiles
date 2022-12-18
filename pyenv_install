@@ -3,8 +3,8 @@
 cd $HOME
 git clone https://github.com/pyenv/pyenv.git ~/.pyenv
 
-pyenv install 3.10.0
-pyenv global 3.10.0
+pyenv install 3.11.1
+pyenv global 3.11.1
 pyenv rehash
 
 npm install -g pyright

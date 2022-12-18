@@ -1,14 +1,14 @@
 #!/bin/sh
 
 PYTHON_VERSION=2.7.18
-PYTHON3_VERSION=3.10.0
+PYTHON3_VERSION=3.11.1
 RUBY_VERSION=2.7.4
 
 cd $HOME
 brew install --HEAD neovim
 npm install -g neovim
 $HOME/.pyenv/versions/$PYTHON3_VERSION/bin/python -m pip install pynvim
-$HOME/.pyenv/versions/$PYTHON_VERSION/bin/python -m pip install pynvim
+$HOME/.pyenv/versions/$PYTHON_VERSION/bin/python -m pip3 install pynvim
 
 if [ ! -f $HOME/.config/nvim/init.vim ]; then
     mkdir -p ~/.config/nvim
