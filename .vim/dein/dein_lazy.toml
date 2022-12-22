@@ -441,6 +441,7 @@ call denite#custom#map('insert', '<C-P>', '<denite:move_to_previous_line>')
 [[plugins]]
 repo = 'neovim/nvim-lspconfig'
 on_event = ['InsertEnter']
+depends = ['mason.nvim']
 hook_source = '''
 function! s:setup_lsp()
   setl signcolumn=no
@@ -513,88 +514,19 @@ local util = require 'lspconfig/util'
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
--- if not lsp.tailwind_lsp then
---   configs.tailwind_lsp = {
---     default_config = {
---       cmd = {vim.api.nvim_eval("$HOME") .. "/.local/share/nvim/lspinstall/tailwindcss/tailwindcss-intellisense.sh", "--stdio"},
---       filetypes = {
---         -- html
---         'aspnetcorerazor',
---         'blade',
---         'django-html',
---         'edge',
---         'ejs',
---         'erb',
---         'gohtml',
---         'haml',
---         'handlebars',
---         'hbs',
---         'html',
---         'html-eex',
---         'jade',
---         'leaf',
---         'liquid',
---         'markdown',
---         'mdx',
---         'mustache',
---         'njk',
---         'nunjucks',
---         'php',
---         'razor',
---         'slim',
---         'twig',
---         -- css
---         'css',
---         'less',
---         'postcss',
---         'sass',
---         'scss',
---         'stylus',
---         'sugarss',
---         -- js
---         'javascript',
---         'javascriptreact',
---         'javascript.jsx',
---         'reason',
---         'rescript',
---         'typescript',
---         'typescriptreact',
---         'typescript.tsx',
---         -- mixed
---         'vue',
---         'svelte',
---       },
---       root_dir = function(fname)
---         return util.root_pattern('tailwind.config.js', 'tailwind.config.ts')(fname) or
---         util.root_pattern('postcss.config.js', 'postcss.config.ts')(fname) or
---         util.find_package_json_ancestor(fname) or
---         util.find_node_modules_ancestor(fname) or
---         util.find_git_ancestor(fname)
---         end,
---       handlers = {
---         ["tailwindcss/getConfiguration"] = function (_, _, params, _, bufnr, _)
---           -- tailwindcss lang server waits for this repsonse before providing hover
---           vim.lsp.buf_notify(bufnr, "tailwindcss/getConfigurationResponse", { _id = params._id })
---         end
---       }
---     };
---   }
--- end
-
--- lsp.tailwind_lsp.setup{}
-lsp.tsserver.setup{}
-lsp.pyright.setup{
-  cmd = {vim.api.nvim_eval("$HOME") .. "/.local/share/nvim/lsp_servers/python/node_modules/.bin/pyright-langserver", '--stdio'}
-}
--- lsp.denols.setup{}
-lsp.gopls.setup{
-  cmd = {vim.api.nvim_eval("$HOME") .. "/.local/share/nvim/lsp_servers/go/gopls"}
-}
-lsp.html.setup{
-  capabilities = capabilities,
-}
-lsp.clangd.setup{}
-
+-- lsp.tsserver.setup{}
+-- lsp.pyright.setup{
+--   cmd = {vim.api.nvim_eval("$HOME") .. "/.local/share/nvim/lsp_servers/python/node_modules/.bin/pyright-langserver", '--stdio'}
+-- }
+-- -- lsp.denols.setup{}
+-- lsp.gopls.setup{
+--   cmd = {vim.api.nvim_eval("$HOME") .. "/.local/share/nvim/lsp_servers/go/gopls"}
+-- }
+-- lsp.html.setup{
+--   capabilities = capabilities,
+-- }
+-- lsp.clangd.setup{}
+--
 -- lsp.sorbet.setup{
 --   cmd = {'bundle', 'exec', 'srb', 'tc', '--lsp', '--dir', '.'},
 -- }
@@ -626,9 +558,27 @@ EOF
 '''
 
 [[plugins]]
-repo = 'williamboman/nvim-lsp-installer'
-depends = ['nvim-lspconfig']
-on_cmd = ['LspInstallInfo', 'LspUninstall', 'LspUninstallAll', 'LspInstall', 'LspInstallLog', 'LspPrintInstalled']
+repo = 'williamboman/mason-lspconfig.nvim'
+
+[[plugins]]
+repo = 'williamboman/mason.nvim'
+depends = ['mason-lspconfig.nvim']
+on_cmd = ['Mason', 'MasonInstall', 'MasonUninstall', 'MasonUninstallAll', 'MasonLog']
+
+hook_source = '''
+  lua << EOF
+  local mason = require('mason')
+  mason.setup()
+
+  local nvim_lsp = require('lspconfig')
+  local mason_lspconfig = require('mason-lspconfig')
+
+  mason_lspconfig.setup_handlers({ function(server_name)
+    local opts = {}
+    nvim_lsp[server_name].setup(opts)
+  end })
+EOF
+'''
 
 # [[plugins]]
 # repo = 'dense-analysis/ale'
