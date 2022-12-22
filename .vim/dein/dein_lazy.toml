@@ -610,7 +610,7 @@ lua <<EOF
       require('null-ls').builtins.formatting.rustfmt,
       require('null-ls').builtins.formatting.rubocop.with({
         command = "bundle",
-        args = { "exec", "rubocop", "--auto-correct", "-f", "quiet", "--stderr", "--stdin", "$FILENAME" },
+        args = { "exec", "rubocop", "--auto-correct-all", "-f", "quiet", "--stderr", "--stdin", "$FILENAME" },
         prefer_local = "bundle_bin",
         condition = function(utils)
           return utils.root_has_file({".rubocop.yml", "Gemfile"})
