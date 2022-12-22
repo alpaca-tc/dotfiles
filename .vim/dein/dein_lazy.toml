@@ -1323,33 +1323,28 @@ repo = 'kana/vim-niceblock'
 on_map    = ["<Plug>(niceblock-I)", "<Plug>(niceblock-A)"]
 
 [[plugins]]
-repo = 'alpaca-tc/auto-pairs'
+repo = 'RRethy/nvim-treesitter-endwise'
+depends = ['nvim-treesitter']
+
+[[plugins]]
+repo = 'nvim-treesitter/nvim-treesitter'
+
+[[plugins]]
+repo = 'windwp/nvim-autopairs'
+depends = ['nvim-treesitter-endwise']
 on_event = ['InsertEnter']
 hook_source = '''
-  let g:auto_pairs#map_space = 0
-  let g:auto_pairs#map_cr = 0
+  lua << EOF
+    local Rule = require('nvim-autopairs.rule')
+    local npairs = require('nvim-autopairs')
 
-  let g:auto_pairs = {
-        \ '(':')',
-        \ '[':']',
-        \ '{':'}',
-        \ "'":"'",
-        \ '"':'"',
-        \ '`':'`',
-        \ }
-  let g:auto_pairs#parens = { '{':'}' }
+    npairs.setup {
+      map_c_h = true
+    }
 
-
-  augroup MySurroundMapping
-    autocmd!
-
-    autocmd FileType ruby,eruby,slim,haml
-      \ let b:auto_pairs = extend(g:auto_pairs, { '|' : '|' })
-  augroup END
-'''
-
-hook_post_source = '''
-  call auto_pairs#try_init()
+    npairs.add_rules(require('nvim-autopairs.rules.endwise-ruby'))
+    npairs.add_rule(Rule('|', '|', { 'ruby', 'eruby' }))
+EOF
 '''
 
 [[plugins]]
