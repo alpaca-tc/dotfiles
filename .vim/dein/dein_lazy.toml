@@ -464,7 +464,7 @@ function! s:setup_lsp()
   nnoremap <silent> tn <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
   nnoremap <silent> tl <cmd>lua vim.diagnostic.setloclist()<CR>
 
-  nnoremap ff :lua vim.lsp.buf.formatting()<CR>
+  nnoremap ff :lua vim.lsp.buf.format { async = true }<CR>
 endfunction
 
 augroup MyAutoCmd
@@ -577,6 +577,48 @@ hook_source = '''
     local opts = {}
     nvim_lsp[server_name].setup(opts)
   end })
+EOF
+'''
+
+[[plugins]]
+repo = 'nvim-lua/plenary.nvim'
+
+[[plugins]]
+repo = 'jose-elias-alvarez/null-ls.nvim'
+depends = ['plenary.nvim']
+on_event = ['InsertEnter']
+hook_source = '''
+lua <<EOF
+  require('null-ls').setup({
+    capabilities = capabilities,
+    sources = {
+      require('null-ls').builtins.formatting.stylua,
+      require('null-ls').builtins.diagnostics.rubocop.with({
+        command = "bundle",
+        args = { "exec", "rubocop", "-f", "json", "--force-exclusion", "--stdin", "$FILENAME" },
+        prefer_local = "bundle_bin",
+        condition = function(utils)
+          return utils.root_has_file({".rubocop.yml", "Gemfile"})
+        end
+      }),
+      require('null-ls').builtins.diagnostics.eslint,
+      require('null-ls').builtins.diagnostics.luacheck.with({
+        extra_args = {"--globals", "vim", "--globals", "awesome"},
+      }),
+      require('null-ls').builtins.diagnostics.yamllint,
+      require('null-ls').builtins.formatting.gofmt,
+      require('null-ls').builtins.formatting.rustfmt,
+      require('null-ls').builtins.formatting.rubocop.with({
+        command = "bundle",
+        args = { "exec", "rubocop", "--auto-correct", "-f", "quiet", "--stderr", "--stdin", "$FILENAME" },
+        prefer_local = "bundle_bin",
+        condition = function(utils)
+          return utils.root_has_file({".rubocop.yml", "Gemfile"})
+        end
+      }),
+      require('null-ls').builtins.completion.spell,
+    },
+  })
 EOF
 '''
 
