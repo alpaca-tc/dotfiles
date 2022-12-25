@@ -616,7 +616,6 @@ lua <<EOF
           return utils.root_has_file({".rubocop.yml", "Gemfile"})
         end
       }),
-      require('null-ls').builtins.completion.spell,
     },
   })
 EOF
@@ -900,17 +899,7 @@ hook_source = '''
 
   " call deoplete#enable_logging('DEBUG', '/tmp/deoplete.log')
   call deoplete#custom#source('_', 'min_pattern_length', 1)
-  call deoplete#custom#option('ignore_sources', {'ruby': ['lsp'], 'gitcommit': ['lsp']})
-
-  " call deoplete#custom#option('keyword_patterns', {
-  "     \ 'html': '[a-zA-Z_][a-z0-9A-Z_\-]*[!?]?',
-  "     \ 'typescript.tsx': '[a-zA-Z_\-][\k\-]*',
-  "     \ 'typescript': '[a-zA-Z_\-][\k\-]*',
-  "     \})
-  "
-  " call deoplete#custom#source('lsp', 'input_pattern', '[a-zA-Z_]\w*$')
-  " call deoplete#custom#source('lsp', 'input_pattern', '(\.|:|->)')
-  " call deoplete#custom#source('lsp', 'input_pattern', '[a-zA-Z_]\w*$')
+  " call deoplete#custom#option('ignore_sources', {'ruby': ['lsp'], 'gitcommit': ['lsp']})
 '''
 
 [[plugins]]
