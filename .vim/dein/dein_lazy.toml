@@ -900,7 +900,7 @@ hook_source = '''
 
   " call deoplete#enable_logging('DEBUG', '/tmp/deoplete.log')
   call deoplete#custom#source('_', 'min_pattern_length', 1)
-  call deoplete#custom#option('ignore_sources', {'ruby': ['lsp']})
+  call deoplete#custom#option('ignore_sources', {'ruby': ['lsp'], 'gitcommit': ['lsp']})
 
   " call deoplete#custom#option('keyword_patterns', {
   "     \ 'html': '[a-zA-Z_][a-z0-9A-Z_\-]*[!?]?',
