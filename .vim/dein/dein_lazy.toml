@@ -575,6 +575,30 @@ hook_source = '''
 
   mason_lspconfig.setup_handlers({ function(server_name)
     local opts = {}
+
+    if server_name == 'denols' then
+      local opts = {
+        root_dir = nvim_lsp.util.root_pattern("deno.json"),
+        init_options = {
+          lint = true,
+          unstable = true,
+          suggest = {
+            imports = {
+              hosts = {
+                ["https://deno.land"] = true,
+                ["https://cdn.nest.land"] = true,
+                ["https://crux.land"] = true,
+              },
+            },
+          },
+        },
+      }
+    elseif server_name == 'tsserver' then
+      local opts = {
+        root_dir = nvim_lsp.util.root_pattern("package.json"),
+      }
+    end
+
     nvim_lsp[server_name].setup(opts)
   end })
 EOF
@@ -852,61 +876,188 @@ hook_source = '''
   augroup END
 '''
 
+# [[plugins]]
+# repo = 'Shougo/deoplete.nvim'
+# on_event = ['InsertEnter']
+# disabled = '!has("nvim")'
+# depends = ['deoplete-lsp']
+# hook_source = '''
+#   let g:deoplete#enable_at_startup = 1
+#
+#   imap <expr><C-G> deoplete#undo_completion()
+#
+#   function! s:my_cr_function()
+#     return pumvisible() ? deoplete#close_popup() . "\<CR>"  : "\<CR>\<Plug>DiscretionaryEnd"
+#   endfunction
+#
+#   augroup MyAutoCmd
+#     autocmd FileType ruby,ruby.rspec imap <expr><silent><buffer> <CR> <SID>my_cr_function()
+#   augroup END
+#
+#   inoremap <expr><C-h> deoplete#smart_close_popup() . "\<C-h>"
+#   inoremap <expr><C-X><C-F> deoplete#manual_complete('file')
+#   inoremap <expr><C-X><C-O> deoplete#manual_complete('lsp')
+#   inoremap <expr><C-X><C-A> deoplete#manual_complete('ale')
+#   inoremap <expr><C-G> deoplete#undo_completion()
+#   inoremap <expr><C-N> pumvisible() ? "\<C-N>" : "\<C-X>\<C-U>\<C-P>\<Down>"
+#   inoremap <expr><C-P> pumvisible() ? "\<C-P>" : "\<C-P>\<C-N>"
+#
+#   inoremap <expr><Left>  deoplete#close_popup() . "\<Left>"
+#   inoremap <expr><Right> deoplete#close_popup() . "\<Right>"
+#   inoremap <expr><Up>    deoplete#close_popup() . "\<Up>"
+#   inoremap <expr><Down>  deoplete#close_popup() . "\<Down>"
+#
+#   imap <expr><TAB> pumvisible() ? "\<C-n>" :
+#         \ neosnippet#expandable_or_jumpable() ?
+#         \ neosnippet#mappings#jump_or_expand_impl() :
+#         \ <SID>check_back_space() ? "\<TAB>" :
+#         \ deoplete#manual_complete()
+#   function! s:check_back_space() "{{{
+#     let col = col('.') - 1
+#     return !col || getline('.')[col - 1]  =~ '\s'
+#   endfunction"}}}
+#
+#   augroup MyAutoCmd
+#     autocmd FileType * setl omnifunc=
+#   augroup END
+#
+#   " call deoplete#enable_logging('DEBUG', '/tmp/deoplete.log')
+#   call deoplete#custom#source('_', 'min_pattern_length', 1)
+#   " call deoplete#custom#option('ignore_sources', {'ruby': ['lsp'], 'gitcommit': ['lsp']})
+# '''
+#
+# [[plugins]]
+# repo = 'Shougo/deoplete-lsp'
+# hook_source = '''
+# let g:deoplete#lsp#handler_enabled = v:true
+# '''
+
 [[plugins]]
-repo = 'Shougo/deoplete.nvim'
+repo = 'Shougo/ddc.vim'
+depends = ['denops.vim', 'pum.vim', 'ddc-file', 'ddc-matcher_head', 'ddc-sorter_rank', 'ddc-converter_remove_overlap', 'ddc-ui-native', 'neco-vim', 'ddc-source-nvim-lsp', 'ddc-buffer', 'ddc-dictionary', 'ddc-gitmoji']
 on_event = ['InsertEnter']
-disabled = '!has("nvim")'
-depends = ['deoplete-lsp']
 hook_source = '''
-  let g:deoplete#enable_at_startup = 1
+  call ddc#custom#patch_global('ui', 'native')
 
-  imap <expr><C-G> deoplete#undo_completion()
+  call ddc#custom#patch_global('completionMenu', 'pum.vim')
 
-  function! s:my_cr_function()
-    return pumvisible() ? deoplete#close_popup() . "\<CR>"  : "\<CR>\<Plug>DiscretionaryEnd"
-  endfunction
+  call ddc#custom#patch_global('sources', [
+    \ 'nvim-lsp',
+    \ 'buffer',
+    \ 'file',
+    \ 'dictionary',
+    \ ])
 
-  augroup MyAutoCmd
-    autocmd FileType ruby,ruby.rspec imap <expr><silent><buffer> <CR> <SID>my_cr_function()
-  augroup END
+  call ddc#custom#patch_global('sourceOptions', {
+    \ '_': {
+    \   'matchers': ['matcher_head'],
+    \   'sorters': ['sorter_rank'],
+    \   'converters': ['converter_remove_overlap'],
+    \ },
+    \ 'gitmoji': {
+    \   'mark': 'gitmoji',
+    \   'sorters': [],
+    \   'matchers': ['gitmoji'],
+    \   'keywordPattern': '[a-zA-Z_:]*',
+    \   'forceCompletionPattern': '(^|\s):',
+    \ },
+    \ 'buffer': {
+    \   'mark': 'buffer',
+    \   'minAutoCompleteLength': 2,
+    \ },
+    \ 'dictionary': {
+    \   'mark': 'dict'
+    \ },
+    \ 'necovim': {
+    \   'mark': 'neco'
+    \ },
+    \ 'nvim-lsp': {
+    \   'mark': 'lsp',
+    \   'forceCompletionPattern': '\.\w*|:\w*|->\w*',
+    \   'minAutoCompleteLength': 0,
+    \ },
+    \ 'file': {
+    \   'mark': 'file',
+    \   'isVolatile': v:true,
+    \   'forceCompletionPattern': '\S/\S*'
+    \ }})
 
-  inoremap <expr><C-h> deoplete#smart_close_popup() . "\<C-h>"
-  inoremap <expr><C-X><C-F> deoplete#manual_complete('file')
-  inoremap <expr><C-X><C-O> deoplete#manual_complete('lsp')
-  inoremap <expr><C-X><C-A> deoplete#manual_complete('ale')
-  inoremap <expr><C-G> deoplete#undo_completion()
-  inoremap <expr><C-N> pumvisible() ? "\<C-N>" : "\<C-X>\<C-U>\<C-P>\<Down>"
-  inoremap <expr><C-P> pumvisible() ? "\<C-P>" : "\<C-P>\<C-N>"
+  call ddc#custom#patch_filetype(['gitcommit'], #{
+    \   keywordPattern: '[a-zA-Z_:]\w*',
+    \   sources: ['gitmoji'],
+    \ })
 
-  inoremap <expr><Left>  deoplete#close_popup() . "\<Left>"
-  inoremap <expr><Right> deoplete#close_popup() . "\<Right>"
-  inoremap <expr><Up>    deoplete#close_popup() . "\<Up>"
-  inoremap <expr><Down>  deoplete#close_popup() . "\<Down>"
+  call ddc#custom#patch_filetype(['vim'], #{
+    \   keywordPattern: '[a-zA-Z_:]\w*',
+    \   sources: ['buffer', 'necovim', 'dictionary'],
+    \ })
 
-  imap <expr><TAB> pumvisible() ? "\<C-n>" :
-        \ neosnippet#expandable_or_jumpable() ?
-        \ neosnippet#mappings#jump_or_expand_impl() :
-        \ <SID>check_back_space() ? "\<TAB>" :
-        \ deoplete#manual_complete()
+  call ddc#custom#patch_global('sourceParams', #{
+    \   nvim-lsp: #{ kindLabels: #{ Class: 'c' } },
+    \ })
+
+  call ddc#custom#patch_global('sourceParams', {
+    \ 'buffer': {
+    \   'requireSameFiletype': v:false,
+    \   'limitBytes': 5000000,
+    \   'fromAltBuf': v:true,
+    \   'forceCollect': v:true,
+    \ },
+    \ })
+
+  call ddc#enable()
+
+  inoremap <Tab> <Cmd>call pum#map#insert_relative(+1)<CR>
+  inoremap <S-Tab> <Cmd>call pum#map#insert_relative(-1)<CR>
+
   function! s:check_back_space() "{{{
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~ '\s'
   endfunction"}}}
 
-  augroup MyAutoCmd
-    autocmd FileType * setl omnifunc=
-  augroup END
-
-  " call deoplete#enable_logging('DEBUG', '/tmp/deoplete.log')
-  call deoplete#custom#source('_', 'min_pattern_length', 1)
-  " call deoplete#custom#option('ignore_sources', {'ruby': ['lsp'], 'gitcommit': ['lsp']})
+  imap <expr><TAB> pumvisible() ? "\<C-n>" :
+        \ neosnippet#expandable_or_jumpable() ?
+        \ neosnippet#mappings#jump_or_expand_impl() :
+        \ <SID>check_back_space() ? "\<TAB>" :
+        \ pum#map#insert_relative(+1)
 '''
 
 [[plugins]]
-repo = 'Shougo/deoplete-lsp'
-hook_source = '''
-let g:deoplete#lsp#handler_enabled = v:true
-'''
+repo = "alpaca-tc/ddc-gitmoji"
+rev = "support_recent_ddc_vim"
+
+[[plugins]]
+repo = "gamoutatsumi/ddc-emoji"
+
+[[plugins]]
+repo = "matsui54/ddc-dictionary"
+
+[[plugins]]
+repo = "Shougo/ddc-source-nvim-lsp"
+
+[[plugins]]
+repo = "matsui54/ddc-buffer"
+
+[[plugins]]
+repo = "Shougo/ddc-ui-native"
+
+[[plugins]]
+repo = 'vim-denops/denops.vim'
+
+[[plugins]]
+repo = 'Shougo/pum.vim'
+
+[[plugins]]
+repo = 'LumaKernel/ddc-file'
+
+[[plugins]]
+repo = 'Shougo/ddc-matcher_head'
+
+[[plugins]]
+repo = 'Shougo/ddc-sorter_rank'
+
+[[plugins]]
+repo = 'Shougo/ddc-converter_remove_overlap'
 
 [[plugins]]
 repo = 'Shougo/context_filetype.vim'
