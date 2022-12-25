@@ -21,6 +21,24 @@ function! s:current_git() "{{{
     return vital.import('Prelude').path2project_directory(getcwd())
   endif
 endfunction"}}}
+
+function! s:get_vital() "{{{
+  if !exists('s:V')
+    if dein#is_sourced('neocomplete.vim')
+      let s:V = neocomplete#util#get_vital()
+    elseif dein#is_sourced('unite.vim')
+      let s:V = unite#util#get_vital()
+    elseif dein#is_sourced('vital.vim')
+      let s:V = vital#vital#new()
+    else
+      call dein#source('vital.vim')
+      let s:V = vital#vital#new()
+    endif
+  endif
+
+  return s:V
+endfunction"}}}
+
 function! s:filetype() "{{{
   return get(split(&filetype, '\.'), 0, '')
 endfunction"}}}
@@ -57,7 +75,6 @@ let g:my.info = {
       \ }
 
 let g:my.bin = {
-      \ 'ctags' : '/usr/local/bin/ctags',
       \ 'git' : executable('hub') ? 'hub' : 'git',
       \ }
 
@@ -232,7 +249,6 @@ nnoremap <silent><Space><Space>w :wall<CR>
 nnoremap <silent><Space><Space>q :qall<CR>
 nnoremap <silent><Space>q :q<CR>
 nnoremap <silent><Space>w :wq<CR>
-nnoremap <silent><Space>s :SudoWrite %<CR>
 
 nnoremap <silent><C-L> :call <SID>redraw_and_doautocmd()<CR>
 function! s:redraw_and_doautocmd() "{{{
@@ -246,6 +262,7 @@ if exists(':OverCommandLine')
   nnoremap re :OverCommandLine<CR>%s!!!g<Left><Left><Left>
   xnoremap :s :OverCommandLine<CR>s!!!g<Left><Left><Left>
   xnoremap re "zy:OverCommandLine<CR>%s!<C-R>=substitute(@z, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
+  xnoremap rr "zy:OverCommandLine<CR>%s!<C-R>=substitute(@z, '!', '\\!', 'g')<CR>!<C-R>=substitute(@z, '!', '\\!', 'g')<CR>!gI<Left><Left><Left>
 else
   nnoremap re :%s!
   xnoremap :s :s!
@@ -258,11 +275,8 @@ cnoremap <C-L> <Right>
 xnoremap H <Nop>
 inoremap <C-@> <Nop>
 
-augroup MyEditing
-  autocmd!
+augroup MyAutoCmd
   autocmd BufEnter * execute ':silent! lcd! ' . fnameescape(expand('%:p:h'))
-  autocmd Filetype xml,html,eruby inoremap <buffer> </ </<C-X><C-O>
-  " autocmd FileType slim,ruby,eruby,haml,racc,ruby.racc inoremap <buffer>\| \|\|<Left>
 augroup END
 "}}}
 
@@ -302,7 +316,6 @@ let g:alpaca_window_max_width = winwidth(0)
 nmap <silent><C-W>n <Plug>(alpaca_window_smart_new)
 
 augroup MyAutoCmd
-  autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line('$') | execute "normal g`\"" | endif
   autocmd FileType qf wincmd J
   autocmd FileType qf call alpaca_window#set_smart_close()
 augroup END
@@ -310,18 +323,11 @@ augroup END
 
 " ----------------------------------------
 " Tab {{{
-nmap [tag_or_tab] <Nop>
-nmap t [tag_or_tab]
-nmap <silent>[tag_or_tab]c      <Plug>(alpaca_window_tabnew)
-nmap <silent>[tag_or_tab]w      <Plug>(alpaca_window_move_buffer_into_last_tab)
-nnoremap <silent>[tag_or_tab]n  :tabnext<CR>
-nnoremap <silent>[tag_or_tab]p  :tabprevious<CR>
-nnoremap <silent>[tag_or_tab]x  :tabclose<CR>
-nnoremap <silent>[tag_or_tab]o  <C-W>T
+nmap <silent>tc      <Plug>(alpaca_window_tabnew)
 
 for i in range(0, 9)
-  execute 'nnoremap <silent>[tag_or_tab]'.i.'  :tabnext '.i'<CR>'
-  execute 'nnoremap <silent>[tag_or_tab]m'.i.'  :tabmove '.i'<CR>'
+  execute 'nnoremap <silent>t'.i.'  :tabnext '.i'<CR>'
+  execute 'nnoremap <silent>tm'.i.'  :tabmove '.i'<CR>'
 endfor
 unlet i
 "}}}
@@ -335,16 +341,6 @@ set fileformat=unix
 set fileformats=unix,dos,mac
 set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc
 set termencoding=utf8
-
-command! -bang -bar -complete=file -nargs=? Cp932 edit<bang> ++enc=cp932 <args>
-command! -bang -bar -complete=file -nargs=? Euc edit<bang> ++enc=euc-jp <args>
-command! -bang -bar -complete=file -nargs=? Iso2022jp edit<bang> ++enc=iso-2022-jp <args>
-command! -bang -bar -complete=file -nargs=? Jis  Iso2022jp<bang> <args>
-command! -bang -bar -complete=file -nargs=? Sjis  Cp932<bang> <args>
-command! -bang -bar -complete=file -nargs=? Unicode Utf16<bang> <args>
-command! -bang -bar -complete=file -nargs=? Utf16 edit<bang> ++enc=ucs-2le <args>
-command! -bang -bar -complete=file -nargs=? Utf16be edit<bang> ++enc=ucs-2 <args>
-command! -bang -bar -complete=file -nargs=? Utf8 edit<bang> ++enc=utf-8 <args>
 " }}}
 
 " ----------------------------------------
@@ -380,7 +376,6 @@ set matchpairs+=<:>
 set number
 set scrolloff=8
 set noshowcmd
-set showfulltag
 set showmatch
 set showtabline=1
 set spelllang=en,cjk
@@ -405,27 +400,6 @@ augroup END
 colorscheme iceberg
 filetype plugin on
 syntax on
-"}}}
-
-" ----------------------------------------
-" Tags {{{
-set tags=./tags
-
-nnoremap [tag_or_tab]t  <C-]>
-nnoremap [tag_or_tab]h  :<C-u>pop<CR>
-nnoremap [tag_or_tab]l  :<C-u>tag<CR>
-nnoremap [tag_or_tab]j  :<C-u>tprevious<CR>
-nnoremap [tag_or_tab]k  :<C-u>tags<CR>
-nnoremap [tag_or_tab]s  :<C-u>tselect<CR>
-
-if dein#is_sourced('alpaca_tags')
-  augroup AlpacaTags
-    autocmd!
-    autocmd BufWritePost Gemfile AlpacaTagsBundle
-    autocmd BufRead,BufNew * AlpacaTagsSet
-    autocmd BufWritePost * AlpacaTagsUpdate
-  augroup END
-endif
 "}}}
 
 " ----------------------------------------
@@ -470,7 +444,6 @@ set history=1000
 set infercase
 set wildchar=<tab>
 set wildmenu
-set showfulltag
 set wildoptions=tagfile
 set wildmode=longest:full,full
 
@@ -535,7 +508,6 @@ xmap ,o <Plug>(openbrowser-open)
 
 " ------------------------------------
 nnoremap <silent>,r :QuickRun<CR>
-nnoremap <silent>,R :autocmd BufWritePost <buffer> call quickrun#command('', len(range(0, line('$'))), 0, line('$'))<CR>
 
 " ----------------------------------------
 nnoremap <silent>gM :Git commit --amend<CR>
@@ -573,10 +545,6 @@ omap <silent>ib <Plug>CamelCaseMotion_ib
 xmap <silent>ib <Plug>CamelCaseMotion_ib
 omap <silent>ie <Plug>CamelCaseMotion_ie
 xmap <silent>ie <Plug>CamelCaseMotion_ie
-
-" ------------------------------------
-nnoremap <silent>,v  :<C-U>VimShellBufferDir -popup<CR>
-nnoremap <silent>,V  :<C-U>VimShellCreate -popup<CR>
 
 " ------------------------------------
 function! s:new_memolist()
@@ -662,31 +630,12 @@ if s:on_init() && !exists('s:loaded_vim_rails')
 endif
 
 " ------------------------------------
-nnoremap <silent>[unite]w  :Unite tweetvim -buffer-name=tweetvim -no-start-insert<CR>
-nnoremap <silent>[tag_or_tab]v :TweetVimSay<CR>
-
-" ------------------------------------
 " vim-endwise
 " ------------------------------------
 let g:endwise_no_mappings = 1
 
 " ------------------------------------
 let g:vinarise_objdump_command = 'gobjdump'
-
-" ------------------------------------
-" Gundo.vim
-" ------------------------------------
-nnoremap <Space>u :GundoToggle<CR>
-
-" ------------------------------------
-" excitetranslate
-" ------------------------------------
-xnoremap <C-E> :<C-U>ExciteTranslate<CR>
-
-" ------------------------------------
-"  simple-javascript-indenter
-let g:SimpleJsIndenter_BriefMode = 1
-let g:SimpleJsIndenter_CaseIndentLevel = -1
 
 " ------------------------------------
 " t_comment
@@ -828,13 +777,6 @@ nmap <C-P> <Plug>(yankround-prev)
 nmap <C-N> <Plug>(yankround-next)
 " let g:yankround_use_region_hl = 1
 
-" ----------------------------------------
-" Other plugin settings {{{
-let g:git_aliases#author_name = g:my.info.github
-
-nnoremap <silent>gK :GitMessanger<CR>
-"}}}
-
 let g:switch_file_rules = {
       \ "vim": [['autoload/%\.vim', 'plugin/%\.vim']],
       \ "ruby": [
@@ -852,121 +794,13 @@ let g:switch_file_rules = {
 
 nnoremap <silent><Space>a :call switch_file#next()<CR>
 nnoremap <silent><Space>A :call switch_file#prev()<CR>
-
-" ----------------------------------------
-
-" git-messenger.vim
-nnoremap <silent>P :GitMessenger<CR>
+"}}}
 
 set hidden
-"}}}
-
 " ----------------------------------------
-function! s:update_ruby_ctags() "{{{
-  call alpaca#system_bg('rbenv ctags')
-  call alpaca#system_bg('gem ctags')
-endfunction"}}}
-command! UpdateRubyTags call <SID>update_ruby_ctags()
-
-" ----------------------------------------
-" Clean memory {{{
-function! s:clear_memory() "{{{
-  if exists(':NeoCompleteClean')
-    NeoCompleteClean
-    NeoCompleteDisable
-    NeoCompleteEnable
-  endif
-
-  if exists(':TagsCleanCache')
-    TagsCleanCache
-    set tags=
-  endif
-
-  execute '1,' . bufnr('$') . 'bwipeout'
-endfunction "}}}
-
 command! UnwatchBuffer setlocal buftype=nofile nobuflisted noswapfile bufhidden=hide
-command! Clean call <SID>clear_memory()
 command! CleanSwap call alpaca#system_bg('rm -rf ' . g:my.dir.swap_dir . '/*')
 command! CleanAll call alpaca#system_bg('rm -rf ' . g:my.dir.trash_dir . '*')
-"}}}
-
-" For Gem
-" Gem {{{
-function! s:get_all_gem_paths() "{{{
-  if exists('s:all_gem_paths')
-    return s:all_gem_paths
-  endif
-
-  let gem_env = system('rbenv exec gem env')
-  let gem_path = matchstr(gem_env, '\(\s*- INSTALLATION DIRECTORY:\s\)\@<=[^\n]*')
-  let gem_path .= '/gems/'
-  let s:all_gem_paths = split(globpath(gem_path, '*/lib'), '\n')
-
-  return s:all_gem_paths
-endfunction"}}}
-
-function! s:get_gem_paths() " {{{
-  if !exists('s:gem_path')
-    let s:gem_path = {}
-  endif
-
-  let project_dir = s:get_vital().import('Prelude').path2project_directory(getcwd())
-
-  if !has_key(s:gem_path, project_dir)
-    try
-      let paths = map(split(result, '\n'), 'v:val . "/lib"')
-      call filter(paths, 'isdirectory(v:val)')
-      let s:gem_path[project_dir] = paths
-    catch /.*/
-      let s:gem_path[project_dir] = s:get_all_gem_paths()
-    endtry
-  endif
-
-  return s:gem_path[project_dir]
-endfunction " }}}
-
-function! s:build_path(path) "{{{
-  let path = join(map(copy(a:path), 'v:val ==# "." ? "" : v:val'), ',')
-  if &g:path !~# '\v^\.%(,/%(usr|emx)/include)=,,$'
-    let path = substitute(&g:path,',,$',',','') . ',' . path
-  endif
-
-  return path
-endfunction"}}}
-
-function! s:set_gem_paths() "{{{
-  let gem_paths = join(s:get_gem_paths(), ',')
-
-  if stridx(&l:path, gem_paths) == -1
-    execute 'setlocal path+=' . gem_paths
-  endif
-endfunction"}}}
-
-function! s:get_vital() "{{{
-  if !exists('s:V')
-    if dein#is_sourced('neocomplete.vim')
-      let s:V = neocomplete#util#get_vital()
-    elseif dein#is_sourced('unite.vim')
-      let s:V = unite#util#get_vital()
-    elseif dein#is_sourced('vital.vim')
-      let s:V = vital#vital#new()
-    else
-      call dein#source('vital.vim')
-      let s:V = vital#vital#new()
-    endif
-  endif
-
-  return s:V
-endfunction"}}}
-
-function! s:load_gem_paths() "{{{
-  if !empty(s:get_vital())
-    call s:set_gem_paths()
-  endif
-endfunction"}}}
-
-command! LoadGemPath call s:load_gem_paths()
 "}}}
 
 function! s:open_file_rec() " {{{

@@ -538,15 +538,15 @@ capabilities.textDocument.completion.completionItem.snippetSupport = true
 -- lsp.solargraph.setup{
 --   cmd = {"/Users/alpaca-tc/projects/solargraph/bin/solargraph", "stdio"},
 -- }
-
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics, {
-    virtual_text = {
-      prefix = "<"
-    }
-  }
-)
-
+--
+-- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+--   vim.lsp.diagnostic.on_publish_diagnostics, {
+--     virtual_text = {
+--       prefix = "<"
+--     }
+--   }
+-- )
+--
 -- local sumneko_main_path = vim.api.nvim_eval("$HOME")..'/.local/share/nvim/lspinstall/lua/sumneko-lua/extension/server/main.lua'
 -- local sumneko_binary = vim.api.nvim_eval("$HOME")..'/.local/share/nvim/lspinstall/lua/sumneko-lua/extension/server/bin/macOS/lua-language-server'
 -- lsp.sumneko_lua.setup{
@@ -620,6 +620,20 @@ lua <<EOF
     },
   })
 EOF
+
+let s:null_ls_disabled = v:false
+
+function! s:toggle_null_ls()
+  if s:null_ls_disabled
+    lua require("null-ls").disable({ 'rubocop' })
+    let s:null_ls_disabled = v:true
+  else
+    lua require("null-ls").enable({ 'rubocop' })
+    let s:null_ls_disabled = v:false
+  endif
+endfunction
+
+command! NullLsToggle call s:toggle_null_ls()
 '''
 
 # [[plugins]]
@@ -672,12 +686,6 @@ on_func   = ["tcomment#DefineType"]
 [[plugins]]
 repo = 'Shougo/neomru.vim'
 on_source = 'unite.vim'
-
-[[plugins]]
-repo = 'Shougo/defx.nvim'
-on_cmd    = ["Defx"]
-hook_source = '''
-'''
 
 [[plugins]]
 repo = 'Shougo/vimfiler'
@@ -892,6 +900,7 @@ hook_source = '''
 
   " call deoplete#enable_logging('DEBUG', '/tmp/deoplete.log')
   call deoplete#custom#source('_', 'min_pattern_length', 1)
+  call deoplete#custom#option('ignore_sources', {'ruby': ['lsp']})
 
   " call deoplete#custom#option('keyword_patterns', {
   "     \ 'html': '[a-zA-Z_][a-z0-9A-Z_\-]*[!?]?',
@@ -937,63 +946,8 @@ hook_source = '''
 '''
 
 [[plugins]]
-repo = 'Shougo/vimshell'
-on_cmd    = ["VimShell", "VimShellCreate", "VimShellTab", "VimShellPop", "VimShellCurrentDir", "VimShellExecute", "VimShellBufferDir", "VimShellInteractive", "VimShellTerminal", "VimShellSendBuffer"]
-hook_source = '''
-  let g:vimshell_user_prompt  = '"(" . getcwd() . ")" '
-  let g:vimshell_prompt       = '$ '
-  let g:vimshell_ignore_case  = 1
-  let g:vimshell_smart_case   = 1
-  let g:vimshell_data_directory = g:my.dir.vimshell
-  let vimsh_path = expand('~/.zsh/.zshrc.alias')
-  if filereadable(vimsh_path)
-    let g:vimshell_vimshrc_path = vimsh_path
-  endif
-
-  let s:vimshell_altercmd = [
-        \ 'vi vim',
-        \ 'g git',
-        \ 'be bundle exec',
-        \ 'diff diff --unified',
-        \ 'du du -h',
-        \ 'free free -m -l -t',
-        \ 'll ls -lh',
-        \ 'la ls -a'
-        \ ]
-  call map(map(s:vimshell_altercmd, "split(v:val, ' ')"), '[v:val[0], join(v:val[1:], " ")]')
-  " => [['vi', 'vim'], ['la', 'ls -a']]
-
-  function! s:vimshell_settings()
-    set omnifunc=vimshell#complete#omnifunc
-
-    imap <buffer><C-K> <Plug>(vimshell_history_unite)
-    imap <silent><buffer><C-L> <ESC><C-L>A
-
-    for altercmd in s:vimshell_altercmd
-      call vimshell#altercmd#define(altercmd[0], altercmd[1])
-    endfor
-  endfunction
-
-  augroup MyAutoCmd
-    autocmd FileType vimshell call <SID>vimshell_settings()
-  augroup END
-'''
-
-[[plugins]]
 repo = 'alpaca-tc/alpaca_remove_dust.vim'
 on_cmd    = ["RemoveDustDisable", "RemoveDustEnable", "RemoveDust", "RemoveDustForce"]
-
-[[plugins]]
-repo = 'vim-erlang/vim-erlang-tags'
-on_ft = ["erlang"]
-
-[[plugins]]
-repo = 'vim-erlang/vim-erlang-omnicomplete'
-on_ft = ["erlang"]
-
-[[plugins]]
-repo = 'mmorearty/elixir-ctags'
-on_ft = ["elixir"]
 
 [[plugins]]
 repo = 'alpaca-tc/alpaca_window.vim'
@@ -1009,10 +963,6 @@ hook_source = '''
   let Grep_Skip_Files = '*.bak *~ .swp .swa .swo'
   let Grep_Xargs_Options = '--print0'
 '''
-
-[[plugins]]
-repo = 'sjl/gundo.vim'
-on_cmd    = ["GundoToggle", "GundoRenderGraph"]
 
 [[plugins]]
 repo = 'vim-scripts/open-browser.vim'
@@ -1307,10 +1257,6 @@ repo = 'alpaca-tc/vim-unite-giti'
 on_source = 'unite.vim'
 
 [[plugins]]
-repo = 'alpaca-tc/unite-git-aliases'
-on_source = 'unite.vim'
-
-[[plugins]]
 repo = 'kana/vim-niceblock'
 on_map    = ["<Plug>(niceblock-I)", "<Plug>(niceblock-A)"]
 
@@ -1579,16 +1525,8 @@ hook_source = '''
 '''
 
 [[plugins]]
-repo = 'ujihisa/unite-colorscheme'
-on_source = 'unite.vim'
-
-[[plugins]]
 repo = 'juliosueiras/vim-terraform-completion'
 on_ft = ['terraform']
-
-[[plugins]]
-repo = 'rhysd/git-messenger.vim'
-on_cmd = ['GitMessenger']
 
 [[plugins]]
 repo = 'rust-lang/rust.vim'
@@ -1598,15 +1536,14 @@ hook_source = '''
 '''
 
 [[plugins]]
-repo = 'alpaca-tc/syarousi'
-on_func   = ["syarousi#test"]
-rtp = 'vim'
-
-[[plugins]]
 repo = 'liuchengxu/vista.vim'
 on_cmd = ['Vista', 'Vista!', 'Vista!!']
 hook_source = '''
   let g:vista_default_executive = 'nvim_lsp'
+  let g:vista#renderer#enable_icon = 1
+  let g:vista_sidebar_width = 40
+  " let g:vista_icon_indent = ['', '']
+  " let g:vista_fold_toggle_icons = get(g:, 'vista_fold_toggle_icons', ['▼', '▶'])
 
   let g:vista_executive_for = {
     \ 'c': 'nvim_lsp',
@@ -1623,43 +1560,6 @@ hook_source = '''
   augroup MyAutoCmd
     autocmd FileType vista_kind call s:vista_settings()
   augroup END
-'''
-
-[[plugins]]
-repo = 'majutsushi/tagbar'
-on_cmd    = ["Tagbar", "TagbarToggle", "TagbarTogglePause", "TagbarOpen"]
-hook_source = '''
-  augroup MyTagbarCmd
-    autocmd!
-    autocmd FileType tagbar
-          \ nnoremap <buffer><Space> <Space>
-          \|nnoremap <buffer><space>t :<C-U>TagbarToggle<CR>
-  augroup END
-
-  if exists('g:my.bin.ctags') && executable(g:my.bin.ctags)
-    let g:tagbar_ctags_bin = g:my.bin.ctags
-  else
-    let g:tagbar_ctags_bin = 'ctags'
-  endif
-
-  let g:tagbar_autoclose = 0
-  " let g:tagbar_sort = 0
-  let g:tagbar_compact    = 1
-  let g:tagbar_autofocus  = 1
-  let g:tagbar_autoshowtag= 1
-  let g:tagbar_iconchars  =  ['▸', '▾']
-  let g:tagbar_width = 40
-'''
-
-hook_source = '''
-  " Ensure you have installed some decent font to show these pretty symbols, then you can enable icon for the kind.
-  let g:vista#renderer#enable_icon = 1
-  let g:vista_sidebar_width = 40
-  "
-  " let g:vista_icon_indent = ['', '']
-  " let g:vista_fold_toggle_icons = get(g:, 'vista_fold_toggle_icons', ['▼', '▶'])
-  "
-  " The default icons can't be suitable for all the filetypes, you can extend it as you wish.
 '''
 
 [[plugins]]
