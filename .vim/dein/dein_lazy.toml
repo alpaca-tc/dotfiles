@@ -876,65 +876,9 @@ hook_source = '''
   augroup END
 '''
 
-# [[plugins]]
-# repo = 'Shougo/deoplete.nvim'
-# on_event = ['InsertEnter']
-# disabled = '!has("nvim")'
-# depends = ['deoplete-lsp']
-# hook_source = '''
-#   let g:deoplete#enable_at_startup = 1
-#
-#   imap <expr><C-G> deoplete#undo_completion()
-#
-#   function! s:my_cr_function()
-#     return pumvisible() ? deoplete#close_popup() . "\<CR>"  : "\<CR>\<Plug>DiscretionaryEnd"
-#   endfunction
-#
-#   augroup MyAutoCmd
-#     autocmd FileType ruby,ruby.rspec imap <expr><silent><buffer> <CR> <SID>my_cr_function()
-#   augroup END
-#
-#   inoremap <expr><C-h> deoplete#smart_close_popup() . "\<C-h>"
-#   inoremap <expr><C-X><C-F> deoplete#manual_complete('file')
-#   inoremap <expr><C-X><C-O> deoplete#manual_complete('lsp')
-#   inoremap <expr><C-X><C-A> deoplete#manual_complete('ale')
-#   inoremap <expr><C-G> deoplete#undo_completion()
-#   inoremap <expr><C-N> pumvisible() ? "\<C-N>" : "\<C-X>\<C-U>\<C-P>\<Down>"
-#   inoremap <expr><C-P> pumvisible() ? "\<C-P>" : "\<C-P>\<C-N>"
-#
-#   inoremap <expr><Left>  deoplete#close_popup() . "\<Left>"
-#   inoremap <expr><Right> deoplete#close_popup() . "\<Right>"
-#   inoremap <expr><Up>    deoplete#close_popup() . "\<Up>"
-#   inoremap <expr><Down>  deoplete#close_popup() . "\<Down>"
-#
-#   imap <expr><TAB> pumvisible() ? "\<C-n>" :
-#         \ neosnippet#expandable_or_jumpable() ?
-#         \ neosnippet#mappings#jump_or_expand_impl() :
-#         \ <SID>check_back_space() ? "\<TAB>" :
-#         \ deoplete#manual_complete()
-#   function! s:check_back_space() "{{{
-#     let col = col('.') - 1
-#     return !col || getline('.')[col - 1]  =~ '\s'
-#   endfunction"}}}
-#
-#   augroup MyAutoCmd
-#     autocmd FileType * setl omnifunc=
-#   augroup END
-#
-#   " call deoplete#enable_logging('DEBUG', '/tmp/deoplete.log')
-#   call deoplete#custom#source('_', 'min_pattern_length', 1)
-#   " call deoplete#custom#option('ignore_sources', {'ruby': ['lsp'], 'gitcommit': ['lsp']})
-# '''
-#
-# [[plugins]]
-# repo = 'Shougo/deoplete-lsp'
-# hook_source = '''
-# let g:deoplete#lsp#handler_enabled = v:true
-# '''
-
 [[plugins]]
 repo = 'Shougo/ddc.vim'
-depends = ['denops.vim', 'pum.vim', 'ddc-file', 'ddc-matcher_head', 'ddc-sorter_rank', 'ddc-converter_remove_overlap', 'ddc-ui-native', 'neco-vim', 'ddc-source-nvim-lsp', 'ddc-buffer', 'ddc-dictionary', 'ddc-gitmoji']
+depends = ['denops.vim', 'pum.vim', 'ddc-file', 'ddc-matcher_head', 'ddc-sorter_rank', 'ddc-converter_remove_overlap', 'ddc-ui-native', 'neco-vim', 'ddc-source-nvim-lsp', 'ddc-buffer', 'ddc-dictionary', 'ddc-gitmoji', 'neosnippet.vim', 'nvim-autopairs']
 on_event = ['InsertEnter']
 hook_source = '''
   call ddc#custom#patch_global('ui', 'native')
@@ -942,6 +886,7 @@ hook_source = '''
   call ddc#custom#patch_global('completionMenu', 'pum.vim')
 
   call ddc#custom#patch_global('sources', [
+    \ 'neosnippet',
     \ 'nvim-lsp',
     \ 'buffer',
     \ 'file',
@@ -953,6 +898,9 @@ hook_source = '''
     \   'matchers': ['matcher_head'],
     \   'sorters': ['sorter_rank'],
     \   'converters': ['converter_remove_overlap'],
+    \ },
+    \ 'neosnippet': {
+    \   'mark': 'snip',
     \ },
     \ 'gitmoji': {
     \   'mark': 'gitmoji',
@@ -979,8 +927,18 @@ hook_source = '''
     \ 'file': {
     \   'mark': 'file',
     \   'isVolatile': v:true,
-    \   'forceCompletionPattern': '\S/\S*'
+    \   'forceCompletionPattern': '\S/\S*',
     \ }})
+
+  call ddc#custom#patch_global('sourceParams', {
+    \ 'file': {
+    \   'displayCwd': v:false,
+    \   'bufAsRoot': v:true,
+    \   'cwdMaxItems': 0,
+    \   'projFromCwdMaxItems': [],
+    \   'projFromBufMaxItems': [],
+    \ }
+    \ })
 
   call ddc#custom#patch_filetype(['gitcommit'], #{
     \   keywordPattern: '[a-zA-Z_:]\w*',
@@ -1015,11 +973,18 @@ hook_source = '''
     return !col || getline('.')[col - 1]  =~ '\s'
   endfunction"}}}
 
+  function! s:my_cr_function()
+    return pumvisible() ? "\<C-y>\<CR>"  : "\<CR>\<Plug>DiscretionaryEnd"
+  endfunction
+
   imap <expr><TAB> pumvisible() ? "\<C-n>" :
         \ neosnippet#expandable_or_jumpable() ?
         \ neosnippet#mappings#jump_or_expand_impl() :
         \ <SID>check_back_space() ? "\<TAB>" :
         \ pum#map#insert_relative(+1)
+  imap <expr><silent><buffer> <CR> <SID>my_cr_function()
+  inoremap <expr><C-X><C-F> ddc#map#manual_complete('file')
+  inoremap <expr><C-X><C-O> ddc#map#manual_complete('lsp')
 '''
 
 [[plugins]]
