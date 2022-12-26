@@ -625,7 +625,11 @@ lua <<EOF
           return utils.root_has_file({".rubocop.yml", "Gemfile"})
         end
       }),
-      require('null-ls').builtins.diagnostics.eslint,
+      require('null-ls').builtins.diagnostics.eslint.with({
+        condition = function(utils)
+          return vim.fn.executable('eslint')
+        end
+      }),
       require('null-ls').builtins.diagnostics.luacheck.with({
         extra_args = {"--globals", "vim", "--globals", "awesome"},
       }),
@@ -885,13 +889,16 @@ hook_source = '''
 
   call ddc#custom#patch_global('completionMenu', 'pum.vim')
 
-  call ddc#custom#patch_global('sources', [
-    \ 'neosnippet',
-    \ 'nvim-lsp',
-    \ 'buffer',
-    \ 'file',
-    \ 'dictionary',
-    \ ])
+  call ddc#custom#patch_global(#{
+    \ sources: [
+    \   'neosnippet',
+    \   'nvim-lsp',
+    \   'buffer',
+    \   'file',
+    \   'dictionary',
+    \ ],
+    \ backspaceCompletion: v:true,
+    \ })
 
   call ddc#custom#patch_global('sourceOptions', {
     \ '_': {
@@ -928,6 +935,7 @@ hook_source = '''
     \   'mark': 'file',
     \   'isVolatile': v:true,
     \   'forceCompletionPattern': '\S/\S*',
+    \   'minAutoCompleteLength': 1,
     \ }})
 
   call ddc#custom#patch_global('sourceParams', {
@@ -985,6 +993,7 @@ hook_source = '''
   imap <expr><silent><buffer> <CR> <SID>my_cr_function()
   inoremap <expr><C-X><C-F> ddc#map#manual_complete('file')
   inoremap <expr><C-X><C-O> ddc#map#manual_complete('lsp')
+  inoremap <expr><C-X><C-X> ddc#map#manual_complete()
 '''
 
 [[plugins]]
