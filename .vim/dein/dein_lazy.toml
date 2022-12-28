@@ -526,11 +526,6 @@ capabilities.textDocument.completion.completionItem.snippetSupport = true
 --   capabilities = capabilities,
 -- }
 -- lsp.clangd.setup{}
---
--- lsp.sorbet.setup{
---   cmd = {'bundle', 'exec', 'srb', 'tc', '--lsp', '--dir', '.'},
--- }
---
 -- lsp.steep.setup{
 --   cmd = { 'bundle', 'exec', 'steep', 'langserver' },
 -- }
@@ -596,6 +591,11 @@ hook_source = '''
     elseif server_name == 'tsserver' then
       local opts = {
         root_dir = nvim_lsp.util.root_pattern("package.json"),
+      }
+    elseif server_name == 'sorbet' then
+      local opts = {
+        root_dir = nvim_lsp.util.root_pattern("Gemfile"),
+        cmd = {'bundle', 'exec', 'srb', 'tc', '--lsp', '--dir', '.'},
       }
     end
 
