@@ -627,7 +627,7 @@ lua <<EOF
       }),
       require('null-ls').builtins.diagnostics.eslint.with({
         condition = function(utils)
-          return vim.fn.executable('eslint')
+          return utils.root_has_file({ "package.json", "yarn.lock" }) and vim.fn.executable('eslint')
         end
       }),
       require('null-ls').builtins.diagnostics.luacheck.with({
