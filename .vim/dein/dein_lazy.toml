@@ -441,6 +441,7 @@ call denite#custom#map('insert', '<C-P>', '<denite:move_to_previous_line>')
 [[plugins]]
 repo = 'neovim/nvim-lspconfig'
 on_event = ['InsertEnter']
+on_cmd = ['LspInfo', 'LspStart', 'LspLog', 'LspStop']
 depends = ['mason.nvim']
 hook_source = '''
 function! s:setup_lsp()
@@ -511,21 +512,12 @@ local lsp = require 'lspconfig'
 local configs = require 'lspconfig/configs'
 local util = require 'lspconfig/util'
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true
-
--- lsp.tsserver.setup{}
 -- lsp.pyright.setup{
 --   cmd = {vim.api.nvim_eval("$HOME") .. "/.local/share/nvim/lsp_servers/python/node_modules/.bin/pyright-langserver", '--stdio'}
 -- }
--- -- lsp.denols.setup{}
 -- lsp.gopls.setup{
 --   cmd = {vim.api.nvim_eval("$HOME") .. "/.local/share/nvim/lsp_servers/go/gopls"}
 -- }
--- lsp.html.setup{
---   capabilities = capabilities,
--- }
--- lsp.clangd.setup{}
 -- lsp.steep.setup{
 --   cmd = { 'bundle', 'exec', 'steep', 'langserver' },
 -- }
@@ -541,12 +533,6 @@ capabilities.textDocument.completion.completionItem.snippetSupport = true
 --     }
 --   }
 -- )
---
--- local sumneko_main_path = vim.api.nvim_eval("$HOME")..'/.local/share/nvim/lspinstall/lua/sumneko-lua/extension/server/main.lua'
--- local sumneko_binary = vim.api.nvim_eval("$HOME")..'/.local/share/nvim/lspinstall/lua/sumneko-lua/extension/server/bin/macOS/lua-language-server'
--- lsp.sumneko_lua.setup{
---   cmd = {sumneko_binary, "-E", sumneko_main_path};
--- }
 
 vim.lsp.set_log_level("debug")
 EOF
@@ -557,7 +543,7 @@ repo = 'williamboman/mason-lspconfig.nvim'
 
 [[plugins]]
 repo = 'williamboman/mason.nvim'
-depends = ['mason-lspconfig.nvim']
+depends = ['mason-lspconfig.nvim', 'nvim-lspconfig']
 on_cmd = ['Mason', 'MasonInstall', 'MasonUninstall', 'MasonUninstallAll', 'MasonLog']
 
 hook_source = '''
@@ -572,7 +558,8 @@ hook_source = '''
     local opts = {}
 
     if server_name == 'denols' then
-      local opts = {
+      opts = {
+        autostart = false,
         root_dir = nvim_lsp.util.root_pattern("deno.json"),
         init_options = {
           lint = true,
@@ -589,11 +576,13 @@ hook_source = '''
         },
       }
     elseif server_name == 'tsserver' then
-      local opts = {
+      opts = {
+        autostart = false,
         root_dir = nvim_lsp.util.root_pattern("package.json"),
       }
     elseif server_name == 'sorbet' then
-      local opts = {
+      opts = {
+        autostart = false,
         root_dir = nvim_lsp.util.root_pattern("Gemfile"),
         cmd = {'bundle', 'exec', 'srb', 'tc', '--lsp', '--dir', '.'},
       }
@@ -602,6 +591,45 @@ hook_source = '''
     nvim_lsp[server_name].setup(opts)
   end })
 EOF
+
+  let s:V = vital#vital#new()
+
+  function! s:file_match_str(path, pattern)
+    if filereadable(a:path)
+      let lines = readfile(a:path)
+
+      for i in range(0, len(lines) - 1)
+        let line = lines[i]
+        if len(matchstr(line, a:pattern)) > 0
+          return v:true
+        endif
+      endfor
+    endif
+
+    return v:false
+  endfunction
+'''
+
+hook_post_source = '''
+  function! s:start_lsp()
+    let filetype = get(split(&filetype, '\.'), 0, '')
+    let root = s:V.import('Prelude').path2project_directory(getcwd())
+    let isTsJs = filetype == 'typescript' || filetype == 'javascript' || filetype == 'typescriptreact'
+
+    if filetype == 'ruby' && s:file_match_str(root . '/Gemfile', 'sorbet')
+      LspStart sorbet
+    elseif isTsJs && (filereadable(root . '/deno.json') || s:file_match_str(root . '/vercel.json', 'vercel-deno'))
+      LspStart denols
+    elseif isTsJs && s:file_match_str(root . '/package.json', 'typescript')
+      LspStart typescript-language-server
+    endif
+  endfunction
+
+  call s:start_lsp()
+
+  augroup MyAutoCmd
+    autocmd FileType ruby,javascript,typescript,typescriptreact,typescript.jsx call s:start_lsp()
+  augroup END
 '''
 
 [[plugins]]
@@ -626,8 +654,9 @@ lua <<EOF
         end
       }),
       require('null-ls').builtins.diagnostics.eslint.with({
+        prefer_local = "node_modules/.bin",
         condition = function(utils)
-          return utils.root_has_file({ "package.json", "yarn.lock" }) and vim.fn.executable('eslint')
+          return utils.root_has_file({ "node_modules/.bin/eslint" })
         end
       }),
       require('null-ls').builtins.diagnostics.luacheck.with({
