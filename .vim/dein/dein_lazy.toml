@@ -1574,6 +1574,7 @@ hook_post_source = '''
 map <leader>P <Plug>(miniyank-startPut)
   let g:miniyank_maxitems = 100
   let g:miniyank_loop_cycle = v:true
+  let g:miniyank_echo_position = v:true
 
   nmap <C-P> <Plug>(miniyank-cycle)
   nmap <C-N> <Plug>(miniyank-cycleback)
