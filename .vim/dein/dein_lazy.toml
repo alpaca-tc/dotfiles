@@ -698,44 +698,6 @@ endfunction
 command! NullLsToggle call s:toggle_null_ls()
 '''
 
-# [[plugins]]
-# repo = 'dense-analysis/ale'
-# build = 'go get -u github.com/sourcegraph/go-langserver && npm install -g typescript-language-server'
-# on_ft = ['typescript', 'javascript', 'go', 'ruby']
-# on_cmd = ['ALEGetStatusLine']
-# hook_source = '''
-#   let g:ale_fixers = {
-#     \ "javascript": ['eslint'],
-#     \ "typescript": ['eslint'],
-#     \ 'go': ['goimports'],
-#     \ 'ruby': ['rubocop'],
-#     \ }
-#
-#   let g:ale_linters = {
-#     \ 'go': ['gopls'],
-#     \ 'rust': ['cargo'],
-#     \ 'ruby': ['rubocop'],
-#     \ }
-#
-#   let g:ale_sign_column_always = 1
-#   let g:ale_fix_on_save = 1
-#   let g:ale_lint_on_text_changed = 0
-#   " let g:ale_lint_on_text_changed = 'always'
-#   let g:ale_lint_on_enter = 0
-#   let g:ale_lint_on_save = 1
-#   let g:ale_echo_cursor = 1
-#   let g:ale_completion_enabled = 0
-#   let g:ale_go_bingo_executable = 'gopls'
-#   let g:ale_virtualtext_cursor = 1
-#   let g:ale_sign_error = '!!'
-#   let g:ale_sign_warning = '=='
-#
-#   " highlight ALEError guibg=none ctermbg=none cterm=none
-#
-#   " nnoremap <buffer><silent> K :ALEHover<CR>
-#   " nnoremap <buffer><silent> tt :ALEGoToDefinition<CR>
-# '''
-
 [[plugins]]
 repo = 'cespare/vim-toml'
 on_ft = ['toml']
@@ -967,7 +929,7 @@ hook_source = '''
     \   'sorters': [],
     \   'matchers': ['gitmoji'],
     \   'keywordPattern': '[a-zA-Z_:]*',
-    \   'forceCompletionPattern': '(^|\s):',
+    \   'forceCompletionPattern': '(^|\s):[a-z]\+',
     \ },
     \ 'buffer': {
     \   'mark': 'buffer',
@@ -1034,16 +996,11 @@ hook_source = '''
     return !col || getline('.')[col - 1]  =~ '\s'
   endfunction"}}}
 
-  function! s:my_cr_function()
-    return pumvisible() ? "\<C-y>\<CR>"  : "\<CR>\<Plug>DiscretionaryEnd"
-  endfunction
-
   imap <expr><TAB> pumvisible() ? "\<C-n>" :
         \ neosnippet#expandable_or_jumpable() ?
         \ neosnippet#mappings#jump_or_expand_impl() :
         \ <SID>check_back_space() ? "\<TAB>" :
         \ pum#map#insert_relative(+1)
-  imap <expr><silent><buffer> <CR> <SID>my_cr_function()
   inoremap <expr><C-X><C-F> ddc#map#manual_complete('file')
   inoremap <expr><C-X><C-O> ddc#map#manual_complete('lsp')
   inoremap <expr><C-X><C-X> ddc#map#manual_complete()
@@ -1052,9 +1009,6 @@ hook_source = '''
 [[plugins]]
 repo = "alpaca-tc/ddc-gitmoji"
 rev = "support_recent_ddc_vim"
-
-[[plugins]]
-repo = "gamoutatsumi/ddc-emoji"
 
 [[plugins]]
 repo = "matsui54/ddc-dictionary"
@@ -1157,18 +1111,6 @@ hook_source = '''
 repo = 'alpaca-tc/git-vim'
 on_cmd    = ["GitDiff", "GitVimDiff", "GitCheckout", "GitAdd", "GitLog", "GitCommit", "GitBlame", "GitPush"]
 on_func   = ["git#get_current_branch"]
-
-[[plugins]]
-repo = 'mattn/gist-vim'
-on_cmd    = ["Gist"]
-depends   = ["mattn/webapi-vim"]
-hook_source = '''
-  let g:gist_clip_command = 'pbcopy'
-  let g:gist_detect_filetype = 1
-  let g:gist_detect_filetype = 1
-  let g:gist_open_browser_after_post = 1
-  let g:github_user = g:my.info.github
-'''
 
 [[plugins]]
 repo = 'alpaca-tc/switch.vim'
@@ -1445,12 +1387,28 @@ hook_source = '''
     local Rule = require('nvim-autopairs.rule')
     local npairs = require('nvim-autopairs')
 
-    npairs.setup {
-      map_c_h = true
-    }
+    npairs.setup({
+      map_c_h = true,
+      map_cr = false,
+    })
 
     npairs.add_rules(require('nvim-autopairs.rules.endwise-ruby'))
     npairs.add_rule(Rule('|', '|', { 'ruby', 'eruby' }))
+
+    _G.MUtils = {}
+
+    MUtils.CR = function()
+      if vim.fn.pumvisible() ~= 0 then
+        if vim.fn.complete_info({ 'selected' }).selected ~= -1 then
+          return npairs.esc('<c-y>') .. npairs.autopairs_cr()
+        else
+          return npairs.esc('<c-e>') .. npairs.autopairs_cr()
+        end
+      else
+        return npairs.autopairs_cr()
+      end
+    end
+    vim.api.nvim_set_keymap('i', '<cr>', 'v:lua.MUtils.CR()', { expr = true, noremap = true })
 EOF
 '''
 
@@ -1584,11 +1542,6 @@ hook_source = '''
 '''
 
 [[plugins]]
-repo = 'tpope/vim-endwise'
-on_event = ['InsertEnter']
-on_map = '<Plug>DiscretionaryEnd'
-
-[[plugins]]
 repo = 'basyura/unite-rails'
 on_source = ["unite.vim"]
 
@@ -1692,10 +1645,6 @@ hook_source = '''
 '''
 
 [[plugins]]
-repo = 'juliosueiras/vim-terraform-completion'
-on_ft = ['terraform']
-
-[[plugins]]
 repo = 'rust-lang/rust.vim'
 on_ft = ['rust']
 hook_source = '''
@@ -1709,24 +1658,17 @@ hook_source = '''
   let g:vista_default_executive = 'nvim_lsp'
   let g:vista#renderer#enable_icon = 1
   let g:vista_sidebar_width = 40
-  " let g:vista_icon_indent = ['', '']
-  " let g:vista_fold_toggle_icons = get(g:, 'vista_fold_toggle_icons', ['▼', '▶'])
+  let g:vista_icon_indent = ['', '']
+  let g:vista_fold_toggle_icons = get(g:, 'vista_fold_toggle_icons', ['▼', '▶'])
+  " let g:vista#renderer#enable_icon = 0
 
   let g:vista_executive_for = {
     \ 'c': 'nvim_lsp',
     \ 'cpp': 'nvim_lsp',
-    \ 'typescript': 'vim_lsp',
-    \ 'javascript': 'vim_lsp',
+    \ 'typescript': 'nvim_lsp',
+    \ 'javascript': 'nvim_lsp',
     \ 'ruby': 'ctags',
     \ }
-
-  function! s:vista_settings()
-    nmap <buffer><Space>t :Vista!<CR>
-  endfunction
-
-  augroup MyAutoCmd
-    autocmd FileType vista_kind call s:vista_settings()
-  augroup END
 '''
 
 [[plugins]]
@@ -1789,14 +1731,3 @@ rev = "with_env"
 [[plugins]]
 repo = 'jlcrochet/vim-rbs'
 on_ft = ["rbs"]
-
-[[plugins]]
-repo = 'mfussenegger/nvim-dap'
-on_ft = ["javascript", "typescript", "javascript.jsx", "typescript.tsx", "ruby"]
-hook_source = '''
-  nnoremap DB :lua require'dap'.toggle_breakpoint()<CR>
-  nnoremap DD :lua require'dap'.continue()<CR>
-  nnoremap DS :lua require'dap'.step_into()<CR>
-  nnoremap DO :lua require'dap'.step_over()<CR>
-  nnoremap DR :lua require'dap'.repl.open()<CR>
-'''

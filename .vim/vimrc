@@ -470,29 +470,7 @@ xmap gS  <Plug>VgSurround
 xmap s   <Plug>VSurround
 
 " ------------------------------------
-function! OpenTag()
-  let tagbars = ['vim']
-
-  let finders = {
-        \ 'nvim_lsp': ['go', 'rust', 'typescript', 'javascript', 'ruby'],
-        \ }
-
-  let command = 'Vista'
-
-  if index(tagbars, &filetype) >= 0
-    let command = 'Tagbar'
-  else
-    for [finder, filetypes] in items(finders)
-      if index(filetypes, &filetype) >= 0
-        let command = 'Vista ' . finder
-      endif
-    endfor
-  endif
-
-  echo ':' . command
-  execute command
-endfunction
-nnoremap <silent><Space>t :call OpenTag()<CR>
+nnoremap <Space>t :Vista!!<CR>
 
 " ----------------------------------------
 " alpaca_github.vim
