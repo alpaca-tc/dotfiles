@@ -400,45 +400,6 @@ hook_source = '''
 '''
 
 [[plugins]]
-repo = 'Shougo/denite.nvim'
-on_cmd    = ["Denite"]
-hook_source = '''
-function! s:denite_settings()
-  nnoremap <silent><buffer><expr> <CR>
-  \ denite#do_map('do_action')
-  nnoremap <silent><buffer><expr> d
-  \ denite#do_map('do_action', 'delete')
-  nnoremap <silent><buffer><expr> p
-  \ denite#do_map('do_action', 'preview')
-  nnoremap <silent><buffer><expr> q
-  \ denite#do_map('quit')
-  nnoremap <silent><buffer><expr> i
-  \ denite#do_map('open_filter_buffer')
-  nnoremap <silent><buffer><expr> <Space>
-  \ denite#do_map('toggle_select').'j'
-endfunction
-
-augroup MyAutoCmd
-  autocmd FileType denite call s:denite_settings()
-augroup END
-
-call denite#custom#var('file/rec', 'command', ['rg', '--files', '--glob', '!.git'])
-" call denite#custom#map(
-"         \ 'insert',
-"         \ '<C-j>',
-"         \ '<denite:move_to_next_line>',
-"         \ 'noremap'
-"         \)
-
-call denite#custom#option('default', 'direction', 'dynamicbottom')
-call denite#custom#option('default', 'auto_highlight', '1')
-call denite#custom#map('normal', '<C-N>', '<denite:move_to_next_line>')
-call denite#custom#map('normal', '<C-P>', '<denite:move_to_previous_line>')
-call denite#custom#map('insert', '<C-N>', '<denite:move_to_next_line>')
-call denite#custom#map('insert', '<C-P>', '<denite:move_to_previous_line>')
-'''
-
-[[plugins]]
 repo = 'neovim/nvim-lspconfig'
 on_event = ['InsertEnter']
 on_cmd = ['LspInfo', 'LspStart', 'LspLog', 'LspStop']
