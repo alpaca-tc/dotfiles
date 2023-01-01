@@ -659,6 +659,12 @@ lua <<EOF
           return utils.root_has_file({ "node_modules/.bin/eslint" })
         end
       }),
+      require('null-ls').builtins.formatting.eslint.with({
+        prefer_local = "node_modules/.bin",
+        condition = function(utils)
+          return utils.root_has_file({ "node_modules/.bin/eslint" })
+        end
+      }),
       require('null-ls').builtins.diagnostics.luacheck.with({
         extra_args = {"--globals", "vim", "--globals", "awesome"},
       }),
@@ -735,9 +741,27 @@ repo = 'cespare/vim-toml'
 on_ft = ['toml']
 
 [[plugins]]
-repo = 'tomtom/tcomment_vim'
-on_cmd    = ["TComment", "TCommentAs", "TCommentMaybeInline"]
-on_func   = ["tcomment#DefineType"]
+repo = 'echasnovski/mini.nvim'
+rev = "stable"
+on_event = ['BufEnter']
+hook_source = '''
+lua <<EOF
+  require('mini.comment').setup({
+    -- Module mappings. Use `''` (empty string) to disable one.
+    mappings = {
+      -- Toggle comment (like `gcip` - comment inner paragraph) for both
+      -- Normal and Visual modes
+      comment = '<C-_>',
+
+      -- Toggle comment on current line
+      comment_line = '<C-_>',
+
+      -- Define 'comment' textobject (like `dgc` - delete whole comment block)
+      textobject = '',
+    },
+  })
+EOF
+'''
 
 [[plugins]]
 repo = 'Shougo/neomru.vim'

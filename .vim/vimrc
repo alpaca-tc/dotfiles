@@ -638,24 +638,6 @@ let g:endwise_no_mappings = 1
 let g:vinarise_objdump_command = 'gobjdump'
 
 " ------------------------------------
-" t_comment
-" ------------------------------------
-if has('gui_running')
-  let g:tcommentMaps = 0
-  nmap <silent><C-_> :TComment<CR>
-  xmap <silent><C-_> :TComment<CR>
-  nmap <silent>_ <C-_>
-  xmap <silent>_ <C-_>
-  " nmap gc <Plug>(caw:i:toggle)
-  " xmap gc <Plug>(caw:i:toggle)
-else
-  nmap <C-_> :TComment<CR>
-  xmap <C-_> :TComment<CR>
-  " nmap <C-_> <Plug>(caw:i:toggle)
-  " xmap <C-_> <Plug>(caw:i:toggle)
-endif
-
-" ------------------------------------
 " alpaca_remove_dust
 " ------------------------------------
 let g:remove_dust_enable = 1
