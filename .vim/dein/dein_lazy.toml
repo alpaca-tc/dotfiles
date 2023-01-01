@@ -858,93 +858,76 @@ hook_source = '''
 
 [[plugins]]
 repo = 'Shougo/ddc.vim'
-depends = ['denops.vim', 'pum.vim', 'ddc-file', 'ddc-matcher_head', 'ddc-sorter_rank', 'ddc-converter_remove_overlap', 'ddc-ui-native', 'neco-vim', 'ddc-source-nvim-lsp', 'ddc-buffer', 'ddc-dictionary', 'ddc-gitmoji', 'neosnippet.vim', 'nvim-autopairs']
+depends = ['denops.vim', 'pum.vim', 'ddc-file', 'ddc-matcher_head', 'ddc-sorter_rank', 'ddc-converter_remove_overlap', 'ddc-ui-native', 'neco-vim', 'ddc-source-nvim-lsp', 'ddc-buffer', 'ddc-dictionary', 'neosnippet.vim', 'nvim-autopairs']
 on_event = ['InsertEnter']
 hook_source = '''
-  call ddc#custom#patch_global('ui', 'native')
-
-  call ddc#custom#patch_global('completionMenu', 'pum.vim')
-
-  call ddc#custom#patch_global(#{
-    \ sources: [
+  call ddc#custom#patch_global({
+    \ 'ui': 'native',
+    \ 'completionMenu': 'pum.vim',
+    \ 'sources': [
     \   'neosnippet',
     \   'nvim-lsp',
     \   'buffer',
     \   'file',
     \   'dictionary',
     \ ],
-    \ backspaceCompletion: v:true,
-    \ })
-
-  call ddc#custom#patch_global('sourceOptions', {
-    \ '_': {
-    \   'matchers': ['matcher_head'],
-    \   'sorters': ['sorter_rank'],
-    \   'converters': ['converter_remove_overlap'],
+    \ 'backspaceCompletion': v:true,
+    \ 'sourceOptions': {
+    \   '_': {
+    \     'matchers': ['matcher_head'],
+    \     'sorters': ['sorter_rank'],
+    \     'converters': ['converter_remove_overlap'],
+    \   },
+    \   'neosnippet': {
+    \     'mark': 'snip',
+    \   },
+    \   'buffer': {
+    \     'mark': 'buffer',
+    \     'minAutoCompleteLength': 2,
+    \   },
+    \   'dictionary': {
+    \     'mark': 'dict'
+    \   },
+    \   'necovim': {
+    \     'mark': 'neco'
+    \   },
+    \   'nvim-lsp': {
+    \     'mark': 'lsp',
+    \     'forceCompletionPattern': '\.\w*|:\w*|->\w*',
+    \     'minAutoCompleteLength': 0,
+    \   },
+    \   'file': {
+    \     'mark': 'file',
+    \     'isVolatile': v:true,
+    \     'forceCompletionPattern': '\S/\S*',
+    \     'minAutoCompleteLength': 1,
+    \   }
     \ },
-    \ 'neosnippet': {
-    \   'mark': 'snip',
+    \ 'sourceParams': {
+    \   'file': {
+    \     'displayCwd': v:false,
+    \     'bufAsRoot': v:true,
+    \     'cwdMaxItems': 0,
+    \     'projFromCwdMaxItems': [],
+    \     'projFromBufMaxItems': [],
+    \   },
+    \   'nvim-lsp': {
+    \     'kindLabels': {
+    \       'Class': 'c'
+    \     }
+    \   },
+    \   'buffer': {
+    \     'requireSameFiletype': v:false,
+    \     'limitBytes': 5000000,
+    \     'fromAltBuf': v:true,
+    \     'forceCollect': v:true,
+    \   },
     \ },
-    \ 'gitmoji': {
-    \   'mark': 'gitmoji',
-    \   'sorters': [],
-    \   'matchers': ['gitmoji'],
-    \   'keywordPattern': '[a-zA-Z_:]*',
-    \   'forceCompletionPattern': '(^|\s):[a-z]\+',
-    \ },
-    \ 'buffer': {
-    \   'mark': 'buffer',
-    \   'minAutoCompleteLength': 2,
-    \ },
-    \ 'dictionary': {
-    \   'mark': 'dict'
-    \ },
-    \ 'necovim': {
-    \   'mark': 'neco'
-    \ },
-    \ 'nvim-lsp': {
-    \   'mark': 'lsp',
-    \   'forceCompletionPattern': '\.\w*|:\w*|->\w*',
-    \   'minAutoCompleteLength': 0,
-    \ },
-    \ 'file': {
-    \   'mark': 'file',
-    \   'isVolatile': v:true,
-    \   'forceCompletionPattern': '\S/\S*',
-    \   'minAutoCompleteLength': 1,
-    \ }})
-
-  call ddc#custom#patch_global('sourceParams', {
-    \ 'file': {
-    \   'displayCwd': v:false,
-    \   'bufAsRoot': v:true,
-    \   'cwdMaxItems': 0,
-    \   'projFromCwdMaxItems': [],
-    \   'projFromBufMaxItems': [],
-    \ }
-    \ })
-
-  call ddc#custom#patch_filetype(['gitcommit'], #{
-    \   keywordPattern: '[a-zA-Z_:]\w*',
-    \   sources: ['gitmoji'],
     \ })
 
   call ddc#custom#patch_filetype(['vim'], #{
     \   keywordPattern: '[a-zA-Z_:]\w*',
     \   sources: ['buffer', 'necovim', 'dictionary'],
-    \ })
-
-  call ddc#custom#patch_global('sourceParams', #{
-    \   nvim-lsp: #{ kindLabels: #{ Class: 'c' } },
-    \ })
-
-  call ddc#custom#patch_global('sourceParams', {
-    \ 'buffer': {
-    \   'requireSameFiletype': v:false,
-    \   'limitBytes': 5000000,
-    \   'fromAltBuf': v:true,
-    \   'forceCollect': v:true,
-    \ },
     \ })
 
   call ddc#enable()
@@ -966,10 +949,6 @@ hook_source = '''
   inoremap <expr><C-X><C-O> ddc#map#manual_complete('lsp')
   inoremap <expr><C-X><C-X> ddc#map#manual_complete()
 '''
-
-[[plugins]]
-repo = "alpaca-tc/ddc-gitmoji"
-rev = "support_recent_ddc_vim"
 
 [[plugins]]
 repo = "matsui54/ddc-dictionary"
