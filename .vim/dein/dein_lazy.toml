@@ -1566,12 +1566,17 @@ repo = 'vim-scripts/sh.vim'
 on_ft  = 'sh'
 
 [[plugins]]
-repo = 'LeafCage/yankround.vim'
-on_map    = [["nx", "<Plug>(yankround-p)"], ["nx", "<Plug>(yankround-P)"], ["nx", "<Plug>(yankround-prev)"], ["nx", "<Plug>(yankround-next)"]]
-on_func   = ["yankround#is_active"]
-kjl
+repo = 'alpaca-tc/nvim-miniyank'
+rev = 'loop_cycle'
+on_map = [['nx', '<Plug>(miniyank-autoput)'], ['nx', '<Plug>(miniyank-autoPut)']]
 hook_post_source = '''
-  let g:yankround_max_history = 300
+  map <leader>p <Plug>(miniyank-startput)
+map <leader>P <Plug>(miniyank-startPut)
+  let g:miniyank_maxitems = 100
+  let g:miniyank_loop_cycle = v:true
+
+  nmap <C-P> <Plug>(miniyank-cycle)
+  nmap <C-N> <Plug>(miniyank-cycleback)
 '''
 
 [[plugins]]
