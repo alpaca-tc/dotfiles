@@ -668,7 +668,7 @@ augroup END
 nmap [unite] <Nop>
 nmap <C-J> [unite]
 
-nnoremap <silent>[unite]j       :Unite neomru/file<CR>
+nnoremap <silent>[unite]j       :call ddu#start(#{ name: 'mr', sources: [#{ name: 'mr' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>
 nnoremap <silent>g/             :Ddu line<CR>
 
 function! s:parse_git_root_option(input) "{{{

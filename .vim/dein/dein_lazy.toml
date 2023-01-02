@@ -244,13 +244,6 @@ repo = 'Shougo/unite.vim'
 on_cmd    = ["Unite", "UniteBookmarkAdd", "UniteClose", "UniteResume", "UniteWithBufferDir", "UniteWithCurrentDir", "UniteWithCursorWord", "UniteWithInput", "UniteWithInputDirectory"]
 on_func   = ["unite#util#path2project_directory", 'unite#util#get_vital']
 hook_source = '''
-  let g:neomru#file_mru_limit=10000
-  let g:neomru#directory_mru_limit=10000
-  " let g:unite_source_directory_mru_time_format="(%m-%d %H:%M) "
-  let g:neomru#time_format='(%m-%d %H:%M) '
-  let g:neomru#filename_format = ':~:.'
-  let g:neomru#file_mru_ignore_pattern = '^\(/private/var/\|\.git\|.pygments-cache\|.pygments-cache\)'
-
   if executable('gmv')
     let rm_command = 'gmv -f --backup=numbered --target-directory ' . g:my.dir.trash . ' $srcs'
     let g:unite_kind_file_delete_file_command = rm_command
@@ -274,7 +267,6 @@ hook_source = '''
   augroup MyUniteCmd
     autocmd!
     autocmd FileType unite call <SID>unite_my_settings()
-    autocmd BufEnter * NeoMRUSave
   augroup END
 
   function! s:unite_my_settings() "{{{
@@ -381,16 +373,23 @@ hook_source = '''
 
 [[plugins]]
 repo = 'Shougo/ddu.vim'
-depends = ['denops.vim', 'ddu-source-file_rec', 'ddu-filter-matcher_substring', 'ddu-ui-ff', 'ddu-ui-filer', 'ddu-kind-file', 'ddu-source-action', 'ddu-source-line']
+depends = ['denops.vim', 'ddu-source-file_rec', 'ddu-filter-matcher_substring', 'ddu-ui-ff', 'ddu-ui-filer', 'ddu-kind-file', 'ddu-source-action', 'ddu-source-line', 'ddu-source-mr']
 hook_source = '''
   call ddu#custom#patch_global({
     \   'ui': 'ff',
-    \   'sources': [#{ name: 'line' }],
+    \   'sources': [#{ name: 'line' }, #{ name: 'mr' }],
     \   'sourceOptions': {
     \     '_': {
     \       'matchers': ['matcher_substring'],
     \       'ignoreCase': v:true,
     \     },
+    \   },
+    \   'sourceParams': {
+    \     'mr': {
+    \       'kind': 'mru',
+    \       'foldRoot': v:true,
+    \       'relativeIfSameRepository': v:true,
+    \     }
     \   },
     \   'filterParams': {
     \     'matcher_substring': {
@@ -435,6 +434,15 @@ hook_post_source = '''
     nnoremap <buffer><silent>q :call ddu#ui#ff#do_action('quit')<CR>
     nnoremap <buffer><silent><Space>q :call ddu#ui#ff#do_action('quit')<CR>
     nnoremap <buffer><silent>* :call ddu#ui#ff#do_action('toggleAllItems')<CR>
+    nnoremap <buffer><silent>k :call <SID>move_to_up_or_ddu_ui_filter()<CR>
+  endfunction
+
+  function! s:move_to_up_or_ddu_ui_filter()
+    if line('.') == 1
+      call ddu#ui#ff#do_action('openFilterWindow')
+    else
+      call cursor(line('.') - 1, col('.'))
+    end
   endfunction
 
   function! s:move_to_ddu_buffer()
@@ -442,11 +450,8 @@ hook_post_source = '''
       let ft = getwinvar(n, '&ft')
 
       if ft == 'ddu-ff'
-        let ids = win_findbuf(n)
-        if !empty(ids)
-          call win_gotoid(ids[0])
-        endif
-
+        let id = win_getid(n)
+        call win_gotoid(id)
         return
       endif
     endfor
@@ -457,7 +462,6 @@ hook_post_source = '''
     nnoremap <buffer><silent>j :call <SID>move_to_ddu_buffer()<CR>
     nnoremap <buffer><silent><Space>q :call ddu#ui#ff#do_action('quit')<CR>
     hi! link StatusLine Normal
-    hi! link StatusLineNC Normal
   endfunction
 
   function! s:disable_lightline_on_ddu_filter_ui()
@@ -492,6 +496,10 @@ repo = 'Shougo/ddu-source-line'
 
 [[plugins]]
 repo = 'Shougo/ddu-source-action'
+
+[[plugins]]
+repo = 'alpaca-tc/ddu-source-mr'
+depends = ['mr.vim']
 
 [[plugins]]
 repo = 'Shougo/ddu-filter-matcher_substring'
@@ -626,7 +634,6 @@ hook_source = '''
     if server_name == 'denols' then
       opts = {
         autostart = false,
-        root_dir = nvim_lsp.util.root_pattern("deno.json"),
         init_options = {
           lint = true,
           unstable = true,
@@ -644,12 +651,10 @@ hook_source = '''
     elseif server_name == 'tsserver' then
       opts = {
         autostart = false,
-        root_dir = nvim_lsp.util.root_pattern("package.json"),
       }
     elseif server_name == 'sorbet' then
       opts = {
         autostart = false,
-        root_dir = nvim_lsp.util.root_pattern("Gemfile"),
         cmd = {'bundle', 'exec', 'srb', 'tc', '--lsp', '--dir', '.'},
       }
     end
@@ -681,10 +686,11 @@ hook_post_source = '''
     let filetype = get(split(&filetype, '\.'), 0, '')
     let root = s:V.import('Prelude').path2project_directory(getcwd())
     let isTsJs = filetype == 'typescript' || filetype == 'javascript' || filetype == 'typescriptreact'
+    let currentFile = expand("%:p")
 
     if filetype == 'ruby' && s:file_match_str(root . '/Gemfile', 'sorbet')
       LspStart sorbet
-    elseif isTsJs && (filereadable(root . '/deno.json') || s:file_match_str(root . '/vercel.json', 'vercel-deno'))
+    elseif isTsJs && (filereadable(root . '/deno.json') || s:file_match_str(root . '/vercel.json', 'vercel-deno') || s:file_match_str(currentFile, 'https://deno.land/'))
       LspStart denols
     elseif isTsJs && s:file_match_str(root . '/package.json', 'typescript')
       LspStart typescript-language-server
@@ -792,8 +798,7 @@ EOF
 '''
 
 [[plugins]]
-repo = 'Shougo/neomru.vim'
-on_source = 'unite.vim'
+repo = 'lambdalisue/mr.vim'
 
 [[plugins]]
 repo = 'Shougo/vimfiler'
