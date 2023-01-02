@@ -72,24 +72,6 @@ hook_source = '''
     endif
   endfunction"}}}
 
-  let g:lightline#functions#ale = s:lightline.new({ 'updatetime' : 0.3 })
-  function! g:lightline#functions#ale.func() "{{{
-    if exists('ale#statusline#Count')
-      let counts = ale#statusline#Count(bufnr(''))
-    else
-      let counts = {
-        \ 'style_error': 0,
-        \ 'error': 0,
-        \ 'total': 0
-        \ }
-    endif
-
-    let errors = counts.error + counts.style_error
-    let non_errors = counts.total - errors
-
-    return (counts.total == 0) ? 'OK' : printf('⨉ %d ⚠ %d', non_errors, errors)
-  endfunction"}}}
-
   let g:lightline = {
         \ 'enable' : {
         \   'statusline': 1,
@@ -98,7 +80,6 @@ hook_source = '''
         \ 'active': {
         \   'left': [
         \     ['mode'],
-        \     ['ale'],
         \     ['information'],
         \     ['git_branch', 'modified'],
         \   ],
@@ -110,7 +91,6 @@ hook_source = '''
         \ },
         \ 'component_function' : {
         \   'information': 'g:lightline#functions#plugin_information.statusline',
-        \   'ale':  'g:lightline#functions#ale.statusline',
         \ },
         \ 'component_expand': {
         \   'git_branch':  'g:lightline#functions#git_branch.statusline',
@@ -398,6 +378,131 @@ hook_source = '''
   endfunction"}}}
   "}}}
 '''
+
+[[plugins]]
+repo = 'Shougo/ddu.vim'
+depends = ['denops.vim', 'ddu-source-file_rec', 'ddu-filter-matcher_substring', 'ddu-ui-ff', 'ddu-ui-filer', 'ddu-kind-file', 'ddu-source-action', 'ddu-source-line']
+hook_source = '''
+  call ddu#custom#patch_global({
+    \   'ui': 'ff',
+    \   'sources': [#{ name: 'line' }],
+    \   'sourceOptions': {
+    \     '_': {
+    \       'matchers': ['matcher_substring'],
+    \       'ignoreCase': v:true,
+    \     },
+    \   },
+    \   'filterParams': {
+    \     'matcher_substring': {
+    \       'highlightMatched': 'Search',
+    \     },
+    \   },
+    \   'uiParams': {
+    \     'ff': {
+    \       'filterFloatingPosition': 'top',
+    \       'filterSplitDirection': 'topleft',
+    \       'startFilter': v:true,
+    \       'splitDirection': 'topleft',
+    \     },
+    \   },
+    \   'kindOptions': {
+    \     'file': {
+    \       'defaultAction': 'open',
+    \     },
+    \   }
+    \ })
+'''
+
+[[plugins]]
+repo = 'Shougo/ddu-kind-file'
+
+[[plugins]]
+repo = 'Shougo/ddu-ui-filer'
+build = 'brew install desktop-file-utils'
+
+[[plugins]]
+repo = 'Shougo/ddu-ui-ff'
+depends = ['lightline.vim']
+hook_post_source = '''
+  function! s:ddu_ff_ui() abort
+    nnoremap <buffer><silent><CR> :call ddu#ui#ff#do_action('itemAction')<CR>
+    nnoremap <buffer><silent><Space> :call ddu#ui#ff#do_action('toggleSelectItem')<CR>j
+    xnoremap <silent><buffer><Space> :call ddu#ui#ff#do_action('toggleSelectItem')<CR>
+    nnoremap <buffer><silent><Tab> :call ddu#ui#ff#do_action('chooseAction')<CR>
+    nnoremap <buffer><silent>a :call ddu#ui#ff#do_action('chooseAction')<CR>
+    nnoremap <buffer><silent>i :call ddu#ui#ff#do_action('openFilterWindow')<CR>
+    nnoremap <buffer><silent>A :call ddu#ui#ff#do_action('openFilterWindow')<CR>
+    nnoremap <buffer><silent>q :call ddu#ui#ff#do_action('quit')<CR>
+    nnoremap <buffer><silent><Space>q :call ddu#ui#ff#do_action('quit')<CR>
+    nnoremap <buffer><silent>* :call ddu#ui#ff#do_action('toggleAllItems')<CR>
+  endfunction
+
+  function! s:move_to_ddu_buffer()
+    for n in range(1, winnr('$'))
+      let ft = getwinvar(n, '&ft')
+
+      if ft == 'ddu-ff'
+        let ids = win_findbuf(n)
+        if !empty(ids)
+          call win_gotoid(ids[0])
+        endif
+
+        return
+      endif
+    endfor
+  endfunction
+
+  function! s:ddu_ff_filter_ui() abort
+    nnoremap <buffer><silent>q :call ddu#ui#ff#do_action('quit')<CR>
+    nnoremap <buffer><silent>j :call <SID>move_to_ddu_buffer()<CR>
+    nnoremap <buffer><silent><Space>q :call ddu#ui#ff#do_action('quit')<CR>
+    hi! link StatusLine Normal
+    hi! link StatusLineNC Normal
+  endfunction
+
+  function! s:disable_lightline_on_ddu_filter_ui()
+    for n in range(1, winnr('$'))
+      let ft = getwinvar(n, '&ft')
+
+      if ft == 'ddu-ff-filter'
+        let width = winwidth(n)
+        let statusline = repeat('-', width)
+        call setwinvar(n, '&statusline', statusline)
+      endif
+    endfor
+  endfunction
+
+  " function! s:ddu_filer_ui() abort
+  "   inoremap <buffer><silent> <CR> <Esc>:close<CR>
+  "   nnoremap <buffer><silent> <CR> :close<CR>
+  "   nnoremap <buffer><silent> q :close<CR>
+  " endfunction
+
+  augroup MyAutoCmd
+    autocmd FileType ddu-ff call s:ddu_ff_ui()
+    autocmd FileType ddu-ff-filter call s:ddu_ff_filter_ui()
+    autocmd FileType ddu-ff-filter call s:disable_lightline_on_ddu_filter_ui()
+    autocmd BufLeave,WinLeave,WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost * call s:disable_lightline_on_ddu_filter_ui()
+    " autocmd FileType ddu-ff-filter call s:ddu_filer_ui()
+  augroup END
+'''
+
+[[plugins]]
+repo = 'Shougo/ddu-source-line'
+
+[[plugins]]
+repo = 'Shougo/ddu-source-action'
+
+[[plugins]]
+repo = 'Shougo/ddu-filter-matcher_substring'
+
+[[plugins]]
+repo = 'Shougo/ddu-source-file_rec'
+
+[[plugins]]
+repo = 'Shougo/ddu-commands.vim'
+on_cmd = ['Ddu']
+depends = ['ddu.vim']
 
 [[plugins]]
 repo = 'neovim/nvim-lspconfig'
@@ -1334,6 +1439,7 @@ hook_source = '''
 
     npairs.add_rules(require('nvim-autopairs.rules.endwise-ruby'))
     npairs.add_rule(Rule('|', '|', { 'ruby', 'eruby' }))
+    npairs.add_rule(Rule('\'\'\'', '\'\'\'', { 'toml' }))
 
     _G.MUtils = {}
 
