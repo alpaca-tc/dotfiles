@@ -6,7 +6,7 @@
 " ξ                ξ
 " ξ ξξ~～~~〜~ξ ξ
 " ξ_ξξ_ξξ_ξξ_ξ  =з =з =з
-" augroup MyAutoCmd
+augroup MyAutoCmd
   autocmd!
 augroup END
 
