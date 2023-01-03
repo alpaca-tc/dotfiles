@@ -3,7 +3,6 @@ repo = 'itchyny/lightline.vim'
 on_event = ['InsertEnter']
 on_func   = ["lightline#update", "lightline#highlight"]
 hook_source = '''
-  let g:a = 1
   let s:lightline = { 'updatetime' : 5 } "{{{
 
   function! s:reltime() "{{{
@@ -359,6 +358,8 @@ hook_source = '''
     \     '_': {
     \       'matchers': ['matcher_substring'],
     \       'ignoreCase': v:true,
+    \     },
+    \     'file': {
     \       'columns': ['filename'],
     \     },
     \   },
@@ -493,6 +494,8 @@ hook_post_source = '''
     nnoremap <buffer><silent>a :call ddu#ui#ff#do_action('chooseAction')<CR>
     nnoremap <buffer><silent>* :call ddu#ui#ff#do_action('toggleAllItems')<CR>
     nnoremap <buffer><silent>k :call <SID>move_to_up_or_ddu_ui_filter()<CR>
+    nnoremap <buffer><silent>i :call ddu#ui#ff#do_action('openFilterWindow')<CR>
+    nnoremap <buffer><silent>A :call ddu#ui#ff#do_action('openFilterWindow')<CR>
   endfunction
 
   function! s:ddu_ui_ff_filter()
