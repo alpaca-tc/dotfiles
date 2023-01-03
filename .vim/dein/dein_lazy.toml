@@ -464,6 +464,7 @@ hook_post_source = '''
 
   function! s:ddu_ui_ff_filter()
     nnoremap <buffer><silent>j :call <SID>move_to_ddu_buffer('ddu-ff')<CR>
+    nnoremap <buffer><silent><C-W>j <C-W>j<C-W>j
     hi! link StatusLine Normal
   endfunction
 
