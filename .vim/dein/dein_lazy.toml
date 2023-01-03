@@ -254,13 +254,7 @@ hook_source = '''
   " let g:unite_marked_icon = "✓"
   " let g:unite_source_history_yank_enable = 0
 
-  " call unite#custom_source('file_rec', 'max_candidates', 5000)
-  " call unite#custom_source('file_rec/async', 'max_candidates', 5000)
-  " call unite#custom_source('giti/branch_all', 'max_candidates', 5000)
   call unite#custom_source('giti/log', 'max_candidates', 100)
-  " call unite#custom_source('line', 'max_candidates', 5000)
-  " call unite#custom_source('tag', 'max_candidates', 5000)
-  " call unite#custom_source('tags', 'max_candidates', 5000)
   let g:giti_git_command = executable('hub') ? 'hub' : 'git'
   let g:giti_log_default_line_count = 500
 
@@ -299,26 +293,9 @@ hook_source = '''
   " ----------------------------------------
   " Hooks
   let s:unite_hooks = {}
-  function! s:unite_hooks.file_mru() "{{{
-    syntax match uniteSource__FileMru_Dir /.*\// containedin=uniteSource__FileMru contains=uniteSource__FileMru_Time,uniteCandidateInputKeyword nextgroup=uniteSource__FileMru_Dir
-    highlight link uniteSource__FileMru_Dir Directory
-    highlight link uniteSource__FileMru_Time Comment
-  endfunction"}}}
-
   function! s:unite_hooks.file() "{{{
     syntax match uniteFileDirectory '.*\/'
     highlight link uniteFileDirectory Directory
-  endfunction"}}}
-
-  function! s:unite_hooks.line() "{{{
-    function! s:toggle_syntax() "{{{
-      let syntax = empty(&syntax) ? b:original_syntax : ''
-      let &syntax = syntax
-      echomsg 'Current syntax is ' . syntax
-    endfunction"}}}
-
-    nnoremap <buffer><C-K> :call <SID>toggle_syntax()<CR>
-    inoremap <buffer><C-K> <ESC>:call <SID>toggle_syntax()<CR>
   endfunction"}}}
 
   " grep {{{
@@ -393,7 +370,7 @@ hook_source = '''
     \   },
     \   'filterParams': {
     \     'matcher_substring': {
-    \       'highlightMatched': 'Search',
+    \       'highlightMatched': 'Statement',
     \     },
     \   },
     \   'uiParams': {
@@ -423,45 +400,24 @@ build = 'brew install desktop-file-utils'
 repo = 'Shougo/ddu-ui-ff'
 depends = ['lightline.vim']
 hook_post_source = '''
-  function! s:ddu_ff_ui() abort
-    nnoremap <buffer><silent><CR> :call ddu#ui#ff#do_action('itemAction')<CR>
-    nnoremap <buffer><silent><Space> :call ddu#ui#ff#do_action('toggleSelectItem')<CR>j
-    xnoremap <silent><buffer><Space> :call ddu#ui#ff#do_action('toggleSelectItem')<CR>
-    nnoremap <buffer><silent><Tab> :call ddu#ui#ff#do_action('chooseAction')<CR>
-    nnoremap <buffer><silent>a :call ddu#ui#ff#do_action('chooseAction')<CR>
-    nnoremap <buffer><silent>i :call ddu#ui#ff#do_action('openFilterWindow')<CR>
-    nnoremap <buffer><silent>A :call ddu#ui#ff#do_action('openFilterWindow')<CR>
-    nnoremap <buffer><silent>q :call ddu#ui#ff#do_action('quit')<CR>
-    nnoremap <buffer><silent><Space>q :call ddu#ui#ff#do_action('quit')<CR>
-    nnoremap <buffer><silent>* :call ddu#ui#ff#do_action('toggleAllItems')<CR>
-    nnoremap <buffer><silent>k :call <SID>move_to_up_or_ddu_ui_filter()<CR>
-  endfunction
-
   function! s:move_to_up_or_ddu_ui_filter()
     if line('.') == 1
-      call ddu#ui#ff#do_action('openFilterWindow')
+      call s:move_to_ddu_buffer('ddu-ff-filter')
     else
       call cursor(line('.') - 1, col('.'))
     end
   endfunction
 
-  function! s:move_to_ddu_buffer()
+  function! s:move_to_ddu_buffer(ft)
     for n in range(1, winnr('$'))
       let ft = getwinvar(n, '&ft')
 
-      if ft == 'ddu-ff'
+      if ft == a:ft
         let id = win_getid(n)
         call win_gotoid(id)
         return
       endif
     endfor
-  endfunction
-
-  function! s:ddu_ff_filter_ui() abort
-    nnoremap <buffer><silent>q :call ddu#ui#ff#do_action('quit')<CR>
-    nnoremap <buffer><silent>j :call <SID>move_to_ddu_buffer()<CR>
-    nnoremap <buffer><silent><Space>q :call ddu#ui#ff#do_action('quit')<CR>
-    hi! link StatusLine Normal
   endfunction
 
   function! s:disable_lightline_on_ddu_filter_ui()
@@ -476,18 +432,136 @@ hook_post_source = '''
     endfor
   endfunction
 
-  " function! s:ddu_filer_ui() abort
-  "   inoremap <buffer><silent> <CR> <Esc>:close<CR>
-  "   nnoremap <buffer><silent> <CR> :close<CR>
-  "   nnoremap <buffer><silent> q :close<CR>
+  function! s:ddu_ui()
+    augroup DduBufferUi
+      autocmd! * <buffer>
+      autocmd BufEnter <buffer> if winnr('$') == 1 |quit| endif
+    augroup END
+
+    nnoremap <buffer><silent>q :call ddu#ui#ff#do_action('quit')<CR>
+    nnoremap <buffer><silent><Space>q :call ddu#ui#ff#do_action('quit')<CR>
+    " nnoremap <expr><buffer>re unite#do_action('replace')
+
+    let source_name = substitute(get(b:, 'ddu_ui_name', ''), '[-/]', '_', 'g')
+    if !empty(source_name) && has_key(s:ddu_hooks, source_name)
+      call s:ddu_hooks[source_name]()
+    endif
+  endfunction
+
+  function! s:ddu_ui_ff()
+    setl cursorline
+
+    nnoremap <buffer><silent><CR> :call ddu#ui#ff#do_action('itemAction')<CR>
+    nnoremap <buffer><silent><Space> :call ddu#ui#ff#do_action('toggleSelectItem')<CR>j
+    xnoremap <silent><buffer><Space> :call ddu#ui#ff#do_action('toggleSelectItem')<CR>
+    nnoremap <buffer><silent><Tab> :call ddu#ui#ff#do_action('chooseAction')<CR>
+    nnoremap <buffer><silent>a :call ddu#ui#ff#do_action('chooseAction')<CR>
+    nnoremap <buffer><silent>i :call ddu#ui#ff#do_action('openFilterWindow')<CR>
+    nnoremap <buffer><silent>A :call ddu#ui#ff#do_action('openFilterWindow')<CR>
+    nnoremap <buffer><silent>* :call ddu#ui#ff#do_action('toggleAllItems')<CR>
+    nnoremap <buffer><silent>k :call <SID>move_to_up_or_ddu_ui_filter()<CR>
+  endfunction
+
+  function! s:ddu_ui_ff_filter()
+    nnoremap <buffer><silent>j :call <SID>move_to_ddu_buffer('ddu-ff')<CR>
+    hi! link StatusLine Normal
+  endfunction
+
+  function! s:get_ddu_ff_winnr()
+    for n in range(1, winnr('$'))
+      let ft = getwinvar(n, '&ft')
+
+      if ft == 'ddu-ff'
+        return n
+      endif
+    endfor
+
+    return v:null
+  endfunction
+
+  let s:ddu_window_size = {}
+  function! s:ddu_fold_buffer()
+    let win_enter = &ft == 'ddu-ff' || &ft == 'ddu-ff-filter'
+    let ddu_ff_winnr = s:get_ddu_ff_winnr()
+
+    if ddu_ff_winnr is v:null
+      " ddu is closed
+      return
+    endif
+
+    if win_enter
+      if has_key(s:ddu_window_size, ddu_ff_winnr)
+        echo 'enter' . ddu_ff_winnr
+        execute ddu_ff_winnr . 'resize ' . s:ddu_window_size[ddu_ff_winnr][0]
+        execute 'vertical ' . ddu_ff_winnr . ' resize ' . s:ddu_window_size[ddu_ff_winnr][1]
+
+        unlet s:ddu_window_size[ddu_ff_winnr]
+      endif
+    else
+      if !has_key(s:ddu_window_size, ddu_ff_winnr)
+        let s:ddu_window_size[ddu_ff_winnr] = [winheight(ddu_ff_winnr), winwidth(ddu_ff_winnr)]
+      endif
+
+      execute ddu_ff_winnr . 'resize 1'
+    endif
+  endfunction
+
+  let s:ddu_hooks = {}
+
+  " grep
+  " let g:ddu_source_grep_max_candidates = 10000
+  " if executable('ag')
+  "   let g:ddu_source_grep_command = 'ag'
+  "   let g:ddu_source_grep_default_opts = '--nocolor --nogroup'
+  "   let g:ddu_source_grep_recursive_opt = ''
+  " elseif executable('rg')
+  "   let g:ddu_source_grep_command =  'rg'
+  "   let g:ddu_source_grep_default_opts = '-n --no-heading --color never'
+  "   let g:ddu_source_grep_recursive_opt = ''
+  "   let g:ddu_source_grep_max_candidates = 200
+  " else
+  "   let g:ddu_source_grep_command =  'grep'
+  "   let g:ddu_source_grep_recursive_opt = '-R'
+  " endif
+  "
+  " function! s:ddu_hooks.grep()
+  "   nnoremap <expr><buffer>re ddu#do_action('replace')
+  " endfunction
+  "
+  " " vim-ddu-giti
+  " function! s:ddu_hooks.giti_status()
+  "   " set previewheight=20
+  "   nnoremap <silent><buffer><expr>gM ddu#do_action('ammend')
+  "   nnoremap <silent><buffer><expr>gm ddu#do_action('commit')
+  "   nnoremap <silent><buffer><expr>ga ddu#do_action('stage')
+  "   nnoremap <silent><buffer><expr>gc ddu#do_action('checkout')
+  "   nnoremap <silent><buffer><expr>gd ddu#do_action('diff')
+  "   nnoremap <silent><buffer><expr>gu ddu#do_action('unstage')
+  " endfunction
+  "
+  " function! s:ddu_hooks.giti_branch()
+  "   nnoremap <silent><buffer><expr>d ddu#do_action('delete')
+  "   nnoremap <silent><buffer><expr>D ddu#do_action('delete_force')
+  "   nnoremap <silent><buffer><expr>rd ddu#do_action('delete_remote')
+  "   nnoremap <silent><buffer><expr>rD ddu#do_action('delete_remote_force')
+  " endfunction
+  "
+  " function! s:ddu_hooks.giti_branch_all()
+  "   call self.giti_branch()
+  " endfunction
+  "
+  " function! s:ddu_hooks.giti_log()
+  "   nnoremap <silent><buffer><expr>gd ddu#do_action('diff')
+  "   nnoremap <silent><buffer><expr>d ddu#do_action('diff')
   " endfunction
 
   augroup MyAutoCmd
-    autocmd FileType ddu-ff call s:ddu_ff_ui()
-    autocmd FileType ddu-ff-filter call s:ddu_ff_filter_ui()
     autocmd FileType ddu-ff-filter call s:disable_lightline_on_ddu_filter_ui()
     autocmd BufLeave,WinLeave,WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost * call s:disable_lightline_on_ddu_filter_ui()
-    " autocmd FileType ddu-ff-filter call s:ddu_filer_ui()
+    autocmd FileType ddu-ff,ddu-ff-filter call <SID>ddu_ui()
+    autocmd FileType ddu-ff call <SID>ddu_ui_ff()
+    autocmd FileType ddu-ff-filter call <SID>ddu_ui_ff_filter()
+    autocmd WinEnter * call s:ddu_fold_buffer()
   augroup END
 '''
 
@@ -506,11 +580,6 @@ repo = 'Shougo/ddu-filter-matcher_substring'
 
 [[plugins]]
 repo = 'Shougo/ddu-source-file_rec'
-
-[[plugins]]
-repo = 'Shougo/ddu-commands.vim'
-on_cmd = ['Ddu']
-depends = ['ddu.vim']
 
 [[plugins]]
 repo = 'neovim/nvim-lspconfig'
@@ -1725,6 +1794,7 @@ hook_source = '''
     \ 'typescript': 'nvim_lsp',
     \ 'javascript': 'nvim_lsp',
     \ 'ruby': 'ctags',
+    \ 'vim': 'ctags',
     \ }
 '''
 
