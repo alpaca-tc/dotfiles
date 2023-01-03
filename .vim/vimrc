@@ -268,7 +268,6 @@ else
   xnoremap :s :s!
   xnoremap re y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
 endif
-nnoremap ,f :setfiletype<Space>
 
 cnoremap <C-L> <Right>
 
@@ -643,6 +642,8 @@ nnoremap ! :Switch<CR>
 " VimFiler "{{{
 nnoremap <silent><Space>f  :call <SID>vim_filer_explorer_git()<CR>
 nnoremap <silent>,,  :VimFilerCreate<CR>
+nnoremap <silent>,f  :call ddu#start(#{ name: 'file', sources: [#{ name: 'file' }], ui: 'filer', columns: ['icon_filename'], uiParams: #{ filer: #{ search: expand('%:p') } } })<CR>
+,
 "}}}
 
 " ----------------------------------------
