@@ -350,6 +350,7 @@ hook_source = '''
 [[plugins]]
 repo = 'Shougo/ddu.vim'
 depends = ['denops.vim', 'ddu-filter-matcher_substring', 'ddu-ui-ff', 'ddu-ui-filer', 'ddu-kind-file', 'ddu-source-action', 'ddu-source-line', 'ddu-source-mr', 'ddu-source-file', 'ddu-source-rg', 'ddu-column-icon_filename', 'ddu-column-filename']
+on_func = ['ddu#custom#get_local', 'ddu#custom#patch_global', 'ddu#custom#patch_local']
 hook_source = '''
   call ddu#custom#patch_global({
     \   'ui': 'ff',
@@ -361,6 +362,7 @@ hook_source = '''
     \     },
     \     'file': {
     \       'columns': ['filename'],
+    \       'sorters': ['sorter_file_alpha'],
     \     },
     \   },
     \   'sourceParams': {
@@ -369,11 +371,6 @@ hook_source = '''
     \       'foldRoot': v:true,
     \       'relativeIfSameRepository': v:true,
     \     }
-    \   },
-    \   'filterParams': {
-    \     'matcher_substring': {
-    \       'highlightMatched': 'Statement',
-    \     },
     \   },
     \   'uiParams': {
     \     'ff': {
@@ -566,6 +563,22 @@ hook_post_source = '''
     endif
   endfunction
 
+  function! s:ddu_ui_filer_toggle_dot_files()
+    let local = ddu#custom#get_current('file')
+    let sorter_file_alpha_params = get(get(local, 'filterParams', {}), 'sorter_file_alpha', {})
+
+    call ddu#redraw('file',
+      \ {
+      \   'updateOptions': {
+      \     'filterParams': {
+      \       'sorter_file_alpha': {
+      \         'visibleDotFiles': !get(sorter_file_alpha_params, 'visibleDotFiles', v:false)
+      \       },
+      \     },
+      \   }
+      \ })
+  endfunction
+
   function! s:ddu_ui_filer()
     nnoremap <buffer><silent><CR> :call <SID>ddu_ui_filer_cr()<CR>
     nnoremap <buffer><silent>l :call <SID>ddu_ui_filer_cr()<CR>
@@ -577,12 +590,15 @@ hook_post_source = '''
     nnoremap <buffer><silent>* :call ddu#ui#filer#do_action('toggleAllItems')<CR>
     nnoremap <buffer><C-l> :call ddu#ui#filer#do_action('checkItems')<CR>
 
+    nnoremap <buffer><silent>q <Cmd>call ddu#ui#filer#do_action('quit')<CR>
+    nnoremap <buffer><silent><Space>q <Cmd>call ddu#ui#filer#do_action('quit')<CR>
     nnoremap <buffer><silent>c <Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'copy'})<CR>
     nnoremap <buffer><silent>d <Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'delete'})<CR>
     nnoremap <buffer><silent>r <Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'rename'})<CR>
     nnoremap <buffer><silent>m <Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'move'})<CR>
     nnoremap <buffer><silent>C <Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'newFile'})<CR>
     nnoremap <buffer><silent>K <Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'newDirectory'})<CR>
+    nnoremap <buffer><silent>. <Cmd>call <SID>ddu_ui_filer_toggle_dot_files()<CR>
 
     nnoremap <buffer>gr :call ddu#ui#filer#do_action('itemAction', {'name': 'grep'})<CR>
     " nnoremap <buffer><expr>p vimfiler#do_action('preview')
@@ -626,6 +642,15 @@ depends = ['mr.vim']
 
 [[plugins]]
 repo = 'Shougo/ddu-filter-matcher_substring'
+hook_post_source = '''
+  call ddu#custom#patch_global({
+    \   'filterParams': {
+    \     'matcher_substring': {
+    \       'highlightMatched': 'Statement',
+    \     },
+    \   },
+    \ })
+'''
 
 [[plugins]]
 repo = 'neovim/nvim-lspconfig'

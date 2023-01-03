@@ -670,7 +670,7 @@ nmap [unite] <Nop>
 nmap <C-J> [unite]
 
 nnoremap <silent>[unite]j       :call ddu#start(#{ name: 'mr', sources: [#{ name: 'mr' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>
-nnoremap <silent>g/             :call ddu#start(#{ name: 'line' })<CR>
+nnoremap <silent>g/             :call ddu#start(#{ name: 'line', sources: [#{ name: 'line' }] })<CR>
 
 function! s:parse_git_root_option(input) "{{{
   let reg_multi =  '\*\*/'
