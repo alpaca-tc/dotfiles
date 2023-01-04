@@ -349,7 +349,7 @@ hook_source = '''
 
 [[plugins]]
 repo = 'Shougo/ddu.vim'
-depends = ['denops.vim', 'ddu-filter-matcher_substring', 'ddu-ui-ff', 'ddu-ui-filer', 'ddu-kind-file', 'ddu-source-action', 'ddu-source-line', 'ddu-source-mr', 'ddu-source-file', 'ddu-source-rg', 'ddu-column-icon_filename', 'ddu-column-filename']
+depends = ['denops.vim', 'ddu-filter-matcher_substring', 'ddu-ui-ff', 'ddu-ui-filer', 'ddu-kind-file', 'ddu-source-action', 'ddu-source-line', 'ddu-source-mr', 'ddu-source-file', 'ddu-source-rg', 'ddu-column-icon_filename', 'ddu-column-filename', 'ddu-source-git']
 on_func = ['ddu#custom#get_local', 'ddu#custom#patch_global', 'ddu#custom#patch_local']
 hook_source = '''
   call ddu#custom#patch_global({
@@ -391,6 +391,12 @@ hook_source = '''
     \     },
     \     action: #{
     \       defaultAction: 'do',
+    \     },
+    \     git_branch: #{
+    \       defaultAction: 'switch',
+    \     },
+    \     git_status: #{
+    \       defaultAction: 'open',
     \     },
     \   }
     \ })
@@ -467,6 +473,7 @@ hook_post_source = '''
   function! s:move_to_ddu_ff_and_cr()
     call s:move_to_ddu_buffer('ddu-ff')
     call ddu#ui#ff#do_action('itemAction')
+    call ddu#ui#ff#close()
   endfunction
 
   function! s:ddu_ui_ff_shared()
@@ -479,11 +486,15 @@ hook_post_source = '''
     nnoremap <buffer><silent><Space>q :call ddu#ui#ff#do_action('quit')<CR>
   endfunction
 
+  function! s:close_filter_window_and_do_item_action()
+    call ddu#ui#ff#do_action('itemAction')
+  endfunction
+
   function! s:ddu_ui_ff()
     call s:ddu_ui_ff_shared()
     setl cursorline
 
-    nnoremap <buffer><silent><CR> :call ddu#ui#ff#do_action('itemAction')<CR>
+    nnoremap <buffer><silent><CR> :call <SID>close_filter_window_and_do_item_action()<CR>
     nnoremap <buffer><silent><Space> :call ddu#ui#ff#do_action('toggleSelectItem')<CR>j
     nnoremap <buffer><silent>f :call ddu#ui#ff#do_action('toggleSelectItem')<CR>j
     xnoremap <silent><buffer><Space> :call ddu#ui#ff#do_action('toggleSelectItem')<CR>
@@ -618,6 +629,27 @@ repo = 'Shougo/ddu-source-line'
 
 [[plugins]]
 repo = 'Shougo/ddu-source-action'
+
+[[plugins]]
+repo = 'alpaca-tc/ddu-source-git'
+hook_post_source = '''
+  function! s:ddu_source_git_branch()
+    let source = get(b:, 'ddu_ui_name', '')
+
+    if source == 'git_branch'
+      nnoremap <silent><buffer>d :call ddu#ui#ff#do_action('itemAction', {'name': 'delete_local'})<CR>
+      nnoremap <silent><buffer>D :call ddu#ui#ff#do_action('itemAction', {'name': 'delete_local_force'})<CR>
+    elseif source == 'git_status'
+      nnoremap <silent><buffer>ga :call ddu#ui#ff#do_action('itemAction', {'name': 'add'})<CR>
+      nnoremap <silent><buffer>gu :call ddu#ui#ff#do_action('itemAction', {'name': 'unstage'})<CR>
+      " nnoremap <silent><buffer>gu :call ddu#ui#ff#do_action('itemAction', {'name': 'restore'})<CR>
+    endif
+  endfunction
+
+  augroup MyAutoCmd
+    autocmd FileType ddu-ff call <SID>ddu_source_git_branch()
+  augroup END
+'''
 
 [[plugins]]
 repo = 'shun/ddu-source-rg'
@@ -983,7 +1015,7 @@ hook_source = '''
     nnoremap <buffer><expr>p vimfiler#do_action('preview')
     nnoremap <expr><buffer>re vimfiler#do_action('replace')
     nnoremap <buffer>v v
-    nnoremap <silent><buffer>gs :Unite giti/status -buffer-name=giti_status -no-start-insert -horizontal<CR>
+    nnoremap <silent><buffer>gs :call ddu#start(#{ name: 'git_status', sources: [#{ name: 'git_status' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>
     nnoremap <buffer>u :<C-U>Unite file -no-start-insert -buffer-name=file<CR>
     " nmap <buffer> <TAB> <Plug>(vimfiler_switch_to_other_window)
     nmap <buffer> <TAB> <Plug>(vimfiler_switch_to_another_vimfiler)

@@ -730,8 +730,8 @@ command! -nargs=? -complete=customlist,s:unite_git_complete UniteGit call <SID>u
 
 " vim-unite-giti
 nnoremap <silent>gl :Unite giti/log -no-start-insert -horizontal<CR>
-nnoremap <silent>gs :Unite giti/status -no-start-insert -horizontal<CR>
-nnoremap <silent>gh :Unite giti/branch_all -no-start-insert<CR>
+nnoremap <silent>gs :call ddu#start(#{ name: 'git_status', sources: [#{ name: 'git_status' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>
+nnoremap <silent>gh :call ddu#start(#{ name: 'git_branch', sources: [#{ name: 'git_branch', params: #{ args: ['-a'] } }] })<CR>
 "}}}
 
 nmap p <Plug>(miniyank-autoput)
