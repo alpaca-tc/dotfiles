@@ -269,6 +269,7 @@ else
   xnoremap re y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
 endif
 
+nnoremap ,f :setfiletype<Space>
 cnoremap <C-L> <Right>
 
 xnoremap H <Nop>
@@ -642,7 +643,7 @@ nnoremap ! :Switch<CR>
 " VimFiler "{{{
 nnoremap <silent><Space>f  :call <SID>vim_filer_explorer_git()<CR>
 nnoremap <silent>,,  :VimFilerCreate<CR>
-nnoremap <silent>,f  :call ddu#start(#{ name: 'file', sources: [#{ name: 'file' }], ui: 'filer', columns: ['icon_filename'], uiParams: #{ filer: #{ search: expand('%:p') } } })<CR>
+nnoremap <silent>[unite]f  :call ddu#start(#{ name: 'file', sources: [#{ name: 'file' }], ui: 'filer', columns: ['icon_filename'], uiParams: #{ filer: #{ search: expand('%:p') } } })<CR>
 ,
 "}}}
 
@@ -728,8 +729,9 @@ endfunction "}}}
 
 command! -nargs=? -complete=customlist,s:unite_git_complete UniteGit call <SID>unite_git_root(<f-args>)
 
-" vim-unite-giti
-nnoremap <silent>gl :Unite giti/log -no-start-insert -horizontal<CR>
+" ddu-source-git
+" nnoremap <silent>gl :Unite giti/log -no-start-insert -horizontal<CR>
+nnoremap <silent>gl :call ddu#start(#{ name: 'git_log', sources: [#{ name: 'git_log' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>
 nnoremap <silent>gs :call ddu#start(#{ name: 'git_status', sources: [#{ name: 'git_status' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>
 nnoremap <silent>gh :call ddu#start(#{ name: 'git_branch', sources: [#{ name: 'git_branch', params: #{ args: ['-a'] } }] })<CR>
 "}}}

@@ -398,6 +398,9 @@ hook_source = '''
     \     git_status: #{
     \       defaultAction: 'open',
     \     },
+    \     git_log: #{
+    \       defaultAction: 'yank_hash',
+    \     },
     \   }
     \ })
 '''
