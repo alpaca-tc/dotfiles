@@ -40,9 +40,7 @@ hook_source = '''
 
   let g:lightline#functions#git_branch = s:lightline.new({ 'updatetime' : 5 })
   function! g:lightline#functions#git_branch.func() "{{{
-    if dein#is_sourced('vim-unite-giti')
-      let branch = giti#branch#current_name()
-    elseif dein#is_sourced('git-vim')
+    if  dein#is_sourced('git-vim')
       let branch = git#get_current_branch()
     elseif dein#is_sourced('vim-fugitive')
       let branch = fugitive#head()
@@ -253,10 +251,6 @@ hook_source = '''
   " let g:unite_marked_icon = "✓"
   " let g:unite_source_history_yank_enable = 0
 
-  call unite#custom_source('giti/log', 'max_candidates', 100)
-  let g:giti_git_command = executable('hub') ? 'hub' : 'git'
-  let g:giti_log_default_line_count = 500
-
   augroup MyUniteCmd
     autocmd!
     autocmd FileType unite call <SID>unite_my_settings()
@@ -315,34 +309,6 @@ hook_source = '''
 
   function! s:unite_hooks.grep() "{{{
     nnoremap <expr><buffer>re unite#do_action('replace')
-  endfunction"}}}
-  "}}}
-
-  " vim-unite-giti {{{
-  function! s:unite_hooks.giti_status() "{{{
-    " set previewheight=20
-    nnoremap <silent><buffer><expr>gM unite#do_action('ammend')
-    nnoremap <silent><buffer><expr>gm unite#do_action('commit')
-    nnoremap <silent><buffer><expr>ga unite#do_action('stage')
-    nnoremap <silent><buffer><expr>gc unite#do_action('checkout')
-    nnoremap <silent><buffer><expr>gd unite#do_action('diff')
-    nnoremap <silent><buffer><expr>gu unite#do_action('unstage')
-  endfunction"}}}
-
-  function! s:unite_hooks.giti_branch() "{{{
-    nnoremap <silent><buffer><expr>d unite#do_action('delete')
-    nnoremap <silent><buffer><expr>D unite#do_action('delete_force')
-    nnoremap <silent><buffer><expr>rd unite#do_action('delete_remote')
-    nnoremap <silent><buffer><expr>rD unite#do_action('delete_remote_force')
-  endfunction"}}}
-
-  function! s:unite_hooks.giti_branch_all() "{{{
-    call self.giti_branch()
-  endfunction"}}}
-
-  function! s:unite_hooks.giti_log() "{{{
-    nnoremap <silent><buffer><expr>gd unite#do_action('diff')
-    nnoremap <silent><buffer><expr>d unite#do_action('diff')
   endfunction"}}}
   "}}}
 '''
@@ -1587,10 +1553,6 @@ repo = 'thinca/vim-qfreplace'
 on_cmd    = ["Qfreplace"]
 on_ft     = ["unite", "quickfix", "vimfiler"]
 on_func   = ["qfreplace#start"]
-
-[[plugins]]
-repo = 'alpaca-tc/vim-unite-giti'
-on_source = 'unite.vim'
 
 [[plugins]]
 repo = 'kana/vim-niceblock'

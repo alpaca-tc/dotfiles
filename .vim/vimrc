@@ -730,7 +730,6 @@ endfunction "}}}
 command! -nargs=? -complete=customlist,s:unite_git_complete UniteGit call <SID>unite_git_root(<f-args>)
 
 " ddu-source-git
-" nnoremap <silent>gl :Unite giti/log -no-start-insert -horizontal<CR>
 nnoremap <silent>gl :call ddu#start(#{ name: 'git_log', sources: [#{ name: 'git_log' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>
 nnoremap <silent>gs :call ddu#start(#{ name: 'git_status', sources: [#{ name: 'git_status' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>
 nnoremap <silent>gh :call ddu#start(#{ name: 'git_branch', sources: [#{ name: 'git_branch', params: #{ args: ['-a'] } }] })<CR>
