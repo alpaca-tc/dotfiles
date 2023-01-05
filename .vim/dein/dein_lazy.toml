@@ -490,7 +490,18 @@ hook_post_source = '''
     augroup END
   endfunction
 
+  function! s:ddu_replace()
+    call ddu#ui#ff#do_action('itemAction', {'name': 'quickfix'})
+    call ddu#ui#ff#close()
+    cclose
+    call qfreplace#start('')
+  endfunction
+
   function! s:ddu_ui_ff()
+    augroup DduBufferPreview
+      autocmd! * <buffer>
+    augroup END
+
     call s:ddu_ui_ff_shared()
     setl cursorline
 
@@ -505,6 +516,7 @@ hook_post_source = '''
     nnoremap <buffer><silent>i :call ddu#ui#ff#do_action('openFilterWindow')<CR>
     nnoremap <buffer><silent>A :call ddu#ui#ff#do_action('openFilterWindow')<CR>
     nnoremap <buffer><silent>p :call <SID>ddu_toggle_preview()<CR>
+    nnoremap <buffer><silent>re :call <SID>ddu_replace()<CR>
   endfunction
 
   function! s:ddu_ui_ff_filter()
