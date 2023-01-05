@@ -1139,7 +1139,7 @@ hook_source = '''
 
 [[plugins]]
 repo = 'Shougo/ddc.vim'
-depends = ['denops.vim', 'pum.vim', 'ddc-file', 'ddc-matcher_head', 'ddc-sorter_rank', 'ddc-converter_remove_overlap', 'ddc-ui-native', 'neco-vim', 'ddc-source-nvim-lsp', 'ddc-buffer', 'ddc-dictionary', 'neosnippet.vim', 'nvim-autopairs']
+depends = ['denops.vim', 'pum.vim', 'ddc-file', 'ddc-matcher_head', 'ddc-sorter_rank', 'ddc-converter_remove_overlap', 'ddc-ui-native', 'neco-vim', 'ddc-source-nvim-lsp', 'ddc-buffer', 'ddc-dictionary', 'neosnippet.vim', 'nvim-autopairs', 'ddu-filter-converter_display_word']
 on_event = ['InsertEnter']
 hook_source = '''
   call ddc#custom#patch_global({
@@ -1230,6 +1230,9 @@ hook_source = '''
   inoremap <expr><C-X><C-O> ddc#map#manual_complete('lsp')
   inoremap <expr><C-X><C-X> ddc#map#manual_complete()
 '''
+
+[[plugins]]
+repo = 'Shougo/ddu-filter-converter_display_word'
 
 [[plugins]]
 repo = "matsui54/ddc-dictionary"

@@ -671,14 +671,37 @@ augroup END
 nmap [unite] <Nop>
 nmap <C-J> [unite]
 
-function! s:ddu_start_rg()
+function! s:ddu_start_rg(input)
   let root_dir = s:current_git()
-  call ddu#start(#{ name: 'rg', sources: [#{ name: 'rg', params: #{ path: root_dir } }], ui: 'ff', volatile: v:true })
+  let options = #{
+        \   name: 'rg',
+        \   sources: [
+        \     #{
+        \       name: 'rg',
+        \       params: #{
+        \         path: root_dir,
+        \         input: a:input
+        \       },
+        \       options: #{
+        \         matchers: ['converter_display_word']
+        \       }
+        \     }
+        \   ],
+        \   input: a:input,
+        \   ui: 'ff',
+        \   volatile: !a:input,
+        \   uiParams: #{
+        \     autoResize: v:false
+        \   }
+        \ }
+
+  call ddu#start(options)
 endfunction
 
 nnoremap <silent>[unite]j :call ddu#start(#{ name: 'mr', sources: [#{ name: 'mr' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>
 nnoremap <silent>g/       :call ddu#start(#{ name: 'line', sources: [#{ name: 'line' }] })<CR>
-nnoremap <silent>gr       :call <SID>ddu_start_rg()<CR>
+nnoremap <silent>gr       :call <SID>ddu_start_rg(expand('<cword>'))<CR>
+nnoremap <silent>gR       :call <SID>ddu_start_rg('')<CR>
 
 function! s:parse_git_root_option(input) "{{{
   let reg_multi =  '\*\*/'
