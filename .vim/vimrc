@@ -121,6 +121,7 @@ set backspace=indent,eol,start
 set clipboard+=unnamed
 set formatoptions+=lcqmM
 set modelines=1
+set signcolumn=no
 
 if !has('nvim')
   " set ttymouse=xterm2
@@ -670,8 +671,14 @@ augroup END
 nmap [unite] <Nop>
 nmap <C-J> [unite]
 
-nnoremap <silent>[unite]j       :call ddu#start(#{ name: 'mr', sources: [#{ name: 'mr' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>
-nnoremap <silent>g/             :call ddu#start(#{ name: 'line', sources: [#{ name: 'line' }] })<CR>
+function! s:ddu_start_rg()
+  let root_dir = s:current_git()
+  call ddu#start(#{ name: 'rg', sources: [#{ name: 'rg', params: #{ path: root_dir } }], ui: 'ff', volatile: v:true })
+endfunction
+
+nnoremap <silent>[unite]j :call ddu#start(#{ name: 'mr', sources: [#{ name: 'mr' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>
+nnoremap <silent>g/       :call ddu#start(#{ name: 'line', sources: [#{ name: 'line' }] })<CR>
+nnoremap <silent>gr       :call <SID>ddu_start_rg()<CR>
 
 function! s:parse_git_root_option(input) "{{{
   let reg_multi =  '\*\*/'
