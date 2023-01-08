@@ -217,10 +217,6 @@ hook_source = '''
 '''
 
 [[plugins]]
-repo = 'vim-scripts/camelcasemotion'
-on_map    = ["<Plug>CamelCaseMotion_w", "<Plug>CamelCaseMotion_b", "<Plug>CamelCaseMotion_e", "<Plug>CamelCaseMotion_iw", "<Plug>CamelCaseMotion_ib", "<Plug>CamelCaseMotion_ie"]
-
-[[plugins]]
 repo = 'Shougo/unite.vim'
 on_cmd    = ["Unite", "UniteBookmarkAdd", "UniteClose", "UniteResume", "UniteWithBufferDir", "UniteWithCurrentDir", "UniteWithCursorWord", "UniteWithInput", "UniteWithInputDirectory"]
 on_func   = ["unite#util#path2project_directory", 'unite#util#get_vital']
@@ -1315,15 +1311,6 @@ hook_source = '''
 '''
 
 [[plugins]]
-repo = 'alpaca-tc/alpaca_remove_dust.vim'
-on_cmd    = ["RemoveDustDisable", "RemoveDustEnable", "RemoveDust", "RemoveDustForce"]
-
-[[plugins]]
-repo = 'alpaca-tc/alpaca_window.vim'
-on_map    = '<Plug>'
-on_func   = ["alpaca_window#set_smart_close", "alpaca_window#smart_close", "alpaca_window#open_buffer"]
-
-[[plugins]]
 repo = 'vim-scripts/grep.vim'
 on_cmd    = ["Grep", "Rgrep", "GrepBuffer"]
 hook_source = '''
@@ -1531,7 +1518,7 @@ hook_source = '''
         \   ['NeoBundle', 'NeoBundleLazy'],
         \   ['echo', 'echomsg'],
         \   ['if', 'else'],
-        \   { 'let\s\+\([gstb]:\a\+\|\a\+\)\s*\(.\|+\|-\|*\|\\\)\{,1}=\s*\(\a\+\)\s*.*$' : 'unlet \1' },
+        \   { 'let\s\+\([gstb]\):\(\a\+\|\a\+\)\s*\(.\|+\|-\|*\|\\\)\{,1}=\s*\(\a\+\)\s*.*$' : 'vim.\1.\2 = \3' },
         \ ],
         \ 'markdown' : [
         \   ['[ ]', '[x]'],
@@ -1783,175 +1770,36 @@ repo = 'basyura/unite-rails'
 on_source = ["unite.vim"]
 
 [[plugins]]
-repo = 'alpaca-tc/nvim-miniyank'
-rev = 'loop_cycle'
-on_map = [['nx', '<Plug>(miniyank-autoput)'], ['nx', '<Plug>(miniyank-autoPut)']]
-hook_post_source = '''
-  map <leader>p <Plug>(miniyank-startput)
-map <leader>P <Plug>(miniyank-startPut)
-  let g:miniyank_maxitems = 100
-  let g:miniyank_loop_cycle = v:true
-  let g:miniyank_echo_position = v:true
-
-  nmap <C-P> <Plug>(miniyank-cycle)
-  nmap <C-N> <Plug>(miniyank-cycleback)
-'''
-
-[[plugins]]
-repo = 'alpaca-tc/alpaca-switch-file.vim'
-on_func = ['switch_file#next', 'switch_file#prev']
-
-[[plugins]]
-repo = 'osyo-manga/vim-over'
-on_cmd    = ["OverCommandLine"]
-hook_post_source = '''
-  let g:over_command_line_key_mappings = {
-        \ "\<C-L>" : "\<C-F>",
-        \ }
-
-  command! -range -nargs=*
-        \  OverCommandLine
-        \  call over#command_line(
-        \    g:over_command_line_prompt,
-        \    <line1> != <line2> ? printf("'<,'>%s", <q-args>) : <q-args>
-        \)
-
-  OverCommandLineNoremap <C-J> <Plug>(over-cmdline-substitute-jump-pattern)
-  OverCommandLineNoremap <C-K> <Plug>(over-cmdline-substitute-jump-string)
-'''
-
-[[plugins]]
 repo = 'Shougo/neco-vim'
 on_ft = ["vim"]
 
-[[plugins]]
-repo = 'posva/vim-vue'
-on_ft = "vue"
-hook_source = '''
-  " autocmd FileType vue syntax sync fromstart
-'''
-
-[[plugins]]
-repo = 'leafgarland/typescript-vim'
-on_ft = ["typescript"]
-
-[[plugins]]
-repo = 'yuezk/vim-js'
-on_ft = ["javascript", "typescript", "javascript.jsx", "typescript.tsx"]
-
-[[plugins]]
-repo = 'MaxMEllon/vim-jsx-pretty'
-on_ft = ["javascript", "typescript", "javascript.jsx", "typescript.tsx"]
-depends = ["vim-js", "yats.vim"]
-hook_source = '''
-  let g:vim_jsx_pretty_highlight_close_tag = 1
-'''
-
-[[plugins]]
-repo = 'HerringtonDarkholme/yats.vim'
-on_ft = ["javascript", "typescript", "javascript.jsx", "typescript.tsx"]
-
-[[plugins]]
-repo = 'peitalin/vim-jsx-typescript'
-on_ft = ["typescript"]
-
-[[plugins]]
-repo = 'keith/swift.vim'
-on_ft = ['swift']
-rtp = 'vim'
-
-[[plugins]]
-repo = 'hashivim/vim-terraform'
-on_ft = ['terraform']
-hook_source = '''
-  let g:terraform_fmt_on_save = 1
-'''
-
-[[plugins]]
-repo = 'rust-lang/rust.vim'
-on_ft = ['rust']
-hook_source = '''
-  let g:rustfmt_autosave = 1
-'''
-
-[[plugins]]
-repo = 'liuchengxu/vista.vim'
-on_cmd = ['Vista', 'Vista!', 'Vista!!']
-hook_source = '''
-  let g:vista_default_executive = 'nvim_lsp'
-  let g:vista#renderer#enable_icon = 1
-  let g:vista_sidebar_width = 40
-  let g:vista_icon_indent = ['', '']
-  let g:vista_fold_toggle_icons = get(g:, 'vista_fold_toggle_icons', ['▼', '▶'])
-  " let g:vista#renderer#enable_icon = 0
-
-  let g:vista_executive_for = {
-    \ 'c': 'nvim_lsp',
-    \ 'cpp': 'nvim_lsp',
-    \ 'typescript': 'nvim_lsp',
-    \ 'javascript': 'nvim_lsp',
-    \ 'ruby': 'ctags',
-    \ 'vim': 'ctags',
-    \ }
-'''
-
-[[plugins]]
-repo = 'alpaca-tc/alpaca_github.vim'
-on_cmd = ['GhFile', 'GhPullRequestCurrentLine', 'GhPullRequest']
-depends = ['open-browser.vim']
-
-[[plugins]]
-repo = 'thinca/vim-quickrun'
-on_cmd    = ["QuickRun"]
-depends = ['vim-quickrun-neovim-job']
-hook_source = '''
-  let g:quickrun_config = {}
-  let g:quickrun_no_default_key_mappings = 1
-
-  let g:quickrun_config._ = {
-        \ 'runner' : 'neovim_job',
-        \ }
-
-  let g:quickrun_config['ruby.rspec'] = {
-        \ 'type' : 'ruby.rspec',
-        \ 'command': 'rspec',
-        \ 'exec': 'bundle exec %c %o %s', }
-
-  let g:quickrun_config['typescript/deno/test'] = {
-    \  'command': 'deno',
-    \  'cmdopt': '--unstable --allow-all',
-    \  'tempfile': '%{tempname()}.ts',
-    \  'exec': ['%c test %o %s'],
-    \ }
-
-  function! s:set_ruby_command()
-    let v = vital#quickrun#new().load('Prelude')
-    let root = v.import('Prelude').path2project_directory(getcwd())
-
-    if filereadable(root . '/Gemfile')
-      let g:quickrun_config['ruby'] = {
-            \ 'command': 'ruby',
-            \ 'exec': 'bundle exec %c %o %s',
-            \ }
-    else
-      let g:quickrun_config['ruby'] = {
-            \   'command': 'ruby',
-            \   'tempfile': '%{tempname()}.rb',
-            \ }
-    endif
-  endfunction
-
-  augroup QuickRunAutoCmd
-    autocmd!
-    autocmd FileType quickrun call alpaca_window#set_smart_close()
-    autocmd FileType ruby call s:set_ruby_command()
-  augroup END
-'''
-
-[[plugins]]
-repo = 'alpaca-tc/vim-quickrun-neovim-job'
-rev = "with_env"
-
-[[plugins]]
-repo = 'jlcrochet/vim-rbs'
-on_ft = ["rbs"]
+# [[plugins]]
+# repo = 'posva/vim-vue'
+# on_ft = "vue"
+# hook_source = '''
+#   " autocmd FileType vue syntax sync fromstart
+# '''
+#
+# [[plugins]]
+# repo = 'leafgarland/typescript-vim'
+# on_ft = ["typescript"]
+#
+# [[plugins]]
+# repo = 'yuezk/vim-js'
+# on_ft = ["javascript", "typescript", "javascript.jsx", "typescript.tsx"]
+#
+# [[plugins]]
+# repo = 'MaxMEllon/vim-jsx-pretty'
+# on_ft = ["javascript", "typescript", "javascript.jsx", "typescript.tsx"]
+# depends = ["vim-js", "yats.vim"]
+# hook_source = '''
+#   let g:vim_jsx_pretty_highlight_close_tag = 1
+# '''
+#
+# [[plugins]]
+# repo = 'HerringtonDarkholme/yats.vim'
+# on_ft = ["javascript", "typescript", "javascript.jsx", "typescript.tsx"]
+#
+# [[plugins]]
+# repo = 'peitalin/vim-jsx-typescript'
+# on_ft = ["typescript"]

@@ -1,6 +1,6 @@
 local fn = vim.fn
 
-require("lua.plugins")
+require("plugins")
 
 vim.cmd('source ' .. os.getenv('HOME') .. '/.vim/vimrc')
 

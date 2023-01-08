@@ -11,6 +11,7 @@ function M.setup()
         return require("packer.util").float { border = "rounded" }
       end,
     },
+    max_jobs = 5
   }
 
   local augroup = vim.api.nvim_create_augroup("PackerPlugins", { clear = true })
@@ -18,8 +19,11 @@ function M.setup()
     pattern = "plugins.lua",
     group = augroup,
     callback = function()
-      vim.cmd('luafile %')
+      vim.cmd('luafile <afile>')
       vim.cmd('PackerSync')
+
+      vim.cmd('source <afile>')
+      vim.cmd('PackerCompile')
     end,
   })
 
@@ -37,11 +41,11 @@ function M.setup()
       }
       vim.cmd [[packadd packer.nvim]]
     end
-    vim.cmd "autocmd BufWritePost plugins.lua source <afile> | PackerCompile"
   end
 
   -- Plugins
   local function plugins(use)
+    -- Keep
     use { "wbthomason/packer.nvim" }
 
     use { "tpope/vim-repeat" }
@@ -93,6 +97,61 @@ function M.setup()
     }
 
     use {
+      'alpaca-tc/vim-quickrun-neovim-job',
+      branch = "with_env",
+      opt = true
+    }
+
+    use {
+      'thinca/vim-quickrun',
+      cmd = { "QuickRun" },
+      requires = { 'alpaca-tc/vim-quickrun-neovim-job' },
+      config = function()
+        vim.g.quickrun_no_default_key_mappings = 1
+
+        vim.g.quickrun_config = {
+          _ = { runner = 'neovim_job' },
+        }
+
+        vim.g.quickrun_config['ruby.rspec'] = {
+          type = 'ruby.rspec',
+          command = 'rspec',
+          exec = 'bundle exec %c %o %s'
+        }
+
+        vim.g.quickrun_config['typescript/deno/test'] = {
+          command = 'deno',
+          cmdopt = '--unstable --allow-all',
+          tempfile = '%{tempname()}.ts',
+          exec = { '%c test %o %s' },
+        }
+
+        -- function! s:set_ruby_command()
+        -- let v = vital#quickrun#new().load('Prelude')
+        -- let root = v.import('Prelude').path2project_directory(getcwd())
+        --
+        -- if filereadable(root . '/Gemfile')
+        --   vim.g.quickrun_config['ruby'] = {
+        --     \ 'command': 'ruby',
+        --     \ 'exec': 'bundle exec %c %o %s',
+        --     \ }
+        --   else
+        --     vim.g.quickrun_config['ruby'] = {
+        --       \   'command': 'ruby',
+        --       \   'tempfile': '%{tempname()}.rb',
+        --       \ }
+        --       endif
+        --       endfunction
+        --
+        --       augroup QuickRunAutoCmd
+        --       autocmd!
+        --       autocmd FileType quickrun call alpaca_window#set_smart_close()
+        --       autocmd FileType ruby call s:set_ruby_command()
+        --       augroup END
+      end
+    }
+
+    use {
       'echasnovski/mini.nvim',
       branch = "stable",
       event = { 'BufEnter' },
@@ -110,6 +169,168 @@ function M.setup()
             -- Define 'comment' textobject (like `dgc` - delete whole comment block)
             textobject = '',
           },
+        })
+      end
+    }
+
+    use {
+      'osyo-manga/vim-over',
+      cmd    = { "OverCommandLine", "OverCommandLineNoremap" },
+      setup = function()
+        vim.keymap.set('n', 're', ':OverCommandLine<CR>%s!!!g<Left><Left><Left>')
+        vim.keymap.set('x', ':s', ':OverCommandLine<CR>s!!!g<Left><Left><Left>')
+        vim.keymap.set('x', 're', '"zy:OverCommandLine<CR>%s!<C-R>=substitute(@z, \'!\', \'\\!\', \'g\')<CR>!!gI<Left><Left><Left>')
+        vim.keymap.set('x', 're', '"zy:OverCommandLine<CR>%s!<C-R>=substitute(@z, \'!\', \'\\!\', \'g\')<CR>!!gI<Left><Left><Left>')
+        vim.keymap.set('x', 'rr', '"zy:OverCommandLine<CR>%s!<C-R>=substitute(@z, \'!\', \'\\!\', \'g\')<CR>!<C-R>=substitute(@z, \'!\', \'\\!\', \'g\')<CR>!gI<Left><Left><Left>')
+
+        vim.g.over_command_line_key_mappings = { ["\\<C-L>"] = "\\<C-F>" }
+      end,
+      config = function()
+        vim.cmd("OverCommandLineNoremap <C-J> <Plug>(over-cmdline-substitute-jump-pattern)")
+        vim.cmd("OverCommandLineNoremap <C-K> <Plug>(over-cmdline-substitute-jump-string)")
+      end
+    }
+
+    use {
+      'vim-scripts/camelcasemotion',
+      keys = { "<Plug>CamelCaseMotion_w", "<Plug>CamelCaseMotion_b", "<Plug>CamelCaseMotion_e", "<Plug>CamelCaseMotion_iw", "<Plug>CamelCaseMotion_ib", "<Plug>CamelCaseMotion_ie" },
+      setup = function()
+        vim.keymap.set({ 'n', 'v', 'o' }, 'w', '<Plug>CamelCaseMotion_w', { silent = true })
+        vim.keymap.set({ 'n', 'v', 'o' }, 'b', '<Plug>CamelCaseMotion_b', { silent = true })
+        vim.keymap.set({ 'n', 'v', 'o' }, 'e', '<Plug>CamelCaseMotion_e', { silent = true })
+        vim.keymap.del({ 's' }, 'w')
+        vim.keymap.del({ 's' }, 'b')
+        vim.keymap.del({ 's' }, 'e')
+      end
+    }
+
+    -- optional
+    use {
+      'alpaca-tc/alpaca_github.vim',
+      cmd = { 'GhFile', 'GhPullRequestCurrentLine', 'GhPullRequest' },
+      requires = { 'tyru/open-browser.vim' },
+      setup = function()
+        vim.g['alpaca_github#host'] = 'github'
+        vim.keymap.set('n', ',go', ':GhFile<CR>')
+        vim.keymap.set('x', ',go', ':GhFile<CR>')
+        vim.keymap.set('n', ',gp', ':GhPullRequestCurrentLine<CR>')
+      end
+    }
+
+    use {
+      'liuchengxu/vista.vim',
+      cmd = { 'Vista', 'Vista!', 'Vista!!' },
+      config = function()
+        vim.g.vista_default_executive = 'nvim_lsp'
+        vim.g['vista#renderer#enable_icon'] = 1
+        vim.g.vista_sidebar_width = 40
+        vim.g.vista_icon_indent = { '', '' }
+        vim.g.vista_fold_toggle_icons = vim.g.vista_fold_toggle_icons or { '▼', '▶' }
+        -- let g:vista#renderer#enable_icon = 0
+
+        vim.g.vista_executive_for = {
+          c= 'nvim_lsp',
+          cpp= 'nvim_lsp',
+          typescript= 'nvim_lsp',
+          javascript= 'nvim_lsp',
+          ruby= 'ctags',
+          vim= 'ctags',
+        }
+      end
+    }
+
+    use {
+      'alpaca-tc/nvim-miniyank',
+      branch = 'loop_cycle',
+      keymap = { '<Plug>(miniyank-autoput)', '<Plug>(miniyank-autoPut)' },
+      -- on_map = [['nx', '<Plug>(miniyank-autoput)'], ['nx', '<Plug>(miniyank-autoPut)']]
+      setup = function()
+        vim.g.miniyank_maxitems = 100
+        vim.g.miniyank_loop_cycle = true
+        vim.g.miniyank_echo_position = true
+
+        vim.keymap.set('n', 'p', '<Plug>(miniyank-autoput)')
+        vim.keymap.set('n', 'P', '<Plug>(miniyank-autoPut)')
+      end,
+      config = function()
+        vim.keymap.set('n', '<C-P>', '<Plug>(miniyank-cycle)')
+        vim.keymap.set('n', '<C-N>', '<Plug>(miniyank-cycleback)')
+      end
+    }
+
+    use {
+      'alpaca-tc/alpaca-switch-file.vim',
+      fn = { 'switch_file#next', 'switch_file#prev' },
+      setup = function()
+        vim.g.switch_file_rules = {
+          vim = { { 'autoload/%\\.vim', 'plugin/%\\.vim' } },
+          ruby = {
+            { 'spec/requests/%_spec\\.rb', 'app/controllers/%_controller\\.rb' },
+            { 'spec/%_spec\\.rb', 'app/%\\.rb' },
+            { 'spec/%_spec\\.rb', 'lib/%\\.rb' },
+            { '%.rb', '%.rbs' },
+            { 'lib/%\\.rb', 'sig/%\\.rbs', 'spec/%_spec\\.rb' },
+          },
+          rbs = {
+            { '%.rbs', '%.rb' },
+          },
+          typescript = {
+            { '%\\.ts', '__tests__/%.test.ts' },
+            { '%\\.ts', '__tests__/%-test.ts' }
+          }
+        }
+
+        vim.keymap.set('n', '<Space>a', ':call switch_file#next()<CR>')
+        vim.keymap.set('n', '<Space>A', ':call switch_file#prev()<CR>')
+      end
+    }
+
+    use {
+      'alpaca-tc/alpaca_remove_dust.vim',
+      cmd = { "RemoveDustDisable", "RemoveDustEnable", "RemoveDust", "RemoveDustForce" },
+      setup = function()
+        vim.g.remove_dust_enable = 1
+
+        local group = vim.api.nvim_create_augroup("PackerAlpacaRemoveDust", { clear = true })
+        vim.api.nvim_create_autocmd("BufWritePre", {
+          group = group,
+          pattern = "*",
+          callback = function()
+            vim.cmd('RemoveDust')
+          end
+        })
+
+        vim.api.nvim_create_autocmd('FileType', {
+          group = group,
+          pattern = { "ts", "go", "c", "make", "markdown" },
+          callback = function()
+            vim.cmd('RemoveDustDisable')
+          end
+        })
+      end
+    }
+
+    use {
+      'alpaca-tc/alpaca_window.vim',
+      fn = { "alpaca_window#set_smart_close", "alpaca_window#smart_close", "alpaca_window#open_buffer", "alpaca_window#util#fold_buffer_automatically" },
+      keys = { '<Plug>(alpaca_window_tabnew)', '<Plug>(alpaca_window_move_buffer_into_last_tab)', '<Plug>(alpaca_window_smart_new)' },
+      setup = function()
+        vim.g.alpaca_window_default_filetype = 'ruby'
+        vim.g.alpaca_window_max_height = vim.fn.winheight(0)
+        vim.g.alpaca_window_max_width = vim.fn.winwidth(0)
+
+        vim.keymap.set('n', '<C-W>n', '<Plug>(alpaca_window_smart_new)')
+        vim.keymap.set('n', '<C-W><C-N>', '<Plug>(alpaca_window_smart_new)')
+        vim.keymap.set('n', 'tc', '<Plug>(alpaca_window_tabnew)', { silent = true })
+        vim.keymap.set('n', 'tw', '<Plug>(alpaca_window_move_buffer_into_last_tab)')
+
+        local group = vim.api.nvim_create_augroup("PackerAlpacaWindow", { clear = true })
+        vim.api.nvim_create_autocmd("FileType", {
+          pattern = "qf",
+          group = group,
+          callback = function()
+            vim.cmd('call alpaca_window#set_smart_close()')
+          end
         })
       end
     }
@@ -143,6 +364,33 @@ function M.setup()
     use {
       'vim-scripts/sh.vim',
       ft  = 'sh'
+    }
+
+    use {
+      'keith/swift.vim',
+      ft = { 'swift' },
+      rtp = 'vim'
+    }
+
+    use {
+      'hashivim/vim-terraform',
+      ft = { 'terraform' },
+      config = function()
+        vim.g.terraform_fmt_on_save = 1
+      end
+    }
+
+    use {
+      'rust-lang/rust.vim',
+      ft = { 'rust' },
+      config = function()
+        vim.g.rustfmt_autosave = 1
+      end
+    }
+
+    use {
+      'jlcrochet/vim-rbs',
+      ft = { "rbs" }
     }
 
     -- -- Git

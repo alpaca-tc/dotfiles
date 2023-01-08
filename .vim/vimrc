@@ -250,17 +250,6 @@ function! s:redraw_and_doautocmd() "{{{
   checktime
 endfunction"}}}
 
-if exists(':OverCommandLine')
-  nnoremap re :OverCommandLine<CR>%s!!!g<Left><Left><Left>
-  xnoremap :s :OverCommandLine<CR>s!!!g<Left><Left><Left>
-  xnoremap re "zy:OverCommandLine<CR>%s!<C-R>=substitute(@z, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
-  xnoremap rr "zy:OverCommandLine<CR>%s!<C-R>=substitute(@z, '!', '\\!', 'g')<CR>!<C-R>=substitute(@z, '!', '\\!', 'g')<CR>!gI<Left><Left><Left>
-else
-  nnoremap re :%s!
-  xnoremap :s :s!
-  xnoremap re y:%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
-endif
-
 nnoremap ,f :setfiletype<Space>
 cnoremap <C-L> <Right>
 
@@ -302,21 +291,13 @@ nnoremap <silent>gj j
 nnoremap <silent>gk k
 nnoremap <silent>Y y$
 
-let g:alpaca_window_default_filetype = 'ruby'
-let g:alpaca_window_max_height = winheight(0)
-let g:alpaca_window_max_width = winwidth(0)
-nmap <silent><C-W>n <Plug>(alpaca_window_smart_new)
-
 augroup MyAutoCmd
   autocmd FileType qf wincmd J
-  autocmd FileType qf call alpaca_window#set_smart_close()
 augroup END
 "}}}
 
 " ----------------------------------------
 " Tab {{{
-nmap <silent>tc      <Plug>(alpaca_window_tabnew)
-nmap <silent>tw      <Plug>(alpaca_window_move_buffer_into_last_tab)
 nnoremap <silent>to  <C-W>T
 
 for i in range(0, 9)
@@ -467,11 +448,6 @@ xmap s   <Plug>VSurround
 nnoremap <Space>t :Vista!!<CR>
 
 " ----------------------------------------
-" alpaca_github.vim
-let g:alpaca_github#host = 'github'
-nmap ,go :GhFile<CR>
-xmap ,go :GhFile<CR>
-nmap ,gp :GhPullRequestCurrentLine<CR>
 
 " ------------------------------------
 nnoremap <silent>,r :QuickRun<CR>
@@ -493,11 +469,6 @@ let g:git_command_edit = 'vnew'
 let g:git_no_default_mappings = 1
 
 " ------------------------------------
-map <silent> w <Plug>CamelCaseMotion_w
-map <silent> b <Plug>CamelCaseMotion_b
-sunmap w
-sunmap b
-
 nnoremap diw di,w
 nnoremap dib di,b
 nnoremap die di,e
@@ -505,13 +476,6 @@ nnoremap die di,e
 nnoremap ciw ci,w
 nnoremap cib ci,b
 nnoremap cie ci,e
-
-omap <silent>iw <Plug>CamelCaseMotion_iw
-xmap <silent>iw <Plug>CamelCaseMotion_iw
-omap <silent>ib <Plug>CamelCaseMotion_ib
-xmap <silent>ib <Plug>CamelCaseMotion_ib
-omap <silent>ie <Plug>CamelCaseMotion_ie
-xmap <silent>ie <Plug>CamelCaseMotion_ie
 
 " ------------------------------------
 function! s:new_memolist()
@@ -603,19 +567,6 @@ let g:endwise_no_mappings = 1
 
 " ------------------------------------
 let g:vinarise_objdump_command = 'gobjdump'
-
-" ------------------------------------
-" alpaca_remove_dust
-" ------------------------------------
-let g:remove_dust_enable = 1
-
-if exists(':RemoveDust')
-  augroup RemoveDust
-    autocmd!
-    autocmd BufWritePre * RemoveDust
-    autocmd FileType ts,go,c,make,markdown RemoveDustDisable
-  augroup END
-endif
 
 " ------------------------------------
 " vim-niceblock
@@ -750,28 +701,6 @@ nnoremap <silent>gl :call ddu#start(#{ name: 'git_log', sources: [#{ name: 'git_
 nnoremap <silent>gs :call ddu#start(#{ name: 'git_status', sources: [#{ name: 'git_status' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>
 nnoremap <silent>gh :call ddu#start(#{ name: 'git_branch', sources: [#{ name: 'git_branch', params: #{ args: ['-a'] } }] })<CR>
 "}}}
-
-nmap p <Plug>(miniyank-autoput)
-nmap P <Plug>(miniyank-autoPut)
-" let g:yankround_use_region_hl = 1
-
-let g:switch_file_rules = {
-      \ "vim": [['autoload/%\.vim', 'plugin/%\.vim']],
-      \ "ruby": [
-      \   ['spec/requests/%_spec\.rb', 'app/controllers/%_controller\.rb'],
-      \   ['spec/%_spec\.rb', 'app/%\.rb'],
-      \   ['spec/%_spec\.rb', 'lib/%\.rb'],
-      \   ['%.rb', '%.rbs'],
-      \   ['lib/%\.rb', 'sig/%\.rbs', 'spec/%_spec\.rb'],
-      \ ],
-      \ "rbs": [
-      \   ['%.rbs', '%.rb'],
-      \ ],
-      \ "typescript": [['%\.ts', '__tests__/%.test.ts'], ['%\.ts', '__tests__/%-test.ts']]
-      \ }
-
-nnoremap <silent><Space>a :call switch_file#next()<CR>
-nnoremap <silent><Space>A :call switch_file#prev()<CR>
 "}}}
 
 set hidden
