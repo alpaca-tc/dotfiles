@@ -315,7 +315,7 @@ hook_source = '''
 
 [[plugins]]
 repo = 'Shougo/ddu.vim'
-depends = ['denops.vim', 'ddu-filter-matcher_substring', 'ddu-ui-ff', 'ddu-ui-filer', 'ddu-kind-file', 'ddu-source-action', 'ddu-source-line', 'ddu-source-mr', 'ddu-source-file', 'ddu-source-rg', 'ddu-column-icon_filename', 'ddu-column-filename', 'ddu-source-git']
+depends = ['denops.vim', 'ddu-filter-matcher_regexp', 'ddu-ui-ff', 'ddu-ui-filer', 'ddu-kind-file', 'ddu-source-action', 'ddu-source-line', 'ddu-source-mr', 'ddu-source-file', 'ddu-source-rg', 'ddu-column-icon_filename', 'ddu-column-filename', 'ddu-source-git']
 on_func = ['ddu#custom#get_local', 'ddu#custom#patch_global', 'ddu#custom#patch_local']
 hook_source = '''
   call ddu#custom#patch_global({
@@ -323,7 +323,7 @@ hook_source = '''
     \   'sources': [#{ name: 'line' }, #{ name: 'mr' }, #{ name: 'file' }, #{ name: 'rg' }],
     \   'sourceOptions': {
     \     '_': {
-    \       'matchers': ['matcher_substring'],
+    \       'matchers': ['matcher_regexp'],
     \       'ignoreCase': v:true,
     \     },
     \     'file': {
@@ -672,11 +672,11 @@ repo = 'alpaca-tc/ddu-source-mr'
 depends = ['mr.vim']
 
 [[plugins]]
-repo = 'Shougo/ddu-filter-matcher_substring'
+repo = 'alpaca-tc/ddu-filter-matcher_regexp'
 hook_post_source = '''
   call ddu#custom#patch_global({
     \   'filterParams': {
-    \     'matcher_substring': {
+    \     'matcher_regexp': {
     \       'highlightMatched': 'Statement',
     \     },
     \   },
@@ -792,12 +792,75 @@ depends = ['mason-lspconfig.nvim', 'nvim-lspconfig']
 on_cmd = ['Mason', 'MasonInstall', 'MasonUninstall', 'MasonUninstallAll', 'MasonLog']
 
 hook_source = '''
+  let s:V = vital#vital#new()
+
   lua << EOF
   local mason = require('mason')
   mason.setup()
 
   local nvim_lsp = require('lspconfig')
   local mason_lspconfig = require('mason-lspconfig')
+
+
+  local function lua_vim_lsp_config()
+    local library = {}
+    local path = vim.split(package.path, ";")
+
+    -- -- this is the ONLY correct way to setup your path
+    -- -- table.insert(path, "lua/?.lua")
+    -- -- table.insert(path, "lua/?/init.lua")
+
+    local function add(lib)
+      for _, p in pairs(vim.fn.expand(lib, false, true)) do
+        p = vim.loop.fs_realpath(p)
+        library[p] = true
+      end
+    end
+
+    -- add runtime
+    add("$VIMRUNTIME")
+    -- add your config
+    add("~/.config/nvim")
+    -- add plugins
+    -- if you're not using packer, then you might need to change the paths below
+
+    -- vim.call("alpaca#initialize#directory", { vim.fn.expand("~/.local/share/nvim/site/pack/packer/opt/"), vim.fn.expand("~/.local/share/nvim/site/pack/packer/start/") })
+    -- add("~/.local/share/nvim/site/pack/packer/opt/*")
+    -- add("~/.local/share/nvim/site/pack/packer/start/*")
+
+    return {
+      -- delete root from workspace to make sure we don't trigger duplicate warnings
+      on_new_config = function(config, root)
+        local libs = vim.tbl_deep_extend("force", {}, library)
+        libs[root] = nil
+        config.settings.Lua.workspace.library = libs
+        return config
+      end,
+      settings = {
+        Lua = {
+          runtime = {
+            -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+            version = "LuaJIT",
+            -- Setup your lua path
+            path = path
+          },
+          completion = { callSnippet = "Both" },
+          diagnostics = {
+            -- Get the language server to recognize the `vim` global
+            globals = { "vim" }
+          },
+          workspace = {
+            -- Make the server aware of Neovim runtime files
+            library = library,
+            maxPreload = 2000,
+            preloadFileSize = 50000
+          },
+          -- Do not send telemetry data containing a randomized but unique identifier
+          telemetry = { enable = false }
+        }
+      }
+    }
+  end
 
   mason_lspconfig.setup_handlers({ function(server_name)
     local opts = {}
@@ -828,12 +891,16 @@ hook_source = '''
         autostart = false,
         cmd = {'bundle', 'exec', 'srb', 'tc', '--lsp', '--dir', '.'},
       }
+    elseif server_name == 'sumneko_lua' then
+      opts = lua_vim_lsp_config()
     end
 
     nvim_lsp[server_name].setup(opts)
   end })
 EOF
+'''
 
+hook_post_source = '''
   let s:V = vital#vital#new()
 
   function! s:file_match_str(path, pattern)
@@ -850,9 +917,7 @@ EOF
 
     return v:false
   endfunction
-'''
 
-hook_post_source = '''
   function! s:start_lsp()
     let filetype = get(split(&filetype, '\.'), 0, '')
     let root = s:V.import('Prelude').path2project_directory(getcwd())
@@ -908,9 +973,9 @@ lua <<EOF
           return utils.root_has_file({ "node_modules/.bin/eslint" })
         end
       }),
-      require('null-ls').builtins.diagnostics.luacheck.with({
-        extra_args = {"--globals", "vim", "--globals", "awesome"},
-      }),
+      -- require('null-ls').builtins.diagnostics.luacheck.with({
+      --   extra_args = {"--globals", "vim", "--globals", "awesome"},
+      -- }),
       require('null-ls').builtins.diagnostics.yamllint,
       require('null-ls').builtins.formatting.gofmt,
       require('null-ls').builtins.formatting.rustfmt,
