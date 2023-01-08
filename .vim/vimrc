@@ -24,16 +24,7 @@ endfunction"}}}
 
 function! s:get_vital() "{{{
   if !exists('s:V')
-    if dein#is_sourced('neocomplete.vim')
-      let s:V = neocomplete#util#get_vital()
-    elseif dein#is_sourced('unite.vim')
-      let s:V = unite#util#get_vital()
-    elseif dein#is_sourced('vital.vim')
-      let s:V = vital#vital#new()
-    else
-      call dein#source('vital.vim')
-      let s:V = vital#vital#new()
-    endif
+    let s:V = vital#of('dotfiles')
   endif
 
   return s:V
@@ -481,11 +472,6 @@ let g:alpaca_github#host = 'github'
 nmap ,go :GhFile<CR>
 xmap ,go :GhFile<CR>
 nmap ,gp :GhPullRequestCurrentLine<CR>
-
-" ------------------------------------
-" open-browser
-nmap ,o <Plug>(openbrowser-open)
-xmap ,o <Plug>(openbrowser-open)
 
 " ------------------------------------
 nnoremap <silent>,r :QuickRun<CR>

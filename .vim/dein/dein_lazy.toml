@@ -100,10 +100,6 @@ hook_post_source = '''
 '''
 
 [[plugins]]
-repo = 'mattn/webapi-vim'
-on_func   = ["webapi#json#encode", "webapi#json#decode"]
-
-[[plugins]]
 repo = 'tpope/vim-surround'
 on_map    = ["nx", "<Plug>"]
 on_map    = [["nx", "<Plug>Dsurround"], ["nx", "<Plug>Csurround"], ["nx", "<Plug>Ysurround"], ["nx", "<Plug>YSurround"], ["nx", "<Plug>Yssurround"], ["nx", "<Plug>YSsurround"], ["nx", "<Plug>YSsurround"], ["nx", "<Plug>VgSurround"], ["nx", "<Plug>VSurround"]]
@@ -223,18 +219,6 @@ hook_source = '''
 [[plugins]]
 repo = 'vim-scripts/camelcasemotion'
 on_map    = ["<Plug>CamelCaseMotion_w", "<Plug>CamelCaseMotion_b", "<Plug>CamelCaseMotion_e", "<Plug>CamelCaseMotion_iw", "<Plug>CamelCaseMotion_ib", "<Plug>CamelCaseMotion_ie"]
-
-[[plugins]]
-repo = 'kana/vim-arpeggio'
-on_event = ['InsertEnter']
-on_func   = ["arpeggio#map"]
-hook_source = '''
-  let escape = '<Esc>:nohlsearch<CR>'
-  call arpeggio#map('i', 's', 0, 'jk', escape)
-  call arpeggio#map('v', 's', 0, 'jk', escape)
-  call arpeggio#map('x', 's', 0, 'jk', escape)
-  call arpeggio#map('c', 's', 0, 'jk', escape)
-'''
 
 [[plugins]]
 repo = 'Shougo/unite.vim'
@@ -1007,33 +991,6 @@ command! NullLsToggle call s:toggle_null_ls()
 '''
 
 [[plugins]]
-repo = 'cespare/vim-toml'
-on_ft = ['toml']
-
-[[plugins]]
-repo = 'echasnovski/mini.nvim'
-rev = "stable"
-on_event = ['BufEnter']
-hook_source = '''
-lua <<EOF
-  require('mini.comment').setup({
-    -- Module mappings. Use `''` (empty string) to disable one.
-    mappings = {
-      -- Toggle comment (like `gcip` - comment inner paragraph) for both
-      -- Normal and Visual modes
-      comment = '<C-_>',
-
-      -- Toggle comment on current line
-      comment_line = '<C-_>',
-
-      -- Define 'comment' textobject (like `dgc` - delete whole comment block)
-      textobject = '',
-    },
-  })
-EOF
-'''
-
-[[plugins]]
 repo = 'lambdalisue/mr.vim'
 
 [[plugins]]
@@ -1375,12 +1332,6 @@ hook_source = '''
   let Grep_Skip_Files = '*.bak *~ .swp .swa .swo'
   let Grep_Xargs_Options = '--print0'
 '''
-
-[[plugins]]
-repo = 'vim-scripts/open-browser.vim'
-on_cmd    = ["OpenBrowserSearch", "OpenBrowser", "OpenBrowserSmartSearch"]
-on_map    = '<Plug>(openbrowser-open)'
-on_func   = ["openbrowser#open"]
 
 [[plugins]]
 repo = 'tpope/vim-fugitive'
@@ -1830,26 +1781,6 @@ hook_source = '''
 [[plugins]]
 repo = 'basyura/unite-rails'
 on_source = ["unite.vim"]
-
-[[plugins]]
-repo = 'slim-template/vim-slim'
-on_ft     = ["slim"]
-
-[[plugins]]
-repo = 'mutewinter/nginx.vim'
-on_ft     = ["nginx"]
-
-[[plugins]]
-repo = 'elixir-lang/vim-elixir'
-on_ft     = ["elixir"]
-
-[[plugins]]
-repo = 'mattreduce/vim-mix'
-on_ft     = ["elixir"]
-
-[[plugins]]
-repo = 'vim-scripts/sh.vim'
-on_ft  = 'sh'
 
 [[plugins]]
 repo = 'alpaca-tc/nvim-miniyank'

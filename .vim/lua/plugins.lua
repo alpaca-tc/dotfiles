@@ -13,6 +13,16 @@ function M.setup()
     },
   }
 
+  local augroup = vim.api.nvim_create_augroup("PackerPlugins", { clear = true })
+  vim.api.nvim_create_autocmd("BufWritePost", {
+    pattern = "plugins.lua",
+    group = augroup,
+    callback = function()
+      vim.cmd('luafile %')
+      vim.cmd('PackerSync')
+    end,
+  })
+
   -- Check if packer.nvim is installed
   -- Run PackerCompile if there are changes in this file
   local function packer_init()
@@ -34,22 +44,107 @@ function M.setup()
   local function plugins(use)
     use { "wbthomason/packer.nvim" }
 
-    -- -- Colorscheme
-    -- use {
-    --   "sainnhe/everforest",
-    --   config = function()
-    --     vim.cmd "colorscheme everforest"
-    --   end,
-    -- }
-    --
-    -- -- Startup screen
-    -- use {
-    --   "goolord/alpha-nvim",
-    --   config = function()
-    --     require("config.alpha").setup()
-    --   end,
-    -- }
-    --
+    use { "tpope/vim-repeat" }
+
+    use {
+      "vim-jp/vital.vim",
+      fn = { "vital#of", "vital#vital#new" },
+      cmd = "Vitalize"
+    }
+
+    use {
+      'cocopon/iceberg.vim'
+    }
+
+    use {
+      'alpaca-tc/alpaca_deepl.vim',
+      run = ':UpdateRemotePlugins',
+      cmd = { "Deepl" },
+      requires = { 'mattn/webapi-vim' },
+    }
+
+    use {
+      'tyru/open-browser.vim',
+      cmd    = { "OpenBrowserSearch", "OpenBrowser", "OpenBrowserSmartSearch" },
+      keys    = { '<Plug>(openbrowser-open)' },
+      fn = { "openbrowser#open" },
+      setup = function()
+        vim.keymap.set('n', ',o', '<Plug>(openbrowser-open)')
+        vim.keymap.set('x', ',o', '<Plug>(openbrowser-open)')
+      end
+    }
+
+    use {
+      'mattn/webapi-vim',
+      fn = { "webapi#json#encode", "webapi#json#decode" }
+    }
+
+    use {
+      'kana/vim-arpeggio',
+      event = { 'InsertEnter' },
+      fn   = { "arpeggio#map" },
+      config = function()
+        local escape = '<Esc>:nohlsearch<CR>'
+        vim.fn['arpeggio#map']('i', 's', 0, 'jk', escape)
+        vim.fn['arpeggio#map']('v', 's', 0, 'jk', escape)
+        vim.fn['arpeggio#map']('x', 's', 0, 'jk', escape)
+        vim.fn['arpeggio#map']('c', 's', 0, 'jk', escape)
+      end
+    }
+
+    use {
+      'echasnovski/mini.nvim',
+      branch = "stable",
+      event = { 'BufEnter' },
+      config = function()
+        require('mini.comment').setup({
+          -- Module mappings. Use `''` (empty string) to disable one.
+          mappings = {
+            -- Toggle comment (like `gcip` - comment inner paragraph) for both
+            -- Normal and Visual modes
+            comment = '<C-_>',
+
+            -- Toggle comment on current line
+            comment_line = '<C-_>',
+
+            -- Define 'comment' textobject (like `dgc` - delete whole comment block)
+            textobject = '',
+          },
+        })
+      end
+    }
+
+    -- file types
+    use {
+      'cespare/vim-toml',
+      ft = { 'toml' }
+    }
+
+    use {
+      'slim-template/vim-slim',
+      ft     = { "slim" }
+    }
+
+    use {
+      'mutewinter/nginx.vim',
+      ft     = { "nginx" }
+    }
+
+    use {
+      'elixir-lang/vim-elixir',
+      ft     = { "elixir" }
+    }
+
+    use {
+      'mattreduce/vim-mix',
+      ft     = { "elixir" }
+    }
+
+    use {
+      'vim-scripts/sh.vim',
+      ft  = 'sh'
+    }
+
     -- -- Git
     -- use {
     --   "TimUntersberger/neogit",
@@ -71,5 +166,7 @@ function M.setup()
   packer.init(conf)
   packer.startup(plugins)
 end
+
+M.setup()
 
 return M

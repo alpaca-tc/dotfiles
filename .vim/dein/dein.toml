@@ -1,26 +1,3 @@
 [[plugins]]
-repo = 'Shougo/vimproc'
-build = 'make'
-
-[[plugins]]
-repo = 'Shougo/echodoc.vim'
-
-[[plugins]]
-repo = 'vim-scripts/repeat.vim'
-on_map    = '<Plug>'
-
-[[plugins]]
 repo = 'vim-jp/vital.vim'
 on_func = ['vital#of']
-
-[[plugins]]
-repo = 'cocopon/iceberg.vim'
-
-[[plugins]]
-repo = 'tyru/open-browser-github.vim'
-depends = ['open-browser.vim']
-
-[[plugins]]
-repo = 'alpaca-tc/alpaca_deepl.vim'
-on_cmd = ["Deepl"]
-depends = ['webapi-vim']

@@ -1,8 +1,8 @@
 local fn = vim.fn
 
-vim.cmd('source ' .. os.getenv('HOME') .. '/.vim/vimrc')
+require("lua.plugins")
 
-require("lua.plugins").setup()
+vim.cmd('source ' .. os.getenv('HOME') .. '/.vim/vimrc')
 
 vim.o.runtimepath = table.concat({ vim.o.runtimepath, os.getenv('HOME').."/.vim", os.getenv("HOME").."/.vim/after" }, ",")
 
