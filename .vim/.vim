@@ -1,1 +1,0 @@
-/Users/alpaca-tc/.vim

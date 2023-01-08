@@ -36,7 +36,8 @@ if [ $yn = "y" -o $yn = "Y" ]; then
     done
 
     ln -s $HOME/.vim $HOME/.nvim
-    ln -s $HOME/.vimrc $HOME/.nvimrc
+    mkdir -p $HOME/.config/nvim
+    ln -s $HOME/.vim $HOME/.config/nvim
 fi
 
 # finderで隠しファイルを表示する
