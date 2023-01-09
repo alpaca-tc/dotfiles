@@ -251,18 +251,10 @@ function M.setup()
           },
         })
 
-        local null_ls_disabled = false
-
         vim.api.nvim_create_user_command(
           'NullLsToggle',
           function()
-            if null_ls_disabled then
-              require("null-ls").disable({ 'rubocop' })
-              null_ls_disabled = true
-            else
-              require("null-ls").enable({ 'rubocop' })
-              null_ls_disabled = false
-            end
+            require('null-ls').toggle('')
           end,
           {}
         )
