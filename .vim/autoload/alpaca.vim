@@ -8,6 +8,14 @@ function! s:let(scope, name, value) "{{{
   endif
 endfunction"}}}
 
+function! alpaca#current_root(cwd)
+  if !exists('s:V')
+    let s:V = vital#of('dotfiles')
+  endif
+
+  return s:V.import('Prelude').path2project_directory(a:cwd)
+endfunction
+
 function! alpaca#system(...) "{{{
   let command = join(a:000)
   return {s:system}(command)

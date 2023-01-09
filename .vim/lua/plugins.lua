@@ -97,15 +97,15 @@ function M.setup()
     }
 
     use {
-      'alpaca-tc/vim-quickrun-neovim-job',
-      branch = "with_env",
-      opt = true
-    }
-
-    use {
       'thinca/vim-quickrun',
       cmd = { "QuickRun" },
-      requires = { 'alpaca-tc/vim-quickrun-neovim-job' },
+      requires = {
+        {
+          'alpaca-tc/vim-quickrun-neovim-job',
+          branch = "with_env",
+          opt = false
+        }
+      },
       config = function()
         vim.g.quickrun_no_default_key_mappings = 1
 
@@ -270,6 +270,256 @@ function M.setup()
     }
 
     use {
+      'neovim/nvim-lspconfig',
+      cmd = { 'LspInfo', 'LspStart', 'LspLog', 'LspStop' },
+      event = { 'InsertEnter' },
+      requires = { 'williamboman/mason.nvim', opt = false },
+      setup = function()
+        local group = vim.api.nvim_create_augroup("PackerNvimLspconfig", { clear = true })
+
+        vim.api.nvim_create_autocmd('FileType', {
+          group = group,
+          pattern = { 'python', 'c', 'ruby', 'typescript', 'javascript', 'vue', 'javascript.jsx', 'typescript.tsx', 'go', 'rust', 'css', 'scss', 'sass', 'ruby', 'typescriptreact' },
+          callback = function()
+            vim.opt_local.signcolumn = 'no'
+
+            -- nnoremap <silent> gd <cmd>lua vim.lsp.buf.declaration()<CR>
+            -- nnoremap <silent> ty <cmd>lua vim.lsp.buf.document_symbol()<CR>
+            -- nnoremap <silent> tt <cmd>lua vim.lsp.buf.definition()<CR>
+            -- nnoremap <silent> K <cmd>lua vim.lsp.buf.hover()<CR>
+            -- nnoremap <silent> ti <cmd>lua vim.lsp.buf.implementation()<CR>
+            -- nnoremap <silent> ts <cmd>lua vim.lsp.buf.signature_help()<CR>
+            -- nnoremap <silent> ta <cmd>lua vim.lsp.buf.code_action()<CR>
+            -- -- nnoremap <silent> <space>wa <cmd>lua vim.lsp.buf.add_workspace_folder()<CR>
+            -- -- nnoremap <silent> <space>wr <cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>
+            -- -- nnoremap <silent> <space>wl <cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>
+            -- nnoremap <silent> td <cmd>lua vim.lsp.buf.type_definition()<CR>
+            -- nnoremap <silent> tr <cmd>lua vim.lsp.buf.rename()<CR>
+            -- nnoremap <silent> tf <cmd>lua vim.lsp.buf.references()<CR>
+            -- nnoremap <silent> te <cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
+            -- nnoremap <silent> tp <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
+            -- nnoremap <silent> tn <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
+            -- nnoremap <silent> tl <cmd>lua vim.diagnostic.setloclist()<CR>
+            --
+            -- nnoremap ff :lua vim.lsp.buf.format { async = true }<CR>
+          end
+        })
+
+        vim.api.nvim_create_autocmd('BufWritePre', {
+          group = group,
+          pattern = { '*.go', '*.ts' },
+          callback = function()
+            vim.lsp.buf.format { async = false }
+          end
+        })
+
+        local function goimports(timeout_ms)
+          local context = { only = { "source.organizeImports" } }
+          vim.validate { context = { context, "t", true } }
+
+          local params = vim.lsp.util.make_range_params()
+          params.context = context
+
+          -- See the implementation of the textDocument/codeAction callback
+          -- (lua/vim/lsp/handler.lua) for how to do this properly.
+          local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout_ms)
+          if not result or next(result) == nil then return end
+          local actions = result[1].result
+          if not actions then return end
+          local action = actions[1]
+
+          -- textDocument/codeAction can return either Command[] or CodeAction[]. If it
+          -- is a CodeAction, it can have either an edit, a command or both. Edits
+          -- should be executed first.
+          if action.edit or type(action.command) == "table" then
+            if action.edit then
+              vim.lsp.util.apply_workspace_edit(action.edit)
+            end
+            if type(action.command) == "table" then
+              vim.lsp.buf.execute_command(action.command)
+            end
+          else
+            vim.lsp.buf.execute_command(action)
+          end
+        end
+
+        vim.api.nvim_create_autocmd('BufWritePre', {
+          group = group,
+          pattern = { '*.go' },
+          callback = function()
+            goimports(1000)
+          end
+        })
+
+        -- vim.lsp.set_log_level("debug")
+      end
+    }
+
+    use {
+      'williamboman/mason.nvim',
+      requires = {
+        { 'williamboman/mason-lspconfig.nvim', opt = false},
+      },
+      cmd = { 'Mason', 'MasonInstall', 'MasonUninstall', 'MasonUninstallAll', 'MasonLog' },
+      run = function()
+        vim.cmd("MasonInstall lua-language-server")
+        vim.cmd("MasonInstall luacheck")
+        vim.cmd("MasonInstall typescript-language-server")
+        vim.cmd("MasonInstall deno")
+      end,
+      config = function()
+        require('mason').setup()
+
+        local lsp_config = require('lspconfig')
+        local mason_lspconfig = require('mason-lspconfig')
+
+        local function lua_vim_lsp_config()
+          local library = {}
+          local path = vim.split(package.path, ";")
+
+          -- this is the ONLY correct way to setup your path
+          -- table.insert(path, "lua/?.lua")
+          -- table.insert(path, "lua/?/init.lua")
+
+          local function add(lib)
+            for _, p in pairs(vim.fn.expand(lib, false, true)) do
+              p = vim.loop.fs_realpath(p)
+              library[p] = true
+            end
+          end
+
+          -- add runtime
+          add("$VIMRUNTIME")
+          -- add your config
+          add("~/.config/nvim")
+          -- add plugins
+          -- if you're not using packer, then you might need to change the paths below
+
+          -- vim.call("alpaca#initialize#directory", { vim.fn.expand("~/.local/share/nvim/site/pack/packer/opt/"), vim.fn.expand("~/.local/share/nvim/site/pack/packer/start/") })
+          -- add("~/.local/share/nvim/site/pack/packer/opt/*")
+          -- add("~/.local/share/nvim/site/pack/packer/start/*")
+
+          return {
+            -- delete root from workspace to make sure we don't trigger duplicate warnings
+            on_new_config = function(config, root)
+              local libs = vim.tbl_deep_extend("force", {}, library)
+              libs[root] = nil
+              config.settings.Lua.workspace.library = libs
+              return config
+            end,
+            settings = {
+              Lua = {
+                runtime = {
+                  -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+                  version = "LuaJIT",
+                  -- Setup your lua path
+                  path = path
+                },
+                completion = { callSnippet = "Both" },
+                diagnostics = {
+                  -- Get the language server to recognize the `vim` global
+                  globals = { "vim" }
+                },
+                workspace = {
+                  -- Make the server aware of Neovim runtime files
+                  library = library,
+                  maxPreload = 2000,
+                  preloadFileSize = 50000
+                },
+                -- Do not send telemetry data containing a randomized but unique identifier
+                telemetry = { enable = false }
+              }
+            }
+          }
+        end
+
+        mason_lspconfig.setup_handlers({ function(server_name)
+          local opts = {}
+
+          if server_name == 'denols' then
+            opts = {
+              autostart = false,
+              init_options = {
+                lint = true,
+                unstable = true,
+                suggest = {
+                  imports = {
+                    hosts = {
+                      ["https://deno.land"] = true,
+                      ["https://cdn.nest.land"] = true,
+                      ["https://crux.land"] = true,
+                    },
+                  },
+                },
+              },
+            }
+          elseif server_name == 'tsserver' then
+            opts = {
+              autostart = false,
+            }
+          elseif server_name == 'sorbet' then
+            opts = {
+              autostart = false,
+              cmd = {'bundle', 'exec', 'srb', 'tc', '--lsp', '--dir', '.'},
+            }
+          elseif server_name == 'sumneko_lua' then
+            opts = lua_vim_lsp_config()
+          end
+
+          print(vim.inspect(server_name))
+          print(vim.inspect(opts))
+
+          lsp_config[server_name].setup(opts)
+        end })
+
+        local function file_match_str(path, pattern)
+          if vim.fn['filereadable'](path) == 1 then
+            local lines = vim.fn['readfile'](path)
+
+            for _, line in pairs(lines) do
+              if string.len(vim.fn["matchstr"](line, pattern)) > 0 then
+                return true
+              end
+            end
+          end
+
+          return false
+        end
+
+        local function start_lsp()
+          local filetype = nil
+
+          for ft, _ in string.gmatch(vim.bo.filetype, '([^\\.]+)') do
+            filetype = filetype or ft
+          end
+          print(vim.inspect(filetype))
+
+          local root = vim.fn['alpaca#current_root'](vim.fn['getcwd']())
+          local isTsJs = filetype == 'typescript' or filetype == 'javascript' or filetype == 'typescriptreact'
+          local currentFile = vim.fn['expand']("%:p")
+
+          if filetype == 'ruby' and file_match_str(root .. '/Gemfile', 'sorbet') then
+            vim.cmd('LspStart sorbet')
+          elseif isTsJs and (vim.fn['filereadable'](root .. '/deno.json') or file_match_str(root .. '/vercel.json', 'vercel-deno') or file_match_str(currentFile, 'https://deno.land/')) then
+            vim.cmd('LspStart denols')
+          elseif isTsJs and file_match_str(root .. '/package.json', 'typescript') then
+            vim.cmd('LspStart typescript-language-server')
+          end
+        end
+
+        start_lsp()
+
+        local group = vim.api.nvim_create_augroup("PackerMason", { clear = true })
+
+        vim.api.nvim_create_autocmd('FileType', {
+          group = group,
+          pattern = { "ruby", "javascript", "typescript", "typescriptreact", "typescript.jsx" },
+          callback = start_lsp
+        })
+      end
+    }
+
+    use {
       'Shougo/neosnippet.vim',
       cmd = { "NeoSnippetEdit", "NeoSnippetSource", "NeoSnippetClearMarkers" },
       event = { 'InsertEnter' },
@@ -389,8 +639,8 @@ function M.setup()
 
         vim.fn['ddc#enable']()
 
-        vim.keymap.set('i', '<Tab>', '<Cmd>call pum#map#insert_relative(+1)<CR>', { noremap = true, replace_keycodes = false })
-        vim.keymap.set('i', '<S-Tab>', '<Cmd>call pum#map#insert_relative(-1)<CR>', { noremap = true, replace_keycodes = false })
+        -- vim.keymap.set('i', '<Tab>', '<Cmd>call pum#map#insert_relative(+1)<CR>', { noremap = true, replace_keycodes = false })
+        -- vim.keymap.set('i', '<S-Tab>', '<Cmd>call pum#map#insert_relative(-1)<CR>', { noremap = true, replace_keycodes = false })
 
         vim.keymap.set(
           'i',
@@ -400,9 +650,9 @@ function M.setup()
             local line = vim.fn['getline']('.')
             local checked_backspace = col == 1 or string.sub(line, col - 1, col - 1) == ' '
 
-            if vim.fn.pumvisible() then
-              return '<C-n>'
-            elseif vim.fn['neosnippet#expandable_or_jumpable']() then
+            if vim.fn.pumvisible() ~= 0 then
+              return '<C-N>'
+            elseif vim.fn['neosnippet#expandable_or_jumpable']() ~= 0 then
               return vim.fn['neosnippet#mappings#jump_or_expand_impl']()
             elseif checked_backspace then
               return '<TAB>'
@@ -410,7 +660,7 @@ function M.setup()
               return vim.fn['pum#map#insert_relative'](1)
             end
           end,
-          { expr = true }
+          { expr = true, noremap = false }
         )
 
         vim.keymap.set('i', '<C-X><C-F>', "ddc#map#manual_complete('file')", { expr = true })
@@ -796,7 +1046,7 @@ function M.setup()
             end
           end
 
-          if vim.fn.exists('b:rails_root') == 0 and switch_definition['rails'] then
+          if vim.fn.exists('b:rails_root') == 0 and switch_definition['rails'] ~= nil then
             definitions = merge(definitions, switch_definition['rails'])
           end
 
