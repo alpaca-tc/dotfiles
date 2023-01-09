@@ -271,9 +271,8 @@ function M.setup()
 
     use {
       'neovim/nvim-lspconfig',
-      cmd = { 'LspInfo', 'LspStart', 'LspLog', 'LspStop' },
       event = { 'InsertEnter' },
-      requires = { 'williamboman/mason.nvim', opt = false },
+      cmd = { 'LspInfo', 'LspStart', 'LspLog', 'LspStop' },
       setup = function()
         local group = vim.api.nvim_create_augroup("PackerNvimLspconfig", { clear = true })
 
@@ -357,9 +356,8 @@ function M.setup()
 
     use {
       'williamboman/mason.nvim',
-      requires = {
-        { 'williamboman/mason-lspconfig.nvim', opt = false},
-      },
+      event = { 'InsertEnter' },
+      requires = { 'williamboman/mason-lspconfig.nvim' },
       cmd = { 'Mason', 'MasonInstall', 'MasonUninstall', 'MasonUninstallAll', 'MasonLog' },
       run = function()
         vim.cmd("MasonInstall lua-language-server")
@@ -368,6 +366,10 @@ function M.setup()
         vim.cmd("MasonInstall deno")
       end,
       config = function()
+        -- FIXME: How to load neovim/nvim-lspconfig before loading mason.nvim?
+        vim.cmd('LspStop')
+
+        print("mason")
         require('mason').setup()
 
         local lsp_config = require('lspconfig')
@@ -465,9 +467,6 @@ function M.setup()
           elseif server_name == 'sumneko_lua' then
             opts = lua_vim_lsp_config()
           end
-
-          print(vim.inspect(server_name))
-          print(vim.inspect(opts))
 
           lsp_config[server_name].setup(opts)
         end })
