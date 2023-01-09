@@ -193,7 +193,8 @@ function M.setup()
 
     use {
       'vim-scripts/camelcasemotion',
-      keys = { "<Plug>CamelCaseMotion_w", "<Plug>CamelCaseMotion_b", "<Plug>CamelCaseMotion_e", "<Plug>CamelCaseMotion_iw", "<Plug>CamelCaseMotion_ib", "<Plug>CamelCaseMotion_ie" },
+      -- keys = { "<Plug>CamelCaseMotion_w", "<Plug>CamelCaseMotion_b", "<Plug>CamelCaseMotion_e", "<Plug>CamelCaseMotion_iw", "<Plug>CamelCaseMotion_ib", "<Plug>CamelCaseMotion_ie" },
+      -- opt = not vim.g.packer_loaded,
       setup = function()
         vim.keymap.set({ 'n', 'v', 'o' }, 'w', '<Plug>CamelCaseMotion_w', { silent = true })
         vim.keymap.set({ 'n', 'v', 'o' }, 'b', '<Plug>CamelCaseMotion_b', { silent = true })
@@ -344,7 +345,7 @@ function M.setup()
 
     use {
       'alpaca-tc/alpaca_remove_dust.vim',
-      cmd = { "RemoveDustDisable", "RemoveDustEnable", "RemoveDust", "RemoveDustForce" },
+      -- cmd = { "RemoveDustDisable", "RemoveDustEnable", "RemoveDust", "RemoveDustForce" },
       setup = function()
         vim.g.remove_dust_enable = 1
 
@@ -457,6 +458,218 @@ function M.setup()
       end,
       setup = function()
         vim.g['beautify#beautifier#html2haml#ruby19_attributes'] = 1
+      end
+    }
+
+    use {
+      'alpaca-tc/switch.vim',
+      cmd = { "Switch" },
+      event = { 'InsertEnter' },
+      setup = function()
+        vim.g.switch_no_builtins = false
+      end,
+      config = function()
+        local switch_definition = {
+          _ = {
+            { ['\\Cenable'] = '\\Cdisable' },
+            { ['\\CEnable'] = '\\CDisable' },
+            { ['\\Ctrue'] = 'false' },
+            { ['\\CTrue'] = 'False' },
+            { ['\\Cfalse'] = 'true' },
+            { ['\\CFalse'] = 'True' },
+            { 'left', 'right' },
+            { 'top', 'bottom' },
+            { 'north', 'south' },
+            { 'east', 'west' },
+            { 'start', 'stop' },
+            { 'up', 'down' },
+            { 'next', 'previous' },
+            { 'read', 'write' },
+            { 'old', 'new' },
+            { 'open', 'close' },
+            { 'enable', 'disable' },
+            { 'first', 'last' },
+            { 'minminimun', 'maxmaxinum' },
+            { 'yes', 'no' },
+            { 'head', 'tail' },
+            { 'push', 'pull' },
+            { 'good', 'bad' },
+            { 'prefix', 'suffix' },
+          },
+          coffee = {
+            { 'if', 'unless' },
+            { 'is', 'isnt' },
+            { ['^\\(.*\\)->'] = '\\1=>' },
+            { ['^\\(.*\\)=>'] = '\\1->' },
+          },
+          liquid = {
+            { 'if', 'unless' },
+            { 'endif', 'endunless' },
+          },
+          ['Rakefile,Gemfile,ruby,ruby.rspec,eruby,haml,slim'] = {
+            { 'if', 'unless' },
+            { 'while', 'until' },
+            { '.blank?', '.present?' },
+            { 'include', 'extend', 'prepend' },
+            { 'class', 'module' },
+            { '.inject', '.delete_if' },
+            { 'attr_accessor', 'attr_reader', 'attr_writer' },
+            { ['%r\\({[^}]\\+\\)}'] = '/\\1/' },
+            { [':\\(\\k\\+\\)\\s*=>\\s*'] ='\\1: ' },
+            { ['\\<\\(\\k\\+\\): '] =     ':\\1 => ' },
+            { ['\\.\\%(tap\\)\\@!\\(\\k\\+\\)'] =  '.tap { |o| puts o.inspect }.\\1' },
+            { ['\\.tap { |o| \\%(.\\{-}\\) }'] ='' },
+            { ['\\(\\k\\+\\)(&:\\(\\S\\+\\))'] ='\\1 { |x| x\\.\\2 }' },
+            { ['\\(\\k\\+\\)\\s\\={ |\\(\\k\\+\\)| \\2.\\(\\S\\+\\) }'] ='\\1(&:\\3)' },
+          },
+          ['ruby.rspec'] = {
+            { 'it_has_behavior', 'it_should_behave_like' },
+            { 'describe', 'context', 'specific', 'example' },
+            { 'before', 'after' },
+            { 'be_true', 'be_false' },
+            { 'be_truthy', 'be_falsy' },
+            { '==', 'eql', 'equal' },
+            { ['\\.should_not'] = '\\.should' },
+            { '\\.to_not', '\\.to' },
+            { ['\\([^. ]\\+\\)\\.should\\(_not\\|\\)'] = 'expect(\\1)\\.to\\2' },
+            { ['expect(\\([^. ]\\+\\))\\.to\\(_not\\|\\)'] = '\\1.should\\2' },
+          },
+          ['rails,slim,ruby'] = {
+            { 100, ':continue', ':information' },
+            { 101, ':switching_protocols' },
+            { 102, ':processing' },
+            { 200, ':ok', ':success' },
+            { 201, ':created' },
+            { 202, ':accepted' },
+            { 203, ':non_authoritative_information' },
+            { 204, ':no_content' },
+            { 205, ':reset_content' },
+            { 206, ':partial_content' },
+            { 207, ':multi_status' },
+            { 208, ':already_reported' },
+            { 226, ':im_used' },
+            { 300, ':multiple_choices' },
+            { 301, ':moved_permanently' },
+            { 302, ':found' },
+            { 303, ':see_other' },
+            { 304, ':not_modified' },
+            { 305, ':use_proxy' },
+            { 306, ':reserved' },
+            { 307, ':temporary_redirect' },
+            { 308, ':permanent_redirect' },
+            { 400, ':bad_request' },
+            { 401, ':unauthorized' },
+            { 402, ':payment_required' },
+            { 403, ':forbidden' },
+            { 404, ':not_found' },
+            { 405, ':method_not_allowed' },
+            { 406, ':not_acceptable' },
+            { 407, ':proxy_authentication_required' },
+            { 408, ':request_timeout' },
+            { 409, ':conflict' },
+            { 410, ':gone' },
+            { 411, ':length_required' },
+            { 412, ':precondition_failed' },
+            { 413, ':request_entity_too_large' },
+            { 414, ':request_uri_too_long' },
+            { 415, ':unsupported_media_type' },
+            { 416, ':requested_range_not_satisfiable' },
+            { 417, ':expectation_failed' },
+            { 422, ':unprocessable_entity' },
+            { 423, ':precondition_required' },
+            { 424, ':too_many_requests' },
+            { 426, ':request_header_fields_too_large' },
+            { 500, ':internal_server_error' },
+            { 501, ':not_implemented' },
+            { 502, ':bad_gateway' },
+            { 503, ':service_unavailable' },
+            { 504, ':gateway_timeout' },
+            { 505, ':http_version_not_supported' },
+            { 506, ':variant_also_negotiates' },
+            { 507, ':insufficient_storage' },
+            { 508, ':loop_detected' },
+            { 510, ':not_extended' },
+            { 511, ':network_authentication_required' },
+          },
+          c = {
+            { 'signed', 'unsigned' },
+          },
+          ['lua,vim'] = {
+            { ['let\\s\\+\\([gstb]\\):\\(\\a\\+\\|\\a\\+\\)\\s*\\(.\\|+\\|-\\|*\\|\\\\\\)\\{,1}=\\s*\\(\\a\\+\\)\\s*.*$'] = 'vim.\\1.\\2 = \\3' },
+          },
+          markdown = {
+            { '[ ]', '[x]' },
+            { '#', '##', '###', '####', '#####' },
+            { ['\\(\\*\\*\\|__\\)\\(.*\\)\\1'] = '_\\2_' },
+            { ['\\(\\*\\|_\\)\\(.*\\)\\1'] = '__\\2__' },
+          },
+          ['typescript,javascript'] = {
+            { ['const \\(.\\+\\)\\s\\+=\\s\\+require(\\(.\\+\\))'] = 'import \\1 from \\2' },
+            { ['import \\(.\\+\\) from \\(.\\+\\)'] = 'const \\1 = require(\\2)' },
+          }
+        }
+
+        switch_definition = vim.fn['alpaca#initialize#redefine_dict_to_each_filetype'](switch_definition, {})
+
+        local function get_switch_mappings()
+          local definitions = vim.empty_dict()
+          local ft = vim.bo.filetype
+
+          local function merge(t1, t2)
+            for _, v in pairs(t2) do
+              table.insert(t1, v)
+            end
+
+            return t1
+          end
+
+          if ft ~= "" then
+            local filetypes = {}
+            for filetype, _ in string.gmatch(ft, '([^,]+)') do
+              table.insert(filetypes, filetype)
+              local filetype_name = table.concat(filetypes, '.')
+
+              if switch_definition[filetype_name] ~= nil then
+                definitions = merge(definitions, switch_definition[filetype_name])
+              end
+            end
+          end
+
+          if vim.fn.exists('b:rails_root') == 0 and switch_definition['rails'] then
+            definitions = merge(definitions, switch_definition['rails'])
+          end
+
+          if switch_definition['_'] ~= nil then
+            definitions = merge(definitions, switch_definition['_'])
+          end
+
+          return definitions
+        end
+
+        local switch_definition_cache = {}
+
+        local function define_switch_mappings()
+          if vim.fn.exists('b:switch_custom_definitions') ~= 0 then
+            vim.cmd('unlet b:switch_custom_definitions')
+          end
+
+          local ft = vim.fn.empty(vim.bo.filetype) == 1 and '*' or vim.bo.filetype
+
+          if switch_definition_cache[ft] == nil then
+            switch_definition_cache[ft] = get_switch_mappings()
+          end
+
+          vim.b.switch_custom_definitions = switch_definition_cache[ft]
+        end
+
+        local group = vim.api.nvim_create_augroup("PackerSwitchVim", { clear = true })
+        vim.api.nvim_create_autocmd("Filetype", {
+          pattern = "*",
+          group = group,
+          callback = define_switch_mappings
+        })
+
+        define_switch_mappings()
       end
     }
 
@@ -584,8 +797,6 @@ function M.setup()
       opt = true,
       run = 'brew install binutils'
     }
-
-
 
     if packer_bootstrap then
       print "Restart Neovim required after installation!"
