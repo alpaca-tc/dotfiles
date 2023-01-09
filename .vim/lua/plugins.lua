@@ -459,6 +459,21 @@ function M.setup()
     --   end,
     -- }
 
+    -- never use
+    use {
+      'Shougo/vinarise.vim',
+      cmd = { "Vinarise" },
+      requires = { "s-yukikaze/vinarise-plugin-peanalysis" }
+    }
+
+    use {
+      's-yukikaze/vinarise-plugin-peanalysis',
+      opt = true,
+      run = 'brew install binutils'
+    }
+
+
+
     if packer_bootstrap then
       print "Restart Neovim required after installation!"
       require("packer").sync()

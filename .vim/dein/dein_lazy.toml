@@ -1577,38 +1577,29 @@ hook_source = '''
   let g:beautify#beautifier#html2haml#ruby19_attributes = 1
 '''
 
-[[plugins]]
-repo = 'othree/yajs.vim'
-on_ft     = ["javascript"]
-
-[[plugins]]
-repo = 'othree/javascript-libraries-syntax.vim'
-on_ft     = ["javascript"]
-
-[[plugins]]
-repo = 'digitaltoad/vim-jade'
-on_ft     = ["jade"]
-
-[[plugins]]
-repo = 'wavded/vim-stylus'
-on_ft     = ["stylus"]
-
-[[plugins]]
-repo = 'moll/vim-node'
-on_ft     = ["javascript"]
-
-[[plugins]]
-repo = 'alpaca-tc/vim-markdown'
-on_ft     = ["markdown"]
-
-[[plugins]]
-repo = 'Shougo/vinarise.vim'
-on_cmd    = ["Vinarise"]
-depends   = ["vinarise-plugin-peanalysis"]
-
-[[plugins]]
-repo = 's-yukikaze/vinarise-plugin-peanalysis'
-build = 'brew install binutils'
+# [[plugins]]
+# repo = 'othree/yajs.vim'
+# on_ft     = ["javascript"]
+#
+# [[plugins]]
+# repo = 'othree/javascript-libraries-syntax.vim'
+# on_ft     = ["javascript"]
+#
+# [[plugins]]
+# repo = 'digitaltoad/vim-jade'
+# on_ft     = ["jade"]
+#
+# [[plugins]]
+# repo = 'wavded/vim-stylus'
+# on_ft     = ["stylus"]
+#
+# [[plugins]]
+# repo = 'moll/vim-node'
+# on_ft     = ["javascript"]
+#
+# [[plugins]]
+# repo = 'alpaca-tc/vim-markdown'
+# on_ft     = ["markdown"]
 
 [[plugins]]
 repo = 'mrkn/vim-cruby'
