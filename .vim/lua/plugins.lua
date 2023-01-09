@@ -262,6 +262,37 @@ function M.setup()
       end
     }
 
+    use {
+      'Shougo/neosnippet.vim',
+      cmd = { "NeoSnippetEdit", "NeoSnippetSource", "NeoSnippetClearMarkers" },
+      event = { 'InsertEnter' },
+      ft = { "snippet" },
+      fn = { "neosnippet#get_snippets", "neosnippet#expandable_or_jumpable", "neosnippet#mappings#jump_or_expand_impl" },
+      requires = { 'Shougo/context_filetype.vim' },
+      setup = function()
+        vim.g['neosnippet#disable_runtime_snippets'] = { ruby = 1 }
+        vim.g['neosnippet#enable_preview'] = 1
+        vim.g['neosnippet#snippets_directory'] = vim.g.my.dir.snippets
+
+        vim.keymap.set('i', '<C-F>', '<Plug>(neosnippet_expand_or_jump)', { silent = true })
+        vim.keymap.set('s', '<C-F>', '<Plug>(neosnippet_expand_or_jump)', { silent = true })
+        vim.keymap.set('i', '<C-Space>', "ddc#map#manual_complete(['neosnippet'])", { expr = true, noremap = true, replace_keycodes = false })
+        vim.keymap.set('n', '<Space>e', ':NeoSnippetEdit -split<CR>', { silent = true, noremap = true })
+      end,
+      config = function()
+        local group = vim.api.nvim_create_augroup("PackerNeosnippet", { clear = true })
+        vim.api.nvim_create_autocmd("BufWritePre", {
+          group = group,
+          pattern = "*",
+          callback = function()
+            if vim.bo.modifiable and not vim.bo.readonly then
+              vim.fn['neosnippet#commands#_clear_markers']()
+            end
+          end
+        })
+      end
+    }
+
     -- optional
     use {
       'alpaca-tc/alpaca_github.vim',

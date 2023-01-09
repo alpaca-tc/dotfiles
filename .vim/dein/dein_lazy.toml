@@ -1216,44 +1216,6 @@ repo = 'Shougo/ddc-sorter_rank'
 [[plugins]]
 repo = 'Shougo/ddc-converter_remove_overlap'
 
-[[plugins]]
-repo = 'Shougo/context_filetype.vim'
-
-[[plugins]]
-repo = 'Shougo/neosnippet.vim'
-on_cmd    = ["NeoSnippetEdit", "NeoSnippetSource", "NeoSnippetClearMarkers"]
-on_event = ['InsertEnter']
-on_ft     = ["snippet"]
-on_func   = ["neosnippet#get_snippets"]
-depends   = ['context_filetype.vim']
-hook_source = '''
-  let g:neosnippet#disable_runtime_snippets = { 'ruby' : 1 }
-
-  " call unite#custom_action('neosnippet/user', 'open', 'neosnippet_source')
-  " call unite#custom_action('neosnippet/runtime', 'open', 'neosnippet_source')
-  imap <silent><C-K>     <ESC>:<C-U>call unite#start(['neosnippet'], { 'input': expand('<cword>')})<CR>
-  imap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
-  smap <silent><C-F>     <Plug>(neosnippet_expand_or_jump)
-
-  if dein#tap('neocomplete.vim')
-    inoremap <expr><C-Space> neocomplete#start_manual_complete(['neosnippet'])
-  elseif dein#tap('deoplete.nvim')
-    inoremap <expr><C-Space> deoplete#manual_complete(['neosnippet'])
-  elseif dein#tap('ddc.vim')
-    inoremap <expr><C-Space> ddc#map#manual_complete(['neosnippet'])
-  endif
-'''
-
-[[plugins]]
-repo = 'vim-scripts/grep.vim'
-on_cmd    = ["Grep", "Rgrep", "GrepBuffer"]
-hook_source = '''
-  let Grep_Find_Use_Xargs = 0
-  let Grep_Skip_Dirs = '.svn .git .swp .hg cache compile'
-  let Grep_Skip_Files = '*.bak *~ .swp .swa .swo'
-  let Grep_Xargs_Options = '--print0'
-'''
-
 # [[plugins]]
 # repo = 'othree/yajs.vim'
 # on_ft     = ["javascript"]

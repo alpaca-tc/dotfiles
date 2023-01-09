@@ -564,23 +564,6 @@ nnoremap <silent>[unite]f  :call ddu#start(#{ name: 'file', sources: [#{ name: '
 "}}}
 
 " ----------------------------------------
-nnoremap <silent><Space>e   :NeoSnippetEdit -split<CR>
-nnoremap <silent>so         :call <SID>open_neosnippet_sources()<CR>
-function! s:open_neosnippet_sources() "{{{
-  silent! execute 'Unite neosnippet/user neosnippet/runtime -no-start-insert -default-action=neosnippet_source -input=' . s:filetype()
-endfunction"}}}
-
-let g:neosnippet#enable_preview = 1
-let g:neosnippet#snippets_directory = g:my.dir.snippets
-
-augroup NeoSnippetAug
-  autocmd!
-  autocmd BufWritePre * if &modifiable && !&readonly
-        \|   call neosnippet#commands#_clear_markers()
-        \| endif
-augroup END
-
-" ----------------------------------------
 " unite.vim"{{{
 " keymappings
 nmap [unite] <Nop>
