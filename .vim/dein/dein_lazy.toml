@@ -1255,25 +1255,6 @@ hook_source = '''
 '''
 
 [[plugins]]
-repo = 'tpope/vim-fugitive'
-on_cmd    = ["Git"]
-on_func   = ["fugitive#head"]
-hook_source = '''
-  augroup MyGitCmd
-    autocmd!
-    autocmd FileType fugitiveblame vertical res 25
-    autocmd FileType gitcommit,git-diff nnoremap <buffer>q :q<CR>
-  augroup END
-
-  let g:fugitive_git_executable = g:my.bin.git
-'''
-
-[[plugins]]
-repo = 'alpaca-tc/git-vim'
-on_cmd    = ["GitDiff", "GitVimDiff", "GitCheckout", "GitAdd", "GitLog", "GitCommit", "GitBlame", "GitPush"]
-on_func   = ["git#get_current_branch"]
-
-[[plugins]]
 repo = 'alpaca-tc/switch.vim'
 on_cmd    = ["Switch"]
 on_event = ['InsertEnter']

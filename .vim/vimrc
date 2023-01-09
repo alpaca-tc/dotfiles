@@ -452,22 +452,6 @@ nnoremap <Space>t :Vista!!<CR>
 " ------------------------------------
 nnoremap <silent>,r :QuickRun<CR>
 
-" ----------------------------------------
-nnoremap <silent>gM :Git commit --amend<CR>
-nnoremap <silent>gb :Git blame<CR>
-nnoremap <silent>gm :Git commit<CR>
-nnoremap gp :<C-U>Git push<Space>
-
-" ----------------------------------------
-nnoremap gA :<C-U>GitAdd<Space>
-nnoremap <silent>ga :<C-U>GitAdd<CR>
-nnoremap gD :<C-U>GitDiff<Space>
-nnoremap gDD :<C-U>GitDiff HEAD<CR>
-
-let g:git_bin = g:my.bin.git
-let g:git_command_edit = 'vnew'
-let g:git_no_default_mappings = 1
-
 " ------------------------------------
 nnoremap diw di,w
 nnoremap dib di,b
