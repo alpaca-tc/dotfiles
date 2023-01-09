@@ -204,6 +204,71 @@ function M.setup()
       end
     }
 
+    -- completion / LSP
+    use {
+      'jose-elias-alvarez/null-ls.nvim',
+      requires = { 'nvim-lua/plenary.nvim' },
+      event = { 'InsertEnter' },
+      config = function()
+        require('null-ls').setup({
+          -- capabilities = capabilities,
+          sources = {
+            require('null-ls').builtins.formatting.stylua,
+            require('null-ls').builtins.diagnostics.rubocop.with({
+              command = "bundle",
+              args = { "exec", "rubocop", "-f", "json", "--force-exclusion", "--stdin", "$FILENAME" },
+              prefer_local = "bundle_bin",
+              condition = function(utils)
+                return utils.root_has_file({".rubocop.yml", "Gemfile"})
+              end
+            }),
+            require('null-ls').builtins.diagnostics.eslint.with({
+              prefer_local = "node_modules/.bin",
+              condition = function(utils)
+                return utils.root_has_file({ "node_modules/.bin/eslint" })
+              end
+            }),
+            require('null-ls').builtins.formatting.eslint.with({
+              prefer_local = "node_modules/.bin",
+              condition = function(utils)
+                return utils.root_has_file({ "node_modules/.bin/eslint" })
+              end
+            }),
+            -- require('null-ls').builtins.diagnostics.luacheck.with({
+            --   extra_args = {"--globals", "vim", "--globals", "awesome"},
+            -- }),
+            require('null-ls').builtins.diagnostics.yamllint,
+            require('null-ls').builtins.formatting.gofmt,
+            require('null-ls').builtins.formatting.rustfmt,
+            require('null-ls').builtins.formatting.rubocop.with({
+              command = "bundle",
+              args = { "exec", "rubocop", "--auto-correct-all", "-f", "quiet", "--stderr", "--stdin", "$FILENAME" },
+              prefer_local = "bundle_bin",
+              condition = function(utils)
+                return utils.root_has_file({".rubocop.yml", "Gemfile"})
+              end
+            }),
+          },
+        })
+
+        local null_ls_disabled = false
+
+        vim.api.nvim_create_user_command(
+          'NullLsToggle',
+          function()
+            if null_ls_disabled then
+              require("null-ls").disable({ 'rubocop' })
+              null_ls_disabled = true
+            else
+              require("null-ls").enable({ 'rubocop' })
+              null_ls_disabled = false
+            end
+          end,
+          {}
+        )
+      end
+    }
+
     -- optional
     use {
       'alpaca-tc/alpaca_github.vim',
