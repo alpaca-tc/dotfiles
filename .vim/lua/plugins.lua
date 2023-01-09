@@ -202,6 +202,13 @@ function M.setup()
         vim.keymap.del({ 's' }, 'w')
         vim.keymap.del({ 's' }, 'b')
         vim.keymap.del({ 's' }, 'e')
+
+        vim.keymap.set('o', 'iw', '<Plug>CamelCaseMotion_iw', { silent = true })
+        vim.keymap.set('x', 'iw', '<Plug>CamelCaseMotion_iw', { silent = true })
+        vim.keymap.set('o', 'ib', '<Plug>CamelCaseMotion_ib', { silent = true })
+        vim.keymap.set('x', 'ib', '<Plug>CamelCaseMotion_ib', { silent = true })
+        vim.keymap.set('o', 'ie', '<Plug>CamelCaseMotion_ie', { silent = true })
+        vim.keymap.set('x', 'ie', '<Plug>CamelCaseMotion_ie', { silent = true })
       end
     }
 
