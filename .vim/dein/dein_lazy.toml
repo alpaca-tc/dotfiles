@@ -1518,23 +1518,6 @@ hook_source = '''
   call s:define_switch_mappings()
 '''
 
-[[plugins]]
-repo = 'thinca/vim-qfreplace'
-on_cmd    = ["Qfreplace"]
-on_ft     = ["unite", "quickfix", "vimfiler"]
-on_func   = ["qfreplace#start"]
-
-[[plugins]]
-repo = 'kana/vim-niceblock'
-on_map    = ["<Plug>(niceblock-I)", "<Plug>(niceblock-A)"]
-
-[[plugins]]
-repo = 'alpaca-tc/beautify.vim'
-on_cmd    = ["Beautify"]
-hook_source = '''
-  let g:beautify#beautifier#html2haml#ruby19_attributes = 1
-'''
-
 # [[plugins]]
 # repo = 'othree/yajs.vim'
 # on_ft     = ["javascript"]

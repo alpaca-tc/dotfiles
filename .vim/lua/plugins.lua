@@ -431,6 +431,35 @@ function M.setup()
       end
     }
 
+    use {
+      'thinca/vim-qfreplace',
+      cmd = { "Qfreplace" },
+      ft = { "unite", "quickfix", "vimfiler" },
+      fn = { "qfreplace#start" }
+    }
+
+    use {
+      'kana/vim-niceblock',
+      keys = { "<Plug>(niceblock-I)", "<Plug>(niceblock-A)" },
+      setup = function()
+        vim.keymap.set('x', 'I', '<Plug>(niceblock-I)')
+        vim.keymap.set('x', 'A', '<Plug>(niceblock-A)')
+      end
+    }
+
+    use {
+      'alpaca-tc/beautify.vim',
+      cmd    = { "Beautify" },
+      run = function()
+        vim.fn.system { "npm", "install", "-g", "js-beautify" }
+        vim.fn.system { "npm", "install", "-g", "jq" }
+        vim.fn.system { "pip", "install", "sqlparse" }
+      end,
+      setup = function()
+        vim.g['beautify#beautifier#html2haml#ruby19_attributes'] = 1
+      end
+    }
+
     -- file types
     use {
       'cespare/vim-toml',

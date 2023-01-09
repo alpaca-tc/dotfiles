@@ -569,12 +569,6 @@ let g:endwise_no_mappings = 1
 let g:vinarise_objdump_command = 'gobjdump'
 
 " ------------------------------------
-" vim-niceblock
-" ------------------------------------
-xmap I  <Plug>(niceblock-I)
-xmap A  <Plug>(niceblock-A)
-
-" ------------------------------------
 nnoremap ! :Switch<CR>
 
 " ------------------------------------
