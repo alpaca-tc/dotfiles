@@ -392,6 +392,45 @@ function M.setup()
       end
     }
 
+    use {
+      'RRethy/nvim-treesitter-endwise',
+      requires = { 'nvim-treesitter/nvim-treesitter' }
+    }
+
+    use {
+      'windwp/nvim-autopairs',
+      requires = { 'RRethy/nvim-treesitter-endwise' },
+      event = { 'InsertEnter' },
+      config = function()
+        local Rule = require('nvim-autopairs.rule')
+        local npairs = require('nvim-autopairs')
+
+        npairs.setup({
+          map_c_h = true,
+          map_cr = false,
+        })
+
+        npairs.add_rules(require('nvim-autopairs.rules.endwise-ruby'))
+        npairs.add_rule(Rule('|', '|', { 'ruby', 'eruby' }))
+        npairs.add_rule(Rule('\'\'\'', '\'\'\'', { 'toml' }))
+
+        _G.MUtils = {}
+
+        MUtils.CR = function()
+          if vim.fn.pumvisible() ~= 0 then
+            if vim.fn.complete_info({ 'selected' }).selected ~= -1 then
+              return npairs.esc('<c-y>') .. npairs.autopairs_cr()
+            else
+              return npairs.esc('<c-e>') .. npairs.autopairs_cr()
+            end
+          else
+            return npairs.autopairs_cr()
+          end
+        end
+        vim.api.nvim_set_keymap('i', '<cr>', 'v:lua.MUtils.CR()', { expr = true, noremap = true })
+      end
+    }
+
     -- file types
     use {
       'cespare/vim-toml',

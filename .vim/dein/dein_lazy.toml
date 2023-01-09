@@ -1091,7 +1091,7 @@ hook_source = '''
 
 [[plugins]]
 repo = 'Shougo/ddc.vim'
-depends = ['denops.vim', 'pum.vim', 'ddc-file', 'ddc-matcher_head', 'ddc-sorter_rank', 'ddc-converter_remove_overlap', 'ddc-ui-native', 'neco-vim', 'ddc-source-nvim-lsp', 'ddc-buffer', 'ddc-dictionary', 'neosnippet.vim', 'nvim-autopairs', 'ddu-filter-converter_display_word']
+depends = ['denops.vim', 'pum.vim', 'ddc-file', 'ddc-matcher_head', 'ddc-sorter_rank', 'ddc-converter_remove_overlap', 'ddc-ui-native', 'neco-vim', 'ddc-source-nvim-lsp', 'ddc-buffer', 'ddc-dictionary', 'neosnippet.vim', 'ddu-filter-converter_display_word']
 on_event = ['InsertEnter']
 hook_source = '''
   call ddc#custom#patch_global({
@@ -1529,48 +1529,6 @@ repo = 'kana/vim-niceblock'
 on_map    = ["<Plug>(niceblock-I)", "<Plug>(niceblock-A)"]
 
 [[plugins]]
-repo = 'RRethy/nvim-treesitter-endwise'
-depends = ['nvim-treesitter']
-
-[[plugins]]
-repo = 'nvim-treesitter/nvim-treesitter'
-
-[[plugins]]
-repo = 'windwp/nvim-autopairs'
-depends = ['nvim-treesitter-endwise']
-on_event = ['InsertEnter']
-hook_source = '''
-  lua << EOF
-    local Rule = require('nvim-autopairs.rule')
-    local npairs = require('nvim-autopairs')
-
-    npairs.setup({
-      map_c_h = true,
-      map_cr = false,
-    })
-
-    npairs.add_rules(require('nvim-autopairs.rules.endwise-ruby'))
-    npairs.add_rule(Rule('|', '|', { 'ruby', 'eruby' }))
-    npairs.add_rule(Rule('\'\'\'', '\'\'\'', { 'toml' }))
-
-    _G.MUtils = {}
-
-    MUtils.CR = function()
-      if vim.fn.pumvisible() ~= 0 then
-        if vim.fn.complete_info({ 'selected' }).selected ~= -1 then
-          return npairs.esc('<c-y>') .. npairs.autopairs_cr()
-        else
-          return npairs.esc('<c-e>') .. npairs.autopairs_cr()
-        end
-      else
-        return npairs.autopairs_cr()
-      end
-    end
-    vim.api.nvim_set_keymap('i', '<cr>', 'v:lua.MUtils.CR()', { expr = true, noremap = true })
-EOF
-'''
-
-[[plugins]]
 repo = 'alpaca-tc/beautify.vim'
 on_cmd    = ["Beautify"]
 hook_source = '''
@@ -1600,18 +1558,18 @@ hook_source = '''
 # [[plugins]]
 # repo = 'alpaca-tc/vim-markdown'
 # on_ft     = ["markdown"]
-
-[[plugins]]
-repo = 'mrkn/vim-cruby'
-on_ft = ["c"]
-
-[[plugins]]
-repo = 'vim-ruby/vim-ruby'
-on_ft     = ["ruby", "erb", "ruby.rspec"]
-hook_source = '''
-  let g:ruby_indent_block_style = 'do'
-  let g:ruby_foldable_groups = 'NONE'
-'''
+#
+# [[plugins]]
+# repo = 'mrkn/vim-cruby'
+# on_ft = ["c"]
+#
+# [[plugins]]
+# repo = 'vim-ruby/vim-ruby'
+# on_ft     = ["ruby", "erb", "ruby.rspec"]
+# hook_source = '''
+#   let g:ruby_indent_block_style = 'do'
+#   let g:ruby_foldable_groups = 'NONE'
+# '''
 
 [[plugins]]
 repo = 'tpope/vim-rails'
