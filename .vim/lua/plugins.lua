@@ -282,25 +282,25 @@ function M.setup()
           callback = function()
             vim.opt_local.signcolumn = 'no'
 
-            -- nnoremap <silent> gd <cmd>lua vim.lsp.buf.declaration()<CR>
-            -- nnoremap <silent> ty <cmd>lua vim.lsp.buf.document_symbol()<CR>
-            -- nnoremap <silent> tt <cmd>lua vim.lsp.buf.definition()<CR>
-            -- nnoremap <silent> K <cmd>lua vim.lsp.buf.hover()<CR>
-            -- nnoremap <silent> ti <cmd>lua vim.lsp.buf.implementation()<CR>
-            -- nnoremap <silent> ts <cmd>lua vim.lsp.buf.signature_help()<CR>
-            -- nnoremap <silent> ta <cmd>lua vim.lsp.buf.code_action()<CR>
-            -- -- nnoremap <silent> <space>wa <cmd>lua vim.lsp.buf.add_workspace_folder()<CR>
-            -- -- nnoremap <silent> <space>wr <cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>
-            -- -- nnoremap <silent> <space>wl <cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>
-            -- nnoremap <silent> td <cmd>lua vim.lsp.buf.type_definition()<CR>
-            -- nnoremap <silent> tr <cmd>lua vim.lsp.buf.rename()<CR>
-            -- nnoremap <silent> tf <cmd>lua vim.lsp.buf.references()<CR>
-            -- nnoremap <silent> te <cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
-            -- nnoremap <silent> tp <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
-            -- nnoremap <silent> tn <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
-            -- nnoremap <silent> tl <cmd>lua vim.diagnostic.setloclist()<CR>
-            --
-            -- nnoremap ff :lua vim.lsp.buf.format { async = true }<CR>
+            vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.declaration()<CR>', { silent = true})
+            vim.keymap.set('n', 'ty', '<cmd>lua vim.lsp.buf.document_symbol()<CR>', { silent = true})
+            vim.keymap.set('n', 'tt', '<cmd>lua vim.lsp.buf.definition()<CR>', { silent = true})
+            vim.keymap.set('n', 'K',  '<cmd>lua vim.lsp.buf.hover()<CR>', { silent = true})
+            vim.keymap.set('n', 'ti', '<cmd>lua vim.lsp.buf.implementation()<CR>', { silent = true})
+            vim.keymap.set('n', 'ts', '<cmd>lua vim.lsp.buf.signature_help()<CR>', { silent = true})
+            vim.keymap.set('n', 'ta', '<cmd>lua vim.lsp.buf.code_action()<CR>', { silent = true})
+            vim.keymap.set('n', 'td', '<cmd>lua vim.lsp.buf.type_definition()<CR>', { silent = true})
+            vim.keymap.set('n', 'tr', '<cmd>lua vim.lsp.buf.rename()<CR>', { silent = true})
+            vim.keymap.set('n', 'tf', '<cmd>lua vim.lsp.buf.references()<CR>', { silent = true})
+            vim.keymap.set('n', 'te', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', { silent = true})
+            vim.keymap.set('n', 'tp', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', { silent = true})
+            vim.keymap.set('n', 'tn', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', { silent = true})
+            vim.keymap.set('n', 'tl', '<cmd>lua vim.diagnostic.setloclist()<CR>', { silent = true})
+            vim.keymap.set('n', 'ff', ':lua vim.lsp.buf.format { async = true }<CR>', { silent = true})
+
+            -- nnoremap <silent> <space>wa <cmd>lua vim.lsp.buf.add_workspace_folder()<CR>
+            -- nnoremap <silent> <space>wr <cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>
+            -- nnoremap <silent> <space>wl <cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>
           end
         })
 
@@ -369,7 +369,6 @@ function M.setup()
         -- FIXME: How to load neovim/nvim-lspconfig before loading mason.nvim?
         vim.cmd('LspStop')
 
-        print("mason")
         require('mason').setup()
 
         local lsp_config = require('lspconfig')
@@ -491,7 +490,6 @@ function M.setup()
           for ft, _ in string.gmatch(vim.bo.filetype, '([^\\.]+)') do
             filetype = filetype or ft
           end
-          print(vim.inspect(filetype))
 
           local root = vim.fn['alpaca#current_root'](vim.fn['getcwd']())
           local isTsJs = filetype == 'typescript' or filetype == 'javascript' or filetype == 'typescriptreact'
