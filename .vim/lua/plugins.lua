@@ -300,6 +300,129 @@ function M.setup()
       end
     }
 
+    use {
+      'Shougo/ddc.vim',
+      requires = {
+        'vim-denops/denops.vim',
+        'Shougo/pum.vim',
+        'LumaKernel/ddc-file',
+        'Shougo/ddc-matcher_head',
+        'Shougo/ddc-sorter_rank',
+        'Shougo/ddc-converter_remove_overlap',
+        'Shougo/ddc-ui-native',
+        'Shougo/neco-vim',
+        'Shougo/ddc-source-nvim-lsp',
+        'matsui54/ddc-buffer',
+        'matsui54/ddc-dictionary',
+        'Shougo/neosnippet.vim',
+      },
+      event = { 'InsertEnter' },
+      config = function()
+        vim.fn['ddc#custom#patch_global']({
+          ui = 'native',
+          completionMenu = 'pum.vim',
+          sources = {
+            'neosnippet',
+            'nvim-lsp',
+            'buffer',
+            'file',
+            'dictionary',
+          },
+          backspaceCompletion = true,
+          sourceOptions = {
+            _ = {
+              matchers = { 'matcher_head'},
+              sorters = { 'sorter_rank'},
+              converters = { 'converter_remove_overlap'},
+            },
+            neosnippet = {
+              mark = 'snip',
+            },
+            buffer = {
+              mark = 'buffer',
+              minAutoCompleteLength = 2,
+            },
+            dictionary = {
+              mark = 'dict'
+            },
+            necovim = {
+              mark = 'neco'
+            },
+            ['nvim-lsp'] = {
+              mark = 'lsp',
+              forceCompletionPattern = '\\.\\w*|:\\w*|->\\w*',
+              minAutoCompleteLength = 0,
+            },
+            file = {
+              mark = 'file',
+              isVolatile = true,
+              forceCompletionPattern = '\\S/\\S*',
+              minAutoCompleteLength = 1,
+            }
+          },
+          sourceParams = {
+            file = {
+              displayCwd = false,
+              bufAsRoot = true,
+              cwdMaxItems = 0,
+              projFromCwdMaxItems = {},
+              projFromBufMaxItems = {},
+            },
+            ['nvim-lsp'] = {
+              kindLabels = {
+                Class = 'c'
+              }
+            },
+            buffer = {
+              requireSameFiletype = false,
+              limitBytes = 5000000,
+              fromAltBuf = true,
+              forceCollect = true,
+            },
+          },
+        })
+
+        vim.fn['ddc#custom#patch_filetype']({ 'vim' }, {
+          keywordPattern = '[a-zA-Z_:]\\w*',
+          sources = { 'buffer', 'necovim', 'dictionary' },
+        })
+
+        vim.fn['ddc#enable']()
+
+        vim.keymap.set('i', '<Tab>', '<Cmd>call pum#map#insert_relative(+1)<CR>', { noremap = true, replace_keycodes = false })
+        vim.keymap.set('i', '<S-Tab>', '<Cmd>call pum#map#insert_relative(-1)<CR>', { noremap = true, replace_keycodes = false })
+
+        vim.keymap.set(
+          'i',
+          '<TAB>',
+          function()
+            local col = vim.fn['col']('.')
+            local line = vim.fn['getline']('.')
+            local checked_backspace = col == 1 or string.sub(line, col - 1, col - 1) == ' '
+
+            if vim.fn.pumvisible() then
+              return '<C-n>'
+            elseif vim.fn['neosnippet#expandable_or_jumpable']() then
+              return vim.fn['neosnippet#mappings#jump_or_expand_impl']()
+            elseif checked_backspace then
+              return '<TAB>'
+            else
+              return vim.fn['pum#map#insert_relative'](1)
+            end
+          end,
+          { expr = true }
+        )
+
+        vim.keymap.set('i', '<C-X><C-F>', "ddc#map#manual_complete('file')", { expr = true })
+        vim.keymap.set('i', '<C-X><C-O>', "ddc#map#manual_complete('lsp')", { expr = true })
+      end
+    }
+
+    use {
+      'Shougo/neco-vim',
+      ft = { "vim" }
+    }
+
     -- optional
     use {
       'alpaca-tc/alpaca_github.vim',

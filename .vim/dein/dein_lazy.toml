@@ -295,7 +295,7 @@ hook_source = '''
 
 [[plugins]]
 repo = 'Shougo/ddu.vim'
-depends = ['denops.vim', 'ddu-filter-matcher_regexp', 'ddu-ui-ff', 'ddu-ui-filer', 'ddu-kind-file', 'ddu-source-action', 'ddu-source-line', 'ddu-source-mr', 'ddu-source-file', 'ddu-source-rg', 'ddu-column-icon_filename', 'ddu-column-filename', 'ddu-source-git']
+depends = ['denops.vim', 'ddu-filter-matcher_regexp', 'ddu-ui-ff', 'ddu-ui-filer', 'ddu-kind-file', 'ddu-source-action', 'ddu-source-line', 'ddu-source-mr', 'ddu-source-file', 'ddu-source-rg', 'ddu-column-icon_filename', 'ddu-column-filename', 'ddu-source-git', 'ddu-filter-converter_display_word']
 on_func = ['ddu#custom#get_local', 'ddu#custom#patch_global', 'ddu#custom#patch_local']
 hook_source = '''
   call ddu#custom#patch_global({
@@ -354,6 +354,9 @@ hook_source = '''
     \   }
     \ })
 '''
+
+[[plugins]]
+repo = 'Shougo/ddu-filter-converter_display_word'
 
 [[plugins]]
 repo = 'Shougo/ddu-kind-file'
@@ -1089,133 +1092,6 @@ hook_source = '''
   augroup END
 '''
 
-[[plugins]]
-repo = 'Shougo/ddc.vim'
-depends = ['denops.vim', 'pum.vim', 'ddc-file', 'ddc-matcher_head', 'ddc-sorter_rank', 'ddc-converter_remove_overlap', 'ddc-ui-native', 'neco-vim', 'ddc-source-nvim-lsp', 'ddc-buffer', 'ddc-dictionary', 'neosnippet.vim', 'ddu-filter-converter_display_word']
-on_event = ['InsertEnter']
-hook_source = '''
-  call ddc#custom#patch_global({
-    \ 'ui': 'native',
-    \ 'completionMenu': 'pum.vim',
-    \ 'sources': [
-    \   'neosnippet',
-    \   'nvim-lsp',
-    \   'buffer',
-    \   'file',
-    \   'dictionary',
-    \ ],
-    \ 'backspaceCompletion': v:true,
-    \ 'sourceOptions': {
-    \   '_': {
-    \     'matchers': ['matcher_head'],
-    \     'sorters': ['sorter_rank'],
-    \     'converters': ['converter_remove_overlap'],
-    \   },
-    \   'neosnippet': {
-    \     'mark': 'snip',
-    \   },
-    \   'buffer': {
-    \     'mark': 'buffer',
-    \     'minAutoCompleteLength': 2,
-    \   },
-    \   'dictionary': {
-    \     'mark': 'dict'
-    \   },
-    \   'necovim': {
-    \     'mark': 'neco'
-    \   },
-    \   'nvim-lsp': {
-    \     'mark': 'lsp',
-    \     'forceCompletionPattern': '\.\w*|:\w*|->\w*',
-    \     'minAutoCompleteLength': 0,
-    \   },
-    \   'file': {
-    \     'mark': 'file',
-    \     'isVolatile': v:true,
-    \     'forceCompletionPattern': '\S/\S*',
-    \     'minAutoCompleteLength': 1,
-    \   }
-    \ },
-    \ 'sourceParams': {
-    \   'file': {
-    \     'displayCwd': v:false,
-    \     'bufAsRoot': v:true,
-    \     'cwdMaxItems': 0,
-    \     'projFromCwdMaxItems': [],
-    \     'projFromBufMaxItems': [],
-    \   },
-    \   'nvim-lsp': {
-    \     'kindLabels': {
-    \       'Class': 'c'
-    \     }
-    \   },
-    \   'buffer': {
-    \     'requireSameFiletype': v:false,
-    \     'limitBytes': 5000000,
-    \     'fromAltBuf': v:true,
-    \     'forceCollect': v:true,
-    \   },
-    \ },
-    \ })
-
-  call ddc#custom#patch_filetype(['vim'], #{
-    \   keywordPattern: '[a-zA-Z_:]\w*',
-    \   sources: ['buffer', 'necovim', 'dictionary'],
-    \ })
-
-  call ddc#enable()
-
-  inoremap <Tab> <Cmd>call pum#map#insert_relative(+1)<CR>
-  inoremap <S-Tab> <Cmd>call pum#map#insert_relative(-1)<CR>
-
-  function! s:check_back_space() "{{{
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~ '\s'
-  endfunction"}}}
-
-  imap <expr><TAB> pumvisible() ? "\<C-n>" :
-        \ neosnippet#expandable_or_jumpable() ?
-        \ neosnippet#mappings#jump_or_expand_impl() :
-        \ <SID>check_back_space() ? "\<TAB>" :
-        \ pum#map#insert_relative(+1)
-  inoremap <expr><C-X><C-F> ddc#map#manual_complete('file')
-  inoremap <expr><C-X><C-O> ddc#map#manual_complete('lsp')
-  inoremap <expr><C-X><C-X> ddc#map#manual_complete()
-'''
-
-[[plugins]]
-repo = 'Shougo/ddu-filter-converter_display_word'
-
-[[plugins]]
-repo = "matsui54/ddc-dictionary"
-
-[[plugins]]
-repo = "Shougo/ddc-source-nvim-lsp"
-
-[[plugins]]
-repo = "matsui54/ddc-buffer"
-
-[[plugins]]
-repo = "Shougo/ddc-ui-native"
-
-[[plugins]]
-repo = 'vim-denops/denops.vim'
-
-[[plugins]]
-repo = 'Shougo/pum.vim'
-
-[[plugins]]
-repo = 'LumaKernel/ddc-file'
-
-[[plugins]]
-repo = 'Shougo/ddc-matcher_head'
-
-[[plugins]]
-repo = 'Shougo/ddc-sorter_rank'
-
-[[plugins]]
-repo = 'Shougo/ddc-converter_remove_overlap'
-
 # [[plugins]]
 # repo = 'othree/yajs.vim'
 # on_ft     = ["javascript"]
@@ -1332,10 +1208,6 @@ hook_source = '''
 [[plugins]]
 repo = 'basyura/unite-rails'
 on_source = ["unite.vim"]
-
-[[plugins]]
-repo = 'Shougo/neco-vim'
-on_ft = ["vim"]
 
 # [[plugins]]
 # repo = 'posva/vim-vue'
