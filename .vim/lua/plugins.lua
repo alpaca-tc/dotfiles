@@ -1373,7 +1373,7 @@ function M.setup()
     use({
       "Shougo/vimfiler",
       cmd = { "VimFiler", "VimFilerBufferDir", "VimFilerExplorer", "VimFilerCreate" },
-      requires = { "Shougo/unite.vim" },
+      -- requires = { "Shougo/unite.vim" },
       setup = function()
         vim.g.vimfiler_data_directory = vim.g.my.dir.vimfiler
         vim.g.vimfiler_force_overwrite_statusline = 0
