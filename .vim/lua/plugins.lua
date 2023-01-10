@@ -24,9 +24,9 @@ function M.setup()
     callback = function()
       -- vim.cmd('luafile <afile>')
       -- vim.cmd('PackerSync')
-      --
-      -- vim.cmd('source <afile>')
-      -- vim.cmd('PackerCompile')
+
+      vim.cmd('source <afile>')
+      vim.cmd('PackerCompile')
     end,
   })
 
@@ -209,6 +209,99 @@ function M.setup()
       end,
     })
 
+    use {
+      'itchyny/lightline.vim',
+      event = { 'InsertEnter' },
+      fn = { "lightline#update", "lightline#highlight" },
+      setup = function()
+        local function reltime()
+          return vim.fn.str2float(vim.fn.reltimestr(vim.fn.reltime()))
+        end
+
+        local Lightline = {}
+        Lightline.new = function(update_time, func)
+          local me = vim.empty_dict()
+
+          me.func = function()
+            return func()
+          end
+          me.update_time = update_time
+          me.update = function()
+            local now = reltime()
+            me.initialized = false
+            me.updatedtime = me.updatedtime or reltime()
+
+            if not me.initialized or (now - me.updatedtime >= me.updatetime) then
+              me.initialized = true
+              me.updatedtime = now
+
+              return true
+            else
+              return false
+            end
+          end
+
+          me.statusline = function()
+            me.update()
+            me.cache = me.update() and me.func() or me.cache or ''
+            return me.cache
+          end
+
+          return me
+        end
+
+        vim.g['lightline#functions#git_branch'] = Lightline.new(
+          5,
+          function()
+            return vim.fn['git#get_current_branch']()
+          end
+        )
+
+        vim.g['lightline#functions#plugin_information'] = Lightline.new(
+          0.5,
+          function()
+            local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
+
+            if vim.fn.empty(vim.fn.bufname('%')) == 1 then
+              return ''
+            elseif vim.fn.empty(root) == 0 then
+              return "%" .. string.sub(vim.fn.expand('%:p'), string.len(root) + 1, -1)
+            else
+              return vim.fn.expand('%:p:~')
+            end
+          end
+        )
+
+        vim.g.lightline = {
+          enable = {
+            statusline = 1,
+          },
+          colorscheme = 'wombat',
+          active = {
+            left = {
+              { 'mode' },
+              { 'information' },
+              { 'git_branch', 'modified' },
+            },
+            right = {
+              { 'lineinfo', 'file_size' },
+              { 'percent' },
+              { 'fileformat', 'fileencoding', 'filetype' }
+            },
+          },
+          component_function = {
+            information = 'g:lightline#functions#plugin_information.statusline',
+          },
+          component_expand = {
+            git_branch =  'g:lightline#functions#git_branch.statusline',
+          },
+        }
+      end,
+      config = function()
+        vim.fn['lightline#update']()
+      end
+    }
+
     use({
       "vim-scripts/camelcasemotion",
       -- keys = { "<Plug>CamelCaseMotion_w", "<Plug>CamelCaseMotion_b", "<Plug>CamelCaseMotion_e", "<Plug>CamelCaseMotion_iw", "<Plug>CamelCaseMotion_ib", "<Plug>CamelCaseMotion_ie" },
@@ -366,259 +459,324 @@ function M.setup()
         "alpaca-tc/ddu-source-git",
         "Shougo/ddu-filter-converter_display_word",
       },
-      fn = { "ddu#custom#get_local", "ddu#custom#patch_global", "ddu#custom#patch_local" },
+      fn = {
+        "ddu#start",
+        "ddu#custom#get_local",
+        "ddu#custom#patch_global",
+        "ddu#custom#patch_local",
+        "ddu#custom#action",
+      },
       config = function()
-        -- call ddu#custom#patch_global({
-        --   \   'ui': 'ff',
-        --   \   'sources': [#{ name: 'line' }, #{ name: 'mr' }, #{ name: 'file' }, #{ name: 'rg' }],
-        --   \   'sourceOptions': {
-        --   \     '_': {
-        --   \       'matchers': ['matcher_regexp'],
-        --   \       'ignoreCase': v:true,
-        --   \     },
-        --   \     'file': {
-        --   \       'columns': ['filename'],
-        --   \       'sorters': ['sorter_file_alpha'],
-        --   \     },
-        --   \   },
-        --   \   'sourceParams': {
-        --   \     'mr': {
-        --   \       'kind': 'mru',
-        --   \       'foldRoot': v:true,
-        --   \       'relativeIfSameRepository': v:true,
-        --   \     },
-        --   \   },
-        --   \   'uiParams': {
-        --   \     'ff': {
-        --   \       'filterFloatingPosition': 'top',
-        --   \       'filterSplitDirection': 'topleft',
-        --   \       'startFilter': v:true,
-        --   \       'splitDirection': 'topleft',
-        --   \       'previewHeight': 40,
-        --   \       'previewRow': 40,
-        --   \       'previewVertical': v:true,
-        --   \       'previewWidth': 50,
-        --   \     },
-        --   \     'filer': {
-        --   \       'filterFloatingPosition': 'top',
-        --   \       'filterSplitDirection': 'topleft',
-        --   \       'splitDirection': 'topleft',
-        --   \     },
-        --   \   },
-        --   \   'kindOptions': #{
-        --   \     file: #{
-        --   \       defaultAction: 'open',
-        --   \     },
-        --   \     action: #{
-        --   \       defaultAction: 'do',
-        --   \     },
-        --   \     git_branch: #{
-        --   \       defaultAction: 'switch',
-        --   \     },
-        --   \     git_status: #{
-        --   \       defaultAction: 'open',
-        --   \     },
-        --   \     git_log: #{
-        --   \       defaultAction: 'yank_hash',
-        --   \     },
-        --   \   }
-        --   \ })
+        vim.fn['ddu#custom#patch_global']({
+          ui = 'ff',
+          sources = {
+            { name = 'line' },
+            { name = 'mr' },
+            { name = 'file' },
+            { name = 'rg' }
+          },
+          sourceOptions = {
+            _ = {
+              matchers = { 'matcher_regexp' },
+              ignoreCase = true,
+            },
+            file = {
+              columns = { 'filename' },
+              sorters = { 'sorter_file_alpha' },
+            },
+          },
+          sourceParams = {
+            mr = {
+              kind = 'mru',
+              foldRoot = true,
+              relativeIfSameRepository = true,
+            },
+          },
+          uiParams = {
+            ff = {
+              filterFloatingPosition = 'top',
+              filterSplitDirection = 'topleft',
+              startFilter = true,
+              splitDirection = 'topleft',
+              previewHeight = 40,
+              previewRow = 40,
+              previewVertical = true,
+              previewWidth = 50,
+            },
+            filer = {
+              filterFloatingPosition = 'top',
+              filterSplitDirection = 'topleft',
+              splitDirection = 'topleft',
+            },
+          },
+          kindOptions = {
+            file = {
+              defaultAction = 'open',
+            },
+            action = {
+              defaultAction = 'do',
+            },
+            git_branch = {
+              defaultAction = 'switch',
+            },
+            git_status = {
+              defaultAction = 'open',
+            },
+            git_log = {
+              defaultAction = 'yank_hash',
+            },
+          }
+        })
       end,
     })
 
     use({
-      repo = "Shougo/ddu-kind-file",
+      "Shougo/ddu-kind-file",
+      after = { "ddu.vim" },
+      setup = function()
+        vim.keymap.set("n", "[unite]f", ":call ddu#start(#{ name: 'file', sources: [#{ name: 'file' }], ui: 'filer', columns: ['icon_filename'], uiParams: #{ filer: #{ search: expand('%:p') } } })<CR>", { noremap = true, silent = true })
+      end,
       config = function()
-        -- call ddu#custom#action('kind', 'file', 'grep', { args -> <SID>ddu_kind_file_grep_action(args) })
-        --
-        -- function! s:ddu_kind_file_grep_action(args)
-        --   " NOTE: param "path" must be one directory
-        --   let path = a:args.items[0].action.path
-        --   let directory = isdirectory(path) ? path : fnamemodify(path, ':h')
-        --
-        --   call ddu#start(#{
-        --       \   name: a:args.options.name,
-        --       \   push: v:true,
-        --       \   sources: [
-        --       \     #{
-        --       \       name: 'rg',
-        --       \       params: #{
-        --       \         path: path,
-        --       \         input: input('Pattern: '),
-        --       \       },
-        --       \     },
-        --       \   ],
-        --       \ })
-        -- endfunction
+        vim.fn['ddu#custom#action'](
+          'kind',
+          'file',
+          'grep',
+          function(args)
+            -- NOTE: param "path" must be one directory
+            local path = args.items[0].action.path
+            local directory = vim.fn['isdirectory'](path) and path or vim.fn['fnamemodify'](path, ':h')
+
+            vim.fn['ddu#start']({
+              name = args.options.name,
+              push = true,
+              sources = {
+                {
+                  name = 'rg',
+                  params = {
+                    path = directory,
+                    input = vim.fn['input']('Pattern: '),
+                  },
+                },
+              },
+            })
+          end
+        )
       end,
     })
 
     use({
       "Shougo/ddu-ui-ff",
-      requires = { "itchyny/lightline.vim" },
+      -- requires = { "itchyny/lightline.vim" },
       config = function()
-        -- function! s:move_to_up_or_ddu_ui_filter()
-        --   if line('.') == 1
-        --     call s:move_to_ddu_buffer('ddu-ff-filter')
-        --   else
-        --     call cursor(line('.') - 1, col('.'))
-        --   end
-        -- endfunction
-        --
-        -- function! s:move_to_ddu_buffer(ft)
-        --   for n in range(1, winnr('$'))
-        --     let ft = getwinvar(n, '&ft')
-        --
-        --     if ft == a:ft
-        --       let id = win_getid(n)
-        --       call win_gotoid(id)
-        --       return
-        --     endif
-        --   endfor
-        -- endfunction
-        --
-        -- function! s:disable_lightline_on_ddu_filter_ui()
-        --   for n in range(1, winnr('$'))
-        --     let ft = getwinvar(n, '&ft')
-        --
-        --     if ft == 'ddu-ff-filter'
-        --       let width = winwidth(n)
-        --       let statusline = repeat('-', width)
-        --       call setwinvar(n, '&statusline', statusline)
-        --     endif
-        --   endfor
-        -- endfunction
-        --
-        -- function! s:move_to_ddu_ff_and_cr()
-        --   call s:move_to_ddu_buffer('ddu-ff')
-        --   call ddu#ui#ff#do_action('itemAction')
-        --   call ddu#ui#ff#close()
-        -- endfunction
-        --
-        -- function! s:ddu_ui_ff_shared()
-        --   augroup DduBufferUi
-        --     autocmd! * <buffer>
-        --     autocmd BufEnter <buffer> if winnr('$') == 1 |quit| endif
-        --   augroup END
-        --
-        --   nnoremap <buffer><silent>q :call ddu#ui#ff#do_action('quit')<CR>
-        --   nnoremap <buffer><silent><Space>q :call ddu#ui#ff#do_action('quit')<CR>
-        -- endfunction
-        --
-        -- function! s:close_filter_window_and_do_item_action()
-        --   call ddu#ui#ff#do_action('itemAction')
-        -- endfunction
-        --
-        -- function! s:close_preview_window()
-        --   for n in range(1, winnr('$'))
-        --     let bufnr = winbufnr(n)
-        --     let bufname = bufname(bufnr)
-        --
-        --     if getwinvar(n, '&l:buftype') == 'nofile' && bufname =~ '^ddu-ff:/'
-        --       execute n . 'wincmd c'
-        --       return
-        --     endif
-        --   endfor
-        -- endfunction
-        --
-        -- function! s:ddu_toggle_preview()
-        --   let enabled = !get(b:, 'ddu_preview_enabled', v:false)
-        --   let b:ddu_preview_enabled = enabled
-        --
-        --   augroup DduBufferPreview
-        --     autocmd! * <buffer>
-        --
-        --     if enabled
-        --       autocmd CursorMoved <buffer> call ddu#ui#ff#do_action('preview')
-        --     else
-        --       call s:close_preview_window()
-        --     endif
-        --   augroup END
-        -- endfunction
-        --
-        -- function! s:ddu_replace()
-        --   call ddu#ui#ff#do_action('itemAction', {'name': 'quickfix'})
-        --   call ddu#ui#ff#close()
-        --   cclose
-        --   call qfreplace#start('')
-        -- endfunction
-        --
-        -- function! s:ddu_ui_ff()
-        --   augroup DduBufferPreview
-        --     autocmd! * <buffer>
-        --   augroup END
-        --
-        --   call s:ddu_ui_ff_shared()
-        --   setl cursorline
-        --
-        --   nnoremap <buffer><silent><CR> :call <SID>close_filter_window_and_do_item_action()<CR>
-        --   nnoremap <buffer><silent><Space> :call ddu#ui#ff#do_action('toggleSelectItem')<CR>j
-        --   nnoremap <buffer><silent>f :call ddu#ui#ff#do_action('toggleSelectItem')<CR>j
-        --   xnoremap <silent><buffer><Space> :call ddu#ui#ff#do_action('toggleSelectItem')<CR>
-        --   nnoremap <buffer><silent><Tab> :call ddu#ui#ff#do_action('chooseAction')<CR>
-        --   nnoremap <buffer><silent>a :call ddu#ui#ff#do_action('chooseAction')<CR>
-        --   nnoremap <buffer><silent>* :call ddu#ui#ff#do_action('toggleAllItems')<CR>
-        --   nnoremap <buffer><silent>k :call <SID>move_to_up_or_ddu_ui_filter()<CR>
-        --   nnoremap <buffer><silent>i :call ddu#ui#ff#do_action('openFilterWindow')<CR>
-        --   nnoremap <buffer><silent>A :call ddu#ui#ff#do_action('openFilterWindow')<CR>
-        --   nnoremap <buffer><silent>p :call <SID>ddu_toggle_preview()<CR>
-        --   nnoremap <buffer><silent>re :call <SID>ddu_replace()<CR>
-        -- endfunction
-        --
-        -- function! s:ddu_ui_ff_filter()
-        --   call s:ddu_ui_ff_shared()
-        --   nnoremap <buffer><silent>j :call <SID>move_to_ddu_buffer('ddu-ff')<CR>
-        --   nnoremap <buffer><silent><CR> :call <SID>move_to_ddu_ff_and_cr()<CR>
-        --   nnoremap <buffer><silent><C-W>j <C-W>j<C-W>j
-        --   hi! link StatusLine Normal
-        -- endfunction
-        --
-        -- function! s:get_ddu_ff_winnr()
-        --   for n in range(1, winnr('$'))
-        --     let ft = getwinvar(n, '&ft')
-        --
-        --     if ft == 'ddu-ff'
-        --       return n
-        --     endif
-        --   endfor
-        --
-        --   return v:null
-        -- endfunction
-        --
-        -- let s:ddu_window_size = {}
-        -- function! s:ddu_fold_buffer()
-        --   let win_enter = &ft == 'ddu-ff' || &ft == 'ddu-ff-filter'
-        --   let ddu_ff_winnr = s:get_ddu_ff_winnr()
-        --
-        --   if ddu_ff_winnr is v:null
-        --     " ddu is closed
-        --     return
-        --   endif
-        --
-        --   if win_enter
-        --     if has_key(s:ddu_window_size, ddu_ff_winnr)
-        --       echo 'enter' . ddu_ff_winnr
-        --       execute ddu_ff_winnr . 'resize ' . s:ddu_window_size[ddu_ff_winnr][0]
-        --       execute 'vertical ' . ddu_ff_winnr . ' resize ' . s:ddu_window_size[ddu_ff_winnr][1]
-        --
-        --       unlet s:ddu_window_size[ddu_ff_winnr]
-        --     endif
-        --   else
-        --     if !has_key(s:ddu_window_size, ddu_ff_winnr)
-        --       let s:ddu_window_size[ddu_ff_winnr] = [winheight(ddu_ff_winnr), winwidth(ddu_ff_winnr)]
-        --     endif
-        --
-        --     execute ddu_ff_winnr . 'resize 1'
-        --   endif
-        -- endfunction
-        --
-        -- augroup MyAutoCmd
-        --   autocmd FileType ddu-ff-filter call s:disable_lightline_on_ddu_filter_ui()
-        --   autocmd BufLeave,WinLeave,WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost * call s:disable_lightline_on_ddu_filter_ui()
-        --   autocmd FileType ddu-ff call <SID>ddu_ui_ff()
-        --   autocmd FileType ddu-ff-filter call <SID>ddu_ui_ff_filter()
-        --   autocmd WinEnter * call s:ddu_fold_buffer()
-        -- augroup END
+        local function move_to_ddu_buffer(ft)
+          for n = 1, vim.fn.winnr('$') do
+            local win_ft = vim.fn.getwinvar(n, '&ft')
+
+            if win_ft == ft then
+              local id = vim.fn.win_getid(n)
+              vim.fn.win_gotoid(id)
+            end
+          end
+        end
+
+        local function move_to_up_or_ddu_ui_filter()
+          if vim.fn['line']('.') == 1 then
+            move_to_ddu_buffer('ddu-ff-filter')
+          else
+            vim.fn.cursor(vim.fn.line('.') - 1, vim.fn.col('.'))
+          end
+        end
+
+        local function disable_lightline_on_ddu_filter_ui()
+          local last = vim.fn.winnr('$')
+          for n = 1, last do
+            local ft = vim.fn.getwinvar(n, '&ft')
+
+            if ft == 'ddu-ff-filter' then
+              local width = vim.fn.winwidth(n)
+              local statusline = vim.fn['repeat']('-', width)
+              print(n, statusline)
+              vim.fn.setwinvar(n, '&statusline', statusline)
+            end
+          end
+        end
+
+        local function move_to_ddu_ff_and_cr()
+          move_to_ddu_buffer('ddu-ff')
+          vim.fn['ddu#ui#ff#do_action']('itemAction')
+          -- vim.fn['ddu#ui#ff#close']()
+        end
+
+        local function ddu_ui_ff_shared()
+          local group = vim.api.nvim_create_augroup("PackerDduBufferUi", { clear = true })
+
+          vim.api.nvim_create_autocmd("BufEnter", {
+            group = group,
+            pattern = "<buffer>",
+            command = "if winnr('$') == 1 |quit| endif"
+          })
+
+          vim.keymap.set("n", "q", function()
+            vim.fn['ddu#ui#ff#do_action']('quit')
+          end, { noremap = true, buffer = true, silent = true })
+          vim.keymap.set("n", "<Space>q", ":call ddu#ui#ff#do_action('quit')<CR>", { noremap = true, buffer = true, silent = true })
+        end
+
+        local function close_filter_window_and_do_item_action()
+          vim.fn['ddu#ui#ff#do_action']('itemAction')
+        end
+
+        local function close_preview_window()
+          local ddu_ff = 'ddu-ff:/'
+
+          for n = 1, vim.fn.winnr('$') do
+            local bufnr = vim.fn.winbufnr(n)
+            local bufname = vim.fn.bufname(bufnr)
+
+            local is_ddu_ff = string.sub(bufname, 1, string.len(ddu_ff)) == ddu_ff
+
+            if vim.fn.getwinvar(n, '&l:buftype') == 'nofile' and is_ddu_ff then
+              vim.cmd(n .. 'wincmd c')
+              return
+            end
+          end
+        end
+
+        local function ddu_toggle_preview()
+          local enabled = vim.bo.ddu_preview_enabled or false
+          vim.bo.ddu_preview_enabled = enabled
+
+          local group = vim.api.nvim_create_augroup("DduBufferPreview", { clear = true })
+          if enabled then
+            vim.api.nvim_create_autocmd("CursorMoved", {
+              group = group,
+              pattern = "<buffer>",
+              callback = function()
+                vim.fn['ddu#ui#ff#do_action']('preview')
+              end
+            })
+          else
+            close_preview_window()
+          end
+        end
+
+        local function ddu_replace()
+          vim.fn['ddu#ui#ff#do_action']('itemAction', { name = 'quickfix' })
+          vim.fn['ddu#ui#ff#close']()
+          vim.cmd('cclose')
+          vim.fn['qfreplace#start']('')
+        end
+
+        local function get_ddu_ff_winnr()
+          local last = tonumber(vim.fn['winnr']('$'))
+          for n = 1, last do
+            if vim.fn.getwinvar(n, '&ft') == 'ddu-ff' then
+              return n
+            end
+          end
+
+          return nil
+        end
+
+        local ddu_window_size = {}
+
+        local group = vim.api.nvim_create_augroup("PackerDduUiFf", { clear = true })
+        vim.api.nvim_create_autocmd("FileType", {
+          group = group,
+          pattern = "ddu-ff-filter",
+          callback = disable_lightline_on_ddu_filter_ui
+        })
+
+        vim.api.nvim_create_autocmd({ "BufLeave", "WinLeave", "WinEnter", "BufEnter", "SessionLoadPost", "FileChangedShellPost" }, {
+          group = group,
+          pattern = "*",
+          callback = disable_lightline_on_ddu_filter_ui
+        })
+
+        vim.api.nvim_create_autocmd("FileType", {
+          group = group,
+          pattern = "ddu-ff",
+          callback = function()
+            -- autocmd! * <buffer>
+            vim.api.nvim_create_augroup("DduBufferPreview", { clear = true })
+
+            vim.opt_local.cursorline = true
+            ddu_ui_ff_shared()
+
+            vim.keymap.set("n", "<CR>", close_filter_window_and_do_item_action, { noremap = true, buffer = true, silent = true })
+            vim.keymap.set("n", "<Space>", ":call ddu#ui#ff#do_action('toggleSelectItem')<CR>j", { noremap = true, buffer = true , silent = true })
+            vim.keymap.set("n", "f", ":call ddu#ui#ff#do_action('toggleSelectItem')<CR>j", { noremap = true, buffer = true , silent = true })
+            vim.keymap.set("x", "<Space>", ":call ddu#ui#ff#do_action('toggleSelectItem')<CR>", { noremap = true, silent = true, buffer = true })
+            vim.keymap.set("n", "<Tab>", ":call ddu#ui#ff#do_action('chooseAction')<CR>", { noremap = true, buffer = true , silent = true })
+            vim.keymap.set("n", "a", ":call ddu#ui#ff#do_action('chooseAction')<CR>", { noremap = true, buffer = true , silent = true })
+            vim.keymap.set("n", "*", ":call ddu#ui#ff#do_action('toggleAllItems')<CR>", { noremap = true, buffer = true , silent = true })
+            vim.keymap.set("n", "k", move_to_up_or_ddu_ui_filter, { noremap = true, buffer = true , silent = true })
+            vim.keymap.set("n", "i", ":call ddu#ui#ff#do_action('openFilterWindow')<CR>", { noremap = true, buffer = true , silent = true })
+            vim.keymap.set("n", "A", ":call ddu#ui#ff#do_action('openFilterWindow')<CR>", { noremap = true, buffer = true , silent = true })
+            vim.keymap.set("n", "p", ddu_toggle_preview, { noremap = true, buffer = true , silent = true })
+            vim.keymap.set("n", "re", ddu_replace, { noremap = true, buffer = true , silent = true })
+          end
+        })
+
+        vim.api.nvim_create_autocmd("FileType", {
+          group = group,
+          pattern = "ddu-ff-filter",
+          callback = function()
+            ddu_ui_ff_shared()
+            vim.keymap.set(
+            "n",
+            "j",
+            function()
+              move_to_ddu_buffer('ddu-ff')
+            end,
+            { noremap = true, buffer = true, silent = true }
+            )
+            vim.keymap.set(
+              "n",
+              "<CR>",
+              move_to_ddu_ff_and_cr,
+              { noremap = true, buffer = true, silent = true }
+            )
+            vim.keymap.set(
+              "i",
+              "<CR>",
+              move_to_ddu_ff_and_cr,
+              { noremap = true, buffer = true, silent = true }
+            )
+
+            vim.keymap.set("n", "<C-W>j", "<C-W>j<C-W>j", { noremap = true, buffer = true, silent = true })
+            vim.cmd('hi! link StatusLine Normal')
+          end
+        })
+
+        vim.api.nvim_create_autocmd("WinEnter", {
+          group = group,
+          pattern = "*",
+          callback = function()
+            local win_enter = vim.bo.ft == 'ddu-ff' or vim.bo.ft == 'ddu-ff-filter'
+            local ddu_ff_winnr = get_ddu_ff_winnr()
+
+            if ddu_ff_winnr == nil then
+              -- ddu is closed
+              return
+            end
+
+            if win_enter then
+              if ddu_window_size[ddu_ff_winnr] ~= nil then
+                vim.cmd(ddu_ff_winnr .. 'resize ' .. ddu_window_size[ddu_ff_winnr][0])
+                vim.cmd('vertical ' .. ddu_ff_winnr .. ' resize ' .. ddu_window_size[ddu_ff_winnr][1])
+
+                ddu_window_size[ddu_ff_winnr] = nil
+              end
+            else
+              if ddu_window_size[ddu_ff_winnr] == nil then
+                ddu_window_size[ddu_ff_winnr] = { [0] = vim.fn.winheight(ddu_ff_winnr), [1] = vim.fn.winwidth(ddu_ff_winnr) }
+              end
+
+              vim.cmd(ddu_ff_winnr .. 'resize 1')
+            end
+          end
+        })
       end,
     })
 
@@ -626,81 +784,85 @@ function M.setup()
       "Shougo/ddu-ui-filer",
       run = "brew install desktop-file-utils",
       config = function()
-        -- function! s:ddu_ui_filer_cr()
-        --   if ddu#ui#filer#is_tree()
-        --     call ddu#ui#filer#do_action('itemAction', {'name': 'narrow'})
-        --   else
-        --     call ddu#ui#filer#do_action('itemAction', {'name': 'open', 'params': {'command': 'vsplit'}})
-        --   endif
-        -- endfunction
-        --
-        -- function! s:ddu_ui_filer_toggle_dot_files()
-        --   let local = ddu#custom#get_current('file')
-        --   let sorter_file_alpha_params = get(get(local, 'filterParams', {}), 'sorter_file_alpha', {})
-        --
-        --   call ddu#redraw('file',
-        --     \ {
-        --     \   'updateOptions': {
-        --     \     'filterParams': {
-        --     \       'sorter_file_alpha': {
-        --     \         'visibleDotFiles': !get(sorter_file_alpha_params, 'visibleDotFiles', v:false)
-        --     \       },
-        --     \     },
-        --     \   }
-        --     \ })
-        -- endfunction
-        --
-        -- function! s:ddu_ui_filer()
-        --   nnoremap <buffer><silent><CR> :call <SID>ddu_ui_filer_cr()<CR>
-        --   nnoremap <buffer><silent>l :call <SID>ddu_ui_filer_cr()<CR>
-        --   nnoremap <buffer><silent>h <Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'narrow', 'params': {'path': '..'}})<CR>
-        --   nnoremap <buffer><silent><Space> :call ddu#ui#filer#do_action('toggleSelectItem')<CR>j
-        --   nnoremap <buffer><silent>f :call ddu#ui#filer#do_action('toggleSelectItem')<CR>j
-        --   nnoremap <buffer><silent><Tab> :call ddu#ui#filer#do_action('chooseAction')<CR>
-        --   nnoremap <buffer><silent>a :call ddu#ui#filer#do_action('chooseAction')<CR>
-        --   nnoremap <buffer><silent>* :call ddu#ui#filer#do_action('toggleAllItems')<CR>
-        --   nnoremap <buffer><C-l> :call ddu#ui#filer#do_action('checkItems')<CR>
-        --
-        --   nnoremap <buffer><silent>q <Cmd>call ddu#ui#filer#do_action('quit')<CR>
-        --   nnoremap <buffer><silent><Space>q <Cmd>call ddu#ui#filer#do_action('quit')<CR>
-        --   nnoremap <buffer><silent>c <Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'copy'})<CR>
-        --   nnoremap <buffer><silent>d <Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'delete'})<CR>
-        --   nnoremap <buffer><silent>r <Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'rename'})<CR>
-        --   nnoremap <buffer><silent>m <Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'move'})<CR>
-        --   nnoremap <buffer><silent>C <Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'newFile'})<CR>
-        --   nnoremap <buffer><silent>K <Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'newDirectory'})<CR>
-        --   nnoremap <buffer><silent>. <Cmd>call <SID>ddu_ui_filer_toggle_dot_files()<CR>
-        --
-        --   nnoremap <buffer>gr :call ddu#ui#filer#do_action('itemAction', {'name': 'grep'})<CR>
-        --   " nnoremap <buffer><expr>p vimfiler#do_action('preview')
-        --   " nnoremap <expr><buffer>re vimfiler#do_action('replace')
-        -- endfunction
-        --
-        -- augroup MyAutoCmd
-        --   autocmd FileType ddu-filer call <SID>ddu_ui_filer()
-        -- augroup END
+        local function ddu_ui_filer_cr()
+          if vim.fn['ddu#ui#filer#is_tree']() then
+            vim.fn['ddu#ui#filer#do_action']('itemAction', { name = 'narrow' })
+          else
+            vim.fn['ddu#ui#filer#do_action']('itemAction', { name = 'open', params = { command = 'vsplit' } })
+          end
+        end
+
+        local function ddu_ui_filer_toggle_dot_files()
+          local current = vim.fn['ddu#custom#get_current']('file')
+          local filterParams = current['filterParams'] or {}
+          local sorter_file_alpha_params = filterParams['sorter_file_alpha'] or {}
+
+          vim.fn['ddu#redraw']('file', {
+            updateOptions = {
+              filterParams = {
+                sorter_file_alpha = {
+                  visibleDotFiles = sorter_file_alpha_params['visibleDotFiles'] or false
+                },
+              },
+            }
+          })
+        end
+
+        local group = vim.api.nvim_create_augroup("PackerUiFiler", { clear = true })
+        vim.api.nvim_create_autocmd("FileType", {
+          group = group,
+          pattern = "ddu-filer",
+          callback = function()
+            -- nnoremap <buffer><expr>p vimfiler#do_action('preview')
+            vim.keymap.set("n", "<CR>", ddu_ui_filer_cr, { noremap = true, silent = true, buffer = true })
+            vim.keymap.set("n", "l", ddu_ui_filer_cr, { noremap = true, silent = true, buffer = true })
+            vim.keymap.set("n", "h", "<Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'narrow', 'params': {'path': '..'}})<CR>", { noremap = true, silent = true, buffer = true })
+            vim.keymap.set("n", "<Space>", ":call ddu#ui#filer#do_action('toggleSelectItem')<CR>j", { noremap = true, silent = true, buffer = true })
+            vim.keymap.set("n", "f", ":call ddu#ui#filer#do_action('toggleSelectItem')<CR>j", { noremap = true, silent = true, buffer = true })
+            vim.keymap.set("n", "<Tab>", ":call ddu#ui#filer#do_action('chooseAction')<CR>", { noremap = true, silent = true, buffer = true })
+            vim.keymap.set("n", "a", ":call ddu#ui#filer#do_action('chooseAction')<CR>", { noremap = true, silent = true, buffer = true })
+            vim.keymap.set("n", "*", ":call ddu#ui#filer#do_action('toggleAllItems')<CR>", { noremap = true, silent = true, buffer = true })
+            vim.keymap.set("n", "<C-l>", ":call ddu#ui#filer#do_action('checkItems')<CR>", { noremap = true, buffer = true })
+
+            vim.keymap.set("n", "q", function()
+              vim.fn['ddu#ui#filer#do_action']('quit')
+            end, { noremap = true, silent = true, buffer = true })
+            vim.keymap.set("n", "<Space>q", "<Cmd>call ddu#ui#filer#do_action('quit')<CR>", { noremap = true, silent = true, buffer = true })
+            vim.keymap.set("n", "c", "<Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'copy'})<CR>", { noremap = true, silent = true, buffer = true })
+            vim.keymap.set("n", "d", "<Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'delete'})<CR>", { noremap = true, silent = true, buffer = true })
+            vim.keymap.set("n", "r", "<Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'rename'})<CR>", { noremap = true, silent = true, buffer = true })
+            vim.keymap.set("n", "m", "<Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'move'})<CR>", { noremap = true, silent = true, buffer = true })
+            vim.keymap.set("n", "C", "<Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'newFile'})<CR>", { noremap = true, silent = true, buffer = true })
+            vim.keymap.set("n", "K", "<Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'newDirectory'})<CR>", { noremap = true, silent = true, buffer = true })
+            vim.keymap.set("n", ".", ddu_ui_filer_toggle_dot_files, { noremap = true, silent = true, buffer = true })
+
+            vim.keymap.set("n", "gr", ":call ddu#ui#filer#do_action('itemAction', {'name': 'grep'})<CR>", { noremap = true, buffer = true })
+            -- nnoremap <expr><buffer>re vimfiler#do_action('replace')
+          end
+        })
       end,
     })
 
     use({
       "alpaca-tc/ddu-source-git",
       config = function()
-        -- function! s:ddu_source_git_branch()
-        --   let source = get(b:, 'ddu_ui_name', '')
-        --
-        --   if source == 'git_branch'
-        --     nnoremap <silent><buffer>d :call ddu#ui#ff#do_action('itemAction', {'name': 'delete_local'})<CR>
-        --     nnoremap <silent><buffer>D :call ddu#ui#ff#do_action('itemAction', {'name': 'delete_local_force'})<CR>
-        --   elseif source == 'git_status'
-        --     nnoremap <silent><buffer>ga :call ddu#ui#ff#do_action('itemAction', {'name': 'add'})<CR>
-        --     nnoremap <silent><buffer>gu :call ddu#ui#ff#do_action('itemAction', {'name': 'unstage'})<CR>
-        --     " nnoremap <silent><buffer>gu :call ddu#ui#ff#do_action('itemAction', {'name': 'restore'})<CR>
-        --   endif
-        -- endfunction
-        --
-        -- augroup MyAutoCmd
-        --   autocmd FileType ddu-ff call <SID>ddu_source_git_branch()
-        -- augroup END
+        local group = vim.api.nvim_create_augroup("PackerDduSourceGit", { clear = true })
+        vim.api.nvim_create_autocmd("FileType", {
+          group = group,
+          pattern = "ddu-ff",
+          callback = function()
+            local source = vim.b.ddu_ui_name or ''
+
+            if source == 'git_branch' then
+              vim.keymap.set("n", "gu", ":call ddu#ui#ff#do_action('itemAction', {'name': 'restore'})<CR>", { noremap = true, silent = true, buffer = true })
+              vim.keymap.set("n", "d", ":call ddu#ui#ff#do_action('itemAction', #{ name: 'delete_local'})<CR>", { noremap = true, silent = true, buffer = true })
+              vim.keymap.set("n", "D", ":call ddu#ui#ff#do_action('itemAction', #{ name: 'delete_local_force'})<CR>", { noremap = true, silent = true, buffer = true })
+            elseif source == 'git_status' then
+              vim.keymap.set("n", "ga", ":call ddu#ui#ff#do_action('itemAction', #{ name: 'add'})<CR>", { noremap = true, silent = true, buffer = true })
+              vim.keymap.set("n", "gu", ":call ddu#ui#ff#do_action('itemAction', #{ name: 'unstage'})<CR>", { noremap = true, silent = true, buffer = true })
+            end
+          end
+        })
       end,
     })
 
@@ -711,14 +873,15 @@ function M.setup()
 
     use({
       "alpaca-tc/ddu-filter-matcher_regexp",
+      after = { "ddu.vim" },
       config = function()
-        -- call ddu#custom#patch_global({
-        --   \   'filterParams': {
-        --   \     'matcher_regexp': {
-        --   \       'highlightMatched': 'Statement',
-        --   \     },
-        --   \   },
-        --   \ })
+        vim.fn['ddu#custom#patch_global']({
+          filterParams = {
+            matcher_regexp = {
+              highlightMatched = 'Statement',
+            },
+          },
+        })
       end,
     })
 

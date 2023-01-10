@@ -526,11 +526,6 @@ let g:vinarise_objdump_command = 'gobjdump'
 " ------------------------------------
 nnoremap ! :Switch<CR>
 
-" ------------------------------------
-" VimFiler "{{{
-nnoremap <silent>[unite]f  :call ddu#start(#{ name: 'file', sources: [#{ name: 'file' }], ui: 'filer', columns: ['icon_filename'], uiParams: #{ filer: #{ search: expand('%:p') } } })<CR>
-"}}}
-
 " ----------------------------------------
 " unite.vim"{{{
 " keymappings
