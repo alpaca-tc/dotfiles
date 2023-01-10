@@ -429,37 +429,8 @@ cnoremap <C-N> <Down>
 
 " ----------------------------------------
 " Plugin settings {{{
-nnoremap [plug] <Nop>
+noremap [plug] <Nop>
 nmap <C-H> [plug]
-
-" ------------------------------------
-nmap cs  <Plug>Csurround
-nmap ds  <Plug>Dsurround
-nmap ySS <Plug>YSsurround
-nmap ySs <Plug>YSsurround
-nmap ys  <Plug>Ysurround
-nmap yss <Plug>Yssurround
-
-xmap S   <Plug>VSurround
-xmap gS  <Plug>VgSurround
-xmap s   <Plug>VSurround
-
-" ------------------------------------
-nnoremap <Space>t :Vista!!<CR>
-
-" ----------------------------------------
-
-" ------------------------------------
-nnoremap <silent>,r :QuickRun<CR>
-
-" ------------------------------------
-nnoremap diw di,w
-nnoremap dib di,b
-nnoremap die di,e
-
-nnoremap ciw ci,w
-nnoremap cib ci,b
-nnoremap cie ci,e
 
 " ------------------------------------
 function! s:new_memolist()

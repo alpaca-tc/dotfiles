@@ -11,6 +11,9 @@ function M.setup()
         return require("packer.util").float { border = "rounded" }
       end,
     },
+    subcommands = {
+      install = 'clone --no-single-branch --progress',
+    },
     max_jobs = 5
   }
 
@@ -106,6 +109,9 @@ function M.setup()
           opt = false
         }
       },
+      setup = function()
+        vim.keymap.set('n', ',r', ':QuickRun<CR>', { silent = true, noremap = true })
+      end,
       config = function()
         vim.g.quickrun_no_default_key_mappings = 1
 
@@ -212,6 +218,112 @@ function M.setup()
       end
     }
 
+    use {
+      'tpope/vim-surround',
+      keys = { "<Plug>Dsurround", "<Plug>Csurround", "<Plug>Ysurround", "<Plug>YSurround", "<Plug>Yssurround", "<Plug>YSsurround", "<Plug>YSsurround", "<Plug>VgSurround", "<Plug>VSurround" },
+      setup = function()
+        vim.g.surround_no_mappings = 1
+
+        vim.keymap.set('n', 'cs',  '<Plug>Csurround', { remap = true })
+        vim.keymap.set('n', 'ds',  '<Plug>Dsurround', { remap = true })
+        vim.keymap.set('n', 'ySS', '<Plug>YSsurround', { remap = true })
+        vim.keymap.set('n', 'ySs', '<Plug>YSsurround', { remap = true })
+        vim.keymap.set('n', 'ys',  '<Plug>Ysurround', { remap = true })
+        vim.keymap.set('n', 'yss', '<Plug>Yssurround', { remap = true })
+
+        vim.keymap.set('x', 'S', '<Plug>VSurround', { remap = true })
+        vim.keymap.set('x', 'gS', '<Plug>VgSurround', { remap = true })
+        vim.keymap.set('x', 's', '<Plug>VSurround', { remap = true })
+      end,
+      config = function()
+        local surround_definitions = {
+          _ = {
+            ['('] = "(\r)",
+            ['['] = "[\r]",
+            ['<'] = "<\r>",
+            ['{'] = "{ \r }",
+            ['#'] = "#{\r}",
+          },
+          [vim.fn['join'](vim.g.my.ft.ruby_files, ',')] = {
+            ['#'] =  "#{\r}",
+            ['%'] =  "<% \r %>",
+            ['-'] =  "<% \r -%>",
+            ['='] =  "<%= \r %>",
+            ['w'] =  "%w(\r)",
+            ['W'] =  "%W(\r)",
+            ['q'] =  "%q(\r)",
+            ['Q'] =  "%Q(\r)",
+            ['r'] =  "%r{\r}",
+            ['R'] =  "%R{\r}",
+            ['\"'] =  '\"\r\"',
+            ["'"] =  "'\r'",
+            ['{'] =  "{ \r }",
+          },
+          terraform = {
+            [ '$' ] = "${\r}",
+          },
+          [ 'snippet,neosnippet' ] = {
+            [ '$' ] = "${\r}",
+          },
+          go = {
+            ['$'] = "${\r}",
+            ['('] = "(\r)",
+            ['['] = "[\r]",
+            ['<'] = "<\r>",
+          },
+          ['javascript,typescript,vue,typescriptreact'] = {
+            ['('] = "(\r)",
+            ['['] = "[\r]",
+            ['$'] = "${\r}",
+          },
+        }
+
+        surround_definitions = vim.fn['alpaca#initialize#redefine_dict_to_each_filetype'](surround_definitions, vim.empty_dict())
+
+        local function define_variable_for_surround(key, mapping)
+          local var_name = 'surround_' .. vim.fn['char2nr'](key)
+          vim.b[var_name] = mapping
+        end
+
+        local function get_definition(filetype)
+          local memo = surround_definitions._ or {}
+          local filetypes = {}
+
+          for ft, _ in string.gmatch(filetype, '([^\\.]+)') do
+            table.insert(filetypes, ft)
+            local ft_name = table.concat(filetypes, '.')
+
+            if surround_definitions[ft_name] ~= nil then
+              local definition = surround_definitions[ft_name]
+              memo = vim.tbl_deep_extend("force", memo, definition)
+            end
+          end
+
+          return memo
+        end
+
+        local function define_variables_for_surround()
+          if vim.bo.filetype == '' then
+            return
+          end
+
+          local definition = get_definition(vim.bo.filetype)
+
+          for k, v in pairs(definition) do
+            define_variable_for_surround(k, v)
+          end
+        end
+
+        local group = vim.api.nvim_create_augroup("PackerSurround", { clear = true })
+        vim.api.nvim_create_autocmd("FileType", {
+          group = group,
+          pattern = "*",
+          callback = define_variables_for_surround
+        })
+        define_variables_for_surround()
+      end
+    }
+
     -- completion / LSP
     use {
       'jose-elias-alvarez/null-ls.nvim',
@@ -224,7 +336,7 @@ function M.setup()
             require('null-ls').builtins.formatting.stylua,
             require('null-ls').builtins.diagnostics.rubocop.with({
               command = "bundle",
-              args = { "exec", "rubocop", "-f", "json", "--force-exclusion", "--stdin", "$FILENAME" },
+              args = { "exec", "rubocop", "-f", "json", "--force-exclusion", "--stdin", "$FILENAME", "--disable-pending-cops" },
               prefer_local = "bundle_bin",
               condition = function(utils)
                 return utils.root_has_file({".rubocop.yml", "Gemfile"})
@@ -250,7 +362,7 @@ function M.setup()
             require('null-ls').builtins.formatting.rustfmt,
             require('null-ls').builtins.formatting.rubocop.with({
               command = "bundle",
-              args = { "exec", "rubocop", "--auto-correct-all", "-f", "quiet", "--stderr", "--stdin", "$FILENAME" },
+              args = { "exec", "rubocop", "--auto-correct-all", "-f", "quiet", "--stderr", "--stdin", "$FILENAME", "--disable-pending-cops" },
               prefer_local = "bundle_bin",
               condition = function(utils)
                 return utils.root_has_file({".rubocop.yml", "Gemfile"})
@@ -686,6 +798,9 @@ function M.setup()
     use {
       'liuchengxu/vista.vim',
       cmd = { 'Vista', 'Vista!', 'Vista!!' },
+      setup = function()
+        vim.keymap.set('n', '<Space>t', ':Vista!!<CR>', { noremap = true })
+      end,
       config = function()
         vim.g.vista_default_executive = 'nvim_lsp'
         vim.g['vista#renderer#enable_icon'] = 1
