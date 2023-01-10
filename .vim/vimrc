@@ -528,10 +528,7 @@ nnoremap ! :Switch<CR>
 
 " ------------------------------------
 " VimFiler "{{{
-nnoremap <silent><Space>f  :call <SID>vim_filer_explorer_git()<CR>
-nnoremap <silent>,,  :VimFilerCreate<CR>
 nnoremap <silent>[unite]f  :call ddu#start(#{ name: 'file', sources: [#{ name: 'file' }], ui: 'filer', columns: ['icon_filename'], uiParams: #{ filer: #{ search: expand('%:p') } } })<CR>
-,
 "}}}
 
 " ----------------------------------------
@@ -641,21 +638,6 @@ command! UnwatchBuffer setlocal buftype=nofile nobuflisted noswapfile bufhidden=
 command! CleanSwap call alpaca#system_bg('rm -rf ' . g:my.dir.swap_dir . '/*')
 command! CleanAll call alpaca#system_bg('rm -rf ' . g:my.dir.trash_dir . '*')
 "}}}
-
-function! s:open_file_rec() " {{{
-  autocmd! OpenFileRec
-
-  if argc() == 0
-    VimFiler
-  endif
-endfunction
-
-if has('vim_starting')
-  augroup OpenFileRec
-    autocmd!
-    autocmd VimEnter * call s:open_file_rec()
-  augroup END
-endif
 " }}}
 
 function! s:copy_current_path() "{{{

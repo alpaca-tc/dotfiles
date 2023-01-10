@@ -782,6 +782,177 @@ function M.setup()
       ft = { "vim" }
     }
 
+    -- utilities
+    use {
+      'Shougo/vimfiler',
+      cmd = { "VimFiler", "VimFilerBufferDir", "VimFilerExplorer", "VimFilerCreate" },
+      requires = { "Shougo/unite.vim" },
+      setup = function()
+        vim.g.vimfiler_data_directory = vim.g.my.dir.vimfiler
+        vim.g.vimfiler_force_overwrite_statusline = 0
+        vim.g.vimfiler_draw_files_limit = 0
+        vim.g.vimfiler_safe_mode_by_default = 0
+        vim.g.vimfiler_as_default_explorer = 1
+        vim.g.vimfiler_sort_type = 'filename'
+        vim.g.vimfiler_preview_action = ''
+        vim.g.vimfiler_enable_auto_cd= 1
+        vim.g.vimfiler_file_icon = '-'
+        vim.g.vimfiler_max_directories_history = 1000
+        vim.g.vimfiler_tree_indentation = 1
+        vim.g.vimfiler_readonly_file_icon = 'x'
+        vim.g.vimfiler_tree_closed_icon = '‣'
+        vim.g.vimfiler_tree_leaf_icon = ' '
+        vim.g.vimfiler_tree_opened_icon = '▾'
+        vim.g.vimfiler_marked_file_icon = '✓'
+        vim.g.vimfiler_ignore_pattern = '\\v^(\\.git|\\.)'
+        vim.g.unite_kind_cdable_lcd_command = 'lcd'
+        vim.g.vimfiler_no_default_key_mappings = 1
+
+        vim.keymap.set('n', ',,', ':VimFilerCreate<CR>', { silent = true, noremap = true })
+
+        if vim.fn.has('vim_starting') == 1 then
+          local group = vim.api.nvim_create_augroup("PackerVimfilerSetup", { clear = true })
+          vim.api.nvim_create_autocmd("VimEnter", {
+            group = group,
+            pattern = "*",
+            callback = function()
+              vim.api.nvim_del_augroup_by_id(group)
+
+              if vim.fn.argc() == 0 then
+                vim.cmd('VimFiler')
+              end
+            end
+          })
+        end
+      end,
+      config = function()
+        local group = vim.api.nvim_create_augroup("PackerVimfiler", { clear = true })
+
+        vim.api.nvim_create_autocmd("FileType", {
+          group = group,
+          pattern = "vimfiler",
+          callback = function()
+            if vim.b.vimfiler == nil then
+              return
+            end
+
+            vim.opt_local.number = false
+
+            vim.keymap.set("n", "C", "<Plug>(vimfiler_new_file)", { buffer = true })
+            vim.keymap.set("n", "<C-J>", "[unite]", { buffer = true })
+            vim.keymap.set("n", "<CR>", "<Plug>(vimfiler_edit_file)", { buffer = true })
+            vim.keymap.set("n", "f", "<Plug>(vimfiler_toggle_mark_current_line)", { buffer = true })
+            vim.keymap.set("n", "b", ":<C-U>UniteBookmarkAdd<CR>", { noremap = true, buffer = true })
+            vim.keymap.set("n", "<expr>p", "vimfiler#do_action('preview')", { noremap = true, buffer = true })
+            vim.keymap.set("n", "<buffer>re", "vimfiler#do_action('replace')", { noremap = true, expr = true })
+            vim.keymap.set("n", "v", "v", { noremap = true, buffer = true })
+            vim.keymap.set("n", "<buffer>gs", ":call ddu#start(#{ name: 'git_status', sources: [#{ name: 'git_status' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>", { noremap = true, silent = true })
+            vim.keymap.set("n", "u", ":<C-U>Unite file -no-start-insert -buffer-name=file<CR>", { noremap = true, buffer = true })
+            vim.keymap.set("n", "<TAB>", "<Plug>(vimfiler_switch_to_other_window)", { buffer = true })
+            vim.keymap.set("n", "<TAB>", "<Plug>(vimfiler_switch_to_another_vimfiler)", { buffer = true })
+            vim.keymap.set("n", "j", "<Plug>(vimfiler_loop_cursor_down)", { buffer = true })
+            vim.keymap.set("n", "k", "<Plug>(vimfiler_loop_cursor_up)", { buffer = true })
+
+            -- Toggle mark.
+            vim.keymap.set("n", "<C-l>", "<Plug>(vimfiler_redraw_screen)", { buffer = true })
+            vim.keymap.set("n", "<Space>", "<Plug>(vimfiler_toggle_mark_current_line)", { buffer = true })
+            vim.keymap.set("n", "<S-LeftMouse>", "<Plug>(vimfiler_toggle_mark_current_line)", { buffer = true })
+            vim.keymap.set("n", "<S-Space>", "<Plug>(vimfiler_toggle_mark_current_line_up)", { buffer = true })
+            vim.keymap.set("v", "<Space>", "<Plug>(vimfiler_toggle_mark_selected_lines)", { buffer = true })
+
+            -- Toggle marks in all lines.
+            vim.keymap.set("n", "*", "<Plug>(vimfiler_toggle_mark_all_lines)", { buffer = true })
+            vim.keymap.set("n", "&", "<Plug>(vimfiler_mark_similar_lines)", { buffer = true })
+            -- Clear marks in all lines.
+            vim.keymap.set("n", "U", "<Plug>(vimfiler_clear_mark_all_lines)", { buffer = true })
+
+            -- Copy files.
+            vim.keymap.set("n", "c", "<Plug>(vimfiler_copy_file)", { buffer = true })
+            vim.keymap.set("n", "Cc", "<Plug>(vimfiler_clipboard_copy_file)", { buffer = true })
+
+            -- Move files.
+            vim.keymap.set("n", "m", "<Plug>(vimfiler_move_file)", { buffer = true })
+            vim.keymap.set("n", "Cm", "<Plug>(vimfiler_clipboard_move_file)", { buffer = true })
+
+            -- Delete files.
+            vim.keymap.set("n", "d", "<Plug>(vimfiler_delete_file)", { buffer = true })
+
+            -- Rename.
+            vim.keymap.set("n", "r", "<Plug>(vimfiler_rename_file)", { buffer = true })
+
+            -- Make directory.
+            vim.keymap.set("n", "K", "<Plug>(vimfiler_make_directory)", { buffer = true })
+
+            -- Paste.
+            vim.keymap.set("n", "Cp", "<Plug>(vimfiler_clipboard_paste)", { buffer = true })
+
+            -- Execute or change directory.
+            vim.keymap.set("n", "R", "<Plug>(vimfiler_execute)", { buffer = true })
+            vim.keymap.set("n", "l", "<Plug>(vimfiler_smart_l)", { buffer = true })
+
+            vim.keymap.set("n", "x", "<Plug>(vimfiler_execute_system_associated)", { buffer = true })
+
+            -- Move to directory.
+            vim.keymap.set("n", "h", "<Plug>(vimfiler_smart_h)", { buffer = true })
+            vim.keymap.set("n", "L", "<Plug>(vimfiler_switch_to_drive)", { buffer = true })
+            vim.keymap.set("n", "~", "<Plug>(vimfiler_switch_to_project_directory)", { buffer = true })
+            vim.keymap.set("n", "<BS>", "<Plug>(vimfiler_switch_to_parent_directory)", { buffer = true })
+
+            vim.keymap.set("n", "gv", "<Plug>(vimfiler_execute_new_gvim)", { buffer = true })
+            vim.keymap.set("n", ".", "<Plug>(vimfiler_toggle_visible_ignore_files)", { buffer = true })
+            vim.keymap.set("n", "H", "<Plug>(vimfiler_popup_shell)", { buffer = true })
+
+            -- Edit file.
+            vim.keymap.set("n", "e", "<Plug>(vimfiler_edit_file)", { buffer = true })
+            vim.keymap.set("n", "E", "<Plug>(vimfiler_split_edit_file)", { buffer = true })
+            vim.keymap.set("n", "B", "<Plug>(vimfiler_edit_binary_file)", { buffer = true })
+
+            -- Choose action.
+            vim.keymap.set("n", "a", "<Plug>(vimfiler_choose_action)", { buffer = true })
+
+            -- Hide vimfiler.
+            vim.keymap.set("n", "q", "<Plug>(vimfiler_hide)", { buffer = true })
+            -- Exit vimfiler.
+            vim.keymap.set("n", "Q", "<Plug>(vimfiler_exit)", { buffer = true })
+            -- Close vimfiler.
+            vim.keymap.set("n", "-", "<Plug>(vimfiler_close)", { buffer = true })
+
+            vim.keymap.set("n", "ge", "<Plug>(vimfiler_execute_external_filer)", { buffer = true })
+            vim.keymap.set("n", "<RightMouse>", "<Plug>(vimfiler_execute_external_filer)", { buffer = true })
+
+            vim.keymap.set("n", "!", "<Plug>(vimfiler_execute_shell_command)", { buffer = true })
+            vim.keymap.set("n", "?", "<Plug>(vimfiler_help)", { buffer = true })
+            vim.keymap.set("n", "v", "<Plug>(vimfiler_preview_file)", { buffer = true })
+            vim.keymap.set("n", "o", "<Plug>(vimfiler_sync_with_current_vimfiler)", { buffer = true })
+            vim.keymap.set("n", "O", "<Plug>(vimfiler_open_file_in_another_vimfiler)", { buffer = true })
+            vim.keymap.set("n", "<C-g>", "<Plug>(vimfiler_print_filename)", { buffer = true })
+            vim.keymap.set("n", "g<C-g>", "<Plug>(vimfiler_toggle_maximize_window)", { buffer = true })
+            vim.keymap.set("n", "yy", "<Plug>(vimfiler_yank_full_path)", { buffer = true })
+            vim.keymap.set("n", "M", "<Plug>(vimfiler_set_current_mask)", { buffer = true })
+            vim.keymap.set("n", "gr", "<Plug>(vimfiler_grep)", { buffer = true })
+            vim.keymap.set("n", "gf", "<Plug>(vimfiler_find)", { buffer = true })
+            vim.keymap.set("n", "S", "<Plug>(vimfiler_select_sort_type)", { buffer = true })
+            vim.keymap.set("n", "<C-v>", "<Plug>(vimfiler_switch_vim_buffer_mode)", { buffer = true })
+            vim.keymap.set("n", "gc", "<Plug>(vimfiler_cd_vim_current_dir)", { buffer = true })
+            vim.keymap.set("n", "gS", "<Plug>(vimfiler_toggle_simple_mode)", { buffer = true })
+            vim.keymap.set("n", "gg", "<Plug>(vimfiler_cursor_top)", { buffer = true })
+            vim.keymap.set("n", "G", "<Plug>(vimfiler_cursor_bottom)", { buffer = true })
+            vim.keymap.set("n", "t", "<Plug>(vimfiler_expand_tree)", { buffer = true })
+            vim.keymap.set("n", "T", "<Plug>(vimfiler_expand_tree_recursive)", { buffer = true })
+            vim.keymap.set("n", "I", "<Plug>(vimfiler_cd_input_directory)", { buffer = true })
+            vim.keymap.set("n", "<2-LeftMouse>", "<Plug>(vimfiler_double_click)", { buffer = true })
+
+            -- pushd/popd
+            vim.keymap.set("n", "Y", "<Plug>(vimfiler_pushd)", { buffer = true })
+            vim.keymap.set("n", "P", "<Plug>(vimfiler_popd)", { buffer = true })
+
+            vim.keymap.set("n", "gj", "<Plug>(vimfiler_jump_last_child)", { buffer = true })
+            vim.keymap.set("n", "gk", "<Plug>(vimfiler_jump_first_child)", { buffer = true })
+          end
+        })
+      end
+    }
+
     -- optional
     use {
       'alpaca-tc/alpaca_github.vim',
