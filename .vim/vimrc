@@ -24,7 +24,7 @@ endfunction"}}}
 
 function! s:get_vital() "{{{
   if !exists('s:V')
-    let s:V = vital#of('dotfiles')
+    let s:V = vital#dotfiles#new()
   endif
 
   return s:V
