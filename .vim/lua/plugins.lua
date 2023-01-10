@@ -1172,8 +1172,6 @@ function M.setup()
             vim.keymap.set('n', 'q', ':q<CR>', { buffer = true })
           end
         })
-
-        vim.g.fugitive_git_executable = vim.g.my.bin.git
       end
     }
 
@@ -1187,7 +1185,6 @@ function M.setup()
         vim.keymap.set('n', 'gD', ':<C-U>GitDiff<Space>')
         vim.keymap.set('n', 'gDD', ':<C-U>GitDiff HEAD<CR>')
 
-        vim.g.git_bin = vim.g.my.bin.git
         vim.g.git_command_edit = 'vnew'
         vim.g.git_no_default_mappings = 1
       end
