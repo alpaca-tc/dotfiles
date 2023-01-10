@@ -177,418 +177,6 @@ hook_source = '''
 '''
 
 [[plugins]]
-repo = 'Shougo/ddu.vim'
-depends = ['denops.vim', 'ddu-filter-matcher_regexp', 'ddu-ui-ff', 'ddu-ui-filer', 'ddu-kind-file', 'ddu-source-action', 'ddu-source-line', 'ddu-source-mr', 'ddu-source-file', 'ddu-source-rg', 'ddu-column-icon_filename', 'ddu-column-filename', 'ddu-source-git', 'ddu-filter-converter_display_word']
-on_func = ['ddu#custom#get_local', 'ddu#custom#patch_global', 'ddu#custom#patch_local']
-hook_source = '''
-  call ddu#custom#patch_global({
-    \   'ui': 'ff',
-    \   'sources': [#{ name: 'line' }, #{ name: 'mr' }, #{ name: 'file' }, #{ name: 'rg' }],
-    \   'sourceOptions': {
-    \     '_': {
-    \       'matchers': ['matcher_regexp'],
-    \       'ignoreCase': v:true,
-    \     },
-    \     'file': {
-    \       'columns': ['filename'],
-    \       'sorters': ['sorter_file_alpha'],
-    \     },
-    \   },
-    \   'sourceParams': {
-    \     'mr': {
-    \       'kind': 'mru',
-    \       'foldRoot': v:true,
-    \       'relativeIfSameRepository': v:true,
-    \     },
-    \   },
-    \   'uiParams': {
-    \     'ff': {
-    \       'filterFloatingPosition': 'top',
-    \       'filterSplitDirection': 'topleft',
-    \       'startFilter': v:true,
-    \       'splitDirection': 'topleft',
-    \       'previewHeight': 40,
-    \       'previewRow': 40,
-    \       'previewVertical': v:true,
-    \       'previewWidth': 50,
-    \     },
-    \     'filer': {
-    \       'filterFloatingPosition': 'top',
-    \       'filterSplitDirection': 'topleft',
-    \       'splitDirection': 'topleft',
-    \     },
-    \   },
-    \   'kindOptions': #{
-    \     file: #{
-    \       defaultAction: 'open',
-    \     },
-    \     action: #{
-    \       defaultAction: 'do',
-    \     },
-    \     git_branch: #{
-    \       defaultAction: 'switch',
-    \     },
-    \     git_status: #{
-    \       defaultAction: 'open',
-    \     },
-    \     git_log: #{
-    \       defaultAction: 'yank_hash',
-    \     },
-    \   }
-    \ })
-'''
-
-[[plugins]]
-repo = 'Shougo/ddu-filter-converter_display_word'
-
-[[plugins]]
-repo = 'Shougo/ddu-kind-file'
-hook_post_source = '''
-  call ddu#custom#action('kind', 'file', 'grep', { args -> <SID>ddu_kind_file_grep_action(args) })
-
-  function! s:ddu_kind_file_grep_action(args)
-    " NOTE: param "path" must be one directory
-    let path = a:args.items[0].action.path
-    let directory = isdirectory(path) ? path : fnamemodify(path, ':h')
-
-    call ddu#start(#{
-        \   name: a:args.options.name,
-        \   push: v:true,
-        \   sources: [
-        \     #{
-        \       name: 'rg',
-        \       params: #{
-        \         path: path,
-        \         input: input('Pattern: '),
-        \       },
-        \     },
-        \   ],
-        \ })
-  endfunction
-'''
-
-[[plugins]]
-repo = 'Shougo/ddu-column-filename'
-
-[[plugins]]
-repo = 'ryota2357/ddu-column-icon_filename'
-
-[[plugins]]
-repo = 'Shougo/ddu-ui-ff'
-depends = ['lightline.vim']
-hook_post_source = '''
-  function! s:move_to_up_or_ddu_ui_filter()
-    if line('.') == 1
-      call s:move_to_ddu_buffer('ddu-ff-filter')
-    else
-      call cursor(line('.') - 1, col('.'))
-    end
-  endfunction
-
-  function! s:move_to_ddu_buffer(ft)
-    for n in range(1, winnr('$'))
-      let ft = getwinvar(n, '&ft')
-
-      if ft == a:ft
-        let id = win_getid(n)
-        call win_gotoid(id)
-        return
-      endif
-    endfor
-  endfunction
-
-  function! s:disable_lightline_on_ddu_filter_ui()
-    for n in range(1, winnr('$'))
-      let ft = getwinvar(n, '&ft')
-
-      if ft == 'ddu-ff-filter'
-        let width = winwidth(n)
-        let statusline = repeat('-', width)
-        call setwinvar(n, '&statusline', statusline)
-      endif
-    endfor
-  endfunction
-
-  function! s:move_to_ddu_ff_and_cr()
-    call s:move_to_ddu_buffer('ddu-ff')
-    call ddu#ui#ff#do_action('itemAction')
-    call ddu#ui#ff#close()
-  endfunction
-
-  function! s:ddu_ui_ff_shared()
-    augroup DduBufferUi
-      autocmd! * <buffer>
-      autocmd BufEnter <buffer> if winnr('$') == 1 |quit| endif
-    augroup END
-
-    nnoremap <buffer><silent>q :call ddu#ui#ff#do_action('quit')<CR>
-    nnoremap <buffer><silent><Space>q :call ddu#ui#ff#do_action('quit')<CR>
-  endfunction
-
-  function! s:close_filter_window_and_do_item_action()
-    call ddu#ui#ff#do_action('itemAction')
-  endfunction
-
-  function! s:close_preview_window()
-    for n in range(1, winnr('$'))
-      let bufnr = winbufnr(n)
-      let bufname = bufname(bufnr)
-
-      if getwinvar(n, '&l:buftype') == 'nofile' && bufname =~ '^ddu-ff:/'
-        execute n . 'wincmd c'
-        return
-      endif
-    endfor
-  endfunction
-
-  function! s:ddu_toggle_preview()
-    let enabled = !get(b:, 'ddu_preview_enabled', v:false)
-    let b:ddu_preview_enabled = enabled
-
-    augroup DduBufferPreview
-      autocmd! * <buffer>
-
-      if enabled
-        autocmd CursorMoved <buffer> call ddu#ui#ff#do_action('preview')
-      else
-        call s:close_preview_window()
-      endif
-    augroup END
-  endfunction
-
-  function! s:ddu_replace()
-    call ddu#ui#ff#do_action('itemAction', {'name': 'quickfix'})
-    call ddu#ui#ff#close()
-    cclose
-    call qfreplace#start('')
-  endfunction
-
-  function! s:ddu_ui_ff()
-    augroup DduBufferPreview
-      autocmd! * <buffer>
-    augroup END
-
-    call s:ddu_ui_ff_shared()
-    setl cursorline
-
-    nnoremap <buffer><silent><CR> :call <SID>close_filter_window_and_do_item_action()<CR>
-    nnoremap <buffer><silent><Space> :call ddu#ui#ff#do_action('toggleSelectItem')<CR>j
-    nnoremap <buffer><silent>f :call ddu#ui#ff#do_action('toggleSelectItem')<CR>j
-    xnoremap <silent><buffer><Space> :call ddu#ui#ff#do_action('toggleSelectItem')<CR>
-    nnoremap <buffer><silent><Tab> :call ddu#ui#ff#do_action('chooseAction')<CR>
-    nnoremap <buffer><silent>a :call ddu#ui#ff#do_action('chooseAction')<CR>
-    nnoremap <buffer><silent>* :call ddu#ui#ff#do_action('toggleAllItems')<CR>
-    nnoremap <buffer><silent>k :call <SID>move_to_up_or_ddu_ui_filter()<CR>
-    nnoremap <buffer><silent>i :call ddu#ui#ff#do_action('openFilterWindow')<CR>
-    nnoremap <buffer><silent>A :call ddu#ui#ff#do_action('openFilterWindow')<CR>
-    nnoremap <buffer><silent>p :call <SID>ddu_toggle_preview()<CR>
-    nnoremap <buffer><silent>re :call <SID>ddu_replace()<CR>
-  endfunction
-
-  function! s:ddu_ui_ff_filter()
-    call s:ddu_ui_ff_shared()
-    nnoremap <buffer><silent>j :call <SID>move_to_ddu_buffer('ddu-ff')<CR>
-    nnoremap <buffer><silent><CR> :call <SID>move_to_ddu_ff_and_cr()<CR>
-    nnoremap <buffer><silent><C-W>j <C-W>j<C-W>j
-    hi! link StatusLine Normal
-  endfunction
-
-  function! s:get_ddu_ff_winnr()
-    for n in range(1, winnr('$'))
-      let ft = getwinvar(n, '&ft')
-
-      if ft == 'ddu-ff'
-        return n
-      endif
-    endfor
-
-    return v:null
-  endfunction
-
-  let s:ddu_window_size = {}
-  function! s:ddu_fold_buffer()
-    let win_enter = &ft == 'ddu-ff' || &ft == 'ddu-ff-filter'
-    let ddu_ff_winnr = s:get_ddu_ff_winnr()
-
-    if ddu_ff_winnr is v:null
-      " ddu is closed
-      return
-    endif
-
-    if win_enter
-      if has_key(s:ddu_window_size, ddu_ff_winnr)
-        echo 'enter' . ddu_ff_winnr
-        execute ddu_ff_winnr . 'resize ' . s:ddu_window_size[ddu_ff_winnr][0]
-        execute 'vertical ' . ddu_ff_winnr . ' resize ' . s:ddu_window_size[ddu_ff_winnr][1]
-
-        unlet s:ddu_window_size[ddu_ff_winnr]
-      endif
-    else
-      if !has_key(s:ddu_window_size, ddu_ff_winnr)
-        let s:ddu_window_size[ddu_ff_winnr] = [winheight(ddu_ff_winnr), winwidth(ddu_ff_winnr)]
-      endif
-
-      execute ddu_ff_winnr . 'resize 1'
-    endif
-  endfunction
-
-  augroup MyAutoCmd
-    autocmd FileType ddu-ff-filter call s:disable_lightline_on_ddu_filter_ui()
-    autocmd BufLeave,WinLeave,WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost * call s:disable_lightline_on_ddu_filter_ui()
-    autocmd FileType ddu-ff call <SID>ddu_ui_ff()
-    autocmd FileType ddu-ff-filter call <SID>ddu_ui_ff_filter()
-    autocmd WinEnter * call s:ddu_fold_buffer()
-  augroup END
-'''
-
-[[plugins]]
-repo = 'Shougo/ddu-ui-filer'
-build = 'brew install desktop-file-utils'
-hook_post_source = '''
-  function! s:ddu_ui_filer_cr()
-    if ddu#ui#filer#is_tree()
-      call ddu#ui#filer#do_action('itemAction', {'name': 'narrow'})
-    else
-      call ddu#ui#filer#do_action('itemAction', {'name': 'open', 'params': {'command': 'vsplit'}})
-    endif
-  endfunction
-
-  function! s:ddu_ui_filer_toggle_dot_files()
-    let local = ddu#custom#get_current('file')
-    let sorter_file_alpha_params = get(get(local, 'filterParams', {}), 'sorter_file_alpha', {})
-
-    call ddu#redraw('file',
-      \ {
-      \   'updateOptions': {
-      \     'filterParams': {
-      \       'sorter_file_alpha': {
-      \         'visibleDotFiles': !get(sorter_file_alpha_params, 'visibleDotFiles', v:false)
-      \       },
-      \     },
-      \   }
-      \ })
-  endfunction
-
-  function! s:ddu_ui_filer()
-    nnoremap <buffer><silent><CR> :call <SID>ddu_ui_filer_cr()<CR>
-    nnoremap <buffer><silent>l :call <SID>ddu_ui_filer_cr()<CR>
-    nnoremap <buffer><silent>h <Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'narrow', 'params': {'path': '..'}})<CR>
-    nnoremap <buffer><silent><Space> :call ddu#ui#filer#do_action('toggleSelectItem')<CR>j
-    nnoremap <buffer><silent>f :call ddu#ui#filer#do_action('toggleSelectItem')<CR>j
-    nnoremap <buffer><silent><Tab> :call ddu#ui#filer#do_action('chooseAction')<CR>
-    nnoremap <buffer><silent>a :call ddu#ui#filer#do_action('chooseAction')<CR>
-    nnoremap <buffer><silent>* :call ddu#ui#filer#do_action('toggleAllItems')<CR>
-    nnoremap <buffer><C-l> :call ddu#ui#filer#do_action('checkItems')<CR>
-
-    nnoremap <buffer><silent>q <Cmd>call ddu#ui#filer#do_action('quit')<CR>
-    nnoremap <buffer><silent><Space>q <Cmd>call ddu#ui#filer#do_action('quit')<CR>
-    nnoremap <buffer><silent>c <Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'copy'})<CR>
-    nnoremap <buffer><silent>d <Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'delete'})<CR>
-    nnoremap <buffer><silent>r <Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'rename'})<CR>
-    nnoremap <buffer><silent>m <Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'move'})<CR>
-    nnoremap <buffer><silent>C <Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'newFile'})<CR>
-    nnoremap <buffer><silent>K <Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'newDirectory'})<CR>
-    nnoremap <buffer><silent>. <Cmd>call <SID>ddu_ui_filer_toggle_dot_files()<CR>
-
-    nnoremap <buffer>gr :call ddu#ui#filer#do_action('itemAction', {'name': 'grep'})<CR>
-    " nnoremap <buffer><expr>p vimfiler#do_action('preview')
-    " nnoremap <expr><buffer>re vimfiler#do_action('replace')
-  endfunction
-
-  augroup MyAutoCmd
-    autocmd FileType ddu-filer call <SID>ddu_ui_filer()
-  augroup END
-'''
-
-[[plugins]]
-repo = 'Shougo/ddu-source-file'
-
-[[plugins]]
-repo = 'Shougo/ddu-source-line'
-
-[[plugins]]
-repo = 'Shougo/ddu-source-action'
-
-[[plugins]]
-repo = 'alpaca-tc/ddu-source-git'
-hook_post_source = '''
-  function! s:ddu_source_git_branch()
-    let source = get(b:, 'ddu_ui_name', '')
-
-    if source == 'git_branch'
-      nnoremap <silent><buffer>d :call ddu#ui#ff#do_action('itemAction', {'name': 'delete_local'})<CR>
-      nnoremap <silent><buffer>D :call ddu#ui#ff#do_action('itemAction', {'name': 'delete_local_force'})<CR>
-    elseif source == 'git_status'
-      nnoremap <silent><buffer>ga :call ddu#ui#ff#do_action('itemAction', {'name': 'add'})<CR>
-      nnoremap <silent><buffer>gu :call ddu#ui#ff#do_action('itemAction', {'name': 'unstage'})<CR>
-      " nnoremap <silent><buffer>gu :call ddu#ui#ff#do_action('itemAction', {'name': 'restore'})<CR>
-    endif
-  endfunction
-
-  augroup MyAutoCmd
-    autocmd FileType ddu-ff call <SID>ddu_source_git_branch()
-  augroup END
-'''
-
-[[plugins]]
-repo = 'shun/ddu-source-rg'
-
-[[plugins]]
-repo = 'alpaca-tc/ddu-source-mr'
-depends = ['mr.vim']
-
-[[plugins]]
-repo = 'alpaca-tc/ddu-filter-matcher_regexp'
-hook_post_source = '''
-  call ddu#custom#patch_global({
-    \   'filterParams': {
-    \     'matcher_regexp': {
-    \       'highlightMatched': 'Statement',
-    \     },
-    \   },
-    \ })
-'''
-
-[[plugins]]
-repo = 'lambdalisue/mr.vim'
-
-# [[plugins]]
-# repo = 'othree/yajs.vim'
-# on_ft     = ["javascript"]
-#
-# [[plugins]]
-# repo = 'othree/javascript-libraries-syntax.vim'
-# on_ft     = ["javascript"]
-#
-# [[plugins]]
-# repo = 'digitaltoad/vim-jade'
-# on_ft     = ["jade"]
-#
-# [[plugins]]
-# repo = 'wavded/vim-stylus'
-# on_ft     = ["stylus"]
-#
-# [[plugins]]
-# repo = 'moll/vim-node'
-# on_ft     = ["javascript"]
-#
-# [[plugins]]
-# repo = 'alpaca-tc/vim-markdown'
-# on_ft     = ["markdown"]
-#
-# [[plugins]]
-# repo = 'mrkn/vim-cruby'
-# on_ft = ["c"]
-#
-# [[plugins]]
-# repo = 'vim-ruby/vim-ruby'
-# on_ft     = ["ruby", "erb", "ruby.rspec"]
-# hook_source = '''
-#   let g:ruby_indent_block_style = 'do'
-#   let g:ruby_foldable_groups = 'NONE'
-# '''
-
-[[plugins]]
 repo = 'tpope/vim-rails'
 hook_source = '''
   let g:rails_level = 4
@@ -699,3 +287,41 @@ on_source = ["unite.vim"]
 # [[plugins]]
 # repo = 'peitalin/vim-jsx-typescript'
 # on_ft = ["typescript"]
+#
+# [[plugins]]
+# repo = 'othree/yajs.vim'
+# on_ft     = ["javascript"]
+#
+# [[plugins]]
+# repo = 'othree/javascript-libraries-syntax.vim'
+# on_ft     = ["javascript"]
+#
+# [[plugins]]
+# repo = 'digitaltoad/vim-jade'
+# on_ft     = ["jade"]
+#
+# [[plugins]]
+# repo = 'wavded/vim-stylus'
+# on_ft     = ["stylus"]
+#
+# [[plugins]]
+# repo = 'moll/vim-node'
+# on_ft     = ["javascript"]
+#
+# [[plugins]]
+# repo = 'alpaca-tc/vim-markdown'
+# on_ft     = ["markdown"]
+#
+# [[plugins]]
+# repo = 'mrkn/vim-cruby'
+# on_ft = ["c"]
+#
+# [[plugins]]
+# repo = 'vim-ruby/vim-ruby'
+# on_ft     = ["ruby", "erb", "ruby.rspec"]
+# hook_source = '''
+#   let g:ruby_indent_block_style = 'do'
+#   let g:ruby_foldable_groups = 'NONE'
+# '''
+
+

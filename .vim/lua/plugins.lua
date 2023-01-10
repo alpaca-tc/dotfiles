@@ -8,13 +8,13 @@ function M.setup()
   local conf = {
     display = {
       open_fn = function()
-        return require("packer.util").float { border = "rounded" }
+        return require("packer.util").float({ border = "rounded" })
       end,
     },
     subcommands = {
-      install = 'clone --no-single-branch --progress',
+      install = "clone --no-single-branch --progress",
     },
-    max_jobs = 5
+    max_jobs = 5,
   }
 
   local augroup = vim.api.nvim_create_augroup("PackerPlugins", { clear = true })
@@ -22,11 +22,11 @@ function M.setup()
     pattern = "plugins.lua",
     group = augroup,
     callback = function()
-      vim.cmd('luafile <afile>')
-      vim.cmd('PackerSync')
-
-      vim.cmd('source <afile>')
-      vim.cmd('PackerCompile')
+      -- vim.cmd('luafile <afile>')
+      -- vim.cmd('PackerSync')
+      --
+      -- vim.cmd('source <afile>')
+      -- vim.cmd('PackerCompile')
     end,
   })
 
@@ -34,102 +34,102 @@ function M.setup()
   -- Run PackerCompile if there are changes in this file
   local function packer_init()
     local fn = vim.fn
-    local install_path = fn.stdpath "data" .. "/site/pack/packer/start/packer.nvim"
+    local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
     if fn.empty(fn.glob(install_path)) > 0 then
-      packer_bootstrap = fn.system {
+      packer_bootstrap = fn.system({
         "git",
         "clone",
         "https://github.com/wbthomason/packer.nvim",
         install_path,
-      }
-      vim.cmd [[packadd packer.nvim]]
+      })
+      vim.cmd([[packadd packer.nvim]])
     end
   end
 
   -- Plugins
   local function plugins(use)
     -- Keep
-    use { "wbthomason/packer.nvim" }
+    use({ "wbthomason/packer.nvim" })
 
-    use { "tpope/vim-repeat" }
+    use({ "tpope/vim-repeat" })
 
-    use {
+    use({
       "vim-jp/vital.vim",
       fn = { "vital#of", "vital#vital#new" },
-      cmd = "Vitalize"
-    }
+      cmd = "Vitalize",
+    })
 
-    use {
-      'cocopon/iceberg.vim'
-    }
+    use({
+      "cocopon/iceberg.vim",
+    })
 
-    use {
-      'alpaca-tc/alpaca_deepl.vim',
-      run = ':UpdateRemotePlugins',
+    use({
+      "alpaca-tc/alpaca_deepl.vim",
+      run = ":UpdateRemotePlugins",
       cmd = { "Deepl" },
-      requires = { 'mattn/webapi-vim' },
-    }
+      requires = { "mattn/webapi-vim" },
+    })
 
-    use {
-      'tyru/open-browser.vim',
-      cmd    = { "OpenBrowserSearch", "OpenBrowser", "OpenBrowserSmartSearch" },
-      keys    = { '<Plug>(openbrowser-open)' },
+    use({
+      "tyru/open-browser.vim",
+      cmd = { "OpenBrowserSearch", "OpenBrowser", "OpenBrowserSmartSearch" },
+      keys = { "<Plug>(openbrowser-open)" },
       fn = { "openbrowser#open" },
       setup = function()
-        vim.keymap.set('n', ',o', '<Plug>(openbrowser-open)')
-        vim.keymap.set('x', ',o', '<Plug>(openbrowser-open)')
-      end
-    }
+        vim.keymap.set("n", ",o", "<Plug>(openbrowser-open)")
+        vim.keymap.set("x", ",o", "<Plug>(openbrowser-open)")
+      end,
+    })
 
-    use {
-      'mattn/webapi-vim',
-      fn = { "webapi#json#encode", "webapi#json#decode" }
-    }
+    use({
+      "mattn/webapi-vim",
+      fn = { "webapi#json#encode", "webapi#json#decode" },
+    })
 
-    use {
-      'kana/vim-arpeggio',
-      event = { 'InsertEnter' },
-      fn   = { "arpeggio#map" },
+    use({
+      "kana/vim-arpeggio",
+      event = { "InsertEnter" },
+      fn = { "arpeggio#map" },
       config = function()
-        local escape = '<Esc>:nohlsearch<CR>'
-        vim.fn['arpeggio#map']('i', 's', 0, 'jk', escape)
-        vim.fn['arpeggio#map']('v', 's', 0, 'jk', escape)
-        vim.fn['arpeggio#map']('x', 's', 0, 'jk', escape)
-        vim.fn['arpeggio#map']('c', 's', 0, 'jk', escape)
-      end
-    }
+        local escape = "<Esc>:nohlsearch<CR>"
+        vim.fn["arpeggio#map"]("i", "s", 0, "jk", escape)
+        vim.fn["arpeggio#map"]("v", "s", 0, "jk", escape)
+        vim.fn["arpeggio#map"]("x", "s", 0, "jk", escape)
+        vim.fn["arpeggio#map"]("c", "s", 0, "jk", escape)
+      end,
+    })
 
-    use {
-      'thinca/vim-quickrun',
+    use({
+      "thinca/vim-quickrun",
       cmd = { "QuickRun" },
       requires = {
         {
-          'alpaca-tc/vim-quickrun-neovim-job',
+          "alpaca-tc/vim-quickrun-neovim-job",
           branch = "with_env",
-          opt = false
-        }
+          opt = false,
+        },
       },
       setup = function()
-        vim.keymap.set('n', ',r', ':QuickRun<CR>', { silent = true, noremap = true })
+        vim.keymap.set("n", ",r", ":QuickRun<CR>", { silent = true, noremap = true })
       end,
       config = function()
         vim.g.quickrun_no_default_key_mappings = 1
 
         vim.g.quickrun_config = {
-          _ = { runner = 'neovim_job' },
+          _ = { runner = "neovim_job" },
         }
 
-        vim.g.quickrun_config['ruby.rspec'] = {
-          type = 'ruby.rspec',
-          command = 'rspec',
-          exec = 'bundle exec %c %o %s'
+        vim.g.quickrun_config["ruby.rspec"] = {
+          type = "ruby.rspec",
+          command = "rspec",
+          exec = "bundle exec %c %o %s",
         }
 
-        vim.g.quickrun_config['typescript/deno/test'] = {
-          command = 'deno',
-          cmdopt = '--unstable --allow-all',
-          tempfile = '%{tempname()}.ts',
-          exec = { '%c test %o %s' },
+        vim.g.quickrun_config["typescript/deno/test"] = {
+          command = "deno",
+          cmdopt = "--unstable --allow-all",
+          tempfile = "%{tempname()}.ts",
+          exec = { "%c test %o %s" },
         }
 
         -- function! s:set_ruby_command()
@@ -154,134 +154,157 @@ function M.setup()
         --       autocmd FileType quickrun call alpaca_window#set_smart_close()
         --       autocmd FileType ruby call s:set_ruby_command()
         --       augroup END
-      end
-    }
+      end,
+    })
 
-    use {
-      'echasnovski/mini.nvim',
+    use({
+      "echasnovski/mini.nvim",
       branch = "stable",
-      event = { 'BufEnter' },
+      event = { "BufEnter" },
       config = function()
-        require('mini.comment').setup({
+        require("mini.comment").setup({
           -- Module mappings. Use `''` (empty string) to disable one.
           mappings = {
             -- Toggle comment (like `gcip` - comment inner paragraph) for both
             -- Normal and Visual modes
-            comment = '<C-_>',
+            comment = "<C-_>",
 
             -- Toggle comment on current line
-            comment_line = '<C-_>',
+            comment_line = "<C-_>",
 
             -- Define 'comment' textobject (like `dgc` - delete whole comment block)
-            textobject = '',
+            textobject = "",
           },
         })
-      end
-    }
+      end,
+    })
 
-    use {
-      'osyo-manga/vim-over',
-      cmd    = { "OverCommandLine", "OverCommandLineNoremap" },
+    use({
+      "osyo-manga/vim-over",
+      cmd = { "OverCommandLine", "OverCommandLineNoremap" },
       setup = function()
-        vim.keymap.set('n', 're', ':OverCommandLine<CR>%s!!!g<Left><Left><Left>')
-        vim.keymap.set('x', ':s', ':OverCommandLine<CR>s!!!g<Left><Left><Left>')
-        vim.keymap.set('x', 're', '"zy:OverCommandLine<CR>%s!<C-R>=substitute(@z, \'!\', \'\\!\', \'g\')<CR>!!gI<Left><Left><Left>')
-        vim.keymap.set('x', 're', '"zy:OverCommandLine<CR>%s!<C-R>=substitute(@z, \'!\', \'\\!\', \'g\')<CR>!!gI<Left><Left><Left>')
-        vim.keymap.set('x', 'rr', '"zy:OverCommandLine<CR>%s!<C-R>=substitute(@z, \'!\', \'\\!\', \'g\')<CR>!<C-R>=substitute(@z, \'!\', \'\\!\', \'g\')<CR>!gI<Left><Left><Left>')
+        vim.keymap.set("n", "re", ":OverCommandLine<CR>%s!!!g<Left><Left><Left>")
+        vim.keymap.set("x", ":s", ":OverCommandLine<CR>s!!!g<Left><Left><Left>")
+        vim.keymap.set(
+          "x",
+          "re",
+          "\"zy:OverCommandLine<CR>%s!<C-R>=substitute(@z, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>"
+        )
+        vim.keymap.set(
+          "x",
+          "re",
+          "\"zy:OverCommandLine<CR>%s!<C-R>=substitute(@z, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>"
+        )
+        vim.keymap.set(
+          "x",
+          "rr",
+          "\"zy:OverCommandLine<CR>%s!<C-R>=substitute(@z, '!', '\\!', 'g')<CR>!<C-R>=substitute(@z, '!', '\\!', 'g')<CR>!gI<Left><Left><Left>"
+        )
 
         vim.g.over_command_line_key_mappings = { ["\\<C-L>"] = "\\<C-F>" }
       end,
       config = function()
         vim.cmd("OverCommandLineNoremap <C-J> <Plug>(over-cmdline-substitute-jump-pattern)")
         vim.cmd("OverCommandLineNoremap <C-K> <Plug>(over-cmdline-substitute-jump-string)")
-      end
-    }
+      end,
+    })
 
-    use {
-      'vim-scripts/camelcasemotion',
+    use({
+      "vim-scripts/camelcasemotion",
       -- keys = { "<Plug>CamelCaseMotion_w", "<Plug>CamelCaseMotion_b", "<Plug>CamelCaseMotion_e", "<Plug>CamelCaseMotion_iw", "<Plug>CamelCaseMotion_ib", "<Plug>CamelCaseMotion_ie" },
       -- opt = not vim.g.packer_loaded,
       setup = function()
-        vim.keymap.set({ 'n', 'v', 'o' }, 'w', '<Plug>CamelCaseMotion_w', { silent = true })
-        vim.keymap.set({ 'n', 'v', 'o' }, 'b', '<Plug>CamelCaseMotion_b', { silent = true })
-        vim.keymap.set({ 'n', 'v', 'o' }, 'e', '<Plug>CamelCaseMotion_e', { silent = true })
-        vim.keymap.del({ 's' }, 'w')
-        vim.keymap.del({ 's' }, 'b')
-        vim.keymap.del({ 's' }, 'e')
+        vim.keymap.set({ "n", "v", "o" }, "w", "<Plug>CamelCaseMotion_w", { silent = true })
+        vim.keymap.set({ "n", "v", "o" }, "b", "<Plug>CamelCaseMotion_b", { silent = true })
+        vim.keymap.set({ "n", "v", "o" }, "e", "<Plug>CamelCaseMotion_e", { silent = true })
+        vim.keymap.del({ "s" }, "w")
+        vim.keymap.del({ "s" }, "b")
+        vim.keymap.del({ "s" }, "e")
 
-        vim.keymap.set('o', 'iw', '<Plug>CamelCaseMotion_iw', { silent = true })
-        vim.keymap.set('x', 'iw', '<Plug>CamelCaseMotion_iw', { silent = true })
-        vim.keymap.set('o', 'ib', '<Plug>CamelCaseMotion_ib', { silent = true })
-        vim.keymap.set('x', 'ib', '<Plug>CamelCaseMotion_ib', { silent = true })
-        vim.keymap.set('o', 'ie', '<Plug>CamelCaseMotion_ie', { silent = true })
-        vim.keymap.set('x', 'ie', '<Plug>CamelCaseMotion_ie', { silent = true })
-      end
-    }
+        vim.keymap.set("o", "iw", "<Plug>CamelCaseMotion_iw", { silent = true })
+        vim.keymap.set("x", "iw", "<Plug>CamelCaseMotion_iw", { silent = true })
+        vim.keymap.set("o", "ib", "<Plug>CamelCaseMotion_ib", { silent = true })
+        vim.keymap.set("x", "ib", "<Plug>CamelCaseMotion_ib", { silent = true })
+        vim.keymap.set("o", "ie", "<Plug>CamelCaseMotion_ie", { silent = true })
+        vim.keymap.set("x", "ie", "<Plug>CamelCaseMotion_ie", { silent = true })
+      end,
+    })
 
-    use {
-      'tpope/vim-surround',
-      keys = { "<Plug>Dsurround", "<Plug>Csurround", "<Plug>Ysurround", "<Plug>YSurround", "<Plug>Yssurround", "<Plug>YSsurround", "<Plug>YSsurround", "<Plug>VgSurround", "<Plug>VSurround" },
+    use({
+      "tpope/vim-surround",
+      keys = {
+        "<Plug>Dsurround",
+        "<Plug>Csurround",
+        "<Plug>Ysurround",
+        "<Plug>YSurround",
+        "<Plug>Yssurround",
+        "<Plug>YSsurround",
+        "<Plug>YSsurround",
+        "<Plug>VgSurround",
+        "<Plug>VSurround",
+      },
       setup = function()
         vim.g.surround_no_mappings = 1
 
-        vim.keymap.set('n', 'cs',  '<Plug>Csurround', { remap = true })
-        vim.keymap.set('n', 'ds',  '<Plug>Dsurround', { remap = true })
-        vim.keymap.set('n', 'ySS', '<Plug>YSsurround', { remap = true })
-        vim.keymap.set('n', 'ySs', '<Plug>YSsurround', { remap = true })
-        vim.keymap.set('n', 'ys',  '<Plug>Ysurround', { remap = true })
-        vim.keymap.set('n', 'yss', '<Plug>Yssurround', { remap = true })
+        vim.keymap.set("n", "cs", "<Plug>Csurround", { remap = true })
+        vim.keymap.set("n", "ds", "<Plug>Dsurround", { remap = true })
+        vim.keymap.set("n", "ySS", "<Plug>YSsurround", { remap = true })
+        vim.keymap.set("n", "ySs", "<Plug>YSsurround", { remap = true })
+        vim.keymap.set("n", "ys", "<Plug>Ysurround", { remap = true })
+        vim.keymap.set("n", "yss", "<Plug>Yssurround", { remap = true })
 
-        vim.keymap.set('x', 'S', '<Plug>VSurround', { remap = true })
-        vim.keymap.set('x', 'gS', '<Plug>VgSurround', { remap = true })
-        vim.keymap.set('x', 's', '<Plug>VSurround', { remap = true })
+        vim.keymap.set("x", "S", "<Plug>VSurround", { remap = true })
+        vim.keymap.set("x", "gS", "<Plug>VgSurround", { remap = true })
+        vim.keymap.set("x", "s", "<Plug>VSurround", { remap = true })
       end,
       config = function()
         local surround_definitions = {
           _ = {
-            ['('] = "(\r)",
-            ['['] = "[\r]",
-            ['<'] = "<\r>",
-            ['{'] = "{ \r }",
-            ['#'] = "#{\r}",
+            ["("] = "(\r)",
+            ["["] = "[\r]",
+            ["<"] = "<\r>",
+            ["{"] = "{ \r }",
+            ["#"] = "#{\r}",
           },
-          [vim.fn['join'](vim.g.my.ft.ruby_files, ',')] = {
-            ['#'] =  "#{\r}",
-            ['%'] =  "<% \r %>",
-            ['-'] =  "<% \r -%>",
-            ['='] =  "<%= \r %>",
-            ['w'] =  "%w(\r)",
-            ['W'] =  "%W(\r)",
-            ['q'] =  "%q(\r)",
-            ['Q'] =  "%Q(\r)",
-            ['r'] =  "%r{\r}",
-            ['R'] =  "%R{\r}",
-            ['\"'] =  '\"\r\"',
-            ["'"] =  "'\r'",
-            ['{'] =  "{ \r }",
+          [vim.fn["join"](vim.g.my.ft.ruby_files, ",")] = {
+            ["#"] = "#{\r}",
+            ["%"] = "<% \r %>",
+            ["-"] = "<% \r -%>",
+            ["="] = "<%= \r %>",
+            ["w"] = "%w(\r)",
+            ["W"] = "%W(\r)",
+            ["q"] = "%q(\r)",
+            ["Q"] = "%Q(\r)",
+            ["r"] = "%r{\r}",
+            ["R"] = "%R{\r}",
+            ['"'] = '"\r"',
+            ["'"] = "'\r'",
+            ["{"] = "{ \r }",
           },
           terraform = {
-            [ '$' ] = "${\r}",
+            ["$"] = "${\r}",
           },
-          [ 'snippet,neosnippet' ] = {
-            [ '$' ] = "${\r}",
+          ["snippet,neosnippet"] = {
+            ["$"] = "${\r}",
           },
           go = {
-            ['$'] = "${\r}",
-            ['('] = "(\r)",
-            ['['] = "[\r]",
-            ['<'] = "<\r>",
+            ["$"] = "${\r}",
+            ["("] = "(\r)",
+            ["["] = "[\r]",
+            ["<"] = "<\r>",
           },
-          ['javascript,typescript,vue,typescriptreact'] = {
-            ['('] = "(\r)",
-            ['['] = "[\r]",
-            ['$'] = "${\r}",
+          ["javascript,typescript,vue,typescriptreact"] = {
+            ["("] = "(\r)",
+            ["["] = "[\r]",
+            ["$"] = "${\r}",
           },
         }
 
-        surround_definitions = vim.fn['alpaca#initialize#redefine_dict_to_each_filetype'](surround_definitions, vim.empty_dict())
+        surround_definitions =
+          vim.fn["alpaca#initialize#redefine_dict_to_each_filetype"](surround_definitions, vim.empty_dict())
 
         local function define_variable_for_surround(key, mapping)
-          local var_name = 'surround_' .. vim.fn['char2nr'](key)
+          local var_name = "surround_" .. vim.fn["char2nr"](key)
           vim.b[var_name] = mapping
         end
 
@@ -289,9 +312,9 @@ function M.setup()
           local memo = surround_definitions._ or {}
           local filetypes = {}
 
-          for ft, _ in string.gmatch(filetype, '([^\\.]+)') do
+          for ft, _ in string.gmatch(filetype, "([^\\.]+)") do
             table.insert(filetypes, ft)
-            local ft_name = table.concat(filetypes, '.')
+            local ft_name = table.concat(filetypes, ".")
 
             if surround_definitions[ft_name] ~= nil then
               local definition = surround_definitions[ft_name]
@@ -303,7 +326,7 @@ function M.setup()
         end
 
         local function define_variables_for_surround()
-          if vim.bo.filetype == '' then
+          if vim.bo.filetype == "" then
             return
           end
 
@@ -318,115 +341,499 @@ function M.setup()
         vim.api.nvim_create_autocmd("FileType", {
           group = group,
           pattern = "*",
-          callback = define_variables_for_surround
+          callback = define_variables_for_surround,
         })
         define_variables_for_surround()
-      end
-    }
+      end,
+    })
+
+    -- ddu
+    use({
+      "Shougo/ddu.vim",
+      requires = {
+        "vim-denops/denops.vim",
+        "alpaca-tc/ddu-filter-matcher_regexp",
+        "Shougo/ddu-ui-ff",
+        "Shougo/ddu-ui-filer",
+        "Shougo/ddu-kind-file",
+        "Shougo/ddu-source-action",
+        "Shougo/ddu-source-line",
+        { "alpaca-tc/ddu-source-mr", requires = { "lambdalisue/mr.vim" } },
+        "Shougo/ddu-source-file",
+        "shun/ddu-source-rg",
+        "ryota2357/ddu-column-icon_filename",
+        "Shougo/ddu-column-filename",
+        "alpaca-tc/ddu-source-git",
+        "Shougo/ddu-filter-converter_display_word",
+      },
+      fn = { "ddu#custom#get_local", "ddu#custom#patch_global", "ddu#custom#patch_local" },
+      config = function()
+        -- call ddu#custom#patch_global({
+        --   \   'ui': 'ff',
+        --   \   'sources': [#{ name: 'line' }, #{ name: 'mr' }, #{ name: 'file' }, #{ name: 'rg' }],
+        --   \   'sourceOptions': {
+        --   \     '_': {
+        --   \       'matchers': ['matcher_regexp'],
+        --   \       'ignoreCase': v:true,
+        --   \     },
+        --   \     'file': {
+        --   \       'columns': ['filename'],
+        --   \       'sorters': ['sorter_file_alpha'],
+        --   \     },
+        --   \   },
+        --   \   'sourceParams': {
+        --   \     'mr': {
+        --   \       'kind': 'mru',
+        --   \       'foldRoot': v:true,
+        --   \       'relativeIfSameRepository': v:true,
+        --   \     },
+        --   \   },
+        --   \   'uiParams': {
+        --   \     'ff': {
+        --   \       'filterFloatingPosition': 'top',
+        --   \       'filterSplitDirection': 'topleft',
+        --   \       'startFilter': v:true,
+        --   \       'splitDirection': 'topleft',
+        --   \       'previewHeight': 40,
+        --   \       'previewRow': 40,
+        --   \       'previewVertical': v:true,
+        --   \       'previewWidth': 50,
+        --   \     },
+        --   \     'filer': {
+        --   \       'filterFloatingPosition': 'top',
+        --   \       'filterSplitDirection': 'topleft',
+        --   \       'splitDirection': 'topleft',
+        --   \     },
+        --   \   },
+        --   \   'kindOptions': #{
+        --   \     file: #{
+        --   \       defaultAction: 'open',
+        --   \     },
+        --   \     action: #{
+        --   \       defaultAction: 'do',
+        --   \     },
+        --   \     git_branch: #{
+        --   \       defaultAction: 'switch',
+        --   \     },
+        --   \     git_status: #{
+        --   \       defaultAction: 'open',
+        --   \     },
+        --   \     git_log: #{
+        --   \       defaultAction: 'yank_hash',
+        --   \     },
+        --   \   }
+        --   \ })
+      end,
+    })
+
+    use({
+      repo = "Shougo/ddu-kind-file",
+      config = function()
+        -- call ddu#custom#action('kind', 'file', 'grep', { args -> <SID>ddu_kind_file_grep_action(args) })
+        --
+        -- function! s:ddu_kind_file_grep_action(args)
+        --   " NOTE: param "path" must be one directory
+        --   let path = a:args.items[0].action.path
+        --   let directory = isdirectory(path) ? path : fnamemodify(path, ':h')
+        --
+        --   call ddu#start(#{
+        --       \   name: a:args.options.name,
+        --       \   push: v:true,
+        --       \   sources: [
+        --       \     #{
+        --       \       name: 'rg',
+        --       \       params: #{
+        --       \         path: path,
+        --       \         input: input('Pattern: '),
+        --       \       },
+        --       \     },
+        --       \   ],
+        --       \ })
+        -- endfunction
+      end,
+    })
+
+    use({
+      "Shougo/ddu-ui-ff",
+      requires = { "itchyny/lightline.vim" },
+      config = function()
+        -- function! s:move_to_up_or_ddu_ui_filter()
+        --   if line('.') == 1
+        --     call s:move_to_ddu_buffer('ddu-ff-filter')
+        --   else
+        --     call cursor(line('.') - 1, col('.'))
+        --   end
+        -- endfunction
+        --
+        -- function! s:move_to_ddu_buffer(ft)
+        --   for n in range(1, winnr('$'))
+        --     let ft = getwinvar(n, '&ft')
+        --
+        --     if ft == a:ft
+        --       let id = win_getid(n)
+        --       call win_gotoid(id)
+        --       return
+        --     endif
+        --   endfor
+        -- endfunction
+        --
+        -- function! s:disable_lightline_on_ddu_filter_ui()
+        --   for n in range(1, winnr('$'))
+        --     let ft = getwinvar(n, '&ft')
+        --
+        --     if ft == 'ddu-ff-filter'
+        --       let width = winwidth(n)
+        --       let statusline = repeat('-', width)
+        --       call setwinvar(n, '&statusline', statusline)
+        --     endif
+        --   endfor
+        -- endfunction
+        --
+        -- function! s:move_to_ddu_ff_and_cr()
+        --   call s:move_to_ddu_buffer('ddu-ff')
+        --   call ddu#ui#ff#do_action('itemAction')
+        --   call ddu#ui#ff#close()
+        -- endfunction
+        --
+        -- function! s:ddu_ui_ff_shared()
+        --   augroup DduBufferUi
+        --     autocmd! * <buffer>
+        --     autocmd BufEnter <buffer> if winnr('$') == 1 |quit| endif
+        --   augroup END
+        --
+        --   nnoremap <buffer><silent>q :call ddu#ui#ff#do_action('quit')<CR>
+        --   nnoremap <buffer><silent><Space>q :call ddu#ui#ff#do_action('quit')<CR>
+        -- endfunction
+        --
+        -- function! s:close_filter_window_and_do_item_action()
+        --   call ddu#ui#ff#do_action('itemAction')
+        -- endfunction
+        --
+        -- function! s:close_preview_window()
+        --   for n in range(1, winnr('$'))
+        --     let bufnr = winbufnr(n)
+        --     let bufname = bufname(bufnr)
+        --
+        --     if getwinvar(n, '&l:buftype') == 'nofile' && bufname =~ '^ddu-ff:/'
+        --       execute n . 'wincmd c'
+        --       return
+        --     endif
+        --   endfor
+        -- endfunction
+        --
+        -- function! s:ddu_toggle_preview()
+        --   let enabled = !get(b:, 'ddu_preview_enabled', v:false)
+        --   let b:ddu_preview_enabled = enabled
+        --
+        --   augroup DduBufferPreview
+        --     autocmd! * <buffer>
+        --
+        --     if enabled
+        --       autocmd CursorMoved <buffer> call ddu#ui#ff#do_action('preview')
+        --     else
+        --       call s:close_preview_window()
+        --     endif
+        --   augroup END
+        -- endfunction
+        --
+        -- function! s:ddu_replace()
+        --   call ddu#ui#ff#do_action('itemAction', {'name': 'quickfix'})
+        --   call ddu#ui#ff#close()
+        --   cclose
+        --   call qfreplace#start('')
+        -- endfunction
+        --
+        -- function! s:ddu_ui_ff()
+        --   augroup DduBufferPreview
+        --     autocmd! * <buffer>
+        --   augroup END
+        --
+        --   call s:ddu_ui_ff_shared()
+        --   setl cursorline
+        --
+        --   nnoremap <buffer><silent><CR> :call <SID>close_filter_window_and_do_item_action()<CR>
+        --   nnoremap <buffer><silent><Space> :call ddu#ui#ff#do_action('toggleSelectItem')<CR>j
+        --   nnoremap <buffer><silent>f :call ddu#ui#ff#do_action('toggleSelectItem')<CR>j
+        --   xnoremap <silent><buffer><Space> :call ddu#ui#ff#do_action('toggleSelectItem')<CR>
+        --   nnoremap <buffer><silent><Tab> :call ddu#ui#ff#do_action('chooseAction')<CR>
+        --   nnoremap <buffer><silent>a :call ddu#ui#ff#do_action('chooseAction')<CR>
+        --   nnoremap <buffer><silent>* :call ddu#ui#ff#do_action('toggleAllItems')<CR>
+        --   nnoremap <buffer><silent>k :call <SID>move_to_up_or_ddu_ui_filter()<CR>
+        --   nnoremap <buffer><silent>i :call ddu#ui#ff#do_action('openFilterWindow')<CR>
+        --   nnoremap <buffer><silent>A :call ddu#ui#ff#do_action('openFilterWindow')<CR>
+        --   nnoremap <buffer><silent>p :call <SID>ddu_toggle_preview()<CR>
+        --   nnoremap <buffer><silent>re :call <SID>ddu_replace()<CR>
+        -- endfunction
+        --
+        -- function! s:ddu_ui_ff_filter()
+        --   call s:ddu_ui_ff_shared()
+        --   nnoremap <buffer><silent>j :call <SID>move_to_ddu_buffer('ddu-ff')<CR>
+        --   nnoremap <buffer><silent><CR> :call <SID>move_to_ddu_ff_and_cr()<CR>
+        --   nnoremap <buffer><silent><C-W>j <C-W>j<C-W>j
+        --   hi! link StatusLine Normal
+        -- endfunction
+        --
+        -- function! s:get_ddu_ff_winnr()
+        --   for n in range(1, winnr('$'))
+        --     let ft = getwinvar(n, '&ft')
+        --
+        --     if ft == 'ddu-ff'
+        --       return n
+        --     endif
+        --   endfor
+        --
+        --   return v:null
+        -- endfunction
+        --
+        -- let s:ddu_window_size = {}
+        -- function! s:ddu_fold_buffer()
+        --   let win_enter = &ft == 'ddu-ff' || &ft == 'ddu-ff-filter'
+        --   let ddu_ff_winnr = s:get_ddu_ff_winnr()
+        --
+        --   if ddu_ff_winnr is v:null
+        --     " ddu is closed
+        --     return
+        --   endif
+        --
+        --   if win_enter
+        --     if has_key(s:ddu_window_size, ddu_ff_winnr)
+        --       echo 'enter' . ddu_ff_winnr
+        --       execute ddu_ff_winnr . 'resize ' . s:ddu_window_size[ddu_ff_winnr][0]
+        --       execute 'vertical ' . ddu_ff_winnr . ' resize ' . s:ddu_window_size[ddu_ff_winnr][1]
+        --
+        --       unlet s:ddu_window_size[ddu_ff_winnr]
+        --     endif
+        --   else
+        --     if !has_key(s:ddu_window_size, ddu_ff_winnr)
+        --       let s:ddu_window_size[ddu_ff_winnr] = [winheight(ddu_ff_winnr), winwidth(ddu_ff_winnr)]
+        --     endif
+        --
+        --     execute ddu_ff_winnr . 'resize 1'
+        --   endif
+        -- endfunction
+        --
+        -- augroup MyAutoCmd
+        --   autocmd FileType ddu-ff-filter call s:disable_lightline_on_ddu_filter_ui()
+        --   autocmd BufLeave,WinLeave,WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost * call s:disable_lightline_on_ddu_filter_ui()
+        --   autocmd FileType ddu-ff call <SID>ddu_ui_ff()
+        --   autocmd FileType ddu-ff-filter call <SID>ddu_ui_ff_filter()
+        --   autocmd WinEnter * call s:ddu_fold_buffer()
+        -- augroup END
+      end,
+    })
+
+    use({
+      "Shougo/ddu-ui-filer",
+      run = "brew install desktop-file-utils",
+      config = function()
+        -- function! s:ddu_ui_filer_cr()
+        --   if ddu#ui#filer#is_tree()
+        --     call ddu#ui#filer#do_action('itemAction', {'name': 'narrow'})
+        --   else
+        --     call ddu#ui#filer#do_action('itemAction', {'name': 'open', 'params': {'command': 'vsplit'}})
+        --   endif
+        -- endfunction
+        --
+        -- function! s:ddu_ui_filer_toggle_dot_files()
+        --   let local = ddu#custom#get_current('file')
+        --   let sorter_file_alpha_params = get(get(local, 'filterParams', {}), 'sorter_file_alpha', {})
+        --
+        --   call ddu#redraw('file',
+        --     \ {
+        --     \   'updateOptions': {
+        --     \     'filterParams': {
+        --     \       'sorter_file_alpha': {
+        --     \         'visibleDotFiles': !get(sorter_file_alpha_params, 'visibleDotFiles', v:false)
+        --     \       },
+        --     \     },
+        --     \   }
+        --     \ })
+        -- endfunction
+        --
+        -- function! s:ddu_ui_filer()
+        --   nnoremap <buffer><silent><CR> :call <SID>ddu_ui_filer_cr()<CR>
+        --   nnoremap <buffer><silent>l :call <SID>ddu_ui_filer_cr()<CR>
+        --   nnoremap <buffer><silent>h <Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'narrow', 'params': {'path': '..'}})<CR>
+        --   nnoremap <buffer><silent><Space> :call ddu#ui#filer#do_action('toggleSelectItem')<CR>j
+        --   nnoremap <buffer><silent>f :call ddu#ui#filer#do_action('toggleSelectItem')<CR>j
+        --   nnoremap <buffer><silent><Tab> :call ddu#ui#filer#do_action('chooseAction')<CR>
+        --   nnoremap <buffer><silent>a :call ddu#ui#filer#do_action('chooseAction')<CR>
+        --   nnoremap <buffer><silent>* :call ddu#ui#filer#do_action('toggleAllItems')<CR>
+        --   nnoremap <buffer><C-l> :call ddu#ui#filer#do_action('checkItems')<CR>
+        --
+        --   nnoremap <buffer><silent>q <Cmd>call ddu#ui#filer#do_action('quit')<CR>
+        --   nnoremap <buffer><silent><Space>q <Cmd>call ddu#ui#filer#do_action('quit')<CR>
+        --   nnoremap <buffer><silent>c <Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'copy'})<CR>
+        --   nnoremap <buffer><silent>d <Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'delete'})<CR>
+        --   nnoremap <buffer><silent>r <Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'rename'})<CR>
+        --   nnoremap <buffer><silent>m <Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'move'})<CR>
+        --   nnoremap <buffer><silent>C <Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'newFile'})<CR>
+        --   nnoremap <buffer><silent>K <Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'newDirectory'})<CR>
+        --   nnoremap <buffer><silent>. <Cmd>call <SID>ddu_ui_filer_toggle_dot_files()<CR>
+        --
+        --   nnoremap <buffer>gr :call ddu#ui#filer#do_action('itemAction', {'name': 'grep'})<CR>
+        --   " nnoremap <buffer><expr>p vimfiler#do_action('preview')
+        --   " nnoremap <expr><buffer>re vimfiler#do_action('replace')
+        -- endfunction
+        --
+        -- augroup MyAutoCmd
+        --   autocmd FileType ddu-filer call <SID>ddu_ui_filer()
+        -- augroup END
+      end,
+    })
+
+    use({
+      "alpaca-tc/ddu-source-git",
+      config = function()
+        -- function! s:ddu_source_git_branch()
+        --   let source = get(b:, 'ddu_ui_name', '')
+        --
+        --   if source == 'git_branch'
+        --     nnoremap <silent><buffer>d :call ddu#ui#ff#do_action('itemAction', {'name': 'delete_local'})<CR>
+        --     nnoremap <silent><buffer>D :call ddu#ui#ff#do_action('itemAction', {'name': 'delete_local_force'})<CR>
+        --   elseif source == 'git_status'
+        --     nnoremap <silent><buffer>ga :call ddu#ui#ff#do_action('itemAction', {'name': 'add'})<CR>
+        --     nnoremap <silent><buffer>gu :call ddu#ui#ff#do_action('itemAction', {'name': 'unstage'})<CR>
+        --     " nnoremap <silent><buffer>gu :call ddu#ui#ff#do_action('itemAction', {'name': 'restore'})<CR>
+        --   endif
+        -- endfunction
+        --
+        -- augroup MyAutoCmd
+        --   autocmd FileType ddu-ff call <SID>ddu_source_git_branch()
+        -- augroup END
+      end,
+    })
+
+    use({
+      "lambdalisue/mr.vim",
+      event = { "BufEnter" },
+    })
+
+    use({
+      "alpaca-tc/ddu-filter-matcher_regexp",
+      config = function()
+        -- call ddu#custom#patch_global({
+        --   \   'filterParams': {
+        --   \     'matcher_regexp': {
+        --   \       'highlightMatched': 'Statement',
+        --   \     },
+        --   \   },
+        --   \ })
+      end,
+    })
 
     -- completion / LSP
-    use {
-      'jose-elias-alvarez/null-ls.nvim',
-      requires = { 'nvim-lua/plenary.nvim' },
-      event = { 'InsertEnter' },
+    use({
+      "jose-elias-alvarez/null-ls.nvim",
+      requires = { "nvim-lua/plenary.nvim" },
+      event = { "InsertEnter" },
       config = function()
-        require('null-ls').setup({
+        require("null-ls").setup({
           -- capabilities = capabilities,
           sources = {
-            require('null-ls').builtins.formatting.stylua,
-            require('null-ls').builtins.diagnostics.rubocop.with({
+            require("null-ls").builtins.formatting.stylua,
+            require("null-ls").builtins.diagnostics.rubocop.with({
               command = "bundle",
-              args = { "exec", "rubocop", "-f", "json", "--force-exclusion", "--stdin", "$FILENAME", "--disable-pending-cops" },
+              args = {
+                "exec",
+                "rubocop",
+                "-f",
+                "json",
+                "--force-exclusion",
+                "--stdin",
+                "$FILENAME",
+                "--disable-pending-cops",
+              },
               prefer_local = "bundle_bin",
               condition = function(utils)
-                return utils.root_has_file({".rubocop.yml", "Gemfile"})
-              end
+                return utils.root_has_file({ ".rubocop.yml", "Gemfile" })
+              end,
             }),
-            require('null-ls').builtins.diagnostics.eslint.with({
+            require("null-ls").builtins.diagnostics.eslint.with({
               prefer_local = "node_modules/.bin",
               condition = function(utils)
                 return utils.root_has_file({ "node_modules/.bin/eslint" })
-              end
+              end,
             }),
-            require('null-ls').builtins.formatting.eslint.with({
+            require("null-ls").builtins.formatting.eslint.with({
               prefer_local = "node_modules/.bin",
               condition = function(utils)
                 return utils.root_has_file({ "node_modules/.bin/eslint" })
-              end
+              end,
             }),
             -- require('null-ls').builtins.diagnostics.luacheck.with({
             --   extra_args = {"--globals", "vim", "--globals", "awesome"},
             -- }),
-            require('null-ls').builtins.diagnostics.yamllint,
-            require('null-ls').builtins.formatting.gofmt,
-            require('null-ls').builtins.formatting.rustfmt,
-            require('null-ls').builtins.formatting.rubocop.with({
+            require("null-ls").builtins.diagnostics.yamllint,
+            require("null-ls").builtins.formatting.gofmt,
+            require("null-ls").builtins.formatting.rustfmt,
+            require("null-ls").builtins.formatting.rubocop.with({
               command = "bundle",
-              args = { "exec", "rubocop", "--auto-correct-all", "-f", "quiet", "--stderr", "--stdin", "$FILENAME", "--disable-pending-cops" },
+              args = {
+                "exec",
+                "rubocop",
+                "--auto-correct-all",
+                "-f",
+                "quiet",
+                "--stderr",
+                "--stdin",
+                "$FILENAME",
+                "--disable-pending-cops",
+              },
               prefer_local = "bundle_bin",
               condition = function(utils)
-                return utils.root_has_file({".rubocop.yml", "Gemfile"})
-              end
+                return utils.root_has_file({ ".rubocop.yml", "Gemfile" })
+              end,
             }),
           },
         })
 
-        vim.api.nvim_create_user_command(
-          'NullLsToggle',
-          function()
-            require('null-ls').toggle('')
-          end,
-          {}
-        )
-      end
-    }
+        vim.api.nvim_create_user_command("NullLsToggle", function()
+          require("null-ls").toggle("")
+        end, {})
+      end,
+    })
 
-    use {
-      'neovim/nvim-lspconfig',
-      event = { 'InsertEnter' },
-      cmd = { 'LspInfo', 'LspStart', 'LspLog', 'LspStop' },
+    use({
+      "neovim/nvim-lspconfig",
+      event = { "InsertEnter" },
+      cmd = { "LspInfo", "LspStart", "LspLog", "LspStop" },
       setup = function()
+        vim.opt_local.signcolumn = "no"
+
+        vim.keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.declaration()<CR>", { silent = true })
+        vim.keymap.set("n", "ty", "<cmd>lua vim.lsp.buf.document_symbol()<CR>", { silent = true })
+        vim.keymap.set("n", "tt", "<cmd>lua vim.lsp.buf.definition()<CR>", { silent = true })
+        vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", { silent = true })
+        vim.keymap.set("n", "ti", "<cmd>lua vim.lsp.buf.implementation()<CR>", { silent = true })
+        vim.keymap.set("n", "ts", "<cmd>lua vim.lsp.buf.signature_help()<CR>", { silent = true })
+        vim.keymap.set("n", "ta", "<cmd>lua vim.lsp.buf.code_action()<CR>", { silent = true })
+        vim.keymap.set("n", "td", "<cmd>lua vim.lsp.buf.type_definition()<CR>", { silent = true })
+        vim.keymap.set("n", "tr", "<cmd>lua vim.lsp.buf.rename()<CR>", { silent = true })
+        vim.keymap.set("n", "tf", "<cmd>lua vim.lsp.buf.references()<CR>", { silent = true })
+        vim.keymap.set("n", "te", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>", { silent = true })
+        vim.keymap.set("n", "tp", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", { silent = true })
+        vim.keymap.set("n", "tn", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", { silent = true })
+        vim.keymap.set("n", "tl", "<cmd>lua vim.diagnostic.setloclist()<CR>", { silent = true })
+        vim.keymap.set("n", "ff", ":lua vim.lsp.buf.format { async = true }<CR>", { silent = true })
+
+        -- nnoremap <silent> <space>wa <cmd>lua vim.lsp.buf.add_workspace_folder()<CR>
+        -- nnoremap <silent> <space>wr <cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>
+        -- nnoremap <silent> <space>wl <cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>
+
         local group = vim.api.nvim_create_augroup("PackerNvimLspconfig", { clear = true })
 
-        vim.api.nvim_create_autocmd('FileType', {
+        vim.api.nvim_create_autocmd("BufWritePre", {
           group = group,
-          pattern = { 'python', 'c', 'ruby', 'typescript', 'javascript', 'vue', 'javascript.jsx', 'typescript.tsx', 'go', 'rust', 'css', 'scss', 'sass', 'ruby', 'typescriptreact' },
+          pattern = { "*.go", "*.ts" },
           callback = function()
-            vim.opt_local.signcolumn = 'no'
-
-            vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.declaration()<CR>', { silent = true})
-            vim.keymap.set('n', 'ty', '<cmd>lua vim.lsp.buf.document_symbol()<CR>', { silent = true})
-            vim.keymap.set('n', 'tt', '<cmd>lua vim.lsp.buf.definition()<CR>', { silent = true})
-            vim.keymap.set('n', 'K',  '<cmd>lua vim.lsp.buf.hover()<CR>', { silent = true})
-            vim.keymap.set('n', 'ti', '<cmd>lua vim.lsp.buf.implementation()<CR>', { silent = true})
-            vim.keymap.set('n', 'ts', '<cmd>lua vim.lsp.buf.signature_help()<CR>', { silent = true})
-            vim.keymap.set('n', 'ta', '<cmd>lua vim.lsp.buf.code_action()<CR>', { silent = true})
-            vim.keymap.set('n', 'td', '<cmd>lua vim.lsp.buf.type_definition()<CR>', { silent = true})
-            vim.keymap.set('n', 'tr', '<cmd>lua vim.lsp.buf.rename()<CR>', { silent = true})
-            vim.keymap.set('n', 'tf', '<cmd>lua vim.lsp.buf.references()<CR>', { silent = true})
-            vim.keymap.set('n', 'te', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', { silent = true})
-            vim.keymap.set('n', 'tp', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', { silent = true})
-            vim.keymap.set('n', 'tn', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', { silent = true})
-            vim.keymap.set('n', 'tl', '<cmd>lua vim.diagnostic.setloclist()<CR>', { silent = true})
-            vim.keymap.set('n', 'ff', ':lua vim.lsp.buf.format { async = true }<CR>', { silent = true})
-
-            -- nnoremap <silent> <space>wa <cmd>lua vim.lsp.buf.add_workspace_folder()<CR>
-            -- nnoremap <silent> <space>wr <cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>
-            -- nnoremap <silent> <space>wl <cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>
-          end
-        })
-
-        vim.api.nvim_create_autocmd('BufWritePre', {
-          group = group,
-          pattern = { '*.go', '*.ts' },
-          callback = function()
-            vim.lsp.buf.format { async = false }
-          end
+            vim.lsp.buf.format({ async = false })
+          end,
         })
 
         local function goimports(timeout_ms)
           local context = { only = { "source.organizeImports" } }
-          vim.validate { context = { context, "t", true } }
+          vim.validate({ context = { context, "t", true } })
 
           local params = vim.lsp.util.make_range_params()
           params.context = context
@@ -434,9 +841,13 @@ function M.setup()
           -- See the implementation of the textDocument/codeAction callback
           -- (lua/vim/lsp/handler.lua) for how to do this properly.
           local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout_ms)
-          if not result or next(result) == nil then return end
+          if not result or next(result) == nil then
+            return
+          end
           local actions = result[1].result
-          if not actions then return end
+          if not actions then
+            return
+          end
           local action = actions[1]
 
           -- textDocument/codeAction can return either Command[] or CodeAction[]. If it
@@ -454,23 +865,23 @@ function M.setup()
           end
         end
 
-        vim.api.nvim_create_autocmd('BufWritePre', {
+        vim.api.nvim_create_autocmd("BufWritePre", {
           group = group,
-          pattern = { '*.go' },
+          pattern = { "*.go" },
           callback = function()
             goimports(1000)
-          end
+          end,
         })
 
         -- vim.lsp.set_log_level("debug")
-      end
-    }
+      end,
+    })
 
-    use {
-      'williamboman/mason.nvim',
-      event = { 'InsertEnter' },
-      requires = { 'williamboman/mason-lspconfig.nvim' },
-      cmd = { 'Mason', 'MasonInstall', 'MasonUninstall', 'MasonUninstallAll', 'MasonLog' },
+    use({
+      "williamboman/mason.nvim",
+      event = { "InsertEnter" },
+      requires = { "williamboman/mason-lspconfig.nvim" },
+      cmd = { "Mason", "MasonInstall", "MasonUninstall", "MasonUninstallAll", "MasonLog" },
       run = function()
         vim.cmd("MasonInstall lua-language-server")
         vim.cmd("MasonInstall luacheck")
@@ -479,12 +890,12 @@ function M.setup()
       end,
       config = function()
         -- FIXME: How to load neovim/nvim-lspconfig before loading mason.nvim?
-        vim.cmd('LspStop')
+        vim.cmd("LspStop")
 
-        require('mason').setup()
+        require("mason").setup()
 
-        local lsp_config = require('lspconfig')
-        local mason_lspconfig = require('mason-lspconfig')
+        local lsp_config = require("lspconfig")
+        local mason_lspconfig = require("mason-lspconfig")
 
         local function lua_vim_lsp_config()
           local library = {}
@@ -526,65 +937,67 @@ function M.setup()
                   -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
                   version = "LuaJIT",
                   -- Setup your lua path
-                  path = path
+                  path = path,
                 },
                 completion = { callSnippet = "Both" },
                 diagnostics = {
                   -- Get the language server to recognize the `vim` global
-                  globals = { "vim" }
+                  globals = { "vim" },
                 },
                 workspace = {
                   -- Make the server aware of Neovim runtime files
                   library = library,
                   maxPreload = 2000,
-                  preloadFileSize = 50000
+                  preloadFileSize = 50000,
                 },
                 -- Do not send telemetry data containing a randomized but unique identifier
-                telemetry = { enable = false }
-              }
-            }
+                telemetry = { enable = false },
+              },
+            },
           }
         end
 
-        mason_lspconfig.setup_handlers({ function(server_name)
-          local opts = {}
+        mason_lspconfig.setup_handlers({
+          function(server_name)
+            local opts = {}
 
-          if server_name == 'denols' then
-            opts = {
-              autostart = false,
-              init_options = {
-                lint = true,
-                unstable = true,
-                suggest = {
-                  imports = {
-                    hosts = {
-                      ["https://deno.land"] = true,
-                      ["https://cdn.nest.land"] = true,
-                      ["https://crux.land"] = true,
+            if server_name == "denols" then
+              opts = {
+                autostart = false,
+                init_options = {
+                  lint = true,
+                  unstable = true,
+                  suggest = {
+                    imports = {
+                      hosts = {
+                        ["https://deno.land"] = true,
+                        ["https://cdn.nest.land"] = true,
+                        ["https://crux.land"] = true,
+                      },
                     },
                   },
                 },
-              },
-            }
-          elseif server_name == 'tsserver' then
-            opts = {
-              autostart = false,
-            }
-          elseif server_name == 'sorbet' then
-            opts = {
-              autostart = false,
-              cmd = {'bundle', 'exec', 'srb', 'tc', '--lsp', '--dir', '.'},
-            }
-          elseif server_name == 'sumneko_lua' then
-            opts = lua_vim_lsp_config()
-          end
+              }
+            elseif server_name == "tsserver" then
+              opts = {
+                autostart = false,
+              }
+            elseif server_name == "sorbet" then
+              opts = {
+                autostart = false,
+                cmd = { "bundle", "exec", "srb", "tc", "--lsp", "--dir", "." },
+              }
+            elseif server_name == "sumneko_lua" then
+              opts = lua_vim_lsp_config()
+            end
 
-          lsp_config[server_name].setup(opts)
-        end })
+            lsp_config[server_name].setup(opts)
+          end,
+        })
 
         local function file_match_str(path, pattern)
-          if vim.fn['filereadable'](path) == 1 then
-            local lines = vim.fn['readfile'](path)
+          if vim.fn["filereadable"](path) == 1 then
+            local lines = vim.fn["readfile"](path)
 
             for _, line in pairs(lines) do
               if string.len(vim.fn["matchstr"](line, pattern)) > 0 then
@@ -599,20 +1012,27 @@ function M.setup()
         local function start_lsp()
           local filetype = nil
 
-          for ft, _ in string.gmatch(vim.bo.filetype, '([^\\.]+)') do
+          for ft, _ in string.gmatch(vim.bo.filetype, "([^\\.]+)") do
             filetype = filetype or ft
           end
 
-          local root = vim.fn['alpaca#current_root'](vim.fn['getcwd']())
-          local isTsJs = filetype == 'typescript' or filetype == 'javascript' or filetype == 'typescriptreact'
-          local currentFile = vim.fn['expand']("%:p")
+          local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
+          local isTsJs = filetype == "typescript" or filetype == "javascript" or filetype == "typescriptreact"
+          local currentFile = vim.fn["expand"]("%:p")
 
-          if filetype == 'ruby' and file_match_str(root .. '/Gemfile', 'sorbet') then
-            vim.cmd('LspStart sorbet')
-          elseif isTsJs and (vim.fn['filereadable'](root .. '/deno.json') or file_match_str(root .. '/vercel.json', 'vercel-deno') or file_match_str(currentFile, 'https://deno.land/')) then
-            vim.cmd('LspStart denols')
-          elseif isTsJs and file_match_str(root .. '/package.json', 'typescript') then
-            vim.cmd('LspStart typescript-language-server')
+          if filetype == "ruby" and file_match_str(root .. "/Gemfile", "sorbet") then
+            vim.cmd("LspStart sorbet")
+          elseif
+            isTsJs
+            and (
+              vim.fn["filereadable"](root .. "/deno.json")
+              or file_match_str(root .. "/vercel.json", "vercel-deno")
+              or file_match_str(currentFile, "https://deno.land/")
+            )
+          then
+            vim.cmd("LspStart denols")
+          elseif isTsJs and file_match_str(root .. "/package.json", "typescript") then
+            vim.cmd("LspStart typescript-language-server")
           end
         end
 
@@ -620,30 +1040,39 @@ function M.setup()
 
         local group = vim.api.nvim_create_augroup("PackerMason", { clear = true })
 
-        vim.api.nvim_create_autocmd('FileType', {
+        vim.api.nvim_create_autocmd("FileType", {
           group = group,
           pattern = { "ruby", "javascript", "typescript", "typescriptreact", "typescript.jsx" },
-          callback = start_lsp
+          callback = start_lsp,
         })
-      end
-    }
+      end,
+    })
 
-    use {
-      'Shougo/neosnippet.vim',
+    use({
+      "Shougo/neosnippet.vim",
       cmd = { "NeoSnippetEdit", "NeoSnippetSource", "NeoSnippetClearMarkers" },
-      event = { 'InsertEnter' },
+      event = { "InsertEnter" },
       ft = { "snippet" },
-      fn = { "neosnippet#get_snippets", "neosnippet#expandable_or_jumpable", "neosnippet#mappings#jump_or_expand_impl" },
-      requires = { 'Shougo/context_filetype.vim' },
+      fn = {
+        "neosnippet#get_snippets",
+        "neosnippet#expandable_or_jumpable",
+        "neosnippet#mappings#jump_or_expand_impl",
+      },
+      requires = { "Shougo/context_filetype.vim" },
       setup = function()
-        vim.g['neosnippet#disable_runtime_snippets'] = { ruby = 1 }
-        vim.g['neosnippet#enable_preview'] = 1
-        vim.g['neosnippet#snippets_directory'] = vim.g.my.dir.snippets
+        vim.g["neosnippet#disable_runtime_snippets"] = { ruby = 1 }
+        vim.g["neosnippet#enable_preview"] = 1
+        vim.g["neosnippet#snippets_directory"] = vim.g.my.dir.snippets
 
-        vim.keymap.set('i', '<C-F>', '<Plug>(neosnippet_expand_or_jump)', { silent = true })
-        vim.keymap.set('s', '<C-F>', '<Plug>(neosnippet_expand_or_jump)', { silent = true })
-        vim.keymap.set('i', '<C-Space>', "ddc#map#manual_complete(['neosnippet'])", { expr = true, noremap = true, replace_keycodes = false })
-        vim.keymap.set('n', '<Space>e', ':NeoSnippetEdit -split<CR>', { silent = true, noremap = true })
+        vim.keymap.set("i", "<C-F>", "<Plug>(neosnippet_expand_or_jump)", { silent = true })
+        vim.keymap.set("s", "<C-F>", "<Plug>(neosnippet_expand_or_jump)", { silent = true })
+        vim.keymap.set(
+          "i",
+          "<C-Space>",
+          "ddc#map#manual_complete(['neosnippet'])",
+          { expr = true, noremap = true, replace_keycodes = false }
+        )
+        vim.keymap.set("n", "<Space>e", ":NeoSnippetEdit -split<CR>", { silent = true, noremap = true })
       end,
       config = function()
         local group = vim.api.nvim_create_augroup("PackerNeosnippet", { clear = true })
@@ -652,72 +1081,72 @@ function M.setup()
           pattern = "*",
           callback = function()
             if vim.bo.modifiable and not vim.bo.readonly then
-              vim.fn['neosnippet#commands#_clear_markers']()
+              vim.fn["neosnippet#commands#_clear_markers"]()
             end
-          end
+          end,
         })
-      end
-    }
+      end,
+    })
 
-    use {
-      'Shougo/ddc.vim',
+    use({
+      "Shougo/ddc.vim",
       requires = {
-        'vim-denops/denops.vim',
-        'Shougo/pum.vim',
-        'LumaKernel/ddc-file',
-        'Shougo/ddc-matcher_head',
-        'Shougo/ddc-sorter_rank',
-        'Shougo/ddc-converter_remove_overlap',
-        'Shougo/ddc-ui-native',
-        'Shougo/neco-vim',
-        'Shougo/ddc-source-nvim-lsp',
-        'matsui54/ddc-buffer',
-        'matsui54/ddc-dictionary',
-        'Shougo/neosnippet.vim',
+        "vim-denops/denops.vim",
+        "Shougo/pum.vim",
+        "LumaKernel/ddc-file",
+        "Shougo/ddc-matcher_head",
+        "Shougo/ddc-sorter_rank",
+        "Shougo/ddc-converter_remove_overlap",
+        "Shougo/ddc-ui-native",
+        "Shougo/neco-vim",
+        "Shougo/ddc-source-nvim-lsp",
+        "matsui54/ddc-buffer",
+        "matsui54/ddc-dictionary",
+        "Shougo/neosnippet.vim",
       },
-      event = { 'InsertEnter' },
+      event = { "InsertEnter" },
       config = function()
-        vim.fn['ddc#custom#patch_global']({
-          ui = 'native',
-          completionMenu = 'pum.vim',
+        vim.fn["ddc#custom#patch_global"]({
+          ui = "native",
+          completionMenu = "pum.vim",
           sources = {
-            'neosnippet',
-            'nvim-lsp',
-            'buffer',
-            'file',
-            'dictionary',
+            "neosnippet",
+            "nvim-lsp",
+            "buffer",
+            "file",
+            "dictionary",
           },
           backspaceCompletion = true,
           sourceOptions = {
             _ = {
-              matchers = { 'matcher_head'},
-              sorters = { 'sorter_rank'},
-              converters = { 'converter_remove_overlap'},
+              matchers = { "matcher_head" },
+              sorters = { "sorter_rank" },
+              converters = { "converter_remove_overlap" },
             },
             neosnippet = {
-              mark = 'snip',
+              mark = "snip",
             },
             buffer = {
-              mark = 'buffer',
+              mark = "buffer",
               minAutoCompleteLength = 2,
             },
             dictionary = {
-              mark = 'dict'
+              mark = "dict",
             },
             necovim = {
-              mark = 'neco'
+              mark = "neco",
             },
-            ['nvim-lsp'] = {
-              mark = 'lsp',
-              forceCompletionPattern = '\\.\\w*|:\\w*|->\\w*',
+            ["nvim-lsp"] = {
+              mark = "lsp",
+              forceCompletionPattern = "\\.\\w*|:\\w*|->\\w*",
               minAutoCompleteLength = 0,
             },
             file = {
-              mark = 'file',
+              mark = "file",
               isVolatile = true,
-              forceCompletionPattern = '\\S/\\S*',
+              forceCompletionPattern = "\\S/\\S*",
               minAutoCompleteLength = 1,
-            }
+            },
           },
           sourceParams = {
             file = {
@@ -727,10 +1156,10 @@ function M.setup()
               projFromCwdMaxItems = {},
               projFromBufMaxItems = {},
             },
-            ['nvim-lsp'] = {
+            ["nvim-lsp"] = {
               kindLabels = {
-                Class = 'c'
-              }
+                Class = "c",
+              },
             },
             buffer = {
               requireSameFiletype = false,
@@ -741,50 +1170,45 @@ function M.setup()
           },
         })
 
-        vim.fn['ddc#custom#patch_filetype']({ 'vim' }, {
-          keywordPattern = '[a-zA-Z_:]\\w*',
-          sources = { 'buffer', 'necovim', 'dictionary' },
+        vim.fn["ddc#custom#patch_filetype"]({ "vim" }, {
+          keywordPattern = "[a-zA-Z_:]\\w*",
+          sources = { "buffer", "necovim", "dictionary" },
         })
 
-        vim.fn['ddc#enable']()
+        vim.fn["ddc#enable"]()
 
         -- vim.keymap.set('i', '<Tab>', '<Cmd>call pum#map#insert_relative(+1)<CR>', { noremap = true, replace_keycodes = false })
         -- vim.keymap.set('i', '<S-Tab>', '<Cmd>call pum#map#insert_relative(-1)<CR>', { noremap = true, replace_keycodes = false })
 
-        vim.keymap.set(
-          'i',
-          '<TAB>',
-          function()
-            local col = vim.fn['col']('.')
-            local line = vim.fn['getline']('.')
-            local checked_backspace = col == 1 or string.sub(line, col - 1, col - 1) == ' '
+        vim.keymap.set("i", "<TAB>", function()
+          local col = vim.fn["col"](".")
+          local line = vim.fn["getline"](".")
+          local checked_backspace = col == 1 or string.sub(line, col - 1, col - 1) == " "
 
-            if vim.fn.pumvisible() ~= 0 then
-              return '<C-N>'
-            elseif vim.fn['neosnippet#expandable_or_jumpable']() ~= 0 then
-              return vim.fn['neosnippet#mappings#jump_or_expand_impl']()
-            elseif checked_backspace then
-              return '<TAB>'
-            else
-              return vim.fn['pum#map#insert_relative'](1)
-            end
-          end,
-          { expr = true, noremap = false }
-        )
+          if vim.fn.pumvisible() ~= 0 then
+            return "<C-N>"
+          elseif vim.fn["neosnippet#expandable_or_jumpable"]() ~= 0 then
+            return vim.fn["neosnippet#mappings#jump_or_expand_impl"]()
+          elseif checked_backspace then
+            return "<TAB>"
+          else
+            return vim.fn["pum#map#insert_relative"](1)
+          end
+        end, { expr = true, noremap = false })
 
-        vim.keymap.set('i', '<C-X><C-F>', "ddc#map#manual_complete('file')", { expr = true })
-        vim.keymap.set('i', '<C-X><C-O>', "ddc#map#manual_complete('lsp')", { expr = true })
-      end
-    }
+        vim.keymap.set("i", "<C-X><C-F>", "ddc#map#manual_complete('file')", { expr = true })
+        vim.keymap.set("i", "<C-X><C-O>", "ddc#map#manual_complete('lsp')", { expr = true })
+      end,
+    })
 
-    use {
-      'Shougo/neco-vim',
-      ft = { "vim" }
-    }
+    use({
+      "Shougo/neco-vim",
+      ft = { "vim" },
+    })
 
     -- utilities
-    use {
-      'Shougo/vimfiler',
+    use({
+      "Shougo/vimfiler",
       cmd = { "VimFiler", "VimFilerBufferDir", "VimFilerExplorer", "VimFilerCreate" },
       requires = { "Shougo/unite.vim" },
       setup = function()
@@ -793,24 +1217,24 @@ function M.setup()
         vim.g.vimfiler_draw_files_limit = 0
         vim.g.vimfiler_safe_mode_by_default = 0
         vim.g.vimfiler_as_default_explorer = 1
-        vim.g.vimfiler_sort_type = 'filename'
-        vim.g.vimfiler_preview_action = ''
-        vim.g.vimfiler_enable_auto_cd= 1
-        vim.g.vimfiler_file_icon = '-'
+        vim.g.vimfiler_sort_type = "filename"
+        vim.g.vimfiler_preview_action = ""
+        vim.g.vimfiler_enable_auto_cd = 1
+        vim.g.vimfiler_file_icon = "-"
         vim.g.vimfiler_max_directories_history = 1000
         vim.g.vimfiler_tree_indentation = 1
-        vim.g.vimfiler_readonly_file_icon = 'x'
-        vim.g.vimfiler_tree_closed_icon = '‣'
-        vim.g.vimfiler_tree_leaf_icon = ' '
-        vim.g.vimfiler_tree_opened_icon = '▾'
-        vim.g.vimfiler_marked_file_icon = '✓'
-        vim.g.vimfiler_ignore_pattern = '\\v^(\\.git|\\.)'
-        vim.g.unite_kind_cdable_lcd_command = 'lcd'
+        vim.g.vimfiler_readonly_file_icon = "x"
+        vim.g.vimfiler_tree_closed_icon = "‣"
+        vim.g.vimfiler_tree_leaf_icon = " "
+        vim.g.vimfiler_tree_opened_icon = "▾"
+        vim.g.vimfiler_marked_file_icon = "✓"
+        vim.g.vimfiler_ignore_pattern = "\\v^(\\.git|\\.)"
+        vim.g.unite_kind_cdable_lcd_command = "lcd"
         vim.g.vimfiler_no_default_key_mappings = 1
 
-        vim.keymap.set('n', ',,', ':VimFilerCreate<CR>', { silent = true, noremap = true })
+        vim.keymap.set("n", ",,", ":VimFilerCreate<CR>", { silent = true, noremap = true })
 
-        if vim.fn.has('vim_starting') == 1 then
+        if vim.fn.has("vim_starting") == 1 then
           local group = vim.api.nvim_create_augroup("PackerVimfilerSetup", { clear = true })
           vim.api.nvim_create_autocmd("VimEnter", {
             group = group,
@@ -819,9 +1243,9 @@ function M.setup()
               vim.api.nvim_del_augroup_by_id(group)
 
               if vim.fn.argc() == 0 then
-                vim.cmd('VimFiler')
+                vim.cmd("VimFiler")
               end
-            end
+            end,
           })
         end
       end,
@@ -843,11 +1267,31 @@ function M.setup()
             vim.keymap.set("n", "<CR>", "<Plug>(vimfiler_edit_file)", { buffer = true })
             vim.keymap.set("n", "f", "<Plug>(vimfiler_toggle_mark_current_line)", { buffer = true })
             vim.keymap.set("n", "b", ":<C-U>UniteBookmarkAdd<CR>", { noremap = true, buffer = true })
-            vim.keymap.set("n", "<expr>p", "vimfiler#do_action('preview')", { noremap = true, buffer = true })
-            vim.keymap.set("n", "<buffer>re", "vimfiler#do_action('replace')", { noremap = true, expr = true })
+            vim.keymap.set(
+              "n",
+              "<expr>p",
+              "vimfiler#do_action('preview')",
+              { noremap = true, buffer = true }
+            )
+            vim.keymap.set(
+              "n",
+              "<buffer>re",
+              "vimfiler#do_action('replace')",
+              { noremap = true, expr = true }
+            )
             vim.keymap.set("n", "v", "v", { noremap = true, buffer = true })
-            vim.keymap.set("n", "<buffer>gs", ":call ddu#start(#{ name: 'git_status', sources: [#{ name: 'git_status' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>", { noremap = true, silent = true })
-            vim.keymap.set("n", "u", ":<C-U>Unite file -no-start-insert -buffer-name=file<CR>", { noremap = true, buffer = true })
+            vim.keymap.set(
+              "n",
+              "<buffer>gs",
+              ":call ddu#start(#{ name: 'git_status', sources: [#{ name: 'git_status' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>",
+              { noremap = true, silent = true }
+            )
+            vim.keymap.set(
+              "n",
+              "u",
+              ":<C-U>Unite file -no-start-insert -buffer-name=file<CR>",
+              { noremap = true, buffer = true }
+            )
             vim.keymap.set("n", "<TAB>", "<Plug>(vimfiler_switch_to_other_window)", { buffer = true })
             vim.keymap.set("n", "<TAB>", "<Plug>(vimfiler_switch_to_another_vimfiler)", { buffer = true })
             vim.keymap.set("n", "j", "<Plug>(vimfiler_loop_cursor_down)", { buffer = true })
@@ -856,8 +1300,18 @@ function M.setup()
             -- Toggle mark.
             vim.keymap.set("n", "<C-l>", "<Plug>(vimfiler_redraw_screen)", { buffer = true })
             vim.keymap.set("n", "<Space>", "<Plug>(vimfiler_toggle_mark_current_line)", { buffer = true })
-            vim.keymap.set("n", "<S-LeftMouse>", "<Plug>(vimfiler_toggle_mark_current_line)", { buffer = true })
-            vim.keymap.set("n", "<S-Space>", "<Plug>(vimfiler_toggle_mark_current_line_up)", { buffer = true })
+            vim.keymap.set(
+              "n",
+              "<S-LeftMouse>",
+              "<Plug>(vimfiler_toggle_mark_current_line)",
+              { buffer = true }
+            )
+            vim.keymap.set(
+              "n",
+              "<S-Space>",
+              "<Plug>(vimfiler_toggle_mark_current_line_up)",
+              { buffer = true }
+            )
             vim.keymap.set("v", "<Space>", "<Plug>(vimfiler_toggle_mark_selected_lines)", { buffer = true })
 
             -- Toggle marks in all lines.
@@ -918,7 +1372,12 @@ function M.setup()
             vim.keymap.set("n", "-", "<Plug>(vimfiler_close)", { buffer = true })
 
             vim.keymap.set("n", "ge", "<Plug>(vimfiler_execute_external_filer)", { buffer = true })
-            vim.keymap.set("n", "<RightMouse>", "<Plug>(vimfiler_execute_external_filer)", { buffer = true })
+            vim.keymap.set(
+              "n",
+              "<RightMouse>",
+              "<Plug>(vimfiler_execute_external_filer)",
+              { buffer = true }
+            )
 
             vim.keymap.set("n", "!", "<Plug>(vimfiler_execute_shell_command)", { buffer = true })
             vim.keymap.set("n", "?", "<Plug>(vimfiler_help)", { buffer = true })
@@ -948,97 +1407,97 @@ function M.setup()
 
             vim.keymap.set("n", "gj", "<Plug>(vimfiler_jump_last_child)", { buffer = true })
             vim.keymap.set("n", "gk", "<Plug>(vimfiler_jump_first_child)", { buffer = true })
-          end
+          end,
         })
-      end
-    }
+      end,
+    })
 
     -- optional
-    use {
-      'alpaca-tc/alpaca_github.vim',
-      cmd = { 'GhFile', 'GhPullRequestCurrentLine', 'GhPullRequest' },
-      requires = { 'tyru/open-browser.vim' },
+    use({
+      "alpaca-tc/alpaca_github.vim",
+      cmd = { "GhFile", "GhPullRequestCurrentLine", "GhPullRequest" },
+      requires = { "tyru/open-browser.vim" },
       setup = function()
-        vim.g['alpaca_github#host'] = 'github'
-        vim.keymap.set('n', ',go', ':GhFile<CR>')
-        vim.keymap.set('x', ',go', ':GhFile<CR>')
-        vim.keymap.set('n', ',gp', ':GhPullRequestCurrentLine<CR>')
-      end
-    }
+        vim.g["alpaca_github#host"] = "github"
+        vim.keymap.set("n", ",go", ":GhFile<CR>")
+        vim.keymap.set("x", ",go", ":GhFile<CR>")
+        vim.keymap.set("n", ",gp", ":GhPullRequestCurrentLine<CR>")
+      end,
+    })
 
-    use {
-      'liuchengxu/vista.vim',
-      cmd = { 'Vista', 'Vista!', 'Vista!!' },
+    use({
+      "liuchengxu/vista.vim",
+      cmd = { "Vista", "Vista!", "Vista!!" },
       setup = function()
-        vim.keymap.set('n', '<Space>t', ':Vista!!<CR>', { noremap = true })
+        vim.keymap.set("n", "<Space>t", ":Vista!!<CR>", { noremap = true })
       end,
       config = function()
-        vim.g.vista_default_executive = 'nvim_lsp'
-        vim.g['vista#renderer#enable_icon'] = 1
+        vim.g.vista_default_executive = "nvim_lsp"
+        vim.g["vista#renderer#enable_icon"] = 1
         vim.g.vista_sidebar_width = 40
-        vim.g.vista_icon_indent = { '', '' }
-        vim.g.vista_fold_toggle_icons = vim.g.vista_fold_toggle_icons or { '▼', '▶' }
+        vim.g.vista_icon_indent = { "", "" }
+        vim.g.vista_fold_toggle_icons = vim.g.vista_fold_toggle_icons or { "▼", "▶" }
         -- let g:vista#renderer#enable_icon = 0
 
         vim.g.vista_executive_for = {
-          c= 'nvim_lsp',
-          cpp= 'nvim_lsp',
-          typescript= 'nvim_lsp',
-          javascript= 'nvim_lsp',
-          ruby= 'ctags',
-          vim= 'ctags',
+          c = "nvim_lsp",
+          cpp = "nvim_lsp",
+          typescript = "nvim_lsp",
+          javascript = "nvim_lsp",
+          ruby = "ctags",
+          vim = "ctags",
         }
-      end
-    }
+      end,
+    })
 
-    use {
-      'alpaca-tc/nvim-miniyank',
-      branch = 'loop_cycle',
-      keymap = { '<Plug>(miniyank-autoput)', '<Plug>(miniyank-autoPut)' },
+    use({
+      "alpaca-tc/nvim-miniyank",
+      branch = "loop_cycle",
+      keymap = { "<Plug>(miniyank-autoput)", "<Plug>(miniyank-autoPut)" },
       -- on_map = [['nx', '<Plug>(miniyank-autoput)'], ['nx', '<Plug>(miniyank-autoPut)']]
       setup = function()
         vim.g.miniyank_maxitems = 100
         vim.g.miniyank_loop_cycle = true
         vim.g.miniyank_echo_position = true
 
-        vim.keymap.set('n', 'p', '<Plug>(miniyank-autoput)')
-        vim.keymap.set('n', 'P', '<Plug>(miniyank-autoPut)')
+        vim.keymap.set("n", "p", "<Plug>(miniyank-autoput)")
+        vim.keymap.set("n", "P", "<Plug>(miniyank-autoPut)")
       end,
       config = function()
-        vim.keymap.set('n', '<C-P>', '<Plug>(miniyank-cycle)')
-        vim.keymap.set('n', '<C-N>', '<Plug>(miniyank-cycleback)')
-      end
-    }
+        vim.keymap.set("n", "<C-P>", "<Plug>(miniyank-cycle)")
+        vim.keymap.set("n", "<C-N>", "<Plug>(miniyank-cycleback)")
+      end,
+    })
 
-    use {
-      'alpaca-tc/alpaca-switch-file.vim',
-      fn = { 'switch_file#next', 'switch_file#prev' },
+    use({
+      "alpaca-tc/alpaca-switch-file.vim",
+      fn = { "switch_file#next", "switch_file#prev" },
       setup = function()
         vim.g.switch_file_rules = {
-          vim = { { 'autoload/%\\.vim', 'plugin/%\\.vim' } },
+          vim = { { "autoload/%\\.vim", "plugin/%\\.vim" } },
           ruby = {
-            { 'spec/requests/%_spec\\.rb', 'app/controllers/%_controller\\.rb' },
-            { 'spec/%_spec\\.rb', 'app/%\\.rb' },
-            { 'spec/%_spec\\.rb', 'lib/%\\.rb' },
-            { '%.rb', '%.rbs' },
-            { 'lib/%\\.rb', 'sig/%\\.rbs', 'spec/%_spec\\.rb' },
+            { "spec/requests/%_spec\\.rb", "app/controllers/%_controller\\.rb" },
+            { "spec/%_spec\\.rb", "app/%\\.rb" },
+            { "spec/%_spec\\.rb", "lib/%\\.rb" },
+            { "%.rb", "%.rbs" },
+            { "lib/%\\.rb", "sig/%\\.rbs", "spec/%_spec\\.rb" },
           },
           rbs = {
-            { '%.rbs', '%.rb' },
+            { "%.rbs", "%.rb" },
           },
           typescript = {
-            { '%\\.ts', '__tests__/%.test.ts' },
-            { '%\\.ts', '__tests__/%-test.ts' }
-          }
+            { "%\\.ts", "__tests__/%.test.ts" },
+            { "%\\.ts", "__tests__/%-test.ts" },
+          },
         }
 
-        vim.keymap.set('n', '<Space>a', ':call switch_file#next()<CR>')
-        vim.keymap.set('n', '<Space>A', ':call switch_file#prev()<CR>')
-      end
-    }
+        vim.keymap.set("n", "<Space>a", ":call switch_file#next()<CR>")
+        vim.keymap.set("n", "<Space>A", ":call switch_file#prev()<CR>")
+      end,
+    })
 
-    use {
-      'alpaca-tc/alpaca_remove_dust.vim',
+    use({
+      "alpaca-tc/alpaca_remove_dust.vim",
       -- cmd = { "RemoveDustDisable", "RemoveDustEnable", "RemoveDust", "RemoveDustForce" },
       setup = function()
         vim.g.remove_dust_enable = 1
@@ -1048,262 +1507,273 @@ function M.setup()
           group = group,
           pattern = "*",
           callback = function()
-            vim.cmd('RemoveDust')
-          end
+            vim.cmd("RemoveDust")
+          end,
         })
 
-        vim.api.nvim_create_autocmd('FileType', {
+        vim.api.nvim_create_autocmd("FileType", {
           group = group,
           pattern = { "ts", "go", "c", "make", "markdown" },
           callback = function()
-            vim.cmd('RemoveDustDisable')
-          end
+            vim.cmd("RemoveDustDisable")
+          end,
         })
-      end
-    }
+      end,
+    })
 
-    use {
-      'alpaca-tc/alpaca_window.vim',
-      fn = { "alpaca_window#set_smart_close", "alpaca_window#smart_close", "alpaca_window#open_buffer", "alpaca_window#util#fold_buffer_automatically" },
-      keys = { '<Plug>(alpaca_window_tabnew)', '<Plug>(alpaca_window_move_buffer_into_last_tab)', '<Plug>(alpaca_window_smart_new)' },
+    use({
+      "alpaca-tc/alpaca_window.vim",
+      fn = {
+        "alpaca_window#set_smart_close",
+        "alpaca_window#smart_close",
+        "alpaca_window#open_buffer",
+        "alpaca_window#util#fold_buffer_automatically",
+      },
+      keys = {
+        "<Plug>(alpaca_window_tabnew)",
+        "<Plug>(alpaca_window_move_buffer_into_last_tab)",
+        "<Plug>(alpaca_window_smart_new)",
+      },
       setup = function()
-        vim.g.alpaca_window_default_filetype = 'ruby'
+        vim.g.alpaca_window_default_filetype = "ruby"
         vim.g.alpaca_window_max_height = vim.fn.winheight(0)
         vim.g.alpaca_window_max_width = vim.fn.winwidth(0)
 
-        vim.keymap.set('n', '<C-W>n', '<Plug>(alpaca_window_smart_new)')
-        vim.keymap.set('n', '<C-W><C-N>', '<Plug>(alpaca_window_smart_new)')
-        vim.keymap.set('n', 'tc', '<Plug>(alpaca_window_tabnew)', { silent = true })
-        vim.keymap.set('n', 'tw', '<Plug>(alpaca_window_move_buffer_into_last_tab)')
+        vim.keymap.set("n", "<C-W>n", "<Plug>(alpaca_window_smart_new)")
+        vim.keymap.set("n", "<C-W><C-N>", "<Plug>(alpaca_window_smart_new)")
+        vim.keymap.set("n", "tc", "<Plug>(alpaca_window_tabnew)", { silent = true })
+        vim.keymap.set("n", "tw", "<Plug>(alpaca_window_move_buffer_into_last_tab)")
 
         local group = vim.api.nvim_create_augroup("PackerAlpacaWindow", { clear = true })
         vim.api.nvim_create_autocmd("FileType", {
           pattern = "qf",
           group = group,
           callback = function()
-            vim.cmd('call alpaca_window#set_smart_close()')
-          end
+            vim.cmd("call alpaca_window#set_smart_close()")
+          end,
         })
-      end
-    }
+      end,
+    })
 
-    use {
-      'RRethy/nvim-treesitter-endwise',
-      requires = { 'nvim-treesitter/nvim-treesitter' }
-    }
+    use({
+      "RRethy/nvim-treesitter-endwise",
+      requires = { "nvim-treesitter/nvim-treesitter" },
+    })
 
-    use {
-      'windwp/nvim-autopairs',
-      requires = { 'RRethy/nvim-treesitter-endwise' },
-      event = { 'InsertEnter' },
+    use({
+      "windwp/nvim-autopairs",
+      requires = { "RRethy/nvim-treesitter-endwise" },
+      event = { "InsertEnter" },
       config = function()
-        local Rule = require('nvim-autopairs.rule')
-        local npairs = require('nvim-autopairs')
+        local Rule = require("nvim-autopairs.rule")
+        local npairs = require("nvim-autopairs")
 
         npairs.setup({
           map_c_h = true,
           map_cr = false,
         })
 
-        npairs.add_rules(require('nvim-autopairs.rules.endwise-ruby'))
-        npairs.add_rule(Rule('|', '|', { 'ruby', 'eruby' }))
-        npairs.add_rule(Rule('\'\'\'', '\'\'\'', { 'toml' }))
+        npairs.add_rules(require("nvim-autopairs.rules.endwise-ruby"))
+        npairs.add_rule(Rule("|", "|", { "ruby", "eruby" }))
+        npairs.add_rule(Rule("'''", "'''", { "toml" }))
 
         _G.MUtils = {}
 
         MUtils.CR = function()
           if vim.fn.pumvisible() ~= 0 then
-            if vim.fn.complete_info({ 'selected' }).selected ~= -1 then
-              return npairs.esc('<c-y>') .. npairs.autopairs_cr()
+            if vim.fn.complete_info({ "selected" }).selected ~= -1 then
+              return npairs.esc("<c-y>") .. npairs.autopairs_cr()
             else
-              return npairs.esc('<c-e>') .. npairs.autopairs_cr()
+              return npairs.esc("<c-e>") .. npairs.autopairs_cr()
             end
           else
             return npairs.autopairs_cr()
           end
         end
-        vim.api.nvim_set_keymap('i', '<cr>', 'v:lua.MUtils.CR()', { expr = true, noremap = true })
-      end
-    }
+        vim.api.nvim_set_keymap("i", "<cr>", "v:lua.MUtils.CR()", { expr = true, noremap = true })
+      end,
+    })
 
-    use {
-      'thinca/vim-qfreplace',
+    use({
+      "thinca/vim-qfreplace",
       cmd = { "Qfreplace" },
       ft = { "unite", "quickfix", "vimfiler" },
-      fn = { "qfreplace#start" }
-    }
+      fn = { "qfreplace#start" },
+    })
 
-    use {
-      'kana/vim-niceblock',
+    use({
+      "kana/vim-niceblock",
       keys = { "<Plug>(niceblock-I)", "<Plug>(niceblock-A)" },
       setup = function()
-        vim.keymap.set('x', 'I', '<Plug>(niceblock-I)')
-        vim.keymap.set('x', 'A', '<Plug>(niceblock-A)')
-      end
-    }
+        vim.keymap.set("x", "I", "<Plug>(niceblock-I)")
+        vim.keymap.set("x", "A", "<Plug>(niceblock-A)")
+      end,
+    })
 
-    use {
-      'alpaca-tc/beautify.vim',
-      cmd    = { "Beautify" },
+    use({
+      "alpaca-tc/beautify.vim",
+      cmd = { "Beautify" },
       run = function()
-        vim.fn.system { "npm", "install", "-g", "js-beautify" }
-        vim.fn.system { "npm", "install", "-g", "jq" }
-        vim.fn.system { "pip", "install", "sqlparse" }
+        vim.fn.system({ "npm", "install", "-g", "js-beautify" })
+        vim.fn.system({ "npm", "install", "-g", "jq" })
+        vim.fn.system({ "pip", "install", "sqlparse" })
       end,
       setup = function()
-        vim.g['beautify#beautifier#html2haml#ruby19_attributes'] = 1
-      end
-    }
+        vim.g["beautify#beautifier#html2haml#ruby19_attributes"] = 1
+      end,
+    })
 
-    use {
-      'alpaca-tc/switch.vim',
+    use({
+      "alpaca-tc/switch.vim",
       cmd = { "Switch" },
-      event = { 'InsertEnter' },
+      event = { "InsertEnter" },
       setup = function()
         vim.g.switch_no_builtins = false
       end,
       config = function()
         local switch_definition = {
           _ = {
-            { ['\\Cenable'] = '\\Cdisable' },
-            { ['\\CEnable'] = '\\CDisable' },
-            { ['\\Ctrue'] = 'false' },
-            { ['\\CTrue'] = 'False' },
-            { ['\\Cfalse'] = 'true' },
-            { ['\\CFalse'] = 'True' },
-            { 'left', 'right' },
-            { 'top', 'bottom' },
-            { 'north', 'south' },
-            { 'east', 'west' },
-            { 'start', 'stop' },
-            { 'up', 'down' },
-            { 'next', 'previous' },
-            { 'read', 'write' },
-            { 'old', 'new' },
-            { 'open', 'close' },
-            { 'enable', 'disable' },
-            { 'first', 'last' },
-            { 'minminimun', 'maxmaxinum' },
-            { 'yes', 'no' },
-            { 'head', 'tail' },
-            { 'push', 'pull' },
-            { 'good', 'bad' },
-            { 'prefix', 'suffix' },
+            { ["\\Cenable"] = "\\Cdisable" },
+            { ["\\CEnable"] = "\\CDisable" },
+            { ["\\Ctrue"] = "false" },
+            { ["\\CTrue"] = "False" },
+            { ["\\Cfalse"] = "true" },
+            { ["\\CFalse"] = "True" },
+            { "left", "right" },
+            { "top", "bottom" },
+            { "north", "south" },
+            { "east", "west" },
+            { "start", "stop" },
+            { "up", "down" },
+            { "next", "previous" },
+            { "read", "write" },
+            { "old", "new" },
+            { "open", "close" },
+            { "enable", "disable" },
+            { "first", "last" },
+            { "minminimun", "maxmaxinum" },
+            { "yes", "no" },
+            { "head", "tail" },
+            { "push", "pull" },
+            { "good", "bad" },
+            { "prefix", "suffix" },
           },
           coffee = {
-            { 'if', 'unless' },
-            { 'is', 'isnt' },
-            { ['^\\(.*\\)->'] = '\\1=>' },
-            { ['^\\(.*\\)=>'] = '\\1->' },
+            { "if", "unless" },
+            { "is", "isnt" },
+            { ["^\\(.*\\)->"] = "\\1=>" },
+            { ["^\\(.*\\)=>"] = "\\1->" },
           },
           liquid = {
-            { 'if', 'unless' },
-            { 'endif', 'endunless' },
+            { "if", "unless" },
+            { "endif", "endunless" },
           },
-          ['Rakefile,Gemfile,ruby,ruby.rspec,eruby,haml,slim'] = {
-            { 'if', 'unless' },
-            { 'while', 'until' },
-            { '.blank?', '.present?' },
-            { 'include', 'extend', 'prepend' },
-            { 'class', 'module' },
-            { '.inject', '.delete_if' },
-            { 'attr_accessor', 'attr_reader', 'attr_writer' },
-            { ['%r\\({[^}]\\+\\)}'] = '/\\1/' },
-            { [':\\(\\k\\+\\)\\s*=>\\s*'] ='\\1: ' },
-            { ['\\<\\(\\k\\+\\): '] =     ':\\1 => ' },
-            { ['\\.\\%(tap\\)\\@!\\(\\k\\+\\)'] =  '.tap { |o| puts o.inspect }.\\1' },
-            { ['\\.tap { |o| \\%(.\\{-}\\) }'] ='' },
-            { ['\\(\\k\\+\\)(&:\\(\\S\\+\\))'] ='\\1 { |x| x\\.\\2 }' },
-            { ['\\(\\k\\+\\)\\s\\={ |\\(\\k\\+\\)| \\2.\\(\\S\\+\\) }'] ='\\1(&:\\3)' },
+          ["Rakefile,Gemfile,ruby,ruby.rspec,eruby,haml,slim"] = {
+            { "if", "unless" },
+            { "while", "until" },
+            { ".blank?", ".present?" },
+            { "include", "extend", "prepend" },
+            { "class", "module" },
+            { ".inject", ".delete_if" },
+            { "attr_accessor", "attr_reader", "attr_writer" },
+            { ["%r\\({[^}]\\+\\)}"] = "/\\1/" },
+            { [":\\(\\k\\+\\)\\s*=>\\s*"] = "\\1: " },
+            { ["\\<\\(\\k\\+\\): "] = ":\\1 => " },
+            { ["\\.\\%(tap\\)\\@!\\(\\k\\+\\)"] = ".tap { |o| puts o.inspect }.\\1" },
+            { ["\\.tap { |o| \\%(.\\{-}\\) }"] = "" },
+            { ["\\(\\k\\+\\)(&:\\(\\S\\+\\))"] = "\\1 { |x| x\\.\\2 }" },
+            { ["\\(\\k\\+\\)\\s\\={ |\\(\\k\\+\\)| \\2.\\(\\S\\+\\) }"] = "\\1(&:\\3)" },
           },
-          ['ruby.rspec'] = {
-            { 'it_has_behavior', 'it_should_behave_like' },
-            { 'describe', 'context', 'specific', 'example' },
-            { 'before', 'after' },
-            { 'be_true', 'be_false' },
-            { 'be_truthy', 'be_falsy' },
-            { '==', 'eql', 'equal' },
-            { ['\\.should_not'] = '\\.should' },
-            { '\\.to_not', '\\.to' },
-            { ['\\([^. ]\\+\\)\\.should\\(_not\\|\\)'] = 'expect(\\1)\\.to\\2' },
-            { ['expect(\\([^. ]\\+\\))\\.to\\(_not\\|\\)'] = '\\1.should\\2' },
+          ["ruby.rspec"] = {
+            { "it_has_behavior", "it_should_behave_like" },
+            { "describe", "context", "specific", "example" },
+            { "before", "after" },
+            { "be_true", "be_false" },
+            { "be_truthy", "be_falsy" },
+            { "==", "eql", "equal" },
+            { ["\\.should_not"] = "\\.should" },
+            { "\\.to_not", "\\.to" },
+            { ["\\([^. ]\\+\\)\\.should\\(_not\\|\\)"] = "expect(\\1)\\.to\\2" },
+            { ["expect(\\([^. ]\\+\\))\\.to\\(_not\\|\\)"] = "\\1.should\\2" },
           },
-          ['rails,slim,ruby'] = {
-            { 100, ':continue', ':information' },
-            { 101, ':switching_protocols' },
-            { 102, ':processing' },
-            { 200, ':ok', ':success' },
-            { 201, ':created' },
-            { 202, ':accepted' },
-            { 203, ':non_authoritative_information' },
-            { 204, ':no_content' },
-            { 205, ':reset_content' },
-            { 206, ':partial_content' },
-            { 207, ':multi_status' },
-            { 208, ':already_reported' },
-            { 226, ':im_used' },
-            { 300, ':multiple_choices' },
-            { 301, ':moved_permanently' },
-            { 302, ':found' },
-            { 303, ':see_other' },
-            { 304, ':not_modified' },
-            { 305, ':use_proxy' },
-            { 306, ':reserved' },
-            { 307, ':temporary_redirect' },
-            { 308, ':permanent_redirect' },
-            { 400, ':bad_request' },
-            { 401, ':unauthorized' },
-            { 402, ':payment_required' },
-            { 403, ':forbidden' },
-            { 404, ':not_found' },
-            { 405, ':method_not_allowed' },
-            { 406, ':not_acceptable' },
-            { 407, ':proxy_authentication_required' },
-            { 408, ':request_timeout' },
-            { 409, ':conflict' },
-            { 410, ':gone' },
-            { 411, ':length_required' },
-            { 412, ':precondition_failed' },
-            { 413, ':request_entity_too_large' },
-            { 414, ':request_uri_too_long' },
-            { 415, ':unsupported_media_type' },
-            { 416, ':requested_range_not_satisfiable' },
-            { 417, ':expectation_failed' },
-            { 422, ':unprocessable_entity' },
-            { 423, ':precondition_required' },
-            { 424, ':too_many_requests' },
-            { 426, ':request_header_fields_too_large' },
-            { 500, ':internal_server_error' },
-            { 501, ':not_implemented' },
-            { 502, ':bad_gateway' },
-            { 503, ':service_unavailable' },
-            { 504, ':gateway_timeout' },
-            { 505, ':http_version_not_supported' },
-            { 506, ':variant_also_negotiates' },
-            { 507, ':insufficient_storage' },
-            { 508, ':loop_detected' },
-            { 510, ':not_extended' },
-            { 511, ':network_authentication_required' },
+          ["rails,slim,ruby"] = {
+            { 100, ":continue", ":information" },
+            { 101, ":switching_protocols" },
+            { 102, ":processing" },
+            { 200, ":ok", ":success" },
+            { 201, ":created" },
+            { 202, ":accepted" },
+            { 203, ":non_authoritative_information" },
+            { 204, ":no_content" },
+            { 205, ":reset_content" },
+            { 206, ":partial_content" },
+            { 207, ":multi_status" },
+            { 208, ":already_reported" },
+            { 226, ":im_used" },
+            { 300, ":multiple_choices" },
+            { 301, ":moved_permanently" },
+            { 302, ":found" },
+            { 303, ":see_other" },
+            { 304, ":not_modified" },
+            { 305, ":use_proxy" },
+            { 306, ":reserved" },
+            { 307, ":temporary_redirect" },
+            { 308, ":permanent_redirect" },
+            { 400, ":bad_request" },
+            { 401, ":unauthorized" },
+            { 402, ":payment_required" },
+            { 403, ":forbidden" },
+            { 404, ":not_found" },
+            { 405, ":method_not_allowed" },
+            { 406, ":not_acceptable" },
+            { 407, ":proxy_authentication_required" },
+            { 408, ":request_timeout" },
+            { 409, ":conflict" },
+            { 410, ":gone" },
+            { 411, ":length_required" },
+            { 412, ":precondition_failed" },
+            { 413, ":request_entity_too_large" },
+            { 414, ":request_uri_too_long" },
+            { 415, ":unsupported_media_type" },
+            { 416, ":requested_range_not_satisfiable" },
+            { 417, ":expectation_failed" },
+            { 422, ":unprocessable_entity" },
+            { 423, ":precondition_required" },
+            { 424, ":too_many_requests" },
+            { 426, ":request_header_fields_too_large" },
+            { 500, ":internal_server_error" },
+            { 501, ":not_implemented" },
+            { 502, ":bad_gateway" },
+            { 503, ":service_unavailable" },
+            { 504, ":gateway_timeout" },
+            { 505, ":http_version_not_supported" },
+            { 506, ":variant_also_negotiates" },
+            { 507, ":insufficient_storage" },
+            { 508, ":loop_detected" },
+            { 510, ":not_extended" },
+            { 511, ":network_authentication_required" },
           },
           c = {
-            { 'signed', 'unsigned' },
+            { "signed", "unsigned" },
           },
-          ['lua,vim'] = {
-            { ['let\\s\\+\\([gstb]\\):\\(\\a\\+\\|\\a\\+\\)\\s*\\(.\\|+\\|-\\|*\\|\\\\\\)\\{,1}=\\s*\\(\\a\\+\\)\\s*.*$'] = 'vim.\\1.\\2 = \\3' },
+          ["lua,vim"] = {
+            {
+              ["let\\s\\+\\([gstb]\\):\\(\\a\\+\\|\\a\\+\\)\\s*\\(.\\|+\\|-\\|*\\|\\\\\\)\\{,1}=\\s*\\(\\a\\+\\)\\s*.*$"] = "vim.\\1.\\2 = \\3",
+            },
           },
           markdown = {
-            { '[ ]', '[x]' },
-            { '#', '##', '###', '####', '#####' },
-            { ['\\(\\*\\*\\|__\\)\\(.*\\)\\1'] = '_\\2_' },
-            { ['\\(\\*\\|_\\)\\(.*\\)\\1'] = '__\\2__' },
+            { "[ ]", "[x]" },
+            { "#", "##", "###", "####", "#####" },
+            { ["\\(\\*\\*\\|__\\)\\(.*\\)\\1"] = "_\\2_" },
+            { ["\\(\\*\\|_\\)\\(.*\\)\\1"] = "__\\2__" },
           },
-          ['typescript,javascript'] = {
-            { ['const \\(.\\+\\)\\s\\+=\\s\\+require(\\(.\\+\\))'] = 'import \\1 from \\2' },
-            { ['import \\(.\\+\\) from \\(.\\+\\)'] = 'const \\1 = require(\\2)' },
-          }
+          ["typescript,javascript"] = {
+            { ["const \\(.\\+\\)\\s\\+=\\s\\+require(\\(.\\+\\))"] = "import \\1 from \\2" },
+            { ["import \\(.\\+\\) from \\(.\\+\\)"] = "const \\1 = require(\\2)" },
+          },
         }
 
-        switch_definition = vim.fn['alpaca#initialize#redefine_dict_to_each_filetype'](switch_definition, {})
+        switch_definition = vim.fn["alpaca#initialize#redefine_dict_to_each_filetype"](switch_definition, {})
 
         local function get_switch_mappings()
           local definitions = vim.empty_dict()
@@ -1319,9 +1789,9 @@ function M.setup()
 
           if ft ~= "" then
             local filetypes = {}
-            for filetype, _ in string.gmatch(ft, '([^,]+)') do
+            for filetype, _ in string.gmatch(ft, "([^,]+)") do
               table.insert(filetypes, filetype)
-              local filetype_name = table.concat(filetypes, '.')
+              local filetype_name = table.concat(filetypes, ".")
 
               if switch_definition[filetype_name] ~= nil then
                 definitions = merge(definitions, switch_definition[filetype_name])
@@ -1329,12 +1799,12 @@ function M.setup()
             end
           end
 
-          if vim.fn.exists('b:rails_root') == 0 and switch_definition['rails'] ~= nil then
-            definitions = merge(definitions, switch_definition['rails'])
+          if vim.fn.exists("b:rails_root") == 0 and switch_definition["rails"] ~= nil then
+            definitions = merge(definitions, switch_definition["rails"])
           end
 
-          if switch_definition['_'] ~= nil then
-            definitions = merge(definitions, switch_definition['_'])
+          if switch_definition["_"] ~= nil then
+            definitions = merge(definitions, switch_definition["_"])
           end
 
           return definitions
@@ -1343,11 +1813,11 @@ function M.setup()
         local switch_definition_cache = {}
 
         local function define_switch_mappings()
-          if vim.fn.exists('b:switch_custom_definitions') ~= 0 then
-            vim.cmd('unlet b:switch_custom_definitions')
+          if vim.fn.exists("b:switch_custom_definitions") ~= 0 then
+            vim.cmd("unlet b:switch_custom_definitions")
           end
 
-          local ft = vim.fn.empty(vim.bo.filetype) == 1 and '*' or vim.bo.filetype
+          local ft = vim.fn.empty(vim.bo.filetype) == 1 and "*" or vim.bo.filetype
 
           if switch_definition_cache[ft] == nil then
             switch_definition_cache[ft] = get_switch_mappings()
@@ -1360,70 +1830,70 @@ function M.setup()
         vim.api.nvim_create_autocmd("Filetype", {
           pattern = "*",
           group = group,
-          callback = define_switch_mappings
+          callback = define_switch_mappings,
         })
 
         define_switch_mappings()
-      end
-    }
+      end,
+    })
 
     -- file types
-    use {
-      'cespare/vim-toml',
-      ft = { 'toml' }
-    }
+    use({
+      "cespare/vim-toml",
+      ft = { "toml" },
+    })
 
-    use {
-      'slim-template/vim-slim',
-      ft     = { "slim" }
-    }
+    use({
+      "slim-template/vim-slim",
+      ft = { "slim" },
+    })
 
-    use {
-      'mutewinter/nginx.vim',
-      ft     = { "nginx" }
-    }
+    use({
+      "mutewinter/nginx.vim",
+      ft = { "nginx" },
+    })
 
-    use {
-      'elixir-lang/vim-elixir',
-      ft     = { "elixir" }
-    }
+    use({
+      "elixir-lang/vim-elixir",
+      ft = { "elixir" },
+    })
 
-    use {
-      'mattreduce/vim-mix',
-      ft     = { "elixir" }
-    }
+    use({
+      "mattreduce/vim-mix",
+      ft = { "elixir" },
+    })
 
-    use {
-      'vim-scripts/sh.vim',
-      ft  = 'sh'
-    }
+    use({
+      "vim-scripts/sh.vim",
+      ft = "sh",
+    })
 
-    use {
-      'keith/swift.vim',
-      ft = { 'swift' },
-      rtp = 'vim'
-    }
+    use({
+      "keith/swift.vim",
+      ft = { "swift" },
+      rtp = "vim",
+    })
 
-    use {
-      'hashivim/vim-terraform',
-      ft = { 'terraform' },
+    use({
+      "hashivim/vim-terraform",
+      ft = { "terraform" },
       config = function()
         vim.g.terraform_fmt_on_save = 1
-      end
-    }
+      end,
+    })
 
-    use {
-      'rust-lang/rust.vim',
-      ft = { 'rust' },
+    use({
+      "rust-lang/rust.vim",
+      ft = { "rust" },
       config = function()
         vim.g.rustfmt_autosave = 1
-      end
-    }
+      end,
+    })
 
-    use {
-      'jlcrochet/vim-rbs',
-      ft = { "rbs" }
-    }
+    use({
+      "jlcrochet/vim-rbs",
+      ft = { "rbs" },
+    })
 
     -- -- Git
     -- use {
@@ -1433,71 +1903,71 @@ function M.setup()
     --     require("config.neogit").setup()
     --   end,
     -- }
-    use {
-      'tpope/vim-fugitive',
+    use({
+      "tpope/vim-fugitive",
       cmd = { "Git" },
       fn = { "fugitive#head" },
       setup = function()
-        vim.keymap.set('n', 'gM', ':Git commit --amend<CR>', { silent = true })
-        vim.keymap.set('n', 'gb', ':Git blame<CR>', { silent = true })
-        vim.keymap.set('n', 'gm', ':Git commit<CR>', { silent = true })
-        vim.keymap.set('n', 'gp', ':<C-U>Git push<Space>')
+        vim.keymap.set("n", "gM", ":Git commit --amend<CR>", { silent = true })
+        vim.keymap.set("n", "gb", ":Git blame<CR>", { silent = true })
+        vim.keymap.set("n", "gm", ":Git commit<CR>", { silent = true })
+        vim.keymap.set("n", "gp", ":<C-U>Git push<Space>")
       end,
       config = function()
         local vgroup = vim.api.nvim_create_augroup("PackerVimFugitive", { clear = true })
-        vim.api.nvim_create_autocmd('FileType', {
+        vim.api.nvim_create_autocmd("FileType", {
           group = vgroup,
           pattern = "fugitiveblame",
-          command = 'vertical resize 25'
+          command = "vertical resize 25",
         })
 
-        vim.api.nvim_create_autocmd('FileType', {
+        vim.api.nvim_create_autocmd("FileType", {
           group = vgroup,
           pattern = { "gitcommit", "git-diff" },
           callback = function()
-            vim.keymap.set('n', 'q', ':q<CR>', { buffer = true })
-          end
+            vim.keymap.set("n", "q", ":q<CR>", { buffer = true })
+          end,
         })
-      end
-    }
+      end,
+    })
 
-    use {
-      'alpaca-tc/git-vim',
+    use({
+      "alpaca-tc/git-vim",
       cmd = { "GitDiff", "GitVimDiff", "GitCheckout", "GitAdd", "GitLog", "GitCommit", "GitBlame", "GitPush" },
       fn = { "git#get_current_branch" },
       setup = function()
         vim.keymap.set("n", "gA", ":<C-U>GitAdd<Space>")
-        vim.keymap.set('n', 'ga', ':<C-U>GitAdd<CR>', { silent = true })
-        vim.keymap.set('n', 'gD', ':<C-U>GitDiff<Space>')
-        vim.keymap.set('n', 'gDD', ':<C-U>GitDiff HEAD<CR>')
+        vim.keymap.set("n", "ga", ":<C-U>GitAdd<CR>", { silent = true })
+        vim.keymap.set("n", "gD", ":<C-U>GitDiff<Space>")
+        vim.keymap.set("n", "gDD", ":<C-U>GitDiff HEAD<CR>")
 
-        vim.g.git_command_edit = 'vnew'
+        vim.g.git_command_edit = "vnew"
         vim.g.git_no_default_mappings = 1
-      end
-    }
+      end,
+    })
 
     -- never use
-    use {
-      'Shougo/vinarise.vim',
+    use({
+      "Shougo/vinarise.vim",
       cmd = { "Vinarise" },
-      requires = { "s-yukikaze/vinarise-plugin-peanalysis" }
-    }
+      requires = { "s-yukikaze/vinarise-plugin-peanalysis" },
+    })
 
-    use {
-      's-yukikaze/vinarise-plugin-peanalysis',
+    use({
+      "s-yukikaze/vinarise-plugin-peanalysis",
       opt = true,
-      run = 'brew install binutils'
-    }
+      run = "brew install binutils",
+    })
 
     if packer_bootstrap then
-      print "Restart Neovim required after installation!"
+      print("Restart Neovim required after installation!")
       require("packer").sync()
     end
   end
 
   packer_init()
 
-  local packer = require "packer"
+  local packer = require("packer")
   packer.init(conf)
   packer.startup(plugins)
 end
