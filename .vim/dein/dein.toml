@@ -1,3 +1,0 @@
-[[plugins]]
-repo = 'vim-jp/vital.vim'
-on_func = ['vital#of']

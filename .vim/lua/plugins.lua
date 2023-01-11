@@ -1188,11 +1188,12 @@ function M.setup()
           elseif
             isTsJs
             and (
-              vim.fn["filereadable"](root .. "/deno.json")
+              vim.fn["filereadable"](root .. "/deno.json") == 1
               or file_match_str(root .. "/vercel.json", "vercel-deno")
               or file_match_str(currentFile, "https://deno.land/")
             )
           then
+            print(vim.inspect(vim.fn["filereadable"](root .. "/deno.json") == 1))
             vim.cmd("LspStart denols")
           elseif isTsJs and file_match_str(root .. "/package.json", "typescript") then
             vim.cmd("LspStart typescript-language-server")
