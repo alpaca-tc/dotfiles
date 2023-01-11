@@ -5,18 +5,6 @@ function M.setup()
   local packer_bootstrap = false
 
   -- packer.nvim configuration
-  local conf = {
-    display = {
-      open_fn = function()
-        return require("packer.util").float({ border = "rounded" })
-      end,
-    },
-    subcommands = {
-      install = "clone --no-single-branch --progress",
-    },
-    max_jobs = 5,
-  }
-
   local augroup = vim.api.nvim_create_augroup("PackerPlugins", { clear = true })
   vim.api.nvim_create_autocmd("BufWritePost", {
     pattern = "plugins.lua",
@@ -25,8 +13,8 @@ function M.setup()
       -- vim.cmd('luafile <afile>')
       -- vim.cmd('PackerSync')
 
-      vim.cmd('source <afile>')
-      vim.cmd('PackerCompile')
+      -- vim.cmd('source <afile>')
+      -- vim.cmd('PackerCompile')
     end,
   })
 
@@ -49,9 +37,9 @@ function M.setup()
   -- Plugins
   local function plugins(use)
     -- Keep
-    use({ "wbthomason/packer.nvim" })
+    use({ "wbthomason/packer.nvim", opt = false })
 
-    use({ "tpope/vim-repeat" })
+    use({ "tpope/vim-repeat", opt = false })
 
     use({
       "vim-jp/vital.vim",
@@ -61,6 +49,7 @@ function M.setup()
 
     use({
       "cocopon/iceberg.vim",
+      opt = false,
     })
 
     use({
@@ -68,6 +57,7 @@ function M.setup()
       run = ":UpdateRemotePlugins",
       cmd = { "Deepl" },
       requires = { "mattn/webapi-vim" },
+      wants = { "webapi-vim" },
     })
 
     use({
@@ -102,13 +92,8 @@ function M.setup()
     use({
       "thinca/vim-quickrun",
       cmd = { "QuickRun" },
-      requires = {
-        {
-          "alpaca-tc/vim-quickrun-neovim-job",
-          branch = "with_env",
-          opt = false,
-        },
-      },
+      requires = { { "alpaca-tc/vim-quickrun-neovim-job", branch = "with_env" } },
+      wants = { "vim-quickrun-neovim-job" },
       setup = function()
         vim.keymap.set("n", ",r", ":QuickRun<CR>", { silent = true, noremap = true })
       end,
@@ -132,28 +117,32 @@ function M.setup()
           exec = { "%c test %o %s" },
         }
 
-        -- function! s:set_ruby_command()
-        -- let v = vital#quickrun#new().load('Prelude')
-        -- let root = v.import('Prelude').path2project_directory(getcwd())
-        --
-        -- if filereadable(root . '/Gemfile')
-        --   vim.g.quickrun_config['ruby'] = {
-        --     \ 'command': 'ruby',
-        --     \ 'exec': 'bundle exec %c %o %s',
-        --     \ }
-        --   else
-        --     vim.g.quickrun_config['ruby'] = {
-        --       \   'command': 'ruby',
-        --       \   'tempfile': '%{tempname()}.rb',
-        --       \ }
-        --       endif
-        --       endfunction
-        --
-        --       augroup QuickRunAutoCmd
-        --       autocmd!
-        --       autocmd FileType quickrun call alpaca_window#set_smart_close()
-        --       autocmd FileType ruby call s:set_ruby_command()
-        --       augroup END
+        local group = vim.api.nvim_create_augroup("PackerSwitchVim", { clear = true })
+        vim.api.nvim_create_autocmd("FileType", {
+          group = group,
+          pattern = "quickrun",
+          callback = vim.fn["alpaca_window#set_smart_closefunction"],
+        })
+
+        vim.api.nvim_create_autocmd("FileType", {
+          group = group,
+          pattern = "ruby",
+          callback = function()
+            local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
+
+            if vim.fn.filereadable(root .. "/Gemfile") == 1 then
+              vim.g.quickrun_config["ruby"] = {
+                command = "ruby",
+                exec = "bundle exec %c %o %s",
+              }
+            else
+              vim.g.quickrun_config["ruby"] = {
+                command = "ruby",
+                tempfile = "%{tempname()}.rb",
+              }
+            end
+          end,
+        })
       end,
     })
 
@@ -209,9 +198,9 @@ function M.setup()
       end,
     })
 
-    use {
-      'itchyny/lightline.vim',
-      event = { 'InsertEnter' },
+    use({
+      "itchyny/lightline.vim",
+      event = { "InsertEnter" },
       fn = { "lightline#update", "lightline#highlight" },
       setup = function()
         local function reltime()
@@ -243,69 +232,69 @@ function M.setup()
 
           me.statusline = function()
             me.update()
-            me.cache = me.update() and me.func() or me.cache or ''
+            me.cache = me.update() and me.func() or me.cache or ""
             return me.cache
           end
 
           return me
         end
 
-        vim.g['lightline#functions#git_branch'] = Lightline.new(
-          5,
-          function()
-            return vim.fn['git#get_current_branch']()
-          end
-        )
+        vim.g["lightline#functions#git_branch"] = Lightline.new(5, function()
+          return vim.fn["git#get_current_branch"]()
+        end)
 
-        vim.g['lightline#functions#plugin_information'] = Lightline.new(
-          0.5,
-          function()
-            local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
+        vim.g["lightline#functions#plugin_information"] = Lightline.new(0.5, function()
+          local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
 
-            if vim.fn.empty(vim.fn.bufname('%')) == 1 then
-              return ''
-            elseif vim.fn.empty(root) == 0 then
-              return "%" .. string.sub(vim.fn.expand('%:p'), string.len(root) + 1, -1)
-            else
-              return vim.fn.expand('%:p:~')
-            end
+          if vim.fn.empty(vim.fn.bufname("%")) == 1 then
+            return ""
+          elseif vim.fn.empty(root) == 0 then
+            return "%" .. string.sub(vim.fn.expand("%:p"), string.len(root) + 1, -1)
+          else
+            return vim.fn.expand("%:p:~")
           end
-        )
+        end)
 
         vim.g.lightline = {
           enable = {
             statusline = 1,
           },
-          colorscheme = 'wombat',
+          colorscheme = "wombat",
           active = {
             left = {
-              { 'mode' },
-              { 'information' },
-              { 'git_branch', 'modified' },
+              { "mode" },
+              { "information" },
+              { "git_branch", "modified" },
             },
             right = {
-              { 'lineinfo', 'file_size' },
-              { 'percent' },
-              { 'fileformat', 'fileencoding', 'filetype' }
+              { "lineinfo", "file_size" },
+              { "percent" },
+              { "fileformat", "fileencoding", "filetype" },
             },
           },
           component_function = {
-            information = 'g:lightline#functions#plugin_information.statusline',
+            information = "g:lightline#functions#plugin_information.statusline",
           },
           component_expand = {
-            git_branch =  'g:lightline#functions#git_branch.statusline',
+            git_branch = "g:lightline#functions#git_branch.statusline",
           },
         }
       end,
       config = function()
-        vim.fn['lightline#update']()
-      end
-    }
+        vim.fn["lightline#update"]()
+      end,
+    })
 
     use({
       "vim-scripts/camelcasemotion",
-      -- keys = { "<Plug>CamelCaseMotion_w", "<Plug>CamelCaseMotion_b", "<Plug>CamelCaseMotion_e", "<Plug>CamelCaseMotion_iw", "<Plug>CamelCaseMotion_ib", "<Plug>CamelCaseMotion_ie" },
-      -- opt = not vim.g.packer_loaded,
+      keys = {
+        "<Plug>CamelCaseMotion_w",
+        "<Plug>CamelCaseMotion_b",
+        "<Plug>CamelCaseMotion_e",
+        "<Plug>CamelCaseMotion_iw",
+        "<Plug>CamelCaseMotion_ib",
+        "<Plug>CamelCaseMotion_ie",
+      },
       setup = function()
         vim.keymap.set({ "n", "v", "o" }, "w", "<Plug>CamelCaseMotion_w", { silent = true })
         vim.keymap.set({ "n", "v", "o" }, "b", "<Plug>CamelCaseMotion_b", { silent = true })
@@ -445,19 +434,12 @@ function M.setup()
       "Shougo/ddu.vim",
       requires = {
         "vim-denops/denops.vim",
-        "alpaca-tc/ddu-filter-matcher_regexp",
-        "Shougo/ddu-ui-ff",
-        "Shougo/ddu-ui-filer",
-        "Shougo/ddu-kind-file",
-        "Shougo/ddu-source-action",
-        "Shougo/ddu-source-line",
-        { "alpaca-tc/ddu-source-mr", requires = { "lambdalisue/mr.vim" } },
-        "Shougo/ddu-source-file",
-        "shun/ddu-source-rg",
-        "ryota2357/ddu-column-icon_filename",
-        "Shougo/ddu-column-filename",
-        "alpaca-tc/ddu-source-git",
-        "Shougo/ddu-filter-converter_display_word",
+      },
+      after = {
+        "ddu-source-action",
+      },
+      wants = {
+        "denops.vim",
       },
       fn = {
         "ddu#start",
@@ -467,110 +449,73 @@ function M.setup()
         "ddu#custom#action",
       },
       config = function()
-        vim.fn['ddu#custom#patch_global']({
-          ui = 'ff',
-          sources = {
-            { name = 'line' },
-            { name = 'mr' },
-            { name = 'file' },
-            { name = 'rg' }
-          },
+        vim.fn["ddu#custom#patch_global"]({
           sourceOptions = {
             _ = {
-              matchers = { 'matcher_regexp' },
+              matchers = { "matcher_regexp" },
               ignoreCase = true,
             },
-            file = {
-              columns = { 'filename' },
-              sorters = { 'sorter_file_alpha' },
-            },
           },
-          sourceParams = {
-            mr = {
-              kind = 'mru',
-              foldRoot = true,
-              relativeIfSameRepository = true,
-            },
-          },
-          uiParams = {
-            ff = {
-              filterFloatingPosition = 'top',
-              filterSplitDirection = 'topleft',
-              startFilter = true,
-              splitDirection = 'topleft',
-              previewHeight = 40,
-              previewRow = 40,
-              previewVertical = true,
-              previewWidth = 50,
-            },
-            filer = {
-              filterFloatingPosition = 'top',
-              filterSplitDirection = 'topleft',
-              splitDirection = 'topleft',
-            },
-          },
-          kindOptions = {
-            file = {
-              defaultAction = 'open',
-            },
-            action = {
-              defaultAction = 'do',
-            },
-            git_branch = {
-              defaultAction = 'switch',
-            },
-            git_status = {
-              defaultAction = 'open',
-            },
-            git_log = {
-              defaultAction = 'yank_hash',
-            },
-          }
         })
       end,
     })
 
     use({
       "Shougo/ddu-kind-file",
-      after = { "ddu.vim" },
-      setup = function()
-        vim.keymap.set("n", "[unite]f", ":call ddu#start(#{ name: 'file', sources: [#{ name: 'file' }], ui: 'filer', columns: ['icon_filename'], uiParams: #{ filer: #{ search: expand('%:p') } } })<CR>", { noremap = true, silent = true })
-      end,
       config = function()
-        vim.fn['ddu#custom#action'](
-          'kind',
-          'file',
-          'grep',
-          function(args)
-            -- NOTE: param "path" must be one directory
-            local path = args.items[0].action.path
-            local directory = vim.fn['isdirectory'](path) and path or vim.fn['fnamemodify'](path, ':h')
+        vim.fn["ddu#custom#patch_global"]({
+          kindOptions = {
+            file = {
+              defaultAction = "open",
+            },
+          },
+        })
 
-            vim.fn['ddu#start']({
-              name = args.options.name,
-              push = true,
-              sources = {
-                {
-                  name = 'rg',
-                  params = {
-                    path = directory,
-                    input = vim.fn['input']('Pattern: '),
-                  },
+        vim.fn["ddu#custom#action"]("kind", "file", "grep", function(args)
+          -- NOTE: param "path" must be one directory
+          local path = args.items[0].action.path
+          local directory = vim.fn["isdirectory"](path) and path or vim.fn["fnamemodify"](path, ":h")
+
+          vim.fn["ddu#start"]({
+            name = args.options.name,
+            push = true,
+            sources = {
+              {
+                name = "rg",
+                params = {
+                  path = directory,
+                  input = vim.fn["input"]("Pattern: "),
                 },
               },
-            })
-          end
-        )
+            },
+          })
+        end)
       end,
     })
 
     use({
       "Shougo/ddu-ui-ff",
-      -- requires = { "itchyny/lightline.vim" },
+      wants = { "lightline.vim" },
       config = function()
+        vim.fn["ddu#custom#patch_global"]({
+          ui = "ff",
+          uiParams = {
+            ff = {
+              filterFloatingPosition = "top",
+              filterSplitDirection = "topleft",
+              startFilter = true,
+              splitDirection = "topleft",
+              previewHeight = 40,
+              previewRow = 40,
+              previewVertical = true,
+              previewWidth = 50,
+            },
+          }
+        })
+
         local function move_to_ddu_buffer(ft)
-          for n = 1, vim.fn.winnr('$') do
-            local win_ft = vim.fn.getwinvar(n, '&ft')
+          for n = 1, vim.fn.winnr("$") do
+            local win_ft = vim.fn.getwinvar(n, "&ft")
 
             if win_ft == ft then
               local id = vim.fn.win_getid(n)
@@ -580,30 +525,29 @@ function M.setup()
         end
 
         local function move_to_up_or_ddu_ui_filter()
-          if vim.fn['line']('.') == 1 then
-            move_to_ddu_buffer('ddu-ff-filter')
+          if vim.fn["line"](".") == 1 then
+            move_to_ddu_buffer("ddu-ff-filter")
           else
-            vim.fn.cursor(vim.fn.line('.') - 1, vim.fn.col('.'))
+            vim.fn.cursor(vim.fn.line(".") - 1, vim.fn.col("."))
           end
         end
 
         local function disable_lightline_on_ddu_filter_ui()
-          local last = vim.fn.winnr('$')
+          local last = vim.fn.winnr("$")
           for n = 1, last do
-            local ft = vim.fn.getwinvar(n, '&ft')
+            local ft = vim.fn.getwinvar(n, "&ft")
 
-            if ft == 'ddu-ff-filter' then
+            if ft == "ddu-ff-filter" then
               local width = vim.fn.winwidth(n)
-              local statusline = vim.fn['repeat']('-', width)
-              print(n, statusline)
-              vim.fn.setwinvar(n, '&statusline', statusline)
+              local statusline = vim.fn["repeat"]("-", width)
+              vim.fn.setwinvar(n, "&statusline", statusline)
             end
           end
         end
 
         local function move_to_ddu_ff_and_cr()
-          move_to_ddu_buffer('ddu-ff')
-          vim.fn['ddu#ui#ff#do_action']('itemAction')
+          move_to_ddu_buffer("ddu-ff")
+          vim.fn["ddu#ui#ff#do_action"]("itemAction")
           -- vim.fn['ddu#ui#ff#close']()
         end
 
@@ -613,30 +557,35 @@ function M.setup()
           vim.api.nvim_create_autocmd("BufEnter", {
             group = group,
             pattern = "<buffer>",
-            command = "if winnr('$') == 1 |quit| endif"
+            command = "if winnr('$') == 1 |quit| endif",
           })
 
           vim.keymap.set("n", "q", function()
-            vim.fn['ddu#ui#ff#do_action']('quit')
+            vim.fn["ddu#ui#ff#do_action"]("quit")
           end, { noremap = true, buffer = true, silent = true })
-          vim.keymap.set("n", "<Space>q", ":call ddu#ui#ff#do_action('quit')<CR>", { noremap = true, buffer = true, silent = true })
+          vim.keymap.set(
+            "n",
+            "<Space>q",
+            ":call ddu#ui#ff#do_action('quit')<CR>",
+            { noremap = true, buffer = true, silent = true }
+          )
         end
 
         local function close_filter_window_and_do_item_action()
-          vim.fn['ddu#ui#ff#do_action']('itemAction')
+          vim.fn["ddu#ui#ff#do_action"]("itemAction")
         end
 
         local function close_preview_window()
-          local ddu_ff = 'ddu-ff:/'
+          local ddu_ff = "ddu-ff:/"
 
-          for n = 1, vim.fn.winnr('$') do
+          for n = 1, vim.fn.winnr("$") do
             local bufnr = vim.fn.winbufnr(n)
             local bufname = vim.fn.bufname(bufnr)
 
             local is_ddu_ff = string.sub(bufname, 1, string.len(ddu_ff)) == ddu_ff
 
-            if vim.fn.getwinvar(n, '&l:buftype') == 'nofile' and is_ddu_ff then
-              vim.cmd(n .. 'wincmd c')
+            if vim.fn.getwinvar(n, "&l:buftype") == "nofile" and is_ddu_ff then
+              vim.cmd(n .. "wincmd c")
               return
             end
           end
@@ -652,8 +601,8 @@ function M.setup()
               group = group,
               pattern = "<buffer>",
               callback = function()
-                vim.fn['ddu#ui#ff#do_action']('preview')
-              end
+                vim.fn["ddu#ui#ff#do_action"]("preview")
+              end,
             })
           else
             close_preview_window()
@@ -661,16 +610,16 @@ function M.setup()
         end
 
         local function ddu_replace()
-          vim.fn['ddu#ui#ff#do_action']('itemAction', { name = 'quickfix' })
-          vim.fn['ddu#ui#ff#close']()
-          vim.cmd('cclose')
-          vim.fn['qfreplace#start']('')
+          vim.fn["ddu#ui#ff#do_action"]("itemAction", { name = "quickfix" })
+          vim.fn["ddu#ui#ff#close"]()
+          vim.cmd("cclose")
+          vim.fn["qfreplace#start"]("")
         end
 
         local function get_ddu_ff_winnr()
-          local last = tonumber(vim.fn['winnr']('$'))
+          local last = tonumber(vim.fn["winnr"]("$"))
           for n = 1, last do
-            if vim.fn.getwinvar(n, '&ft') == 'ddu-ff' then
+            if vim.fn.getwinvar(n, "&ft") == "ddu-ff" then
               return n
             end
           end
@@ -684,14 +633,17 @@ function M.setup()
         vim.api.nvim_create_autocmd("FileType", {
           group = group,
           pattern = "ddu-ff-filter",
-          callback = disable_lightline_on_ddu_filter_ui
+          callback = disable_lightline_on_ddu_filter_ui,
         })
 
-        vim.api.nvim_create_autocmd({ "BufLeave", "WinLeave", "WinEnter", "BufEnter", "SessionLoadPost", "FileChangedShellPost" }, {
-          group = group,
-          pattern = "*",
-          callback = disable_lightline_on_ddu_filter_ui
-        })
+        vim.api.nvim_create_autocmd(
+          { "BufLeave", "WinLeave", "WinEnter", "BufEnter", "SessionLoadPost", "FileChangedShellPost" },
+          {
+            group = group,
+            pattern = "*",
+            callback = disable_lightline_on_ddu_filter_ui,
+          }
+        )
 
         vim.api.nvim_create_autocmd("FileType", {
           group = group,
@@ -703,19 +655,69 @@ function M.setup()
             vim.opt_local.cursorline = true
             ddu_ui_ff_shared()
 
-            vim.keymap.set("n", "<CR>", close_filter_window_and_do_item_action, { noremap = true, buffer = true, silent = true })
-            vim.keymap.set("n", "<Space>", ":call ddu#ui#ff#do_action('toggleSelectItem')<CR>j", { noremap = true, buffer = true , silent = true })
-            vim.keymap.set("n", "f", ":call ddu#ui#ff#do_action('toggleSelectItem')<CR>j", { noremap = true, buffer = true , silent = true })
-            vim.keymap.set("x", "<Space>", ":call ddu#ui#ff#do_action('toggleSelectItem')<CR>", { noremap = true, silent = true, buffer = true })
-            vim.keymap.set("n", "<Tab>", ":call ddu#ui#ff#do_action('chooseAction')<CR>", { noremap = true, buffer = true , silent = true })
-            vim.keymap.set("n", "a", ":call ddu#ui#ff#do_action('chooseAction')<CR>", { noremap = true, buffer = true , silent = true })
-            vim.keymap.set("n", "*", ":call ddu#ui#ff#do_action('toggleAllItems')<CR>", { noremap = true, buffer = true , silent = true })
-            vim.keymap.set("n", "k", move_to_up_or_ddu_ui_filter, { noremap = true, buffer = true , silent = true })
-            vim.keymap.set("n", "i", ":call ddu#ui#ff#do_action('openFilterWindow')<CR>", { noremap = true, buffer = true , silent = true })
-            vim.keymap.set("n", "A", ":call ddu#ui#ff#do_action('openFilterWindow')<CR>", { noremap = true, buffer = true , silent = true })
-            vim.keymap.set("n", "p", ddu_toggle_preview, { noremap = true, buffer = true , silent = true })
-            vim.keymap.set("n", "re", ddu_replace, { noremap = true, buffer = true , silent = true })
-          end
+            vim.keymap.set(
+              "n",
+              "<CR>",
+              close_filter_window_and_do_item_action,
+              { noremap = true, buffer = true, silent = true }
+            )
+            vim.keymap.set(
+              "n",
+              "<Space>",
+              ":call ddu#ui#ff#do_action('toggleSelectItem')<CR>j",
+              { noremap = true, buffer = true, silent = true }
+            )
+            vim.keymap.set(
+              "n",
+              "f",
+              ":call ddu#ui#ff#do_action('toggleSelectItem')<CR>j",
+              { noremap = true, buffer = true, silent = true }
+            )
+            vim.keymap.set(
+              "x",
+              "<Space>",
+              ":call ddu#ui#ff#do_action('toggleSelectItem')<CR>",
+              { noremap = true, silent = true, buffer = true }
+            )
+            vim.keymap.set(
+              "n",
+              "<Tab>",
+              ":call ddu#ui#ff#do_action('chooseAction')<CR>",
+              { noremap = true, buffer = true, silent = true }
+            )
+            vim.keymap.set(
+              "n",
+              "a",
+              ":call ddu#ui#ff#do_action('chooseAction')<CR>",
+              { noremap = true, buffer = true, silent = true }
+            )
+            vim.keymap.set(
+              "n",
+              "*",
+              ":call ddu#ui#ff#do_action('toggleAllItems')<CR>",
+              { noremap = true, buffer = true, silent = true }
+            )
+            vim.keymap.set(
+              "n",
+              "k",
+              move_to_up_or_ddu_ui_filter,
+              { noremap = true, buffer = true, silent = true }
+            )
+            vim.keymap.set(
+              "n",
+              "i",
+              ":call ddu#ui#ff#do_action('openFilterWindow')<CR>",
+              { noremap = true, buffer = true, silent = true }
+            )
+            vim.keymap.set(
+              "n",
+              "A",
+              ":call ddu#ui#ff#do_action('openFilterWindow')<CR>",
+              { noremap = true, buffer = true, silent = true }
+            )
+            vim.keymap.set("n", "p", ddu_toggle_preview, { noremap = true, buffer = true, silent = true })
+            vim.keymap.set("n", "re", ddu_replace, { noremap = true, buffer = true, silent = true })
+          end,
         })
 
         vim.api.nvim_create_autocmd("FileType", {
@@ -723,14 +725,9 @@ function M.setup()
           pattern = "ddu-ff-filter",
           callback = function()
             ddu_ui_ff_shared()
-            vim.keymap.set(
-            "n",
-            "j",
-            function()
-              move_to_ddu_buffer('ddu-ff')
-            end,
-            { noremap = true, buffer = true, silent = true }
-            )
+            vim.keymap.set("n", "j", function()
+              move_to_ddu_buffer("ddu-ff")
+            end, { noremap = true, buffer = true, silent = true })
             vim.keymap.set(
               "n",
               "<CR>",
@@ -745,15 +742,15 @@ function M.setup()
             )
 
             vim.keymap.set("n", "<C-W>j", "<C-W>j<C-W>j", { noremap = true, buffer = true, silent = true })
-            vim.cmd('hi! link StatusLine Normal')
-          end
+            vim.cmd("hi! link StatusLine Normal")
+          end,
         })
 
         vim.api.nvim_create_autocmd("WinEnter", {
           group = group,
           pattern = "*",
           callback = function()
-            local win_enter = vim.bo.ft == 'ddu-ff' or vim.bo.ft == 'ddu-ff-filter'
+            local win_enter = vim.bo.ft == "ddu-ff" or vim.bo.ft == "ddu-ff-filter"
             local ddu_ff_winnr = get_ddu_ff_winnr()
 
             if ddu_ff_winnr == nil then
@@ -763,19 +760,20 @@ function M.setup()
 
             if win_enter then
               if ddu_window_size[ddu_ff_winnr] ~= nil then
-                vim.cmd(ddu_ff_winnr .. 'resize ' .. ddu_window_size[ddu_ff_winnr][0])
-                vim.cmd('vertical ' .. ddu_ff_winnr .. ' resize ' .. ddu_window_size[ddu_ff_winnr][1])
+                vim.cmd(ddu_ff_winnr .. "resize " .. ddu_window_size[ddu_ff_winnr][0])
+                vim.cmd("vertical " .. ddu_ff_winnr .. " resize " .. ddu_window_size[ddu_ff_winnr][1])
 
                 ddu_window_size[ddu_ff_winnr] = nil
               end
             else
               if ddu_window_size[ddu_ff_winnr] == nil then
-                ddu_window_size[ddu_ff_winnr] = { [0] = vim.fn.winheight(ddu_ff_winnr), [1] = vim.fn.winwidth(ddu_ff_winnr) }
+                ddu_window_size[ddu_ff_winnr] =
+                  { [0] = vim.fn.winheight(ddu_ff_winnr), [1] = vim.fn.winwidth(ddu_ff_winnr) }
               end
 
-              vim.cmd(ddu_ff_winnr .. 'resize 1')
+              vim.cmd(ddu_ff_winnr .. "resize 1")
             end
-          end
+          end,
         })
       end,
     })
@@ -844,41 +842,272 @@ function M.setup()
     })
 
     use({
-      "alpaca-tc/ddu-source-git",
+      "Shougo/ddu-source-action",
       config = function()
+        vim.fn["ddu#custom#patch_global"]({
+          kindOptions = {
+            action = {
+              defaultAction = "do",
+            },
+          },
+        })
+      end
+    })
+
+    use({
+      "Shougo/ddu-source-file",
+      requires = {
+        "ryota2357/ddu-column-icon_filename",
+        "Shougo/ddu-column-filename"
+      },
+      wants = {
+        "ddu.vim",
+        "ddu-ui-filer",
+        "ddu-kind-file",
+        "ddu-filter-matcher_regexp",
+        "ddu-source-action",
+        "ddu-column-icon_filename",
+        "ddu-column-filename",
+      },
+      keys = {
+        { "n", "<C-J>f" }
+      },
+      config = function()
+        vim.keymap.set("n", "<C-J>f", ":call ddu#start(#{ name: 'file', sources: [#{ name: 'file' }], ui: 'filer', sourceOptions: #{ _: #{ columns: ['filename'] } }, uiParams: #{ filer: #{ search: expand('%:p') } } })<CR>", { noremap = true, silent = true })
+
+        vim.fn["ddu#custom#patch_global"]({
+          sourceOptions = {
+            file = {
+              columns = { "filename" },
+              sorters = { "sorter_file_alpha" },
+            },
+          },
+          uiParams = {
+            filer = {
+              filterFloatingPosition = "top",
+              filterSplitDirection = "topleft",
+              splitDirection = "topleft",
+            },
+          }
+        })
+      end
+    })
+
+    use({
+      "alpaca-tc/ddu-source-mr",
+      wants = {
+        "ddu.vim",
+        "ddu-ui-ff",
+        "ddu-kind-file",
+        "ddu-filter-matcher_regexp",
+        "ddu-source-action",
+      },
+      keys = {
+        { "n", "<C-J>j" },
+      },
+      config = function()
+        vim.keymap.set(
+          "n",
+          "<C-J>j",
+          ":call ddu#start(#{ name: 'mr', sources: [#{ name: 'mr' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>",
+          { noremap = true, silent = true }
+        )
+
+        vim.fn["ddu#custom#patch_global"]({
+          sourceParams = {
+            mr = {
+              kind = "mru",
+              foldRoot = true,
+              relativeIfSameRepository = true,
+            },
+          },
+        })
+      end,
+    })
+
+    use({
+      "shun/ddu-source-rg",
+      requires = {
+        "Shougo/ddu-filter-converter_display_word"
+      },
+      wants = {
+        "ddu.vim",
+        "ddu-ui-ff",
+        "ddu-kind-file",
+        "ddu-filter-matcher_regexp",
+        "ddu-source-action",
+        "ddu-filter-converter_display_word",
+      },
+      keys = {
+        { "n", "gr" },
+        { "n", "gR" },
+      },
+      config = function()
+        local function ddu_start_rg(input)
+          local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
+          local options = {
+            name = "rg",
+            sources = {
+              {
+                name = "rg",
+                params = {
+                  path = root,
+                  input = input,
+                },
+                options = {
+                  matchers = { "converter_display_word", "matcher_regexp" },
+                },
+              },
+            },
+            input = input,
+            ui = "ff",
+            volatile = string.len(input) == 0,
+            uiParams = {
+              autoResize = false,
+            },
+          }
+
+          vim.fn["ddu#start"](options)
+        end
+
+        vim.keymap.set("n", "gr", function()
+          ddu_start_rg(vim.fn.expand("<cword>"))
+        end, { noremap = true, silent = true })
+
+        vim.keymap.set("n", "gR", function()
+          ddu_start_rg("")
+        end, { noremap = true, silent = true })
+      end,
+    })
+
+    use({
+      "Shougo/ddu-source-line",
+      wants = {
+        "ddu.vim",
+        "ddu-ui-ff",
+        "ddu-kind-file",
+        "ddu-filter-matcher_regexp",
+        "ddu-source-action",
+      },
+      keys = {
+        { "n", "g/" },
+      },
+      config = function()
+        vim.keymap.set(
+          "n",
+          "g/",
+          ":call ddu#start(#{ name: 'line', sources: [#{ name: 'line' }] })<CR>",
+          { noremap = true, silent = true }
+        )
+      end,
+    })
+
+    use({
+      "alpaca-tc/ddu-source-git",
+      wants = {
+        "ddu.vim",
+        "ddu-ui-ff",
+        "ddu-kind-file",
+        "ddu-filter-matcher_regexp",
+        "ddu-source-action",
+      },
+      keys = {
+        { "n", "gl" },
+        { "n", "gs" },
+        { "n", "gh" },
+      },
+      config = function()
+        vim.fn["ddu#custom#patch_global"]({
+          kindOptions = {
+            git_branch = {
+              defaultAction = "switch",
+            },
+            git_status = {
+              defaultAction = "open",
+            },
+            git_log = {
+              defaultAction = "yank_hash",
+            },
+          },
+        })
+
+        vim.keymap.set(
+          "n",
+          "gl",
+          ":call ddu#start(#{ name: 'git_log', sources: [#{ name: 'git_log' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>",
+          { noremap = true, silent = true }
+        )
+        vim.keymap.set(
+          "n",
+          "gs",
+          ":call ddu#start(#{ name: 'git_status', sources: [#{ name: 'git_status' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>",
+          { noremap = true, silent = true }
+        )
+        vim.keymap.set(
+          "n",
+          "gh",
+          ":call ddu#start(#{ name: 'git_branch', sources: [#{ name: 'git_branch', params: #{ args: ['-a'] } }] })<CR>",
+          { noremap = true, silent = true }
+        )
+
         local group = vim.api.nvim_create_augroup("PackerDduSourceGit", { clear = true })
         vim.api.nvim_create_autocmd("FileType", {
           group = group,
           pattern = "ddu-ff",
           callback = function()
-            local source = vim.b.ddu_ui_name or ''
+            local source = vim.b.ddu_ui_name or ""
 
-            if source == 'git_branch' then
-              vim.keymap.set("n", "gu", ":call ddu#ui#ff#do_action('itemAction', {'name': 'restore'})<CR>", { noremap = true, silent = true, buffer = true })
-              vim.keymap.set("n", "d", ":call ddu#ui#ff#do_action('itemAction', #{ name: 'delete_local'})<CR>", { noremap = true, silent = true, buffer = true })
-              vim.keymap.set("n", "D", ":call ddu#ui#ff#do_action('itemAction', #{ name: 'delete_local_force'})<CR>", { noremap = true, silent = true, buffer = true })
-            elseif source == 'git_status' then
-              vim.keymap.set("n", "ga", ":call ddu#ui#ff#do_action('itemAction', #{ name: 'add'})<CR>", { noremap = true, silent = true, buffer = true })
-              vim.keymap.set("n", "gu", ":call ddu#ui#ff#do_action('itemAction', #{ name: 'unstage'})<CR>", { noremap = true, silent = true, buffer = true })
+            if source == "git_branch" then
+              vim.keymap.set(
+                "n",
+                "gu",
+                ":call ddu#ui#ff#do_action('itemAction', {'name': 'restore'})<CR>",
+                { noremap = true, silent = true, buffer = true }
+              )
+              vim.keymap.set(
+                "n",
+                "d",
+                ":call ddu#ui#ff#do_action('itemAction', #{ name: 'delete_local'})<CR>",
+                { noremap = true, silent = true, buffer = true }
+              )
+              vim.keymap.set(
+                "n",
+                "D",
+                ":call ddu#ui#ff#do_action('itemAction', #{ name: 'delete_local_force'})<CR>",
+                { noremap = true, silent = true, buffer = true }
+              )
+            elseif source == "git_status" then
+              vim.keymap.set(
+                "n",
+                "ga",
+                ":call ddu#ui#ff#do_action('itemAction', #{ name: 'add'})<CR>",
+                { noremap = true, silent = true, buffer = true }
+              )
+              vim.keymap.set(
+                "n",
+                "gu",
+                ":call ddu#ui#ff#do_action('itemAction', #{ name: 'unstage'})<CR>",
+                { noremap = true, silent = true, buffer = true }
+              )
             end
-          end
+          end,
         })
       end,
     })
 
     use({
       "lambdalisue/mr.vim",
+      fn = { "mr#mrr#list", "mr#mrw#list", "mr#mru#list" },
       event = { "BufEnter" },
     })
 
     use({
       "alpaca-tc/ddu-filter-matcher_regexp",
-      after = { "ddu.vim" },
       config = function()
-        vim.fn['ddu#custom#patch_global']({
+        vim.fn["ddu#custom#patch_global"]({
           filterParams = {
             matcher_regexp = {
-              highlightMatched = 'Statement',
+              highlightMatched = "Statement",
             },
           },
         })
@@ -1044,6 +1273,7 @@ function M.setup()
       "williamboman/mason.nvim",
       event = { "InsertEnter" },
       requires = { "williamboman/mason-lspconfig.nvim" },
+      wants = { "mason-lspconfig.nvim" },
       cmd = { "Mason", "MasonInstall", "MasonUninstall", "MasonUninstallAll", "MasonLog" },
       run = function()
         vim.cmd("MasonInstall lua-language-server")
@@ -1267,6 +1497,20 @@ function M.setup()
         "matsui54/ddc-buffer",
         "matsui54/ddc-dictionary",
         "Shougo/neosnippet.vim",
+      },
+      wants = {
+        "denops.vim",
+        "pum.vim",
+        "ddc-file",
+        "ddc-matcher_head",
+        "ddc-sorter_rank",
+        "ddc-converter_remove_overlap",
+        "ddc-ui-native",
+        "neco-vim",
+        "ddc-source-nvim-lsp",
+        "ddc-buffer",
+        "ddc-dictionary",
+        "neosnippet.vim",
       },
       event = { "InsertEnter" },
       config = function()
@@ -1617,7 +1861,7 @@ function M.setup()
     use({
       "alpaca-tc/nvim-miniyank",
       branch = "loop_cycle",
-      keymap = { "<Plug>(miniyank-autoput)", "<Plug>(miniyank-autoPut)" },
+      keys = { "<Plug>(miniyank-autoput)", "<Plug>(miniyank-autoPut)" },
       -- on_map = [['nx', '<Plug>(miniyank-autoput)'], ['nx', '<Plug>(miniyank-autoPut)']]
       setup = function()
         vim.g.miniyank_maxitems = 100
@@ -1662,7 +1906,7 @@ function M.setup()
 
     use({
       "alpaca-tc/alpaca_remove_dust.vim",
-      -- cmd = { "RemoveDustDisable", "RemoveDustEnable", "RemoveDust", "RemoveDustForce" },
+      cmd = { "RemoveDustDisable", "RemoveDustEnable", "RemoveDust", "RemoveDustForce" },
       setup = function()
         vim.g.remove_dust_enable = 1
 
@@ -1722,11 +1966,13 @@ function M.setup()
     use({
       "RRethy/nvim-treesitter-endwise",
       requires = { "nvim-treesitter/nvim-treesitter" },
+      wants = { "nvim-treesitter" },
     })
 
     use({
       "windwp/nvim-autopairs",
       requires = { "RRethy/nvim-treesitter-endwise" },
+      wants = { "nvim-treesitter-endwise" },
       event = { "InsertEnter" },
       config = function()
         local Rule = require("nvim-autopairs.rule")
@@ -2132,7 +2378,19 @@ function M.setup()
   packer_init()
 
   local packer = require("packer")
-  packer.init(conf)
+  packer.init({
+    display = {
+      open_fn = function()
+        return require("packer.util").float({ border = "rounded" })
+      end,
+    },
+    subcommands = {
+      install = "clone --no-single-branch --progress",
+    },
+    max_jobs = 5,
+    opt_default = true,
+    autoremove = true,
+  })
   packer.startup(plugins)
 end
 

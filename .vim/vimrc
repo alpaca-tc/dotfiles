@@ -1,4 +1,3 @@
-" Δ~~~~Δ
 " ξ・ェ・ξ  < I am @alpaca-tc
 " ξ     ξ
 " ξ     ξ
@@ -530,38 +529,6 @@ nnoremap ! :Switch<CR>
 nmap [unite] <Nop>
 nmap <C-J> [unite]
 
-function! s:ddu_start_rg(input)
-  let root_dir = s:current_git()
-  let options = #{
-        \   name: 'rg',
-        \   sources: [
-        \     #{
-        \       name: 'rg',
-        \       params: #{
-        \         path: root_dir,
-        \         input: a:input
-        \       },
-        \       options: #{
-        \         matchers: ['converter_display_word']
-        \       }
-        \     }
-        \   ],
-        \   input: a:input,
-        \   ui: 'ff',
-        \   volatile: !a:input,
-        \   uiParams: #{
-        \     autoResize: v:false
-        \   }
-        \ }
-
-  call ddu#start(options)
-endfunction
-
-nnoremap <silent>[unite]j :call ddu#start(#{ name: 'mr', sources: [#{ name: 'mr' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>
-nnoremap <silent>g/       :call ddu#start(#{ name: 'line', sources: [#{ name: 'line' }] })<CR>
-nnoremap <silent>gr       :call <SID>ddu_start_rg(expand('<cword>'))<CR>
-nnoremap <silent>gR       :call <SID>ddu_start_rg('')<CR>
-
 function! s:parse_git_root_option(input) "{{{
   let reg_multi =  '\*\*/'
   let reg_bad_pattern =  '\v(\*\*[^/])'
@@ -617,12 +584,6 @@ function! s:unite_git_complete(arg_lead, cmd_line, cursor_pos) "{{{
 endfunction "}}}
 
 command! -nargs=? -complete=customlist,s:unite_git_complete UniteGit call <SID>unite_git_root(<f-args>)
-
-" ddu-source-git
-nnoremap <silent>gl :call ddu#start(#{ name: 'git_log', sources: [#{ name: 'git_log' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>
-nnoremap <silent>gs :call ddu#start(#{ name: 'git_status', sources: [#{ name: 'git_status' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>
-nnoremap <silent>gh :call ddu#start(#{ name: 'git_branch', sources: [#{ name: 'git_branch', params: #{ args: ['-a'] } }] })<CR>
-"}}}
 "}}}
 
 set hidden
