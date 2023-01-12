@@ -1,20 +1,18 @@
 local M = {}
 
-        function M.file_match_str(path, pattern)
-          if vim.fn["filereadable"](path) == 1 then
-            local lines = vim.fn["readfile"](path)
+function M.file_match_str(path, pattern)
+  if vim.fn["filereadable"](path) == 1 then
+    local lines = vim.fn["readfile"](path)
 
-            for _, line in pairs(lines) do
-              if string.len(vim.fn["matchstr"](line, pattern)) > 0 then
-                return true
-              end
-            end
-          end
+    for _, line in pairs(lines) do
+      if string.len(vim.fn["matchstr"](line, pattern)) > 0 then
+        return true
+      end
+    end
+  end
 
-          return false
-
-        end
-
+  return false
+end
 
 function M.setup()
   -- Indicate first time installation
@@ -58,8 +56,8 @@ function M.setup()
     use({ "tpope/vim-repeat", opt = false })
 
     use({
-      'Shougo/vimproc.vim',
-      fn = { "vimproc#system", "vimproc#system_bg" }
+      "Shougo/vimproc.vim",
+      fn = { "vimproc#system", "vimproc#system_bg" },
     })
 
     use({
@@ -531,7 +529,7 @@ function M.setup()
               previewVertical = true,
               previewWidth = 50,
             },
-          }
+          },
         })
 
         local function move_to_ddu_buffer(ft)
@@ -804,26 +802,29 @@ function M.setup()
       run = "brew install desktop-file-utils",
       config = function()
         local function ddu_ui_filer_cr()
-          if vim.fn['ddu#ui#filer#is_tree']() then
-            vim.fn['ddu#ui#filer#do_action']('itemAction', { name = 'narrow' })
+          if vim.fn["ddu#ui#filer#is_tree"]() then
+            vim.fn["ddu#ui#filer#do_action"]("itemAction", { name = "narrow" })
           else
-            vim.fn['ddu#ui#filer#do_action']('itemAction', { name = 'open', params = { command = 'vsplit' } })
+            vim.fn["ddu#ui#filer#do_action"](
+              "itemAction",
+              { name = "open", params = { command = "vsplit" } }
+            )
           end
         end
 
         local function ddu_ui_filer_toggle_dot_files()
-          local current = vim.fn['ddu#custom#get_current']('file')
-          local filterParams = current['filterParams'] or {}
-          local sorter_file_alpha_params = filterParams['sorter_file_alpha'] or {}
+          local current = vim.fn["ddu#custom#get_current"]("file")
+          local filterParams = current["filterParams"] or {}
+          local sorter_file_alpha_params = filterParams["sorter_file_alpha"] or {}
 
-          vim.fn['ddu#redraw']('file', {
+          vim.fn["ddu#redraw"]("file", {
             updateOptions = {
               filterParams = {
                 sorter_file_alpha = {
-                  visibleDotFiles = sorter_file_alpha_params['visibleDotFiles'] or false
+                  visibleDotFiles = sorter_file_alpha_params["visibleDotFiles"] or false,
                 },
               },
-            }
+            },
           })
         end
 
@@ -835,29 +836,109 @@ function M.setup()
             -- nnoremap <buffer><expr>p vimfiler#do_action('preview')
             vim.keymap.set("n", "<CR>", ddu_ui_filer_cr, { noremap = true, silent = true, buffer = true })
             vim.keymap.set("n", "l", ddu_ui_filer_cr, { noremap = true, silent = true, buffer = true })
-            vim.keymap.set("n", "h", "<Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'narrow', 'params': {'path': '..'}})<CR>", { noremap = true, silent = true, buffer = true })
-            vim.keymap.set("n", "<Space>", ":call ddu#ui#filer#do_action('toggleSelectItem')<CR>j", { noremap = true, silent = true, buffer = true })
-            vim.keymap.set("n", "f", ":call ddu#ui#filer#do_action('toggleSelectItem')<CR>j", { noremap = true, silent = true, buffer = true })
-            vim.keymap.set("n", "<Tab>", ":call ddu#ui#filer#do_action('chooseAction')<CR>", { noremap = true, silent = true, buffer = true })
-            vim.keymap.set("n", "a", ":call ddu#ui#filer#do_action('chooseAction')<CR>", { noremap = true, silent = true, buffer = true })
-            vim.keymap.set("n", "*", ":call ddu#ui#filer#do_action('toggleAllItems')<CR>", { noremap = true, silent = true, buffer = true })
-            vim.keymap.set("n", "<C-l>", ":call ddu#ui#filer#do_action('checkItems')<CR>", { noremap = true, buffer = true })
+            vim.keymap.set(
+              "n",
+              "h",
+              "<Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'narrow', 'params': {'path': '..'}})<CR>",
+              { noremap = true, silent = true, buffer = true }
+            )
+            vim.keymap.set(
+              "n",
+              "<Space>",
+              ":call ddu#ui#filer#do_action('toggleSelectItem')<CR>j",
+              { noremap = true, silent = true, buffer = true }
+            )
+            vim.keymap.set(
+              "n",
+              "f",
+              ":call ddu#ui#filer#do_action('toggleSelectItem')<CR>j",
+              { noremap = true, silent = true, buffer = true }
+            )
+            vim.keymap.set(
+              "n",
+              "<Tab>",
+              ":call ddu#ui#filer#do_action('chooseAction')<CR>",
+              { noremap = true, silent = true, buffer = true }
+            )
+            vim.keymap.set(
+              "n",
+              "a",
+              ":call ddu#ui#filer#do_action('chooseAction')<CR>",
+              { noremap = true, silent = true, buffer = true }
+            )
+            vim.keymap.set(
+              "n",
+              "*",
+              ":call ddu#ui#filer#do_action('toggleAllItems')<CR>",
+              { noremap = true, silent = true, buffer = true }
+            )
+            vim.keymap.set(
+              "n",
+              "<C-l>",
+              ":call ddu#ui#filer#do_action('checkItems')<CR>",
+              { noremap = true, buffer = true }
+            )
 
             vim.keymap.set("n", "q", function()
-              vim.fn['ddu#ui#filer#do_action']('quit')
+              vim.fn["ddu#ui#filer#do_action"]("quit")
             end, { noremap = true, silent = true, buffer = true })
-            vim.keymap.set("n", "<Space>q", "<Cmd>call ddu#ui#filer#do_action('quit')<CR>", { noremap = true, silent = true, buffer = true })
-            vim.keymap.set("n", "c", "<Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'copy'})<CR>", { noremap = true, silent = true, buffer = true })
-            vim.keymap.set("n", "d", "<Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'delete'})<CR>", { noremap = true, silent = true, buffer = true })
-            vim.keymap.set("n", "r", "<Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'rename'})<CR>", { noremap = true, silent = true, buffer = true })
-            vim.keymap.set("n", "m", "<Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'move'})<CR>", { noremap = true, silent = true, buffer = true })
-            vim.keymap.set("n", "C", "<Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'newFile'})<CR>", { noremap = true, silent = true, buffer = true })
-            vim.keymap.set("n", "K", "<Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'newDirectory'})<CR>", { noremap = true, silent = true, buffer = true })
-            vim.keymap.set("n", ".", ddu_ui_filer_toggle_dot_files, { noremap = true, silent = true, buffer = true })
+            vim.keymap.set(
+              "n",
+              "<Space>q",
+              "<Cmd>call ddu#ui#filer#do_action('quit')<CR>",
+              { noremap = true, silent = true, buffer = true }
+            )
+            vim.keymap.set(
+              "n",
+              "c",
+              "<Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'copy'})<CR>",
+              { noremap = true, silent = true, buffer = true }
+            )
+            vim.keymap.set(
+              "n",
+              "d",
+              "<Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'delete'})<CR>",
+              { noremap = true, silent = true, buffer = true }
+            )
+            vim.keymap.set(
+              "n",
+              "r",
+              "<Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'rename'})<CR>",
+              { noremap = true, silent = true, buffer = true }
+            )
+            vim.keymap.set(
+              "n",
+              "m",
+              "<Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'move'})<CR>",
+              { noremap = true, silent = true, buffer = true }
+            )
+            vim.keymap.set(
+              "n",
+              "C",
+              "<Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'newFile'})<CR>",
+              { noremap = true, silent = true, buffer = true }
+            )
+            vim.keymap.set(
+              "n",
+              "K",
+              "<Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'newDirectory'})<CR>",
+              { noremap = true, silent = true, buffer = true }
+            )
+            vim.keymap.set(
+              "n",
+              ".",
+              ddu_ui_filer_toggle_dot_files,
+              { noremap = true, silent = true, buffer = true }
+            )
 
-            vim.keymap.set("n", "gr", ":call ddu#ui#filer#do_action('itemAction', {'name': 'grep'})<CR>", { noremap = true, buffer = true })
+            vim.keymap.set(
+              "n",
+              "gr",
+              ":call ddu#ui#filer#do_action('itemAction', {'name': 'grep'})<CR>",
+              { noremap = true, buffer = true }
+            )
             -- nnoremap <expr><buffer>re vimfiler#do_action('replace')
-          end
+          end,
         })
       end,
     })
@@ -872,14 +953,14 @@ function M.setup()
             },
           },
         })
-      end
+      end,
     })
 
     use({
       "Shougo/ddu-source-file",
       requires = {
         "ryota2357/ddu-column-icon_filename",
-        "Shougo/ddu-column-filename"
+        "Shougo/ddu-column-filename",
       },
       wants = {
         "ddu.vim",
@@ -891,10 +972,15 @@ function M.setup()
         "ddu-column-filename",
       },
       keys = {
-        { "n", "<C-J>f" }
+        { "n", "<C-J>f" },
       },
       config = function()
-        vim.keymap.set("n", "<C-J>f", ":call ddu#start(#{ name: 'file', sources: [#{ name: 'file' }], ui: 'filer', sourceOptions: #{ _: #{ columns: ['filename'] } }, uiParams: #{ filer: #{ search: expand('%:p') } } })<CR>", { noremap = true, silent = true })
+        vim.keymap.set(
+          "n",
+          "<C-J>f",
+          ":call ddu#start(#{ name: 'file', sources: [#{ name: 'file' }], ui: 'filer', sourceOptions: #{ _: #{ columns: ['filename'] } }, uiParams: #{ filer: #{ search: expand('%:p') } } })<CR>",
+          { noremap = true, silent = true }
+        )
 
         vim.fn["ddu#custom#patch_global"]({
           sourceOptions = {
@@ -909,9 +995,9 @@ function M.setup()
               filterSplitDirection = "topleft",
               splitDirection = "topleft",
             },
-          }
+          },
         })
-      end
+      end,
     })
 
     use({
@@ -949,7 +1035,7 @@ function M.setup()
     use({
       "shun/ddu-source-rg",
       requires = {
-        "Shougo/ddu-filter-converter_display_word"
+        "Shougo/ddu-filter-converter_display_word",
       },
       wants = {
         "ddu.vim",
