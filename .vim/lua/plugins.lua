@@ -25,9 +25,7 @@ function M.setup()
     group = augroup,
     callback = function()
       -- vim.cmd('luafile <afile>')
-      -- vim.cmd('PackerSync')
-
-      -- vim.cmd('source <afile>')
+      -- vim.cmd('PackerInstall')
       -- vim.cmd('PackerCompile')
     end,
   })
@@ -801,6 +799,17 @@ function M.setup()
       "Shougo/ddu-ui-filer",
       run = "brew install desktop-file-utils",
       config = function()
+
+        vim.fn["ddu#custom#patch_global"]({
+          uiParams = {
+            filer = {
+              filterFloatingPosition = "top",
+              filterSplitDirection = "topleft",
+              splitDirection = "topleft",
+            },
+          },
+        })
+
         local function ddu_ui_filer_cr()
           if vim.fn["ddu#ui#filer#is_tree"]() then
             vim.fn["ddu#ui#filer#do_action"]("itemAction", { name = "narrow" })
@@ -989,15 +998,30 @@ function M.setup()
               sorters = { "sorter_file_alpha" },
             },
           },
-          uiParams = {
-            filer = {
-              filterFloatingPosition = "top",
-              filterSplitDirection = "topleft",
-              splitDirection = "topleft",
-            },
-          },
         })
       end,
+    })
+
+    use({
+      'Shougo/ddu-source-file_rec',
+      keys = {
+        { "n", "<C-J>a" }
+      },
+      wants = {
+        "ddu.vim",
+        "ddu-ui-ff",
+        "ddu-kind-file",
+        "ddu-filter-matcher_regexp",
+        "ddu-source-action",
+      },
+      config = function()
+        vim.keymap.set(
+          "n",
+          "<C-J>a",
+          ":call ddu#start(#{ name: 'file_rec', sources: [#{ name: 'file_rec' }], uiParams: #{ ff: #{ startFilter: v:false } }, ui: 'ff' })<CR>",
+          { noremap = true, silent = true }
+        )
+      end
     })
 
     use({
@@ -1019,6 +1043,14 @@ function M.setup()
           ":call ddu#start(#{ name: 'mr', sources: [#{ name: 'mr' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>",
           { noremap = true, silent = true }
         )
+
+        vim.fn["ddu#custom#patch_global"]({
+          sourceOptions = {
+            file_rec = {
+              ignoredDirectories = { ".git", "node_modules", ".bundle" }
+            },
+          },
+        })
 
         vim.fn["ddu#custom#patch_global"]({
           sourceParams = {
