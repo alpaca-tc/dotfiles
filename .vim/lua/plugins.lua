@@ -42,6 +42,11 @@ function M.setup()
     use({ "tpope/vim-repeat", opt = false })
 
     use({
+      'Shougo/vimproc.vim',
+      fn = { "vimproc#system", "vimproc#system_bg" }
+    })
+
+    use({
       "vim-jp/vital.vim",
       fn = { "vital#of", "vital#vital#new" },
       cmd = "Vitalize",

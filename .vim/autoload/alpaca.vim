@@ -1,6 +1,3 @@
-let s:system = dein#is_sourced('vimproc') ? 'vimproc#system' : 'system'
-let s:system_bg = dein#is_sourced('vimproc') ? 'vimproc#system_bg' : 'system'
-
 function! s:let(scope, name, value) "{{{
   let global_variable_name = a:scope . ':' . a:name
   if !exists(global_variable_name)
@@ -18,11 +15,11 @@ endfunction
 
 function! alpaca#system(...) "{{{
   let command = join(a:000)
-  return {s:system}(command)
+  return vimproc#system(command)
 endfunction"}}}
 function! alpaca#system_bg(...) "{{{
   let command = join(a:000)
-  call {s:system_bg}(command)
+  call vimproc#system_bg(command)
 endfunction"}}}
 
 function! alpaca#print_error(string) "{{{
