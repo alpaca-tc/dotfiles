@@ -56,6 +56,7 @@ function M.setup()
     use({
       "Shougo/vimproc.vim",
       fn = { "vimproc#system", "vimproc#system_bg" },
+      run = "make"
     })
 
     use({
@@ -217,6 +218,7 @@ function M.setup()
 
     use({
       "itchyny/lightline.vim",
+      wants = { "git-vim" },
       event = { "InsertEnter" },
       fn = { "lightline#update", "lightline#highlight" },
       setup = function()
@@ -445,6 +447,58 @@ function M.setup()
         define_variables_for_surround()
       end,
     })
+
+    -- -- Git
+    -- use {
+    --   "TimUntersberger/neogit",
+    --   requires = "nvim-lua/plenary.nvim",
+    --   config = function()
+    --     require("config.neogit").setup()
+    --   end,
+    -- }
+    use({
+      "tpope/vim-fugitive",
+      cmd = { "Git" },
+      fn = { "fugitive#head" },
+      setup = function()
+        vim.keymap.set("n", "gM", ":Git commit --amend<CR>", { silent = true })
+        vim.keymap.set("n", "gb", ":Git blame<CR>", { silent = true })
+        vim.keymap.set("n", "gm", ":Git commit<CR>", { silent = true })
+        vim.keymap.set("n", "gp", ":<C-U>Git push<Space>")
+      end,
+      config = function()
+        local vgroup = vim.api.nvim_create_augroup("PackerVimFugitive", { clear = true })
+        vim.api.nvim_create_autocmd("FileType", {
+          group = vgroup,
+          pattern = "fugitiveblame",
+          command = "vertical resize 25",
+        })
+
+        vim.api.nvim_create_autocmd("FileType", {
+          group = vgroup,
+          pattern = { "gitcommit", "git-diff" },
+          callback = function()
+            vim.keymap.set("n", "q", ":q<CR>", { buffer = true })
+          end,
+        })
+      end,
+    })
+
+    use({
+      "alpaca-tc/git-vim",
+      cmd = { "GitDiff", "GitVimDiff", "GitCheckout", "GitAdd", "GitLog", "GitCommit", "GitBlame", "GitPush" },
+      fn = { "git#get_current_branch" },
+      setup = function()
+        vim.keymap.set("n", "gA", ":<C-U>GitAdd<Space>")
+        vim.keymap.set("n", "ga", ":<C-U>GitAdd<CR>", { silent = true })
+        vim.keymap.set("n", "gD", ":<C-U>GitDiff<Space>")
+        vim.keymap.set("n", "gDD", ":<C-U>GitDiff HEAD<CR>")
+
+        vim.g.git_command_edit = "vnew"
+        vim.g.git_no_default_mappings = 1
+      end,
+    })
+
 
     -- ddu
     use({
@@ -1004,8 +1058,8 @@ function M.setup()
 
     use({
       'Shougo/ddu-source-file_rec',
-      keys = {
-        { "n", "<C-J>a" }
+      requires = {
+       "Shougo/ddu-filter-sorter_alpha"
       },
       wants = {
         "ddu.vim",
@@ -1014,13 +1068,75 @@ function M.setup()
         "ddu-filter-matcher_regexp",
         "ddu-source-action",
       },
+      cond = function()
+        return vim.fn['has']('vim_starting') and packer_plugins['git-vim'] and vim.fn['alpaca#is_rails'](vim.fn["getcwd"]()) == 1
+      end,
       config = function()
-        vim.keymap.set(
-          "n",
-          "<C-J>a",
-          ":call ddu#start(#{ name: 'file_rec', sources: [#{ name: 'file_rec' }], uiParams: #{ ff: #{ startFilter: v:false } }, ui: 'ff' })<CR>",
-          { noremap = true, silent = true }
-        )
+        local function setup_rails()
+          if vim.fn['alpaca#is_rails'](vim.fn["getcwd"]()) == 0 then
+            return
+          end
+
+          local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
+
+          local from_root = function(prefix)
+            local fn = function()
+              local path = root .. prefix
+
+              vim.fn['ddu#custom#patch_local']('file_rec', {
+                sources = { { name = 'file_rec' } },
+                uiParams = {
+                  ff = { startFilter = true }
+                },
+                sourceOptions = {
+                  file_rec = {
+                    path = path,
+                    sorters = { "sorter_alpha" },
+                  }
+                },
+                ui = 'ff'
+              })
+
+              vim.fn["ddu#start"]({ name = 'file_rec' })
+            end
+
+            return fn
+          end
+
+          vim.keymap.set("n", "<C-K>", from_root('/app/models'), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K><C-K>", from_root('/app/controllers'), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K><C-K><C-K>", from_root('/app/views'), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>u", from_root('/app/uploaders'), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>p", from_root('/app/policies'), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>d", from_root('/app/decorators'), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>j", from_root('/app/jobs'), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>c", from_root('/config'), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>se", from_root('/app/services'), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>sp", from_root('/spec'), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>fo", from_root('/app/forms'), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>fa", from_root('/spec/factories'), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>m", from_root('/app/mailers'), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>l", from_root('/app/lib'), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>g", ":edit " .. root .. '/Gemfile<CR>', { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>S", ":edit " .. root .. '/db/schema.rb<CR>', { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>r", ":edit " .. root .. '/config/routes.rb<CR>', { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>w", from_root('/app/workers'), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>h", from_root('/app/helpers'), { noremap = true, buffer = true })
+        end
+
+        local group = vim.api.nvim_create_augroup("PackerDduSourceFileRec", { clear = true })
+        vim.api.nvim_create_autocmd({ "BufNewFile", "BufReadPost" }, {
+          group = group,
+          pattern = "*",
+          callback = setup_rails
+        })
+        vim.api.nvim_create_autocmd({ "FileType" }, {
+          group = group,
+          pattern = "vimfiler",
+          callback = setup_rails
+        })
+
+        setup_rails()
       end
     })
 
@@ -1988,6 +2104,7 @@ function M.setup()
         vim.g.vista_executive_for = {
           c = "nvim_lsp",
           cpp = "nvim_lsp",
+          lua = "nvim_lsp",
           typescript = "nvim_lsp",
           javascript = "nvim_lsp",
           ruby = "ctags",
@@ -2441,57 +2558,6 @@ function M.setup()
     use({
       "jlcrochet/vim-rbs",
       ft = { "rbs" },
-    })
-
-    -- -- Git
-    -- use {
-    --   "TimUntersberger/neogit",
-    --   requires = "nvim-lua/plenary.nvim",
-    --   config = function()
-    --     require("config.neogit").setup()
-    --   end,
-    -- }
-    use({
-      "tpope/vim-fugitive",
-      cmd = { "Git" },
-      fn = { "fugitive#head" },
-      setup = function()
-        vim.keymap.set("n", "gM", ":Git commit --amend<CR>", { silent = true })
-        vim.keymap.set("n", "gb", ":Git blame<CR>", { silent = true })
-        vim.keymap.set("n", "gm", ":Git commit<CR>", { silent = true })
-        vim.keymap.set("n", "gp", ":<C-U>Git push<Space>")
-      end,
-      config = function()
-        local vgroup = vim.api.nvim_create_augroup("PackerVimFugitive", { clear = true })
-        vim.api.nvim_create_autocmd("FileType", {
-          group = vgroup,
-          pattern = "fugitiveblame",
-          command = "vertical resize 25",
-        })
-
-        vim.api.nvim_create_autocmd("FileType", {
-          group = vgroup,
-          pattern = { "gitcommit", "git-diff" },
-          callback = function()
-            vim.keymap.set("n", "q", ":q<CR>", { buffer = true })
-          end,
-        })
-      end,
-    })
-
-    use({
-      "alpaca-tc/git-vim",
-      cmd = { "GitDiff", "GitVimDiff", "GitCheckout", "GitAdd", "GitLog", "GitCommit", "GitBlame", "GitPush" },
-      fn = { "git#get_current_branch" },
-      setup = function()
-        vim.keymap.set("n", "gA", ":<C-U>GitAdd<Space>")
-        vim.keymap.set("n", "ga", ":<C-U>GitAdd<CR>", { silent = true })
-        vim.keymap.set("n", "gD", ":<C-U>GitDiff<Space>")
-        vim.keymap.set("n", "gDD", ":<C-U>GitDiff HEAD<CR>")
-
-        vim.g.git_command_edit = "vnew"
-        vim.g.git_no_default_mappings = 1
-      end,
     })
 
     -- never use

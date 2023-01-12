@@ -7,10 +7,16 @@ endfunction"}}}
 
 function! alpaca#current_root(cwd)
   if !exists('s:V')
-    let s:V = vital#of('dotfiles')
+    let s:V = vital#dotfiles#new()
   endif
 
   return s:V.import('Prelude').path2project_directory(a:cwd)
+endfunction
+
+function! alpaca#is_rails(cwd)
+  let root = alpaca#current_root(a:cwd)
+
+  return filereadable(root . '/config/environment.rb') || isdirectory(root . '/app/models') || isdirectory(root . '/app/controllers')
 endfunction
 
 function! alpaca#system(...) "{{{
