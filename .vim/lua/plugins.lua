@@ -1,5 +1,21 @@
 local M = {}
 
+        function M.file_match_str(path, pattern)
+          if vim.fn["filereadable"](path) == 1 then
+            local lines = vim.fn["readfile"](path)
+
+            for _, line in pairs(lines) do
+              if string.len(vim.fn["matchstr"](line, pattern)) > 0 then
+                return true
+              end
+            end
+          end
+
+          return false
+
+        end
+
+
 function M.setup()
   -- Indicate first time installation
   local packer_bootstrap = false
@@ -1428,10 +1444,9 @@ function M.setup()
               or file_match_str(currentFile, "https://deno.land/")
             )
           then
-            print(vim.inspect(vim.fn["filereadable"](root .. "/deno.json") == 1))
             vim.cmd("LspStart denols")
           elseif isTsJs and file_match_str(root .. "/package.json", "typescript") then
-            vim.cmd("LspStart typescript-language-server")
+            vim.cmd("LspStart tsserver")
           end
         end
 
