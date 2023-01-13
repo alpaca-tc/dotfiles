@@ -56,7 +56,7 @@ function M.setup()
     use({
       "Shougo/vimproc.vim",
       fn = { "vimproc#system", "vimproc#system_bg" },
-      run = "make"
+      run = "make",
     })
 
     use({
@@ -402,7 +402,7 @@ function M.setup()
         }
 
         surround_definitions =
-          vim.fn["alpaca#initialize#redefine_dict_to_each_filetype"](surround_definitions, vim.empty_dict())
+        vim.fn["alpaca#initialize#redefine_dict_to_each_filetype"](surround_definitions, vim.empty_dict())
 
         local function define_variable_for_surround(key, mapping)
           local var_name = "surround_" .. vim.fn["char2nr"](key)
@@ -490,14 +490,13 @@ function M.setup()
       setup = function()
         vim.keymap.set("n", "ga", ":<C-U>call git#add(expand('%:p'))<CR>")
         vim.keymap.set("n", "gD", ":<C-U>call git#diff('')<Left><Left>")
-        vim.keymap.set("n", "gDD", ":<C-U>call git#diff()<CR>")
+        vim.keymap.set("n", "gDD", ":<C-U>call git#diff('HEAD')<CR>")
 
         vim.g.git_command_edit = "vnew"
         vim.g.git_no_default_mappings = 1
         vim.g.git_use_vimproc = 1
       end,
     })
-
 
     -- ddu
     use({
@@ -838,7 +837,7 @@ function M.setup()
             else
               if ddu_window_size[ddu_ff_winnr] == nil then
                 ddu_window_size[ddu_ff_winnr] =
-                  { [0] = vim.fn.winheight(ddu_ff_winnr), [1] = vim.fn.winwidth(ddu_ff_winnr) }
+                { [0] = vim.fn.winheight(ddu_ff_winnr), [1] = vim.fn.winwidth(ddu_ff_winnr) }
               end
 
               vim.cmd(ddu_ff_winnr .. "resize 1")
@@ -852,7 +851,6 @@ function M.setup()
       "Shougo/ddu-ui-filer",
       run = "brew install desktop-file-utils",
       config = function()
-
         vim.fn["ddu#custom#patch_global"]({
           uiParams = {
             filer = {
@@ -872,22 +870,6 @@ function M.setup()
               { name = "open", params = { command = "vsplit" } }
             )
           end
-        end
-
-        local function ddu_ui_filer_toggle_dot_files()
-          local current = vim.fn["ddu#custom#get_current"]("file")
-          local filterParams = current["filterParams"] or {}
-          local sorter_file_alpha_params = filterParams["sorter_file_alpha"] or {}
-
-          vim.fn["ddu#redraw"]("file", {
-            updateOptions = {
-              filterParams = {
-                sorter_file_alpha = {
-                  visibleDotFiles = sorter_file_alpha_params["visibleDotFiles"] or false,
-                },
-              },
-            },
-          })
         end
 
         local group = vim.api.nvim_create_augroup("PackerUiFiler", { clear = true })
@@ -941,6 +923,29 @@ function M.setup()
               { noremap = true, buffer = true }
             )
 
+            vim.keymap.set("n", ".", function()
+              local function has_value(tab, val)
+                for _, value in ipairs(tab) do
+                  if value == val then
+                    return true
+                  end
+                end
+
+                return false
+              end
+
+              local current = vim.fn["ddu#custom#get_current"]("file")
+              local enabled = has_value(current.sourceOptions.file.sorters, "dot")
+              local sorters = { "sorter_directory_file" }
+
+              if not enabled then
+                table.insert(sorters, "dot")
+              end
+
+              print(vim.inspect(sorters))
+              vim.fn["ddu#redraw"]("file", { refreshItems = true, updateOptions = { sourceOptions = { file = { sorters = sorters } } } })
+            end, { noremap = true, buffer = true })
+
             vim.keymap.set("n", "q", function()
               vim.fn["ddu#ui#filer#do_action"]("quit")
             end, { noremap = true, silent = true, buffer = true })
@@ -986,12 +991,6 @@ function M.setup()
               "<Cmd>call ddu#ui#filer#do_action('itemAction', {'name': 'newDirectory'})<CR>",
               { noremap = true, silent = true, buffer = true }
             )
-            vim.keymap.set(
-              "n",
-              ".",
-              ddu_ui_filer_toggle_dot_files,
-              { noremap = true, silent = true, buffer = true }
-            )
 
             vim.keymap.set(
               "n",
@@ -1023,7 +1022,8 @@ function M.setup()
       requires = {
         "ryota2357/ddu-column-icon_filename",
         "Shougo/ddu-column-filename",
-        "Shougo/ddu-filter-sorter_alpha",
+        "alpaca-tc/ddu-filter-sorter_directory_file",
+        "alpaca-tc/ddu-filter-dot",
       },
       wants = {
         "ddu.vim",
@@ -1033,47 +1033,47 @@ function M.setup()
         "ddu-source-action",
         "ddu-column-filename",
         "ddu-filter-sorter_alpha",
+        "ddu-filter-sorter_directory_file",
+        "ddu-filter-dot",
       },
       keys = {
         { "n", "<C-J>f" },
       },
       config = function()
-        vim.fn["ddu#custom#patch_local"]('file', {
-          sources = { { name = 'file' } },
-          ui = 'filer',
-          uiParams = {
-            filer = {
-              search = vim.fn['expand']('%:p')
-            }
-          },
-          sourceOptions = {
-            file = {
-              columns = { "filename" },
-              sorters = { "sorter_alpha" },
+        vim.keymap.set("n", "<C-J>f", function()
+          vim.fn["ddu#custom#patch_local"]("file", {
+            sources = { { name = "file" } },
+            ui = "filer",
+            uiParams = {
+              filer = {
+                search = vim.fn["expand"]("%:p"),
+              },
             },
-          },
-          columnParams = {
-            filename = {
-              fileIcon = "-"
-            }
-          }
-        })
+            sourceOptions = {
+              file = {
+                columns = { "filename" },
+                sorters = { "sorter_directory_file" },
+              },
+            },
+            columnParams = {
+              filename = {
+                fileIcon = "-",
+              },
+            },
+          })
 
-        vim.keymap.set(
-          "n",
-          "<C-J>f",
-          function()
-            vim.fn['ddu#start']({ name = 'file' })
-          end,
-          { noremap = true, silent = true }
-        )
+          vim.fn["ddu#start"]({
+            name = "file",
+            sourceOptions = { file = { sorters = { "dot", "sorter_directory_file" } } },
+          })
+        end, { noremap = true, silent = true })
       end,
     })
 
     use({
-      'Shougo/ddu-source-file_rec',
+      "Shougo/ddu-source-file_rec",
       requires = {
-       "Shougo/ddu-filter-sorter_alpha"
+        "Shougo/ddu-filter-sorter_alpha",
       },
       wants = {
         "ddu.vim",
@@ -1083,11 +1083,13 @@ function M.setup()
         "ddu-source-action",
       },
       cond = function()
-        return vim.fn['has']('vim_starting') and packer_plugins['git-vim'] and vim.fn['alpaca#is_rails'](vim.fn["getcwd"]()) == 1
+        return vim.fn["has"]("vim_starting")
+            and packer_plugins["git-vim"]
+            and vim.fn["alpaca#is_rails"](vim.fn["getcwd"]()) == 1
       end,
       config = function()
         local function setup_rails()
-          if vim.fn['alpaca#is_rails'](vim.fn["getcwd"]()) == 0 then
+          if vim.fn["alpaca#is_rails"](vim.fn["getcwd"]()) == 0 then
             return
           end
 
@@ -1097,61 +1099,71 @@ function M.setup()
             local fn = function()
               local path = root .. prefix
 
-              vim.fn['ddu#custom#patch_local']('file_rec', {
-                sources = { { name = 'file_rec' } },
+              vim.fn["ddu#custom#patch_local"]("file_rec", {
+                sources = { { name = "file_rec" } },
                 uiParams = {
-                  ff = { startFilter = true }
+                  ff = { startFilter = true },
                 },
                 sourceOptions = {
                   file_rec = {
                     path = path,
                     sorters = { "sorter_alpha" },
-                  }
+                  },
                 },
-                ui = 'ff'
+                ui = "ff",
               })
 
-              vim.fn["ddu#start"]({ name = 'file_rec' })
+              vim.fn["ddu#start"]({ name = "file_rec" })
             end
 
             return fn
           end
 
-          vim.keymap.set("n", "<C-K>", from_root('/app/models'), { noremap = true, buffer = true })
-          vim.keymap.set("n", "<C-K><C-K>", from_root('/app/controllers'), { noremap = true, buffer = true })
-          vim.keymap.set("n", "<C-K><C-K><C-K>", from_root('/app/views'), { noremap = true, buffer = true })
-          vim.keymap.set("n", "<C-K>u", from_root('/app/uploaders'), { noremap = true, buffer = true })
-          vim.keymap.set("n", "<C-K>p", from_root('/app/policies'), { noremap = true, buffer = true })
-          vim.keymap.set("n", "<C-K>d", from_root('/app/decorators'), { noremap = true, buffer = true })
-          vim.keymap.set("n", "<C-K>j", from_root('/app/jobs'), { noremap = true, buffer = true })
-          vim.keymap.set("n", "<C-K>c", from_root('/config'), { noremap = true, buffer = true })
-          vim.keymap.set("n", "<C-K>se", from_root('/app/services'), { noremap = true, buffer = true })
-          vim.keymap.set("n", "<C-K>sp", from_root('/spec'), { noremap = true, buffer = true })
-          vim.keymap.set("n", "<C-K>fo", from_root('/app/forms'), { noremap = true, buffer = true })
-          vim.keymap.set("n", "<C-K>fa", from_root('/spec/factories'), { noremap = true, buffer = true })
-          vim.keymap.set("n", "<C-K>m", from_root('/app/mailers'), { noremap = true, buffer = true })
-          vim.keymap.set("n", "<C-K>l", from_root('/app/lib'), { noremap = true, buffer = true })
-          vim.keymap.set("n", "<C-K>g", ":edit " .. root .. '/Gemfile<CR>', { noremap = true, buffer = true })
-          vim.keymap.set("n", "<C-K>S", ":edit " .. root .. '/db/schema.rb<CR>', { noremap = true, buffer = true })
-          vim.keymap.set("n", "<C-K>r", ":edit " .. root .. '/config/routes.rb<CR>', { noremap = true, buffer = true })
-          vim.keymap.set("n", "<C-K>w", from_root('/app/workers'), { noremap = true, buffer = true })
-          vim.keymap.set("n", "<C-K>h", from_root('/app/helpers'), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>", from_root("/app/models"), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K><C-K>", from_root("/app/controllers"), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K><C-K><C-K>", from_root("/app/views"), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>u", from_root("/app/uploaders"), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>p", from_root("/app/policies"), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>d", from_root("/app/decorators"), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>j", from_root("/app/jobs"), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>c", from_root("/config"), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>se", from_root("/app/services"), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>sp", from_root("/spec"), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>fo", from_root("/app/forms"), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>fa", from_root("/spec/factories"), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>m", from_root("/app/mailers"), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>l", from_root("/app/lib"), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>g", ":edit " .. root .. "/Gemfile<CR>", { noremap = true, buffer = true })
+          vim.keymap.set(
+            "n",
+            "<C-K>S",
+            ":edit " .. root .. "/db/schema.rb<CR>",
+            { noremap = true, buffer = true }
+          )
+          vim.keymap.set(
+            "n",
+            "<C-K>r",
+            ":edit " .. root .. "/config/routes.rb<CR>",
+            { noremap = true, buffer = true }
+          )
+          vim.keymap.set("n", "<C-K>w", from_root("/app/workers"), { noremap = true, buffer = true })
+          vim.keymap.set("n", "<C-K>h", from_root("/app/helpers"), { noremap = true, buffer = true })
         end
 
         local group = vim.api.nvim_create_augroup("PackerDduSourceFileRec", { clear = true })
         vim.api.nvim_create_autocmd({ "BufNewFile", "BufReadPost" }, {
           group = group,
           pattern = "*",
-          callback = setup_rails
+          callback = setup_rails,
         })
         vim.api.nvim_create_autocmd({ "FileType" }, {
           group = group,
           pattern = "vimfiler",
-          callback = setup_rails
+          callback = setup_rails,
         })
 
         setup_rails()
-      end
+      end,
     })
 
     use({
@@ -1170,14 +1182,15 @@ function M.setup()
         vim.keymap.set(
           "n",
           "<C-J>j",
-          ":call ddu#start(#{ name: 'mr', sources: [#{ name: 'mr' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>",
+          ":call ddu#start(#{ name: 'mr', sources: [#{ name: 'mr' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>"
+          ,
           { noremap = true, silent = true }
         )
 
         vim.fn["ddu#custom#patch_global"]({
           sourceOptions = {
             file_rec = {
-              ignoredDirectories = { ".git", "node_modules", ".bundle" }
+              ignoredDirectories = { ".git", "node_modules", ".bundle" },
             },
           },
         })
@@ -1303,13 +1316,15 @@ function M.setup()
         vim.keymap.set(
           "n",
           "gl",
-          ":call ddu#start(#{ name: 'git_log', sources: [#{ name: 'git_log' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>",
+          ":call ddu#start(#{ name: 'git_log', sources: [#{ name: 'git_log' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>"
+          ,
           { noremap = true, silent = true }
         )
         vim.keymap.set(
           "n",
           "gs",
-          ":call ddu#start(#{ name: 'git_status', sources: [#{ name: 'git_status' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>",
+          ":call ddu#start(#{ name: 'git_status', sources: [#{ name: 'git_status' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>"
+          ,
           { noremap = true, silent = true }
         )
         vim.keymap.set(
@@ -1374,28 +1389,28 @@ function M.setup()
         end
 
         local function end_with(str, ending)
-          return ending == "" or string.sub(str, -#ending) == ending
+          return ending == "" or string.sub(str, - #ending) == ending
         end
 
         local function contains(str, sub)
           return string.find(str, sub, 1, true) ~= nil
         end
 
-        vim.g['mr#mru#predicates'] = {
+        vim.g["mr#mru#predicates"] = {
           function(filename)
-            return not start_with(filename, '/private/var/')
+            return not start_with(filename, "/private/var/")
           end,
           function(filename)
-            return not end_with(filename, '.fugitiveblame')
+            return not end_with(filename, ".fugitiveblame")
           end,
           function(filename)
-            return not end_with(filename, 'COMMIT_EDITMSG')
+            return not end_with(filename, "COMMIT_EDITMSG")
           end,
           function(filename)
-            return not contains(filename, '.git/')
-          end
+            return not contains(filename, ".git/")
+          end,
         }
-      end
+      end,
     })
 
     use({
@@ -1712,13 +1727,12 @@ function M.setup()
 
           if filetype == "ruby" and file_match_str(root .. "/Gemfile", "sorbet") then
             vim.cmd("LspStart sorbet")
-          elseif
-            isTsJs
-            and (
+          elseif isTsJs
+              and (
               vim.fn["filereadable"](root .. "/deno.json") == 1
-              or file_match_str(root .. "/vercel.json", "vercel-deno")
-              or file_match_str(currentFile, "https://deno.land/")
-            )
+                  or file_match_str(root .. "/vercel.json", "vercel-deno")
+                  or file_match_str(currentFile, "https://deno.land/")
+              )
           then
             vim.cmd("LspStart denols")
           elseif isTsJs and file_match_str(root .. "/package.json", "typescript") then
@@ -1987,7 +2001,8 @@ function M.setup()
             vim.keymap.set(
               "n",
               "<buffer>gs",
-              ":call ddu#start(#{ name: 'git_status', sources: [#{ name: 'git_status' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>",
+              ":call ddu#start(#{ name: 'git_status', sources: [#{ name: 'git_status' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>"
+              ,
               { noremap = true, silent = true }
             )
             vim.keymap.set(
