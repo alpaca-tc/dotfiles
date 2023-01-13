@@ -486,7 +486,7 @@ function M.setup()
 
     use({
       "alpaca-tc/git-vim",
-      fn = { "git#get_current_branch", "git#add" },
+      fn = { "git#get_current_branch", "git#add", "git#diff" },
       setup = function()
         vim.keymap.set("n", "ga", ":<C-U>call git#add(expand('%:p'))<CR>")
         vim.keymap.set("n", "gD", ":<C-U>call git#diff('')<Left><Left>")
@@ -1023,6 +1023,7 @@ function M.setup()
       requires = {
         "ryota2357/ddu-column-icon_filename",
         "Shougo/ddu-column-filename",
+        "Shougo/ddu-filter-sorter_alpha",
       },
       wants = {
         "ddu.vim",
@@ -1030,28 +1031,42 @@ function M.setup()
         "ddu-kind-file",
         "ddu-filter-matcher_regexp",
         "ddu-source-action",
-        "ddu-column-icon_filename",
         "ddu-column-filename",
+        "ddu-filter-sorter_alpha",
       },
       keys = {
         { "n", "<C-J>f" },
       },
       config = function()
-        vim.keymap.set(
-          "n",
-          "<C-J>f",
-          ":call ddu#start(#{ name: 'file', sources: [#{ name: 'file' }], ui: 'filer', sourceOptions: #{ _: #{ columns: ['filename'] } }, uiParams: #{ filer: #{ search: expand('%:p') } } })<CR>",
-          { noremap = true, silent = true }
-        )
-
-        vim.fn["ddu#custom#patch_global"]({
+        vim.fn["ddu#custom#patch_local"]('file', {
+          sources = { { name = 'file' } },
+          ui = 'filer',
+          uiParams = {
+            filer = {
+              search = vim.fn['expand']('%:p')
+            }
+          },
           sourceOptions = {
             file = {
               columns = { "filename" },
-              sorters = { "sorter_file_alpha" },
+              sorters = { "sorter_alpha" },
             },
           },
+          columnParams = {
+            filename = {
+              fileIcon = "-"
+            }
+          }
         })
+
+        vim.keymap.set(
+          "n",
+          "<C-J>f",
+          function()
+            vim.fn['ddu#start']({ name = 'file' })
+          end,
+          { noremap = true, silent = true }
+        )
       end,
     })
 
