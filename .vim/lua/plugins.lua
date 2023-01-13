@@ -1354,6 +1354,34 @@ function M.setup()
       "lambdalisue/mr.vim",
       fn = { "mr#mrr#list", "mr#mrw#list", "mr#mru#list" },
       event = { "BufEnter" },
+      setup = function()
+        local function start_with(str, start)
+          return string.sub(str, 1, string.len(start)) == start
+        end
+
+        local function end_with(str, ending)
+          return ending == "" or string.sub(str, -#ending) == ending
+        end
+
+        local function contains(str, sub)
+          return string.find(str, sub, 1, true) ~= nil
+        end
+
+        vim.g['mr#mru#predicates'] = {
+          function(filename)
+            return not start_with(filename, '/private/var/')
+          end,
+          function(filename)
+            return not end_with(filename, '.fugitiveblame')
+          end,
+          function(filename)
+            return not end_with(filename, 'COMMIT_EDITMSG')
+          end,
+          function(filename)
+            return not contains(filename, '.git/')
+          end
+        }
+      end
     })
 
     use({
