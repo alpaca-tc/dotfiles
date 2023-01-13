@@ -486,11 +486,12 @@ function M.setup()
 
     use({
       "alpaca-tc/git-vim",
+      cmd = { "GitDiff", "GitVimDiff", "GitCheckout", "GitAdd", "GitLog", "GitCommit", "GitBlame", "GitPush" },
       fn = { "git#get_current_branch", "git#add", "git#diff" },
       setup = function()
-        vim.keymap.set("n", "ga", ":<C-U>call git#add(expand('%:p'))<CR>")
-        vim.keymap.set("n", "gD", ":<C-U>call git#diff('')<Left><Left>")
-        vim.keymap.set("n", "gDD", ":<C-U>call git#diff('HEAD')<CR>")
+        vim.keymap.set("n", "ga", ":<C-U>GitAdd<CR>")
+        vim.keymap.set("n", "gD", ":<C-U>GitDiff<Space>")
+        vim.keymap.set("n", "gDD", ":<C-U>GitDiff HEAD<CR>")
 
         vim.g.git_command_edit = "vnew"
         vim.g.git_no_default_mappings = 1
@@ -1081,12 +1082,9 @@ function M.setup()
         "ddu-kind-file",
         "ddu-filter-matcher_regexp",
         "ddu-source-action",
+        "neosnippet.vim",
       },
-      cond = function()
-        return vim.fn["has"]("vim_starting")
-            and packer_plugins["git-vim"]
-            and vim.fn["alpaca#is_rails"](vim.fn["getcwd"]()) == 1
-      end,
+      event = 'User Rails',
       config = function()
         local function setup_snippet(root, cwd)
           local function start_with(str, start)
@@ -1222,16 +1220,16 @@ function M.setup()
         end
 
         local group = vim.api.nvim_create_augroup("PackerDduSourceFileRec", { clear = true })
-        vim.api.nvim_create_autocmd({ "BufNewFile", "BufReadPost" }, {
+        vim.api.nvim_create_autocmd({ "User" }, {
           group = group,
-          pattern = "*",
+          pattern = "Rails",
           callback = setup_rails,
         })
-        vim.api.nvim_create_autocmd({ "FileType" }, {
-          group = group,
-          pattern = "vimfiler",
-          callback = setup_rails,
-        })
+        -- vim.api.nvim_create_autocmd({ "FileType" }, {
+        --   group = group,
+        --   pattern = "vimfiler",
+        --   callback = setup_rails,
+        -- })
 
         setup_rails()
       end,

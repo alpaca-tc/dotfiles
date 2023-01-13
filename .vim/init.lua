@@ -1,5 +1,6 @@
 local fn = vim.fn
 
+require("rails").setup()
 require("plugins")
 
 vim.cmd('source ' .. os.getenv('HOME') .. '/.vim/vimrc')
