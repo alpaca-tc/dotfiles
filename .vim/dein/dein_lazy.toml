@@ -75,64 +75,6 @@ hook_source = '''
   "}}}
 '''
 
-[[plugins]]
-repo = 'tpope/vim-rails'
-hook_source = '''
-  let g:rails_level = 4
-  let g:rails_mappings=1
-  let g:rails_modelines=0
-  let g:rails_syntax = 1
-
-  function! s:source_snippet() " {{{
-    if empty(get(b:, 'rails_root', 0))
-      return
-    endif
-
-    try
-      let buf = rails#buffer()
-    catch /.*/
-      echomsg 'Missing rails type'
-    endtry
-
-    let type = "-" . buf.type_name()
-    let path = '/' . buf.name()
-    if path =~ '[ !#$%\,]'
-      let path = ''
-    endif
-
-    if type != '-'
-      let type = substitute(type, '-', '.', 'g')
-      execute 'doautocmd User Rails' . type
-    endif
-
-    " if !empty(path)
-    "   execute 'doautocmd User Rails' . path
-    " endif
-  endfunction"}}}
-
-  function! s:set_rails_path() "{{{
-    let path = ['app/controllers', 'app/models', 'lib', 'app/controllers/concerns', 'app/models/concerns', 'app/workers', 'app/decorators', 'app/jobs']
-    execute 'setl path+=,' . join(map(path, 'expand(b:rails_root . "/" . v:val)'), ',')
-  endfunction"}}}
-
-  function! s:unite_rails_setting() " {{{
-    call s:source_snippet()
-
-    nnoremap <buffer><Space>r :R<CR>
-    nnoremap <buffer><Space>a :A<CR>
-  endfunction " }}}
-
-  augroup RailsDictSetting
-    autocmd!
-    autocmd User Rails call s:unite_rails_setting()
-    autocmd User BufEnterRails call s:set_rails_path()
-  augroup END
-'''
-
-[[plugins]]
-repo = 'basyura/unite-rails'
-on_source = ["unite.vim"]
-
 # [[plugins]]
 # repo = 'posva/vim-vue'
 # on_ft = "vue"

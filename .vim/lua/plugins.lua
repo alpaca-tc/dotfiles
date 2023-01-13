@@ -1088,12 +1088,83 @@ function M.setup()
             and vim.fn["alpaca#is_rails"](vim.fn["getcwd"]()) == 1
       end,
       config = function()
+        local function setup_snippet(root, cwd)
+          local function start_with(str, start)
+            return string.sub(str, 1, string.len(start)) == start
+          end
+
+          local function end_with(str, ending)
+            return ending == "" or string.sub(str, - #ending) == ending
+          end
+
+          local rails_snippets = {
+            {
+              path = "app/views",
+              snippet = 'ruby.rails.view',
+            }, {
+              path = "app/views",
+              ext = 'haml',
+              snippet = "haml.rails.view",
+            }, {
+              path = "app/views",
+              ext = "erb",
+              snippet = 'eruby.rails.view'
+            }, {
+              path = "app/models",
+              snippet = 'ruby.rails.model'
+            }, {
+              path = "app/controllers",
+              snippet = 'ruby.rails.controller'
+            }, {
+              path = "db/migrate",
+              ext = "rb",
+              snippet = 'ruby.rails.migrate'
+            }, {
+              path = "config/routes.rb",
+              snippet = "ruby.rails.route"
+            }, {
+              path = "spec/factories",
+              snippet = "ruby.factory_girl"
+            }, {
+              path = "spec/controllers",
+              snippet = "ruby.rspec.controller"
+            }, {
+              path = "spec/models",
+              snippet = "ruby.rspec.model"
+            }, {
+              path = "spec/helpers",
+              snippet = "ruby.rspec.helper"
+            }, {
+              path = "spec/feature",
+              snippet = "ruby.capybara"
+            }, {
+              path = "spec/routing",
+              snippet = 'ruby.rspec.routing'
+            }
+          }
+
+          for _, def in pairs(rails_snippets) do
+            local prefix = root .. '/' .. def.path
+
+            if start_with(cwd, prefix) and (not def.ext or end_with(cwd, def.ext)) then
+              local snippet_file = vim.fn.expand('~/.vim/snippet/' .. def.snippet .. '.snip')
+              if vim.fn['filereadable'](snippet_file) then
+                vim.cmd('NeoSnippetSource ' .. snippet_file)
+                vim.keymap.set("n", "<Space>e", ':<C-U>tabnew ' .. snippet_file .. '<CR>', { noremap = true, buffer = true })
+              end
+            end
+          end
+        end
+
         local function setup_rails()
-          if vim.fn["alpaca#is_rails"](vim.fn["getcwd"]()) == 0 then
+          local cwd = vim.fn["expand"]('%:p')
+
+          if vim.fn["alpaca#is_rails"](cwd) == 0 then
             return
           end
 
-          local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
+          local root = vim.fn["alpaca#current_root"](cwd)
+          setup_snippet(root, cwd)
 
           local from_root = function(prefix)
             local fn = function()
@@ -2351,6 +2422,7 @@ function M.setup()
       event = { "InsertEnter" },
       setup = function()
         vim.g.switch_no_builtins = false
+        vim.keymap.set('n', '!', ':Switch<CR>', { noremap = true })
       end,
       config = function()
         local switch_definition = {
@@ -2622,6 +2694,9 @@ function M.setup()
       "Shougo/vinarise.vim",
       cmd = { "Vinarise" },
       requires = { "s-yukikaze/vinarise-plugin-peanalysis" },
+      setup = function()
+        vim.g.vinarise_objdump_command = 'gobjdump'
+      end
     })
 
     use({

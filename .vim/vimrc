@@ -426,9 +426,6 @@ cnoremap <C-N> <Down>
 
 " ----------------------------------------
 " Plugin settings {{{
-noremap [plug] <Nop>
-nmap <C-H> [plug]
-
 " ------------------------------------
 function! s:new_memolist()
   let date = strftime('%Y-%m-%d')
@@ -438,90 +435,6 @@ endfunction
 
 nnoremap <silent><Space>mn :call <SID>new_memolist()<CR>
 nnoremap <silent><Space>ml :execute 'VimFilerExplorer ' . g:my.dir.memolist . ' -horizontal'<CR>
-
-" ------------------------------------
-function! s:define_rails_autocmd() "{{{
-  let s:rails_snippets = {
-        \ '.view*':                 ['ruby.rails.view'],
-        \ '.view.haml':             ['haml.rails.view'],
-        \ '.view.erb':              ['eruby.rails.view'],
-        \ '.model*':                 ['ruby.rails.model'],
-        \ '.controller':            ['ruby.rails.controller'],
-        \ '.db.migration':          ['ruby.rails.migrate'],
-        \ '/config/environment.rb': ['ruby.rails.environment'],
-        \ '/config/routes.rb':      ['ruby.rails.route'],
-        \ '.fixtures.replacement':  ['ruby.factory_girl'],
-        \ '.spec.controller':       ['ruby.rspec.controller'],
-        \ '.spec.model':            ['ruby.rspec.model'],
-        \ '.spec.helper':           ['ruby.rspec.helper'],
-        \ '.spec.feature':          ['ruby.capybara'],
-        \ '.spec.routing':          ['ruby.rspec.routing']
-        \ }
-
-  augroup MyRailsSetting
-    autocmd!
-
-    for [type_or_path, snippets] in items(s:rails_snippets)
-      for snippet in snippets
-        let snippet_file = expand('~/.vim/snippet/' . snippet . '.snip')
-        if filereadable(snippet_file)
-          let prefix = 'autocmd User Rails' . type_or_path
-          execute prefix . ' NeoSnippetSource ' . snippet_file
-          execute prefix . ' nnoremap <buffer><Space>e :<C-U>tabnew ' . snippet_file . '<CR>'
-        endif
-      endfor
-    endfor
-  augroup END
- endfunction"}}}
-
-function! s:detect_rails()
-  let root_dir = s:current_git()
-  return !empty(root_dir) && filereadable(root_dir . '/config/application.rb')
-endfunction
-
-function! s:load_vim_rails() "{{{
-  if exists('s:loaded_vim_rails')
-    return
-  endif
-
-  if s:detect_rails()
-    let s:loaded_vim_rails = 1
-    let root_dir = s:current_git()
-
-    autocmd! LoadVimRails
-    augroup! LoadVimRails
-
-    let b:rails_root = root_dir
-    call dein#source('vim-rails')
-    call s:define_rails_autocmd()
-
-    silent doautocmd User BufEnterRails
-    silent doautocmd User Rails
-
-    augroup DetectVimRails
-      autocmd!
-      autocmd BufNew,BufNewFile *.rb silent doautocmd User Rails
-    augroup END
-  endif
-endfunction"}}}
-
-if s:on_init() && !exists('s:loaded_vim_rails')
-  augroup LoadVimRails
-    autocmd!
-    autocmd VimEnter,BufNewFile,BufRead * call <SID>load_vim_rails()
-  augroup END
-endif
-
-" ------------------------------------
-" vim-endwise
-" ------------------------------------
-let g:endwise_no_mappings = 1
-
-" ------------------------------------
-let g:vinarise_objdump_command = 'gobjdump'
-
-" ------------------------------------
-nnoremap ! :Switch<CR>
 
 " ----------------------------------------
 " unite.vim"{{{
