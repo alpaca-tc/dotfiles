@@ -486,16 +486,15 @@ function M.setup()
 
     use({
       "alpaca-tc/git-vim",
-      cmd = { "GitDiff", "GitVimDiff", "GitCheckout", "GitAdd", "GitLog", "GitCommit", "GitBlame", "GitPush" },
-      fn = { "git#get_current_branch" },
+      fn = { "git#get_current_branch", "git#add" },
       setup = function()
-        vim.keymap.set("n", "gA", ":<C-U>GitAdd<Space>")
-        vim.keymap.set("n", "ga", ":<C-U>GitAdd<CR>", { silent = true })
-        vim.keymap.set("n", "gD", ":<C-U>GitDiff<Space>")
-        vim.keymap.set("n", "gDD", ":<C-U>GitDiff HEAD<CR>")
+        vim.keymap.set("n", "ga", ":<C-U>call git#add(expand('%:p'))<CR>")
+        vim.keymap.set("n", "gD", ":<C-U>call git#diff('')<Left><Left>")
+        vim.keymap.set("n", "gDD", ":<C-U>call git#diff()<CR>")
 
         vim.g.git_command_edit = "vnew"
         vim.g.git_no_default_mappings = 1
+        vim.g.git_use_vimproc = 1
       end,
     })
 
