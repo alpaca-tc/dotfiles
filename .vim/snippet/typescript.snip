@@ -60,3 +60,9 @@ options word
     useEffect(effectHook, deps);
   };
 
+
+snippet .reduce
+abbr    .reduce
+regexp  '\.reduce'
+options word
+  .reduce((result, current) => ${2}, ${1})

@@ -111,7 +111,7 @@ function M.setup()
       "thinca/vim-quickrun",
       cmd = { "QuickRun" },
       requires = { { "alpaca-tc/vim-quickrun-neovim-job", branch = "with_env" } },
-      wants = { "vim-quickrun-neovim-job" },
+      wants = { "vim-quickrun-neovim-job", "alpaca_window.vim" },
       setup = function()
         vim.keymap.set("n", ",r", ":QuickRun<CR>", { silent = true, noremap = true })
       end,
@@ -139,7 +139,9 @@ function M.setup()
         vim.api.nvim_create_autocmd("FileType", {
           group = group,
           pattern = "quickrun",
-          callback = vim.fn["alpaca_window#set_smart_closefunction"],
+          callback = function()
+            vim.fn["alpaca_window#set_smart_close"]()
+          end,
         })
 
         vim.api.nvim_create_autocmd("FileType", {
@@ -402,7 +404,7 @@ function M.setup()
         }
 
         surround_definitions =
-        vim.fn["alpaca#initialize#redefine_dict_to_each_filetype"](surround_definitions, vim.empty_dict())
+          vim.fn["alpaca#initialize#redefine_dict_to_each_filetype"](surround_definitions, vim.empty_dict())
 
         local function define_variable_for_surround(key, mapping)
           local var_name = "surround_" .. vim.fn["char2nr"](key)
@@ -448,14 +450,7 @@ function M.setup()
       end,
     })
 
-    -- -- Git
-    -- use {
-    --   "TimUntersberger/neogit",
-    --   requires = "nvim-lua/plenary.nvim",
-    --   config = function()
-    --     require("config.neogit").setup()
-    --   end,
-    -- }
+    -- Git
     use({
       "tpope/vim-fugitive",
       cmd = { "Git" },
@@ -838,7 +833,7 @@ function M.setup()
             else
               if ddu_window_size[ddu_ff_winnr] == nil then
                 ddu_window_size[ddu_ff_winnr] =
-                { [0] = vim.fn.winheight(ddu_ff_winnr), [1] = vim.fn.winwidth(ddu_ff_winnr) }
+                  { [0] = vim.fn.winheight(ddu_ff_winnr), [1] = vim.fn.winwidth(ddu_ff_winnr) }
               end
 
               vim.cmd(ddu_ff_winnr .. "resize 1")
@@ -944,7 +939,13 @@ function M.setup()
               end
 
               print(vim.inspect(sorters))
-              vim.fn["ddu#redraw"]("file", { refreshItems = true, updateOptions = { sourceOptions = { file = { sorters = sorters } } } })
+              vim.fn["ddu#redraw"](
+                "file",
+                {
+                  refreshItems = true,
+                  updateOptions = { sourceOptions = { file = { sorters = sorters } } },
+                }
+              )
             end, { noremap = true, buffer = true })
 
             vim.keymap.set("n", "q", function()
@@ -1084,7 +1085,7 @@ function M.setup()
         "ddu-source-action",
         "neosnippet.vim",
       },
-      event = 'User Rails',
+      event = "User Rails",
       config = function()
         local function setup_snippet(root, cwd)
           local function start_with(str, start)
@@ -1092,70 +1093,87 @@ function M.setup()
           end
 
           local function end_with(str, ending)
-            return ending == "" or string.sub(str, - #ending) == ending
+            return ending == "" or string.sub(str, -#ending) == ending
           end
 
           local rails_snippets = {
             {
               path = "app/views",
-              snippet = 'ruby.rails.view',
-            }, {
+              snippet = "ruby.rails.view",
+            },
+            {
               path = "app/views",
-              ext = 'haml',
+              ext = "haml",
               snippet = "haml.rails.view",
-            }, {
+            },
+            {
               path = "app/views",
               ext = "erb",
-              snippet = 'eruby.rails.view'
-            }, {
+              snippet = "eruby.rails.view",
+            },
+            {
               path = "app/models",
-              snippet = 'ruby.rails.model'
-            }, {
+              snippet = "ruby.rails.model",
+            },
+            {
               path = "app/controllers",
-              snippet = 'ruby.rails.controller'
-            }, {
+              snippet = "ruby.rails.controller",
+            },
+            {
               path = "db/migrate",
               ext = "rb",
-              snippet = 'ruby.rails.migrate'
-            }, {
+              snippet = "ruby.rails.migrate",
+            },
+            {
               path = "config/routes.rb",
-              snippet = "ruby.rails.route"
-            }, {
+              snippet = "ruby.rails.route",
+            },
+            {
               path = "spec/factories",
-              snippet = "ruby.factory_girl"
-            }, {
+              snippet = "ruby.factory_girl",
+            },
+            {
               path = "spec/controllers",
-              snippet = "ruby.rspec.controller"
-            }, {
+              snippet = "ruby.rspec.controller",
+            },
+            {
               path = "spec/models",
-              snippet = "ruby.rspec.model"
-            }, {
+              snippet = "ruby.rspec.model",
+            },
+            {
               path = "spec/helpers",
-              snippet = "ruby.rspec.helper"
-            }, {
+              snippet = "ruby.rspec.helper",
+            },
+            {
               path = "spec/feature",
-              snippet = "ruby.capybara"
-            }, {
+              snippet = "ruby.capybara",
+            },
+            {
               path = "spec/routing",
-              snippet = 'ruby.rspec.routing'
-            }
+              snippet = "ruby.rspec.routing",
+            },
           }
 
           for _, def in pairs(rails_snippets) do
-            local prefix = root .. '/' .. def.path
+            local prefix = root .. "/" .. def.path
 
             if start_with(cwd, prefix) and (not def.ext or end_with(cwd, def.ext)) then
-              local snippet_file = vim.fn.expand('~/.vim/snippet/' .. def.snippet .. '.snip')
-              if vim.fn['filereadable'](snippet_file) then
-                vim.cmd('NeoSnippetSource ' .. snippet_file)
-                vim.keymap.set("n", "<Space>e", ':<C-U>tabnew ' .. snippet_file .. '<CR>', { noremap = true, buffer = true })
+              local snippet_file = vim.fn.expand("~/.vim/snippet/" .. def.snippet .. ".snip")
+              if vim.fn["filereadable"](snippet_file) then
+                vim.cmd("NeoSnippetSource " .. snippet_file)
+                vim.keymap.set(
+                  "n",
+                  "<Space>e",
+                  ":<C-U>tabnew " .. snippet_file .. "<CR>",
+                  { noremap = true, buffer = true }
+                )
               end
             end
           end
         end
 
         local function setup_rails()
-          local cwd = vim.fn["expand"]('%:p')
+          local cwd = vim.fn["expand"]("%:p")
 
           if vim.fn["alpaca#is_rails"](cwd) == 0 then
             return
@@ -1251,8 +1269,7 @@ function M.setup()
         vim.keymap.set(
           "n",
           "<C-J>j",
-          ":call ddu#start(#{ name: 'mr', sources: [#{ name: 'mr' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>"
-          ,
+          ":call ddu#start(#{ name: 'mr', sources: [#{ name: 'mr' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>",
           { noremap = true, silent = true }
         )
 
@@ -1385,15 +1402,13 @@ function M.setup()
         vim.keymap.set(
           "n",
           "gl",
-          ":call ddu#start(#{ name: 'git_log', sources: [#{ name: 'git_log' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>"
-          ,
+          ":call ddu#start(#{ name: 'git_log', sources: [#{ name: 'git_log' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>",
           { noremap = true, silent = true }
         )
         vim.keymap.set(
           "n",
           "gs",
-          ":call ddu#start(#{ name: 'git_status', sources: [#{ name: 'git_status' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>"
-          ,
+          ":call ddu#start(#{ name: 'git_status', sources: [#{ name: 'git_status' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>",
           { noremap = true, silent = true }
         )
         vim.keymap.set(
@@ -1458,7 +1473,7 @@ function M.setup()
         end
 
         local function end_with(str, ending)
-          return ending == "" or string.sub(str, - #ending) == ending
+          return ending == "" or string.sub(str, -#ending) == ending
         end
 
         local function contains(str, sub)
@@ -1499,6 +1514,9 @@ function M.setup()
     use({
       "jose-elias-alvarez/null-ls.nvim",
       requires = { "nvim-lua/plenary.nvim" },
+      wants = {
+        "plenary.nvim",
+      },
       event = { "InsertEnter" },
       config = function()
         require("null-ls").setup({
@@ -1796,12 +1814,13 @@ function M.setup()
 
           if filetype == "ruby" and file_match_str(root .. "/Gemfile", "sorbet") then
             vim.cmd("LspStart sorbet")
-          elseif isTsJs
-              and (
+          elseif
+            isTsJs
+            and (
               vim.fn["filereadable"](root .. "/deno.json") == 1
-                  or file_match_str(root .. "/vercel.json", "vercel-deno")
-                  or file_match_str(currentFile, "https://deno.land/")
-              )
+              or file_match_str(root .. "/vercel.json", "vercel-deno")
+              or file_match_str(currentFile, "https://deno.land/")
+            )
           then
             vim.cmd("LspStart denols")
           elseif isTsJs and file_match_str(root .. "/package.json", "typescript") then
@@ -1997,7 +2016,9 @@ function M.setup()
     use({
       "Shougo/vimfiler",
       cmd = { "VimFiler", "VimFilerBufferDir", "VimFilerExplorer", "VimFilerCreate" },
-      -- requires = { "Shougo/unite.vim" },
+      wants = {
+        "unite.vim",
+      },
       setup = function()
         vim.g.vimfiler_data_directory = vim.g.my.dir.vimfiler
         vim.g.vimfiler_force_overwrite_statusline = 0
@@ -2070,8 +2091,7 @@ function M.setup()
             vim.keymap.set(
               "n",
               "<buffer>gs",
-              ":call ddu#start(#{ name: 'git_status', sources: [#{ name: 'git_status' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>"
-              ,
+              ":call ddu#start(#{ name: 'git_status', sources: [#{ name: 'git_status' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>",
               { noremap = true, silent = true }
             )
             vim.keymap.set(
@@ -2338,7 +2358,7 @@ function M.setup()
           pattern = "qf",
           group = group,
           callback = function()
-            vim.cmd("call alpaca_window#set_smart_close()")
+            vim.fn["call alpaca_window#set_smart_close"]()
           end,
         })
       end,
@@ -2420,7 +2440,7 @@ function M.setup()
       event = { "InsertEnter" },
       setup = function()
         vim.g.switch_no_builtins = false
-        vim.keymap.set('n', '!', ':Switch<CR>', { noremap = true })
+        vim.keymap.set("n", "!", ":Switch<CR>", { noremap = true })
       end,
       config = function()
         local switch_definition = {
@@ -2693,8 +2713,8 @@ function M.setup()
       cmd = { "Vinarise" },
       requires = { "s-yukikaze/vinarise-plugin-peanalysis" },
       setup = function()
-        vim.g.vinarise_objdump_command = 'gobjdump'
-      end
+        vim.g.vinarise_objdump_command = "gobjdump"
+      end,
     })
 
     use({
@@ -2703,11 +2723,151 @@ function M.setup()
       run = "brew install binutils",
     })
 
+    use({
+      "Shougo/unite.vim",
+      cmd = {
+        "Unite",
+        "UniteBookmarkAdd",
+        "UniteClose",
+        "UniteResume",
+        "UniteWithBufferDir",
+        "UniteWithCurrentDir",
+        "UniteWithCursorWord",
+        "UniteWithInput",
+        "UniteWithInputDirectory",
+      },
+      fn = { "unite#util#path2project_directory", "unite#util#get_vital" },
+      wants = {
+        "vimfiler",
+      },
+      setup = function()
+        vim.g.unite_winheight = 20
+      end,
+      config = function()
+        local group = vim.api.nvim_create_augroup("PackerUnite", { clear = true })
+
+        vim.api.nvim_create_autocmd("FileType", {
+          group = group,
+          pattern = "unite",
+          callback = function()
+            vim.cmd([[highlight link uniteMarkedLine Identifier]])
+            vim.cmd([[highlight link uniteCandidateInputKeyword Statement]])
+
+            vim.keymap.set(
+              "n",
+              "f",
+              "<Plug>(unite_toggle_mark_current_candidate)",
+              { silent = true, buffer = true }
+            )
+            vim.keymap.set(
+              "x",
+              "f",
+              "<Plug>(unite_toggle_mark_selected_candidates)",
+              { silent = true, buffer = true }
+            )
+            vim.keymap.set(
+              "n",
+              ",,",
+              "unite#do_action('vimfiler')",
+              { noremap = true, silent = true, expr = true, buffer = true }
+            )
+            vim.keymap.set(
+              "n",
+              "re",
+              "unite#do_action('replace')",
+              { noremap = true, expr = true, buffer = true }
+            )
+          end,
+        })
+
+        if vim.fn.executable("ag") then
+          vim.g.unite_source_grep_command = "ag"
+          vim.g.unite_source_grep_default_opts = "--nocolor --nogroup"
+          vim.g.unite_source_grep_recursive_opt = ""
+        elseif vim.fn.executable("rg") then
+          vim.g.unite_source_grep_command = "rg"
+          vim.g.unite_source_grep_default_opts = "-n --no-heading --color never"
+          vim.g.unite_source_grep_recursive_opt = ""
+          vim.g.unite_source_grep_max_candidates = 200
+        else
+          vim.g.unite_source_grep_command = "grep"
+          vim.g.unite_source_grep_recursive_opt = "-R"
+        end
+      end,
+    })
+
     if packer_bootstrap then
       print("Restart Neovim required after installation!")
       require("packer").sync()
     end
   end
+
+  -- [[plugins]]
+  -- repo = 'posva/vim-vue'
+  -- on_ft = "vue"
+  -- hook_source = '''
+  --   " autocmd FileType vue syntax sync fromstart
+  -- '''
+  --
+  -- [[plugins]]
+  -- repo = 'leafgarland/typescript-vim'
+  -- on_ft = ["typescript"]
+  --
+  -- [[plugins]]
+  -- repo = 'yuezk/vim-js'
+  -- on_ft = ["javascript", "typescript", "javascript.jsx", "typescript.tsx"]
+  --
+  -- [[plugins]]
+  -- repo = 'MaxMEllon/vim-jsx-pretty'
+  -- on_ft = ["javascript", "typescript", "javascript.jsx", "typescript.tsx"]
+  -- depends = ["vim-js", "yats.vim"]
+  -- hook_source = '''
+  --   let g:vim_jsx_pretty_highlight_close_tag = 1
+  -- '''
+  --
+  -- [[plugins]]
+  -- repo = 'HerringtonDarkholme/yats.vim'
+  -- on_ft = ["javascript", "typescript", "javascript.jsx", "typescript.tsx"]
+  --
+  -- [[plugins]]
+  -- repo = 'peitalin/vim-jsx-typescript'
+  -- on_ft = ["typescript"]
+  --
+  -- [[plugins]]
+  -- repo = 'othree/yajs.vim'
+  -- on_ft     = ["javascript"]
+  --
+  -- [[plugins]]
+  -- repo = 'othree/javascript-libraries-syntax.vim'
+  -- on_ft     = ["javascript"]
+  --
+  -- [[plugins]]
+  -- repo = 'digitaltoad/vim-jade'
+  -- on_ft     = ["jade"]
+  --
+  -- [[plugins]]
+  -- repo = 'wavded/vim-stylus'
+  -- on_ft     = ["stylus"]
+  --
+  -- [[plugins]]
+  -- repo = 'moll/vim-node'
+  -- on_ft     = ["javascript"]
+  --
+  -- [[plugins]]
+  -- repo = 'alpaca-tc/vim-markdown'
+  -- on_ft     = ["markdown"]
+  --
+  -- [[plugins]]
+  -- repo = 'mrkn/vim-cruby'
+  -- on_ft = ["c"]
+  --
+  -- [[plugins]]
+  -- repo = 'vim-ruby/vim-ruby'
+  -- on_ft     = ["ruby", "erb", "ruby.rspec"]
+  -- hook_source = '''
+  --   let g:ruby_indent_block_style = 'do'
+  --   let g:ruby_foldable_groups = 'NONE'
+  -- '''
 
   packer_init()
 
