@@ -601,14 +601,22 @@ function M.setup()
           },
         })
 
-        local function move_to_ddu_buffer(ft)
+        local function find_ddu_buffer(ft)
           for n = 1, vim.fn.winnr("$") do
             local win_ft = vim.fn.getwinvar(n, "&ft")
 
             if win_ft == ft then
-              local id = vim.fn.win_getid(n)
-              vim.fn.win_gotoid(id)
+              return n
             end
+          end
+        end
+
+        local function move_to_ddu_buffer(ft)
+          local winnr = find_ddu_buffer(ft)
+
+          if (winnr) then
+            local id = vim.fn.win_getid(winnr)
+            vim.fn.win_gotoid(id)
           end
         end
 
@@ -649,7 +657,21 @@ function M.setup()
           })
 
           vim.keymap.set("n", "q", function()
-            vim.fn["ddu#ui#ff#do_action"]("quit")
+            -- vim.fn["ddu#ui#ff#do_action"]("quit")
+
+            local winnr = find_ddu_buffer('ddu-ff-filter')
+
+            if (winnr) then
+              vim.fn.win_gotoid(vim.fn.win_getid(winnr))
+              vim.cmd('quit!')
+            end
+
+            winnr = find_ddu_buffer('ddu-ff')
+
+            if (winnr) then
+              vim.fn.win_gotoid(vim.fn.win_getid(winnr))
+              vim.cmd('quit!')
+            end
           end, { noremap = true, buffer = true, silent = true })
           vim.keymap.set(
             "n",
@@ -1334,6 +1356,19 @@ function M.setup()
         { "n", "gR" },
       },
       config = function()
+        vim.fn["ddu#custom#patch_local"]("rg", {
+          ui = "ff",
+          uiParams = {
+            autoResize = false,
+          },
+          sourceOptions = {
+            rg = {
+              converters = { "fold_path" },
+              matchers = { "converter_display_word", "matcher_regexp" },
+            }
+          }
+        })
+
         local function ddu_start_rg(input)
           local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
           local options = {
@@ -1356,6 +1391,11 @@ function M.setup()
             uiParams = {
               autoResize = false,
             },
+            sourceOptions = {
+              rg = {
+                filters = { "fold_path" }
+              }
+            }
           }
 
           vim.fn["ddu#start"](options)
