@@ -24,9 +24,9 @@ function M.setup()
     pattern = "plugins.lua",
     group = augroup,
     callback = function()
-      -- vim.cmd('luafile <afile>')
+      vim.cmd('luafile <afile>')
       -- vim.cmd('PackerInstall')
-      -- vim.cmd('PackerCompile')
+      vim.cmd('PackerCompile')
     end,
   })
 
@@ -537,24 +537,47 @@ function M.setup()
         })
 
         vim.fn["ddu#custom#action"]("kind", "file", "grep", function(args)
-          -- NOTE: param "path" must be one directory
-          local path = args.items[0].action.path
-          local directory = vim.fn["isdirectory"](path) and path or vim.fn["fnamemodify"](path, ":h")
+          local paths = {}
+
+          for _, item in pairs(args.items) do
+            table.insert(paths, item.action.path)
+          end
 
           vim.fn["ddu#start"]({
-            name = args.options.name,
+            name = 'rg',
             push = true,
             sources = {
               {
                 name = "rg",
                 params = {
-                  path = directory,
+                  path = vim.fn.getcwd(),
                   input = vim.fn["input"]("Pattern: "),
+                  paths = paths
                 },
-              },
+              }
             },
           })
         end)
+
+        -- vim.fn['ddu#custom#action']('kind', 'file', 'quickfix', function(args)
+        --   local qflist = {}
+        --
+        --   for _, item in pairs(args.items) do
+        --     if item.action ~= nil and item.action. then
+        --       let filename = s:get_filename(candidate)
+        --       call add(qflist, {
+        --             \ 'filename' : filename,
+        --             \ 'lnum' : candidate.action__line,
+        --             \ 'text' : candidate.action__text,
+        --             \ })
+        --     end
+        --   end
+        --
+        --   if !empty(qflist)
+        --     call setqflist(qflist)
+        --     call qfreplace#start('')
+        --   endif
+        -- end)
       end,
     })
 
@@ -2018,6 +2041,7 @@ function M.setup()
       cmd = { "VimFiler", "VimFilerBufferDir", "VimFilerExplorer", "VimFilerCreate" },
       wants = {
         "unite.vim",
+        "vimproc.vim",
       },
       setup = function()
         vim.g.vimfiler_data_directory = vim.g.my.dir.vimfiler
@@ -2196,7 +2220,10 @@ function M.setup()
             vim.keymap.set("n", "g<C-g>", "<Plug>(vimfiler_toggle_maximize_window)", { buffer = true })
             vim.keymap.set("n", "yy", "<Plug>(vimfiler_yank_full_path)", { buffer = true })
             vim.keymap.set("n", "M", "<Plug>(vimfiler_set_current_mask)", { buffer = true })
-            vim.keymap.set("n", "gr", "<Plug>(vimfiler_grep)", { buffer = true })
+            vim.keymap.set("n", "gr", function()
+              local vimfiler = vim.b.vimfiler
+              vim.fn['vimfiler#mappings#do_action'](vimfiler, 'ddu-rg')
+            end, { buffer = true })
             vim.keymap.set("n", "gf", "<Plug>(vimfiler_find)", { buffer = true })
             vim.keymap.set("n", "S", "<Plug>(vimfiler_select_sort_type)", { buffer = true })
             vim.keymap.set("n", "<C-v>", "<Plug>(vimfiler_switch_vim_buffer_mode)", { buffer = true })
@@ -2739,6 +2766,7 @@ function M.setup()
       fn = { "unite#util#path2project_directory", "unite#util#get_vital" },
       wants = {
         "vimfiler",
+        "ddu-source-rg",
       },
       setup = function()
         vim.g.unite_winheight = 20
@@ -2778,6 +2806,32 @@ function M.setup()
               { noremap = true, expr = true, buffer = true }
             )
           end,
+        })
+
+        vim.fn['unite#custom#action']('file', 'ddu-rg', {
+          is_selectable = 1,
+          func = function(candidates)
+            local paths = {}
+
+            for _, item in pairs(candidates) do
+              table.insert(paths, item.action__path)
+            end
+
+            vim.fn["ddu#start"]({
+              name = 'rg',
+              push = true,
+              sources = {
+                {
+                  name = "rg",
+                  params = {
+                    path = vim.fn.getcwd(),
+                    input = vim.fn["input"]("Pattern: "),
+                    paths = paths
+                  },
+                }
+              },
+            })
+          end
         })
 
         if vim.fn.executable("ag") then
