@@ -1132,6 +1132,14 @@ function M.setup()
       },
       event = "User Rails",
       config = function()
+        vim.fn["ddu#custom#patch_global"]({
+          sourceOptions = {
+            file_rec = {
+              ignoredDirectories = { ".git", "node_modules", ".bundle" },
+            },
+          },
+        })
+
         local function setup_snippet(root, cwd)
           local function start_with(str, start)
             return string.sub(str, 1, string.len(start)) == start
@@ -1311,30 +1319,27 @@ function M.setup()
         { "n", "<C-J>j" },
       },
       config = function()
-        vim.keymap.set(
-          "n",
-          "<C-J>j",
-          ":call ddu#start(#{ name: 'mr', sources: [#{ name: 'mr' }], uiParams: #{ ff: #{ startFilter: v:false } } })<CR>",
-          { noremap = true, silent = true }
-        )
-
-        vim.fn["ddu#custom#patch_global"]({
-          sourceOptions = {
-            file_rec = {
-              ignoredDirectories = { ".git", "node_modules", ".bundle" },
-            },
-          },
-        })
-
-        vim.fn["ddu#custom#patch_global"]({
+        vim.fn["ddu#custom#patch_local"]('mr', {
+          sources = { { name = 'mr' } },
+          uiParams = { ff = { startFilter = false } },
           sourceParams = {
             mr = {
               kind = "mru",
-              foldRoot = true,
-              relativeIfSameRepository = true,
+            }
+          },
+          sourceOptions = {
+            mr = {
+              converters = { "fold_path" },
             },
           },
         })
+
+        vim.keymap.set(
+          "n",
+          "<C-J>j",
+          ":call ddu#start(#{ name: 'mr' })<CR>",
+          { noremap = true, silent = true }
+        )
       end,
     })
 
