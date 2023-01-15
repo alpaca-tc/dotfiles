@@ -550,7 +550,6 @@ function M.setup()
               {
                 name = "rg",
                 params = {
-                  path = vim.fn.getcwd(),
                   input = vim.fn["input"]("Pattern: "),
                   paths = paths
                 },
@@ -1398,9 +1397,9 @@ function M.setup()
             },
             sourceOptions = {
               rg = {
-                filters = { "fold_path" }
+                converters = { "fold_path" }
               }
-            }
+            },
           }
 
           vim.fn["ddu#start"](options)
@@ -2869,7 +2868,6 @@ function M.setup()
                 {
                   name = "rg",
                   params = {
-                    path = vim.fn.getcwd(),
                     input = vim.fn["input"]("Pattern: "),
                     paths = paths
                   },

@@ -21,7 +21,6 @@ export class Filter extends BaseFilter<Params> {
     const dir = await fn.getcwd(args.denops) as string;
     const homeDir = await args.denops.call("expand", "~") as string;
     const repoDir = await findGitRoot(dir);
-    console.log("hello");
 
     args.items.forEach((item) => {
       // /Users/hiroyuki.ishii/.local/share/nvim/site/pack/packer/opt/ddu-source-mr/denops/@ddu-sources/mr.ts
@@ -38,7 +37,16 @@ export class Filter extends BaseFilter<Params> {
           );
           break;
         }
-        // case 'rg':
+        case "rg":
+          items.push(
+            this.foldItemForRg(
+              dir,
+              homeDir,
+              repoDir,
+              item as Item<FileActionData>,
+            ),
+          );
+          break;
         default:
           console.log(`not supported source given ${item.__sourceName}`);
       }
@@ -68,8 +76,28 @@ export class Filter extends BaseFilter<Params> {
       word = `~${word.slice(homeDir.length)}`;
     }
 
-    console.log(word);
-
     return { ...item, word } as FoldItem;
+  }
+
+  private foldItemForRg(
+    dir: string,
+    homeDir: string,
+    repoDir: string | undefined,
+    item: Item<FileActionData>,
+  ) {
+    const action = item.action!;
+    let path = action.path!;
+
+    if (repoDir && path.startsWith(repoDir)) {
+      path = relative(dir, path);
+    }
+
+    if (path.startsWith(homeDir)) {
+      path = `~${path.slice(homeDir.length)}`;
+    }
+
+    const word = `${path}:${action.lineNr}:${action.col}: ${action.text}`;
+
+    return { ...item, display: word, word } as FoldItem;
   }
 }
