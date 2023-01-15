@@ -98,6 +98,6 @@ export class Filter extends BaseFilter<Params> {
 
     const word = `${path}:${action.lineNr}:${action.col}: ${action.text}`;
 
-    return { ...item, display: word, word } as FoldItem;
+    return { ...item, display: word } as FoldItem;
   }
 }

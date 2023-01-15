@@ -1370,6 +1370,11 @@ function M.setup()
               converters = { "fold_path" },
               matchers = { "converter_display_word", "matcher_regexp" },
             }
+          },
+          sourceParams = {
+            rg = {
+              args = { "--column", "--no-heading", "--color", "never", "--json" }
+            }
           }
         })
 
