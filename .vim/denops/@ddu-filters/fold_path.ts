@@ -15,6 +15,10 @@ type Params = Record<string, unknown>;
 
 type FoldItem = DduItem & Item<FileActionData>;
 
+function charposToBytepos(input: string, pos: number): number {
+  return (new TextEncoder()).encode(input.slice(0, pos)).length;
+}
+
 export class Filter extends BaseFilter<Params> {
   override async filter(args: FilterArguments<Params>): Promise<DduItem[]> {
     const items: FoldItem[] = [];
@@ -25,7 +29,6 @@ export class Filter extends BaseFilter<Params> {
     args.items.forEach((item) => {
       // /Users/hiroyuki.ishii/.local/share/nvim/site/pack/packer/opt/ddu-source-mr/denops/@ddu-sources/mr.ts
       switch (item.__sourceName) {
-        // case 'file':
         case "mr": {
           items.push(
             this.foldItemForMr(
@@ -40,6 +43,7 @@ export class Filter extends BaseFilter<Params> {
         case "rg":
           items.push(
             this.foldItemForRg(
+              args,
               dir,
               homeDir,
               repoDir,
@@ -80,6 +84,7 @@ export class Filter extends BaseFilter<Params> {
   }
 
   private foldItemForRg(
+    args: FilterArguments<Params>,
     dir: string,
     homeDir: string,
     repoDir: string | undefined,
@@ -96,8 +101,65 @@ export class Filter extends BaseFilter<Params> {
       path = `~${path.slice(homeDir.length)}`;
     }
 
-    const word = `${path}:${action.lineNr}:${action.col}: ${action.text}`;
+    const display = `${path}:${action.lineNr}:${action.col}: ${action.text}`;
+    const highlights = (item.highlights ?? []).map((highlight) => {
+      switch (highlight.name) {
+        // recalculate highlight width/col
+        // see https://github.com/shun/ddu-source-rg//blob/6b5e5905d5b5d6059ee3ddbcc9fe946f7a89dded/denops/@ddu-sources/rg.ts#L76
+        case "path": {
+          return {
+            ...highlight,
+            width: path.length,
+          };
+        }
+        case "lineNr": {
+          return {
+            ...highlight,
+            col: path.length + 2,
+            width: String(action.lineNr).length,
+          };
+        }
+        case "word", "matched": {
+          // ignore
+          break;
+        }
+        default:
+          return highlight;
+      }
+    }).filter(Boolean);
 
-    return { ...item, display: word } as FoldItem;
+    const patterns = this.getInputPatterns(args.input)
+
+    for (const pattern of patterns) {
+      [...display.matchAll(pattern)].forEach((match) => {
+        if (match.index) {
+          highlights.push({
+            name: "matched",
+            "hl_group": args.filterParams.highlightMatched ?? "Statement",
+            col: charposToBytepos(display, match.index) + 1,
+            width: (new TextEncoder()).encode(match[0]).length,
+          });
+        }
+      });
+    }
+
+    return { ...item, display, word: display, highlights } as FoldItem;
+  }
+
+  private getInputPatterns(input: string): RegExp[] {
+    const inputs = input.split(/(?<!\\)\s+/).filter((x) => x != "").map((x) =>
+      x.replaceAll(/\\(?=\s)/g, "")
+    );
+    const patterns: RegExp[] = [];
+
+    for (const input of inputs) {
+      try {
+        patterns.push(new RegExp(input, 'ig'));
+      } catch (_) {
+        // ignore
+      }
+    }
+
+    return patterns
   }
 }

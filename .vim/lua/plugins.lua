@@ -543,6 +543,8 @@ function M.setup()
             table.insert(paths, item.action.path)
           end
 
+          local input = vim.fn["input"]("Pattern: ")
+
           vim.fn["ddu#start"]({
             name = 'rg',
             push = true,
@@ -550,7 +552,7 @@ function M.setup()
               {
                 name = "rg",
                 params = {
-                  input = vim.fn["input"]("Pattern: "),
+                  input = input,
                   paths = paths
                 },
               }
@@ -1373,7 +1375,12 @@ function M.setup()
           },
           sourceParams = {
             rg = {
-              args = { "--column", "--no-heading", "--color", "never", "--json" }
+              args = { "--column", "--no-heading", "--color", "never", "--json" },
+              highlights = {
+                path = "Directory",
+                lineNr = "Directory",
+                word = "Search"
+              }
             }
           }
         })
@@ -2866,6 +2873,8 @@ function M.setup()
               table.insert(paths, item.action__path)
             end
 
+            local input = vim.fn["input"]("Pattern: ")
+
             vim.fn["ddu#start"]({
               name = 'rg',
               push = true,
@@ -2873,7 +2882,7 @@ function M.setup()
                 {
                   name = "rg",
                   params = {
-                    input = vim.fn["input"]("Pattern: "),
+                    input = input,
                     paths = paths
                   },
                 }
