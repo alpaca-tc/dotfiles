@@ -27,6 +27,7 @@ function M.setup()
         "app/models/concerns",
         "app/mailers",
         "app/mailers/concerns",
+        "app/serializers",
         "app/repositories",
         "app/validators",
         "app/view_models",
@@ -44,6 +45,31 @@ function M.setup()
         vim.opt_local.path:prepend(root .. "/" .. val)
       end
     end,
+  })
+
+  -- Customize gf
+  vim.api.nvim_create_autocmd("User", {
+    group = group,
+    pattern = "Rails",
+    callback = function()
+      vim.keymap.set('n', 'gf', function()
+        local file = vim.fn['RubyCursorFile']()
+
+        if vim.fn.findfile(file) == '' then
+          local candidate = vim.fn.substitute(file, 'rt_hr', 'rthr', 'g')
+
+          if vim.fn.findfile(candidate) then
+            file = candidate
+          end
+        end
+
+        if vim.fn.findfile(file) == '' then
+          vim.cmd(string.format('echo "E447: Can\'t find file \'%s\' in path"', file))
+        else
+          vim.cmd('find ' .. file)
+        end
+      end, { buffer = true })
+    end
   })
 end
 
