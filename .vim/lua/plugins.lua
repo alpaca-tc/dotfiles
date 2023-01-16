@@ -651,14 +651,18 @@ function M.setup()
         local function ddu_ui_ff_shared()
           local group = vim.api.nvim_create_augroup("PackerDduBufferUi", { clear = true })
 
-          vim.api.nvim_create_autocmd("BufEnter", {
-            group = group,
-            pattern = "<buffer>",
-            command = "if winnr('$') == 1 |quit| endif",
-          })
+          local function close_ddu_ui_ff_and_ddu_ui_ff_filter()
+            vim.api.nvim_del_augroup_by_id(group)
 
-          vim.keymap.set("n", "q", function()
-            -- vim.fn["ddu#ui#ff#do_action"]("quit")
+            local last = vim.fn.winnr("$")
+
+            for n = 1, last do
+              local ft = vim.fn.getwinvar(n, "&ft")
+
+              if ft == "ddu-ff" or ft == "ddu-ff-filter" then
+                vim.fn["ddu#ui#ff#do_action"]("quit")
+              end
+            end
 
             local winnr = find_ddu_buffer('ddu-ff-filter')
 
@@ -673,11 +677,39 @@ function M.setup()
               vim.fn.win_gotoid(vim.fn.win_getid(winnr))
               vim.cmd('quit!')
             end
-          end, { noremap = true, buffer = true, silent = true })
+          end
+
+          vim.api.nvim_create_autocmd({ "BufLeave", "BufEnter" }, {
+            group = group,
+            pattern = "*",
+            callback = function()
+              local only_ddu_ff = true
+              local ddu_ff_found = false
+              local ddu_ff_filter_found = false
+
+              local last = vim.fn.winnr("$")
+
+              for n = 1, last do
+                local ft = vim.fn.getwinvar(n, "&ft")
+
+                ddu_ff_found = ddu_ff_found or ft == "ddu-ff"
+                ddu_ff_filter_found = ddu_ff_filter_found or ft == "ddu-ff-filter"
+
+                only_ddu_ff = only_ddu_ff and (ft == "ddu-ff" or ft == "ddu-ff-filter")
+              end
+
+              if only_ddu_ff or (ddu_ff_filter_found and not ddu_ff_found) then
+                close_ddu_ui_ff_and_ddu_ui_ff_filter()
+              end
+            end
+          })
+
+          vim.keymap.set("n", "q", close_ddu_ui_ff_and_ddu_ui_ff_filter, { noremap = true, buffer = true, silent = true })
+
           vim.keymap.set(
             "n",
             "<Space>q",
-            ":call ddu#ui#ff#do_action('quit')<CR>",
+            close_ddu_ui_ff_and_ddu_ui_ff_filter,
             { noremap = true, buffer = true, silent = true }
           )
         end
@@ -1375,7 +1407,7 @@ function M.setup()
           },
           sourceParams = {
             rg = {
-              args = { "--column", "--no-heading", "--color", "never", "--json" },
+              args = { "--column", "--no-heading", "--color", "never", "--json", "--smart-case" },
               highlights = {
                 path = "Directory",
                 lineNr = "Directory",
