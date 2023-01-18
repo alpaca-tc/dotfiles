@@ -2463,8 +2463,6 @@ function M.setup()
         vim.g.alpaca_window_max_height = vim.fn.winheight(0)
         vim.g.alpaca_window_max_width = vim.fn.winwidth(0)
 
-        vim.keymap.set("n", "<C-W>n", "<Plug>(alpaca_window_smart_new)")
-        vim.keymap.set("n", "<C-W><C-N>", "<Plug>(alpaca_window_smart_new)")
         vim.keymap.set("n", "tc", "<Plug>(alpaca_window_tabnew)", { silent = true })
         vim.keymap.set("n", "tw", "<Plug>(alpaca_window_move_buffer_into_last_tab)")
 
@@ -2473,7 +2471,7 @@ function M.setup()
           pattern = "qf",
           group = group,
           callback = function()
-            vim.fn["call alpaca_window#set_smart_close"]()
+            vim.fn["alpaca_window#set_smart_close"]()
           end,
         })
       end,
