@@ -1783,18 +1783,16 @@ function M.setup()
       "williamboman/mason.nvim",
       event = { "InsertEnter" },
       requires = { "williamboman/mason-lspconfig.nvim" },
-      wants = { "mason-lspconfig.nvim" },
+      wants = { "nvim-lspconfig", "mason-lspconfig.nvim" },
       cmd = { "Mason", "MasonInstall", "MasonUninstall", "MasonUninstallAll", "MasonLog" },
       run = function()
         vim.cmd("MasonInstall lua-language-server")
         vim.cmd("MasonInstall luacheck")
         vim.cmd("MasonInstall typescript-language-server")
         vim.cmd("MasonInstall deno")
+        vim.cmd("MasonInstall clangd")
       end,
       config = function()
-        -- FIXME: How to load neovim/nvim-lspconfig before loading mason.nvim?
-        vim.cmd("LspStop")
-
         require("mason").setup()
 
         local lsp_config = require("lspconfig")
@@ -1936,6 +1934,8 @@ function M.setup()
             vim.cmd("LspStart denols")
           elseif isTsJs and file_match_str(root .. "/package.json", "typescript") then
             vim.cmd("LspStart tsserver")
+          elseif filetype == 'c' then
+            vim.cmd("LspStart clangd")
           end
         end
 
@@ -1945,7 +1945,7 @@ function M.setup()
 
         vim.api.nvim_create_autocmd("FileType", {
           group = group,
-          pattern = { "ruby", "javascript", "typescript", "typescriptreact", "typescript.jsx" },
+          pattern = { "ruby", "javascript", "typescript", "typescriptreact", "typescript.jsx", "c" },
           callback = start_lsp,
         })
       end,
@@ -2402,7 +2402,7 @@ function M.setup()
           ruby = {
             { "spec/requests/%_spec\\.rb", "app/controllers/%_controller\\.rb" },
             { "spec/%_spec\\.rb", "app/%\\.rb" },
-            { "spec/%_spec\\.rb", "lib/%\\.rb" },
+            { "spec/%_spec\\.rb", "spec/lib/%_spec\\.rb", "lib/%\\.rb" },
             { "%.rb", "%.rbs" },
             { "lib/%\\.rb", "sig/%\\.rbs", "spec/%_spec\\.rb" },
           },
@@ -2497,8 +2497,24 @@ function M.setup()
           map_cr = false,
         })
 
-        npairs.add_rules(require("nvim-autopairs.rules.endwise-ruby"))
-        npairs.add_rule(Rule("|", "|", { "ruby", "eruby" }))
+        local endwise = require('nvim-autopairs.ts-rule').endwise
+        local ruby_types = { "ruby", "eruby", "ruby.rspec" }
+
+        npairs.add_rules({
+          endwise('%sdo$',              'end', ruby_types, nil),
+          endwise('%sdo%s|.*|$',        'end', ruby_types, nil),
+          endwise('begin$',             'end', ruby_types, nil),
+          endwise('def%s.+$',           'end', ruby_types, nil),
+          endwise('module%s.+$',        'end', ruby_types, nil),
+          endwise('class%s.+$',         'end', ruby_types, nil),
+          endwise('[%s=]%sif%s.+$',     'end', ruby_types, nil),
+          endwise('[%s=]%sunless%s.+$', 'end', ruby_types, nil),
+          endwise('[%s=]%scase%s.+$',   'end', ruby_types, nil),
+          endwise('[%s=]%swhile%s.+$',  'end', ruby_types, nil),
+          endwise('[%s=]%suntil%s.+$',  'end', ruby_types, nil),
+        })
+
+        npairs.add_rule(Rule("|", "|", ruby_types))
         npairs.add_rule(Rule("'''", "'''", { "toml" }))
 
         _G.MUtils = {}
