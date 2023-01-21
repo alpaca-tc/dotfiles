@@ -1945,7 +1945,7 @@ function M.setup()
 
         vim.api.nvim_create_autocmd("FileType", {
           group = group,
-          pattern = { "ruby", "javascript", "typescript", "typescriptreact", "typescript.jsx", "c" },
+          pattern = { "ruby", "javascript", "typescript", "typescriptreact", "typescript.jsx", "c", "rust" },
           callback = start_lsp,
         })
       end,
