@@ -648,6 +648,11 @@ function M.setup()
           -- vim.fn['ddu#ui#ff#close']()
         end
 
+        local function move_ddu_ui_filter_and_call(cmd)
+          move_to_ddu_buffer("ddu-ff")
+          vim.cmd("normal! " .. cmd)
+        end
+
         local function ddu_ui_ff_shared()
           local group = vim.api.nvim_create_augroup("PackerDduBufferUi", { clear = true })
 
@@ -881,6 +886,14 @@ function M.setup()
               "i",
               "<CR>",
               move_to_ddu_ff_and_cr,
+              { noremap = true, buffer = true, silent = true }
+            )
+            vim.keymap.set(
+              "n",
+              "G",
+              function()
+                move_ddu_ui_filter_and_call("G")
+              end,
               { noremap = true, buffer = true, silent = true }
             )
 
@@ -1890,6 +1903,28 @@ function M.setup()
               }
             elseif server_name == "sumneko_lua" then
               opts = lua_vim_lsp_config()
+            elseif server_name == "rust-analyzer" then
+              opts = {
+                autostart = true,
+                settings = {
+                  ['rust-analyzer'] = {
+                    imports = {
+                      granularity = {
+                        group = "module",
+                      },
+                      prefix = "self",
+                    },
+                    cargo = {
+                      buildScripts = {
+                        enable = true,
+                      },
+                    },
+                    procMacro = {
+                      enable = true
+                    },
+                  },
+                },
+              }
             end
 
             lsp_config[server_name].setup(opts)

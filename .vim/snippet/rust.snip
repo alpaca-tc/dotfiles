@@ -40,6 +40,13 @@ options word
       ${1:#:do_something}
   }
 
+snippet forin
+abbr    for i in
+options word
+  for ${1} in ${2} {
+    ${3}
+  }
+
 snippet struct
 abbr    struct Name {...}
 options word
@@ -72,10 +79,10 @@ options word
     ${4}
   }
 
-snippet println
-abbr    println(...)
+snippet println!
+abbr    println!(...)
 options word
-  println(fmt!("${1:%?}", ${2}))
+  println!("${1}");
 
 snippet main
 abbr    main
