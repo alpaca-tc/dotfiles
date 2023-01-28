@@ -1903,7 +1903,7 @@ function M.setup()
               }
             elseif server_name == "sumneko_lua" then
               opts = lua_vim_lsp_config()
-            elseif server_name == "rust-analyzer" then
+            elseif server_name == "rust_analyzer" then
               opts = {
                 autostart = true,
                 settings = {
@@ -1971,6 +1971,8 @@ function M.setup()
             vim.cmd("LspStart tsserver")
           elseif filetype == 'c' then
             vim.cmd("LspStart clangd")
+          elseif filetype == 'rust' then
+            vim.cmd("LspStart rust-analyzer")
           end
         end
 
@@ -2550,6 +2552,7 @@ function M.setup()
         })
 
         npairs.add_rule(Rule("|", "|", ruby_types))
+        npairs.add_rule(Rule("|", "|", { "rust" }))
         npairs.add_rule(Rule("'''", "'''", { "toml" }))
 
         _G.MUtils = {}

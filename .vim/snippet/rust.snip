@@ -333,3 +333,12 @@ options word
   use std::collections::HashMap;
 
   let mut map = HashMap::new();
+
+snippet From
+abbr    impl From<T> for {}
+options word
+  impl From<${1}> for ${2} {
+    fn from(${3}: $1) -> $2 {
+      ${4}
+    }
+  }
