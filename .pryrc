@@ -1,3 +1,5 @@
+# vim: set ft=ruby:
+
 Pry.config.editor = ENV['EDITOR']
 Pry.config.commands.alias_command('show', 'show-method')
 

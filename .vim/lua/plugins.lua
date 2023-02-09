@@ -1738,13 +1738,13 @@ function M.setup()
 
         local group = vim.api.nvim_create_augroup("PackerNvimLspconfig", { clear = true })
 
-        vim.api.nvim_create_autocmd("BufWritePre", {
-          group = group,
-          pattern = { "*.go", "*.ts" },
-          callback = function()
-            vim.lsp.buf.format({ async = false })
-          end,
-        })
+        -- vim.api.nvim_create_autocmd("BufWritePre", {
+        --   group = group,
+        --   pattern = { "*.go", "*.ts" },
+        --   callback = function()
+        --     vim.lsp.buf.format({ async = false })
+        --   end,
+        -- })
 
         local function goimports(timeout_ms)
           local context = { only = { "source.organizeImports" } }
@@ -1973,6 +1973,8 @@ function M.setup()
             vim.cmd("LspStart clangd")
           elseif filetype == 'rust' then
             vim.cmd("LspStart rust-analyzer")
+          elseif filetype == 'terraform' then
+            vim.cmd("LspStart terraformls")
           end
         end
 
@@ -2222,7 +2224,6 @@ function M.setup()
             vim.keymap.set("n", "C", "<Plug>(vimfiler_new_file)", { buffer = true })
             vim.keymap.set("n", "<C-J>", "[unite]", { buffer = true })
             vim.keymap.set("n", "<CR>", "<Plug>(vimfiler_edit_file)", { buffer = true })
-            vim.keymap.set("n", "f", "<Plug>(vimfiler_toggle_mark_current_line)", { buffer = true })
             vim.keymap.set("n", "b", ":<C-U>UniteBookmarkAdd<CR>", { noremap = true, buffer = true })
             vim.keymap.set(
               "n",
@@ -2257,18 +2258,7 @@ function M.setup()
             -- Toggle mark.
             vim.keymap.set("n", "<C-l>", "<Plug>(vimfiler_redraw_screen)", { buffer = true })
             vim.keymap.set("n", "<Space>", "<Plug>(vimfiler_toggle_mark_current_line)", { buffer = true })
-            vim.keymap.set(
-              "n",
-              "<S-LeftMouse>",
-              "<Plug>(vimfiler_toggle_mark_current_line)",
-              { buffer = true }
-            )
-            vim.keymap.set(
-              "n",
-              "<S-Space>",
-              "<Plug>(vimfiler_toggle_mark_current_line_up)",
-              { buffer = true }
-            )
+            vim.keymap.set("n", "s", "<Plug>(vimfiler_toggle_mark_current_line)", { buffer = true })
             vim.keymap.set("v", "<Space>", "<Plug>(vimfiler_toggle_mark_selected_lines)", { buffer = true })
 
             -- Toggle marks in all lines.

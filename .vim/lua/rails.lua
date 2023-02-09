@@ -31,6 +31,7 @@ function M.setup()
       local path = {
         "app/controllers",
         "app/controllers/concerns",
+        "app/services",
         "app/models",
         "app/models/concerns",
         "app/mailers",
