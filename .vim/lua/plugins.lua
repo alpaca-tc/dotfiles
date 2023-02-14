@@ -1,4 +1,5 @@
 local M = {}
+local S = require('string_extend')
 
 function M.file_match_str(path, pattern)
   if vim.fn["filereadable"](path) == 1 then
@@ -1108,6 +1109,36 @@ function M.setup()
     })
 
     use({
+      "shun/ddu-source-buffer",
+      requires = {
+          "Shougo/ddu-filter-sorter_alpha",
+      },
+      wants = {
+          "ddu.vim",
+          "ddu-ui-ff",
+          "ddu-kind-file",
+          "ddu-filter-matcher_regexp",
+          "ddu-source-action",
+      },
+      keys = {
+          { "n", "<C-J>b" },
+      },
+      config = function()
+          vim.fn["ddu#custom#patch_local"]("buffer", {
+              sources = { { name = "buffer" } },
+              uiParams = { ff = { startFilter = false } },
+              sourceOptions = {
+                  buffer = {
+                      converters = { "fold_path" },
+                  },
+              },
+          })
+
+          vim.keymap.set("n", "<C-J>b", ":call ddu#start(#{ name: 'buffer' })<CR>", { noremap = true, silent = true })
+      end
+    })
+
+    use({
         "Shougo/ddu-source-file",
         requires = {
             "ryota2357/ddu-column-icon_filename",
@@ -1652,7 +1683,13 @@ function M.setup()
                           "--disable-pending-cops",
                       },
                       extra_args = function(params)
-                        return {}
+                        local path = vim.fn.expand('%:p')
+
+                        if S.contains(path, 'utsuwa') then
+                          return { "--server" }
+                        else
+                          return {}
+                        end
                       end,
                       condition = function(utils)
                         return utils.root_has_file({ ".rubocop.yml" })
