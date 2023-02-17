@@ -1109,7 +1109,7 @@ function M.setup()
     })
 
     use({
-      "shun/ddu-source-buffer",
+      "alpaca-tc/ddu-source-buffer",
       requires = {
           "Shougo/ddu-filter-sorter_alpha",
       },
@@ -1124,8 +1124,8 @@ function M.setup()
           { "n", "<C-J>b" },
       },
       config = function()
-          vim.fn["ddu#custom#patch_local"]("buffer", {
-              sources = { { name = "buffer" } },
+          vim.fn["ddu#custom#patch_local"]("buffers", {
+              sources = { { name = "buffers" } },
               uiParams = { ff = { startFilter = false } },
               sourceOptions = {
                   buffer = {
@@ -1134,7 +1134,7 @@ function M.setup()
               },
           })
 
-          vim.keymap.set("n", "<C-J>b", ":call ddu#start(#{ name: 'buffer' })<CR>", { noremap = true, silent = true })
+          vim.keymap.set("n", "<C-J>b", ":call ddu#start(#{ name: 'buffers' })<CR>", { noremap = true, silent = true })
       end
     })
 
