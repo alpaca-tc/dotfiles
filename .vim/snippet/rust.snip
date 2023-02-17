@@ -1,8 +1,8 @@
 snippet if
 abbr    if condition {...}
 options word
-  if ${1:/* condition */} {
-      ${0:/* code */}
+  if ${1} {
+      ${0}
   }
 
 snippet fn
@@ -22,8 +22,8 @@ options word
 snippet while
 abbr    while condition {...}
 options word
-  while ${1:#:condition} {
-      ${1:#:do_something}
+  while ${1} {
+      ${2}
   }
 
 snippet for
@@ -334,6 +334,16 @@ options word
 
   let mut map = HashMap::new();
 
+snippet Display
+abbr  impl Display {}
+  impl Display for ${1} {
+      fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+          match self {
+              Self::${2}(e) => write!(f, "{}", e),
+          }
+      }
+  }
+
 snippet From
 abbr    impl From<T> for {}
 options word
@@ -342,3 +352,24 @@ options word
       ${4}
     }
   }
+
+
+snippet thiserror
+abbr    thiserror::Error
+options word
+  use thiserror::Error;
+
+  #[derive(Debug, Error)]
+  enum ReadUsernameError {
+      #[error("Could not read: {0}")]
+      IoError(#[from] io::Error),
+  }
+
+snippet test_comment
+options word
+  /// ${1:#:description}.
+  ///
+  /// ```
+  /// use ${2:#:current_mod};
+  /// assert_eq!($2(), expected);
+  /// ```

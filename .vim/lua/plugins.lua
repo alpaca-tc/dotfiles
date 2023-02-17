@@ -3011,6 +3011,11 @@ function M.setup()
         end,
     })
 
+    use({
+      'chrisbra/csv.vim',
+      ft = { "csv" },
+    })
+
     if packer_bootstrap then
       print("Restart Neovim required after installation!")
       require("packer").sync()
