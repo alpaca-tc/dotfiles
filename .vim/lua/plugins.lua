@@ -1207,7 +1207,7 @@ function M.setup()
         event = "User Rails",
         config = function()
           vim.fn["ddu#custom#patch_global"]({
-              sourceOptions = {
+              sourceParams = {
                   file_rec = {
                       ignoredDirectories = { ".git", "node_modules", ".bundle" },
                   },
