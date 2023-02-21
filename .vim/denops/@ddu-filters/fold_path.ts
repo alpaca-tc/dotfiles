@@ -52,7 +52,7 @@ export class Filter extends BaseFilter<Params> {
           );
           break;
         default:
-          console.log(`not supported source given ${item.__sourceName}`);
+          console.log(`[fold_path] not supported source given ${item.__sourceName}`);
       }
     });
 

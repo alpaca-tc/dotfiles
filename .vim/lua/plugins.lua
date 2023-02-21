@@ -597,7 +597,7 @@ function M.setup()
                       splitDirection = "topleft",
                       previewHeight = 40,
                       previewRow = 40,
-                      previewVertical = true,
+                      previewVertical = false,
                       previewWidth = 50,
                   },
               },
@@ -746,11 +746,12 @@ function M.setup()
           end
 
           local function ddu_toggle_preview()
-            local enabled = vim.bo.ddu_preview_enabled or false
-            vim.bo.ddu_preview_enabled = enabled
+            local enabled = vim.b.ddu_preview_enabled
 
             local group = vim.api.nvim_create_augroup("DduBufferPreview", { clear = true })
-            if enabled then
+            if not enabled then
+              print("preview enabled")
+              vim.b.ddu_preview_enabled = true
               vim.api.nvim_create_autocmd("CursorMoved", {
                   group = group,
                   pattern = "<buffer>",
@@ -759,6 +760,8 @@ function M.setup()
                   end,
               })
             else
+              print("preview disabled")
+              vim.b.ddu_preview_enabled = nil
               close_preview_window()
             end
           end
@@ -1109,7 +1112,7 @@ function M.setup()
     })
 
     use({
-      "alpaca-tc/ddu-source-buffer",
+      "shun/ddu-source-buffer",
       requires = {
           "Shougo/ddu-filter-sorter_alpha",
       },
@@ -1124,17 +1127,37 @@ function M.setup()
           { "n", "<C-J>b" },
       },
       config = function()
-          vim.fn["ddu#custom#patch_local"]("buffers", {
-              sources = { { name = "buffers" } },
+          vim.fn["ddu#custom#patch_local"]("buffer", {
+              sources = { { name = "buffer" } },
               uiParams = { ff = { startFilter = false } },
-              sourceOptions = {
-                  buffer = {
-                      converters = { "fold_path" },
-                  },
-              },
           })
 
-          vim.keymap.set("n", "<C-J>b", ":call ddu#start(#{ name: 'buffers' })<CR>", { noremap = true, silent = true })
+          vim.keymap.set("n", "<C-J>b", ":call ddu#start(#{ name: 'buffer' })<CR>", { noremap = true, silent = true })
+      end
+    })
+
+    use({
+      "k-ota106/ddu-source-marks",
+      requires = {
+          "Shougo/ddu-filter-sorter_alpha",
+      },
+      wants = {
+          "ddu.vim",
+          "ddu-ui-ff",
+          "ddu-kind-file",
+          "ddu-filter-matcher_regexp",
+          "ddu-source-action",
+      },
+      keys = {
+          { "n", "<C-J>m" },
+      },
+      config = function()
+          vim.fn["ddu#custom#patch_local"]("marks", {
+              sources = { { name = "marks" } },
+              uiParams = { ff = { startFilter = false } },
+          })
+
+          vim.keymap.set("n", "<C-J>m", ":call ddu#start(#{ name: 'marks' })<CR>", { noremap = true, silent = true })
       end
     })
 
@@ -2982,7 +3005,6 @@ function M.setup()
 
                 vim.fn["ddu#start"]({
                     name = "rg",
-                    push = true,
                     sources = {
                         {
                             name = "rg",
