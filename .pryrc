@@ -127,11 +127,11 @@ end
 
 require 'bigdecimal'
 
-class BigDecimal
-  def inspect
-    to_s
-  end
-end
+# class BigDecimal
+#   def inspect
+#     to_s
+#   end
+# end
 
 Pry::Commands.add_command(show_backtrace)
 Pry::Commands.alias_command '~', 'show-backtrace'
