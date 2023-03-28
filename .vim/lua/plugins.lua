@@ -1,6 +1,26 @@
 local M = {}
 local S = require("string_extend")
 
+-- Check if packer.nvim is installed
+-- Run PackerCompile if there are changes in this file
+local function packer_init()
+  local fn = vim.fn
+  local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
+
+  if fn.empty(fn.glob(install_path)) > 0 then
+    packer_bootstrap = fn.system({
+      "git",
+      "clone",
+      "https://github.com/wbthomason/packer.nvim",
+      install_path,
+    })
+  end
+
+  vim.cmd.packadd("packer.nvim")
+end
+
+packer_init()
+
 function M.file_match_str(path, pattern)
   if vim.fn["filereadable"](path) == 1 then
     local lines = vim.fn["readfile"](path)
@@ -25,27 +45,11 @@ function M.setup()
     pattern = "plugins.lua",
     group = augroup,
     callback = function()
-      vim.cmd("luafile <afile>")
+      -- vim.cmd("luafile <afile>")
       -- vim.cmd('PackerInstall')
       vim.cmd("PackerCompile")
     end,
   })
-
-  -- Check if packer.nvim is installed
-  -- Run PackerCompile if there are changes in this file
-  local function packer_init()
-    local fn = vim.fn
-    local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-    if fn.empty(fn.glob(install_path)) > 0 then
-      packer_bootstrap = fn.system({
-        "git",
-        "clone",
-        "https://github.com/wbthomason/packer.nvim",
-        install_path,
-      })
-      vim.cmd([[packadd packer.nvim]])
-    end
-  end
 
   -- Plugins
   local function plugins(use)
@@ -1715,19 +1719,19 @@ function M.setup()
         vim.g["copilot_no_tab_map"] = true
 
         -- vim.keymap.set("n", "C", 'copilot#Accept("\\<CR>")', { expr = true })
-        vim.keymap.set("i", "<C-_>", 'copilot#Accept()', { expr = true, nowait = true })
+        vim.keymap.set("i", "<C-_>", "copilot#Accept()", { expr = true, nowait = true })
 
         local dissmissAndEsc = function()
           if vim.fn["alpaca#copilot#is_displayed"]() ~= 0 then
             vim.fn["copilot#Dismiss"]()
           end
 
-          return '<Esc>'
+          return "<Esc>"
         end
         vim.keymap.set("n", "<Esc>", dissmissAndEsc, { expr = true, noremap = true })
         vim.keymap.set("i", "<Esc>", dissmissAndEsc, { expr = true, noremap = true })
-        vim.keymap.set("n", "<C-X><C-X>", '<Plug>(copilot-suggest)')
-      end
+        vim.keymap.set("n", "<C-X><C-X>", "<Plug>(copilot-suggest)")
+      end,
     })
 
     use({
@@ -1816,7 +1820,7 @@ function M.setup()
     use({
       "jose-elias-alvarez/typescript.nvim",
       wants = {
-        "nvim-lspconfig"
+        "nvim-lspconfig",
       },
       event = { "InsertEnter" },
       ft = { "typescript", "typescript.tsx" },
@@ -2283,8 +2287,8 @@ function M.setup()
           if vim.fn.pumvisible() ~= 0 then
             return "<C-N>"
           elseif vim.fn["alpaca#copilot#is_displayed"]() ~= 0 then
-            vim.fn['copilot#Next']()
-            return ''
+            vim.fn["copilot#Next"]()
+            return ""
           elseif vim.fn["neosnippet#expandable_or_jumpable"]() ~= 0 then
             return vim.fn["neosnippet#mappings#jump_or_expand_impl"]()
           elseif checked_backspace then
@@ -2298,8 +2302,8 @@ function M.setup()
           if vim.fn.pumvisible() ~= 0 then
             return "<C-P>"
           elseif vim.fn["alpaca#copilot#is_displayed"]() ~= 0 then
-            vim.fn['copilot#Previous']()
-            return ''
+            vim.fn["copilot#Previous"]()
+            return ""
           else
             return "<S-TAB>"
           end
@@ -3226,8 +3230,6 @@ function M.setup()
   --   let g:ruby_indent_block_style = 'do'
   --   let g:ruby_foldable_groups = 'NONE'
   -- '''
-
-  packer_init()
 
   local packer = require("packer")
   packer.init({
