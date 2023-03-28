@@ -431,4 +431,9 @@ options word
 snippet explain_analyze
 abbr    ActiveRecord::Base.connection.exec_query(%Q{EXPLAIN ANALYZE})
 options word
-  ActiveRecord::Base.connection.exec_query(%Q{EXPLAIN ANALYZE ${1}}' AND "notifications"."unread" = TRUE}).pluck("QUERY PLAN").join("\n")
+  ActiveRecord::Base.connection.exec_query(%Q{EXPLAIN (ANALYZE, BUFFERS) ${1}}' AND "notifications"."unread" = TRUE}).pluck("QUERY PLAN").join("\n")
+
+snippet reconnect!
+abbr    ActiveRecord::Base.connection.reconnect!
+options word
+  ActiveRecord::Base.connection.reconnect!
