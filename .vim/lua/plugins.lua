@@ -45,7 +45,7 @@ function M.setup()
     pattern = "plugins.lua",
     group = augroup,
     callback = function()
-      -- vim.cmd("luafile <afile>")
+      vim.cmd("luafile <afile>")
       -- vim.cmd('PackerInstall')
       vim.cmd("PackerCompile")
     end,
@@ -240,13 +240,13 @@ function M.setup()
           me.func = function()
             return func()
           end
+          me.initialized = false
           me.update_time = update_time
           me.update = function()
             local now = reltime()
-            me.initialized = false
             me.updatedtime = me.updatedtime or reltime()
 
-            if not me.initialized or (now - me.updatedtime >= me.updatetime) then
+            if not me.initialized or ((now - me.updatedtime) >= me.update_time) then
               me.initialized = true
               me.updatedtime = now
 
@@ -257,8 +257,12 @@ function M.setup()
           end
 
           me.statusline = function()
-            me.update()
-            me.cache = me.update() and me.func() or me.cache or ""
+            if me.update() then
+              me.cache = me.func() or ""
+            else
+              me.cache = me.cache or ""
+            end
+
             return me.cache
           end
 
@@ -269,7 +273,15 @@ function M.setup()
           return vim.fn["git#get_current_branch"]()
         end)
 
-        vim.g["lightline#functions#plugin_information"] = Lightline.new(0.5, function()
+        vim.g["lightline#functions#copilot"] = Lightline.new(0.5, function()
+          if vim.fn.exists('b:_copilot') == 1 and vim.fn.exists('b:_copilot.first') == 1 then
+            return vim.b['_copilot']['first']['status']
+          else
+            return 'stop'
+          end
+        end)
+
+        vim.g["lightline#functions#plugin_information"] = Lightline.new(1, function()
           local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
 
           if vim.fn.empty(vim.fn.bufname("%")) == 1 then
@@ -289,6 +301,7 @@ function M.setup()
           active = {
             left = {
               { "mode" },
+              { "copilot" },
               { "information" },
               { "git_branch", "modified" },
             },
@@ -300,6 +313,7 @@ function M.setup()
           },
           component_function = {
             information = "g:lightline#functions#plugin_information.statusline",
+            copilot = "g:lightline#functions#copilot.statusline",
           },
           component_expand = {
             git_branch = "g:lightline#functions#git_branch.statusline",
@@ -772,7 +786,7 @@ function M.setup()
 
         local function ddu_replace()
           vim.fn["ddu#ui#ff#do_action"]("itemAction", { name = "quickfix" })
-          vim.fn["ddu#ui#ff#close"]()
+          vim.fn["ddu#ui#ff#do_action"]("closeFilterWindow")
           vim.cmd("cclose")
           vim.fn["qfreplace#start"]("")
         end
@@ -1717,9 +1731,12 @@ function M.setup()
         -- vim.g["copilot_node_command"] = ""
         vim.g["copilot_no_maps"] = true
         vim.g["copilot_no_tab_map"] = true
+        vim.g["copilot_assume_mapped"] = true
 
         -- vim.keymap.set("n", "C", 'copilot#Accept("\\<CR>")', { expr = true })
-        vim.keymap.set("i", "<C-_>", "copilot#Accept()", { expr = true, nowait = true })
+        vim.keymap.set("i", "<C-_>", function()
+          return vim.fn["copilot#Accept"]()
+        end, { expr = true, nowait = true, script = true })
 
         local dissmissAndEsc = function()
           if vim.fn["alpaca#copilot#is_displayed"]() ~= 0 then

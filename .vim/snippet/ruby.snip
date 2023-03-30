@@ -6,7 +6,6 @@ include ruby.algorithm.snip
 include ruby.rdoc.snip
 include ruby.rubocop.snip
 include rbi.snip
-include ruby.railsconsole.snip
 
 # Magic code#{{{
 snippet   utf
@@ -428,10 +427,10 @@ options word
     git_source(:github) { |repo| "https://github.com/#{repo}.git" }
   end
 
-snippet explain_analyze
+snippet explain
 abbr    ActiveRecord::Base.connection.exec_query(%Q{EXPLAIN ANALYZE})
 options word
-  ActiveRecord::Base.connection.exec_query(%Q{EXPLAIN (ANALYZE, BUFFERS) ${1}}' AND "notifications"."unread" = TRUE}).pluck("QUERY PLAN").join("\n")
+  ActiveRecord::Base.connection.exec_query(%Q{EXPLAIN (ANALYZE, BUFFERS) #{${1:sql}}}).pluck("QUERY PLAN").join("\n")
 
 snippet reconnect!
 abbr    ActiveRecord::Base.connection.reconnect!
