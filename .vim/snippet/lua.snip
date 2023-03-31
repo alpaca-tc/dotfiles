@@ -2,3 +2,17 @@ snippet print
 abbr    print(vim.inspect())
 options word
   print(vim.inspect($1))
+
+snippet for
+abbr    for _, line in ... do
+options word
+  for _, value in pairs(${values}) do
+    ${2}
+  end
+
+snippet for-range
+abbr    for n = 1, last do
+options word
+  for n = 1, ${2:last} do
+    ${3}
+  end

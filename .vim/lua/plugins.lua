@@ -182,10 +182,8 @@ function M.setup()
             -- Toggle comment (like `gcip` - comment inner paragraph) for both
             -- Normal and Visual modes
             comment = "<C-_>",
-
             -- Toggle comment on current line
             comment_line = "<C-_>",
-
             -- Define 'comment' textobject (like `dgc` - delete whole comment block)
             textobject = "",
           },
@@ -274,10 +272,10 @@ function M.setup()
         end)
 
         vim.g["lightline#functions#copilot"] = Lightline.new(0.5, function()
-          if vim.fn.exists('b:_copilot') == 1 and vim.fn.exists('b:_copilot.first') == 1 then
-            return vim.b['_copilot']['first']['status']
+          if vim.fn.exists("b:_copilot") == 1 and vim.fn.exists("b:_copilot.first") == 1 then
+            return vim.b["_copilot"]["first"]["status"]
           else
-            return 'stop'
+            return "stop"
           end
         end)
 
@@ -306,7 +304,7 @@ function M.setup()
               { "git_branch", "modified" },
             },
             right = {
-              { "lineinfo", "file_size" },
+              { "lineinfo",   "file_size" },
               { "percent" },
               { "fileformat", "fileencoding", "filetype" },
             },
@@ -423,7 +421,7 @@ function M.setup()
         }
 
         surround_definitions =
-          vim.fn["alpaca#initialize#redefine_dict_to_each_filetype"](surround_definitions, vim.empty_dict())
+            vim.fn["alpaca#initialize#redefine_dict_to_each_filetype"](surround_definitions, vim.empty_dict())
 
         local function define_variable_for_surround(key, mapping)
           local var_name = "surround_" .. vim.fn["char2nr"](key)
@@ -946,7 +944,7 @@ function M.setup()
             else
               if ddu_window_size[ddu_ff_winnr] == nil then
                 ddu_window_size[ddu_ff_winnr] =
-                  { [0] = vim.fn.winheight(ddu_ff_winnr), [1] = vim.fn.winwidth(ddu_ff_winnr) }
+                { [0] = vim.fn.winheight(ddu_ff_winnr),[1] = vim.fn.winwidth(ddu_ff_winnr) }
               end
 
               vim.cmd(ddu_ff_winnr .. "resize 1")
@@ -1271,7 +1269,7 @@ function M.setup()
           end
 
           local function end_with(str, ending)
-            return ending == "" or string.sub(str, -#ending) == ending
+            return ending == "" or string.sub(str, - #ending) == ending
           end
 
           local rails_snippets = {
@@ -1671,7 +1669,7 @@ function M.setup()
         end
 
         local function end_with(str, ending)
-          return ending == "" or string.sub(str, -#ending) == ending
+          return ending == "" or string.sub(str, - #ending) == ending
         end
 
         local function contains(str, sub)
@@ -1735,7 +1733,12 @@ function M.setup()
 
         -- vim.keymap.set("n", "C", 'copilot#Accept("\\<CR>")', { expr = true })
         -- https://github.com/orgs/community/discussions/29817
-        vim.api.nvim_set_keymap("i", "<C-_>", "copilot#Accept()", { expr = true, nowait = true, script = true, noremap = true })
+        vim.api.nvim_set_keymap(
+          "i",
+          "<C-_>",
+          "copilot#Accept()",
+          { expr = true, nowait = true, script = true, noremap = true }
+        )
 
         local dissmissAndEsc = function()
           if vim.fn["alpaca#copilot#is_displayed"]() ~= 0 then
@@ -2118,12 +2121,12 @@ function M.setup()
           if filetype == "ruby" and file_match_str(root .. "/Gemfile", "sorbet") then
             vim.cmd("LspStart sorbet")
           elseif
-            isTsJs
-            and (
+              isTsJs
+              and (
               vim.fn["filereadable"](root .. "/deno.json") == 1
               or file_match_str(root .. "/vercel.json", "vercel-deno")
               or file_match_str(currentFile, "https://deno.land/")
-            )
+              )
           then
             vim.cmd("LspStart denols")
           elseif isTsJs then
@@ -2598,11 +2601,15 @@ function M.setup()
         vim.g.switch_file_rules = {
           vim = { { "autoload/%\\.vim", "plugin/%\\.vim" } },
           ruby = {
-            { "spec/requests/%_spec\\.rb", "app/controllers/%_controller\\.rb" },
-            { "spec/%_spec\\.rb", "app/%\\.rb" },
-            { "spec/%_spec\\.rb", "spec/lib/%_spec\\.rb", "lib/%\\.rb" },
-            { "%.rb", "%.rbs" },
-            { "lib/%\\.rb", "sig/%\\.rbs", "spec/%_spec\\.rb" },
+            { "spec/requests/%_spec\\.rb", "app/controllers/%_controller\\.rb", "app/views/%/:ruby_cursor_method_name*" },
+            { "spec/mailers/%_spec\\.rb", "app/mailers/%\\.rb", "app/views/%/:ruby_cursor_method_name*" },
+            { "spec/%_spec\\.rb",          "app/%\\.rb" },
+            { "spec/%_spec\\.rb",          "spec/lib/%_spec\\.rb",             "lib/%\\.rb" },
+            { "%.rb",                      "%.rbs" },
+            { "lib/%\\.rb",                "sig/%\\.rbs",                      "spec/%_spec\\.rb" },
+          },
+          eruby = {
+            { "app/views/%", "app/mailers/:ruby_view_directory_name.rb" },
           },
           rbs = {
             { "%.rbs", "%.rb" },
@@ -2611,6 +2618,29 @@ function M.setup()
             { "%\\.ts", "__tests__/%.test.ts" },
             { "%\\.ts", "__tests__/%-test.ts" },
           },
+        }
+
+        vim.g.switch_file_context = {
+          ruby_view_directory_name = function()
+            local dirname = vim.fn.expand("%:p:h")
+            return vim.fn.substitute(dirname, ".*app/views/", "", "")
+          end,
+          ruby_cursor_method_name = function()
+            local current_line = vim.fn.line(".")
+            local lines = vim.fn.getline(1, current_line)
+
+            for n = current_line, 1, -1 do
+              local line = lines[n]
+
+              local m = vim.fn.matchlist(line, 'def\\s\\(\\k\\+\\)')
+
+              if m and #m ~= 0 then
+                return m[2]
+              end
+            end
+
+            return nil
+          end
         }
 
         vim.keymap.set("n", "<Space>a", ":call switch_file#next()<CR>")
@@ -2779,45 +2809,45 @@ function M.setup()
             { ["\\CTrue"] = "False" },
             { ["\\Cfalse"] = "true" },
             { ["\\CFalse"] = "True" },
-            { "left", "right" },
-            { "top", "bottom" },
-            { "north", "south" },
-            { "east", "west" },
-            { "start", "stop" },
-            { "up", "down" },
-            { "next", "previous" },
-            { "read", "write" },
-            { "old", "new" },
-            { "open", "close" },
-            { "enable", "disable" },
-            { "first", "last" },
-            { "minminimun", "maxmaxinum" },
-            { "yes", "no" },
-            { "head", "tail" },
-            { "push", "pull" },
-            { "good", "bad" },
-            { "prefix", "suffix" },
+            { "left",                      "right" },
+            { "top",                       "bottom" },
+            { "north",                     "south" },
+            { "east",                      "west" },
+            { "start",                     "stop" },
+            { "up",                        "down" },
+            { "next",                      "previous" },
+            { "read",                      "write" },
+            { "old",                       "new" },
+            { "open",                      "close" },
+            { "enable",                    "disable" },
+            { "first",                     "last" },
+            { "minminimun",                "maxmaxinum" },
+            { "yes",                       "no" },
+            { "head",                      "tail" },
+            { "push",                      "pull" },
+            { "good",                      "bad" },
+            { "prefix",                    "suffix" },
           },
           coffee = {
-            { "if", "unless" },
-            { "is", "isnt" },
+            { "if",                     "unless" },
+            { "is",                     "isnt" },
             { ["^\\(.*\\)->"] = "\\1=>" },
             { ["^\\(.*\\)=>"] = "\\1->" },
           },
           liquid = {
-            { "if", "unless" },
+            { "if",    "unless" },
             { "endif", "endunless" },
           },
           ["Rakefile,Gemfile,ruby,ruby.rspec,eruby,haml,slim"] = {
-            { "if", "unless" },
-            { "while", "until" },
+            { "if",      "unless" },
+            { "while",   "until" },
             { ".blank?", ".present?" },
             {
               "include",
               "extend",
               "prepend",
             },
-            { "class", "module" },
+            { "class",   "module" },
             { ".inject", ".delete_if" },
             {
               "attr_accessor",
@@ -2840,24 +2870,24 @@ function M.setup()
               "specific",
               "example",
             },
-            { "before", "after" },
-            { "be_true", "be_false" },
-            { "be_truthy", "be_falsy" },
+            { "before",          "after" },
+            { "be_true",         "be_false" },
+            { "be_truthy",       "be_falsy" },
             {
               "==",
               "eql",
               "equal",
             },
             { ["\\.should_not"] = "\\.should" },
-            { "\\.to_not", "\\.to" },
+            { "\\.to_not",                                                     "\\.to" },
             { ["\\([^. ]\\+\\)\\.should\\(_not\\|\\)"] = "expect(\\1)\\.to\\2" },
             { ["expect(\\([^. ]\\+\\))\\.to\\(_not\\|\\)"] = "\\1.should\\2" },
           },
           ["rails,slim,ruby"] = {
-            { 100, ":continue", ":information" },
+            { 100, ":continue",                       ":information" },
             { 101, ":switching_protocols" },
             { 102, ":processing" },
-            { 200, ":ok", ":success" },
+            { 200, ":ok",                             ":success" },
             { 201, ":created" },
             { 202, ":accepted" },
             { 203, ":non_authoritative_information" },
@@ -2921,7 +2951,7 @@ function M.setup()
           markdown = {
             { ["[ ]"] = "[x]" },
             { ["\\[\\(.\\+\\)\\]"] = "［\\1］" },
-            { "#", "##", "###", "####", "#####" },
+            { "#",                                       "##", "###", "####", "#####" },
             { ["\\(\\*\\*\\|__\\)\\(.*\\)\\1"] = "_\\2_" },
             { ["\\(\\*\\|_\\)\\(.*\\)\\1"] = "__\\2__" },
           },
