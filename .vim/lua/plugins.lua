@@ -1512,10 +1512,10 @@ function M.setup()
               {
                 name = "rg",
                 params = {
-                  path = root,
                   input = input,
                 },
                 options = {
+                  path = root,
                   matchers = { "converter_display_word", "matcher_regexp" },
                 },
               },
@@ -1734,9 +1734,8 @@ function M.setup()
         vim.g["copilot_assume_mapped"] = true
 
         -- vim.keymap.set("n", "C", 'copilot#Accept("\\<CR>")', { expr = true })
-        vim.keymap.set("i", "<C-_>", function()
-          return vim.fn["copilot#Accept"]()
-        end, { expr = true, nowait = true, script = true })
+        -- https://github.com/orgs/community/discussions/29817
+        vim.api.nvim_set_keymap("i", "<C-_>", "copilot#Accept()", { expr = true, nowait = true, script = true, noremap = true })
 
         local dissmissAndEsc = function()
           if vim.fn["alpaca#copilot#is_displayed"]() ~= 0 then
