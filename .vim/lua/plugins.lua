@@ -1539,7 +1539,8 @@ function M.setup()
         end, { noremap = true, silent = true })
 
         vim.keymap.set("n", "gR", function()
-          ddu_start_rg("")
+          local input = vim.fn["input"]("Pattern: ")
+          ddu_start_rg(input)
         end, { noremap = true, silent = true })
       end,
     })
@@ -2601,12 +2602,16 @@ function M.setup()
         vim.g.switch_file_rules = {
           vim = { { "autoload/%\\.vim", "plugin/%\\.vim" } },
           ruby = {
-            { "spec/requests/%_spec\\.rb", "app/controllers/%_controller\\.rb", "app/views/%/:ruby_cursor_method_name*" },
-            { "spec/mailers/%_spec\\.rb", "app/mailers/%\\.rb", "app/views/%/:ruby_cursor_method_name*" },
-            { "spec/%_spec\\.rb",          "app/%\\.rb" },
-            { "spec/%_spec\\.rb",          "spec/lib/%_spec\\.rb",             "lib/%\\.rb" },
-            { "%.rb",                      "%.rbs" },
-            { "lib/%\\.rb",                "sig/%\\.rbs",                      "spec/%_spec\\.rb" },
+            {
+              "spec/requests/%_spec\\.rb",
+              "app/controllers/%_controller\\.rb",
+              "app/views/%/:ruby_cursor_method_name*",
+            },
+            { "spec/mailers/%_spec\\.rb", "app/mailers/%\\.rb",   "app/views/%/:ruby_cursor_method_name*" },
+            { "spec/%_spec\\.rb",         "app/%\\.rb" },
+            { "spec/%_spec\\.rb",         "spec/lib/%_spec\\.rb", "lib/%\\.rb" },
+            { "%.rb",                     "%.rbs" },
+            { "lib/%\\.rb",               "sig/%\\.rbs",          "spec/%_spec\\.rb" },
           },
           eruby = {
             { "app/views/%", "app/mailers/:ruby_view_directory_name.rb" },
@@ -2632,7 +2637,7 @@ function M.setup()
             for n = current_line, 1, -1 do
               local line = lines[n]
 
-              local m = vim.fn.matchlist(line, 'def\\s\\(\\k\\+\\)')
+              local m = vim.fn.matchlist(line, "def\\s\\(\\k\\+\\)")
 
               if m and #m ~= 0 then
                 return m[2]
@@ -2640,7 +2645,7 @@ function M.setup()
             end
 
             return nil
-          end
+          end,
         }
 
         vim.keymap.set("n", "<Space>a", ":call switch_file#next()<CR>")
