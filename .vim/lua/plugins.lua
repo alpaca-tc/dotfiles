@@ -271,6 +271,10 @@ function M.setup()
           return vim.fn["git#get_current_branch"]()
         end)
 
+        vim.g["lightline#functions#nearest_method_name"] = Lightline.new(1, function()
+          return vim.b['vista_nearest_method_or_function'] or ''
+        end)
+
         vim.g["lightline#functions#copilot"] = Lightline.new(0.5, function()
           if vim.fn.exists("b:_copilot") == 1 and vim.fn.exists("b:_copilot.first") == 1 then
             return vim.b["_copilot"]["first"]["status"]
@@ -302,6 +306,7 @@ function M.setup()
               { "copilot" },
               { "information" },
               { "git_branch", "modified" },
+              { "nearest_method_name" },
             },
             right = {
               { "lineinfo",   "file_size" },
@@ -312,6 +317,7 @@ function M.setup()
           component_function = {
             information = "g:lightline#functions#plugin_information.statusline",
             copilot = "g:lightline#functions#copilot.statusline",
+            nearest_method_name = "g:lightline#functions#nearest_method_name.statusline",
           },
           component_expand = {
             git_branch = "g:lightline#functions#git_branch.statusline",
@@ -2560,8 +2566,9 @@ function M.setup()
         vim.g.vista_default_executive = "nvim_lsp"
         vim.g["vista#renderer#enable_icon"] = 1
         vim.g.vista_sidebar_width = 40
-        vim.g.vista_icon_indent = { "", "" }
-        vim.g.vista_fold_toggle_icons = vim.g.vista_fold_toggle_icons or { "▼", "▶" }
+        vim.g.vista_icon_indent = { "▸ ", "" }
+        vim.g.vista_update_on_text_changed = 1
+        -- vim.g.vista_fold_toggle_icons = vim.g.vista_fold_toggle_icons or { "▼", "▶" }
         -- let g:vista#renderer#enable_icon = 0
 
         vim.g.vista_executive_for = {
