@@ -277,9 +277,20 @@ function M.setup()
 
         vim.g["lightline#functions#copilot"] = Lightline.new(0.5, function()
           if vim.fn.exists("b:_copilot") == 1 and vim.fn.exists("b:_copilot.first") == 1 then
-            return vim.b["_copilot"]["first"]["status"]
+            local status = vim.b["_copilot"]["first"]["status"]
+
+            if status == "stop" then
+              return "🤖 💤"
+            elseif status == "running" then
+              return "🤖 💬"
+            elseif status == "success" then
+              local message = "(" .. vim.fn.len(vim.b["_copilot"].suggestions) .. ")"
+              return "🤖 " .. message
+            else
+              return "🤖 　"
+            end
           else
-            return "stop"
+            return "🤖 💤"
           end
         end)
 
