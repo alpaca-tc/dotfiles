@@ -1738,6 +1738,7 @@ function M.setup()
           vim = true,
           ruby = true,
           shell = true,
+          deno = true,
           typescript = true,
           javascript = true,
           python = true,
@@ -1759,6 +1760,10 @@ function M.setup()
         )
 
         local dissmissAndEsc = function()
+          -- function! alpaca#copilot#is_displayed()
+          --   let suggestion = copilot#GetDisplayedSuggestion()
+          --   return !empty(suggestion.text)
+          -- endfunction
           if vim.fn["alpaca#copilot#is_displayed"]() ~= 0 then
             vim.fn["copilot#Dismiss"]()
           end
@@ -1767,7 +1772,7 @@ function M.setup()
         end
         vim.keymap.set("n", "<Esc>", dissmissAndEsc, { expr = true, noremap = true })
         vim.keymap.set("i", "<Esc>", dissmissAndEsc, { expr = true, noremap = true })
-        vim.keymap.set("n", "<C-X><C-X>", "<Plug>(copilot-suggest)")
+        -- vim.keymap.set("i", "<C-X><C-X>", "copilot#Suggest()", { expr = true, noremap = true })
       end,
     })
 
