@@ -316,13 +316,13 @@ function M.setup()
               { "mode" },
               { "copilot" },
               { "information" },
-              { "git_branch", "modified" },
               { "nearest_method_name" },
             },
             right = {
-              { "lineinfo",   "file_size" },
-              { "percent" },
-              { "fileformat", "fileencoding", "filetype" },
+              { "percent", "lineinfo", "file_size" },
+              { "git_branch", "modified" },
+              { "filetype" },
+              -- "fileformat", "fileencoding",
             },
           },
           component_function = {
