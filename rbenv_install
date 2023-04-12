@@ -17,5 +17,5 @@ if [ -x `which rbenv` ];then
     echo 'eval "$(rbenv init -)"'
 
     rbenv rehash
-    RUBY_CONFIGURE_OPTS="--with-openssl-dir=`brew --prefix openssl` --enable-shared --with-readline-dir=`brew --prefix readline` --with-libyaml-dir=/usr/local" rbenv install 3.2.0
+    RUBY_CONFIGURE_OPTS="--with-openssl-dir=`brew --prefix openssl` --enable-shared --with-readline-dir=`brew --prefix readline` --with-libyaml-dir=`brew --prefix libyaml`" rbenv install 3.2.0
 fi

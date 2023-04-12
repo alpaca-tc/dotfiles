@@ -26,6 +26,9 @@ if [ -x '/opt/homebrew/bin/brew' ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
+# bison
+export PATH="/opt/homebrew/opt/bison/bin:$PATH"
+
 if [ -x '/usr/local/bin/brew' ]; then
   eval "$(/usr/local/bin/brew shellenv)"
 fi

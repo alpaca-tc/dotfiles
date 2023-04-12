@@ -1737,12 +1737,14 @@ function M.setup()
           go = true,
           vim = true,
           ruby = true,
-          shell = true,
           deno = true,
           typescript = true,
           javascript = true,
           python = true,
           lua = true,
+          sh = true,
+          zsh = true,
+          bash = true,
         }
 
         -- vim.g["copilot_node_command"] = ""
@@ -3227,10 +3229,10 @@ function M.setup()
       end,
     })
 
-    use({
-      "chrisbra/csv.vim",
-      ft = { "csv" },
-    })
+    -- use({
+    --   "chrisbra/csv.vim",
+    --   ft = { "csv" },
+    -- })
 
     if packer_bootstrap then
       print("Restart Neovim required after installation!")
