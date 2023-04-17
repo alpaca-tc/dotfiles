@@ -496,6 +496,8 @@ nmap cpr :call <SID>copy_current_path_from_root()<CR>
 
 command! OpenLocale call rails_locale#open_locale_file_from_path(expand('%:p'))
 
+let &rtp .= ',' . expand('~/projects/alpaca-tc/openai-vim')
+
 " Installation check.
 let s:loaded_vimrc = 1
 set secure

@@ -96,7 +96,7 @@ function M.setup()
 
     use({
       "mattn/webapi-vim",
-      fn = { "webapi#json#encode", "webapi#json#decode" },
+      fn = { "webapi#json#encode", "webapi#json#decode", "webapi#http#get" },
     })
 
     use({
@@ -272,7 +272,7 @@ function M.setup()
         end)
 
         vim.g["lightline#functions#nearest_method_name"] = Lightline.new(1, function()
-          return vim.b['vista_nearest_method_or_function'] or ''
+          return vim.b["vista_nearest_method_or_function"] or ""
         end)
 
         vim.g["lightline#functions#copilot"] = Lightline.new(0.5, function()
@@ -319,7 +319,7 @@ function M.setup()
               { "nearest_method_name" },
             },
             right = {
-              { "percent", "lineinfo", "file_size" },
+              { "percent",    "lineinfo", "file_size" },
               { "git_branch", "modified" },
               { "filetype" },
               -- "fileformat", "fileencoding",
@@ -3226,6 +3226,134 @@ function M.setup()
           vim.g.unite_source_grep_command = "grep"
           vim.g.unite_source_grep_recursive_opt = "-R"
         end
+      end,
+    })
+
+    use({
+      "jackMort/ChatGPT.nvim",
+      requires = {
+        "MunifTanjim/nui.nvim",
+        "nvim-lua/plenary.nvim",
+        "nvim-telescope/telescope.nvim",
+      },
+      wants = {
+        "nui.nvim",
+        "plenary.nvim",
+        "telescope.nvim",
+      },
+      cmd = {
+        "ChatGPT",
+        "ChatGPTActAs",
+      },
+      config = function()
+        require("chatgpt").setup({
+          yank_register = "+",
+          edit_with_instructions = {
+            diff = false,
+            keymaps = {
+              accept = "<C-y>",
+              toggle_diff = "<C-d>",
+              toggle_settings = "<C-o>",
+              cycle_windows = "<Tab>",
+              use_output_as_input = "<C-i>",
+            },
+          },
+          chat = {
+            welcome_message = WELCOME_MESSAGE,
+            loading_text = "Loading, please wait ...",
+            question_sign = "🙂 ", -- 🙂
+            answer_sign = "🤖 ", -- 🤖
+            max_line_length = 120,
+            sessions_window = {
+              border = {
+                style = "rounded",
+                text = {
+                  top = " Sessions ",
+                },
+              },
+              win_options = {
+                winhighlight = "Normal:Normal,FloatBorder:FloatBorder",
+              },
+            },
+            keymaps = {
+              close = { "<C-c>" },
+              yank_last = "<C-y>",
+              yank_last_code = "<C-k>",
+              scroll_up = "<C-u>",
+              scroll_down = "<C-d>",
+              toggle_settings = "<C-o>",
+              new_session = "<C-n>",
+              cycle_windows = "<Tab>",
+              select_session = "<Space>",
+              rename_session = "r",
+              delete_session = "d",
+            },
+          },
+          popup_layout = {
+            relative = "editor",
+            position = "50%",
+            size = {
+              height = "90%",
+              width = "90%",
+            },
+          },
+          popup_window = {
+            filetype = "chatgpt",
+            border = {
+              highlight = "FloatBorder",
+              style = "rounded",
+              text = {
+                top = " ChatGPT ",
+              },
+            },
+            win_options = {
+              winhighlight = "Normal:Normal,FloatBorder:FloatBorder",
+            },
+          },
+          popup_input = {
+            prompt = "> ",
+            border = {
+              highlight = "FloatBorder",
+              style = "rounded",
+              text = {
+                top_align = "center",
+                top = " Prompt ",
+              },
+            },
+            win_options = {
+              winhighlight = "Normal:Normal,FloatBorder:FloatBorder",
+            },
+            submit = "<C-M>",
+          },
+          settings_window = {
+            border = {
+              style = "rounded",
+              text = {
+                top = " Settings ",
+              },
+            },
+            win_options = {
+              winhighlight = "Normal:Normal,FloatBorder:FloatBorder",
+            },
+          },
+          openai_params = {
+            model = "gpt-3.5-turbo",
+            frequency_penalty = 0,
+            presence_penalty = 0,
+            max_tokens = 300,
+            temperature = 0,
+            top_p = 1,
+            n = 1,
+          },
+          openai_edit_params = {
+            model = "code-davinci-edit-001",
+            temperature = 0,
+            top_p = 1,
+            n = 1,
+          },
+          actions_paths = {},
+          predefined_chat_gpt_prompts = "https://raw.githubusercontent.com/f/awesome-chatgpt-prompts/main/prompts.csv",
+        })
       end,
     })
 
