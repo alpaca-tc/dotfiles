@@ -2149,6 +2149,8 @@ function M.setup()
               isTsJs
               and (
               vim.fn["filereadable"](root .. "/deno.json") == 1
+              or vim.fn["filereadable"](root .. "/deno.jsonc") == 1
+              or vim.fn["filereadable"](root .. "/deno.lock") == 1
               or file_match_str(root .. "/vercel.json", "vercel-deno")
               or file_match_str(currentFile, "https://deno.land/")
               )
