@@ -2079,6 +2079,11 @@ function M.setup()
                   },
                 },
               }
+            elseif server_name == "ruby_ls" then
+              opts = {
+                autostart = false,
+                cmd = { "bundle", "exec", "ruby-lsp" },
+              }
             elseif server_name == "tsserver" then
               opts = {
                 autostart = false,
@@ -2145,6 +2150,8 @@ function M.setup()
 
           if filetype == "ruby" and file_match_str(root .. "/Gemfile", "sorbet") then
             vim.cmd("LspStart sorbet")
+          elseif filetype == "ruby" and file_match_str(root .. "/Gemfile", "ruby-lsp") then
+            vim.cmd("LspStart ruby_ls")
           elseif
             isTsJs and (
             vim.fn["filereadable"](root .. "/deno.json") == 1 or
