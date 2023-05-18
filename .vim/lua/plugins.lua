@@ -1,5 +1,4 @@
 local M = {}
-local S = require("string_extend")
 
 -- Check if packer.nvim is installed
 -- Run PackerCompile if there are changes in this file
@@ -20,20 +19,6 @@ local function packer_init()
 end
 
 packer_init()
-
-function M.file_match_str(path, pattern)
-  if vim.fn["filereadable"](path) == 1 then
-    local lines = vim.fn["readfile"](path)
-
-    for _, line in pairs(lines) do
-      if string.len(vim.fn["matchstr"](line, pattern)) > 0 then
-        return true
-      end
-    end
-  end
-
-  return false
-end
 
 function M.setup()
   -- Indicate first time installation
@@ -1806,7 +1791,7 @@ function M.setup()
               extra_args = function(params)
                 local path = vim.fn.expand("%:p")
 
-                if S.contains(path, "utsuwa") then
+                if require("string_extend").contains(path, "utsuwa") then
                   return { "--server" }
                 else
                   return {}
@@ -2123,22 +2108,9 @@ function M.setup()
           end,
         })
 
-        local function file_match_str(path, pattern)
-          if vim.fn["filereadable"](path) == 1 then
-            local lines = vim.fn["readfile"](path)
-
-            for _, line in pairs(lines) do
-              if string.len(vim.fn["matchstr"](line, pattern)) > 0 then
-                return true
-              end
-            end
-          end
-
-          return false
-        end
-
         local function start_lsp()
           local filetype = nil
+          local file_match_str = require("file_extend").file_match_str
 
           for ft, _ in string.gmatch(vim.bo.filetype, "([^\\.]+)") do
             filetype = filetype or ft
@@ -2586,8 +2558,6 @@ function M.setup()
       cmd = { "Vista", "Vista!", "Vista!!" },
       setup = function()
         vim.keymap.set("n", "<Space>t", ":Vista!!<CR>", { noremap = true })
-      end,
-      config = function()
         vim.g.vista_default_executive = "nvim_lsp"
         vim.g["vista#renderer#enable_icon"] = 1
         vim.g.vista_sidebar_width = 40
@@ -2605,6 +2575,22 @@ function M.setup()
           ruby = "ctags",
           vim = "ctags",
         }
+
+        local group = vim.api.nvim_create_augroup("PackerVista", { clear = true })
+        vim.api.nvim_create_autocmd("FileType", {
+          group = group,
+          pattern = "ruby",
+          callback = function()
+            local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
+            local executive_for = "ctags"
+
+            if require("file_extend").file_match_str(root .. "/Gemfile", "ruby-lsp") then
+              executive_for = "nvim_lsp"
+            end
+
+            vim.g.vista_executive_for = vim.tbl_extend("force", vim.g.vista_executive_for, { ruby = executive_for })
+          end,
+        })
       end,
     })
 
