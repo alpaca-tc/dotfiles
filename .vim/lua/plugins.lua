@@ -1783,7 +1783,7 @@ function M.setup()
       requires = { "nvim-lua/plenary.nvim" },
       wants = {
         "plenary.nvim",
-        "typescript.nvim",
+        -- "typescript.nvim",
       },
       event = { "InsertEnter" },
       config = function()
@@ -1834,7 +1834,7 @@ function M.setup()
             require("null-ls").builtins.diagnostics.yamllint,
             require("null-ls").builtins.formatting.gofmt,
             require("null-ls").builtins.formatting.rustfmt,
-            require("typescript.extensions.null-ls.code-actions"),
+            -- require("typescript.extensions.null-ls.code-actions"),
             require("null-ls").builtins.formatting.rubocop.with({
               command = "bundle",
               args = {
@@ -1861,40 +1861,40 @@ function M.setup()
       end,
     })
 
-    use({
-      "jose-elias-alvarez/typescript.nvim",
-      wants = {
-        "nvim-lspconfig",
-      },
-      event = { "InsertEnter" },
-      ft = { "typescript", "typescript.tsx" },
-      cmd = { "TypescriptGoToSourceDefinition", "TypescriptRenameFile", "TypescriptAddMissingImports" },
-      setup = function()
-        local group = vim.api.nvim_create_augroup("PackerMason", { clear = true })
-
-        vim.api.nvim_create_autocmd("FileType", {
-          group = group,
-          pattern = { "javascript", "typescript", "typescriptreact", "typescript.jsx" },
-          callback = function()
-            vim.keymap.set("n", "ti", "<cmd>TypescriptGoToSourceDefinition<CR>", { buffer = true })
-            vim.keymap.set("n", "rf", "<cmd>TypescriptRenameFile<CR>", { buffer = true })
-            -- TypescriptAddMissingImports
-          end,
-        })
-      end,
-      config = function()
-        require("typescript").setup({
-          disable_commands = false, -- prevent the plugin from creating Vim commands
-          -- debug = false, -- enable debug logging for commands
-          go_to_source_definition = {
-            fallback = true, -- fall back to standard LSP definition on failure
-          },
-          -- server = { -- pass options to lspconfig's setup method
-          --   on_attach = ...,
-          -- },
-        })
-      end,
-    })
+    -- use({
+    --   "jose-elias-alvarez/typescript.nvim",
+    --   wants = {
+    --     "nvim-lspconfig",
+    --   },
+    --   event = { "InsertEnter" },
+    --   ft = { "typescript", "typescript.tsx" },
+    --   cmd = { "TypescriptGoToSourceDefinition", "TypescriptRenameFile", "TypescriptAddMissingImports" },
+    --   setup = function()
+    --     local group = vim.api.nvim_create_augroup("PackerMason", { clear = true })
+    --
+    --     vim.api.nvim_create_autocmd("FileType", {
+    --       group = group,
+    --       pattern = { "javascript", "typescript", "typescriptreact", "typescript.jsx" },
+    --       callback = function()
+    --         vim.keymap.set("n", "ti", "<cmd>TypescriptGoToSourceDefinition<CR>", { buffer = true })
+    --         vim.keymap.set("n", "rf", "<cmd>TypescriptRenameFile<CR>", { buffer = true })
+    --         -- TypescriptAddMissingImports
+    --       end,
+    --     })
+    --   end,
+    --   config = function()
+    --     require("typescript").setup({
+    --       disable_commands = false, -- prevent the plugin from creating Vim commands
+    --       -- debug = false, -- enable debug logging for commands
+    --       go_to_source_definition = {
+    --         fallback = true, -- fall back to standard LSP definition on failure
+    --       },
+    --       -- server = { -- pass options to lspconfig's setup method
+    --       --   on_attach = ...,
+    --       -- },
+    --     })
+    --   end,
+    -- })
 
     use({
       "neovim/nvim-lspconfig",
@@ -1925,13 +1925,13 @@ function M.setup()
 
         local group = vim.api.nvim_create_augroup("PackerNvimLspconfig", { clear = true })
 
-        -- vim.api.nvim_create_autocmd("BufWritePre", {
-        --   group = group,
-        --   pattern = { "*.go", "*.ts" },
-        --   callback = function()
-        --     vim.lsp.buf.format({ async = false })
-        --   end,
-        -- })
+        vim.api.nvim_create_autocmd("BufWritePre", {
+          group = group,
+          pattern = { "*.go", "*.ts" },
+          callback = function()
+            vim.lsp.buf.format({ async = false })
+          end,
+        })
 
         local function goimports(timeout_ms)
           local context = { only = { "source.organizeImports" } }
@@ -2140,21 +2140,19 @@ function M.setup()
           end
 
           local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
-          local isTsJs = filetype == "typescript" or filetype == "javascript" or filetype == "typescriptreact"
+          local isTsJs = filetype == "typescript" or filetype == "javascript" or filetype == "typescriptreact" or filetype == "javascript.jsx" or filetype == "javascriptreact" or filetype == 'typescript.tsx'
           local currentFile = vim.fn["expand"]("%:p")
 
           if filetype == "ruby" and file_match_str(root .. "/Gemfile", "sorbet") then
             vim.cmd("LspStart sorbet")
           elseif
-              isTsJs
-              and (
-              vim.fn["filereadable"](root .. "/deno.json") == 1
-              or vim.fn["filereadable"](root .. "/deno.jsonc") == 1
-              or vim.fn["filereadable"](root .. "/deno.lock") == 1
-              or file_match_str(root .. "/vercel.json", "vercel-deno")
-              or file_match_str(currentFile, "https://deno.land/")
-              )
-          then
+            isTsJs and (
+            vim.fn["filereadable"](root .. "/deno.json") == 1 or
+            vim.fn["filereadable"](root .. "/deno.jsonc") == 1 or
+            vim.fn["filereadable"](root .. "/deno.lock") == 1 or
+            file_match_str(root .. "/vercel.json", "vercel-deno") or
+            file_match_str(currentFile, "https://deno.land/")
+            ) then
             vim.cmd("LspStart denols")
           elseif isTsJs then
             vim.cmd("LspStart tsserver")
