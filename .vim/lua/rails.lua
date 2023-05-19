@@ -56,24 +56,39 @@ function M.setup()
     end,
   })
 
+  local function find_file(path)
+    local formatted_path = vim.fn.substitute(path, 'rt_hr', 'rthr', 'g')
+    local parts = vim.fn.split(formatted_path, '/')
+
+    while #parts > 0 do
+      local file = vim.fn.join(parts, '/')
+      local rb_file = file .. '.rb'
+
+      if vim.fn.findfile(rb_file) ~= '' then
+        return rb_file
+      end
+
+      if vim.fn.findfile(file) ~= '' then
+        return file
+      end
+
+      table.remove(parts)
+    end
+
+    return ''
+  end
+
   -- Customize gf
   vim.api.nvim_create_autocmd("User", {
     group = group,
     pattern = "Rails",
     callback = function()
       vim.keymap.set('n', 'gf', function()
-        local file = vim.fn['RubyCursorFile']()
+        local original_file = vim.fn['RubyCursorFile']()
+        local file = find_file(original_file)
 
         if vim.fn.findfile(file) == '' then
-          local candidate = vim.fn.substitute(file, 'rt_hr', 'rthr', 'g')
-
-          if vim.fn.findfile(candidate) then
-            file = candidate
-          end
-        end
-
-        if vim.fn.findfile(file) == '' then
-          vim.cmd(string.format('echo "E447: Can\'t find file \'%s\' in path"', file))
+          vim.cmd(string.format('echo "E447: Can\'t find file \'%s\' in path"', original_file))
         else
           vim.cmd('find ' .. file)
         end

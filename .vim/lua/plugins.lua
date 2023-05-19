@@ -663,7 +663,7 @@ function M.setup()
 
         local function move_to_ddu_ff_and_cr()
           move_to_ddu_buffer("ddu-ff")
-          vim.fn["ddu#ui#ff#do_action"]("itemAction")
+          vim.fn["ddu#ui#sync_action"]("itemAction")
           -- vim.fn['ddu#ui#ff#close']()
         end
 
@@ -684,7 +684,7 @@ function M.setup()
               local ft = vim.fn.getwinvar(n, "&ft")
 
               if ft == "ddu-ff" or ft == "ddu-ff-filter" then
-                vim.fn["ddu#ui#ff#do_action"]("quit")
+                vim.fn["ddu#ui#sync_action"]("quit")
               end
             end
 
@@ -744,7 +744,7 @@ function M.setup()
         end
 
         local function close_filter_window_and_do_item_action()
-          vim.fn["ddu#ui#ff#do_action"]("itemAction")
+          vim.fn["ddu#ui#sync_action"]("itemAction")
         end
 
         local function close_preview_window()
@@ -774,7 +774,7 @@ function M.setup()
               group = group,
               pattern = "<buffer>",
               callback = function()
-                vim.fn["ddu#ui#ff#do_action"]("preview")
+                vim.fn["ddu#ui#sync_action"]("preview")
               end,
             })
           else
@@ -785,8 +785,8 @@ function M.setup()
         end
 
         local function ddu_replace()
-          vim.fn["ddu#ui#ff#do_action"]("itemAction", { name = "quickfix" })
-          vim.fn["ddu#ui#ff#do_action"]("closeFilterWindow")
+          vim.fn["ddu#ui#sync_action"]("itemAction", { name = "quickfix" })
+          vim.fn["ddu#ui#sync_action"]("closeFilterWindow")
           vim.cmd("cclose")
           vim.fn["qfreplace#start"]("")
         end
@@ -839,37 +839,37 @@ function M.setup()
             vim.keymap.set(
               "n",
               "<Space>",
-              ":call ddu#ui#ff#do_action('toggleSelectItem')<CR>j",
+              ":call ddu#ui#sync_action('toggleSelectItem')<CR>j",
               { noremap = true, buffer = true, silent = true }
             )
             vim.keymap.set(
               "n",
               "f",
-              ":call ddu#ui#ff#do_action('toggleSelectItem')<CR>j",
+              ":call ddu#ui#sync_action('toggleSelectItem')<CR>j",
               { noremap = true, buffer = true, silent = true }
             )
             vim.keymap.set(
               "x",
               "<Space>",
-              ":call ddu#ui#ff#do_action('toggleSelectItem')<CR>",
+              ":call ddu#ui#sync_action('toggleSelectItem')<CR>",
               { noremap = true, silent = true, buffer = true }
             )
             vim.keymap.set(
               "n",
               "<Tab>",
-              ":call ddu#ui#ff#do_action('chooseAction')<CR>",
+              ":call ddu#ui#sync_action('chooseAction')<CR>",
               { noremap = true, buffer = true, silent = true }
             )
             vim.keymap.set(
               "n",
               "a",
-              ":call ddu#ui#ff#do_action('chooseAction')<CR>",
+              ":call ddu#ui#sync_action('chooseAction')<CR>",
               { noremap = true, buffer = true, silent = true }
             )
             vim.keymap.set(
               "n",
               "*",
-              ":call ddu#ui#ff#do_action('toggleAllItems')<CR>",
+              ":call ddu#ui#sync_action('toggleAllItems')<CR>",
               { noremap = true, buffer = true, silent = true }
             )
             vim.keymap.set(
@@ -881,13 +881,13 @@ function M.setup()
             vim.keymap.set(
               "n",
               "i",
-              ":call ddu#ui#ff#do_action('openFilterWindow')<CR>",
+              ":call ddu#ui#sync_action('openFilterWindow')<CR>",
               { noremap = true, buffer = true, silent = true }
             )
             vim.keymap.set(
               "n",
               "A",
-              ":call ddu#ui#ff#do_action('openFilterWindow')<CR>",
+              ":call ddu#ui#sync_action('openFilterWindow')<CR>",
               { noremap = true, buffer = true, silent = true }
             )
             vim.keymap.set("n", "p", ddu_toggle_preview, { noremap = true, buffer = true, silent = true })
@@ -946,7 +946,7 @@ function M.setup()
             else
               if ddu_window_size[ddu_ff_winnr] == nil then
                 ddu_window_size[ddu_ff_winnr] =
-                { [0] = vim.fn.winheight(ddu_ff_winnr),[1] = vim.fn.winwidth(ddu_ff_winnr) }
+                { [0] = vim.fn.winheight(ddu_ff_winnr), [1] = vim.fn.winwidth(ddu_ff_winnr) }
               end
 
               vim.cmd(ddu_ff_winnr .. "resize 1")
@@ -1522,7 +1522,7 @@ function M.setup()
             },
             input = input,
             ui = "ff",
-            volatile = string.len(input) == 0,
+            -- volatile = string.len(input) == 0,
             uiParams = {
               autoResize = false,
             },
@@ -1628,32 +1628,32 @@ function M.setup()
               vim.keymap.set(
                 "n",
                 "gu",
-                ":call ddu#ui#ff#do_action('itemAction', {'name': 'restore'})<CR>",
+                ":call ddu#ui#sync_action('itemAction', {'name': 'restore'})<CR>",
                 { noremap = true, silent = true, buffer = true }
               )
               vim.keymap.set(
                 "n",
                 "d",
-                ":call ddu#ui#ff#do_action('itemAction', #{ name: 'delete_local'})<CR>",
+                ":call ddu#ui#sync_action('itemAction', #{ name: 'delete_local'})<CR>",
                 { noremap = true, silent = true, buffer = true }
               )
               vim.keymap.set(
                 "n",
                 "D",
-                ":call ddu#ui#ff#do_action('itemAction', #{ name: 'delete_local_force'})<CR>",
+                ":call ddu#ui#sync_action('itemAction', #{ name: 'delete_local_force'})<CR>",
                 { noremap = true, silent = true, buffer = true }
               )
             elseif source == "git_status" then
               vim.keymap.set(
                 "n",
                 "ga",
-                ":call ddu#ui#ff#do_action('itemAction', #{ name: 'add'})<CR>",
+                ":call ddu#ui#sync_action('itemAction', #{ name: 'add'})<CR>",
                 { noremap = true, silent = true, buffer = true }
               )
               vim.keymap.set(
                 "n",
                 "gu",
-                ":call ddu#ui#ff#do_action('itemAction', #{ name: 'unstage'})<CR>",
+                ":call ddu#ui#sync_action('itemAction', #{ name: 'unstage'})<CR>",
                 { noremap = true, silent = true, buffer = true }
               )
             end
@@ -1960,7 +1960,7 @@ function M.setup()
           end,
         })
 
-        -- vim.lsp.set_log_level("debug")
+        vim.lsp.set_log_level("debug")
       end,
     })
 
@@ -2068,6 +2068,53 @@ function M.setup()
               opts = {
                 autostart = false,
                 cmd = { "bundle", "exec", "ruby-lsp" },
+                init_options = {
+                  formatter = "auto",
+                  enabledFeatures = {
+                    "documentHighlights",
+                    "documentSymbols",
+                    "documentLink",
+                    "diagnostics",
+                    "completion",
+                    "foldingRanges",
+                    "selectionRanges",
+                    "hover",
+                    -- "semanticHighlighting",
+                    "formatting",
+                    "codeActions",
+                  },
+                },
+                on_attach = function(client, bufnr)
+                  local callback = function()
+                    local params = vim.lsp.util.make_text_document_params(buffer)
+
+                    client.request(
+                      "textDocument/diagnostic",
+                      { textDocument = params },
+                      function(err, result)
+                        if err then
+                          return
+                        end
+
+                        vim.lsp.diagnostic.on_publish_diagnostics(
+                          nil,
+                          vim.tbl_extend("keep", params, { diagnostics = result.items }),
+                          { client_id = client.id }
+                        )
+                      end
+                    )
+                  end
+
+                  callback() -- call on attach
+
+                  vim.api.nvim_create_autocmd(
+                    { "BufEnter", "BufWritePre", "BufReadPost", "InsertLeave", "TextChanged" },
+                    {
+                      buffer = buffer,
+                      callback = callback,
+                    }
+                  )
+                end,
               }
             elseif server_name == "tsserver" then
               opts = {
@@ -2117,7 +2164,12 @@ function M.setup()
           end
 
           local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
-          local isTsJs = filetype == "typescript" or filetype == "javascript" or filetype == "typescriptreact" or filetype == "javascript.jsx" or filetype == "javascriptreact" or filetype == 'typescript.tsx'
+          local isTsJs = filetype == "typescript"
+              or filetype == "javascript"
+              or filetype == "typescriptreact"
+              or filetype == "javascript.jsx"
+              or filetype == "javascriptreact"
+              or filetype == "typescript.tsx"
           local currentFile = vim.fn["expand"]("%:p")
 
           if filetype == "ruby" and file_match_str(root .. "/Gemfile", "sorbet") then
@@ -2125,13 +2177,15 @@ function M.setup()
           elseif filetype == "ruby" and file_match_str(root .. "/Gemfile", "ruby-lsp") then
             vim.cmd("LspStart ruby_ls")
           elseif
-            isTsJs and (
-            vim.fn["filereadable"](root .. "/deno.json") == 1 or
-            vim.fn["filereadable"](root .. "/deno.jsonc") == 1 or
-            vim.fn["filereadable"](root .. "/deno.lock") == 1 or
-            file_match_str(root .. "/vercel.json", "vercel-deno") or
-            file_match_str(currentFile, "https://deno.land/")
-            ) then
+              isTsJs
+              and (
+                vim.fn["filereadable"](root .. "/deno.json") == 1
+                or vim.fn["filereadable"](root .. "/deno.jsonc") == 1
+                or vim.fn["filereadable"](root .. "/deno.lock") == 1
+                or file_match_str(root .. "/vercel.json", "vercel-deno")
+                or file_match_str(currentFile, "https://deno.land/")
+              )
+          then
             vim.cmd("LspStart denols")
           elseif isTsJs then
             vim.cmd("LspStart tsserver")
@@ -2588,7 +2642,8 @@ function M.setup()
               executive_for = "nvim_lsp"
             end
 
-            vim.g.vista_executive_for = vim.tbl_extend("force", vim.g.vista_executive_for, { ruby = executive_for })
+            vim.g.vista_executive_for =
+                vim.tbl_extend("force", vim.g.vista_executive_for, { ruby = executive_for })
           end,
         })
       end,
