@@ -28,36 +28,26 @@ function M.setup()
     group = group,
     pattern = "Rails",
     callback = function()
-      local path = {
-        "app/controllers",
-        "app/controllers/concerns",
-        "app/services",
-        "app/models",
-        "app/models/concerns",
-        "app/mailers",
-        "app/mailers/concerns",
-        "app/serializers",
-        "app/repositories",
-        "app/validators",
-        "app/view_models",
-        "app/workers",
-        "app/decorators",
-        "app/jobs",
-        "app/forms",
-        "app/policies",
-        "lib",
-      }
-
       local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
 
+      local path = {
+        root .. "/lib",
+      }
+
+      -- 文字列を改行で分割する
+      for line in vim.fn["glob"](root .. "/app/*"):gmatch("([^\n]*)\n?") do
+        table.insert(path, line)
+        table.insert(path, line .. "/concerns")
+      end
+
       for _, val in pairs(path) do
-        vim.opt_local.path:prepend(root .. "/" .. val)
+        vim.opt_local.path:prepend(val)
       end
     end,
   })
 
   local function find_file(path)
-    local formatted_path = vim.fn.substitute(path, 'rt_hr', 'rthr', 'g')
+    local formatted_path = require("string_extend").to_snake_case(vim.fn.substitute(path, 'rt_hr', 'rthr', 'g'))
     local parts = vim.fn.split(formatted_path, '/')
 
     while #parts > 0 do
