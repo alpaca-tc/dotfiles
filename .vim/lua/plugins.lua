@@ -566,7 +566,6 @@ function M.setup()
 
           vim.fn["ddu#start"]({
             name = "rg",
-            push = true,
             sources = {
               {
                 name = "rg",
@@ -1130,6 +1129,19 @@ function M.setup()
     })
 
     use({
+      "flow6852/ddu-source-qf",
+      config = function()
+        vim.fn["ddu#custom#patch_local"]("qf", {
+          sourceOptions = {
+            qf = {
+              converters = { "fold_path" },
+            },
+          },
+        })
+      end
+    })
+
+    use({
       "shun/ddu-source-buffer",
       requires = {
         "Shougo/ddu-filter-sorter_alpha",
@@ -1531,6 +1543,9 @@ function M.setup()
                 converters = { "fold_path" },
               },
             },
+            actionOptions = {
+              quit = false
+            }
           }
 
           vim.fn["ddu#start"](options)
@@ -1730,6 +1745,7 @@ function M.setup()
           sh = true,
           zsh = true,
           bash = true,
+          markdown = true,
         }
 
         -- vim.g["copilot_node_command"] = ""
@@ -1885,6 +1901,7 @@ function M.setup()
       "neovim/nvim-lspconfig",
       event = { "InsertEnter" },
       cmd = { "LspInfo", "LspStart", "LspLog", "LspStop" },
+      wants = { "ddu-source-qf" },
       setup = function()
         vim.opt_local.signcolumn = "no"
 
@@ -1897,7 +1914,30 @@ function M.setup()
         vim.keymap.set("n", "ta", "<cmd>lua vim.lsp.buf.code_action()<CR>", { silent = true })
         vim.keymap.set("n", "td", "<cmd>lua vim.lsp.buf.type_definition()<CR>", { silent = true })
         vim.keymap.set("n", "tr", "<cmd>lua vim.lsp.buf.rename()<CR>", { silent = true })
-        vim.keymap.set("n", "tf", "<cmd>lua vim.lsp.buf.references()<CR>", { silent = true })
+        vim.keymap.set("n", "tF", "<cmd>lua vim.lsp.buf.references()<CR>", { silent = true })
+        vim.keymap.set("n", "tf", function()
+          local on_list = function(options)
+            vim.fn.setqflist({}, ' ', options)
+            -- vim.api.nvim_command('cfirst')
+
+            vim.fn['ddu#start']({
+              name = 'qf',
+              sources = {{
+                name = 'qf',
+                params = {
+                  format = "%P:%l: %t"
+                }
+              }},
+              uiParams = {
+                ff = {
+                  startFilter = false,
+                },
+              }
+            })
+          end
+
+          vim.lsp.buf.references(nil, { on_list = on_list })
+        end, { silent = true })
         vim.keymap.set("n", "te", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>", { silent = true })
         vim.keymap.set("n", "tp", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", { silent = true })
         vim.keymap.set("n", "tn", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", { silent = true })
@@ -2067,7 +2107,7 @@ function M.setup()
             elseif server_name == "ruby_ls" then
               opts = {
                 autostart = false,
-                cmd = { "bundle", "exec", "ruby-lsp" },
+                cmd = { "bundle", "exec", "ruby-lsp-hanica" },
                 init_options = {
                   formatter = "auto",
                   enabledFeatures = {
@@ -2082,6 +2122,7 @@ function M.setup()
                     -- "semanticHighlighting",
                     "formatting",
                     "codeActions",
+                    "references",
                   },
                 },
                 on_attach = function(client, bufnr)
@@ -2149,6 +2190,19 @@ function M.setup()
                   },
                 },
               }
+            elseif server_name == "gopls" then
+              opts = {
+                autostart = true,
+                cmd = { "gopls", "serve" },
+                settings = {
+                  gopls = {
+                    analyses = {
+                      unusedparams = true,
+                    },
+                    staticcheck = true,
+                  },
+                },
+              }
             end
 
             lsp_config[server_name].setup(opts)
@@ -2195,6 +2249,8 @@ function M.setup()
             vim.cmd("LspStart rust-analyzer")
           elseif filetype == "terraform" then
             vim.cmd("LspStart terraformls")
+          elseif filetype == "go" then
+            vim.cmd("LspStart gopls")
           end
         end
 
@@ -2204,7 +2260,7 @@ function M.setup()
 
         vim.api.nvim_create_autocmd("FileType", {
           group = group,
-          pattern = { "ruby", "javascript", "typescript", "typescriptreact", "typescript.jsx", "c", "rust" },
+          pattern = { "ruby", "javascript", "typescript", "typescriptreact", "typescript.jsx", "c", "rust", "go" },
           callback = start_lsp,
         })
       end,
@@ -3260,20 +3316,6 @@ function M.setup()
             })
           end,
         })
-
-        if vim.fn.executable("ag") then
-          vim.g.unite_source_grep_command = "ag"
-          vim.g.unite_source_grep_default_opts = "--nocolor --nogroup"
-          vim.g.unite_source_grep_recursive_opt = ""
-        elseif vim.fn.executable("rg") then
-          vim.g.unite_source_grep_command = "rg"
-          vim.g.unite_source_grep_default_opts = "-n --no-heading --color never"
-          vim.g.unite_source_grep_recursive_opt = ""
-          vim.g.unite_source_grep_max_candidates = 200
-        else
-          vim.g.unite_source_grep_command = "grep"
-          vim.g.unite_source_grep_recursive_opt = "-R"
-        end
       end,
     })
 

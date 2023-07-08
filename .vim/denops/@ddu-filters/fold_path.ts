@@ -51,8 +51,21 @@ export class Filter extends BaseFilter<Params> {
             ),
           );
           break;
+        case "qf":
+          items.push(
+            this.foldItemForQf(
+              args,
+              dir,
+              homeDir,
+              repoDir,
+              item as Item<FileActionData>,
+            ),
+          );
+          break;
         default:
-          console.log(`[fold_path] not supported source given ${item.__sourceName}`);
+          console.log(
+            `[fold_path] not supported source given ${item.__sourceName}`,
+          );
       }
     });
 
@@ -83,6 +96,67 @@ export class Filter extends BaseFilter<Params> {
     return { ...item, word } as FoldItem;
   }
 
+  private foldItemForQf(
+    args: FilterArguments<Params>,
+    dir: string,
+    homeDir: string,
+    repoDir: string | undefined,
+    item: Item<FileActionData>,
+  ) {
+    const action = item.action!;
+    let path = action.path!;
+    const prefix = `${action.path}:${action.lineNr}: `;
+    const word = action.text!.substring(prefix.length);
+
+    if (repoDir && path.startsWith(repoDir)) {
+      path = relative(dir, path);
+    }
+
+    if (path.startsWith(homeDir)) {
+      path = `~${path.slice(homeDir.length)}`;
+    }
+
+    const text = `${path}:${action.lineNr}: ${word}`;
+
+    const highlights: Item["highlights"] = [
+      {
+        name: "path",
+        hl_group: "Directory",
+        col: 1,
+        width: path.length,
+      },
+      {
+        name: "lineNr",
+        hl_group: "Directory",
+        col: `${path}:`.length + 1,
+        width: String(action.lineNr).length,
+      },
+      {
+        name: "word",
+        hl_group: "Normal",
+        col: `${path}:${action.lineNr}: `.length + 1,
+        width: word.length,
+      },
+    ];
+
+    const patterns = this.getInputPatterns(args.input);
+
+    for (const pattern of patterns) {
+      [...text.matchAll(pattern)].forEach((match) => {
+        if (match.index) {
+          highlights.push({
+            name: "matched",
+            hl_group: "Statement",
+            col: charposToBytepos(text, match.index) + 1,
+            width: (new TextEncoder()).encode(match[0]).length,
+          });
+        }
+      });
+    }
+
+    return { action: { ...action, text }, word: text, highlights } as FoldItem;
+  }
+
   private foldItemForRg(
     args: FilterArguments<Params>,
     dir: string,
@@ -100,6 +174,7 @@ export class Filter extends BaseFilter<Params> {
     if (path.startsWith(homeDir)) {
       path = `~${path.slice(homeDir.length)}`;
     }
+    console.log(item);
 
     const display = `${path}:${action.lineNr}:${action.col}: ${action.text}`;
     const highlights = (item.highlights ?? []).map((highlight) => {
@@ -119,7 +194,8 @@ export class Filter extends BaseFilter<Params> {
             width: String(action.lineNr).length,
           };
         }
-        case "word", "matched": {
+        case "word":
+        case "matched": {
           // ignore
           break;
         }
@@ -128,14 +204,14 @@ export class Filter extends BaseFilter<Params> {
       }
     }).filter(Boolean);
 
-    const patterns = this.getInputPatterns(args.input)
+    const patterns = this.getInputPatterns(args.input);
 
     for (const pattern of patterns) {
       [...display.matchAll(pattern)].forEach((match) => {
         if (match.index) {
           highlights.push({
             name: "matched",
-            "hl_group": args.filterParams.highlightMatched ?? "Statement",
+            hl_group: "Statement",
             col: charposToBytepos(display, match.index) + 1,
             width: (new TextEncoder()).encode(match[0]).length,
           });
@@ -154,12 +230,12 @@ export class Filter extends BaseFilter<Params> {
 
     for (const input of inputs) {
       try {
-        patterns.push(new RegExp(input, 'ig'));
+        patterns.push(new RegExp(input, "ig"));
       } catch (_) {
         // ignore
       }
     }
 
-    return patterns
+    return patterns;
   }
 }
