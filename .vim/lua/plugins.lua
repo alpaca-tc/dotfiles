@@ -1140,6 +1140,7 @@ function M.setup()
       },
       keys = {
         { "n", "tf" },
+        { "n", "tt" },
       },
       config = function()
         vim.fn["ddu#custom#patch_local"]("qf", {
@@ -1150,28 +1151,32 @@ function M.setup()
           },
         })
 
-        vim.keymap.set("n", "tf", function()
-          local on_list = function(options)
-            vim.fn.setqflist({}, ' ', options)
-            -- vim.api.nvim_command('cfirst')
+        local on_list = function(options)
+          vim.fn.setqflist({}, ' ', options)
+          -- vim.api.nvim_command('cfirst')
 
-            vim.fn['ddu#start']({
+          vim.fn['ddu#start']({
+            name = 'qf',
+            sources = {{
               name = 'qf',
-              sources = {{
-                name = 'qf',
-                params = {
-                  format = "%P:%l: %t"
-                }
-              }},
-              uiParams = {
-                ff = {
-                  startFilter = false,
-                },
+              params = {
+                format = "%P:%l: %t"
               }
-            })
-          end
+            }},
+            uiParams = {
+              ff = {
+                startFilter = false,
+              },
+            }
+          })
+        end
 
+        vim.keymap.set("n", "tf", function()
           vim.lsp.buf.references(nil, { on_list = on_list })
+        end, { silent = true })
+
+        vim.keymap.set("n", "tt", function()
+          vim.lsp.buf.definition({ on_list = on_list })
         end, { silent = true })
       end
     })
@@ -1188,21 +1193,24 @@ function M.setup()
       },
       keys = {
         { "n", "ws" },
+        { "n", "co" },
+        { "n", "ci" },
       },
       config = function()
-        vim.keymap.set("n", "ws", function()
-          vim.fn["ddu#custom#patch_global"]({
-            kindOptions = {
-              lsp = {
-                defaultAction = "open",
-              },
-              lsp_codeAction = {
-                defaultAction = "apply",
-              },
+        vim.fn["ddu#custom#patch_global"]({
+          kindOptions = {
+            lsp = {
+              defaultAction = "open",
             },
-          })
+            lsp_codeAction = {
+              defaultAction = "apply",
+            },
+          },
+        })
 
-          vim.fn["ddu#custom#patch_local"]("lsp_workspaceSymbol", {
+        vim.keymap.set("n", "ws", function()
+          vim.fn['ddu#start']({
+            name = 'lsp_workspaceSymbol',
             sources = {{
               name = 'lsp_workspaceSymbol',
             }},
@@ -1218,9 +1226,48 @@ function M.setup()
               },
             },
           })
+        end, { silent = true })
 
+        vim.fn["ddu#custom#patch_local"]("lsp_callHierarchy", {
+          uiParams = {
+            ff = {
+              displayTree = true,
+              startFilter = false,
+            },
+          },
+        })
+
+        vim.keymap.set("n", "ci", function()
           vim.fn['ddu#start']({
-            name = 'lsp_workspaceSymbol',
+            name = 'lsp_callHierarchy',
+            sources = {{
+              name = 'lsp_callHierarchy',
+              params = {
+                method = "callHierarchy/outgoingCalls"
+              }
+            }},
+            -- sourceOptions = {
+            --   lsp_callHierarchy = {
+            --     converters = { "fold_path" },
+            --   },
+            -- },
+          })
+        end, { silent = true })
+
+        vim.keymap.set("n", "co", function()
+          vim.fn['ddu#start']({
+            name = 'lsp_callHierarchy',
+            sources = {{
+              name = 'lsp_callHierarchy',
+              params = {
+                method = "callHierarchy/incomingCalls"
+              }
+            }},
+            -- sourceOptions = {
+            --   lsp_callHierarchy = {
+            --     converters = { "fold_path" },
+            --   },
+            -- },
           })
         end, { silent = true })
       end
@@ -1991,14 +2038,14 @@ function M.setup()
 
         vim.keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.declaration()<CR>", { silent = true })
         vim.keymap.set("n", "ty", "<cmd>lua vim.lsp.buf.document_symbol()<CR>", { silent = true })
-        vim.keymap.set("n", "tt", "<cmd>lua vim.lsp.buf.definition()<CR>", { silent = true })
+        -- vim.keymap.set("n", "tt", "<cmd>lua vim.lsp.buf.definition()<CR>", { silent = true })
         vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", { silent = true })
         vim.keymap.set("n", "ti", "<cmd>lua vim.lsp.buf.implementation()<CR>", { silent = true })
         vim.keymap.set("n", "ts", "<cmd>lua vim.lsp.buf.signature_help()<CR>", { silent = true })
         vim.keymap.set("n", "ta", "<cmd>lua vim.lsp.buf.code_action()<CR>", { silent = true })
         vim.keymap.set("n", "td", "<cmd>lua vim.lsp.buf.type_definition()<CR>", { silent = true })
         vim.keymap.set("n", "tr", "<cmd>lua vim.lsp.buf.rename()<CR>", { silent = true })
-        vim.keymap.set("n", "tF", "<cmd>lua vim.lsp.buf.references()<CR>", { silent = true })
+        -- vim.keymap.set("n", "tF", "<cmd>lua vim.lsp.buf.references()<CR>", { silent = true })
         -- vim.keymap.set("n", "te", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>", { silent = true })
         vim.keymap.set("n", "tp", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", { silent = true })
         vim.keymap.set("n", "tn", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", { silent = true })
