@@ -1130,6 +1130,17 @@ function M.setup()
 
     use({
       "flow6852/ddu-source-qf",
+      wants = {
+        "ddu.vim",
+        "ddu-ui-ff",
+        "ddu-kind-file",
+        "ddu-filter-matcher_regexp",
+        "ddu-source-action",
+        "nvim-lspconfig",
+      },
+      keys = {
+        { "n", "tf" },
+      },
       config = function()
         vim.fn["ddu#custom#patch_local"]("qf", {
           sourceOptions = {
@@ -1138,6 +1149,80 @@ function M.setup()
             },
           },
         })
+
+        vim.keymap.set("n", "tf", function()
+          local on_list = function(options)
+            vim.fn.setqflist({}, ' ', options)
+            -- vim.api.nvim_command('cfirst')
+
+            vim.fn['ddu#start']({
+              name = 'qf',
+              sources = {{
+                name = 'qf',
+                params = {
+                  format = "%P:%l: %t"
+                }
+              }},
+              uiParams = {
+                ff = {
+                  startFilter = false,
+                },
+              }
+            })
+          end
+
+          vim.lsp.buf.references(nil, { on_list = on_list })
+        end, { silent = true })
+      end
+    })
+
+    use({
+      "uga-rosa/ddu-source-lsp",
+      wants = {
+        "ddu.vim",
+        "ddu-ui-ff",
+        "ddu-kind-file",
+        "ddu-filter-matcher_regexp",
+        "ddu-source-action",
+        "nvim-lspconfig",
+      },
+      keys = {
+        { "n", "ws" },
+      },
+      config = function()
+        vim.keymap.set("n", "ws", function()
+          vim.fn["ddu#custom#patch_global"]({
+            kindOptions = {
+              lsp = {
+                defaultAction = "open",
+              },
+              lsp_codeAction = {
+                defaultAction = "apply",
+              },
+            },
+          })
+
+          vim.fn["ddu#custom#patch_local"]("lsp_workspaceSymbol", {
+            sources = {{
+              name = 'lsp_workspaceSymbol',
+            }},
+            uiParams = {
+              ff = {
+                ignoreEmpty = false,
+              },
+            },
+            sourceOptions = {
+              lsp_workspaceSymbol = {
+                volatile = true,
+                converters = { "fold_path" },
+              },
+            },
+          })
+
+          vim.fn['ddu#start']({
+            name = 'lsp_workspaceSymbol',
+          })
+        end, { silent = true })
       end
     })
 
@@ -1901,7 +1986,6 @@ function M.setup()
       "neovim/nvim-lspconfig",
       event = { "InsertEnter" },
       cmd = { "LspInfo", "LspStart", "LspLog", "LspStop" },
-      wants = { "ddu-source-qf" },
       setup = function()
         vim.opt_local.signcolumn = "no"
 
@@ -1915,30 +1999,7 @@ function M.setup()
         vim.keymap.set("n", "td", "<cmd>lua vim.lsp.buf.type_definition()<CR>", { silent = true })
         vim.keymap.set("n", "tr", "<cmd>lua vim.lsp.buf.rename()<CR>", { silent = true })
         vim.keymap.set("n", "tF", "<cmd>lua vim.lsp.buf.references()<CR>", { silent = true })
-        vim.keymap.set("n", "tf", function()
-          local on_list = function(options)
-            vim.fn.setqflist({}, ' ', options)
-            -- vim.api.nvim_command('cfirst')
-
-            vim.fn['ddu#start']({
-              name = 'qf',
-              sources = {{
-                name = 'qf',
-                params = {
-                  format = "%P:%l: %t"
-                }
-              }},
-              uiParams = {
-                ff = {
-                  startFilter = false,
-                },
-              }
-            })
-          end
-
-          vim.lsp.buf.references(nil, { on_list = on_list })
-        end, { silent = true })
-        vim.keymap.set("n", "te", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>", { silent = true })
+        -- vim.keymap.set("n", "te", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>", { silent = true })
         vim.keymap.set("n", "tp", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", { silent = true })
         vim.keymap.set("n", "tn", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", { silent = true })
         vim.keymap.set("n", "tl", "<cmd>lua vim.diagnostic.setloclist()<CR>", { silent = true })
@@ -2111,51 +2172,51 @@ function M.setup()
                 init_options = {
                   formatter = "auto",
                   enabledFeatures = {
-                    "documentHighlights",
-                    "documentSymbols",
-                    "documentLink",
-                    "diagnostics",
-                    "completion",
-                    "foldingRanges",
-                    "selectionRanges",
-                    "hover",
+                    -- "documentHighlights",
+                    -- "documentSymbols",
+                    -- "documentLink",
+                    -- "diagnostics",
+                    -- "completion",
+                    -- "foldingRanges",
+                    -- "selectionRanges",
+                    -- "hover",
                     -- "semanticHighlighting",
-                    "formatting",
-                    "codeActions",
+                    -- "formatting",
+                    -- "codeActions",
                     "references",
                   },
                 },
-                on_attach = function(client, bufnr)
-                  local callback = function()
-                    local params = vim.lsp.util.make_text_document_params(buffer)
-
-                    client.request(
-                      "textDocument/diagnostic",
-                      { textDocument = params },
-                      function(err, result)
-                        if err then
-                          return
-                        end
-
-                        vim.lsp.diagnostic.on_publish_diagnostics(
-                          nil,
-                          vim.tbl_extend("keep", params, { diagnostics = result.items }),
-                          { client_id = client.id }
-                        )
-                      end
-                    )
-                  end
-
-                  callback() -- call on attach
-
-                  vim.api.nvim_create_autocmd(
-                    { "BufEnter", "BufWritePre", "BufReadPost", "InsertLeave", "TextChanged" },
-                    {
-                      buffer = buffer,
-                      callback = callback,
-                    }
-                  )
-                end,
+                -- on_attach = function(client, bufnr)
+                --   local callback = function()
+                --     local params = vim.lsp.util.make_text_document_params(buffer)
+                --
+                --     client.request(
+                --       "textDocument/diagnostic",
+                --       { textDocument = params },
+                --       function(err, result)
+                --         if err then
+                --           return
+                --         end
+                --
+                --         vim.lsp.diagnostic.on_publish_diagnostics(
+                --           nil,
+                --           vim.tbl_extend("keep", params, { diagnostics = result.items }),
+                --           { client_id = client.id }
+                --         )
+                --       end
+                --     )
+                --   end
+                --
+                --   callback() -- call on attach
+                --
+                --   vim.api.nvim_create_autocmd(
+                --     { "BufEnter", "BufWritePre", "BufReadPost", "InsertLeave", "TextChanged" },
+                --     {
+                --       buffer = buffer,
+                --       callback = callback,
+                --     }
+                --   )
+                -- end,
               }
             elseif server_name == "tsserver" then
               opts = {

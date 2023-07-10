@@ -8,12 +8,21 @@ import {
 import { FilterArguments } from "https://deno.land/x/ddu_vim@v2.0.0/base/filter.ts";
 import { ActionData as FileActionData } from "https://deno.land/x/ddu_kind_file@v0.3.2/file.ts";
 import { relative } from "https://deno.land/std@0.122.0/path/mod.ts";
+import * as LSP from "npm:vscode-languageserver-types@3.17.3";
 import { fn } from "https://deno.land/x/ddu_vim@v2.2.0/deps.ts";
 import { findGitRoot } from "../findGitRoot.ts";
 
 type Params = Record<string, unknown>;
 
 type FoldItem = DduItem & Item<FileActionData>;
+
+type LspActionData = {
+  path: string;
+  word: string;
+  range: LSP.Range;
+  lnum?: number; // 1-index
+  col?: number; // 1-index
+};
 
 function charposToBytepos(input: string, pos: number): number {
   return (new TextEncoder()).encode(input.slice(0, pos)).length;
@@ -62,6 +71,19 @@ export class Filter extends BaseFilter<Params> {
             ),
           );
           break;
+        case "lsp_workspaceSymbol": {
+          items.push(
+            this.foldItemForLspWorkspaceSymbol(
+              args,
+              dir,
+              homeDir,
+              repoDir,
+              item as Item<LspActionData>,
+            ),
+          );
+          break;
+        }
+
         default:
           console.log(
             `[fold_path] not supported source given ${item.__sourceName}`,
@@ -154,7 +176,104 @@ export class Filter extends BaseFilter<Params> {
       });
     }
 
-    return { action: { ...action, text }, word: text, highlights } as FoldItem;
+    return {
+      ...item,
+      action: { ...action, text },
+      word: text,
+      highlights,
+    } as FoldItem;
+  }
+
+  private foldItemForLspWorkspaceSymbol(
+    args: FilterArguments<Params>,
+    dir: string,
+    homeDir: string,
+    repoDir: string | undefined,
+    item: Item<LspActionData>,
+  ) {
+    const textParserRe = /^\[(?<kind>[^\]]+)\]\s+(?<name>.*)$/;
+    const { groups } = item.word.match(textParserRe)!;
+
+    const action = item.action!;
+    let path = action!.path;
+
+    if (repoDir && path.startsWith(repoDir)) {
+      path = relative(dir, path);
+    }
+
+    if (path.startsWith(homeDir)) {
+      path = `~${path.slice(homeDir.length)}`;
+    }
+
+    const kind = groups!["kind"];
+    const name = groups!["name"];
+    let prefix = path;
+
+    if (action.range) {
+      prefix = `${prefix}:${action.range.start.line + 1}: `;
+    }
+
+    const text = `${prefix} [${kind}] ${name}`;
+
+    const highlights: Item["highlights"] = [];
+
+    highlights.push(
+      {
+        name: "path",
+        hl_group: "Directory",
+        col: 1,
+        width: path.length,
+      },
+    );
+
+    if (action.range) {
+      highlights.push({
+        name: "lineNr",
+        hl_group: "Directory",
+        col: `${path}:`.length + 1,
+        width: String(action.range.start.line + 1).length,
+      });
+    }
+
+    highlights.push(
+      {
+        name: "kind",
+        hl_group: "Keyword",
+        col: prefix.length + 3,
+        width: kind.length,
+      },
+    );
+
+    highlights.push(
+      {
+        name: "word",
+        hl_group: "Normal",
+        col: prefix.length + 2 + kind.length + 2,
+        width: name.length,
+      },
+    );
+
+    const patterns = this.getInputPatterns(args.input);
+
+    for (const pattern of patterns) {
+      [...text.matchAll(pattern)].forEach((match) => {
+        if (match.index) {
+          highlights.push({
+            name: "matched",
+            hl_group: "Statement",
+            col: charposToBytepos(text, match.index) + 1,
+            width: (new TextEncoder()).encode(match[0]).length,
+          });
+        }
+      });
+    }
+
+    return {
+      ...item,
+      action: { ...action, text },
+      word: text,
+      highlights,
+    } as FoldItem;
   }
 
   private foldItemForRg(
@@ -174,7 +293,6 @@ export class Filter extends BaseFilter<Params> {
     if (path.startsWith(homeDir)) {
       path = `~${path.slice(homeDir.length)}`;
     }
-    console.log(item);
 
     const display = `${path}:${action.lineNr}:${action.col}: ${action.text}`;
     const highlights = (item.highlights ?? []).map((highlight) => {
