@@ -256,10 +256,6 @@ function M.setup()
           return vim.fn["git#get_current_branch"]()
         end)
 
-        vim.g["lightline#functions#nearest_method_name"] = Lightline.new(1, function()
-          return vim.b["vista_nearest_method_or_function"] or ""
-        end)
-
         vim.g["lightline#functions#copilot"] = Lightline.new(0.5, function()
           if vim.fn.exists("b:_copilot") == 1 and vim.fn.exists("b:_copilot.first") == 1 then
             local status = vim.b["_copilot"]["first"]["status"]
@@ -301,7 +297,6 @@ function M.setup()
               { "mode" },
               { "copilot" },
               { "information" },
-              { "nearest_method_name" },
             },
             right = {
               { "percent",    "lineinfo", "file_size" },
@@ -313,7 +308,6 @@ function M.setup()
           component_function = {
             information = "g:lightline#functions#plugin_information.statusline",
             copilot = "g:lightline#functions#copilot.statusline",
-            nearest_method_name = "g:lightline#functions#nearest_method_name.statusline",
           },
           component_expand = {
             git_branch = "g:lightline#functions#git_branch.statusline",
@@ -1153,31 +1147,36 @@ function M.setup()
 
         local on_list = function(options)
           vim.fn.setqflist({}, ' ', options)
-          -- vim.api.nvim_command('cfirst')
 
-          vim.fn['ddu#start']({
-            name = 'qf',
-            sources = {{
+          if #options['items'] == 0 then
+            return vim.api.nvim_err_writeln('No results found')
+          elseif #options['items'] == 1 then
+            vim.api.nvim_command('cfirst')
+          else
+            vim.fn['ddu#start']({
               name = 'qf',
-              params = {
-                format = "%P:%l: %t"
+              sources = {{
+                name = 'qf',
+                params = {
+                  format = "%P:%l: %t"
+                }
+              }},
+              uiParams = {
+                ff = {
+                  startFilter = false,
+                },
               }
-            }},
-            uiParams = {
-              ff = {
-                startFilter = false,
-              },
-            }
-          })
+            })
+          end
         end
 
         vim.keymap.set("n", "tf", function()
           vim.lsp.buf.references(nil, { on_list = on_list })
-        end, { silent = true })
+        end)
 
         vim.keymap.set("n", "tt", function()
           vim.lsp.buf.definition({ on_list = on_list })
-        end, { silent = true })
+        end)
       end
     })
 
@@ -1192,7 +1191,7 @@ function M.setup()
         "nvim-lspconfig",
       },
       keys = {
-        { "n", "ws" },
+        { "n", "sw" },
         { "n", "co" },
         { "n", "ci" },
       },
@@ -1208,7 +1207,7 @@ function M.setup()
           },
         })
 
-        vim.keymap.set("n", "ws", function()
+        vim.keymap.set("n", "sw", function()
           vim.fn['ddu#start']({
             name = 'lsp_workspaceSymbol',
             sources = {{
@@ -1968,23 +1967,23 @@ function M.setup()
             require("null-ls").builtins.formatting.gofmt,
             require("null-ls").builtins.formatting.rustfmt,
             -- require("typescript.extensions.null-ls.code-actions"),
-            require("null-ls").builtins.formatting.rubocop.with({
-              command = "bundle",
-              args = {
-                "exec",
-                "rubocop",
-                "--auto-correct-all",
-                "-f",
-                "quiet",
-                "--stderr",
-                "--stdin",
-                "$FILENAME",
-                "--disable-pending-cops",
-              },
-              condition = function(utils)
-                return utils.root_has_file({ ".rubocop.yml" })
-              end,
-            }),
+            -- require("null-ls").builtins.formatting.rubocop.with({
+            --   command = "bundle",
+            --   args = {
+            --     "exec",
+            --     "rubocop",
+            --     "--auto-correct-all",
+            --     "-f",
+            --     "quiet",
+            --     "--stderr",
+            --     "--stdin",
+            --     "$FILENAME",
+            --     "--disable-pending-cops",
+            --   },
+            --   condition = function(utils)
+            --     return utils.root_has_file({ ".rubocop.yml" })
+            --   end,
+            -- }),
           },
         })
 
@@ -2049,12 +2048,42 @@ function M.setup()
         -- vim.keymap.set("n", "te", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>", { silent = true })
         vim.keymap.set("n", "tp", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", { silent = true })
         vim.keymap.set("n", "tn", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", { silent = true })
-        vim.keymap.set("n", "tl", "<cmd>lua vim.diagnostic.setloclist()<CR>", { silent = true })
+        vim.keymap.set("n", "tl", function()
+          vim.diagnostic.setqflist({ open = false })
+          qflist = vim.fn['getqflist']()
+
+          if #qflist == 0 then
+            return vim.api.nvim_err_writeln('No diagnostics found')
+          else
+            vim.fn['ddu#start']({
+              name = 'qf',
+              sources = {{
+                name = 'qf',
+                params = {
+                  format = "%P:%l: %t"
+                }
+              }},
+              uiParams = {
+                ff = {
+                  startFilter = false,
+                },
+              }
+            })
+          end
+        end, { silent = true })
         vim.keymap.set("n", "ff", ":lua vim.lsp.buf.format { async = true }<CR>", { silent = true })
 
         -- nnoremap <silent> <space>wa <cmd>lua vim.lsp.buf.add_workspace_folder()<CR>
         -- nnoremap <silent> <space>wr <cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>
         -- nnoremap <silent> <space>wl <cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>
+
+        vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+          virtual_text = {
+            format = function(diagnostic)
+              return string.format("%s: %s", diagnostic.code, diagnostic.message)
+            end
+          },
+        })
 
         local group = vim.api.nvim_create_augroup("PackerNvimLspconfig", { clear = true })
 
@@ -2108,8 +2137,45 @@ function M.setup()
           end,
         })
 
-        vim.lsp.set_log_level("debug")
+        -- vim.lsp.set_log_level("debug")
       end,
+      config = function()
+        local util = require 'lspconfig.util'
+        local nvim_lsp_configs = require 'lspconfig.configs'
+
+        nvim_lsp_configs['smarthr-ruby-ls'] = {
+          default_config = {
+            autostart = false,
+            cmd = { 'bundle', 'exec', 'smarthr-ruby-ls' },
+            filetypes = { 'ruby' },
+            root_dir = util.root_pattern('Gemfile', '.git'),
+            init_options = {
+            },
+          },
+        }
+
+        nvim_lsp_configs['smarthr-ruby-ls'].setup({})
+
+        local group = vim.api.nvim_create_augroup("PackerNvimLspconfig", { clear = true })
+        vim.api.nvim_create_autocmd("FileType", {
+          group = group,
+          pattern = { "ruby" },
+          callback = function()
+            local file_match_str = require("file_extend").file_match_str
+            local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
+
+            if vim.fn['filereadable'](root .. '/exe/smarthr-ruby-ls') == 0 then
+              nvim_lsp_configs['smarthr-ruby-ls'].setup({ cmd = { root .. "/exe/smarthr-ruby-ls" } })
+            else
+              nvim_lsp_configs['smarthr-ruby-ls'].setup({ cmd = { 'bundle', 'exec', 'smarthr-ruby-ls' } })
+            end
+
+            if filetype == "ruby" and file_match_str(root .. "/Gemfile", "smarthr-ruby-ls") then
+              vim.cmd("LspStart smarthr-ruby-ls")
+            end
+          end,
+        })
+      end
     })
 
     use({
@@ -2212,15 +2278,19 @@ function M.setup()
                   },
                 },
               }
-            elseif server_name == "ruby_ls" then
+            elseif server_name == "solargraph" then
               opts = {
                 autostart = false,
-                cmd = { "bundle", "exec", "ruby-lsp-hanica" },
+                cmd = { 'bundle', 'exec', 'solargraph', 'stdio' },
+              }
+            elseif server_name == "smarthr-ruby-ls" then
+              opts = {
+                autostart = false,
                 init_options = {
-                  formatter = "auto",
-                  enabledFeatures = {
+                  -- formatter = "auto",
+                  enabled_features = {
                     -- "documentHighlights",
-                    -- "documentSymbols",
+                    "documentSymbols",
                     -- "documentLink",
                     -- "diagnostics",
                     -- "completion",
@@ -2230,7 +2300,29 @@ function M.setup()
                     -- "semanticHighlighting",
                     -- "formatting",
                     -- "codeActions",
-                    "references",
+                    -- "references",
+                  },
+                },
+              }
+            elseif server_name == "ruby_ls" then
+              opts = {
+                autostart = false,
+                -- cmd = { "bundle", "exec", "ruby-lsp-hanica" },
+                init_options = {
+                  -- formatter = "auto",
+                  enabledFeatures = {
+                    -- "documentHighlights",
+                    "documentSymbols",
+                    -- "documentLink",
+                    -- "diagnostics",
+                    -- "completion",
+                    -- "foldingRanges",
+                    -- "selectionRanges",
+                    -- "hover",
+                    -- "semanticHighlighting",
+                    -- "formatting",
+                    -- "codeActions",
+                    -- "references",
                   },
                 },
                 -- on_attach = function(client, bufnr)
@@ -2272,7 +2364,12 @@ function M.setup()
             elseif server_name == "sorbet" then
               opts = {
                 autostart = false,
-                cmd = { "bundle", "exec", "srb", "tc", "--lsp", "--dir", "." },
+                cmd = { "bundle", "exec", "srb", "tc", "--lsp" },
+              }
+            elseif server_name == "rubocop" then
+              opts = {
+                autostart = false,
+                cmd = { "bundle", "exec", "rubocop", "--lsp" },
               }
             elseif server_name == "sumneko_lua" then
               opts = lua_vim_lsp_config()
@@ -2336,7 +2433,10 @@ function M.setup()
 
           if filetype == "ruby" and file_match_str(root .. "/Gemfile", "sorbet") then
             vim.cmd("LspStart sorbet")
+          elseif filetype == "ruby" and file_match_str(root .. "/Gemfile", "smarthr-ruby-ls") then
+            vim.cmd("LspStart smarthr-ruby-ls")
           elseif filetype == "ruby" and file_match_str(root .. "/Gemfile", "ruby-lsp") then
+            vim.fn['echo']('xxx')
             vim.cmd("LspStart ruby_ls")
           elseif
               isTsJs
@@ -2359,6 +2459,10 @@ function M.setup()
             vim.cmd("LspStart terraformls")
           elseif filetype == "go" then
             vim.cmd("LspStart gopls")
+          end
+
+          if filetype == "ruby" and file_match_str(root .. "/Gemfile", "rubocop") then
+            vim.cmd("LspStart rubocop")
           end
         end
 
@@ -2775,7 +2879,7 @@ function M.setup()
       "liuchengxu/vista.vim",
       cmd = { "Vista", "Vista!", "Vista!!" },
       setup = function()
-        vim.keymap.set("n", "<Space>t", ":Vista!!<CR>", { noremap = true })
+        vim.keymap.set("n", "<Space>T", ":Vista!!<CR>", { noremap = true })
         vim.g.vista_default_executive = "nvim_lsp"
         vim.g["vista#renderer#enable_icon"] = 1
         vim.g.vista_sidebar_width = 40
@@ -2785,12 +2889,6 @@ function M.setup()
         -- let g:vista#renderer#enable_icon = 0
 
         vim.g.vista_executive_for = {
-          c = "nvim_lsp",
-          cpp = "nvim_lsp",
-          lua = "nvim_lsp",
-          typescript = "nvim_lsp",
-          javascript = "nvim_lsp",
-          ruby = "ctags",
           vim = "ctags",
         }
 
@@ -2801,8 +2899,9 @@ function M.setup()
           callback = function()
             local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
             local executive_for = "ctags"
+            local file_extend = require("file_extend")
 
-            if require("file_extend").file_match_str(root .. "/Gemfile", "ruby-lsp") then
+            if file_extend.file_match_str(root .. "/Gemfile", "ruby-lsp") or file_extend.file_match_str(root .. "/Gemfile", "smarthr-ruby-ls") then
               executive_for = "nvim_lsp"
             end
 
@@ -2811,6 +2910,79 @@ function M.setup()
           end,
         })
       end,
+    })
+
+    use({
+      'simrat39/symbols-outline.nvim',
+      cmd = { 'SymbolsOutline', 'SymbolsOutlineOpen', 'SymbolsOutlineClose' },
+      setup = function()
+        vim.keymap.set("n", "<Space>t", ":SymbolsOutline<CR>", { noremap = true })
+      end,
+      config = function()
+        require("symbols-outline").setup({
+          highlight_hovered_item = true,
+          show_guides = true,
+          auto_preview = false,
+          position = 'right',
+          relative_width = true,
+          width = 40,
+          auto_close = false,
+          show_numbers = false,
+          show_relative_numbers = false,
+          show_symbol_details = false,
+          preview_bg_highlight = 'Pmenu',
+          autofold_depth = nil,
+          auto_unfold_hover = true,
+          fold_markers = { '', '' },
+          wrap = false,
+          keymaps = { -- These keymaps can be a string or a table for multiple keys
+            close = {"<Esc>", "q"},
+            goto_location = "<Cr>",
+            focus_location = "o",
+            hover_symbol = "<C-space>",
+            toggle_preview = "K",
+            rename_symbol = "r",
+            code_actions = "a",
+            fold = "fo",
+            unfold = "fc",
+            fold_all = "O",
+            unfold_all = "o",
+            fold_reset = "R",
+          },
+          lsp_blacklist = {},
+          symbol_blacklist = {},
+          symbols = {
+            File = { icon = "", hl = "@text.uri" },
+            Module = { icon = "", hl = "@namespace" },
+            Namespace = { icon = "", hl = "@namespace" },
+            Package = { icon = "", hl = "@namespace" },
+            Class = { icon = "𝓒", hl = "@type" },
+            Method = { icon = "ƒ", hl = "@method" },
+            Property = { icon = "", hl = "@method" },
+            Field = { icon = "󰽏", hl = "@field" },
+            Constructor = { icon = "", hl = "@constructor" },
+            Enum = { icon = "ℰ", hl = "@type" },
+            Interface = { icon = "ﰮ", hl = "@type" },
+            Function = { icon = "", hl = "@function" },
+            Variable = { icon = "", hl = "@constant" },
+            Constant = { icon = "", hl = "@constant" },
+            String = { icon = "𝓐", hl = "@string" },
+            Number = { icon = "#", hl = "@number" },
+            Boolean = { icon = "⊨", hl = "@boolean" },
+            Array = { icon = "", hl = "@constant" },
+            Object = { icon = "⦿", hl = "@type" },
+            Key = { icon = "🔐", hl = "@type" },
+            Null = { icon = "NULL", hl = "@type" },
+            EnumMember = { icon = "", hl = "@field" },
+            Struct = { icon = "𝓢", hl = "@type" },
+            Event = { icon = "", hl = "@type" },
+            Operator = { icon = "+", hl = "@operator" },
+            TypeParameter = { icon = "𝙏", hl = "@parameter" },
+            Component = { icon = "󰡀", hl = "@function" },
+            Fragment = { icon = "󰋮", hl = "@constant" },
+          },
+        })
+      end
     })
 
     use({

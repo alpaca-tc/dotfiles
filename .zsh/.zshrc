@@ -180,6 +180,9 @@ export SSL_CERT_FILE=$HOME/dotfiles/cacert.pem
 # For Sublime
 export PATH=$PATH:/Applications/Sublime\ Text.app/Contents/SharedSupport/bin
 
+# https://shinkufencer.hateblo.jp/entry/2019/05/02/000000_1
+export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+
 # 各種読み込み
 # {{{
 source ~/.zsh/.zshrc.basic

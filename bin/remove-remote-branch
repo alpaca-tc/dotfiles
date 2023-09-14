@@ -4,8 +4,17 @@ PROTECTED_BRANCHES = %w[
   master
   development
   release
-  master
+  main
 ].freeze
+
+IGNORED_REPOS = %w[
+  kufu
+]
+
+if IGNORED_REPOS.any? { Dir.pwd.include?(_1) }
+  $stderr.puts("Ignoring #{Dir.pwd}")
+  exit
+end
 
 remote = ARGV[1] || 'origin'
 

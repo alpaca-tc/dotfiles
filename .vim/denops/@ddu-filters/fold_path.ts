@@ -41,6 +41,7 @@ export class Filter extends BaseFilter<Params> {
         case "mr": {
           items.push(
             this.foldItemForMr(
+              args,
               dir,
               homeDir,
               repoDir,
@@ -99,6 +100,7 @@ export class Filter extends BaseFilter<Params> {
   }
 
   private foldItemForMr(
+    args: FilterArguments<Params>,
     dir: string,
     homeDir: string,
     repoDir: string | undefined,
@@ -115,7 +117,24 @@ export class Filter extends BaseFilter<Params> {
       word = `~${word.slice(homeDir.length)}`;
     }
 
-    return { ...item, word } as FoldItem;
+    const highlights: Item["highlights"] = []
+
+    const patterns = this.getInputPatterns(args.input);
+
+    for (const pattern of patterns) {
+      [...word.matchAll(pattern)].forEach((match) => {
+        if (match.index) {
+          highlights.push({
+            name: "matched",
+            hl_group: "Statement",
+            col: charposToBytepos(word, match.index) + 1,
+            width: (new TextEncoder()).encode(match[0]).length,
+          });
+        }
+      });
+    }
+
+    return { ...item, highlights, word } as FoldItem;
   }
 
   private foldItemForQf(

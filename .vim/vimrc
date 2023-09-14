@@ -356,8 +356,11 @@ function! s:set_dictionary_automatically() "{{{
   for ft in dict_name
     call add(filetypes, ft)
 
-    let dict_path = '~/.vim/dict/'. join(filetypes, '.') .'.dict'
-    execute 'setl dictionary+=' . expand(dict_path)
+    let dict_path = expand('~/.vim/dict/'. join(filetypes, '.') .'.dict')
+
+    if filereadable(dict_path)
+      execute 'setl dictionary+=' . expand(dict_path)
+    endif
 
     if exists(':NeoSnippetSource')
       let snippet_path = expand('~/.vim/snippet/'. join(filetypes, '.') .'.snip')
