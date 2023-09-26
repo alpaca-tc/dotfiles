@@ -218,8 +218,21 @@ cnoremap <C-L> <Right>
 xnoremap H <Nop>
 inoremap <C-@> <Nop>
 
+function! s:move_to_current_directory_on_open_file()
+  let directory = fnameescape(expand('%:p:h'))
+
+  if isdirectory(directory) && directory !~ '^\/tmp'
+    execute ':silent! lcd! ' . directory
+    call chansend(v:stderr, printf("\033]7;file://%s\033\\", directory))
+  endif
+endfunction
+
 augroup MyAutoCmd
-  autocmd BufEnter * execute ':silent! lcd! ' . fnameescape(expand('%:p:h'))
+  autocmd BufEnter * call <SID>move_to_current_directory_on_open_file()
+
+  " https://github.com/neovim/neovim/issues/21771
+  autocmd VimLeave * call chansend(v:stderr, "\033]7;\033\\")
+  autocmd DirChanged * call chansend(v:stderr, printf("\033]7;file://%s\033\\", v:event.cwd))
 augroup END
 "}}}
 
