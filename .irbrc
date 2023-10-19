@@ -2,6 +2,8 @@
 # IRB.conf[:PROMPT_MODE] = :SIMPLE
 # IRB.conf[:PROMPT_MODE] = :SIMPLE
 # IRB.conf[:USE_MULTILINE] = false
+IRB.conf[:INSPECT_MODE] = :pp
+IRB.conf[:USE_AUTOCOMPLETE] = false
 
 IRB.conf[:COMMAND_ALIASES][:cd] = :irb_pry_change_workspace
 
