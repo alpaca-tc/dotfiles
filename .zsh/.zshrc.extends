@@ -1,4 +1,5 @@
 # zstyle ':completion:*:*:git:*' script ~/.zsh/completion/git-completion.zsh
+# zstyle ':completion:*:*:multipass:*' script ~/.zsh/completion/multipass-completion.zsh
 source ~/.zsh/git-prompt.sh
 # source ~/.zsh/completion/tig-completion.bash
 # source ~/.zsh/tmux-completion.bash

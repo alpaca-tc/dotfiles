@@ -1,0 +1,137 @@
+#compdef multipass
+
+# heavily based on _cvs and _adb
+
+_multipass() {
+  _arguments \
+    '*::multipass command:_multipass_command'
+}
+
+# define multipass command dispatch function.
+
+(( $+functions[_multipass_command] )) ||
+_multipass_command() {
+  local ret=1
+  # multipass --help
+  # pbpaste | sed -E "s/^ */'/g; s/$/'/g; s/ {2,}/:/g" | tr '[:upper:]' '[:lower:]'
+  local -a commands
+  commands=(
+    'alias:create an alias'
+    'aliases:list available aliases'
+    'delete:delete instances'
+    'exec:run a command on an instance'
+    'find:display available images to create instances from'
+    'get:get a configuration setting'
+    'help:display help about a command'
+    'info:display information about instances'
+    'launch:create and start an ubuntu instance'
+    'list:list all available instances'
+    'mount:mount a local directory in the instance'
+    'networks:list available network interfaces'
+    'purge:purge all deleted instances permanently'
+    'recover:recover deleted instances'
+    'restart:restart instances'
+    'set:set a configuration setting'
+    'shell:open a shell on a running instance'
+    'start:start instances'
+    'stop:stop running instances'
+    'suspend:suspend running instances'
+    'transfer:transfer files between the host and instances'
+    'umount:unmount a directory from an instance'
+    'unalias:remove an alias'
+    'version:show version details:_version'
+  )
+
+  if (( CURRENT == 1 )); then
+    _describe -t commands 'multipass command' commands
+  else
+    _call_function ret _multipass_$words[1]
+    return ret
+  fi
+}
+
+_multipass_delete() {
+  _arguments \
+      --all \
+    + '(purge)' \
+      {-p,--purge} \
+      '*::name:_instances'
+}
+
+_multipass_exec() {
+  _arguments \
+    ':name:_instances_running'
+}
+
+_multipass_get() {
+  _arguments \
+    --raw \
+    ':key:_configuration_settings'
+}
+
+_multipass_info() {
+  _arguments \
+    --all \
+    '--format: :(table json csv yaml)' \
+    ':name:_instances'
+}
+
+_multipass_purge() {
+  # the purge subcommand takes no arguments
+}
+
+_multipass_restart() {
+  _arguments \
+    --all \
+    --timeout: \
+    ':name:_instances_running'
+}
+
+_multipass_shell() {
+  _arguments \
+    --timeout: \
+    ':name:_instances'
+}
+
+_multipass_start() {
+  _arguments \
+    --all \
+    --timeout: \
+    '::name:_instances'
+}
+
+_multipass_stop() {
+  _arguments \
+      --all \
+    + '(time)' \
+      {-t,--time}: \
+    + '(cancel)' \
+      {-c,--cancel} \
+      '*::name:_instances_running'
+}
+
+_multipass_version() {
+  _arguments \
+    '--format: :(table json csv yaml)'
+}
+
+_configuration_settings() {
+  local -a keys
+  keys=( $(multipass set --help | grep -E '(client|local)') )
+  _describe -t names 'keys' keys
+}
+
+_instances() {
+  # from _adb
+  local -a instances
+  instances=( $(multipass list --format csv | tail -n +2 | cut -f 1 -d ,) )
+  _describe -t names 'instances' instances
+}
+
+_instances_running() {
+  local -a instances
+  instances=( $(multipass list --format csv | tail -n +2 | grep Running | cut -f 1 -d ,) )
+  _describe -t names 'instances' instances
+}
+
+_multipass $@
