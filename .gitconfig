@@ -54,6 +54,7 @@
   forkdiff = !bash -c 'git diff $(git merge-base "$1" "$2") "$2" "${@: 3}" ' -
   diffm = !"f() { git log HEAD...${1} --oneline | grep Merge; }; f"
   ff = !git clean -fd | git reset --hard
+  show-all-pr = "!~/dotfiles/bin/show-all-pull-request ${1}"
   show-pr = !"f() { git log --merges --oneline --ancestry-path $1...HEAD | grep 'Merge pull request #' | tail -n 1; }; f"
   open-pr = !"f() { hub browse -- pull/$(git show-pr $1 | sed 's/.*Merge pull request #\\([0-9]*\\) .*/\\1/g'); }; f"
   show-commit = !"f() { git log --reverse --ancestry-path $1^...master; }; f"

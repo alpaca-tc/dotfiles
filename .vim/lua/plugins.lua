@@ -531,7 +531,7 @@ function M.setup()
           sourceOptions = {
             _ = {
               matchers = { "matcher_regexp" },
-              ignoreCase = true,
+              ignoreCase = false,
             },
           },
         })
@@ -1967,23 +1967,23 @@ function M.setup()
             require("null-ls").builtins.formatting.gofmt,
             require("null-ls").builtins.formatting.rustfmt,
             -- require("typescript.extensions.null-ls.code-actions"),
-            -- require("null-ls").builtins.formatting.rubocop.with({
-            --   command = "bundle",
-            --   args = {
-            --     "exec",
-            --     "rubocop",
-            --     "--auto-correct-all",
-            --     "-f",
-            --     "quiet",
-            --     "--stderr",
-            --     "--stdin",
-            --     "$FILENAME",
-            --     "--disable-pending-cops",
-            --   },
-            --   condition = function(utils)
-            --     return utils.root_has_file({ ".rubocop.yml" })
-            --   end,
-            -- }),
+            require("null-ls").builtins.formatting.rubocop.with({
+              command = "bundle",
+              args = {
+                "exec",
+                "rubocop",
+                "--auto-correct-all",
+                "-f",
+                "quiet",
+                "--stderr",
+                "--stdin",
+                "$FILENAME",
+                "--disable-pending-cops",
+              },
+              condition = function(utils)
+                return utils.root_has_file({ ".rubocop.yml" })
+              end,
+            }),
           },
         })
 
@@ -2483,6 +2483,7 @@ function M.setup()
       cmd = { "NeoSnippetEdit", "NeoSnippetSource", "NeoSnippetClearMarkers" },
       event = { "InsertEnter" },
       ft = { "snippet" },
+      cmd = { "NeoSnippetSource" },
       fn = {
         "neosnippet#get_snippets",
         "neosnippet#expandable_or_jumpable",
@@ -2529,7 +2530,7 @@ function M.setup()
         "Shougo/ddc-converter_remove_overlap",
         "Shougo/ddc-ui-native",
         "Shougo/neco-vim",
-        "Shougo/ddc-source-nvim-lsp",
+        "Shougo/ddc-source-lsp",
         "matsui54/ddc-buffer",
         "matsui54/ddc-dictionary",
         "Shougo/neosnippet.vim",
@@ -2543,7 +2544,7 @@ function M.setup()
         "ddc-converter_remove_overlap",
         "ddc-ui-native",
         "neco-vim",
-        "ddc-source-nvim-lsp",
+        "ddc-source-lsp",
         "ddc-buffer",
         "ddc-dictionary",
         "neosnippet.vim",
@@ -2555,7 +2556,7 @@ function M.setup()
           -- completionMenu = "pum.vim",
           sources = {
             "neosnippet",
-            "nvim-lsp",
+            "lsp",
             "buffer",
             "file",
             "dictionary",
@@ -2578,9 +2579,10 @@ function M.setup()
               mark = "dict",
             },
             necovim = {
+              keywordPattern = "[a-zA-Z_:]\\w*",
               mark = "neco",
             },
-            ["nvim-lsp"] = {
+            lsp = {
               mark = "lsp",
               forceCompletionPattern = "\\.\\w*|:\\w*|->\\w*",
               minAutoCompleteLength = 0,
@@ -2600,10 +2602,13 @@ function M.setup()
               projFromCwdMaxItems = {},
               projFromBufMaxItems = {},
             },
-            ["nvim-lsp"] = {
+            lsp = {
               kindLabels = {
                 Class = "c",
               },
+              enableResolveItem = true,
+              enableAdditionalTextEdit = true,
+              confirmBehavior = 'replace',
             },
             buffer = {
               requireSameFiletype = false,
@@ -2615,7 +2620,6 @@ function M.setup()
         })
 
         vim.fn["ddc#custom#patch_filetype"]({ "vim" }, {
-          keywordPattern = "[a-zA-Z_:]\\w*",
           sources = { "buffer", "necovim", "dictionary" },
         })
 

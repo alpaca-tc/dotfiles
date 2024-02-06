@@ -115,13 +115,13 @@ set signcolumn=no
 if !has('nvim')
   " set ttymouse=xterm2
 endif
+set viminfo=!,'1000,<800,s300,h,\"1000,f1,:1000,/1000,h
 execute 'set viminfo+=n' . g:my.dir.viminfo . '/.viminfo'
 " set nomore
 " set nobackup
 set nowritebackup
 " set norestorescreen
 " set noshowmode
-" set viminfo='1000,<800,s300,\"1000,f1,:1000,/1000
 set visualbell t_vb=
 " set helplang=en
 set timeout timeoutlen=400 ttimeoutlen=70 updatetime=600
