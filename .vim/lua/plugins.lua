@@ -1957,7 +1957,7 @@ function M.setup()
             -- }),
             require("null-ls").builtins.diagnostics.yamllint,
             require("null-ls").builtins.formatting.gofmt,
-            require("null-ls").builtins.formatting.rustfmt,
+            -- require("null-ls").builtins.formatting.rustfmt,
             -- require("typescript.extensions.null-ls.code-actions"),
             require("null-ls").builtins.formatting.rubocop.with({
               command = "bundle",
@@ -3043,6 +3043,31 @@ function M.setup()
           callback = function()
             vim.fn["alpaca_window#set_smart_close"]()
           end,
+        })
+      end,
+    })
+
+    use({
+      'nvim-treesitter/nvim-treesitter',
+      ft = {
+        "typescript",
+        "typescript.tsx",
+        "javascript",
+        "javascript.tsx",
+      },
+      run = function()
+        vim.cmd("TSUpdate")
+      end,
+      config = function()
+        require('nvim-treesitter.configs').setup({
+          ensure_installed = { "c", "lua", "vim", "vimdoc", "typescript", "tsx" },
+          sync_install = true,
+          highlight = {
+            enable = false,
+          },
+          indent = {
+            enable = true,
+          },
         })
       end,
     })
