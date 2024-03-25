@@ -169,6 +169,7 @@ function M.setup()
             comment = "<C-_>",
             -- Toggle comment on current line
             comment_line = "<C-_>",
+            comment_visual = "<C-_>",
             -- Define 'comment' textobject (like `dgc` - delete whole comment block)
             textobject = "",
           },
@@ -1877,6 +1878,9 @@ function M.setup()
           zsh = true,
           bash = true,
           markdown = true,
+          cs = true,
+          vb = true,
+          css = true,
         }
 
         -- vim.g["copilot_node_command"] = ""
@@ -1911,7 +1915,7 @@ function M.setup()
     })
 
     use({
-      "jose-elias-alvarez/null-ls.nvim",
+      "nvimtools/none-ls.nvim",
       requires = { "nvim-lua/plenary.nvim" },
       wants = {
         "plenary.nvim",
@@ -1946,18 +1950,6 @@ function M.setup()
               end,
               condition = function(utils)
                 return utils.root_has_file({ ".rubocop.yml" })
-              end,
-            }),
-            require("null-ls").builtins.diagnostics.eslint.with({
-              prefer_local = "node_modules/.bin",
-              condition = function(utils)
-                return utils.root_has_file({ "node_modules/.bin/eslint" })
-              end,
-            }),
-            require("null-ls").builtins.formatting.eslint.with({
-              prefer_local = "node_modules/.bin",
-              condition = function(utils)
-                return utils.root_has_file({ "node_modules/.bin/eslint" })
               end,
             }),
             -- require('null-ls').builtins.diagnostics.luacheck.with({
@@ -2190,6 +2182,7 @@ function M.setup()
         vim.cmd("MasonInstall typescript-language-server")
         vim.cmd("MasonInstall deno")
         vim.cmd("MasonInstall clangd")
+        vim.cmd("MasonInstall eslint-lsp")
       end,
       config = function()
         require("mason").setup()
@@ -2264,6 +2257,7 @@ function M.setup()
             if server_name == "denols" then
               opts = {
                 autostart = false,
+                filetypes = {},
                 init_options = {
                   lint = true,
                   unstable = true,
@@ -2283,81 +2277,11 @@ function M.setup()
                 autostart = false,
                 cmd = { 'bundle', 'exec', 'solargraph', 'stdio' },
               }
-            elseif server_name == "smarthr-ruby-ls" then
-              opts = {
-                autostart = false,
-                init_options = {
-                  -- formatter = "auto",
-                  enabled_features = {
-                    -- "documentHighlights",
-                    "documentSymbols",
-                    -- "documentLink",
-                    -- "diagnostics",
-                    -- "completion",
-                    -- "foldingRanges",
-                    -- "selectionRanges",
-                    -- "hover",
-                    -- "semanticHighlighting",
-                    -- "formatting",
-                    -- "codeActions",
-                    -- "references",
-                  },
-                },
-              }
-            elseif server_name == "ruby_ls" then
-              opts = {
-                autostart = false,
-                -- cmd = { "bundle", "exec", "ruby-lsp-hanica" },
-                init_options = {
-                  -- formatter = "auto",
-                  enabledFeatures = {
-                    -- "documentHighlights",
-                    "documentSymbols",
-                    -- "documentLink",
-                    -- "diagnostics",
-                    -- "completion",
-                    -- "foldingRanges",
-                    -- "selectionRanges",
-                    -- "hover",
-                    -- "semanticHighlighting",
-                    -- "formatting",
-                    -- "codeActions",
-                    -- "references",
-                  },
-                },
-                -- on_attach = function(client, bufnr)
-                --   local callback = function()
-                --     local params = vim.lsp.util.make_text_document_params(buffer)
-                --
-                --     client.request(
-                --       "textDocument/diagnostic",
-                --       { textDocument = params },
-                --       function(err, result)
-                --         if err then
-                --           return
-                --         end
-                --
-                --         vim.lsp.diagnostic.on_publish_diagnostics(
-                --           nil,
-                --           vim.tbl_extend("keep", params, { diagnostics = result.items }),
-                --           { client_id = client.id }
-                --         )
-                --       end
-                --     )
-                --   end
-                --
-                --   callback() -- call on attach
-                --
-                --   vim.api.nvim_create_autocmd(
-                --     { "BufEnter", "BufWritePre", "BufReadPost", "InsertLeave", "TextChanged" },
-                --     {
-                --       buffer = buffer,
-                --       callback = callback,
-                --     }
-                --   )
-                -- end,
-              }
             elseif server_name == "tsserver" then
+              opts = {
+                autostart = false,
+              }
+            elseif server_name == "eslint" then
               opts = {
                 autostart = false,
               }
@@ -2450,8 +2374,8 @@ function M.setup()
           then
             vim.cmd("LspStart denols")
           elseif isTsJs then
-            vim.cmd("LspStart tsserver")
-          elseif filetype == "c" then
+            vim.cmd("LspStart tsserver eslint")
+          elseif filetype == "c" or filetype == "cpp" then
             vim.cmd("LspStart clangd")
           elseif filetype == "rust" then
             vim.cmd("LspStart rust-analyzer")

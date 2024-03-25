@@ -42,6 +42,9 @@ export PATH=$HOME/usr/bin:$HOME/opt/homebrew/bin:$PATH
 # gcloud
 export PATH=$HOME/src/google-cloud-sdk/bin:$PATH
 
+# dotnet
+export PATH=$HOME/.dotnet:$PATH
+
 # java 1.7.0
 # export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_07.jdk/Contents/Home
 # export PATH=$JAVA_HOME/bin:$PATH
