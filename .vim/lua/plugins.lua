@@ -2081,7 +2081,7 @@ function M.setup()
 
         vim.api.nvim_create_autocmd("BufWritePre", {
           group = group,
-          pattern = { "*.go", "*.ts" },
+          pattern = { "*.go", "*.ts", "*.tsx", },
           callback = function()
             vim.lsp.buf.format({ async = false })
           end,
@@ -2284,6 +2284,15 @@ function M.setup()
             elseif server_name == "eslint" then
               opts = {
                 autostart = false,
+                format = {
+                  enable = true
+                },
+                on_attach = function(client, bufnr)
+                  vim.api.nvim_create_autocmd("BufWritePre", {
+                    buffer = bufnr,
+                    command = "EslintFixAll",
+                  })
+                end,
               }
             elseif server_name == "sorbet" then
               opts = {
