@@ -420,8 +420,8 @@ nnoremap <silent><Space>ml :execute 'VimFilerExplorer ' . g:my.dir.memolist . ' 
 " ----------------------------------------
 " unite.vim"{{{
 " keymappings
-nmap [unite] <Nop>
-nmap <C-J> [unite]
+" nmap [unite] <Nop>
+" nmap <C-J> [unite]
 
 function! s:parse_git_root_option(input) "{{{
   let reg_multi =  '\*\*/'

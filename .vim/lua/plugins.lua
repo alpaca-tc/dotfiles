@@ -1,93 +1,67 @@
-local M = {}
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
 
--- Check if packer.nvim is installed
--- Run PackerCompile if there are changes in this file
-local function packer_init()
-  local fn = vim.fn
-  local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
+local lazy_function = function(plugin_name, fns)
+  local group = vim.api.nvim_create_augroup("LazyFn-" .. plugin_name, { clear = true })
 
-  if fn.empty(fn.glob(install_path)) > 0 then
-    packer_bootstrap = fn.system({
-      "git",
-      "clone",
-      "https://github.com/wbthomason/packer.nvim",
-      install_path,
+  for fn in pairs(fns) do
+    vim.api.nvim_create_autocmd("FuncUndefined", {
+      group = group,
+      pattern = prefix,
+      once = true,
+      callback = function()
+        require("lazy").load { plugins = { plugin_name } }
+        -- vim.api.nvim_del_augroup_by_id(group)
+      end,
     })
   end
-
-  vim.cmd.packadd("packer.nvim")
+  -- 'vim.cmd[[au FuncUndefined %s ++once lua require("packer.load")({%s}, {}, _G.packer_plugins)]]',
 end
 
-packer_init()
-
-function M.setup()
-  -- Indicate first time installation
-  local packer_bootstrap = false
-
-  -- packer.nvim configuration
-  local augroup = vim.api.nvim_create_augroup("PackerPlugins", { clear = true })
-  vim.api.nvim_create_autocmd("BufWritePost", {
-    pattern = "plugins.lua",
-    group = augroup,
-    callback = function()
-      vim.cmd("luafile <afile>")
-      -- vim.cmd('PackerInstall')
-      vim.cmd("PackerCompile")
-    end,
-  })
-
-  -- Plugins
-  local function plugins(use)
-    -- Keep
-    use({ "wbthomason/packer.nvim", opt = false })
-
-    use({ "tpope/vim-repeat", opt = false })
-
-    use({
+require("lazy").setup(
+  {
+    { "tpope/vim-repeat", lazy = false },
+    { "cocopon/iceberg.vim", lazy = false },
+    {
       "Shougo/vimproc.vim",
-      fn = { "vimproc#system", "vimproc#system_bg" },
-      run = "make",
-    })
-
-    use({
+      build = "make",
+      init = function()
+        lazy_function('vimproc.vim', { "vimproc#system", "vimproc#system_bg" })
+      end
+    },
+    {
       "vim-jp/vital.vim",
-      fn = { "vital#of", "vital#vital#new" },
       cmd = "Vitalize",
-    })
-
-    use({
-      "cocopon/iceberg.vim",
-      opt = false,
-    })
-
-    use({
-      "alpaca-tc/alpaca_deepl.vim",
-      run = ":UpdateRemotePlugins",
-      cmd = { "Deepl" },
-      requires = { "mattn/webapi-vim" },
-      wants = { "webapi-vim" },
-    })
-
-    use({
+      init = function()
+        lazy_function('vital.vim', { "vital#of", "vital#vital#new" })
+      end
+    },
+    {
       "tyru/open-browser.vim",
       cmd = { "OpenBrowserSearch", "OpenBrowser", "OpenBrowserSmartSearch" },
       keys = { "<Plug>(openbrowser-open)" },
-      fn = { "openbrowser#open" },
-      setup = function()
+      init = function()
+        lazy_function('open-browser.vim', { "openbrowser#open" })
         vim.keymap.set("n", ",o", "<Plug>(openbrowser-open)")
         vim.keymap.set("x", ",o", "<Plug>(openbrowser-open)")
       end,
-    })
-
-    use({
-      "mattn/webapi-vim",
-      fn = { "webapi#json#encode", "webapi#json#decode", "webapi#http#get" },
-    })
-
-    use({
+    },
+    {
       "kana/vim-arpeggio",
       event = { "InsertEnter" },
-      fn = { "arpeggio#map" },
+      init = function()
+        lazy_function('vim-arpeggio', { "arpeggio#map" })
+      end,
       config = function()
         local escape = "<Esc>:nohlsearch<CR>"
         vim.fn["arpeggio#map"]("i", "s", 0, "jk", escape)
@@ -95,14 +69,27 @@ function M.setup()
         vim.fn["arpeggio#map"]("x", "s", 0, "jk", escape)
         vim.fn["arpeggio#map"]("c", "s", 0, "jk", escape)
       end,
-    })
-
-    use({
+    },
+    {
+      "alpaca-tc/alpaca_deepl.vim",
+      build = ":UpdateRemotePlugins",
+      cmd = { "Deepl" },
+      dependencies = { "mattn/webapi-vim", "mattn/webapi-vim" },
+    },
+    {
+      "mattn/webapi-vim",
+      init = function()
+        lazy_function('webapi-vim', { "webapi#json#encode", "webapi#json#decode", "webapi#http#get" })
+      end,
+    },
+    {
       "thinca/vim-quickrun",
       cmd = { "QuickRun" },
-      requires = { { "alpaca-tc/vim-quickrun-neovim-job", branch = "with_env" } },
-      wants = { "vim-quickrun-neovim-job", "alpaca_window.vim" },
-      setup = function()
+      dependencies = {
+        "alpaca-tc/vim-quickrun-neovim-job",
+        "alpaca-tc/alpaca_window.vim",
+      },
+      init = function()
         vim.keymap.set("n", ",r", ":QuickRun<CR>", { silent = true, noremap = true })
       end,
       config = function()
@@ -154,9 +141,44 @@ function M.setup()
           end,
         })
       end,
-    })
+    },
+    {
+      "alpaca-tc/alpaca_window.vim",
+      keys = {
+        "<Plug>(alpaca_window_tabnew)",
+        "<Plug>(alpaca_window_move_buffer_into_last_tab)",
+        "<Plug>(alpaca_window_smart_new)",
+      },
+      init = function()
+        lazy_function('alpaca_window.vim', {
+          "alpaca_window#set_smart_close",
+          "alpaca_window#smart_close",
+          "alpaca_window#open_buffer",
+          "alpaca_window#util#fold_buffer_automatically",
+        })
 
-    use({
+        vim.g.alpaca_window_default_filetype = "ruby"
+        vim.g.alpaca_window_max_height = vim.fn.winheight(0)
+        vim.g.alpaca_window_max_width = vim.fn.winwidth(0)
+
+        vim.keymap.set("n", "tc", "<Plug>(alpaca_window_tabnew)", { silent = true })
+        vim.keymap.set("n", "tw", "<Plug>(alpaca_window_move_buffer_into_last_tab)")
+
+        local group = vim.api.nvim_create_augroup("PackerAlpacaWindow", { clear = true })
+        vim.api.nvim_create_autocmd("FileType", {
+          pattern = "qf",
+          group = group,
+          callback = function()
+            vim.fn["alpaca_window#set_smart_close"]()
+          end,
+        })
+      end,
+    },
+    {
+      "alpaca-tc/vim-quickrun-neovim-job",
+      branch = "with_env",
+    },
+    {
       "echasnovski/mini.nvim",
       branch = "stable",
       event = { "BufEnter" },
@@ -175,12 +197,11 @@ function M.setup()
           },
         })
       end,
-    })
-
-    use({
+    },
+    {
       "osyo-manga/vim-over",
       cmd = { "OverCommandLine", "OverCommandLineNoremap" },
-      setup = function()
+      init = function()
         vim.keymap.set("n", "re", ":OverCommandLine<CR>%s!!!g<Left><Left><Left>")
         vim.keymap.set("x", ":s", ":OverCommandLine<CR>s!!!g<Left><Left><Left>")
         vim.keymap.set(
@@ -205,14 +226,16 @@ function M.setup()
         vim.cmd("OverCommandLineNoremap <C-J> <Plug>(over-cmdline-substitute-jump-pattern)")
         vim.cmd("OverCommandLineNoremap <C-K> <Plug>(over-cmdline-substitute-jump-string)")
       end,
-    })
-
-    use({
+    },
+    {
       "itchyny/lightline.vim",
-      wants = { "git-vim" },
+      dependencies = {
+        "alpaca-tc/git-vim"
+      },
       event = { "InsertEnter" },
-      fn = { "lightline#update", "lightline#highlight" },
-      setup = function()
+      init = function()
+        lazy_function('lightline.vim', { "lightline#update", "lightline#highlight" })
+
         local function reltime()
           return vim.fn.str2float(vim.fn.reltimestr(vim.fn.reltime()))
         end
@@ -318,9 +341,8 @@ function M.setup()
       config = function()
         vim.fn["lightline#update"]()
       end,
-    })
-
-    use({
+    },
+    {
       "vim-scripts/camelcasemotion",
       keys = {
         "<Plug>CamelCaseMotion_w",
@@ -330,7 +352,7 @@ function M.setup()
         "<Plug>CamelCaseMotion_ib",
         "<Plug>CamelCaseMotion_ie",
       },
-      setup = function()
+      init = function()
         vim.keymap.set({ "n", "v", "o" }, "w", "<Plug>CamelCaseMotion_w", { silent = true })
         vim.keymap.set({ "n", "v", "o" }, "b", "<Plug>CamelCaseMotion_b", { silent = true })
         vim.keymap.set({ "n", "v", "o" }, "e", "<Plug>CamelCaseMotion_e", { silent = true })
@@ -345,9 +367,26 @@ function M.setup()
         vim.keymap.set("o", "ie", "<Plug>CamelCaseMotion_ie", { silent = true })
         vim.keymap.set("x", "ie", "<Plug>CamelCaseMotion_ie", { silent = true })
       end,
-    })
+    },
+    {
+      "alpaca-tc/git-vim",
+      dependencies = {
+        "Shougo/vimproc.vim"
+      },
+      cmd = { "GitDiff", "GitVimDiff", "GitCheckout", "GitAdd", "GitLog", "GitCommit", "GitBlame", "GitPush" },
+      init = function()
+        lazy_function('git-vim', { "git#get_current_branch", "git#add", "git#diff" })
 
-    use({
+        vim.keymap.set("n", "ga", ":<C-U>GitAdd<CR>")
+        vim.keymap.set("n", "gD", ":<C-U>GitDiff<Space>")
+        vim.keymap.set("n", "gDD", ":<C-U>GitDiff HEAD<CR>")
+
+        vim.g.git_command_edit = "vnew"
+        vim.g.git_no_default_mappings = 1
+        vim.g.git_use_vimproc = 1
+      end,
+    },
+    {
       "tpope/vim-surround",
       keys = {
         "<Plug>Dsurround",
@@ -360,7 +399,7 @@ function M.setup()
         "<Plug>VgSurround",
         "<Plug>VSurround",
       },
-      setup = function()
+      init = function()
         vim.g.surround_no_mappings = 1
 
         vim.keymap.set("n", "cs", "<Plug>Csurround", { remap = true })
@@ -383,7 +422,7 @@ function M.setup()
             ["{"] = "{ \r }",
             ["#"] = "#{\r}",
           },
-          [vim.fn["join"](vim.g.my.ft.ruby_files, ",")] = {
+          [vim.fn["join"]({ 'ruby', 'Gemfile', 'haml', 'eruby', 'yaml', 'ruby.rspec', 'slim' }, ",")] = {
             ["#"] = "#{\r}",
             ["%"] = "<% \r %>",
             ["-"] = "<% \r -%>",
@@ -462,14 +501,14 @@ function M.setup()
         })
         define_variables_for_surround()
       end,
-    })
-
+    },
     -- Git
-    use({
+    {
       "tpope/vim-fugitive",
       cmd = { "Git" },
-      fn = { "fugitive#head" },
-      setup = function()
+      init = function()
+        lazy_function('vim-fugitive', { "fugitive#head" })
+
         vim.keymap.set("n", "gM", ":Git commit --amend<CR>", { silent = true })
         vim.keymap.set("n", "gb", ":Git blame<CR>", { silent = true })
         vim.keymap.set("n", "gm", ":Git commit<CR>", { silent = true })
@@ -491,42 +530,24 @@ function M.setup()
           end,
         })
       end,
-    })
-
-    use({
-      "alpaca-tc/git-vim",
-      cmd = { "GitDiff", "GitVimDiff", "GitCheckout", "GitAdd", "GitLog", "GitCommit", "GitBlame", "GitPush" },
-      fn = { "git#get_current_branch", "git#add", "git#diff" },
-      setup = function()
-        vim.keymap.set("n", "ga", ":<C-U>GitAdd<CR>")
-        vim.keymap.set("n", "gD", ":<C-U>GitDiff<Space>")
-        vim.keymap.set("n", "gDD", ":<C-U>GitDiff HEAD<CR>")
-
-        vim.g.git_command_edit = "vnew"
-        vim.g.git_no_default_mappings = 1
-        vim.g.git_use_vimproc = 1
-      end,
-    })
-
+    },
     -- ddu
-    use({
+    {
       "Shougo/ddu.vim",
-      requires = {
+      dependencies = {
+        "vim-denops/denops.vim",
+        "Shougo/ddu-source-action",
         "vim-denops/denops.vim",
       },
-      after = {
-        "ddu-source-action",
-      },
-      wants = {
-        "denops.vim",
-      },
-      fn = {
-        "ddu#start",
-        "ddu#custom#get_local",
-        "ddu#custom#patch_global",
-        "ddu#custom#patch_local",
-        "ddu#custom#action",
-      },
+      init = function()
+        lazy_function('ddu.vim', {
+          "ddu#start",
+          "ddu#custom#get_local",
+          "ddu#custom#patch_global",
+          "ddu#custom#patch_local",
+          "ddu#custom#action",
+        })
+      end,
       config = function()
         vim.fn["ddu#custom#patch_global"]({
           sourceOptions = {
@@ -537,9 +558,8 @@ function M.setup()
           },
         })
       end,
-    })
-
-    use({
+    },
+    {
       "Shougo/ddu-kind-file",
       config = function()
         vim.fn["ddu#custom#patch_global"]({
@@ -558,6 +578,7 @@ function M.setup()
           end
 
           local input = vim.fn["input"]("Pattern: ")
+          require("lazy").load { plugins = { 'ddu-source-rg' } }
 
           vim.fn["ddu#start"]({
             name = "rg",
@@ -593,11 +614,12 @@ function M.setup()
         --   endif
         -- end)
       end,
-    })
-
-    use({
+    },
+    {
       "Shougo/ddu-ui-ff",
-      wants = { "lightline.vim" },
+      dependencies = {
+        "itchyny/lightline.vim"
+      },
       config = function()
         vim.fn["ddu#custom#patch_global"]({
           ui = "ff",
@@ -948,11 +970,10 @@ function M.setup()
           end,
         })
       end,
-    })
-
-    use({
+    },
+    {
       "Shougo/ddu-ui-filer",
-      run = "brew install desktop-file-utils",
+      build = "brew install desktop-file-utils",
       config = function()
         vim.fn["ddu#custom#patch_global"]({
           uiParams = {
@@ -1108,9 +1129,8 @@ function M.setup()
           end,
         })
       end,
-    })
-
-    use({
+    },
+    {
       "Shougo/ddu-source-action",
       config = function()
         vim.fn["ddu#custom#patch_global"]({
@@ -1121,21 +1141,20 @@ function M.setup()
           },
         })
       end,
-    })
-
-    use({
+    },
+    {
       "flow6852/ddu-source-qf",
-      wants = {
-        "ddu.vim",
-        "ddu-ui-ff",
-        "ddu-kind-file",
-        "ddu-filter-matcher_regexp",
-        "ddu-source-action",
-        "nvim-lspconfig",
+      dependencies = {
+        "Shougo/ddu.vim",
+        "Shougo/ddu-ui-ff",
+        "Shougo/ddu-kind-file",
+        "alpaca-tc/ddu-filter-matcher_regexp",
+        "Shougo/ddu-source-action",
+        "neovim/nvim-lspconfig",
       },
       keys = {
-        { "n", "tf" },
-        { "n", "tt" },
+        { "tf" },
+        { "tt" },
       },
       config = function()
         vim.fn["ddu#custom#patch_local"]("qf", {
@@ -1179,22 +1198,21 @@ function M.setup()
           vim.lsp.buf.definition({ on_list = on_list })
         end)
       end
-    })
-
-    use({
+    },
+    {
       "uga-rosa/ddu-source-lsp",
-      wants = {
-        "ddu.vim",
-        "ddu-ui-ff",
-        "ddu-kind-file",
-        "ddu-filter-matcher_regexp",
-        "ddu-source-action",
-        "nvim-lspconfig",
+      dependencies = {
+        "Shougo/ddu.vim",
+        "Shougo/ddu-ui-ff",
+        "Shougo/ddu-kind-file",
+        "alpaca-tc/ddu-filter-matcher_regexp",
+        "Shougo/ddu-source-action",
+        "neovim/nvim-lspconfig",
       },
       keys = {
-        { "n", "sw" },
-        { "n", "co" },
-        { "n", "ci" },
+        { "sw" },
+        { "co" },
+        { "ci" },
       },
       config = function()
         vim.fn["ddu#custom#patch_global"]({
@@ -1271,22 +1289,19 @@ function M.setup()
           })
         end, { silent = true })
       end
-    })
-
-    use({
+    },
+    {
       "shun/ddu-source-buffer",
-      requires = {
+      dependencies = {
         "Shougo/ddu-filter-sorter_alpha",
-      },
-      wants = {
-        "ddu.vim",
-        "ddu-ui-ff",
-        "ddu-kind-file",
-        "ddu-filter-matcher_regexp",
-        "ddu-source-action",
+        "Shougo/ddu.vim",
+        "Shougo/ddu-ui-ff",
+        "Shougo/ddu-kind-file",
+        "alpaca-tc/ddu-filter-matcher_regexp",
+        "Shougo/ddu-source-action",
       },
       keys = {
-        { "n", "<C-J>b" },
+        { "<C-J>b" },
       },
       config = function()
         vim.fn["ddu#custom#patch_local"]("buffer", {
@@ -1297,26 +1312,25 @@ function M.setup()
         vim.keymap.set(
           "n",
           "<C-J>b",
-          ":call ddu#start(#{ name: 'buffer' })<CR>",
+          function()
+            vim.fn["ddu#start"]({ name = "buffer" })
+          end,
           { noremap = true, silent = true }
         )
       end,
-    })
-
-    use({
+    },
+    {
       "k-ota106/ddu-source-marks",
-      requires = {
+      dependencies = {
         "Shougo/ddu-filter-sorter_alpha",
-      },
-      wants = {
-        "ddu.vim",
-        "ddu-ui-ff",
-        "ddu-kind-file",
-        "ddu-filter-matcher_regexp",
-        "ddu-source-action",
+        "Shougo/ddu.vim",
+        "Shougo/ddu-ui-ff",
+        "Shougo/ddu-kind-file",
+        "alpaca-tc/ddu-filter-matcher_regexp",
+        "Shougo/ddu-source-action",
       },
       keys = {
-        { "n", "<C-J>m" },
+        { "<C-J>m" },
       },
       config = function()
         vim.fn["ddu#custom#patch_local"]("marks", {
@@ -1331,29 +1345,23 @@ function M.setup()
           { noremap = true, silent = true }
         )
       end,
-    })
-
-    use({
+    },
+    {
       "Shougo/ddu-source-file",
-      requires = {
+      dependencies = {
         "ryota2357/ddu-column-icon_filename",
         "Shougo/ddu-column-filename",
         "alpaca-tc/ddu-filter-sorter_directory_file",
         "alpaca-tc/ddu-filter-dot",
-      },
-      wants = {
-        "ddu.vim",
-        "ddu-ui-filer",
-        "ddu-kind-file",
-        "ddu-filter-matcher_regexp",
-        "ddu-source-action",
-        "ddu-column-filename",
-        "ddu-filter-sorter_alpha",
-        "ddu-filter-sorter_directory_file",
-        "ddu-filter-dot",
+        "Shougo/ddu.vim",
+        "Shougo/ddu-ui-filer",
+        "Shougo/ddu-kind-file",
+        "alpaca-tc/ddu-filter-matcher_regexp",
+        "Shougo/ddu-source-action",
+        "Shougo/ddu-filter-sorter_alpha",
       },
       keys = {
-        { "n", "<C-J>f" },
+        { "<C-J>f" },
       },
       config = function()
         vim.keymap.set("n", "<C-J>f", function()
@@ -1384,20 +1392,17 @@ function M.setup()
           })
         end, { noremap = true, silent = true })
       end,
-    })
-
-    use({
+    },
+    {
       "Shougo/ddu-source-file_rec",
-      requires = {
+      dependencies = {
         "Shougo/ddu-filter-sorter_alpha",
-      },
-      wants = {
-        "ddu.vim",
-        "ddu-ui-ff",
-        "ddu-kind-file",
-        "ddu-filter-matcher_regexp",
-        "ddu-source-action",
-        "neosnippet.vim",
+        "Shougo/ddu.vim",
+        "Shougo/ddu-ui-ff",
+        "Shougo/ddu-kind-file",
+        "alpaca-tc/ddu-filter-matcher_regexp",
+        "Shougo/ddu-source-action",
+        "Shougo/neosnippet.vim",
       },
       event = "User Rails",
       config = function()
@@ -1573,19 +1578,18 @@ function M.setup()
 
         setup_rails()
       end,
-    })
-
-    use({
+    },
+    {
       "alpaca-tc/ddu-source-mr",
-      wants = {
-        "ddu.vim",
-        "ddu-ui-ff",
-        "ddu-kind-file",
-        "ddu-filter-matcher_regexp",
-        "ddu-source-action",
+      dependencies = {
+        "Shougo/ddu.vim",
+        "Shougo/ddu-ui-ff",
+        "Shougo/ddu-kind-file",
+        "alpaca-tc/ddu-filter-matcher_regexp",
+        "Shougo/ddu-source-action",
       },
       keys = {
-        { "n", "<C-J>j" },
+        { "<C-J>j" },
       },
       config = function()
         vim.fn["ddu#custom#patch_local"]("mr", {
@@ -1605,24 +1609,21 @@ function M.setup()
 
         vim.keymap.set("n", "<C-J>j", ":call ddu#start(#{ name: 'mr' })<CR>", { noremap = true, silent = true })
       end,
-    })
-
-    use({
+    },
+    {
       "shun/ddu-source-rg",
-      requires = {
+      dependencies = {
         "Shougo/ddu-filter-converter_display_word",
-      },
-      wants = {
-        "ddu.vim",
-        "ddu-ui-ff",
-        "ddu-kind-file",
-        "ddu-filter-matcher_regexp",
-        "ddu-source-action",
+        "Shougo/ddu.vim",
+        "Shougo/ddu-ui-ff",
+        "Shougo/ddu-kind-file",
+        "alpaca-tc/ddu-filter-matcher_regexp",
+        "Shougo/ddu-source-action",
         "ddu-filter-converter_display_word",
       },
       keys = {
-        { "n", "gr" },
-        { "n", "gR" },
+        { "gr" },
+        { "gR" },
       },
       config = function()
         vim.fn["ddu#custom#patch_local"]("rg", {
@@ -1649,6 +1650,8 @@ function M.setup()
         })
 
         local function ddu_start_rg(input)
+          require("lazy").load { plugins = { 'ddu-source-rg' } }
+
           local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
           local options = {
             name = "rg",
@@ -1692,19 +1695,18 @@ function M.setup()
           ddu_start_rg(input)
         end, { noremap = true, silent = true })
       end,
-    })
-
-    use({
+    },
+    {
       "Shougo/ddu-source-line",
-      wants = {
-        "ddu.vim",
-        "ddu-ui-ff",
-        "ddu-kind-file",
-        "ddu-filter-matcher_regexp",
-        "ddu-source-action",
+      dependencies = {
+        "Shougo/ddu.vim",
+        "Shougo/ddu-ui-ff",
+        "Shougo/ddu-kind-file",
+        "alpaca-tc/ddu-filter-matcher_regexp",
+        "Shougo/ddu-source-action",
       },
       keys = {
-        { "n", "g/" },
+        { "g/" },
       },
       config = function()
         vim.keymap.set(
@@ -1714,21 +1716,20 @@ function M.setup()
           { noremap = true, silent = true }
         )
       end,
-    })
-
-    use({
+    },
+    {
       "alpaca-tc/ddu-source-git",
-      wants = {
-        "ddu.vim",
-        "ddu-ui-ff",
-        "ddu-kind-file",
-        "ddu-filter-matcher_regexp",
-        "ddu-source-action",
+      dependencies = {
+        "Shougo/ddu.vim",
+        "Shougo/ddu-ui-ff",
+        "Shougo/ddu-kind-file",
+        "alpaca-tc/ddu-filter-matcher_regexp",
+        "Shougo/ddu-source-action",
       },
       keys = {
-        { "n", "gl" },
-        { "n", "gs" },
-        { "n", "gh" },
+        { "gl" },
+        { "gs" },
+        { "gh" },
       },
       config = function()
         vim.fn["ddu#custom#patch_global"]({
@@ -1807,13 +1808,13 @@ function M.setup()
           end,
         })
       end,
-    })
-
-    use({
+    },
+    {
       "lambdalisue/mr.vim",
-      fn = { "mr#mrr#list", "mr#mrw#list", "mr#mru#list" },
       event = { "BufEnter" },
-      setup = function()
+      init = function()
+        lazy_function('mr.vim', { "mr#mrr#list", "mr#mrw#list", "mr#mru#list" })
+
         local function start_with(str, start)
           return string.sub(str, 1, string.len(start)) == start
         end
@@ -1841,9 +1842,8 @@ function M.setup()
           end,
         }
       end,
-    })
-
-    use({
+    },
+    {
       "alpaca-tc/ddu-filter-matcher_regexp",
       config = function()
         vim.fn["ddu#custom#patch_global"]({
@@ -1854,177 +1854,13 @@ function M.setup()
           },
         })
       end,
-    })
-
+    },
     -- completion / LSP
-    use({
-      "github/copilot.vim",
-      cmd = { "Copilot" },
-      event = { "InsertEnter" },
-      fn = { "copilot#GetDisplayedSuggestion" },
-      setup = function()
-        vim.g["copilot_filetypes"] = {
-          ["*"] = false,
-          rust = true,
-          go = true,
-          vim = true,
-          ruby = true,
-          deno = true,
-          typescript = true,
-          javascript = true,
-          python = true,
-          lua = true,
-          sh = true,
-          zsh = true,
-          bash = true,
-          markdown = true,
-          cs = true,
-          vb = true,
-          css = true,
-        }
-
-        -- vim.g["copilot_node_command"] = ""
-        vim.g["copilot_no_maps"] = true
-        vim.g["copilot_no_tab_map"] = true
-        vim.g["copilot_assume_mapped"] = true
-
-        -- vim.keymap.set("n", "C", 'copilot#Accept("\\<CR>")', { expr = true })
-        -- https://github.com/orgs/community/discussions/29817
-        vim.api.nvim_set_keymap(
-          "i",
-          "<C-_>",
-          "copilot#Accept()",
-          { expr = true, nowait = true, script = true, noremap = true }
-        )
-
-        local dissmissAndEsc = function()
-          -- function! alpaca#copilot#is_displayed()
-          --   let suggestion = copilot#GetDisplayedSuggestion()
-          --   return !empty(suggestion.text)
-          -- endfunction
-          if vim.fn["alpaca#copilot#is_displayed"]() ~= 0 then
-            vim.fn["copilot#Dismiss"]()
-          end
-
-          return "<Esc>"
-        end
-        vim.keymap.set("n", "<Esc>", dissmissAndEsc, { expr = true, noremap = true })
-        vim.keymap.set("i", "<Esc>", dissmissAndEsc, { expr = true, noremap = true })
-        -- vim.keymap.set("i", "<C-X><C-X>", "copilot#Suggest()", { expr = true, noremap = true })
-      end,
-    })
-
-    use({
-      "nvimtools/none-ls.nvim",
-      requires = { "nvim-lua/plenary.nvim" },
-      wants = {
-        "plenary.nvim",
-        -- "typescript.nvim",
-      },
-      event = { "InsertEnter" },
-      config = function()
-        require("null-ls").setup({
-          -- capabilities = capabilities,
-          sources = {
-            require("null-ls").builtins.formatting.stylua,
-            require("null-ls").builtins.diagnostics.rubocop.with({
-              command = "bundle",
-              args = {
-                "exec",
-                "rubocop",
-                "-f",
-                "json",
-                "--force-exclusion",
-                "--stdin",
-                "$FILENAME",
-                "--disable-pending-cops",
-              },
-              extra_args = function(params)
-                local path = vim.fn.expand("%:p")
-
-                if require("string_extend").contains(path, "utsuwa") then
-                  return { "--server" }
-                else
-                  return {}
-                end
-              end,
-              condition = function(utils)
-                return utils.root_has_file({ ".rubocop.yml" })
-              end,
-            }),
-            -- require('null-ls').builtins.diagnostics.luacheck.with({
-            --   extra_args = {"--globals", "vim", "--globals", "awesome"},
-            -- }),
-            require("null-ls").builtins.diagnostics.yamllint,
-            require("null-ls").builtins.formatting.gofmt,
-            -- require("null-ls").builtins.formatting.rustfmt,
-            -- require("typescript.extensions.null-ls.code-actions"),
-            require("null-ls").builtins.formatting.rubocop.with({
-              command = "bundle",
-              args = {
-                "exec",
-                "rubocop",
-                "--auto-correct-all",
-                "-f",
-                "quiet",
-                "--stderr",
-                "--stdin",
-                "$FILENAME",
-                "--disable-pending-cops",
-              },
-              condition = function(utils)
-                return utils.root_has_file({ ".rubocop.yml" })
-              end,
-            }),
-          },
-        })
-
-        vim.api.nvim_create_user_command("NullLsToggle", function()
-          require("null-ls").toggle("")
-        end, {})
-      end,
-    })
-
-    -- use({
-    --   "jose-elias-alvarez/typescript.nvim",
-    --   wants = {
-    --     "nvim-lspconfig",
-    --   },
-    --   event = { "InsertEnter" },
-    --   ft = { "typescript", "typescript.tsx" },
-    --   cmd = { "TypescriptGoToSourceDefinition", "TypescriptRenameFile", "TypescriptAddMissingImports" },
-    --   setup = function()
-    --     local group = vim.api.nvim_create_augroup("PackerMason", { clear = true })
-    --
-    --     vim.api.nvim_create_autocmd("FileType", {
-    --       group = group,
-    --       pattern = { "javascript", "typescript", "typescriptreact", "typescript.jsx" },
-    --       callback = function()
-    --         vim.keymap.set("n", "ti", "<cmd>TypescriptGoToSourceDefinition<CR>", { buffer = true })
-    --         vim.keymap.set("n", "rf", "<cmd>TypescriptRenameFile<CR>", { buffer = true })
-    --         -- TypescriptAddMissingImports
-    --       end,
-    --     })
-    --   end,
-    --   config = function()
-    --     require("typescript").setup({
-    --       disable_commands = false, -- prevent the plugin from creating Vim commands
-    --       -- debug = false, -- enable debug logging for commands
-    --       go_to_source_definition = {
-    --         fallback = true, -- fall back to standard LSP definition on failure
-    --       },
-    --       -- server = { -- pass options to lspconfig's setup method
-    --       --   on_attach = ...,
-    --       -- },
-    --     })
-    --   end,
-    -- })
-
-    use({
+    {
       "neovim/nvim-lspconfig",
       event = { "InsertEnter" },
       cmd = { "LspInfo", "LspStart", "LspLog", "LspStop" },
-      setup = function()
+      init = function()
         vim.opt_local.signcolumn = "no"
 
         vim.keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.declaration()<CR>", { silent = true })
@@ -2168,15 +2004,16 @@ function M.setup()
           end,
         })
       end
-    })
-
-    use({
+    },
+    {
       "williamboman/mason.nvim",
       event = { "InsertEnter" },
-      requires = { "williamboman/mason-lspconfig.nvim" },
-      wants = { "nvim-lspconfig", "mason-lspconfig.nvim" },
+      dependencies = {
+        "williamboman/mason-lspconfig.nvim",
+        "neovim/nvim-lspconfig",
+      },
       cmd = { "Mason", "MasonInstall", "MasonUninstall", "MasonUninstallAll", "MasonLog" },
-      run = function()
+      build = function()
         vim.cmd("MasonInstall lua-language-server")
         vim.cmd("MasonInstall luacheck")
         vim.cmd("MasonInstall typescript-language-server")
@@ -2409,24 +2246,24 @@ function M.setup()
           callback = start_lsp,
         })
       end,
-    })
-
-    use({
+    },
+    {
       "Shougo/neosnippet.vim",
+      dependencies = { "Shougo/context_filetype.vim" },
       cmd = { "NeoSnippetEdit", "NeoSnippetSource", "NeoSnippetClearMarkers" },
       event = { "InsertEnter" },
       ft = { "snippet" },
       cmd = { "NeoSnippetSource" },
-      fn = {
-        "neosnippet#get_snippets",
-        "neosnippet#expandable_or_jumpable",
-        "neosnippet#mappings#jump_or_expand_impl",
-      },
-      requires = { "Shougo/context_filetype.vim" },
-      setup = function()
+      init = function()
+        lazy_function('neosnippet.vim', {
+          "neosnippet#get_snippets",
+          "neosnippet#expandable_or_jumpable",
+          "neosnippet#mappings#jump_or_expand_impl",
+        })
+
         vim.g["neosnippet#disable_runtime_snippets"] = { ruby = 1 }
         vim.g["neosnippet#enable_preview"] = 1
-        vim.g["neosnippet#snippets_directory"] = vim.g.my.dir.snippets
+        vim.g["neosnippet#snippets_directory"] = vim.fn['expand']('~/.vim/snippet')
 
         vim.keymap.set("i", "<C-F>", "<Plug>(neosnippet_expand_or_jump)", { silent = true })
         vim.keymap.set("s", "<C-F>", "<Plug>(neosnippet_expand_or_jump)", { silent = true })
@@ -2450,11 +2287,135 @@ function M.setup()
           end,
         })
       end,
-    })
+    },
+    {
+      "github/copilot.vim",
+      cmd = { "Copilot" },
+      event = { "InsertEnter" },
+      init = function()
+        lazy_function('copilot.vim', { "copilot#GetDisplayedSuggestion" })
 
-    use({
+        vim.g["copilot_filetypes"] = {
+          ["*"] = false,
+          rust = true,
+          go = true,
+          vim = true,
+          ruby = true,
+          deno = true,
+          typescript = true,
+          javascript = true,
+          python = true,
+          lua = true,
+          sh = true,
+          zsh = true,
+          bash = true,
+          markdown = true,
+          cs = true,
+          vb = true,
+          css = true,
+        }
+
+        -- vim.g["copilot_node_command"] = ""
+        vim.g["copilot_no_maps"] = true
+        vim.g["copilot_no_tab_map"] = true
+        vim.g["copilot_assume_mapped"] = true
+
+        -- vim.keymap.set("n", "C", 'copilot#Accept("\\<CR>")', { expr = true })
+        -- https://github.com/orgs/community/discussions/29817
+        vim.api.nvim_set_keymap(
+          "i",
+          "<C-_>",
+          "copilot#Accept()",
+          { expr = true, nowait = true, script = true, noremap = true }
+        )
+
+        local dissmissAndEsc = function()
+          -- function! alpaca#copilot#is_displayed()
+          --   let suggestion = copilot#GetDisplayedSuggestion()
+          --   return !empty(suggestion.text)
+          -- endfunction
+          if vim.fn["alpaca#copilot#is_displayed"]() ~= 0 then
+            vim.fn["copilot#Dismiss"]()
+          end
+
+          return "<Esc>"
+        end
+        vim.keymap.set("n", "<Esc>", dissmissAndEsc, { expr = true, noremap = true })
+        vim.keymap.set("i", "<Esc>", dissmissAndEsc, { expr = true, noremap = true })
+        -- vim.keymap.set("i", "<C-X><C-X>", "copilot#Suggest()", { expr = true, noremap = true })
+      end,
+    },
+    {
+      "nvimtools/none-ls.nvim",
+      dependencies = {
+        "nvim-lua/plenary.nvim"
+      },
+      event = { "InsertEnter" },
+      config = function()
+        require("null-ls").setup({
+          -- capabilities = capabilities,
+          sources = {
+            require("null-ls").builtins.formatting.stylua,
+            require("null-ls").builtins.diagnostics.rubocop.with({
+              command = "bundle",
+              args = {
+                "exec",
+                "rubocop",
+                "-f",
+                "json",
+                "--force-exclusion",
+                "--stdin",
+                "$FILENAME",
+                "--disable-pending-cops",
+              },
+              extra_args = function(params)
+                local path = vim.fn.expand("%:p")
+
+                if require("string_extend").contains(path, "utsuwa") then
+                  return { "--server" }
+                else
+                  return {}
+                end
+              end,
+              condition = function(utils)
+                return utils.root_has_file({ ".rubocop.yml" })
+              end,
+            }),
+            -- require('null-ls').builtins.diagnostics.luacheck.with({
+            --   extra_args = {"--globals", "vim", "--globals", "awesome"},
+            -- }),
+            require("null-ls").builtins.diagnostics.yamllint,
+            require("null-ls").builtins.formatting.gofmt,
+            -- require("null-ls").builtins.formatting.rustfmt,
+            -- require("typescript.extensions.null-ls.code-actions"),
+            require("null-ls").builtins.formatting.rubocop.with({
+              command = "bundle",
+              args = {
+                "exec",
+                "rubocop",
+                "--auto-correct-all",
+                "-f",
+                "quiet",
+                "--stderr",
+                "--stdin",
+                "$FILENAME",
+                "--disable-pending-cops",
+              },
+              condition = function(utils)
+                return utils.root_has_file({ ".rubocop.yml" })
+              end,
+            }),
+          },
+        })
+
+        vim.api.nvim_create_user_command("NullLsToggle", function()
+          require("null-ls").toggle("")
+        end, {})
+      end,
+    },
+    {
       "Shougo/ddc.vim",
-      requires = {
+      dependencies = {
         "vim-denops/denops.vim",
         "Shougo/pum.vim",
         "LumaKernel/ddc-file",
@@ -2467,20 +2428,6 @@ function M.setup()
         "matsui54/ddc-buffer",
         "matsui54/ddc-dictionary",
         "Shougo/neosnippet.vim",
-      },
-      wants = {
-        "denops.vim",
-        "pum.vim",
-        "ddc-file",
-        "ddc-matcher_head",
-        "ddc-sorter_rank",
-        "ddc-converter_remove_overlap",
-        "ddc-ui-native",
-        "neco-vim",
-        "ddc-source-lsp",
-        "ddc-buffer",
-        "ddc-dictionary",
-        "neosnippet.vim",
       },
       event = { "InsertEnter" },
       config = function()
@@ -2594,23 +2541,21 @@ function M.setup()
         vim.keymap.set("i", "<C-X><C-F>", "ddc#map#manual_complete('file')", { expr = true })
         vim.keymap.set("i", "<C-X><C-O>", "ddc#map#manual_complete('lsp')", { expr = true })
       end,
-    })
-
-    use({
+    },
+    {
       "Shougo/neco-vim",
       ft = { "vim" },
-    })
-
+    },
     -- utilities
-    use({
+    {
       "Shougo/vimfiler",
       cmd = { "VimFiler", "VimFilerBufferDir", "VimFilerExplorer", "VimFilerCreate" },
-      wants = {
-        "unite.vim",
-        "vimproc.vim",
+      dependencies = {
+        "Shougo/unite.vim",
+        "Shougo/vimproc.vim",
       },
-      setup = function()
-        vim.g.vimfiler_data_directory = vim.g.my.dir.vimfiler
+      init = function()
+        vim.g.vimfiler_data_directory = vim.fn.expand('~/.cache/vim/vimfiler')
         vim.g.vimfiler_force_overwrite_statusline = 0
         vim.g.vimfiler_draw_files_limit = 0
         vim.g.vimfiler_safe_mode_by_default = 0
@@ -2773,6 +2718,7 @@ function M.setup()
             vim.keymap.set("n", "yy", "<Plug>(vimfiler_yank_full_path)", { buffer = true })
             vim.keymap.set("n", "M", "<Plug>(vimfiler_set_current_mask)", { buffer = true })
             vim.keymap.set("n", "gr", function()
+              require("lazy").load { plugins = { 'ddu-source-rg' } }
               local vimfiler = vim.b.vimfiler
               vim.fn["vimfiler#mappings#do_action"](vimfiler, "ddu-rg")
             end, { buffer = true })
@@ -2797,25 +2743,24 @@ function M.setup()
           end,
         })
       end,
-    })
-
+    },
     -- optional
-    use({
+    {
       "alpaca-tc/alpaca_github.vim",
+      dependencies = { "tyru/open-browser.vim" },
       cmd = { "GhFile", "GhPullRequestCurrentLine", "GhPullRequest" },
-      requires = { "tyru/open-browser.vim" },
-      setup = function()
+      init = function()
         vim.g["alpaca_github#host"] = "github"
         vim.keymap.set("n", ",go", ":GhFile<CR>")
         vim.keymap.set("x", ",go", ":GhFile<CR>")
         vim.keymap.set("n", ",gp", ":GhPullRequestCurrentLine<CR>")
       end,
-    })
-
-    use({
+    },
+    {
       "liuchengxu/vista.vim",
-      cmd = { "Vista", "Vista!", "Vista!!" },
-      setup = function()
+      -- cmd = { "Vista", "Vista!", "Vista!!" },
+      cmd = { "Vista" }, -- TODO
+      init = function()
         vim.keymap.set("n", "<Space>T", ":Vista!!<CR>", { noremap = true })
         vim.g.vista_default_executive = "nvim_lsp"
         vim.g["vista#renderer#enable_icon"] = 1
@@ -2847,12 +2792,12 @@ function M.setup()
           end,
         })
       end,
-    })
-
-    use({
+    },
+    {
       'simrat39/symbols-outline.nvim',
       cmd = { 'SymbolsOutline', 'SymbolsOutlineOpen', 'SymbolsOutlineClose' },
-      setup = function()
+      keys = { "<Space>t" },
+      init = function()
         vim.keymap.set("n", "<Space>t", ":SymbolsOutline<CR>", { noremap = true })
       end,
       config = function()
@@ -2920,14 +2865,12 @@ function M.setup()
           },
         })
       end
-    })
-
-    use({
+    },
+    {
       "alpaca-tc/nvim-miniyank",
       branch = "loop_cycle",
       keys = { "<Plug>(miniyank-autoput)", "<Plug>(miniyank-autoPut)" },
-      -- on_map = [['nx', '<Plug>(miniyank-autoput)'], ['nx', '<Plug>(miniyank-autoPut)']]
-      setup = function()
+      init = function()
         vim.g.miniyank_maxitems = 100
         vim.g.miniyank_loop_cycle = true
         vim.g.miniyank_echo_position = true
@@ -2939,12 +2882,12 @@ function M.setup()
         vim.keymap.set("n", "<C-P>", "<Plug>(miniyank-cycle)")
         vim.keymap.set("n", "<C-N>", "<Plug>(miniyank-cycleback)")
       end,
-    })
-
-    use({
+    },
+    {
       "alpaca-tc/alpaca-switch-file.vim",
-      fn = { "switch_file#next", "switch_file#prev" },
-      setup = function()
+      init = function()
+        lazy_function('alpaca-switch-file.vim', { "switch_file#next", "switch_file#prev"  })
+
         vim.g.switch_file_rules = {
           vim = { { "autoload/%\\.vim", "plugin/%\\.vim" } },
           ruby = {
@@ -2997,12 +2940,11 @@ function M.setup()
         vim.keymap.set("n", "<Space>a", ":call switch_file#next()<CR>")
         vim.keymap.set("n", "<Space>A", ":call switch_file#prev()<CR>")
       end,
-    })
-
-    use({
+    },
+    {
       "alpaca-tc/alpaca_remove_dust.vim",
       cmd = { "RemoveDustDisable", "RemoveDustEnable", "RemoveDust", "RemoveDustForce" },
-      setup = function()
+      init = function()
         vim.g.remove_dust_enable = 1
 
         local group = vim.api.nvim_create_augroup("PackerAlpacaRemoveDust", { clear = true })
@@ -3022,41 +2964,8 @@ function M.setup()
           end,
         })
       end,
-    })
-
-    use({
-      "alpaca-tc/alpaca_window.vim",
-      fn = {
-        "alpaca_window#set_smart_close",
-        "alpaca_window#smart_close",
-        "alpaca_window#open_buffer",
-        "alpaca_window#util#fold_buffer_automatically",
-      },
-      keys = {
-        "<Plug>(alpaca_window_tabnew)",
-        "<Plug>(alpaca_window_move_buffer_into_last_tab)",
-        "<Plug>(alpaca_window_smart_new)",
-      },
-      setup = function()
-        vim.g.alpaca_window_default_filetype = "ruby"
-        vim.g.alpaca_window_max_height = vim.fn.winheight(0)
-        vim.g.alpaca_window_max_width = vim.fn.winwidth(0)
-
-        vim.keymap.set("n", "tc", "<Plug>(alpaca_window_tabnew)", { silent = true })
-        vim.keymap.set("n", "tw", "<Plug>(alpaca_window_move_buffer_into_last_tab)")
-
-        local group = vim.api.nvim_create_augroup("PackerAlpacaWindow", { clear = true })
-        vim.api.nvim_create_autocmd("FileType", {
-          pattern = "qf",
-          group = group,
-          callback = function()
-            vim.fn["alpaca_window#set_smart_close"]()
-          end,
-        })
-      end,
-    })
-
-    use({
+    },
+    {
       'nvim-treesitter/nvim-treesitter',
       ft = {
         "typescript",
@@ -3064,7 +2973,7 @@ function M.setup()
         "javascript",
         "javascript.tsx",
       },
-      run = function()
+      build = function()
         vim.cmd("TSUpdate")
       end,
       config = function()
@@ -3079,18 +2988,18 @@ function M.setup()
           },
         })
       end,
-    })
-
-    use({
+    },
+    {
       "RRethy/nvim-treesitter-endwise",
-      requires = { "nvim-treesitter/nvim-treesitter" },
-      wants = { "nvim-treesitter" },
-    })
-
-    use({
+      dependencies = {
+        "nvim-treesitter/nvim-treesitter"
+      }
+    },
+    {
       "windwp/nvim-autopairs",
-      requires = { "RRethy/nvim-treesitter-endwise" },
-      wants = { "nvim-treesitter-endwise" },
+      dependencies = {
+        "RRethy/nvim-treesitter-endwise"
+      },
       event = { "InsertEnter" },
       config = function()
         local Rule = require("nvim-autopairs.rule")
@@ -3137,42 +3046,40 @@ function M.setup()
         end
         vim.api.nvim_set_keymap("i", "<cr>", "v:lua.MUtils.CR()", { expr = true, noremap = true })
       end,
-    })
-
-    use({
+    },
+    {
       "thinca/vim-qfreplace",
       cmd = { "Qfreplace" },
       ft = { "unite", "quickfix", "vimfiler" },
-      fn = { "qfreplace#start" },
-    })
-
-    use({
+      init = function()
+        lazy_function('vim-qfreplace', { "qfreplace#start" })
+      end
+    },
+    {
       "kana/vim-niceblock",
       keys = { "<Plug>(niceblock-I)", "<Plug>(niceblock-A)" },
-      setup = function()
+      init = function()
         vim.keymap.set("x", "I", "<Plug>(niceblock-I)")
         vim.keymap.set("x", "A", "<Plug>(niceblock-A)")
       end,
-    })
-
-    use({
+    },
+    {
       "alpaca-tc/beautify.vim",
       cmd = { "Beautify" },
-      run = function()
+      build = function()
         vim.fn.system({ "npm", "install", "-g", "js-beautify" })
         vim.fn.system({ "npm", "install", "-g", "jq" })
         vim.fn.system({ "pip", "install", "sqlparse" })
       end,
-      setup = function()
+      init = function()
         vim.g["beautify#beautifier#html2haml#ruby19_attributes"] = 1
       end,
-    })
-
-    use({
+    },
+    {
       "alpaca-tc/switch.vim",
       cmd = { "Switch" },
       event = { "InsertEnter" },
-      setup = function()
+      init = function()
         vim.g.switch_no_builtins = false
         vim.keymap.set("n", "!", ":Switch<CR>", { noremap = true })
       end,
@@ -3399,83 +3306,70 @@ function M.setup()
 
         define_switch_mappings()
       end,
-    })
-
+    },
     -- file types
-    use({
+    {
       "cespare/vim-toml",
       ft = { "toml" },
-    })
-
-    use({
+    },
+    {
       "slim-template/vim-slim",
       ft = { "slim" },
-    })
-
-    use({
+    },
+    {
       "mutewinter/nginx.vim",
       ft = { "nginx" },
-    })
-
-    use({
+    },
+    {
       "elixir-lang/vim-elixir",
       ft = { "elixir" },
-    })
-
-    use({
+    },
+    {
       "mattreduce/vim-mix",
       ft = { "elixir" },
-    })
-
-    use({
+    },
+    {
       "vim-scripts/sh.vim",
       ft = "sh",
-    })
-
-    use({
+    },
+    {
       "keith/swift.vim",
       ft = { "swift" },
       rtp = "vim",
-    })
-
-    use({
+    },
+    {
       "hashivim/vim-terraform",
       ft = { "terraform" },
       config = function()
         vim.g.terraform_fmt_on_save = 1
       end,
-    })
-
-    use({
+    },
+    {
       "rust-lang/rust.vim",
       ft = { "rust" },
       config = function()
         vim.g.rustfmt_autosave = 1
       end,
-    })
-
-    use({
+    },
+    {
       "jlcrochet/vim-rbs",
       ft = { "rbs" },
-    })
+    },
 
     -- never use
-    use({
+    {
       "Shougo/vinarise.vim",
       cmd = { "Vinarise" },
-      requires = { "s-yukikaze/vinarise-plugin-peanalysis" },
-      setup = function()
+      dependencies = { "s-yukikaze/vinarise-plugin-peanalysis" },
+      init = function()
         vim.g.vinarise_objdump_command = "gobjdump"
       end,
-    })
-
-    use({
+    },
+    {
       "s-yukikaze/vinarise-plugin-peanalysis",
-      opt = true,
-      run = "brew install binutils",
-    })
-
-    use({
+      build = "brew install binutils",
+    },
+    {
       "Shougo/unite.vim",
       cmd = {
         "Unite",
@@ -3488,12 +3382,8 @@ function M.setup()
         "UniteWithInput",
         "UniteWithInputDirectory",
       },
-      fn = { "unite#util#path2project_directory", "unite#util#get_vital" },
-      wants = {
-        "vimfiler",
-        "ddu-source-rg",
-      },
       setup = function()
+        lazy_function('unite.vim', { "unite#util#path2project_directory", "unite#util#get_vital" })
         vim.g.unite_winheight = 20
       end,
       config = function()
@@ -3559,19 +3449,13 @@ function M.setup()
           end,
         })
       end,
-    })
-
-    use({
+    },
+    {
       "jackMort/ChatGPT.nvim",
-      requires = {
+      dependencies = {
         "MunifTanjim/nui.nvim",
         "nvim-lua/plenary.nvim",
         "nvim-telescope/telescope.nvim",
-      },
-      wants = {
-        "nui.nvim",
-        "plenary.nvim",
-        "telescope.nvim",
       },
       cmd = {
         "ChatGPT",
@@ -3687,103 +3571,12 @@ function M.setup()
           predefined_chat_gpt_prompts = "https://raw.githubusercontent.com/f/awesome-chatgpt-prompts/main/prompts.csv",
         })
       end,
-    })
-
-    -- use({
-    --   "chrisbra/csv.vim",
-    --   ft = { "csv" },
-    -- })
-
-    if packer_bootstrap then
-      print("Restart Neovim required after installation!")
-      require("packer").sync()
-    end
-  end
-
-  -- [[plugins]]
-  -- repo = 'posva/vim-vue'
-  -- on_ft = "vue"
-  -- hook_source = '''
-  --   " autocmd FileType vue syntax sync fromstart
-  -- '''
-  --
-  -- [[plugins]]
-  -- repo = 'leafgarland/typescript-vim'
-  -- on_ft = ["typescript"]
-  --
-  -- [[plugins]]
-  -- repo = 'yuezk/vim-js'
-  -- on_ft = ["javascript", "typescript", "javascript.jsx", "typescript.tsx"]
-  --
-  -- [[plugins]]
-  -- repo = 'MaxMEllon/vim-jsx-pretty'
-  -- on_ft = ["javascript", "typescript", "javascript.jsx", "typescript.tsx"]
-  -- depends = ["vim-js", "yats.vim"]
-  -- hook_source = '''
-  --   let g:vim_jsx_pretty_highlight_close_tag = 1
-  -- '''
-  --
-  -- [[plugins]]
-  -- repo = 'HerringtonDarkholme/yats.vim'
-  -- on_ft = ["javascript", "typescript", "javascript.jsx", "typescript.tsx"]
-  --
-  -- [[plugins]]
-  -- repo = 'peitalin/vim-jsx-typescript'
-  -- on_ft = ["typescript"]
-  --
-  -- [[plugins]]
-  -- repo = 'othree/yajs.vim'
-  -- on_ft     = ["javascript"]
-  --
-  -- [[plugins]]
-  -- repo = 'othree/javascript-libraries-syntax.vim'
-  -- on_ft     = ["javascript"]
-  --
-  -- [[plugins]]
-  -- repo = 'digitaltoad/vim-jade'
-  -- on_ft     = ["jade"]
-  --
-  -- [[plugins]]
-  -- repo = 'wavded/vim-stylus'
-  -- on_ft     = ["stylus"]
-  --
-  -- [[plugins]]
-  -- repo = 'moll/vim-node'
-  -- on_ft     = ["javascript"]
-  --
-  -- [[plugins]]
-  -- repo = 'alpaca-tc/vim-markdown'
-  -- on_ft     = ["markdown"]
-  --
-  -- [[plugins]]
-  -- repo = 'mrkn/vim-cruby'
-  -- on_ft = ["c"]
-  --
-  -- [[plugins]]
-  -- repo = 'vim-ruby/vim-ruby'
-  -- on_ft     = ["ruby", "erb", "ruby.rspec"]
-  -- hook_source = '''
-  --   let g:ruby_indent_block_style = 'do'
-  --   let g:ruby_foldable_groups = 'NONE'
-  -- '''
-
-  local packer = require("packer")
-  packer.init({
-    display = {
-      open_fn = function()
-        return require("packer.util").float({ border = "rounded" })
-      end,
     },
-    subcommands = {
-      install = "clone --no-single-branch --progress",
+  },
+  {
+    defaults = {
+      lazy = true,
     },
-    max_jobs = 5,
-    opt_default = true,
-    autoremove = true,
-  })
-  packer.startup(plugins)
-end
-
-M.setup()
-
-return M
+    concurrency = 5,
+  }
+)
