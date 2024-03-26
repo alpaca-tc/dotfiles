@@ -399,6 +399,7 @@ require("lazy").setup(
         "<Plug>VgSurround",
         "<Plug>VSurround",
       },
+      lazy = false, -- TODO
       init = function()
         vim.g.surround_no_mappings = 1
 
