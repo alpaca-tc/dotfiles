@@ -2518,7 +2518,7 @@ function M.setup()
             lsp = {
               mark = "lsp",
               forceCompletionPattern = "\\.\\w*|:\\w*|->\\w*",
-              minAutoCompleteLength = 0,
+              minAutoCompleteLength = 1,
             },
             file = {
               mark = "file",
