@@ -554,7 +554,7 @@ require("lazy").setup(
           sourceOptions = {
             _ = {
               matchers = { "matcher_regexp" },
-              ignoreCase = false,
+              ignoreCase = true,
             },
           },
         })
@@ -2466,7 +2466,7 @@ require("lazy").setup(
             lsp = {
               mark = "lsp",
               forceCompletionPattern = "\\.\\w*|:\\w*|->\\w*",
-              minAutoCompleteLength = 1,
+              minAutoCompleteLength = 0,
             },
             file = {
               mark = "file",
