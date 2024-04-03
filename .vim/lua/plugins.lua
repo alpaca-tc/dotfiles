@@ -3058,7 +3058,7 @@ require("lazy").setup(
     },
     {
       "kana/vim-niceblock",
-      keys = { "<Plug>(niceblock-I)", "<Plug>(niceblock-A)" },
+      keys = { { "<Plug>(niceblock-I)", mode = "x" }, { "<Plug>(niceblock-A)", mode = "x" } },
       init = function()
         vim.keymap.set("x", "I", "<Plug>(niceblock-I)")
         vim.keymap.set("x", "A", "<Plug>(niceblock-A)")
