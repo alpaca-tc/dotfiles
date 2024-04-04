@@ -345,12 +345,12 @@ require("lazy").setup(
     {
       "vim-scripts/camelcasemotion",
       keys = {
-        "<Plug>CamelCaseMotion_w",
-        "<Plug>CamelCaseMotion_b",
-        "<Plug>CamelCaseMotion_e",
-        "<Plug>CamelCaseMotion_iw",
-        "<Plug>CamelCaseMotion_ib",
-        "<Plug>CamelCaseMotion_ie",
+        { "<Plug>CamelCaseMotion_w", mode = { "n", "x" } },
+        { "<Plug>CamelCaseMotion_b", mode = { "n", "x" } },
+        { "<Plug>CamelCaseMotion_e", mode = { "n", "x" } },
+        { "<Plug>CamelCaseMotion_iw", mode = { "n", "x" } },
+        { "<Plug>CamelCaseMotion_ib", mode = { "n", "x" } },
+        { "<Plug>CamelCaseMotion_ie", mode = { "n", "x" } },
       },
       init = function()
         vim.keymap.set({ "n", "v", "o" }, "w", "<Plug>CamelCaseMotion_w", { silent = true })
