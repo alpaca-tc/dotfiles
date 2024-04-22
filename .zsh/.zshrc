@@ -74,6 +74,7 @@ fi
 
 if is_executable rbenv; then
   eval "$(rbenv init -)"
+  export C_INCLUDE_PATH=$HOME/.rbenv/versions/3.2.3/include/ruby-3.2.0:$C_INCLUDE_PATH
 fi
 
 # rust

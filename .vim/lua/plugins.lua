@@ -2298,6 +2298,7 @@ require("lazy").setup(
 
         vim.g["copilot_filetypes"] = {
           ["*"] = false,
+          c = true,
           rust = true,
           go = true,
           vim = true,
