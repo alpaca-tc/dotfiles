@@ -15,6 +15,8 @@ IRB.conf[:PROMPT][:CUSTOM] = {
 IRB.conf[:PROMPT_MODE] = :CUSTOM
 IRB.conf[:AUTO_INDENT] = true
 
+return if IRB::VERSION < '1.13.0'
+
 IRB::Irb.prepend(Module.new do
   def format_prompt(prompt, ltype, indent, line_no) # :nodoc:
     nest_string = '‣'

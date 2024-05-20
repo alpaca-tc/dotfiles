@@ -2291,6 +2291,7 @@ require("lazy").setup(
           cs = true,
           vb = true,
           css = true,
+          html = true,
         }
 
         -- vim.g["copilot_node_command"] = ""

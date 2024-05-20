@@ -32,3 +32,4 @@ serclet
 .swn
 .swo
 .vim/plugin/packer_compiled.lua
+.vim/lazy-lock.json
