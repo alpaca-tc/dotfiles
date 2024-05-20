@@ -1968,43 +1968,6 @@ require("lazy").setup(
 
         -- vim.lsp.set_log_level("debug")
       end,
-      config = function()
-        local util = require 'lspconfig.util'
-        local nvim_lsp_configs = require 'lspconfig.configs'
-
-        nvim_lsp_configs['smarthr-ruby-ls'] = {
-          default_config = {
-            autostart = false,
-            cmd = { 'bundle', 'exec', 'smarthr-ruby-ls' },
-            filetypes = { 'ruby' },
-            root_dir = util.root_pattern('Gemfile', '.git'),
-            init_options = {
-            },
-          },
-        }
-
-        nvim_lsp_configs['smarthr-ruby-ls'].setup({})
-
-        local group = vim.api.nvim_create_augroup("PackerNvimLspconfig", { clear = true })
-        vim.api.nvim_create_autocmd("FileType", {
-          group = group,
-          pattern = { "ruby" },
-          callback = function()
-            local file_match_str = require("file_extend").file_match_str
-            local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
-
-            if vim.fn['filereadable'](root .. '/exe/smarthr-ruby-ls') == 0 then
-              nvim_lsp_configs['smarthr-ruby-ls'].setup({ cmd = { root .. "/exe/smarthr-ruby-ls" } })
-            else
-              nvim_lsp_configs['smarthr-ruby-ls'].setup({ cmd = { 'bundle', 'exec', 'smarthr-ruby-ls' } })
-            end
-
-            if filetype == "ruby" and file_match_str(root .. "/Gemfile", "smarthr-ruby-ls") then
-              vim.cmd("LspStart smarthr-ruby-ls")
-            end
-          end,
-        })
-      end
     },
     {
       "williamboman/mason.nvim",
@@ -2021,9 +1984,15 @@ require("lazy").setup(
         vim.cmd("MasonInstall deno")
         vim.cmd("MasonInstall clangd")
         vim.cmd("MasonInstall eslint-lsp")
+        vim.cmd("MasonInstall typeprof")
       end,
       config = function()
-        require("mason").setup()
+        -- Remove registories
+        require("mason").setup({
+          registries = {
+            "file:~/projects/oss/mason-registry"
+          }
+        })
 
         local lsp_config = require("lspconfig")
         local mason_lspconfig = require("mason-lspconfig")
@@ -2091,6 +2060,7 @@ require("lazy").setup(
         mason_lspconfig.setup_handlers({
           function(server_name)
             local opts = {}
+            print(vim.inspect(server_name))
 
             if server_name == "denols" then
               opts = {
@@ -2136,6 +2106,10 @@ require("lazy").setup(
               opts = {
                 autostart = false,
                 cmd = { "bundle", "exec", "srb", "tc", "--lsp" },
+              }
+            elseif server_name == "typeprof" then
+              opts = {
+                autostart = false,
               }
             elseif server_name == "rubocop" then
               opts = {
@@ -2204,6 +2178,8 @@ require("lazy").setup(
 
           if filetype == "ruby" and file_match_str(root .. "/Gemfile", "sorbet") then
             vim.cmd("LspStart sorbet")
+          elseif filetype == "ruby" and file_match_str(root .. "/Gemfile", "typeprof") then
+            vim.cmd("LspStart typeprof")
           elseif filetype == "ruby" and file_match_str(root .. "/Gemfile", "smarthr-ruby-ls") then
             vim.cmd("LspStart smarthr-ruby-ls")
           elseif filetype == "ruby" and file_match_str(root .. "/Gemfile", "ruby-lsp") then
