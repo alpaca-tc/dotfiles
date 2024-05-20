@@ -1988,11 +1988,7 @@ require("lazy").setup(
       end,
       config = function()
         -- Remove registories
-        require("mason").setup({
-          registries = {
-            "file:~/projects/oss/mason-registry"
-          }
-        })
+        require("mason").setup()
 
         local lsp_config = require("lspconfig")
         local mason_lspconfig = require("mason-lspconfig")
@@ -2079,6 +2075,10 @@ require("lazy").setup(
                     },
                   },
                 },
+              }
+            elseif server_name == "ruby_lsp" then
+              opts = {
+                autostart = false,
               }
             elseif server_name == "solargraph" then
               opts = {
@@ -2183,8 +2183,7 @@ require("lazy").setup(
           elseif filetype == "ruby" and file_match_str(root .. "/Gemfile", "smarthr-ruby-ls") then
             vim.cmd("LspStart smarthr-ruby-ls")
           elseif filetype == "ruby" and file_match_str(root .. "/Gemfile", "ruby-lsp") then
-            vim.fn['echo']('xxx')
-            vim.cmd("LspStart ruby_ls")
+            vim.cmd("LspStart ruby_lsp")
           elseif
               isTsJs
               and (
