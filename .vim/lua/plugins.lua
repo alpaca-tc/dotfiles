@@ -2104,6 +2104,7 @@ require("lazy").setup({
             opts = {
               autostart = false,
               cmd = { "bundle", "exec", "rubocop", "--lsp" },
+              root_dir = util.root_pattern(".rubocop.yml"),
             }
           elseif server_name == "sumneko_lua" then
             opts = lua_vim_lsp_config()
@@ -2145,6 +2146,30 @@ require("lazy").setup({
           end
 
           lsp_config[server_name].setup(opts)
+        end,
+      })
+
+      lsp_config["typeprof"].setup({
+        autostart = false,
+        filetypes = { "ruby", "eruby" },
+        root_dir = util.root_pattern("typeprof.conf.json"),
+        cmd = function()
+          local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
+          local file_match_str = require("file_extend").file_match_str
+          local insert_multi = require("table_extend").insert_multi
+          local commands = {}
+
+          if vim.fn["executable"](root .. "/bin/typeprof") == 1 then
+            insert_multi(commands, "bundle", "exec", "ruby", root .. "/bin/typeprof")
+          elseif file_match_str(root .. "/Gemfile", "typeprof") then
+            insert_multi(commands, "bundle", "exec", "typeprof")
+          elseif vim.fn["executable"]("typeprof") == 1 then
+            table.insert(commands, "typeprof")
+          end
+
+          insert_multi(commands, "--lsp", "stdio")
+
+          return commands
         end,
       })
 
@@ -2203,24 +2228,12 @@ require("lazy").setup({
 
       start_lsp()
 
-      local setup_typeprof = function()
-        local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
-
-        lsp_config["typeprof"].setup({
-          autostart = false,
-          cmd = { root .. "/bin/typeprof", "--lsp", "stdio" },
-          filetypes = { "ruby", "eruby" },
-          root_dir = util.root_pattern("typeprof.conf.json"),
-        })
-      end
-
       local group = vim.api.nvim_create_augroup("PackerMason", { clear = true })
 
       vim.api.nvim_create_autocmd("FileType", {
         group = group,
         pattern = { "ruby", "javascript", "typescript", "typescriptreact", "typescript.jsx", "c", "rust", "go" },
         callback = function()
-          setup_typeprof()
           start_lsp()
         end,
       })
