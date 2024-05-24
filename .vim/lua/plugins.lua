@@ -1859,6 +1859,18 @@ require("lazy").setup({
       -- vim.keymap.set("n", "te", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>", { silent = true })
       vim.keymap.set("n", "tp", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", { silent = true })
       vim.keymap.set("n", "tn", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", { silent = true })
+      vim.keymap.set('n', 'tx', function()
+        local enabled = vim.lsp.inlay_hint.is_enabled()
+
+        if enabled then
+          print("inlay hint disabled")
+        else
+          print("inlay hint enabled")
+        end
+
+        vim.lsp.inlay_hint.enable(not enabled)
+      end)
+
       vim.keymap.set("n", "tl", function()
         vim.diagnostic.setqflist({ open = false })
         qflist = vim.fn["getqflist"]()
@@ -2217,6 +2229,8 @@ require("lazy").setup({
           vim.cmd("LspStart rust-analyzer")
         elseif filetype == "terraform" then
           vim.cmd("LspStart terraformls")
+        elseif filetype == "lua" then
+          vim.cmd("LspStart lua_ls")
         elseif filetype == "go" then
           vim.cmd("LspStart gopls")
         end
@@ -2949,18 +2963,24 @@ require("lazy").setup({
   },
   {
     "nvim-treesitter/nvim-treesitter",
+    lazy = false,
     ft = {
       "typescript",
       "typescript.tsx",
       "javascript",
       "javascript.tsx",
+      "lua",
+      "markdown",
+      "ruby",
+      "vim",
+      "c",
     },
     build = function()
       vim.cmd("TSUpdate")
     end,
     config = function()
       require("nvim-treesitter.configs").setup({
-        ensure_installed = { "c", "lua", "vim", "vimdoc", "typescript", "tsx" },
+        ensure_installed = { "c", "lua", "vim", "vimdoc", "typescript", "tsx", "markdown", "ruby" },
         sync_install = true,
         highlight = {
           enable = false,
