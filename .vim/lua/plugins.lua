@@ -2165,7 +2165,7 @@ require("lazy").setup({
         autostart = false,
         filetypes = { "ruby", "eruby" },
         root_dir = util.root_pattern("typeprof.conf.json"),
-        cmd = function()
+        cmd = function(dispatchers)
           local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
           local file_match_str = require("file_extend").file_match_str
           local insert_multi = require("table_extend").insert_multi
@@ -2181,7 +2181,9 @@ require("lazy").setup({
 
           insert_multi(commands, "--lsp", "stdio")
 
-          return commands
+          return vim.lsp.rpc.start(commands, dispatchers, {
+            cwd = root or vim.fn["getcwd"](),
+          })
         end,
       })
 
