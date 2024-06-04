@@ -2000,9 +2000,9 @@ require("lazy").setup({
     config = function()
       -- Remove registories
       require("mason").setup({
-        -- registries = {
-        --   "file:~/projects/oss/mason-registry"
-        -- }
+        registries = {
+          "file:~/projects/oss/mason-registry"
+        }
       })
 
       local lsp_config = require("lspconfig")
@@ -2071,6 +2071,7 @@ require("lazy").setup({
 
       mason_lspconfig.setup_handlers({
         function(server_name)
+          print(vim.inspect(server_name))
           local opts = {}
 
           if server_name == "denols" then
@@ -2122,9 +2123,52 @@ require("lazy").setup({
               autostart = false,
               cmd = { "bundle", "exec", "srb", "tc", "--lsp" },
             }
+          elseif server_name == "steep" then
+            opts = {
+              autostart = false,
+            }
           elseif server_name == "typeprof" then
             opts = {
               autostart = false,
+              filetypes = { "ruby", "eruby" },
+              root_dir = util.root_pattern("typeprof.conf.json"),
+              on_attach = function(_, bufnr)
+                local group = vim.api.nvim_create_augroup("LspTypeProf", { clear = true })
+
+                vim.api.nvim_create_autocmd({ 'BufEnter', 'BufReadPost', 'TextChanged', 'InsertLeave' }, {
+                  buffer = bufnr,
+                  group = group,
+                  callback = function()
+                    vim.lsp.codelens.refresh({ bufnr = bufnr })
+                  end
+                })
+
+                vim.lsp.inlay_hint.enable(true)
+                vim.lsp.codelens.refresh({ bufnr = bufnr })
+              end,
+              cmd = function(dispatchers)
+                local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
+                local file_match_str = require("file_extend").file_match_str
+                local insert_multi = require("table_extend").insert_multi
+                local local_typeprof_dir = vim.fn["expand"]("~/projects/oss/typeprof")
+                local commands = {}
+
+                if vim.fn["executable"](root .. "/bin/typeprof") == 1 then
+                  insert_multi(commands, root .. "/bin/typeprof")
+                elseif file_match_str(root .. "/Gemfile", "typeprof") then
+                  insert_multi(commands, "bundle", "exec", "typeprof")
+                elseif vim.fn["executable"](local_typeprof_dir .. "/bin/typeprof") then
+                  insert_multi(commands, local_typeprof_dir .. "/bin/typeprof")
+                elseif vim.fn["executable"]("typeprof") == 1 then
+                  table.insert(commands, "typeprof")
+                end
+
+                insert_multi(commands, "--lsp", "stdio")
+
+                return vim.lsp.rpc.start(commands, dispatchers, {
+                  cwd = root or vim.fn["getcwd"](),
+                })
+              end,
             }
           elseif server_name == "rubocop" then
             opts = {
@@ -2175,49 +2219,6 @@ require("lazy").setup({
         end,
       })
 
-      lsp_config["typeprof"].setup({
-        autostart = false,
-        filetypes = { "ruby", "eruby" },
-        root_dir = util.root_pattern("typeprof.conf.json"),
-        on_attach = function(_, bufnr)
-          local group = vim.api.nvim_create_augroup("LspTypeProf", { clear = true })
-
-          vim.api.nvim_create_autocmd({ 'BufEnter', 'BufReadPost', 'TextChanged', 'InsertLeave' }, {
-            buffer = bufnr,
-            group = group,
-            callback = function()
-              vim.lsp.codelens.refresh({ bufnr = bufnr })
-            end
-          })
-
-          vim.lsp.inlay_hint.enable(true)
-          vim.lsp.codelens.refresh({ bufnr = bufnr })
-        end,
-        cmd = function(dispatchers)
-          local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
-          local file_match_str = require("file_extend").file_match_str
-          local insert_multi = require("table_extend").insert_multi
-          local local_typeprof_dir = vim.fn["expand"]("~/projects/oss/typeprof")
-          local commands = {}
-
-          if vim.fn["executable"](root .. "/bin/typeprof") == 1 then
-            insert_multi(commands, root .. "/bin/typeprof")
-          elseif file_match_str(root .. "/Gemfile", "typeprof") then
-            insert_multi(commands, "bundle", "exec", "typeprof")
-          elseif vim.fn["executable"](local_typeprof_dir .. "/bin/typeprof") then
-            insert_multi(commands, local_typeprof_dir .. "/bin/typeprof")
-          elseif vim.fn["executable"]("typeprof") == 1 then
-            table.insert(commands, "typeprof")
-          end
-
-          insert_multi(commands, "--lsp", "stdio")
-
-          return vim.lsp.rpc.start(commands, dispatchers, {
-            cwd = root or vim.fn["getcwd"](),
-          })
-        end,
-      })
-
       local function start_lsp()
         local filetype = nil
         local file_match_str = require("file_extend").file_match_str
@@ -2239,6 +2240,8 @@ require("lazy").setup({
           vim.cmd("LspStart sorbet")
         elseif filetype == "ruby" and vim.fn["filereadable"](root .. "/typeprof.conf.json") == 1 then
           vim.cmd("LspStart typeprof")
+        elseif filetype == "ruby" and vim.fn["filereadable"](root .. "/Steepfile") == 1 then
+          vim.cmd("LspStart steep")
         elseif filetype == "ruby" and file_match_str(root .. "/Gemfile", "smarthr-ruby-ls") then
           vim.cmd("LspStart smarthr-ruby-ls")
         elseif filetype == "ruby" and file_match_str(root .. "/Gemfile", "ruby-lsp") then
