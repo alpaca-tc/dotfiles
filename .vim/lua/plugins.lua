@@ -1859,16 +1859,19 @@ require("lazy").setup({
       -- vim.keymap.set("n", "te", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>", { silent = true })
       vim.keymap.set("n", "tp", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", { silent = true })
       vim.keymap.set("n", "tn", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", { silent = true })
+
       vim.keymap.set('n', 'tx', function()
-        local enabled = vim.lsp.inlay_hint.is_enabled()
-
-        if enabled then
-          print("inlay hint disabled")
+        if vim.lsp.inlay_hint.is_enabled() then
+          print("inlay hint / code lenses disabled")
+          vim.lsp.inlay_hint.enable(false)
+          vim.lsp.codelens.clear()
+          vim.g["lsp_code_lenses_enabled"] = false
         else
-          print("inlay hint enabled")
+          print("inlay hint / code lenses enabled")
+          vim.lsp.inlay_hint.enable(true)
+          vim.lsp.codelens.refresh({ bufnr = 0 })
+          vim.g["lsp_code_lenses_enabled"] = true
         end
-
-        vim.lsp.inlay_hint.enable(not enabled)
       end)
 
       vim.keymap.set("n", "tl", function()
@@ -1920,6 +1923,17 @@ require("lazy").setup({
           vim.lsp.buf.format({ async = false })
         end,
       })
+
+      vim.api.nvim_create_autocmd({ "TextChanged", "InsertLeave" }, {
+        group = group,
+        pattern = { "*.rb", "*.rbs" },
+        callback = function()
+          if vim.g["lsp_code_lenses_enabled"] then
+            vim.lsp.codelens.refresh({ bufnr = 0 })
+          end
+        end,
+      })
+
 
       local function goimports(timeout_ms)
         local context = { only = { "source.organizeImports" } }
@@ -2165,16 +2179,33 @@ require("lazy").setup({
         autostart = false,
         filetypes = { "ruby", "eruby" },
         root_dir = util.root_pattern("typeprof.conf.json"),
+        on_attach = function(_, bufnr)
+          local group = vim.api.nvim_create_augroup("LspTypeProf", { clear = true })
+
+          vim.api.nvim_create_autocmd({ 'BufEnter', 'BufReadPost', 'TextChanged', 'InsertLeave' }, {
+            buffer = bufnr,
+            group = group,
+            callback = function()
+              vim.lsp.codelens.refresh({ bufnr = bufnr })
+            end
+          })
+
+          vim.lsp.inlay_hint.enable(true)
+          vim.lsp.codelens.refresh({ bufnr = bufnr })
+        end,
         cmd = function(dispatchers)
           local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
           local file_match_str = require("file_extend").file_match_str
           local insert_multi = require("table_extend").insert_multi
+          local local_typeprof_dir = vim.fn["expand"]("~/projects/oss/typeprof")
           local commands = {}
 
           if vim.fn["executable"](root .. "/bin/typeprof") == 1 then
-            insert_multi(commands, "bundle", "exec", "ruby", root .. "/bin/typeprof")
+            insert_multi(commands, root .. "/bin/typeprof")
           elseif file_match_str(root .. "/Gemfile", "typeprof") then
             insert_multi(commands, "bundle", "exec", "typeprof")
+          elseif vim.fn["executable"](local_typeprof_dir .. "/bin/typeprof") then
+            insert_multi(commands, local_typeprof_dir .. "/bin/typeprof")
           elseif vim.fn["executable"]("typeprof") == 1 then
             table.insert(commands, "typeprof")
           end
@@ -2973,7 +3004,6 @@ require("lazy").setup({
       "javascript.tsx",
       "lua",
       "markdown",
-      "ruby",
       "vim",
       "c",
     },
@@ -2982,7 +3012,7 @@ require("lazy").setup({
     end,
     config = function()
       require("nvim-treesitter.configs").setup({
-        ensure_installed = { "c", "lua", "vim", "vimdoc", "typescript", "tsx", "markdown", "ruby" },
+        ensure_installed = { "c", "lua", "vim", "vimdoc", "typescript", "tsx", "markdown" },
         sync_install = true,
         highlight = {
           enable = false,

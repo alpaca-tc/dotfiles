@@ -22,7 +22,7 @@ IRB::Irb.prepend(Module.new do
     nest_string = '‣'
     workspace_stack = @context.instance_variable_get(:@workspace_stack)
     module_name = view_clip(@context.main)
-    nest = nest_string * [workspace_stack.size, 1].max
+    nest = nest_string * [workspace_stack&.size || 0, 1].max
     format("\e[33;1m%-30.30s \e[36;5m%-4.4s\e[0m $ ", module_name, nest)
   end
 

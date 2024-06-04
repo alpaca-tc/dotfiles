@@ -29,6 +29,9 @@ fi
 # bison
 export PATH="/opt/homebrew/opt/bison/bin:$PATH"
 
+# sphinx
+export PATH="/opt/homebrew/opt/sphinx-doc/bin:$PATH"
+
 if [ -x '/usr/local/bin/brew' ]; then
   eval "$(/usr/local/bin/brew shellenv)"
 fi
@@ -75,6 +78,7 @@ fi
 if is_executable rbenv; then
   eval "$(rbenv init -)"
   export C_INCLUDE_PATH=$HOME/.rbenv/versions/3.2.3/include/ruby-3.2.0:$C_INCLUDE_PATH
+  export RUBY_DEBUG_LOG_LEVEL=FATAL
 fi
 
 # rust

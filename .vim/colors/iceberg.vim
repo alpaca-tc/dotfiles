@@ -124,4 +124,5 @@ hi! link yamlKeyValueDelimiter Delimiter
 
 hi! Virtual ctermfg=117 ctermbg=240 guifg=#8ac6f2 guibg=#585858
 
+hi! link LspCodeLens Virtual
 hi! link LspInlayHint Virtual
