@@ -1053,7 +1053,6 @@ require("lazy").setup({
               table.insert(sorters, "dot")
             end
 
-            print(vim.inspect(sorters))
             vim.fn["ddu#redraw"]("file", {
               refreshItems = true,
               updateOptions = { sourceOptions = { file = { sorters = sorters } } },
@@ -1881,6 +1880,8 @@ require("lazy").setup({
         if #qflist == 0 then
           return vim.api.nvim_err_writeln("No diagnostics found")
         else
+          require("lazy").load({ plugins = { "ddu-source-qf" } })
+
           vim.fn["ddu#start"]({
             name = "qf",
             sources = {
@@ -2071,7 +2072,6 @@ require("lazy").setup({
 
       mason_lspconfig.setup_handlers({
         function(server_name)
-          print(vim.inspect(server_name))
           local opts = {}
 
           if server_name == "denols" then
@@ -2126,6 +2126,29 @@ require("lazy").setup({
           elseif server_name == "steep" then
             opts = {
               autostart = false,
+              cmd = function(dispatchers)
+                local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
+                local file_match_str = require("file_extend").file_match_str
+                local insert_multi = require("table_extend").insert_multi
+                local local_steep_dir = vim.fn["expand"]("~/projects/oss/steep")
+                local commands = {}
+
+                if vim.fn["executable"](root .. "/exe/steep") == 1 then
+                  table.insert(commands, root .. "/exe/steep")
+                -- elseif vim.fn["executable"](local_steep_dir .. "/bin/steep") then
+                --   insert_multi(commands, local_steep_dir .. "/bin/steep")
+                elseif file_match_str(root .. "/Gemfile", "steep") then
+                  insert_multi(commands, "bundle", "exec", "steep")
+                elseif vim.fn["executable"]("steep") == 1 then
+                  table.insert(commands, "steep")
+                end
+
+                table.insert(commands, 'langserver')
+
+                return vim.lsp.rpc.start(commands, dispatchers, {
+                  cwd = root or vim.fn["getcwd"](),
+                })
+              end,
             }
           elseif server_name == "typeprof" then
             opts = {
@@ -2155,10 +2178,10 @@ require("lazy").setup({
 
                 if vim.fn["executable"](root .. "/bin/typeprof") == 1 then
                   insert_multi(commands, root .. "/bin/typeprof")
-                elseif file_match_str(root .. "/Gemfile", "typeprof") then
-                  insert_multi(commands, "bundle", "exec", "typeprof")
                 elseif vim.fn["executable"](local_typeprof_dir .. "/bin/typeprof") then
                   insert_multi(commands, local_typeprof_dir .. "/bin/typeprof")
+                elseif file_match_str(root .. "/Gemfile", "typeprof") then
+                  insert_multi(commands, "bundle", "exec", "typeprof")
                 elseif vim.fn["executable"]("typeprof") == 1 then
                   table.insert(commands, "typeprof")
                 end
