@@ -219,7 +219,7 @@ xnoremap H <Nop>
 inoremap <C-@> <Nop>
 
 function! s:move_to_current_directory_on_open_file()
-  let directory = fnameescape(expand('%:p:h'))
+  let directory = expand('%:p:h')
 
   if isdirectory(directory) && directory !~ '^\/tmp'
     execute ':silent! lcd! ' . directory

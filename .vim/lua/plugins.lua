@@ -1917,13 +1917,13 @@ require("lazy").setup({
 
       local group = vim.api.nvim_create_augroup("PackerNvimLspconfig", { clear = true })
 
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        group = group,
-        pattern = { "*.go", "*.ts", "*.tsx" },
-        callback = function()
-          vim.lsp.buf.format({ async = false })
-        end,
-      })
+      -- vim.api.nvim_create_autocmd("BufWritePre", {
+      --   group = group,
+      --   pattern = { "*.go", "*.ts", "*.tsx" },
+      --   callback = function()
+      --     vim.lsp.buf.format({ async = false })
+      --   end,
+      -- })
 
       vim.api.nvim_create_autocmd({ "TextChanged", "InsertLeave" }, {
         group = group,
@@ -2177,7 +2177,7 @@ require("lazy").setup({
                 local commands = {}
 
                 if vim.fn["executable"](root .. "/bin/typeprof") == 1 then
-                  insert_multi(commands, root .. "/bin/typeprof")
+                  insert_multi(commands, "bundle", "exec", "ruby", root .. "/bin/typeprof")
                 elseif vim.fn["executable"](local_typeprof_dir .. "/bin/typeprof") then
                   insert_multi(commands, local_typeprof_dir .. "/bin/typeprof")
                 elseif file_match_str(root .. "/Gemfile", "typeprof") then
@@ -2380,6 +2380,8 @@ require("lazy").setup({
         vb = true,
         css = true,
         html = true,
+        gitcommit = true,
+        nginx = true,
       }
 
       -- vim.g["copilot_node_command"] = ""
