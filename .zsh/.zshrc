@@ -60,10 +60,18 @@ export SCALA_HOME=/opt/homebrew/Cellar/scala/2.9.2
 # XCode
 export PATH=/Library/Apple/usr/bin:$PATH
 
+export LDFLAGS=""
+
 if [ -d '/opt/homebrew/opt/readline' ]; then
-  export LDFLAGS="-L/opt/homebrew/opt/readline/lib"
-  export CPPFLAGS="-I/opt/homebrew/opt/readline/include"
-  export PKG_CONFIG_PATH="/opt/homebrew/opt/readline/lib/pkgconfig"
+  export LDFLAGS="-L/opt/homebrew/opt/readline/lib ${LDFLAGS}"
+  export CPPFLAGS="-I/opt/homebrew/opt/readline/include${CPPFLAGS:+:$CPPFLAGS}"
+  export PKG_CONFIG_PATH="/opt/homebrew/opt/readline/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
+fi
+
+if [ -d '/opt/homebrew/opt/icu4c/lib/pkgconfig' ]; then
+  export LDFLAGS="-L/opt/homebrew/opt/icu4c/lib ${LDFLAGS}"
+  export CPPFLAGS="-I/opt/homebrew/opt/icu4c/include${CPPFLAGS:+:$CPPFLAGS}"
+  export PKG_CONFIG_PATH="/opt/homebrew/opt/icu4c/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
 fi
 
 # rbenv
