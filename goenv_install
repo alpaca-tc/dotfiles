@@ -2,6 +2,6 @@
 
 cd $HOME
 git clone https://github.com/syndbg/goenv.git ~/.goenv
-goenv install 1.14.6
-goenv global 1.14.6
+goenv install 1.24.1
+goenv global 1.24.1
 go install golang.org/x/tools/gopls@latest
