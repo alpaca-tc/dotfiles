@@ -2292,6 +2292,8 @@ require("lazy").setup({
           vim.cmd("LspStart lua_ls")
         elseif filetype == "go" then
           vim.cmd("LspStart gopls")
+        elseif filetype == "python" then
+          vim.cmd("LspStart pyright")
         end
 
         if filetype == "ruby" and file_match_str(root .. "/Gemfile", "rubocop") then
@@ -2435,12 +2437,12 @@ require("lazy").setup({
       "CopilotChatAgents",
     },
     init = function()
-      vim.keymap.set("x", "co", function()
+      vim.keymap.set("x", "Q", function()
         require("lazy").load({ plugins = { "CopilotChat.nvim" } })
         local chat = require("CopilotChat")
 
-        chat.ask("Explain how it works.", {
-          selection = require("CopilotChat.select").buffer,
+        chat.ask("コードの動作を説明してください", {
+          selection = require("CopilotChat.select").visual,
         })
       end, { noremap = true })
     end,
@@ -2596,7 +2598,7 @@ require("lazy").setup({
           lsp = {
             mark = "lsp",
             forceCompletionPattern = "\\.\\w*|:\\w*|->\\w*",
-            minAutoCompleteLength = 0,
+            minAutoCompleteLength = 1,
           },
           file = {
             mark = "file",
@@ -3109,10 +3111,14 @@ require("lazy").setup({
         sync_install = true,
         highlight = {
           enable = false,
+          additional_vim_regex_highlighting = {
+            "python",
+            "typescript"
+          },
         },
-        indent = {
-          enable = true,
-        },
+        -- indent = {
+        --   enable = true,
+        -- },
       })
     end,
   },
