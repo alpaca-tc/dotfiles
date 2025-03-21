@@ -36,8 +36,10 @@ if [ -x '/usr/local/bin/brew' ]; then
   eval "$(/usr/local/bin/brew shellenv)"
 fi
 
+export CPPFLAGS=""
+
 # export LDFLAGS="-L/opt/homebrew/opt/llvm/lib -L/opt/homebrew/opt/openssl/lib"
-# export CPPFLAGS="-I/opt/homebrew/opt/llvm/include -I/opt/homebrew/opt/openssl/include"
+export CPPFLAGS="-I/opt/homebrew/opt/llvm/include -I/opt/homebrew/opt/openssl/include"
 
 # iTerm2
 export PATH=$HOME/usr/bin:$HOME/opt/homebrew/bin:$PATH
@@ -64,13 +66,13 @@ export LDFLAGS=""
 
 if [ -d '/opt/homebrew/opt/readline' ]; then
   export LDFLAGS="-L/opt/homebrew/opt/readline/lib ${LDFLAGS}"
-  export CPPFLAGS="-I/opt/homebrew/opt/readline/include${CPPFLAGS:+:$CPPFLAGS}"
+  export CPPFLAGS="-I/opt/homebrew/opt/readline/include ${CPPFLAGS}"
   export PKG_CONFIG_PATH="/opt/homebrew/opt/readline/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
 fi
 
 if [ -d '/opt/homebrew/opt/icu4c/lib/pkgconfig' ]; then
   export LDFLAGS="-L/opt/homebrew/opt/icu4c/lib ${LDFLAGS}"
-  export CPPFLAGS="-I/opt/homebrew/opt/icu4c/include${CPPFLAGS:+:$CPPFLAGS}"
+  export CPPFLAGS="-I/opt/homebrew/opt/icu4c/include ${CPPFLAGS}"
   export PKG_CONFIG_PATH="/opt/homebrew/opt/icu4c/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
 fi
 
@@ -115,6 +117,7 @@ export PATH=$PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH
 if is_executable pyenv; then
   eval "$(pyenv init -)"
   export PATH=$HOME/.local/bin:$PATH
+  export CPPFLAGS="$(python3-config --includes) $(python3-config --includes | sed -E 's@([^ ]+)@\1/cpython@g') ${CPPFLAGS}"
 fi
 
 # goenv
