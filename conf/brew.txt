@@ -14,7 +14,6 @@ nkf
 openssl
 pkg-config
 readline
-reattach-to-user-namespace
 redis
 sqlite
 tmux
