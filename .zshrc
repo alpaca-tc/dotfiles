@@ -1,3 +1,5 @@
+# Add deno completions to search path
+if [[ ":$FPATH:" != *":/Users/hiroyuki.ishii/.zsh/completions:"* ]]; then export FPATH="/Users/hiroyuki.ishii/.zsh/completions:$FPATH"; fi
 # source ~/.zsh/git-completion.bash
 source ~/.zsh/.zshrc
 
@@ -21,3 +23,4 @@ case ":$PATH:" in
 esac
 # pnpm end
 . "/Users/alpaca-tc/.deno/env"
+. "/Users/hiroyuki.ishii/.deno/env"
