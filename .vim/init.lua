@@ -12,7 +12,7 @@ vim.o.termguicolors = true
 vim.o.clipboard=vim.o.clipboard..','..'unnamedplus'
 
 if fn.executable('pyenv') then
-  vim.g.python3_host_prog = os.getenv('HOME') .. '/.pyenv/versions/3.12.1/bin/python'
+  vim.g.python3_host_prog = os.getenv('HOME') .. '/.pyenv/versions/3.12.3/bin/python'
   vim.g.python_host_prog = os.getenv('HOME') .. '/.pyenv/versions/2.7.18/bin/python'
 else
   vim.g.python_host_prog = 'python'

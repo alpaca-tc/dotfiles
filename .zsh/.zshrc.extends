@@ -3,7 +3,7 @@
 source ~/.zsh/git-prompt.sh
 # source ~/.zsh/completion/tig-completion.bash
 # source ~/.zsh/tmux-completion.bash
-# source ~/.zsh/rbenv.zsh
+source ~/.zsh/rbenv.zsh
 # source ~/.zsh/scala.sh
 
 # peco-select-history {{{

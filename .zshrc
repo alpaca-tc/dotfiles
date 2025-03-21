@@ -22,5 +22,4 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
-. "/Users/alpaca-tc/.deno/env"
-. "/Users/hiroyuki.ishii/.deno/env"
+. "$HOME/.deno/env"
