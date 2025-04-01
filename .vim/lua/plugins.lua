@@ -1970,15 +1970,15 @@ require("lazy").setup({
         end
       end
 
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        group = group,
-        pattern = { "*.go" },
-        callback = function()
-          goimports(1000)
-        end,
-      })
-
-      vim.lsp.set_log_level("debug")
+      -- vim.api.nvim_create_autocmd("BufWritePre", {
+      --   group = group,
+      --   pattern = { "*.go" },
+      --   callback = function()
+      --     goimports(1000)
+      --   end,
+      -- })
+      --
+      -- vim.lsp.set_log_level("debug")
     end,
   },
   {
@@ -1997,13 +1997,14 @@ require("lazy").setup({
       vim.cmd("MasonInstall clangd")
       vim.cmd("MasonInstall eslint-lsp")
       vim.cmd("MasonInstall typeprof")
+      vim.cmd("MasonInstall gopls")
     end,
     config = function()
       -- Remove registories
       require("mason").setup({
-        registries = {
-          "file:~/projects/oss/mason-registry"
-        }
+        -- registries = {
+        --   "file:~/projects/oss/mason-registry"
+        -- }
       })
 
       local lsp_config = require("lspconfig")
@@ -2441,7 +2442,7 @@ require("lazy").setup({
         require("lazy").load({ plugins = { "CopilotChat.nvim" } })
         local chat = require("CopilotChat")
 
-        chat.ask("コードの動作を説明してください", {
+        chat.ask("コードの動作を説明してください。まず、コードの概要を端的に説明してください。その後に、上から順にどういう処理をしているか説明してください。最後に、このコードがどういった意図か、歴史的経緯や使われ方や関係を説明してください。", {
           selection = require("CopilotChat.select").visual,
         })
       end, { noremap = true })
@@ -2450,6 +2451,7 @@ require("lazy").setup({
       local chat = require("CopilotChat")
 
       chat.setup({
+        model = "gpt-4",
         system_prompt = [[
           You are an AI programming assistant.
           When asked for your name, you must respond with "GitHub Copilot".
@@ -2463,17 +2465,17 @@ require("lazy").setup({
         ]],
         window = {
           -- layout = 'vertical', -- 'vertical', 'horizontal', 'float', 'replace'
-          layout = 'float', -- 'vertical', 'horizontal', 'float', 'replace'
-          width = 1, -- fractional width of parent, or absolute width in columns when > 1
-          height = 1, -- fractional height of parent, or absolute height in rows when > 1
+          layout = 'horizontal', -- 'vertical', 'horizontal', 'float', 'replace'
+          -- width = 1, -- fractional width of parent, or absolute width in columns when > 1
+          -- height = 1, -- fractional height of parent, or absolute height in rows when > 1
           -- Options below only apply to floating windows
-          relative = 'editor', -- 'editor', 'win', 'cursor', 'mouse'
-          border = 'single', -- 'none', single', 'double', 'rounded', 'solid', 'shadow'
-          row = nil, -- row position of the window, default is centered
-          col = nil, -- column position of the window, default is centered
-          title = 'Copilot Chat', -- title of chat window
-          footer = nil, -- footer of chat window
-          zindex = 1, -- determines if window is on top or below other floating windows
+          -- relative = 'editor', -- 'editor', 'win', 'cursor', 'mouse'
+          -- border = 'single', -- 'none', single', 'double', 'rounded', 'solid', 'shadow'
+          -- row = nil, -- row position of the window, default is centered
+          -- col = nil, -- column position of the window, default is centered
+          -- title = 'Copilot Chat', -- title of chat window
+          -- footer = nil, -- footer of chat window
+          -- zindex = 1, -- determines if window is on top or below other floating windows
         },
       })
     end,
