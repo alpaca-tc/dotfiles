@@ -692,7 +692,7 @@ require("lazy").setup({
         local group = vim.api.nvim_create_augroup("PackerDduBufferUi", { clear = true })
 
         local function close_ddu_ui_ff_and_ddu_ui_ff_filter()
-          vim.api.nvim_del_augroup_by_id(group)
+          group = vim.api.nvim_create_augroup("PackerDduBufferUi", { clear = true })
 
           local last = vim.fn.winnr("$")
 
@@ -1847,14 +1847,12 @@ require("lazy").setup({
 
       vim.keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.declaration()<CR>", { silent = true })
       vim.keymap.set("n", "ty", "<cmd>lua vim.lsp.buf.document_symbol()<CR>", { silent = true })
-      -- vim.keymap.set("n", "tt", "<cmd>lua vim.lsp.buf.definition()<CR>", { silent = true })
       vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", { silent = true })
       vim.keymap.set("n", "ti", "<cmd>lua vim.lsp.buf.implementation()<CR>", { silent = true })
       vim.keymap.set("n", "ts", "<cmd>lua vim.lsp.buf.signature_help()<CR>", { silent = true })
       vim.keymap.set("n", "ta", "<cmd>lua vim.lsp.buf.code_action()<CR>", { silent = true })
       vim.keymap.set("n", "td", "<cmd>lua vim.lsp.buf.type_definition()<CR>", { silent = true })
       vim.keymap.set("n", "tr", "<cmd>lua vim.lsp.buf.rename()<CR>", { silent = true })
-      -- vim.keymap.set("n", "tF", "<cmd>lua vim.lsp.buf.references()<CR>", { silent = true })
       -- vim.keymap.set("n", "te", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>", { silent = true })
       vim.keymap.set("n", "tp", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", { silent = true })
       vim.keymap.set("n", "tn", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", { silent = true })
@@ -1901,10 +1899,6 @@ require("lazy").setup({
         end
       end, { silent = true })
       vim.keymap.set("n", "ff", ":lua vim.lsp.buf.format { async = true }<CR>", { silent = true })
-
-      -- nnoremap <silent> <space>wa <cmd>lua vim.lsp.buf.add_workspace_folder()<CR>
-      -- nnoremap <silent> <space>wr <cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>
-      -- nnoremap <silent> <space>wl <cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>
 
       vim.lsp.handlers["textDocument/publishDiagnostics"] =
           vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {

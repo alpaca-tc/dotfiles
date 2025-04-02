@@ -1,5 +1,6 @@
 local fn = vim.fn
 
+require("no_defaults")
 require("rails").setup()
 require("plugins")
 require("typeprof").setup()
