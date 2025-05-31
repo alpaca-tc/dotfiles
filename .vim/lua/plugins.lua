@@ -2001,6 +2001,25 @@ require("lazy").setup({
         -- }
       })
 
+      require("mason-lspconfig").setup({
+        ensure_installed = {
+          "lua_ls",
+          "ts_ls",
+          "eslint",
+          -- "typescript-language-server",
+          "jsonls",
+          "html",
+          "cssls",
+          -- "steep",
+          -- "basedpyright",
+          "rust_analyzer",
+          -- "gopls",
+          "rubocop",
+          "ruby_lsp",
+        },
+        automatic_enable = false,
+      })
+
       local lsp_config = require("lspconfig")
       local util = require("lspconfig/util")
       local mason_lspconfig = require("mason-lspconfig")
@@ -2065,176 +2084,168 @@ require("lazy").setup({
         }
       end
 
-      mason_lspconfig.setup_handlers({
-        function(server_name)
-          local opts = {}
-
-          if server_name == "denols" then
-            opts = {
-              autostart = false,
-              filetypes = {},
-              init_options = {
-                lint = true,
-                unstable = true,
-                suggest = {
-                  imports = {
-                    hosts = {
-                      ["https://deno.land"] = true,
-                      ["https://cdn.nest.land"] = true,
-                      ["https://crux.land"] = true,
-                    },
-                  },
-                },
+      lsp_config["denols"].setup({
+        autostart = false,
+        filetypes = {},
+        init_options = {
+          lint = true,
+          unstable = true,
+          suggest = {
+            imports = {
+              hosts = {
+                ["https://deno.land"] = true,
+                ["https://cdn.nest.land"] = true,
+                ["https://crux.land"] = true,
               },
-            }
-          elseif server_name == "ruby_lsp" then
-            opts = {
-              autostart = false,
-            }
-          elseif server_name == "solargraph" then
-            opts = {
-              autostart = false,
-              cmd = { "bundle", "exec", "solargraph", "stdio" },
-            }
-          elseif server_name == "tsserver" then
-            opts = {
-              autostart = false,
-            }
-          elseif server_name == "eslint" then
-            opts = {
-              autostart = false,
-              format = {
-                enable = true,
-              },
-              on_attach = function(client, bufnr)
-                vim.api.nvim_create_autocmd("BufWritePre", {
-                  buffer = bufnr,
-                  command = "EslintFixAll",
-                })
-              end,
-            }
-          elseif server_name == "sorbet" then
-            opts = {
-              autostart = false,
-              cmd = { "bundle", "exec", "srb", "tc", "--lsp" },
-            }
-          elseif server_name == "steep" then
-            opts = {
-              autostart = false,
-              cmd = function(dispatchers)
-                local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
-                local file_match_str = require("file_extend").file_match_str
-                local insert_multi = require("table_extend").insert_multi
-                local local_steep_dir = vim.fn["expand"]("~/projects/oss/steep")
-                local commands = {}
+            },
+          },
+        },
+      })
 
-                if vim.fn["executable"](root .. "/exe/steep") == 1 then
-                  table.insert(commands, root .. "/exe/steep")
-                -- elseif vim.fn["executable"](local_steep_dir .. "/bin/steep") then
-                --   insert_multi(commands, local_steep_dir .. "/bin/steep")
-                elseif file_match_str(root .. "/Gemfile", "steep") then
-                  insert_multi(commands, "bundle", "exec", "steep")
-                elseif vim.fn["executable"]("steep") == 1 then
-                  table.insert(commands, "steep")
-                end
+      lsp_config["ruby_lsp"].setup({
+        autostart = false,
+      })
 
-                table.insert(commands, 'langserver')
+      lsp_config["solargraph"].setup({
+        autostart = false,
+        cmd = { "bundle", "exec", "solargraph", "stdio" },
+      })
 
-                return vim.lsp.rpc.start(commands, dispatchers, {
-                  cwd = root or vim.fn["getcwd"](),
-                })
-              end,
-            }
-          elseif server_name == "typeprof" then
-            opts = {
-              autostart = false,
-              filetypes = { "ruby", "eruby" },
-              root_dir = util.root_pattern("typeprof.conf.json"),
-              on_attach = function(_, bufnr)
-                local group = vim.api.nvim_create_augroup("LspTypeProf", { clear = true })
+      lsp_config["ts_ls"].setup({
+        autostart = false,
+      })
 
-                vim.api.nvim_create_autocmd({ 'BufEnter', 'BufReadPost', 'TextChanged', 'InsertLeave' }, {
-                  buffer = bufnr,
-                  group = group,
-                  callback = function()
-                    vim.lsp.codelens.refresh({ bufnr = bufnr })
-                  end
-                })
+      lsp_config["eslint"].setup({
+        autostart = false,
+        format = {
+          enable = true,
+        },
+        on_attach = function(client, bufnr)
+          vim.api.nvim_create_autocmd("BufWritePre", {
+            buffer = bufnr,
+            command = "EslintFixAll",
+          })
+        end,
+      })
 
-                vim.lsp.inlay_hint.enable(true)
-                vim.lsp.codelens.refresh({ bufnr = bufnr })
-              end,
-              cmd = function(dispatchers)
-                local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
-                local file_match_str = require("file_extend").file_match_str
-                local insert_multi = require("table_extend").insert_multi
-                local local_typeprof_dir = vim.fn["expand"]("~/projects/oss/typeprof")
-                local commands = {}
+      lsp_config["sorbet"].setup({
+        autostart = false,
+        cmd = { "bundle", "exec", "srb", "tc", "--lsp" },
+      })
 
-                if vim.fn["executable"](root .. "/bin/typeprof") == 1 then
-                  insert_multi(commands, "bundle", "exec", "ruby", root .. "/bin/typeprof")
-                elseif vim.fn["executable"](local_typeprof_dir .. "/bin/typeprof") then
-                  insert_multi(commands, local_typeprof_dir .. "/bin/typeprof")
-                elseif file_match_str(root .. "/Gemfile", "typeprof") then
-                  insert_multi(commands, "bundle", "exec", "typeprof")
-                elseif vim.fn["executable"]("typeprof") == 1 then
-                  table.insert(commands, "typeprof")
-                end
+      lsp_config["steep"].setup({
+        autostart = false,
+        cmd = function(dispatchers)
+          local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
+          local file_match_str = require("file_extend").file_match_str
+          local insert_multi = require("table_extend").insert_multi
+          local local_steep_dir = vim.fn["expand"]("~/projects/oss/steep")
+          local commands = {}
 
-                insert_multi(commands, "--lsp", "--stdio")
-
-                return vim.lsp.rpc.start(commands, dispatchers, {
-                  cwd = root or vim.fn["getcwd"](),
-                })
-              end,
-            }
-          elseif server_name == "rubocop" then
-            opts = {
-              autostart = false,
-              cmd = { "bundle", "exec", "rubocop", "--lsp" },
-              root_dir = util.root_pattern(".rubocop.yml"),
-            }
-          elseif server_name == "sumneko_lua" then
-            opts = lua_vim_lsp_config()
-          elseif server_name == "rust_analyzer" then
-            opts = {
-              autostart = true,
-              settings = {
-                ["rust-analyzer"] = {
-                  imports = {
-                    granularity = {
-                      group = "module",
-                    },
-                    prefix = "self",
-                  },
-                  cargo = {
-                    buildScripts = {
-                      enable = true,
-                    },
-                  },
-                  procMacro = {
-                    enable = true,
-                  },
-                },
-              },
-            }
-          elseif server_name == "gopls" then
-            opts = {
-              autostart = true,
-              cmd = { "gopls", "serve" },
-              settings = {
-                gopls = {
-                  analyses = {
-                    unusedparams = true,
-                  },
-                  staticcheck = true,
-                },
-              },
-            }
+          if vim.fn["executable"](root .. "/exe/steep") == 1 then
+            table.insert(commands, root .. "/exe/steep")
+            -- elseif vim.fn["executable"](local_steep_dir .. "/bin/steep") then
+            --   insert_multi(commands, local_steep_dir .. "/bin/steep")
+          elseif file_match_str(root .. "/Gemfile", "steep") then
+            insert_multi(commands, "bundle", "exec", "steep")
+          elseif vim.fn["executable"]("steep") == 1 then
+            table.insert(commands, "steep")
           end
 
-          lsp_config[server_name].setup(opts)
+          table.insert(commands, 'langserver')
+
+          return vim.lsp.rpc.start(commands, dispatchers, {
+            cwd = root or vim.fn["getcwd"](),
+          })
         end,
+      })
+
+      lsp_config["typeprof"].setup({
+        autostart = false,
+        filetypes = { "ruby", "eruby" },
+        root_dir = util.root_pattern("typeprof.conf.json"),
+        on_attach = function(_, bufnr)
+          local group = vim.api.nvim_create_augroup("LspTypeProf", { clear = true })
+
+          vim.api.nvim_create_autocmd({ 'BufEnter', 'BufReadPost', 'TextChanged', 'InsertLeave' }, {
+            buffer = bufnr,
+            group = group,
+            callback = function()
+              vim.lsp.codelens.refresh({ bufnr = bufnr })
+            end
+          })
+
+          vim.lsp.inlay_hint.enable(true)
+          vim.lsp.codelens.refresh({ bufnr = bufnr })
+        end,
+        cmd = function(dispatchers)
+          local root = vim.fn["alpaca#current_root"](vim.fn["getcwd"]())
+          local file_match_str = require("file_extend").file_match_str
+          local insert_multi = require("table_extend").insert_multi
+          local local_typeprof_dir = vim.fn["expand"]("~/projects/oss/typeprof")
+          local commands = {}
+
+          if vim.fn["executable"](root .. "/bin/typeprof") == 1 then
+            insert_multi(commands, "bundle", "exec", "ruby", root .. "/bin/typeprof")
+          elseif vim.fn["executable"](local_typeprof_dir .. "/bin/typeprof") then
+            insert_multi(commands, local_typeprof_dir .. "/bin/typeprof")
+          elseif file_match_str(root .. "/Gemfile", "typeprof") then
+            insert_multi(commands, "bundle", "exec", "typeprof")
+          elseif vim.fn["executable"]("typeprof") == 1 then
+            table.insert(commands, "typeprof")
+          end
+
+          insert_multi(commands, "--lsp", "--stdio")
+
+          return vim.lsp.rpc.start(commands, dispatchers, {
+            cwd = root or vim.fn["getcwd"](),
+          })
+        end,
+      })
+
+      lsp_config["rubocop"].setup({
+        autostart = false,
+        cmd = { "bundle", "exec", "rubocop", "--lsp" },
+        root_dir = util.root_pattern(".rubocop.yml"),
+      })
+
+      lsp_config["lua_ls"].setup(
+        lua_vim_lsp_config()
+      )
+
+      lsp_config["rust_analyzer"].setup({
+        autostart = true,
+        settings = {
+          ["rust-analyzer"] = {
+            imports = {
+              granularity = {
+                group = "module",
+              },
+              prefix = "self",
+            },
+            cargo = {
+              buildScripts = {
+                enable = true,
+              },
+            },
+            procMacro = {
+              enable = true,
+            },
+          },
+        },
+      })
+
+      lsp_config["gopls"].setup({
+        autostart = true,
+        cmd = { "gopls", "serve" },
+        settings = {
+          gopls = {
+            analyses = {
+              unusedparams = true,
+            },
+            staticcheck = true,
+          },
+        },
       })
 
       local function start_lsp()
