@@ -38,7 +38,7 @@ fi
 
 export CPPFLAGS=""
 
-# export LDFLAGS="-L/opt/homebrew/opt/llvm/lib -L/opt/homebrew/opt/openssl/lib"
+export LDFLAGS="-L/opt/homebrew/opt/llvm/lib -L/opt/homebrew/opt/openssl/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/llvm/include -I/opt/homebrew/opt/openssl/include"
 
 # iTerm2
@@ -68,6 +68,10 @@ if [ -d '/opt/homebrew/opt/readline' ]; then
   export LDFLAGS="-L/opt/homebrew/opt/readline/lib ${LDFLAGS}"
   export CPPFLAGS="-I/opt/homebrew/opt/readline/include ${CPPFLAGS}"
   export PKG_CONFIG_PATH="/opt/homebrew/opt/readline/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
+fi
+
+if [ -d '/opt/homebrew/Cellar/zstd' ]; then
+  export LIBRARY_PATH=$LIBRARY_PATH:$(brew --prefix zstd)/lib/
 fi
 
 if [ -d '/opt/homebrew/opt/icu4c/lib/pkgconfig' ]; then

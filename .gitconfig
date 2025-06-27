@@ -61,6 +61,7 @@
   difff = diff --color-words --word-diff-regex='\\w+|[^[:space:]]'
   project = !"f() { hub clone $1 $1; }; f"
   progress=!"f() { git log ${1:-staging}..HEAD --reverse -p --ignore-space-change; }; f"
+  grepp=!"f() { git grep $1 -- ':!*.tlf' ':!*.png' ':!*.jpg'; }; f"
 
 [log]
   date = iso
