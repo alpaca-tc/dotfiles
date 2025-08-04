@@ -36,10 +36,10 @@ if [ -x '/usr/local/bin/brew' ]; then
   eval "$(/usr/local/bin/brew shellenv)"
 fi
 
-export CPPFLAGS=""
-
-export LDFLAGS="-L/opt/homebrew/opt/llvm/lib -L/opt/homebrew/opt/openssl/lib"
-export CPPFLAGS="-I/opt/homebrew/opt/llvm/include -I/opt/homebrew/opt/openssl/include"
+# export CPPFLAGS=""
+#
+# export LDFLAGS="-L/opt/homebrew/opt/llvm/lib -L/opt/homebrew/opt/openssl/lib"
+# export CPPFLAGS="-I/opt/homebrew/opt/llvm/include -I/opt/homebrew/opt/openssl/include"
 
 # iTerm2
 export PATH=$HOME/usr/bin:$HOME/opt/homebrew/bin:$PATH

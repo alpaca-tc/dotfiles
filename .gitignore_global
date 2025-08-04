@@ -37,3 +37,4 @@ tmp/
 ~
 .claude
 .mcp.json
+.direnv/
