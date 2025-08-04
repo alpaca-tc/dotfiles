@@ -1996,26 +1996,26 @@ require("lazy").setup({
     config = function()
       -- Remove registories
       require("mason").setup({
-        -- registries = {
-        --   "file:~/projects/oss/mason-registry"
-        -- }
+        registries = {
+          "github:alpaca-tc/mason-registry@add_steep_and_typeprof"
+        }
       })
 
       require("mason-lspconfig").setup({
         ensure_installed = {
-          "lua_ls",
-          "ts_ls",
-          "eslint",
+          -- "lua_ls",
+          -- "ts_ls",
+          -- "eslint",
           -- "typescript-language-server",
-          "jsonls",
-          "html",
-          "cssls",
+          -- "jsonls",
+          -- "html",
+          -- "cssls",
           -- "steep",
           -- "basedpyright",
-          "rust_analyzer",
+          -- "rust_analyzer",
           -- "gopls",
-          "rubocop",
-          "ruby_lsp",
+          -- "rubocop",
+          -- "ruby_lsp",
         },
         automatic_enable = false,
       })
@@ -2163,7 +2163,7 @@ require("lazy").setup({
       lsp_config["typeprof"].setup({
         autostart = false,
         filetypes = { "ruby", "eruby" },
-        root_dir = util.root_pattern("typeprof.conf.json"),
+        root_dir = util.root_pattern("typeprof.conf.json") or util.root_pattern("typeprof.conf.jsonc"),
         on_attach = function(_, bufnr)
           local group = vim.api.nvim_create_augroup("LspTypeProf", { clear = true })
 
@@ -2267,7 +2267,7 @@ require("lazy").setup({
 
         if filetype == "ruby" and file_match_str(root .. "/Gemfile", "sorbet") then
           vim.cmd("LspStart sorbet")
-        elseif filetype == "ruby" and vim.fn["filereadable"](root .. "/typeprof.conf.json") == 1 then
+        elseif filetype == "ruby" and (vim.fn["filereadable"](root .. "/typeprof.conf.json") == 1 or vim.fn["filereadable"](root .. "/typeprof.conf.jsonc") == 1) then
           vim.cmd("LspStart typeprof")
         elseif filetype == "ruby" and vim.fn["filereadable"](root .. "/Steepfile") == 1 then
           vim.cmd("LspStart steep")
