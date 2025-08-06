@@ -214,6 +214,7 @@ source ~/.zsh/.zshrc.extends
 source ~/.zsh/.zshrc.alias
 source ~/.zsh/.zshrc.smartalias
 source ~/.zsh/.zshrc.bindkey
+source ~/.zsh/.zshrc.command
 
 [[ -s "$HOME/.secret.zshrc" ]] && source ~/.secret.zshrc
 # }}}

@@ -36,3 +36,4 @@ tags
 tmp/
 ~
 .claude
+.mcp.json
