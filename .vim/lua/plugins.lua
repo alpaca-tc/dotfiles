@@ -1997,9 +1997,9 @@ require("lazy").setup({
     config = function()
       -- Remove registories
       require("mason").setup({
-        registries = {
-          "github:alpaca-tc/mason-registry@add_steep_and_typeprof"
-        }
+        -- registries = {
+        --   "github:alpaca-tc/mason-registry@add_steep_and_typeprof"
+        -- }
       })
 
       require("mason-lspconfig").setup({
@@ -2294,6 +2294,10 @@ require("lazy").setup({
         },
       })
 
+      lsp_config["pyright"].setup({
+        autostart = false,
+      })
+
       local function start_lsp()
         local filetype = nil
         local file_match_str = require("file_extend").file_match_str
@@ -2359,7 +2363,7 @@ require("lazy").setup({
 
       vim.api.nvim_create_autocmd("FileType", {
         group = group,
-        pattern = { "ruby", "javascript", "typescript", "typescriptreact", "typescript.jsx", "c", "rust", "go" },
+        pattern = { "ruby", "javascript", "typescript", "typescriptreact", "typescript.jsx", "c", "rust", "go", "python" },
         callback = function()
           start_lsp()
         end,
