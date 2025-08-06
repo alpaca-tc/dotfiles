@@ -38,3 +38,4 @@ tmp/
 .claude
 .mcp.json
 .direnv/
+.serena/
