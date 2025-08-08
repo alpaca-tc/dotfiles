@@ -1933,7 +1933,7 @@ require("lazy").setup({
 
       local function goimports(timeout_ms)
         local context = { only = { "source.organizeImports" } }
-        vim.validate({ context = { context, "t", true } })
+        vim.validate("context", context, "t")
 
         local params = vim.lsp.util.make_range_params()
         params.context = context
@@ -2529,6 +2529,37 @@ require("lazy").setup({
         },
       })
     end,
+  },
+  {
+    "coder/claudecode.nvim",
+    dependencies = {
+      "folke/snacks.nvim",
+    },
+    cmd = {
+      "ClaudeCode", "ClaudeCodeFocus", "ClaudeCodeSelectModel", "ClaudeCodeAdd", "ClaudeCodeSend"
+    },
+    init = function()
+      vim.keymap.set("n", "gA", ":ClaudeCodeFocus<CR>", { silent = true, noremap = true })
+      vim.keymap.set("x", "gA", ":'<,'>ClaudeCodeFocus<CR>", { silent = true, noremap = true })
+    end,
+    config = function()
+      require("claudecode").setup({
+        terminal = {
+          split_side = "right", -- "left" or "right"
+          split_width_percentage = 0.30,
+          provider = "snacks", -- "auto", "snacks", "native", or custom provider table
+          auto_close = true,
+          snacks_win_opts = {
+            position = "bottom",
+            height = 0.4,
+            width = 1.0,
+            border = "single",
+            claude_hide_ctrl = { "<C-_>", function(self) self:hide() end, mode = "t" },
+            claude_close = { "<C-,>", "close", mode = "n", desc = "Close" },
+          },
+        },
+      })
+    end
   },
   {
     "nvimtools/none-ls.nvim",
