@@ -185,6 +185,9 @@ if is_executable direnv; then
   eval "$(direnv hook zsh)"
 fi
 
+# solargraph
+export PATH="$HOME/src/solargraph/bin:$PATH"
+
 export LC_CTYPE=en_US.UTF-8
 export LANG=en_US.UTF-8
 export TZ=Asia/Tokyo
