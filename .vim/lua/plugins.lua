@@ -1515,7 +1515,7 @@ require("lazy").setup({
           return fn
         end
 
-        vim.keymap.set("n", "<C-K>", from_root("/app/models"), { noremap = true, buffer = true })
+        vim.keymap.set("n", "<C-K>", from_root("/**/*/app/models"), { noremap = true, buffer = true })
         vim.keymap.set("n", "<C-K><C-K>", from_root("/app/controllers"), { noremap = true, buffer = true })
         vim.keymap.set("n", "<C-K><C-K><C-K>", from_root("/app/views"), { noremap = true, buffer = true })
         vim.keymap.set("n", "<C-K>u", from_root("/app/uploaders"), { noremap = true, buffer = true })

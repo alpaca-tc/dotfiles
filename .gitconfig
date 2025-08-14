@@ -21,9 +21,11 @@
 
 [alias]
   fsync = "!fun() { git fetch ${1:-origin} $(git rev-parse --abbrev-ref HEAD) && git reset --hard FETCH_HEAD; }; fun"
+  frebase = "!fun() { git fetch ${1:-origin} $(git defaultbranch) && git rebase FETCH_HEAD; }; fun"
   rmaster = "!git fetch origin master && git rebase FETCH_HEAD"
   ffetch = "!git fetch origin ${1} && git checkout FETCH_HEAD -b ${1}"
   delta = "!fun() { git diff ${1:-HEAD} | delta; }; fun"
+  defaultbranch = "!fun() { git remote show origin | grep 'HEAD branch' | awk '{print $NF}'; }; fun"
 
   first = !"fun() { git init; git add -A; git commit -m 'First commit'; }; fun"
   assume = !"fun() { git update-index --assume-unchanged `git ls-files $@ --no-empty-directory`; }; fun"
@@ -62,6 +64,7 @@
   project = !"f() { hub clone $1 $1; }; f"
   progress=!"f() { git log ${1:-staging}..HEAD --reverse -p --ignore-space-change; }; f"
   grepp=!"f() { git grep $1 -- ':!*.tlf' ':!*.png' ':!*.jpg'; }; f"
+  changes=!git status -s "*.rb" | cut -c4-
 
 [log]
   date = iso
