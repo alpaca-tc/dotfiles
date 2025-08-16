@@ -65,6 +65,7 @@
   progress=!"f() { git log ${1:-staging}..HEAD --reverse -p --ignore-space-change; }; f"
   grepp=!"f() { git grep $1 -- ':!*.tlf' ':!*.png' ':!*.jpg'; }; f"
   changes=!git status -s "*.rb" | cut -c4-
+  diff-changes=!"f() { git diff --diff-filter=d --name-only ${1:-staging}..HEAD ; }; f"
 
 [log]
   date = iso

@@ -3102,6 +3102,7 @@ require("lazy").setup({
             "app/views/%/:ruby_cursor_method_name*",
           },
           { "spec/mailers/%_spec\\.rb", "app/mailers/%\\.rb",   "app/views/%/:ruby_cursor_method_name*" },
+          { "app/%\\.rb", "spec/%_spec\\.rb" },
           { "spec/%_spec\\.rb",         "app/%\\.rb" },
           { "spec/%_spec\\.rb",         "spec/lib/%_spec\\.rb", "lib/%\\.rb" },
           { "%.rb",                     "%.rbs" },
