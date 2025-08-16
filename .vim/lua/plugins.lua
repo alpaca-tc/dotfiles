@@ -2501,7 +2501,7 @@ require("lazy").setup({
       local chat = require("CopilotChat")
 
       chat.setup({
-        model = "gpt-4",
+        model = "gpt-4o",
         system_prompt = [[
           You are an AI programming assistant.
           When asked for your name, you must respond with "GitHub Copilot".
