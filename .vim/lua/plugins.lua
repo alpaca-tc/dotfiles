@@ -2538,24 +2538,41 @@ require("lazy").setup({
     cmd = {
       "ClaudeCode", "ClaudeCodeFocus", "ClaudeCodeSelectModel", "ClaudeCodeAdd", "ClaudeCodeSend"
     },
+    keys = {
+      { '<C-U>', "<cmd>ClaudeCodeFocus<cr>", desc="Claude Code", mode = { "n", "x" } },
+    },
     init = function()
-      vim.keymap.set("n", "gA", ":ClaudeCodeFocus<CR>", { silent = true, noremap = true })
-      vim.keymap.set("x", "gA", ":'<,'>ClaudeCodeFocus<CR>", { silent = true, noremap = true })
+      vim.keymap.set("n", "<C-U>", ":ClaudeCodeFocus<CR>", { silent = true, noremap = true })
+      vim.keymap.set("x", "<C-U>", ":'<,'>ClaudeCodeFocus<CR>", { silent = true, noremap = true })
     end,
     config = function()
       require("claudecode").setup({
         terminal = {
-          split_side = "right", -- "left" or "right"
-          split_width_percentage = 0.30,
+          -- split_side = "bottom", -- "left" or "right"
+          -- split_width_percentage = 0.30,
           provider = "snacks", -- "auto", "snacks", "native", or custom provider table
           auto_close = true,
           snacks_win_opts = {
+            wo = {
+              listchars = "extends:.,tab:  ",
+              fillchars = "eob: ,lastline:.",
+            },
             position = "bottom",
-            height = 0.4,
-            width = 1.0,
             border = "single",
-            claude_hide_ctrl = { "<C-_>", function(self) self:hide() end, mode = "t" },
-            claude_close = { "<C-,>", "close", mode = "n", desc = "Close" },
+            -- claude_hide_ctrl = { "<C-_>", function(self) self:hide() end, mode = "t" },
+            -- claude_close = { "<C-,>", "close", mode = "n", desc = "Close" },
+            width = 1.0,
+            height = 0.4,
+            keys = {
+              claude_hide = {
+                '<C-U>',
+                function(self)
+                  self:hide()
+                end,
+                mode = "t",
+                desc = "Hide",
+              },
+            },
           },
         },
       })
@@ -2568,11 +2585,13 @@ require("lazy").setup({
     },
     event = { "InsertEnter" },
     config = function()
-      require("null-ls").setup({
+      null_ls = require("null-ls")
+
+      null_ls.setup({
         -- capabilities = capabilities,
         sources = {
-          require("null-ls").builtins.formatting.stylua,
-          require("null-ls").builtins.diagnostics.rubocop.with({
+          null_ls.builtins.formatting.stylua,
+          null_ls.builtins.diagnostics.rubocop.with({
             command = "bundle",
             args = {
               "exec",
@@ -2600,11 +2619,11 @@ require("lazy").setup({
           -- require('null-ls').builtins.diagnostics.luacheck.with({
           --   extra_args = {"--globals", "vim", "--globals", "awesome"},
           -- }),
-          require("null-ls").builtins.diagnostics.yamllint,
-          require("null-ls").builtins.formatting.gofmt,
-          -- require("null-ls").builtins.formatting.rustfmt,
+          null_ls.builtins.diagnostics.yamllint,
+          null_ls.builtins.formatting.gofmt,
+          -- null_ls.builtins.formatting.rustfmt,
           -- require("typescript.extensions.null-ls.code-actions"),
-          require("null-ls").builtins.formatting.rubocop.with({
+          null_ls.builtins.formatting.rubocop.with({
             command = "bundle",
             args = {
               "exec",
@@ -2621,11 +2640,13 @@ require("lazy").setup({
               return utils.root_has_file({ ".rubocop.yml" })
             end,
           }),
+          null_ls.builtins.formatting.black,
         },
+        ensure_installed = { "black" },
       })
 
       vim.api.nvim_create_user_command("NullLsToggle", function()
-        require("null-ls").toggle("")
+        null_ls.toggle("")
       end, {})
     end,
   },
@@ -3183,6 +3204,7 @@ require("lazy").setup({
       "javascript.tsx",
       "lua",
       "ruby",
+      "python",
       "markdown",
       "vim",
       "c",
@@ -3190,9 +3212,19 @@ require("lazy").setup({
     build = function()
       vim.cmd("TSUpdate")
     end,
+    init = function()
+      local group = vim.api.nvim_create_augroup("TreesitterFileType", { clear = true })
+      vim.api.nvim_create_autocmd("Filetype", {
+        pattern = "python",
+        group = group,
+        callback = function()
+          vim.opt_local.indentexpr = "nvim_treesitter#indent()"
+        end
+      })
+    end,
     config = function()
       require("nvim-treesitter.configs").setup({
-        ensure_installed = { "c", "lua", "vim", "vimdoc", "typescript", "tsx", "markdown", "ruby" },
+        ensure_installed = { "c", "lua", "vim", "vimdoc", "typescript", "tsx", "markdown", "ruby", "python" },
         sync_install = true,
         highlight = {
           enable = false,
@@ -3589,6 +3621,9 @@ require("lazy").setup({
     "s-yukikaze/vinarise-plugin-peanalysis",
     build = "brew install binutils",
   },
+  -- {
+  --   "Vimjas/vim-python-pep8-indent",
+  -- },
   {
     "Shougo/unite.vim",
     cmd = {

@@ -39,3 +39,4 @@ tmp/
 .mcp.json
 .direnv/
 .serena/
+.ipynb_checkpoints

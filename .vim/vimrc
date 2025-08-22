@@ -284,7 +284,7 @@ unlet i
 
 " ----------------------------------------
 " Encoding {{{
-set ambiwidth=double
+set ambiwidth=single
 set encoding=utf-8
 set fileencodings=utf-8,sjis,shift-jis,euc-jp,utf-16,ascii,ucs-bom,cp932,iso-2022-jp
 set fileformat=unix

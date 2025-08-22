@@ -70,9 +70,9 @@ if [ -d '/opt/homebrew/opt/readline' ]; then
   export PKG_CONFIG_PATH="/opt/homebrew/opt/readline/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
 fi
 
-if [ -d '/opt/homebrew/Cellar/zstd' ]; then
-  export LIBRARY_PATH=$LIBRARY_PATH:$(brew --prefix zstd)/lib/
-fi
+# if [ -d '/opt/homebrew/Cellar/zstd' ]; then
+#   export LIBRARY_PATH=$LIBRARY_PATH:$(brew --prefix zstd)/lib/
+# fi
 
 if [ -d '/opt/homebrew/opt/icu4c/lib/pkgconfig' ]; then
   export LDFLAGS="-L/opt/homebrew/opt/icu4c/lib ${LDFLAGS}"
@@ -91,7 +91,7 @@ fi
 
 if is_executable rbenv; then
   eval "$(rbenv init -)"
-  export C_INCLUDE_PATH=$HOME/.rbenv/versions/3.2.3/include/ruby-3.2.0:$C_INCLUDE_PATH
+  # export C_INCLUDE_PATH=$HOME/.rbenv/versions/3.2.3/include/ruby-3.2.0:$C_INCLUDE_PATH
   export RUBY_DEBUG_LOG_LEVEL=FATAL
 fi
 
